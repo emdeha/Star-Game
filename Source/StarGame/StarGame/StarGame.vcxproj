@@ -89,11 +89,6 @@
     <ClInclude Include="Main.h" />
     <ClInclude Include="ProgramData.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Entities\Entities.vcxproj">
-      <Project>{50cb8288-b114-4424-93a4-8bd4c51aab2d}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

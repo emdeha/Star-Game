@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<Filter Include="src">
+			<UniqueIdentifier>{331227C7-56E3-B149-A334-BA650BA16D4E}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="src\freeglut_callbacks.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_cursor.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_display.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_ext.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_font.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_font_data.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_gamemode.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_geometry.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_glutfont_definitions.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_init.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_input_devices.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_joystick.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_main.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_menu.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_misc.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_overlay.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_spaceball.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_state.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_stroke_mono_roman.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_stroke_roman.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_structure.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_teapot.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_videoresize.c">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\freeglut_window.c">
+			<Filter>src</Filter>
+		</ClCompile>
+	</ItemGroup>
+</Project>

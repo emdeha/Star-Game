@@ -1,0 +1,40 @@
+﻿Build started 29.5.2012 г. 17:42:29 ч..
+     1>Project "E:\CECI\Programming\MyPrograms\OpenGL\OpenGL Tasks\McKesson\Tutorial 0.3.8\glsdk\glimg\glimg.vcxproj" on node 4 (rebuild target(s)).
+     1>PrepareForBuild:
+         Creating directory "lib\".
+       InitializeBuildStatus:
+         Creating "Debug\glimg.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Iinclude /Isource /I..\glload\include /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _SCL_SECURE_NO_WARNINGS /D WIN32 /D DEBUG /D _DEBUG /D MEMORY_DEBUGGING /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt source\DdsLoader.cpp source\ImageCreator.cpp source\ImageFormat.cpp source\ImageSet.cpp source\ImageSetImpl.cpp source\StbLoader.cpp source\TestLoader.cpp source\TextureGenerator.cpp source\Util.cpp
+         Util.cpp
+         TextureGenerator.cpp
+         TestLoader.cpp
+         StbLoader.cpp
+         ImageSetImpl.cpp
+         ImageSet.cpp
+         ImageFormat.cpp
+         ImageCreator.cpp
+         DdsLoader.cpp
+         Generating Code...
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Iinclude /Isource /I..\glload\include /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _SCL_SECURE_NO_WARNINGS /D WIN32 /D DEBUG /D _DEBUG /D MEMORY_DEBUGGING /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt source\stb_image.c
+         stb_image.c
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"lib\glimgD.lib" /NOLOGO Debug\DdsLoader.obj
+         Debug\ImageCreator.obj
+         Debug\ImageFormat.obj
+         Debug\ImageSet.obj
+         Debug\ImageSetImpl.obj
+         Debug\StbLoader.obj
+         Debug\TestLoader.obj
+         Debug\TextureGenerator.obj
+         Debug\Util.obj
+         Debug\stb_image.obj
+         glimg.vcxproj -> E:\CECI\Programming\MyPrograms\OpenGL\OpenGL Tasks\McKesson\Tutorial 0.3.8\glsdk\glimg\lib\glimgD.lib
+       FinalizeBuildStatus:
+         Deleting file "Debug\glimg.unsuccessfulbuild".
+         Touching "Debug\glimg.lastbuildstate".
+     1>Done Building Project "E:\CECI\Programming\MyPrograms\OpenGL\OpenGL Tasks\McKesson\Tutorial 0.3.8\glsdk\glimg\glimg.vcxproj" (rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:05.05

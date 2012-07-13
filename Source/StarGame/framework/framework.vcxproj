@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup Label="ProjectConfigurations">
+		<ProjectConfiguration Include="Debug|Win32">
+			<Configuration>Debug</Configuration>
+			<Platform>Win32</Platform>
+		</ProjectConfiguration>
+		<ProjectConfiguration Include="Release|Win32">
+			<Configuration>Release</Configuration>
+			<Platform>Win32</Platform>
+		</ProjectConfiguration>
+	</ItemGroup>
+	<PropertyGroup Label="Globals">
+		<ProjectGuid>{F4D5FA3D-2A08-5146-A354-4B4F0729A6E3}</ProjectGuid>
+		<RootNamespace>framework</RootNamespace>
+		<Keyword>Win32Proj</Keyword>
+	</PropertyGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+		<ConfigurationType>StaticLibrary</ConfigurationType>
+		<CharacterSet>MultiByte</CharacterSet>
+		<UseDebugLibraries>true</UseDebugLibraries>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+		<ConfigurationType>StaticLibrary</ConfigurationType>
+		<CharacterSet>MultiByte</CharacterSet>
+		<WholeProgramOptimization>true</WholeProgramOptimization>
+		<UseDebugLibraries>false</UseDebugLibraries>
+	</PropertyGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+	<ImportGroup Label="ExtensionSettings">
+	</ImportGroup>
+	<ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<PropertyGroup Label="UserMacros" />
+	<PropertyGroup>
+		<_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+		<OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">lib\</OutDir>
+		<IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">lib\Debug\</IntDir>
+		<TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">frameworkD</TargetName>
+		<OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">lib\</OutDir>
+		<IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">lib\Release\</IntDir>
+		<TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">framework</TargetName>
+	</PropertyGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+		<ClCompile>
+			<Optimization>Disabled</Optimization>
+			<AdditionalIncludeDirectories>.;..\glsdk\glload\include;..\glsdk\glimg\include;..\glsdk\glm;..\glsdk\glutil\include;..\glsdk\glmesh\include;..\glsdk\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;TIXML_USE_STL;FREEGLUT_STATIC;WIN32;_LIB;FREEGLUT_LIB_PRAGMAS=0;DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<MinimalRebuild>true</MinimalRebuild>
+			<BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+			<RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+			<FunctionLevelLinking>true</FunctionLevelLinking>
+			<PrecompiledHeader></PrecompiledHeader>
+			<WarningLevel>Level3</WarningLevel>
+			<DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+		</ClCompile>
+		<ResourceCompile>
+			<PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;TIXML_USE_STL;FREEGLUT_STATIC;WIN32;_LIB;FREEGLUT_LIB_PRAGMAS=0;DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<AdditionalIncludeDirectories>.;..\glsdk\glload\include;..\glsdk\glimg\include;..\glsdk\glm;..\glsdk\glutil\include;..\glsdk\glmesh\include;..\glsdk\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+		</ResourceCompile>
+	<Lib>
+		<OutputFile>$(OutDir)frameworkD.lib</OutputFile>
+	</Lib>
+		<Link>
+			<SubSystem>Windows</SubSystem>
+			<GenerateDebugInformation>true</GenerateDebugInformation>
+			<ProgramDataBaseFileName>$(OutDir)frameworkD.pdb</ProgramDataBaseFileName>
+		</Link>
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+		<ClCompile>
+			<Optimization>MaxSpeed</Optimization>
+			<AdditionalIncludeDirectories>.;..\glsdk\glload\include;..\glsdk\glimg\include;..\glsdk\glm;..\glsdk\glutil\include;..\glsdk\glmesh\include;..\glsdk\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;TIXML_USE_STL;FREEGLUT_STATIC;WIN32;_LIB;FREEGLUT_LIB_PRAGMAS=0;RELEASE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<MinimalRebuild>false</MinimalRebuild>
+			<StringPooling>true</StringPooling>
+			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+			<FunctionLevelLinking>true</FunctionLevelLinking>
+			<PrecompiledHeader></PrecompiledHeader>
+			<WarningLevel>Level4</WarningLevel>
+			<DebugInformationFormat></DebugInformationFormat>
+			<OmitFramePointers>true</OmitFramePointers>
+		</ClCompile>
+		<ResourceCompile>
+			<PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;TIXML_USE_STL;FREEGLUT_STATIC;WIN32;_LIB;FREEGLUT_LIB_PRAGMAS=0;RELEASE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<AdditionalIncludeDirectories>.;..\glsdk\glload\include;..\glsdk\glimg\include;..\glsdk\glm;..\glsdk\glutil\include;..\glsdk\glmesh\include;..\glsdk\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+		</ResourceCompile>
+	<Lib>
+		<OutputFile>$(OutDir)framework.lib</OutputFile>
+	</Lib>
+		<Link>
+			<SubSystem>Windows</SubSystem>
+			<GenerateDebugInformation>false</GenerateDebugInformation>
+			<OptimizeReferences>true</OptimizeReferences>
+			<EnableCOMDATFolding>true</EnableCOMDATFolding>
+		</Link>
+	</ItemDefinitionGroup>
+	<ItemGroup>
+		<ClInclude Include="directories.h" />
+		<ClInclude Include="framework.h" />
+		<ClInclude Include="framework_all.h" />
+		<ClInclude Include="Interpolators.h" />
+		<ClInclude Include="Mesh.h" />
+		<ClInclude Include="MousePole.h" />
+		<ClInclude Include="rapidxml_helpers.h" />
+		<ClInclude Include="Scene.h" />
+		<ClInclude Include="SceneBinders.h" />
+		<ClInclude Include="Timer.h" />
+		<ClInclude Include="UniformBlockArray.h" />
+		<ClInclude Include="rapidxml.hpp" />
+		<ClInclude Include="rapidxml_iterators.hpp" />
+		<ClInclude Include="rapidxml_print.hpp" />
+		<ClInclude Include="rapidxml_utils.hpp" />
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="framework.cpp">
+		</ClCompile>
+		<ClCompile Include="Mesh.cpp">
+		</ClCompile>
+		<ClCompile Include="Scene.cpp">
+		</ClCompile>
+		<ClCompile Include="Timer.cpp">
+		</ClCompile>
+	</ItemGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+	<ImportGroup Label="ExtensionTargets">
+	</ImportGroup>
+</Project>

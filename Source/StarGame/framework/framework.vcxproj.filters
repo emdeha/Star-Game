@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<ClInclude Include="directories.h" />
+		<ClInclude Include="framework.h" />
+		<ClInclude Include="framework_all.h" />
+		<ClInclude Include="Interpolators.h" />
+		<ClInclude Include="Mesh.h" />
+		<ClInclude Include="MousePole.h" />
+		<ClInclude Include="rapidxml_helpers.h" />
+		<ClInclude Include="Scene.h" />
+		<ClInclude Include="SceneBinders.h" />
+		<ClInclude Include="Timer.h" />
+		<ClInclude Include="UniformBlockArray.h" />
+		<ClInclude Include="rapidxml.hpp" />
+		<ClInclude Include="rapidxml_iterators.hpp" />
+		<ClInclude Include="rapidxml_print.hpp" />
+		<ClInclude Include="rapidxml_utils.hpp" />
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="framework.cpp" />
+		<ClCompile Include="Mesh.cpp" />
+		<ClCompile Include="Scene.cpp" />
+		<ClCompile Include="Timer.cpp" />
+	</ItemGroup>
+</Project>

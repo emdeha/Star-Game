@@ -1,0 +1,25 @@
+﻿Build started 29.5.2012 г. 17:42:38 ч..
+     1>Project "E:\CECI\Programming\MyPrograms\OpenGL\OpenGL Tasks\McKesson\Tutorial 0.3.8\glsdk\glload\glload.vcxproj" on node 5 (rebuild target(s)).
+     1>InitializeBuildStatus:
+         Creating "Release\glload.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Iinclude /Isource /nologo /W4 /WX- /O2 /Oy /GL /D _CRT_SECURE_NO_WARNINGS /D _SCL_SECURE_NO_WARNINGS /D WIN32 /D NDEBUG /D RELEASE /D _UNICODE /D UNICODE /GF /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt source\gll_c.c source\gll_gl_ext.c source\wgll_ext.c
+         gll_c.c
+         gll_gl_ext.c
+         wgll_ext.c
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Iinclude /Isource /nologo /W4 /WX- /O2 /Oy /GL /D _CRT_SECURE_NO_WARNINGS /D _SCL_SECURE_NO_WARNINGS /D WIN32 /D NDEBUG /D RELEASE /D _UNICODE /D UNICODE /GF /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt source\gll_cpp.cpp
+         gll_cpp.cpp
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"lib\glload.lib" /NOLOGO /LTCG Release\gll_c.obj
+         Release\gll_gl_ext.obj
+         Release\gll_cpp.obj
+         Release\wgll_ext.obj
+         glload.vcxproj -> E:\CECI\Programming\MyPrograms\OpenGL\OpenGL Tasks\McKesson\Tutorial 0.3.8\glsdk\glload\lib\glload.lib
+       FinalizeBuildStatus:
+         Deleting file "Release\glload.unsuccessfulbuild".
+         Touching "Release\glload.lastbuildstate".
+     1>Done Building Project "E:\CECI\Programming\MyPrograms\OpenGL\OpenGL Tasks\McKesson\Tutorial 0.3.8\glsdk\glload\glload.vcxproj" (rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.68

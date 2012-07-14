@@ -1,4 +1,4 @@
-﻿Build started 14.7.2012 г. 17:31:56 ч..
+﻿Build started 14.7.2012 г. 19:28:57 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\Mouse\Mouse.vcxproj" on node 5 (rebuild target(s)).
      1>_PrepareForClean:
          Deleting file "Debug\Mouse.lastbuildstate".
@@ -18,6 +18,8 @@
          Debug\dllmain.obj
          Debug\Mouse.obj
          Debug\stdafx.obj
+         E:\CECI\TheGame\Source\StarGame\framework\lib\frameworkD.lib
+         E:\CECI\TheGame\Source\StarGame\Debug\ProgramData.lib
             Creating library E:\CECI\TheGame\Source\StarGame\Debug\Mouse.lib and object E:\CECI\TheGame\Source\StarGame\Debug\Mouse.exp
        Manifest:
          Deleting file "Debug\Mouse.dll.embed.manifest".
@@ -28,6 +30,8 @@
          Debug\dllmain.obj
          Debug\Mouse.obj
          Debug\stdafx.obj
+         E:\CECI\TheGame\Source\StarGame\framework\lib\frameworkD.lib
+         E:\CECI\TheGame\Source\StarGame\Debug\ProgramData.lib
             Creating library E:\CECI\TheGame\Source\StarGame\Debug\Mouse.lib and object E:\CECI\TheGame\Source\StarGame\Debug\Mouse.exp
          Mouse.vcxproj -> E:\CECI\TheGame\Source\StarGame\Debug\Mouse.dll
        FinalizeBuildStatus:
@@ -37,4 +41,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.11
+Time Elapsed 00:00:01.00

@@ -20,7 +20,6 @@
 #include "../Entities/Lights.h"
 #include "../Universe/Universe.h"
 #include "../Camera/TopDownCamera.h"
-#include "../Mouse/Mouse.h"
 
 #define ARRAY_COUNT( array ) (sizeof( array ) / (sizeof( array[0] ) * (sizeof( array ) != sizeof(void*) || sizeof( array[0] ) <= sizeof(void*))))
 
@@ -88,7 +87,9 @@ struct ProjectionBlock
 	glm::mat4 cameraToClipMatrix;
 };
 
-Sun *mainSun = new Sun();
+glm::mat4 g_cameraToClipMatrix;
+
+Sun *mainSun = new Sun(glm::vec3(), 2.9f);
 SunLight *mainSunLight = new SunLight(glm::vec3(), glm::vec4(1.0f), glm::vec4(0.2f), glm::vec4(1.0f),
 								   1.2f, 0.5f);
 
@@ -96,9 +97,19 @@ Universe *universe = new Universe();
 
 Mouse userMouse;
 
+TopDownCamera userCamera = TopDownCamera(glm::vec3(), 25.0f, 90.0f, 0.0f);
+
 void HandleMouse()
 {
-	
+	if(userMouse.IsLeftButtonDown())
+	{
+		if(mainSun->IsClicked
+			(g_cameraToClipMatrix, userCamera.CalcMatrix(), userMouse, 
+			glm::vec4(userCamera.ResolveCamPosition(), 1.0f), glutGet(GLUT_WINDOW_HEIGHT), glutGet(GLUT_WINDOW_WIDTH)))
+		{
+			std::printf("Clicked!!!\n");
+		}
+	}
 }
 void HandleMouseButtons(int button, int state, int x, int y)
 {
@@ -145,9 +156,9 @@ void Init()
 	universe->AddSunLight(mainSunLight);
 
 
-	/*glutMouseFunc(MouseButton);
-	glutMotionFunc(MouseMotion);
-	glutMouseWheelFunc(MouseWheel);*/
+	glutMouseFunc(HandleMouseButtons);
+	glutMotionFunc(HandleActiveMovement);
+	glutPassiveMotionFunc(HandlePassiveMovement);
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -173,8 +184,6 @@ void Init()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-TopDownCamera userCamera = TopDownCamera(glm::vec3(), 12.0f, 90.0f, 0.0f);
-
 //Called to update the display.
 //You should call glutSwapBuffers after all of your rendering to display what you rendered.
 //If you need continuous updates of the screen, call glutPostRedisplay() at the end of the function.
@@ -192,6 +201,9 @@ void Display()
 					
 	glUseProgram(0);
 
+	HandleMouse();
+	userMouse.OverrideLastPosition(userMouse.GetCurrentPosition());
+
 	glutPostRedisplay();
 	glutSwapBuffers();
 }
@@ -205,11 +217,12 @@ void Reshape(int width, int height)
 	float aspectRatio = width / (float)height;
 	persMatrix.Perspective(45.0f, aspectRatio, g_fzNear, g_fzFar);
 
-	ProjectionBlock projData;
-	projData.cameraToClipMatrix = persMatrix.Top();
+	//ProjectionBlock projData;
+	//projData.cameraToClipMatrix = persMatrix.Top();
+	g_cameraToClipMatrix = persMatrix.Top();
 
 	glBindBuffer(GL_UNIFORM_BUFFER, g_projectionUniformBuffer);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(ProjectionBlock), &projData);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(ProjectionBlock), &g_cameraToClipMatrix);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	glViewport(0, 0, (GLsizei) width, (GLsizei) height);

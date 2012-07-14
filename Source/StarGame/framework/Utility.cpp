@@ -15,31 +15,15 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
-#ifndef PROGRAM_DATA_H
-#define PROGRAM_DATA_H
+#include "Utility.h"
 
-struct ProgramData
+Utility::Ray::Ray()
 {
-	GLuint theProgram;
-
-	GLuint modelToCameraMatrixUnif;
-
-	GLuint lightIntensityUnif;
-	GLuint ambientIntensityUnif;
-
-	GLuint normalModelToCameraMatrixUnif;
-	GLuint cameraSpaceLightPosUnif;
-	GLuint lightAttenuationUnif;
-	GLuint shininessFactorUnif;
-	GLuint baseDiffuseColorUnif;
-};
-
-struct UnlitProgData
+	origin = glm::vec4();
+	direction = glm::vec4();
+}
+Utility::Ray::Ray(glm::vec4 newOrigin, glm::vec4 newDirection)
 {
-	GLuint theProgram;
-
-	GLuint objectColorUnif;
-	GLuint modelToCameraMatrixUnif;
-};
-
-#endif
+	origin = newOrigin;
+	direction = newDirection;
+}

@@ -1,6 +1,8 @@
-﻿Build started 14.7.2012 г. 17:32:06 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Camera\Camera.vcxproj" on node 4 (rebuild target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 14.7.2012 г. 19:29:04 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Camera\Camera.vcxproj" on node 5 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Release\Camera.lastbuildstate".
+       InitializeBuildStatus:
          Creating "Release\Camera.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Release\Camera.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
@@ -18,4 +20,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.54
+Time Elapsed 00:00:00.39

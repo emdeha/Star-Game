@@ -14,7 +14,7 @@
 #include "../framework/Timer.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "ProgramData.h"
+#include "../ProgramData/ProgramData.h"
 
 #ifdef LOAD_X11
 #define APIENTRY

@@ -18,12 +18,14 @@
 #ifndef PLANET_BODIES_H
 #define PLANET_BODIES_H
 
+
 #include <glload/gl_3_3.h>
 #include <glutil/glutil.h>
 #include "../framework/framework.h"
 #include "../framework/Mesh.h"
 #include "../framework/Timer.h"
-#include "../StarGame/ProgramData.h"
+#include "../ProgramData/ProgramData.h"
+#include "../Mouse/Mouse.h"
 
 
 class Satellite
@@ -67,9 +69,11 @@ private:
 
 	glm::vec3 position;
 
+	float radius;
+
 public:
 	Sun();
-	Sun(glm::vec3 newPosition);
+	Sun(glm::vec3 newPosition, float newRadius);
 
 	void LoadMesh(const std::string &fileName);
 
@@ -79,6 +83,10 @@ public:
 
 	void AddSatellite(const std::string &fileName, 
 					  float height, float offset, float speed, float radius);
+
+	bool IsClicked(glm::mat4 projMat, glm::mat4 cameraMat, 
+				   Mouse userMouse, glm::vec4 cameraPos,
+				   float windowHeight, float windowWidth);
 
 public:
 	Sun(const Sun &other);

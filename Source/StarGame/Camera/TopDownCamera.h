@@ -36,7 +36,6 @@ public:
 
 	glm::mat4 CalcMatrix();
 
-private:
 	glm::vec3 ResolveCamPosition();
 };
 

@@ -1,12 +1,14 @@
-﻿Build started 14.7.2012 г. 17:32:01 ч..
+﻿Build started 14.7.2012 г. 19:28:59 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" on node 3 (rebuild target(s)).
      1>_PrepareForClean:
          Deleting file "Debug\StarGame.lastbuildstate".
        InitializeBuildStatus:
-         Touching "Debug\StarGame.unsuccessfulbuild".
+         Creating "Debug\StarGame.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\framework /I..\glsdk\glload\include /I..\glsdk\glimg\include /I..\glsdk\glm /I..\glsdk\glutil\include /I..\glsdk\glmesh\include /I..\glsdk\freeglut\include /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D DEBUG /D _DEBUG /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp
          Main.cpp
+     1>e:\ceci\thegame\source\stargame\stargame\main.cpp(108): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>e:\ceci\thegame\source\stargame\stargame\main.cpp(108): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
        ManifestResourceCompile:
          C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\StarGame.exe.embed.manifest.res" Debug\StarGame_manifest.rc 
        Link:
@@ -16,6 +18,7 @@
          E:\CECI\TheGame\Source\StarGame\framework\lib\frameworkD.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Universe.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Entities.lib
+         E:\CECI\TheGame\Source\StarGame\Debug\ProgramData.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Mouse.lib
        Manifest:
          Deleting file "Debug\StarGame.exe.embed.manifest".
@@ -28,6 +31,7 @@
          E:\CECI\TheGame\Source\StarGame\framework\lib\frameworkD.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Universe.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Entities.lib
+         E:\CECI\TheGame\Source\StarGame\Debug\ProgramData.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Mouse.lib
          StarGame.vcxproj -> E:\CECI\TheGame\Source\StarGame\Debug\StarGame.exe
        FinalizeBuildStatus:
@@ -37,4 +41,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.26
+Time Elapsed 00:00:01.39

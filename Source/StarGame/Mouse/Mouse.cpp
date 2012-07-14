@@ -1,3 +1,20 @@
+//Copyright 2012, 2013 Tsvetan Tsvetanov
+//This file is part of the Star Game.
+//
+//The Star Game is free software: you can redistribute it and/or modify
+//it under the terms of the GNU General Public License as published by
+//the Free Software Foundation, either version 3 of the License, or
+//(at your option) any later version.
+//
+//The Star Game is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//
+//You should have received a copy of the GNU General Public License
+//along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
+
+
 #include "stdafx.h"
 #include "Mouse.h"
 
@@ -83,4 +100,25 @@ inline void Mouse::MouseWheelDown()
 inline void Mouse::MouseWheelNotDown()
 {
 	isMouseWheelDown = false;
+}
+
+
+Utility::Ray Mouse::GetPickRay(glm::mat4 projMat, glm::mat4 cameraMat, 
+							   glm::vec4 cameraPos, glm::vec4 bodyPos, 
+							   float windowWidth, float windowHeight)
+{
+	float mouseX = (float)this->currentPosition.x;
+	float mouseY = (float)this->currentPosition.y;
+
+	glm::vec4 mousePos_clipSpace = glm::vec4((((mouseX * 2.0f) / windowWidth) - 1.0f), 
+											 (1 - ((mouseY * 2.0f) / windowHeight)), 
+											 1.0f, 0.0f);
+
+	glm::vec4 mousePos_worldSpace = 
+		glm::inverse(cameraMat) * glm::inverse(projMat) * mousePos_clipSpace;
+
+	glm::vec4 direction = glm::normalize(mousePos_worldSpace - cameraPos);
+	glm::vec4 origin = cameraPos - bodyPos;
+
+	return Utility::Ray(origin, direction);
 }

@@ -90,12 +90,14 @@ Sun::Sun()
 	if(sunMesh != NULL)
 		sunMesh = NULL;
 	position = glm::vec3();
+	radius = 0.0f;
 }
-Sun::Sun(glm::vec3 newPosition)
+Sun::Sun(glm::vec3 newPosition, float newRadius)
 {
 	if(sunMesh != NULL)
 		sunMesh = NULL;
 	position = newPosition;
+	radius = newRadius;
 }
 
 void Sun::LoadMesh(const std::string &fileName)
@@ -117,6 +119,7 @@ void Sun::Render(glutil::MatrixStack &modelMatrix,
 	glutil::PushStack push(modelMatrix);
 
 	modelMatrix.Translate(position);
+	modelMatrix.Scale(radius);
 
 	glUseProgram(unlitData.theProgram);
 	glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
@@ -145,6 +148,31 @@ void Sun::AddSatellite(const std::string &fileName, float height, float offset, 
 	sat->LoadMesh(fileName);
 	satellites.push_back(sat);
 }
+
+
+bool Sun::IsClicked(glm::mat4 projMat, glm::mat4 cameraMat, 
+				    Mouse userMouse, glm::vec4 cameraPos,
+				    float windowHeight, float windowWidth)
+{
+	Utility::Ray mouseRay = 
+		userMouse.GetPickRay(projMat, cameraMat, cameraPos, glm::vec4(position, 1.0f), 
+							 windowWidth, windowHeight);
+
+	float clampedRadius = radius / 2.9f;
+
+	float a = glm::dot(mouseRay.direction, mouseRay.direction);
+	float b = glm::dot(mouseRay.direction, mouseRay.origin) * 2.0f;
+	float c = glm::dot(mouseRay.origin, mouseRay.origin) - clampedRadius * clampedRadius;
+
+	float discriminant = b * b - 4 * a * c;
+
+	if(discriminant < 0.0f)
+	{
+		return false;
+	}
+	return true;
+}
+
 
 Sun::Sun(const Sun &other)
 {

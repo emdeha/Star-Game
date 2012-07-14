@@ -1,26 +1,78 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<ItemGroup>
-		<ClInclude Include="directories.h" />
-		<ClInclude Include="framework.h" />
-		<ClInclude Include="framework_all.h" />
-		<ClInclude Include="Interpolators.h" />
-		<ClInclude Include="Mesh.h" />
-		<ClInclude Include="MousePole.h" />
-		<ClInclude Include="rapidxml_helpers.h" />
-		<ClInclude Include="Scene.h" />
-		<ClInclude Include="SceneBinders.h" />
-		<ClInclude Include="Timer.h" />
-		<ClInclude Include="UniformBlockArray.h" />
-		<ClInclude Include="rapidxml.hpp" />
-		<ClInclude Include="rapidxml_iterators.hpp" />
-		<ClInclude Include="rapidxml_print.hpp" />
-		<ClInclude Include="rapidxml_utils.hpp" />
-	</ItemGroup>
-	<ItemGroup>
-		<ClCompile Include="framework.cpp" />
-		<ClCompile Include="Mesh.cpp" />
-		<ClCompile Include="Scene.cpp" />
-		<ClCompile Include="Timer.cpp" />
-	</ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="directories.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="framework_all.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Interpolators.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml_helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml_iterators.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml_print.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml_utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MousePole.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneBinders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UniformBlockArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="framework.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{2274bd97-e3a7-490d-8d69-1d35f39d2782}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{bf6674ee-f0ee-4cfb-9325-2af1d480c237}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
 </Project>

@@ -85,11 +85,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
-    <ClInclude Include="ProgramData.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Entities\Entities.vcxproj">
       <Project>{0e2397ac-13f2-4a38-92c7-8fd02a24c17e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Universe\Universe.vcxproj">
+      <Project>{adcf5f7c-7b7d-4ecb-baaf-bcac0db38b6e}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

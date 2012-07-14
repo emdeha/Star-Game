@@ -76,12 +76,14 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Entities.h" />
+    <ClInclude Include="Lights.h" />
+    <ClInclude Include="PlanetBodies.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Entities.cpp" />
+    <ClCompile Include="Lights.cpp" />
+    <ClCompile Include="PlanetBodies.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -90,6 +92,9 @@
   <ItemGroup>
     <ProjectReference Include="..\framework\framework.vcxproj">
       <Project>{f4d5fa3d-2a08-5146-a354-4b4f0729a6e3}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Universe\Universe.vcxproj">
+      <Project>{adcf5f7c-7b7d-4ecb-baaf-bcac0db38b6e}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

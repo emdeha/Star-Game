@@ -16,7 +16,9 @@
 
 
 #include "Main.h"
-#include "../Entities/Entities.h"
+#include "../Entities/PlanetBodies.h"
+#include "../Entities/Lights.h"
+#include "../Universe/Universe.h"
 
 #define ARRAY_COUNT( array ) (sizeof( array ) / (sizeof( array[0] ) * (sizeof( array ) != sizeof(void*) || sizeof( array[0] ) <= sizeof(void*))))
 
@@ -138,7 +140,11 @@ struct ProjectionBlock
 	glm::mat4 cameraToClipMatrix;
 };
 
-Sun *newSun = new Sun();
+Sun *mainSun = new Sun();
+SunLight *mainSunLight = new SunLight(glm::vec3(), glm::vec4(1.0f), glm::vec4(0.2f), glm::vec4(1.0f),
+								   1.2f, 0.5f);
+
+Universe *universe = new Universe();
 
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
 void Init()
@@ -146,11 +152,14 @@ void Init()
 	InitializePrograms();
 
 
-	newSun->LoadMesh("UnitSphere.xml");
-	newSun->AddSatellite("UnitSphere.xml", 1.5f, 1.0f, 5.0f, 0.5f);
-	newSun->AddSatellite("UnitSphere.xml", 0.0f, 2.0f, 2.0f, 0.5f);
-	newSun->AddSatellite("UnitSphere.xml", 1.0f, 2.5f, 10.0f, 0.5f);
-	newSun->AddSatellite("UnitSphere.xml", 1.0f, 3.0f, 6.0f, 0.5f);
+	mainSun->LoadMesh("UnitSphere.xml");
+	mainSun->AddSatellite("UnitSphere.xml", 1.5f, 1.0f, 5.0f, 0.5f);
+	mainSun->AddSatellite("UnitSphere.xml", 0.0f, 2.0f, 2.0f, 0.5f);
+	mainSun->AddSatellite("UnitSphere.xml", 1.0f, 2.5f, 10.0f, 0.5f);
+	mainSun->AddSatellite("UnitSphere.xml", 1.0f, 3.0f, 6.0f, 0.5f);
+
+	universe->AddSun(mainSun);
+	universe->AddSunLight(mainSunLight);
 
 
 	glutMouseFunc(MouseButton);
@@ -193,11 +202,16 @@ void Display()
 	glutil::MatrixStack modelMatrix;
 	modelMatrix.SetMatrix(g_viewPole.CalcMatrix());
 
+	/*mainLight->Render(modelMatrix, g_Lit);
+
 	//const glm::vec4 &worldLightPos = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);//CalcLightPosition();
 	//const glm::vec4 &lightPosCameraSpace = modelMatrix.Top() * worldLightPos;
 
 	newSun->Update();
-	newSun->Render(modelMatrix, g_Lit, g_Unlit);
+	newSun->Render(modelMatrix, g_Lit, g_Unlit);*/
+
+	universe->UpdateUniverse();
+	universe->RenderUniverse(modelMatrix, g_Lit, g_Unlit);
 					
 	glUseProgram(0);
 

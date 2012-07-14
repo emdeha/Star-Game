@@ -1,6 +1,8 @@
-﻿Build started 14.7.2012 г. 15:28:01 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Entities\Entities.vcxproj" on node 3 (rebuild target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 14.7.2012 г. 17:32:09 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Entities\Entities.vcxproj" on node 5 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Release\Entities.lastbuildstate".
+       InitializeBuildStatus:
          Creating "Release\Entities.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D RELEASE /D NDEBUG /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Release\Entities.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp

@@ -1,4 +1,4 @@
-﻿Build started 14.7.2012 г. 15:31:18 ч..
+﻿Build started 14.7.2012 г. 17:31:56 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\framework\framework.vcxproj" on node 2 (rebuild target(s)).
      1>_PrepareForClean:
          Deleting file "lib\Debug\framework.lastbuildstate".
@@ -24,4 +24,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.30
+Time Elapsed 00:00:03.37

@@ -19,6 +19,8 @@
 #include "../Entities/PlanetBodies.h"
 #include "../Entities/Lights.h"
 #include "../Universe/Universe.h"
+#include "../Camera/TopDownCamera.h"
+#include "../Mouse/Mouse.h"
 
 #define ARRAY_COUNT( array ) (sizeof( array ) / (sizeof( array[0] ) * (sizeof( array ) != sizeof(void*) || sizeof( array[0] ) <= sizeof(void*))))
 
@@ -79,60 +81,6 @@ void InitializePrograms()
 	g_Unlit = LoadUnlitProgram("PosTransform.vert", "UniformColor.frag");
 }
 
-///////////////////////////////////////////////
-// View/Object Setup
-glutil::ViewData g_initialViewData =
-{
-	glm::vec3(0.0f, 0.5f, 0.0f),
-	glm::fquat(0.92387953f, 0.3826834f, 0.0f, 0.0f),
-	5.0f,
-	0.0f
-};
-
-glutil::ViewScale g_viewScale =
-{
-	3.0f, 50.0f,
-	1.5f, 0.5f,
-	0.0f, 0.0f,		//No camera movement.
-	90.0f/250.0f
-};
-
-glutil::ObjectData g_initialObjectData =
-{
-	glm::vec3(0.0f, 0.5f, 0.0f),
-	glm::fquat(1.0f, 0.0f, 0.0f, 0.0f),
-};
-
-glutil::ViewPole g_viewPole = glutil::ViewPole(g_initialViewData,
-											   g_viewScale, glutil::MB_LEFT_BTN);
-glutil::ObjectPole g_objtPole = glutil::ObjectPole(g_initialObjectData,
-												   90.0f/250.0f, glutil::MB_RIGHT_BTN, &g_viewPole);
-
-namespace
-{
-	void MouseMotion(int x, int y)
-	{
-		Framework::ForwardMouseMotion(g_viewPole, x, y);
-		Framework::ForwardMouseMotion(g_objtPole, x, y);
-		glutPostRedisplay();
-	}
-
-	void MouseButton(int button, int state, int x, int y)
-	{
-		Framework::ForwardMouseButton(g_viewPole, button, state, x, y);
-		Framework::ForwardMouseButton(g_objtPole, button, state, x, y);
-		glutPostRedisplay();
-	}
-
-	void MouseWheel(int wheel, int direction, int x, int y)
-	{
-		Framework::ForwardMouseWheel(g_viewPole, wheel, direction, x, y);
-		Framework::ForwardMouseWheel(g_objtPole, wheel, direction, x, y);
-		glutPostRedisplay();
-	}
-}
-
-
 GLuint g_projectionUniformBuffer = 0;
 
 struct ProjectionBlock
@@ -145,6 +93,41 @@ SunLight *mainSunLight = new SunLight(glm::vec3(), glm::vec4(1.0f), glm::vec4(0.
 								   1.2f, 0.5f);
 
 Universe *universe = new Universe();
+
+Mouse userMouse;
+
+void HandleMouse()
+{
+	
+}
+void HandleMouseButtons(int button, int state, int x, int y)
+{
+	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	{
+		userMouse.PressLeftButton();
+	}
+	if(button == GLUT_LEFT_BUTTON && state == GLUT_UP)
+	{
+		userMouse.ReleaseLeftButton();
+	}
+
+	if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+	{
+		userMouse.PressRightButton();
+	}
+	if(button == GLUT_RIGHT_BUTTON && state == GLUT_UP)
+	{
+		userMouse.ReleaseRightButton();
+	}
+}
+void HandleActiveMovement(int x, int y)
+{
+	userMouse.SetCurrentPosition(glm::ivec2(x, y));
+}
+void HandlePassiveMovement(int x, int y)
+{
+	userMouse.SetCurrentPosition(glm::ivec2(x, y));
+}
 
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
 void Init()
@@ -162,9 +145,9 @@ void Init()
 	universe->AddSunLight(mainSunLight);
 
 
-	glutMouseFunc(MouseButton);
+	/*glutMouseFunc(MouseButton);
 	glutMotionFunc(MouseMotion);
-	glutMouseWheelFunc(MouseWheel);
+	glutMouseWheelFunc(MouseWheel);*/
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -190,25 +173,19 @@ void Init()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
+TopDownCamera userCamera = TopDownCamera(glm::vec3(), 12.0f, 90.0f, 0.0f);
+
 //Called to update the display.
 //You should call glutSwapBuffers after all of your rendering to display what you rendered.
 //If you need continuous updates of the screen, call glutPostRedisplay() at the end of the function.
 void Display()
 {
-	glClearColor(0.0f, 0.0f, 0.24f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth(1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glutil::MatrixStack modelMatrix;
-	modelMatrix.SetMatrix(g_viewPole.CalcMatrix());
-
-	/*mainLight->Render(modelMatrix, g_Lit);
-
-	//const glm::vec4 &worldLightPos = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);//CalcLightPosition();
-	//const glm::vec4 &lightPosCameraSpace = modelMatrix.Top() * worldLightPos;
-
-	newSun->Update();
-	newSun->Render(modelMatrix, g_Lit, g_Unlit);*/
+	modelMatrix.SetMatrix(userCamera.CalcMatrix());
 
 	universe->UpdateUniverse();
 	universe->RenderUniverse(modelMatrix, g_Lit, g_Unlit);

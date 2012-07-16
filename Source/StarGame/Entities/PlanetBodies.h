@@ -77,14 +77,14 @@ public:
 
 	void LoadMesh(const std::string &fileName);
 
-	void Render(glutil::MatrixStack &modelMatrix, 
+	void Render(glutil::MatrixStack &modelMatrix,
 				const ProgramData &litData, const UnlitProgData &unlitData);
 	void Update();
 
 	void AddSatellite(const std::string &fileName, 
 					  float height, float offset, float speed, float radius);
 
-	bool IsClicked(glm::mat4 projMat, glm::mat4 cameraMat, 
+	bool IsClicked(glm::mat4 projMat, glm::mat4 modelMat, 
 				   Mouse userMouse, glm::vec4 cameraPos,
 				   float windowHeight, float windowWidth);
 

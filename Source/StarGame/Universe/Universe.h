@@ -37,7 +37,7 @@ public:
 	void AddSun(Sun *newSun);
 
 	void UpdateUniverse();
-	void RenderUniverse(glutil::MatrixStack &modelMatrix, 
+	void RenderUniverse(glutil::MatrixStack &modelMatrix,
 						const ProgramData &litData, const UnlitProgData &unLitData);
 
 	// TODO: Add Load function

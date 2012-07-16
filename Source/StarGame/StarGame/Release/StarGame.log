@@ -1,14 +1,9 @@
-﻿Build started 14.7.2012 г. 19:29:07 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" on node 3 (rebuild target(s)).
-     1>_PrepareForClean:
-         Deleting file "Release\StarGame.lastbuildstate".
-       InitializeBuildStatus:
+﻿Build started 16.7.2012 г. 15:22:29 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" on node 3 (build target(s)).
+     1>InitializeBuildStatus:
          Creating "Release\StarGame.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\framework /I..\glsdk\glload\include /I..\glsdk\glimg\include /I..\glsdk\glm /I..\glsdk\glutil\include /I..\glsdk\glmesh\include /I..\glsdk\freeglut\include /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D RELEASE /D NDEBUG /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp
-         Main.cpp
-     1>Main.cpp(108): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>Main.cpp(108): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+         All outputs are up-to-date.
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\CECI\TheGame\Source\StarGame\Release\StarGame.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:..\glsdk\glload\lib /LIBPATH:..\glsdk\glimg\lib /LIBPATH:..\glsdk\glutil\lib /LIBPATH:..\glsdk\glmesh\lib /LIBPATH:..\glsdk\freeglut\lib ..\Release\Mouse.lib ..\framework\lib\framework.lib glload.lib glimg.lib glutil.lib glmesh.lib freeglut.lib glu32.lib opengl32.lib gdi32.lib winmm.lib user32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\StarGame.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"E:\CECI\TheGame\Source\StarGame\Release\StarGame.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\CECI\TheGame\Source\StarGame\Release\StarGame.lib" /MACHINE:X86 Release\Main.obj
          E:\CECI\TheGame\Source\StarGame\Release\Camera.lib
@@ -33,8 +28,8 @@
        FinalizeBuildStatus:
          Deleting file "Release\StarGame.unsuccessfulbuild".
          Touching "Release\StarGame.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" (rebuild target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:05.91
+Time Elapsed 00:00:06.14

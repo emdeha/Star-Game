@@ -88,8 +88,9 @@ struct ProjectionBlock
 };
 
 glm::mat4 g_cameraToClipMatrix;
+glm::mat4 g_modelMatrix;
 
-Sun *mainSun = new Sun(glm::vec3(), 2.9f);
+Sun *mainSun = new Sun(glm::vec3(), 0.5f);
 SunLight *mainSunLight = new SunLight(glm::vec3(), glm::vec4(1.0f), glm::vec4(0.2f), glm::vec4(1.0f),
 								   1.2f, 0.5f);
 
@@ -97,15 +98,28 @@ Universe *universe = new Universe();
 
 Mouse userMouse;
 
-TopDownCamera userCamera = TopDownCamera(glm::vec3(), 25.0f, 90.0f, 0.0f);
+TopDownCamera userCamera = TopDownCamera(glm::vec3(), 6.25f, 90.0f, 0.0f);
+
+float CalcFrustumScale(float fFovDeg)
+{
+	const float degToRad = 3.14159f * 2.0f / 360.0f;
+	float fFovRad = fFovDeg * degToRad;
+	return 1.0f / tan(fFovRad / 2.0f);
+}
 
 void HandleMouse()
 {
 	if(userMouse.IsLeftButtonDown())
 	{
+		glm::mat4 camMatrix = userCamera.CalcMatrix();
+		glm::vec3 cameraPosition = userCamera.ResolveCamPosition();
+
+		float windowWidth = (float)glutGet(GLUT_WINDOW_HEIGHT);
+		float windowHeight = (float)glutGet(GLUT_WINDOW_WIDTH);
+
 		if(mainSun->IsClicked
-			(g_cameraToClipMatrix, userCamera.CalcMatrix(), userMouse, 
-			glm::vec4(userCamera.ResolveCamPosition(), 1.0f), glutGet(GLUT_WINDOW_HEIGHT), glutGet(GLUT_WINDOW_WIDTH)))
+			(g_cameraToClipMatrix, g_modelMatrix, userMouse, 
+			 glm::vec4(cameraPosition, 1.0f), windowHeight, windowWidth))
 		{
 			std::printf("Clicked!!!\n");
 		}
@@ -196,9 +210,11 @@ void Display()
 	glutil::MatrixStack modelMatrix;
 	modelMatrix.SetMatrix(userCamera.CalcMatrix());
 
+	g_modelMatrix = modelMatrix.Top();
+
 	universe->UpdateUniverse();
 	universe->RenderUniverse(modelMatrix, g_Lit, g_Unlit);
-					
+
 	glUseProgram(0);
 
 	HandleMouse();
@@ -222,7 +238,7 @@ void Reshape(int width, int height)
 	g_cameraToClipMatrix = persMatrix.Top();
 
 	glBindBuffer(GL_UNIFORM_BUFFER, g_projectionUniformBuffer);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(ProjectionBlock), &g_cameraToClipMatrix);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(g_cameraToClipMatrix), &g_cameraToClipMatrix);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	glViewport(0, 0, (GLsizei) width, (GLsizei) height);

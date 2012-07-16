@@ -23,7 +23,7 @@
 
 #pragma warning(disable: 4251)
 
-#define PI
+#define PI 3.14159f
 
 #include <glm\glm.hpp>
 #include "../framework/Utility.h"
@@ -52,7 +52,7 @@ public:
 	void OverrideLastPosition(glm::ivec2 newLastPosition);
 
 
-	Utility::Ray GetPickRay(glm::mat4 projMat, glm::mat4 cameraMat, 
+	Utility::Ray GetPickRay(glm::mat4 projMat, glm::mat4 modelMat, 
 							glm::vec4 cameraPos, glm::vec4 bodyPos,
 							float windowWidth, float windowHeight);
 

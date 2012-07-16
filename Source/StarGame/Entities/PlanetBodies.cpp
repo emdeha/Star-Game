@@ -58,21 +58,23 @@ void Satellite::LoadMesh(const std::string &fileName)
 
 void Satellite::Render(glutil::MatrixStack &modelMatrix, const ProgramData &data)
 {
-	glutil::PushStack push(modelMatrix);
+	{
+		glutil::PushStack push(modelMatrix);
 
-	modelMatrix.Translate(position);
-	modelMatrix.Scale(radius);
+		modelMatrix.Translate(position);
+		modelMatrix.Scale(radius);
 
-	glm::mat3 normMatrix(modelMatrix.Top());
-	normMatrix = glm::transpose(glm::inverse(normMatrix));
+		glm::mat3 normMatrix(modelMatrix.Top());
+		normMatrix = glm::transpose(glm::inverse(normMatrix));
 
-	glUseProgram(data.theProgram);
-	glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-	glUniformMatrix3fv(data.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+		glUseProgram(data.theProgram);
+		glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+		glUniformMatrix3fv(data.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
 
-	mesh->Render("lit");
+		mesh->Render("lit");
 
-	glUseProgram(0);
+		glUseProgram(0);
+	}
 }
 void Satellite::Update()
 {
@@ -116,21 +118,23 @@ void Sun::LoadMesh(const std::string &fileName)
 void Sun::Render(glutil::MatrixStack &modelMatrix,
 				 const ProgramData &litData, const UnlitProgData &unlitData)
 {
-	glutil::PushStack push(modelMatrix);
-
-	modelMatrix.Translate(position);
-	modelMatrix.Scale(radius);
-
-	glUseProgram(unlitData.theProgram);
-	glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-	glUniform4f(unlitData.objectColorUnif, 0.8078f, 0.8706f, 0.0f, 1.0f);
-
-	sunMesh->Render("flat");
-
-	int satellitesCount = satellites.size();
-	for(int i = 0; i < satellitesCount; i++)
 	{
-		satellites[i]->Render(modelMatrix, litData);
+		glutil::PushStack push(modelMatrix);
+		
+		modelMatrix.Translate(position);
+		modelMatrix.Scale(radius);
+
+		glUseProgram(unlitData.theProgram);
+		glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+		glUniform4f(unlitData.objectColorUnif, 0.8078f, 0.8706f, 0.0f, 1.0f);
+
+		sunMesh->Render("flat");
+	
+		int satellitesCount = satellites.size();
+		for(int i = 0; i < satellitesCount; i++)
+		{
+			satellites[i]->Render(modelMatrix, litData);
+		}
 	}
 }
 void Sun::Update()
@@ -150,22 +154,20 @@ void Sun::AddSatellite(const std::string &fileName, float height, float offset, 
 }
 
 
-bool Sun::IsClicked(glm::mat4 projMat, glm::mat4 cameraMat, 
+bool Sun::IsClicked(glm::mat4 projMat, glm::mat4 modelMat, 
 				    Mouse userMouse, glm::vec4 cameraPos,
 				    float windowHeight, float windowWidth)
 {
 	Utility::Ray mouseRay = 
-		userMouse.GetPickRay(projMat, cameraMat, cameraPos, glm::vec4(position, 1.0f), 
-							 windowWidth, windowHeight);
-
-	float clampedRadius = radius / 2.9f;
+		userMouse.GetPickRay(projMat, modelMat, cameraPos, glm::vec4(position, 1.0f), 
+							 windowHeight, windowWidth);
 
 	float a = glm::dot(mouseRay.direction, mouseRay.direction);
 	float b = glm::dot(mouseRay.direction, mouseRay.origin) * 2.0f;
-	float c = glm::dot(mouseRay.origin, mouseRay.origin) - clampedRadius * clampedRadius;
+	float c = glm::dot(mouseRay.origin, mouseRay.origin) - radius * radius / 4.0f;
 
 	float discriminant = b * b - 4 * a * c;
-
+	
 	if(discriminant < 0.0f)
 	{
 		return false;

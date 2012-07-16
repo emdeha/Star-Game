@@ -33,7 +33,7 @@ void Universe::AddSun(Sun *newSun)
 	suns.push_back(newSun);
 }
 
-void Universe::RenderUniverse(glutil::MatrixStack &modelMatrix, 
+void Universe::RenderUniverse(glutil::MatrixStack &modelMatrix,
 							  const ProgramData &litData, const UnlitProgData &unLitData)
 {
 	int sizeLights = lights.size();

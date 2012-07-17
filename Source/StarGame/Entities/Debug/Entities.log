@@ -1,4 +1,4 @@
-﻿Build started 16.7.2012 г. 19:54:24 ч..
+﻿Build started 17.7.2012 г. 19:07:09 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\Entities\Entities.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Entities.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -18,4 +18,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.74
+Time Elapsed 00:00:00.77

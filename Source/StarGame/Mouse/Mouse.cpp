@@ -108,7 +108,7 @@ inline void Mouse::MouseWheelNotDown()
 
 Utility::Ray Mouse::GetPickRay(glm::mat4 projMat, glm::mat4 modelMat, 
 							   glm::vec4 cameraPos, glm::vec4 bodyPos, 
-							   float windowHeight, float windowWidth)
+							   float windowWidth, float windowHeight)
 {
 	float mouseX = this->currentPosition.x;
 	float mouseY = this->currentPosition.y;
@@ -116,16 +116,13 @@ Utility::Ray Mouse::GetPickRay(glm::mat4 projMat, glm::mat4 modelMat,
 	glm::vec4 mousePos_clipSpace = glm::vec4(
 											 ((mouseX * 2.0f) / windowWidth) - 1.0f,
 											 (1.0f - (2.0f * mouseY) / windowHeight),
-											 -1.0f, 
+											 0.0f, 
 											 1.0f
 											 );
 
 	glm::vec4 mousePos_viewSpace = glm::inverse(projMat) * mousePos_clipSpace;
 
-	mousePos_viewSpace = glm::vec4(mousePos_viewSpace.x / mousePos_viewSpace.w, 
-								   mousePos_viewSpace.y / mousePos_viewSpace.w,
-								   mousePos_viewSpace.z / mousePos_viewSpace.w,
-								   1.0f);
+	mousePos_viewSpace = mousePos_viewSpace / mousePos_viewSpace.w;
 
 	glm::vec4 mousePos_worldSpace = glm::inverse(modelMat) * mousePos_viewSpace;
 

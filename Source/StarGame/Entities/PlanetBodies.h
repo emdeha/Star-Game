@@ -28,10 +28,16 @@
 #include "../Mouse/Mouse.h"
 
 
+// NOTE: Body positions need to be passed in world space in order to do proper clicking.
+
+class Sun;
+
 class Satellite
 {
 private:
 	Framework::Mesh *mesh;
+	Sun *parent;
+
 	Framework::Timer revolutionDuration;
 
 	glm::vec3 position;
@@ -39,17 +45,23 @@ private:
 	float height;
 	float offsetFromSun;
 
-	float radius;
+	float diameter;
 
 public:
 	Satellite();
 	Satellite(Framework::Timer newRevolutionDuration, 
-			  float newHeight, float newOffsetFromSun, float newRadius);
+			  float newHeight, float newOffsetFromSun, float newDiameter);
 
 	void LoadMesh(const std::string &fileName);
 
 	void Render(glutil::MatrixStack &modelMatrix, const ProgramData &data);
 	void Update();
+
+	bool IsClicked(glm::mat4 projMat, glm::mat4 modelMat, 
+				   Mouse userMouse, glm::vec4 cameraPos,
+				   float windowWidth, float windowHeight);
+
+	void SetParent(Sun *newParent);
 
 public:
 	Satellite(const Satellite &other);
@@ -60,6 +72,9 @@ private:
 	glm::vec4 CalculatePosition();
 };
 
+
+
+
 class Sun
 {
 private:
@@ -69,11 +84,11 @@ private:
 
 	glm::vec3 position;
 
-	float radius;
+	float diameter;
 
 public:
 	Sun();
-	Sun(glm::vec3 newPosition, float newRadius);
+	Sun(glm::vec3 newPosition, float newDiameter);
 
 	void LoadMesh(const std::string &fileName);
 
@@ -81,17 +96,33 @@ public:
 				const ProgramData &litData, const UnlitProgData &unlitData);
 	void Update();
 
-	void AddSatellite(const std::string &fileName, 
-					  float height, float offset, float speed, float radius);
+	bool AddSatellite(const std::string &fileName, 
+					  float height, float offset, float speed, float diameter);
+
+	std::vector<Satellite*> GetSatellites();
+
+	glm::vec4 GetPosition();
 
 	bool IsClicked(glm::mat4 projMat, glm::mat4 modelMat, 
 				   Mouse userMouse, glm::vec4 cameraPos,
-				   float windowHeight, float windowWidth);
+				   float windowWidth, float windowHeight);
 
 public:
 	Sun(const Sun &other);
 	~Sun();
 	Sun operator=(const Sun &other);
 };
+
+inline glm::vec4 Sun::GetPosition()
+{
+	return glm::vec4(position, 1.0f);
+}
+
+
+
+inline void Satellite::SetParent(Sun *newParent)
+{
+	parent = new Sun(*newParent);
+}
 
 #endif

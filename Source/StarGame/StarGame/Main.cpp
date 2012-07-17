@@ -107,6 +107,8 @@ float CalcFrustumScale(float fFovDeg)
 	return 1.0f / tan(fFovRad / 2.0f);
 }
 
+float initialOffset = 1.5f;
+
 void HandleMouse()
 {
 	if(userMouse.IsLeftButtonDown())
@@ -119,11 +121,27 @@ void HandleMouse()
 
 		if(mainSun->IsClicked
 			(g_cameraToClipMatrix, g_modelMatrix, userMouse, 
-			 glm::vec4(cameraPosition, 1.0f), windowHeight, windowWidth))
+			 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 		{
-			std::printf("Clicked!!!\n");
+			if(mainSun->AddSatellite("UnitSphere.xml", 1.5f, initialOffset, 10.0f, 0.5f))
+			{
+				initialOffset += 1.0f;
+			}
+			else std::printf("Satellite cap reached!\n");
+		}
+
+		std::vector<Satellite*> satellites = mainSun->GetSatellites();
+		for(int satellite = 0; satellite < satellites.size(); satellite++)
+		{
+			if(satellites[satellite]->IsClicked
+				(g_cameraToClipMatrix, g_modelMatrix, userMouse, 
+				 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
+			{
+				std::printf("Satellite %d clicked!!!\n", satellite);
+			}
 		}
 	}
+	userMouse.ReleaseLeftButton();
 }
 void HandleMouseButtons(int button, int state, int x, int y)
 {
@@ -161,10 +179,10 @@ void Init()
 
 
 	mainSun->LoadMesh("UnitSphere.xml");
-	mainSun->AddSatellite("UnitSphere.xml", 1.5f, 1.0f, 5.0f, 0.5f);
-	mainSun->AddSatellite("UnitSphere.xml", 0.0f, 2.0f, 2.0f, 0.5f);
-	mainSun->AddSatellite("UnitSphere.xml", 1.0f, 2.5f, 10.0f, 0.5f);
-	mainSun->AddSatellite("UnitSphere.xml", 1.0f, 3.0f, 6.0f, 0.5f);
+	//mainSun->AddSatellite("UnitSphere.xml", 1.5f, 3.0f, 100.0f, 0.5f);
+	//mainSun->AddSatellite("UnitSphere.xml", 0.0f, 2.0f, 110.0f, 0.5f);
+	//mainSun->AddSatellite("UnitSphere.xml", 1.0f, 2.5f, 90.0f, 0.5f);
+	//mainSun->AddSatellite("UnitSphere.xml", 1.0f, 4.0f, 60.0f, 0.5f);
 
 	universe->AddSun(mainSun);
 	universe->AddSunLight(mainSunLight);
@@ -210,10 +228,10 @@ void Display()
 	glutil::MatrixStack modelMatrix;
 	modelMatrix.SetMatrix(userCamera.CalcMatrix());
 
-	g_modelMatrix = modelMatrix.Top();
-
 	universe->UpdateUniverse();
 	universe->RenderUniverse(modelMatrix, g_Lit, g_Unlit);
+
+	g_modelMatrix = modelMatrix.Top();
 
 	glUseProgram(0);
 

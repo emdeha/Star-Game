@@ -25,22 +25,26 @@ Satellite::Satellite()
 {
 	if(mesh != NULL)
 		mesh = NULL;
+	if(parent != NULL)
+		parent = NULL;
 	revolutionDuration = Framework::Timer(Framework::Timer::TT_LOOP, 0.0f);
 	position = glm::vec3();
 	height = 0.0f;
 	offsetFromSun = 0.0f;
-	radius = 0.0f;
+	diameter = 0.0f;
 }
 Satellite::Satellite(Framework::Timer newRevolutionDuration, 
-					 float newHeight, float newOffsetFromSun, float newRadius)
+					 float newHeight, float newOffsetFromSun, float newDiameter)
 {
 	if(mesh != NULL)
 		mesh = NULL;
+	if(parent != NULL)
+		parent = NULL;
 	revolutionDuration = newRevolutionDuration;
-	position = glm::vec3(0.0f, newHeight, 0.0f);
+	position = glm::vec3();
 	height = newHeight;
 	offsetFromSun = newOffsetFromSun;
-	radius = newRadius;
+	diameter = newDiameter;
 }
 
 void Satellite::LoadMesh(const std::string &fileName)
@@ -62,7 +66,7 @@ void Satellite::Render(glutil::MatrixStack &modelMatrix, const ProgramData &data
 		glutil::PushStack push(modelMatrix);
 
 		modelMatrix.Translate(position);
-		modelMatrix.Scale(radius);
+		modelMatrix.Scale(diameter);
 
 		glm::mat3 normMatrix(modelMatrix.Top());
 		normMatrix = glm::transpose(glm::inverse(normMatrix));
@@ -86,20 +90,81 @@ void Satellite::Update()
 	position.y = sinf(currTimeThroughLoop * (2.0f * PI)) * offsetFromSun;
 }
 
+bool Satellite::IsClicked(glm::mat4 projMat, glm::mat4 modelMat, 
+						  Mouse userMouse, glm::vec4 cameraPos,
+						  float windowWidth, float windowHeight)
+{
+	glm::vec4 parentPosition_worldSpace = modelMat * parent->GetPosition();
+
+	Utility::Ray mouseRay = 
+		userMouse.GetPickRay(projMat, modelMat, cameraPos, parentPosition_worldSpace, 
+							 windowHeight, windowWidth);
+
+	float outerRadius = glm::length(position) + diameter / 2.0f;
+	float innerRadius = glm::length(position) - diameter / 2.0f;
+
+	if(Utility::Intersections::RayIntersectsSphere(mouseRay, outerRadius) && 
+	   !Utility::Intersections::RayIntersectsSphere(mouseRay, innerRadius))
+	{
+		return true;
+	}
+	return false;
+}
+
+Satellite::Satellite(const Satellite &other)
+{
+	mesh = new Framework::Mesh(*other.mesh);
+	parent = new Sun(*other.parent);
+	revolutionDuration = other.revolutionDuration;
+	position = other.position;
+	height = other.height;
+	offsetFromSun = other.offsetFromSun;
+	diameter = other.diameter;
+}
+Satellite::~Satellite()
+{
+	if(mesh != NULL)
+	{
+		delete mesh;
+	}
+	if(parent != NULL)
+	{
+		delete parent;
+	}
+}
+Satellite Satellite::operator=(const Satellite &other)
+{
+	if(this == &other)
+	{
+		return *this;
+	}
+
+	mesh = new Framework::Mesh(*other.mesh);
+	parent = new Sun(*other.parent);
+	revolutionDuration = other.revolutionDuration;
+	position = other.position;
+	height = other.height;
+	offsetFromSun = other.offsetFromSun;
+	diameter = other.diameter;
+
+	return *this;
+}
+
+
 
 Sun::Sun()
 {
 	if(sunMesh != NULL)
 		sunMesh = NULL;
 	position = glm::vec3();
-	radius = 0.0f;
+	diameter = 0.0f;
 }
-Sun::Sun(glm::vec3 newPosition, float newRadius)
+Sun::Sun(glm::vec3 newPosition, float newDiameter)
 {
 	if(sunMesh != NULL)
 		sunMesh = NULL;
 	position = newPosition;
-	radius = newRadius;
+	diameter = newDiameter;
 }
 
 void Sun::LoadMesh(const std::string &fileName)
@@ -122,14 +187,14 @@ void Sun::Render(glutil::MatrixStack &modelMatrix,
 		glutil::PushStack push(modelMatrix);
 		
 		modelMatrix.Translate(position);
-		modelMatrix.Scale(radius);
+		modelMatrix.Scale(diameter);
 
 		glUseProgram(unlitData.theProgram);
 		glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
 		glUniform4f(unlitData.objectColorUnif, 0.8078f, 0.8706f, 0.0f, 1.0f);
 
 		sunMesh->Render("flat");
-	
+
 		int satellitesCount = satellites.size();
 		for(int i = 0; i < satellitesCount; i++)
 		{
@@ -146,46 +211,58 @@ void Sun::Update()
 	}
 }
 
-void Sun::AddSatellite(const std::string &fileName, float height, float offset, float speed, float radius)
+bool Sun::AddSatellite(const std::string &fileName, float height, float offset, float speed, float diameter)
 {
-	Satellite *sat = new Satellite(Framework::Timer(Framework::Timer::TT_LOOP, speed), height, offset, radius);
+	if(satellites.size() >= 4)
+	{
+		return false;
+	}
+
+	Satellite *sat = new Satellite(Framework::Timer(Framework::Timer::TT_LOOP, speed), height, offset, diameter);
 	sat->LoadMesh(fileName);
+	sat->SetParent(this);
 	satellites.push_back(sat);
+
+	return true;
 }
 
+std::vector<Satellite*> Sun::GetSatellites()
+{
+	return satellites;
+}
 
 bool Sun::IsClicked(glm::mat4 projMat, glm::mat4 modelMat, 
 				    Mouse userMouse, glm::vec4 cameraPos,
-				    float windowHeight, float windowWidth)
+				    float windowWidth, float windowHeight)
 {
 	Utility::Ray mouseRay = 
 		userMouse.GetPickRay(projMat, modelMat, cameraPos, glm::vec4(position, 1.0f), 
 							 windowHeight, windowWidth);
 
-	float a = glm::dot(mouseRay.direction, mouseRay.direction);
-	float b = glm::dot(mouseRay.direction, mouseRay.origin) * 2.0f;
-	float c = glm::dot(mouseRay.origin, mouseRay.origin) - radius * radius / 4.0f;
-
-	float discriminant = b * b - 4 * a * c;
-	
-	if(discriminant < 0.0f)
+	if(Utility::Intersections::RayIntersectsSphere(mouseRay, diameter / 2.0f))
 	{
-		return false;
+		return true;
 	}
-	return true;
+	return false;
 }
 
 
 Sun::Sun(const Sun &other)
 {
 	sunMesh = new Framework::Mesh(*other.sunMesh);
+	satellites = other.satellites;
 	position = other.position;
+	diameter = other.diameter;
 }
 Sun::~Sun()
 {
 	if(sunMesh != NULL)
 	{
 		delete sunMesh;
+	}
+	if(!satellites.empty())
+	{
+		satellites.clear();
 	}
 }
 Sun Sun::operator=(const Sun &other)
@@ -196,6 +273,8 @@ Sun Sun::operator=(const Sun &other)
 	}
 
 	sunMesh = new Framework::Mesh(*other.sunMesh);
+	satellites = other.satellites;
+	diameter = other.diameter;
 	position = other.position;
 
 	return *this;

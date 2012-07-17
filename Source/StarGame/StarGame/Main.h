@@ -73,15 +73,15 @@ int main(int argc, char** argv)
 	unsigned int displayMode = GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH | GLUT_STENCIL;
 	displayMode = Defaults(displayMode, width, height);
 
-	glutInitDisplayMode (displayMode);
-	glutInitContextVersion (3, 3);
+	glutInitDisplayMode(displayMode);
+	glutInitContextVersion(3, 3);
 	glutInitContextProfile(GLUT_CORE_PROFILE);
 #ifdef DEBUG
 	glutInitContextFlags(GLUT_DEBUG);
 #endif
-	glutInitWindowSize (width, height); 
-	glutInitWindowPosition (300, 200);
-	int window = glutCreateWindow (argv[0]);
+	glutInitWindowSize(width, height); 
+	glutInitWindowPosition(300, 200);
+	int window = glutCreateWindow(argv[0]);
 
 	glload::LoadFunctions();
 

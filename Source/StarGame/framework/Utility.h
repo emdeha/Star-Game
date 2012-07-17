@@ -31,6 +31,11 @@ namespace Utility
 		Ray();
 		Ray(glm::vec4 newOrigin, glm::vec4 newDirection);
 	};
+
+	namespace Intersections
+	{
+		bool RayIntersectsSphere(Ray mouseRay, float sphereRadius);
+	}
 }
 
 #endif

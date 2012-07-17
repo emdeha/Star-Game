@@ -27,3 +27,20 @@ Utility::Ray::Ray(glm::vec4 newOrigin, glm::vec4 newDirection)
 	origin = newOrigin;
 	direction = newDirection;
 }
+
+
+bool Utility::Intersections::RayIntersectsSphere(Ray mouseRay, float sphereRadius)
+{
+	float a = glm::dot(mouseRay.direction, mouseRay.direction);
+	float b = glm::dot(mouseRay.direction, mouseRay.origin) * 2.0f;
+	float c = glm::dot(mouseRay.origin, mouseRay.origin) - sphereRadius * sphereRadius;
+
+	float discriminant = b * b - 4 * a * c;
+
+	if(discriminant >= 0.0f)
+	{
+		return true;
+	}
+	else 
+		return false;
+}

@@ -31,8 +31,6 @@ InterpProgData g_Interp;
 
 const int g_projectionBlockIndex = 2;
 
-GLuint positionAttrib;
-//GLuint colorAttrib;
 InterpProgData LoadInterpProgram(const std::string &strVertexShader, const std::string &strFragmentShader)
 {
 	std::vector<GLuint> shaderList;
@@ -45,10 +43,7 @@ InterpProgData LoadInterpProgram(const std::string &strVertexShader, const std::
 	data.modelToCameraMatrixUnif = glGetUniformLocation(data.theProgram, "modelToCameraMatrix");
 	data.colorUnif = glGetUniformLocation(data.theProgram, "color");
 
-	positionAttrib = glGetAttribLocation(data.theProgram, "position");
-	//colorAttrib = glGetAttribLocation(data.theProgram, "color");
-	/*data.startColorUnif = glGetUniformLocation(data.theProgram, "startColor");*/
-	//data.endColorUnif = glGetUniformLocation(data.theProgram, "endColor");
+	data.positionAttrib = glGetAttribLocation(data.theProgram, "position");
 
 	GLuint projectionBlock = glGetUniformBlockIndex(data.theProgram, "Projection");	
 	glUniformBlockBinding(data.theProgram, projectionBlock, g_projectionBlockIndex);
@@ -209,86 +204,8 @@ void HandlePassiveMovement(int x, int y)
 	userMouse.SetCurrentPosition(glm::ivec2(x, y));
 }
 
-std::vector<float> torusData;
-unsigned short indexData[181 * 4];
-
-void Generate2DTorus(float innerRadius, float outerRadius, short resolution)
-{
-	short currentCoord = 0;
-	unsigned short currentIndex = 0;
-	int currentIndexPos = 0;
-
-	//indexData.resize(((resolution / 2) + 1) * 4);
-	//indexData = new unsigned short[181 * 4];
-
-	for(int i = 0; i <= 360; i += 360 / resolution)
-	{		
-		torusData.push_back(cosf(i * (PI / 180.0f)) * outerRadius);
-		torusData.push_back(0.0f);
-		torusData.push_back(sinf(i * (PI / 180.0f)) * outerRadius);
-		torusData.push_back(1.0f);
-		
-		torusData.push_back(cosf(i * (PI / 180.0f)) * innerRadius);
-		torusData.push_back(0.0f);
-		torusData.push_back(sinf(i * (PI / 180.0f)) * innerRadius);
-		torusData.push_back(1.0f);
-
-		indexData[currentIndexPos] = currentIndex + 1;
-		indexData[currentIndexPos + 1] = currentIndex + 2;
-		//indexData.insert(indexData.begin() + currentIndexPos, currentIndex + 1);
-		//indexData.insert(indexData.begin() + (currentIndexPos + 1), currentIndex + 2);
-
-		currentIndexPos += 2;
-		currentCoord += 8;
-		currentIndex += 2;
-	}
-
-	std::printf("Index: %i\n", currentIndex);
-
-	indexData[currentIndexPos - 1] = 1;
-	indexData[currentIndexPos] = 2;
-	indexData[currentIndexPos + 1] = currentIndex - 2;
-	//indexData.insert(indexData.begin() + (currentIndexPos - 1), 1);
-	//indexData.insert(indexData.begin() + currentIndexPos, 2);
-	//indexData.insert(indexData.begin() + (currentIndexPos + 1), currentIndex - 2);
-	
-	//std::printf("Size: %i\n", indexData.size());
-	std::printf("Size: %i\n", sizeof(indexData));
-}
-
-GLuint vertexBO;
-GLuint indexBO;
-GLuint vao;
 
 Utility::BasicMeshGeneration::Torus2D torus(1.0f, 2.0f, 360);
-
-void InitializeVAO()
-{
-	//Generate2DTorus(1.0f, 2.0f, 360);
-	//torus.Generate();
-
-	glGenBuffers(1, &vertexBO);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
-	glBufferData(GL_ARRAY_BUFFER, torus.vertexData.size() * sizeof(float), &torus.vertexData[0], GL_STREAM_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glGenBuffers(1, &indexBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(torus.indexData), torus.indexData, GL_STREAM_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
-
-	glBindVertexArray(0);
-
-	torus.indexBO = indexBO;
-	torus.vertexBO = vertexBO;
-	torus.vao = vao;
-}
-
 
 
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
@@ -296,13 +213,8 @@ void Init()
 {
 	InitializePrograms();
 	torus.Init();
-	//InitializeVAO();
 	
 	mainSun->LoadMesh("UnitSphere.xml");
-	//mainSun->AddSatellite("UnitSphere.xml", 1.5f, 3.0f, 100.0f, 0.5f);
-	//mainSun->AddSatellite("UnitSphere.xml", 0.0f, 2.0f, 110.0f, 0.5f);
-	//mainSun->AddSatellite("UnitSphere.xml", 1.0f, 2.5f, 90.0f, 0.5f);
-	//mainSun->AddSatellite("UnitSphere.xml", 1.0f, 4.0f, 60.0f, 0.5f);
 
 	universe->AddSun(mainSun);
 	universe->AddSunLight(mainSunLight);
@@ -350,25 +262,7 @@ void Display()
 	glutil::MatrixStack modelMatrix;
 	modelMatrix.SetMatrix(userCamera.CalcMatrix());
 
-	torus.Draw(modelMatrix, g_Interp, positionAttrib);
-	/*glUseProgram(g_Interp.theProgram);
-	glBindVertexArray(vao);
-	{
-		glutil::PushStack push(modelMatrix);
-
-		modelMatrix.RotateX(90.0f);
-
-		glUniformMatrix4fv(g_Interp.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-		glUniform4f(g_Interp.colorUnif, 1.0f, 0.0f, 0.0f, 1.0f);
-		
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
-		glEnableVertexAttribArray(positionAttrib);
-		glVertexAttribPointer(positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-		glDrawElements(GL_TRIANGLE_STRIP, ARRAY_COUNT(indexData), GL_UNSIGNED_SHORT, 0);
-	}
-	glDisableVertexAttribArray(0);
-	glUseProgram(0);*/
+	torus.Draw(modelMatrix, g_Interp);
 
 	universe->UpdateUniverse();
 	universe->RenderUniverse(modelMatrix, g_Lit, g_Unlit, g_Interp);
@@ -391,8 +285,6 @@ void Reshape(int width, int height)
 	float aspectRatio = width / (float)height;
 	persMatrix.Perspective(45.0f, aspectRatio, g_fzNear, g_fzFar);
 
-	//ProjectionBlock projData;
-	//projData.cameraToClipMatrix = persMatrix.Top();
 	g_cameraToClipMatrix = persMatrix.Top();
 
 	glBindBuffer(GL_UNIFORM_BUFFER, g_projectionUniformBuffer);

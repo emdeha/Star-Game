@@ -48,6 +48,8 @@ struct InterpProgData
 
 	GLuint modelToCameraMatrixUnif;
 	GLuint colorUnif;
+
+	GLuint positionAttrib;
 };
 
 #endif

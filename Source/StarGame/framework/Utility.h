@@ -57,28 +57,17 @@ namespace Utility
 			float outerRadius;
 			short resolution;
 
-			static void Generate(Torus2D &other);
+			unsigned int vao;
+			unsigned int indexBO;
+			unsigned int vertexBO;
 
 		public:
 			Torus2D(float newInnerRadius, float newOuterRadius, 
 					int newResolution);
 
 			void Init();
-			void Draw(glutil::MatrixStack &modelMatrix, const InterpProgData &data, 
-					  unsigned int positionAttrib);
+			void Draw(glutil::MatrixStack &modelMatrix, const InterpProgData &data);
 
-			unsigned int GetVertexBO();
-			unsigned int GetIndexBO();
-			unsigned int GetVao();
-
-		public:		
-			unsigned int vao;
-			unsigned int indexBO;
-			unsigned int vertexBO;
-
-			std::vector<float> vertexData;
-			// TODO: Use pointer, vector or sth like that
-			unsigned short indexData[724];
 		};
 	}
 }

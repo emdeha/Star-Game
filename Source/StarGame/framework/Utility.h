@@ -18,7 +18,18 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
+#define ARRAY_COUNT( array ) (sizeof( array ) / (sizeof( array[0] ) * (sizeof( array ) != sizeof(void*) || sizeof( array[0] ) <= sizeof(void*))))
+
+
+#include <glload/gl_3_3.h>
+#include <glutil/glutil.h>
+#include "../framework/framework.h"
+#include "../framework/Mesh.h"
+#include "../framework/Timer.h"
 #include <glm/glm.hpp>
+#include <vector>
+
+#include "../ProgramData/ProgramData.h"
 
 namespace Utility
 {
@@ -35,6 +46,40 @@ namespace Utility
 	namespace Intersections
 	{
 		bool RayIntersectsSphere(Ray mouseRay, float sphereRadius);
+	}
+
+	namespace BasicMeshGeneration
+	{
+		class Torus2D
+		{
+		private:
+			float innerRadius;
+			float outerRadius;
+			short resolution;
+
+			static void Generate(Torus2D &other);
+
+		public:
+			Torus2D(float newInnerRadius, float newOuterRadius, 
+					int newResolution);
+
+			void Init();
+			void Draw(glutil::MatrixStack &modelMatrix, const InterpProgData &data, 
+					  unsigned int positionAttrib);
+
+			unsigned int GetVertexBO();
+			unsigned int GetIndexBO();
+			unsigned int GetVao();
+
+		public:		
+			unsigned int vao;
+			unsigned int indexBO;
+			unsigned int vertexBO;
+
+			std::vector<float> vertexData;
+			// TODO: Use pointer, vector or sth like that
+			unsigned short indexData[724];
+		};
 	}
 }
 

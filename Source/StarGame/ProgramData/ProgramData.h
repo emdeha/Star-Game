@@ -42,4 +42,12 @@ struct UnlitProgData
 	GLuint modelToCameraMatrixUnif;
 };
 
+struct InterpProgData
+{
+	GLuint theProgram;
+
+	GLuint modelToCameraMatrixUnif;
+	GLuint colorUnif;
+};
+
 #endif

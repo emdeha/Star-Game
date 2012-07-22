@@ -19,7 +19,17 @@
         0 -1 0
         0 -1 0
         0 -1 0
-        0 -1 0</attribute>
+	0 -1 0</attribute>
+	<attribute index="1" type="float" size="4" >
+	1 0 0 0.5
+	1 0 0 0.5
+	0 0 0 0.5
+	0 0 0 0.5 
+	0 0 0 0.5 
+	0 0 0 0.5
+	0 0 0 0.5
+	0 0 0 0.5
+	</attribute>
 	<indices cmd="triangles" type="ushort" > 
         0 1 2
         2 3 0

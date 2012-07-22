@@ -34,7 +34,7 @@ void Universe::AddSun(Sun *newSun)
 }
 
 void Universe::RenderUniverse(glutil::MatrixStack &modelMatrix,
-							  const ProgramData &litData, const UnlitProgData &unLitData)
+							  const ProgramData &litData, const UnlitProgData &unLitData, const InterpProgData &interpData)
 {
 	int sizeLights = lights.size();
 	for(int i = 0; i < sizeLights; i++)
@@ -45,7 +45,7 @@ void Universe::RenderUniverse(glutil::MatrixStack &modelMatrix,
 	int sizeSuns = suns.size();
 	for(int i = 0; i < sizeSuns; i++)
 	{
-		suns[i]->Render(modelMatrix, litData, unLitData);
+		suns[i]->Render(modelMatrix, litData, unLitData, interpData);
 	}
 }
 void Universe::UpdateUniverse()

@@ -54,7 +54,7 @@ Main game mechanics
 v- Planet movement
 v- 3D Planets 
 -- textures
--- Selection
+v- Selection
     orbits
     only upgrades on small planets
     

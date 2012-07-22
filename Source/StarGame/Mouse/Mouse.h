@@ -15,13 +15,8 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
-#ifdef MOUSE_EXPORTS
-#define MOUSE_API __declspec(dllexport)
-#else
-#define MOUSE_API __declspec(dllimport)
-#endif
-
-#pragma warning(disable: 4251)
+#ifndef MOUSE_H
+#define MOUSE_H
 
 #define PI 3.14159f
 
@@ -29,7 +24,7 @@
 #include "../framework/Utility.h"
 
 // A simple mouse wrapping class.
-class MOUSE_API Mouse
+class Mouse
 {
 private:
 	glm::ivec2 currentPosition;
@@ -73,3 +68,5 @@ public:
 	void MouseWheelDown();
 	void MouseWheelNotDown();
 };
+
+#endif

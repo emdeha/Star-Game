@@ -38,7 +38,7 @@ public:
 
 	void UpdateUniverse();
 	void RenderUniverse(glutil::MatrixStack &modelMatrix,
-						const ProgramData &litData, const UnlitProgData &unLitData);
+						const ProgramData &litData, const UnlitProgData &unLitData, const InterpProgData &interpData);
 
 	// TODO: Add Load function
 };

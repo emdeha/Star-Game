@@ -32,6 +32,9 @@ Satellite::Satellite()
 	height = 0.0f;
 	offsetFromSun = 0.0f;
 	diameter = 0.0f;
+	isClicked = false;
+	animationID = '\0';
+	fastTimer = Framework::Timer(Framework::Timer::TT_LOOP, 2.0f);
 }
 Satellite::Satellite(Framework::Timer newRevolutionDuration, 
 					 float newHeight, float newOffsetFromSun, float newDiameter)
@@ -45,6 +48,9 @@ Satellite::Satellite(Framework::Timer newRevolutionDuration,
 	height = newHeight;
 	offsetFromSun = newOffsetFromSun;
 	diameter = newDiameter;
+	isClicked = false;
+	animationID = '\0';
+	fastTimer = Framework::Timer(Framework::Timer::TT_LOOP, 2.0f);
 }
 
 void Satellite::LoadMesh(const std::string &fileName)
@@ -60,7 +66,7 @@ void Satellite::LoadMesh(const std::string &fileName)
 	}
 }
 
-void Satellite::Render(glutil::MatrixStack &modelMatrix, const ProgramData &data)
+void Satellite::Render(glutil::MatrixStack &modelMatrix, const ProgramData &data, const UnlitProgData &unlitData, const InterpProgData &interpData)
 {
 	{
 		glutil::PushStack push(modelMatrix);
@@ -74,10 +80,16 @@ void Satellite::Render(glutil::MatrixStack &modelMatrix, const ProgramData &data
 		glUseProgram(data.theProgram);
 		glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
 		glUniformMatrix3fv(data.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+		glUniform4fv(data.baseDiffuseColorUnif, 1, glm::value_ptr(glm::vec4(1.0f)));
 
 		mesh->Render("lit");
 
 		glUseProgram(0);
+	}
+
+	if(isClicked)
+	{
+		LoadClickedAnimation(modelMatrix, data, unlitData, interpData);
 	}
 }
 void Satellite::Update()
@@ -106,9 +118,195 @@ bool Satellite::IsClicked(glm::mat4 projMat, glm::mat4 modelMat,
 	if(Utility::Intersections::RayIntersectsSphere(mouseRay, outerRadius) && 
 	   !Utility::Intersections::RayIntersectsSphere(mouseRay, innerRadius))
 	{
+		isClicked = true;
 		return true;
 	}
+	isClicked = false;
 	return false;
+}
+
+#define UNLIT
+
+void Satellite::LoadClickedAnimation(glutil::MatrixStack &modelMatrix, const ProgramData &data, const UnlitProgData &unlitData, const InterpProgData &interpData)
+{
+	switch(animationID)
+	{
+		case 'a':
+		{
+			float currTimeThroughLoop = revolutionDuration.GetAlpha();
+			
+			{
+				glutil::PushStack push(modelMatrix);
+		
+				modelMatrix.Translate(position);	
+				modelMatrix.RotateZ(80.0f);
+				modelMatrix.RotateZ(glm::degrees(currTimeThroughLoop * 2 * PI));	
+				modelMatrix.Translate(-0.25f, 0.0f, 0.0f);
+				modelMatrix.Scale(0.5f);
+				modelMatrix.RotateX(90.0f);
+
+				glm::mat3 normMatrix = glm::mat3(modelMatrix.Top());
+				normMatrix = glm::transpose(glm::inverse(normMatrix));
+				
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+#ifdef LIT
+				glUseProgram(data.theProgram);
+				glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+				glUniformMatrix3fv(data.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+#elif defined UNLIT
+				glUseProgram(unlitData.theProgram);
+				glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+				glUniform4fv(unlitData.objectColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f)));
+#else
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				glUseProgram(interpData.theProgram);
+				glUniformMatrix4fv(interpData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+				//glUniform4fv(interpData.startColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
+#endif
+
+				Framework::Mesh *effectMesh = new Framework::Mesh("UnitPlane.xml");
+				effectMesh->Render();
+
+				glUseProgram(0);
+			}
+			{
+				glutil::PushStack push(modelMatrix);
+		
+				modelMatrix.Translate(position);	
+				modelMatrix.RotateZ(-80.0f);
+				modelMatrix.RotateZ(glm::degrees(currTimeThroughLoop * 2 * PI));	
+				modelMatrix.Translate(-0.25f, 0.0f, 0.0f);
+				modelMatrix.Scale(0.5f);
+				modelMatrix.RotateX(90.0f);
+
+				glm::mat3 normMatrix = glm::mat3(modelMatrix.Top());
+				normMatrix = glm::transpose(glm::inverse(normMatrix));
+
+#ifdef LIT
+				glUseProgram(data.theProgram);
+				glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+				glUniformMatrix3fv(data.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+#elif defined UNLIT
+				glUseProgram(unlitData.theProgram);
+				glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+				glUniform4fv(unlitData.objectColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f)));
+#else
+				glUseProgram(interpData.theProgram);
+				glUniformMatrix4fv(interpData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+				//glUniform4fv(interpData.startColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
+#endif
+
+				Framework::Mesh *effectMesh = new Framework::Mesh("UnitPlane.xml");
+				effectMesh->Render();
+
+				glUseProgram(0);
+
+				glDisable(GL_BLEND);
+			}
+		}
+		break;
+		case 'b':
+		{
+			fastTimer.Update();
+
+			float currTimeThroughLoop = fastTimer.GetAlpha();
+			glm::vec3 littlePos;
+
+			{
+				glutil::PushStack push(modelMatrix);
+
+				littlePos.x = cosf(currTimeThroughLoop * (2.0f * PI)) * (offsetFromSun - diameter / 2.0f);
+				littlePos.y = sinf(currTimeThroughLoop * (2.0f * PI)) * (offsetFromSun - diameter / 2.0f);
+
+				modelMatrix.Translate(littlePos);
+				modelMatrix.Scale(0.2f);
+
+				glm::mat3 normMatrix(modelMatrix.Top());
+				normMatrix = glm::transpose(glm::inverse(normMatrix));
+
+#ifndef UNLIT
+				glUseProgram(data.theProgram);
+				glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+				glUniformMatrix3fv(data.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+				glUniform4fv(data.baseDiffuseColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
+#else
+				glUseProgram(unlitData.theProgram);
+				glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+				glUniform4fv(unlitData.objectColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
+#endif
+
+				mesh->Render("lit");
+
+				glUseProgram(0);
+			}
+			{
+				glutil::PushStack push(modelMatrix);
+
+				littlePos.x = cosf(currTimeThroughLoop * (2.0f * PI)) * (offsetFromSun + diameter / 2.0f);
+				littlePos.y = sinf(currTimeThroughLoop * (2.0f * PI)) * (offsetFromSun + diameter / 2.0f);
+
+				modelMatrix.Translate(littlePos);
+				modelMatrix.Scale(0.2f);
+
+				glm::mat3 normMatrix = glm::mat3(modelMatrix.Top());
+				normMatrix = glm::transpose(glm::inverse(normMatrix));
+
+#ifndef UNLIT
+				glUseProgram(data.theProgram);
+				glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+				glUniformMatrix3fv(data.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+				glUniform4fv(data.baseDiffuseColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
+#else
+				glUseProgram(unlitData.theProgram);
+				glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+				glUniform4fv(unlitData.objectColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
+#endif
+			
+				mesh->Render("lit");
+
+				glUseProgram(0);
+			}
+		}
+		break;
+		case 'c':
+		{	
+			fastTimer.Update();
+
+			float currTimeThroughLoop = fastTimer.GetAlpha();
+			glm::vec3 littlePos;
+			
+			glutil::PushStack push(modelMatrix);
+
+			modelMatrix.Translate(position);
+
+			littlePos.x = cosf(currTimeThroughLoop * (2.0f * PI)) * diameter;
+			littlePos.y = sinf(currTimeThroughLoop * (2.0f * PI)) * diameter;
+
+			modelMatrix.Translate(littlePos);
+			modelMatrix.Scale(0.5f);
+
+			glm::mat3 normMatrix = glm::mat3(modelMatrix.Top());
+			normMatrix = glm::transpose(glm::inverse(normMatrix));
+
+#ifndef UNLIT
+			glUseProgram(data.theProgram);
+			glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+			glUniformMatrix3fv(data.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+			glUniform4fv(data.baseDiffuseColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
+#else
+			glUseProgram(unlitData.theProgram);
+			glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+			glUniform4fv(unlitData.objectColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
+#endif
+			
+			mesh->Render("lit");
+
+			glUseProgram(0);
+		}
+		break;
+	}
 }
 
 Satellite::Satellite(const Satellite &other)
@@ -181,7 +379,7 @@ void Sun::LoadMesh(const std::string &fileName)
 }
 
 void Sun::Render(glutil::MatrixStack &modelMatrix,
-				 const ProgramData &litData, const UnlitProgData &unlitData)
+				 const ProgramData &litData, const UnlitProgData &unlitData, const InterpProgData &interpData)
 {
 	{
 		glutil::PushStack push(modelMatrix);
@@ -198,7 +396,7 @@ void Sun::Render(glutil::MatrixStack &modelMatrix,
 		int satellitesCount = satellites.size();
 		for(int i = 0; i < satellitesCount; i++)
 		{
-			satellites[i]->Render(modelMatrix, litData);
+			satellites[i]->Render(modelMatrix, litData, unlitData, interpData);
 		}
 	}
 }

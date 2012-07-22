@@ -19,7 +19,7 @@
 #include "Mouse.h"
 
 #include <glload/gl_3_3.h>
-#include <glutil\glutil.h>
+#include <glutil/glutil.h>
 
 Mouse::Mouse()
 {
@@ -33,74 +33,74 @@ Mouse::Mouse()
 	isMouseWheelDown = false;
 }
 
-inline void Mouse::SetCurrentPosition(glm::ivec2 newCurrentPosition)
+void Mouse::SetCurrentPosition(glm::ivec2 newCurrentPosition)
 {
 	currentPosition = newCurrentPosition;
 }
 
-inline glm::ivec2 Mouse::GetCurrentPosition()
+glm::ivec2 Mouse::GetCurrentPosition()
 {
 	return currentPosition;
 }
-inline glm::ivec2 Mouse::GetLastPosition()
+glm::ivec2 Mouse::GetLastPosition()
 {
 	return lastPosition;
 }
 
-inline void Mouse::OverrideLastPosition(glm::ivec2 newLastPosition)
+void Mouse::OverrideLastPosition(glm::ivec2 newLastPosition)
 {
 	lastPosition = newLastPosition;
 }
 
 
-inline bool Mouse::IsLeftButtonDown()
+bool Mouse::IsLeftButtonDown()
 {
 	return isLeftButtonPressed;
 }
-inline bool Mouse::IsRightButtonDown()
+bool Mouse::IsRightButtonDown()
 {
 	return isRightButtonPressed;
 }
 
-inline bool Mouse::IsMouseWheelUp()
+bool Mouse::IsMouseWheelUp()
 {
 	return isMouseWheelUp;
 }
-inline bool Mouse::IsMouseWheelDown()
+bool Mouse::IsMouseWheelDown()
 {
 	return isMouseWheelDown;
 }
 
-inline void Mouse::PressLeftButton()
+void Mouse::PressLeftButton()
 {
 	isLeftButtonPressed = true;
 }
-inline void Mouse::ReleaseLeftButton()
+void Mouse::ReleaseLeftButton()
 {
 	isLeftButtonPressed = false;
 }
-inline void Mouse::PressRightButton()
+void Mouse::PressRightButton()
 {
 	isRightButtonPressed = true;
 }
-inline void Mouse::ReleaseRightButton()
+void Mouse::ReleaseRightButton()
 {
 	isRightButtonPressed = false;
 }
 
-inline void Mouse::MouseWheelUp()
+void Mouse::MouseWheelUp()
 {
 	isMouseWheelUp = true;
 }
-inline void Mouse::MouseWheelNotUp()
+void Mouse::MouseWheelNotUp()
 {
 	isMouseWheelUp = false;
 }
-inline void Mouse::MouseWheelDown()
+void Mouse::MouseWheelDown()
 {
 	isMouseWheelDown = true;
 }
-inline void Mouse::MouseWheelNotDown()
+void Mouse::MouseWheelNotDown()
 {
 	isMouseWheelDown = false;
 }

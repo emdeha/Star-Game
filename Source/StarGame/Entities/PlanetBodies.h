@@ -39,6 +39,7 @@ private:
 	Sun *parent;
 
 	Framework::Timer revolutionDuration;
+	Framework::Timer fastTimer;
 
 	glm::vec3 position;
 
@@ -47,6 +48,11 @@ private:
 
 	float diameter;
 
+	bool isClicked;
+
+
+	char animationID;
+
 public:
 	Satellite();
 	Satellite(Framework::Timer newRevolutionDuration, 
@@ -54,14 +60,20 @@ public:
 
 	void LoadMesh(const std::string &fileName);
 
-	void Render(glutil::MatrixStack &modelMatrix, const ProgramData &data);
+	void Render(glutil::MatrixStack &modelMatrix, const ProgramData &data, const UnlitProgData &unlitData, const InterpProgData &interpData);
 	void Update();
 
 	bool IsClicked(glm::mat4 projMat, glm::mat4 modelMat, 
 				   Mouse userMouse, glm::vec4 cameraPos,
 				   float windowWidth, float windowHeight);
 
+	void LoadClickedAnimation(glutil::MatrixStack &modelMatrix, const ProgramData &data, const UnlitProgData &unlitData, const InterpProgData &interpData);
+
 	void SetParent(Sun *newParent);
+	void SetAnimationID(char newAnimationID)
+	{
+		animationID = newAnimationID;
+	}
 
 public:
 	Satellite(const Satellite &other);
@@ -93,7 +105,7 @@ public:
 	void LoadMesh(const std::string &fileName);
 
 	void Render(glutil::MatrixStack &modelMatrix,
-				const ProgramData &litData, const UnlitProgData &unlitData);
+				const ProgramData &litData, const UnlitProgData &unlitData, const InterpProgData &interpData);
 	void Update();
 
 	bool AddSatellite(const std::string &fileName, 

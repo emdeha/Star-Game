@@ -17,6 +17,8 @@
 
 #include "Utility.h"
 
+#define PI 3.14159f
+
 Utility::Ray::Ray()
 {
 	origin = glm::vec4();
@@ -44,3 +46,160 @@ bool Utility::Intersections::RayIntersectsSphere(Ray mouseRay, float sphereRadiu
 	else 
 		return false;
 }
+
+
+Utility::BasicMeshGeneration::Torus2D::Torus2D(float newInnerRadius, float newOuterRadius, 
+											   int newResolution)
+{
+	innerRadius = newInnerRadius;
+	outerRadius = newOuterRadius;
+	resolution = newResolution;
+
+	vertexData.resize(0);
+
+	vao = 0;
+	indexBO = 0;
+	vertexBO = 0;
+
+	/*this->Generate();
+
+	glGenBuffers(1, &vertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+	glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(float), &vertexData[0], GL_STREAM_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glGenBuffers(1, &indexBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexData), indexData, GL_STREAM_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+
+	glBindVertexArray(0);*/
+}
+
+void Utility::BasicMeshGeneration::Torus2D::Init()
+{
+	Generate(*this);
+
+	glGenBuffers(1, &vertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+	glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(float), &vertexData[0], GL_STREAM_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glGenBuffers(1, &indexBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexData), indexData, GL_STREAM_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+
+	glBindVertexArray(0);
+}
+
+void Utility::BasicMeshGeneration::Torus2D::Generate(Torus2D &other)
+{
+	short currentCoord = 0;
+	unsigned short currentIndex = 0;
+	int currentIndexPos = 0;
+
+	for(int i = 0; i <= 360; i += 360 / other.resolution)
+	{		
+		other.vertexData.push_back(cosf(i * (PI / 180.0f)) * other.outerRadius);
+		other.vertexData.push_back(0.0f);
+		other.vertexData.push_back(sinf(i * (PI / 180.0f)) * other.outerRadius);
+		other.vertexData.push_back(1.0f);
+		
+		other.vertexData.push_back(cosf(i * (PI / 180.0f)) * other.innerRadius);
+		other.vertexData.push_back(0.0f);
+		other.vertexData.push_back(sinf(i * (PI / 180.0f)) * other.innerRadius);
+		other.vertexData.push_back(1.0f);
+
+		other.indexData[currentIndexPos] = currentIndex + 1;
+		other.indexData[currentIndexPos + 1] = currentIndex + 2;
+
+		currentIndexPos += 2;
+		currentCoord += 8;
+		currentIndex += 2;
+	}
+
+	other.indexData[currentIndexPos - 1] = 1;
+	other.indexData[currentIndexPos] = 2;
+	other.indexData[currentIndexPos + 1] = currentIndex - 2;
+}
+
+void Utility::BasicMeshGeneration::Torus2D::Draw(glutil::MatrixStack &modelMatrix, const InterpProgData &data,
+												 unsigned int positionAttrib)
+{
+	glUseProgram(data.theProgram);
+	glBindVertexArray(vao);
+	{
+		glutil::PushStack push(modelMatrix);
+
+		modelMatrix.RotateX(90.0f);
+
+		glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+		glUniform4f(data.colorUnif, 1.0f, 0.0f, 0.0f, 1.0f);
+
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+		glEnableVertexAttribArray(positionAttrib);
+		glVertexAttribPointer(positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+		glDrawElements(GL_TRIANGLE_STRIP, ARRAY_COUNT(indexData), GL_UNSIGNED_SHORT, 0);
+	}
+	glDisableVertexAttribArray(0);
+	glUseProgram(0);
+}
+
+unsigned int Utility::BasicMeshGeneration::Torus2D::GetIndexBO()
+{
+	return indexBO;
+}
+unsigned int Utility::BasicMeshGeneration::Torus2D::GetVertexBO()
+{
+	return vertexBO;
+}
+unsigned int Utility::BasicMeshGeneration::Torus2D::GetVao()
+{
+	return vao;
+}
+/*void Utility::BasicMeshGeneration::Generate2DTorus(float innerRadius, float outerRadius, 
+												   short resolution)
+{
+	unsigned short currentCoord = 0;
+	unsigned short currentIndex = 0;
+	int currentIndexPos = 0;
+
+	for(int i = 0; i <= 360; i += 360 / resolution)
+	{		
+		torusData.push_back(cosf(i * (PI / 180.0f)) * outerRadius);
+		torusData.push_back(0.0f);
+		torusData.push_back(sinf(i * (PI / 180.0f)) * outerRadius);
+		torusData.push_back(1.0f);
+		
+		torusData.push_back(cosf(i * (PI / 180.0f)) * innerRadius);
+		torusData.push_back(0.0f);
+		torusData.push_back(sinf(i * (PI / 180.0f)) * innerRadius);
+		torusData.push_back(1.0f);
+
+		indexData[currentIndexPos] = currentIndex + 1;
+		indexData[currentIndexPos + 1] = currentIndex + 2;
+
+		currentIndexPos += 2;
+		currentCoord += 8;
+		currentIndex += 2;
+	}
+
+	std::printf("Index: %i\n", currentIndex);
+	std::printf("Size: %i\n", torusData.size());
+
+	indexData[currentIndexPos - 1] = 1;
+	indexData[currentIndexPos] = 2;
+	indexData[currentIndexPos + 1] = currentIndex - 2;
+}*/

@@ -46,28 +46,53 @@ namespace Utility
 	namespace Intersections
 	{
 		bool RayIntersectsSphere(Ray mouseRay, float sphereRadius);
+		bool RayIntersectsEllipsoid(Ray mouseRay, float sphereRadius, glm::mat4 distortionMat);
 	}
 
 	namespace BasicMeshGeneration
 	{
 		class Torus2D
 		{
-		private:
-			float innerRadius;
-			float outerRadius;
-			short resolution;
+		private:			
+			glm::vec4 color;
+			glm::vec4 position;
 
 			unsigned int vao;
 			unsigned int indexBO;
 			unsigned int vertexBO;
 
+			float innerRadius;
+			float outerRadius;
+			short resolution;
+
 		public:
-			Torus2D(float newInnerRadius, float newOuterRadius, 
+			Torus2D(glm::vec4 newColor, glm::vec4 newPosition,
+					float newInnerRadius, float newOuterRadius, 
 					int newResolution);
 
 			void Init();
 			void Draw(glutil::MatrixStack &modelMatrix, const InterpProgData &data);
+		};
 
+		class Circle
+		{
+		private:
+			glm::vec4 color;
+			glm::vec4 position;
+
+			unsigned int vao;
+			unsigned int indexBO;
+			unsigned int vertexBO;
+
+			float radius;
+			short resolution;
+
+		public:
+			Circle(glm::vec4 newColor, glm::vec4 newPosition, 
+				   float newRadius, short newResolution);
+
+			void Init();
+			void Draw(glutil::MatrixStack &modelMatrix, const InterpProgData &data);
 		};
 	}
 }

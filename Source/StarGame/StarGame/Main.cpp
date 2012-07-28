@@ -25,7 +25,7 @@
 float g_fzNear = 1.0f;
 float g_fzFar = 1000.0f;
 
-ProgramData g_Lit;
+LitProgData g_Lit;
 UnlitProgData g_Unlit;
 InterpProgData g_Interp;
 
@@ -69,14 +69,14 @@ UnlitProgData LoadUnlitProgram(const std::string &strVertexShader, const std::st
 	return data;
 }
 
-ProgramData LoadLitProgram(const std::string &strVertexShader, const std::string &strFragmentShader)
+LitProgData LoadLitProgram(const std::string &strVertexShader, const std::string &strFragmentShader)
 {
 	std::vector<GLuint> shaderList;
 
 	shaderList.push_back(Framework::LoadShader(GL_VERTEX_SHADER, strVertexShader));
 	shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, strFragmentShader));
 
-	ProgramData data;
+	LitProgData data;
 	data.theProgram = Framework::CreateProgram(shaderList);
 	data.modelToCameraMatrixUnif = glGetUniformLocation(data.theProgram, "modelToCameraMatrix");
 	data.lightIntensityUnif = glGetUniformLocation(data.theProgram, "lightIntensity");
@@ -111,7 +111,7 @@ struct ProjectionBlock
 glm::mat4 g_cameraToClipMatrix;
 glm::mat4 g_modelMatrix;
 
-Sun *mainSun = new Sun(glm::vec3(), 0.5f);
+Sun *mainSun = new Sun(glm::vec3(0.0f), 1.25f);
 SunLight *mainSunLight = new SunLight(glm::vec3(), glm::vec4(1.0f), glm::vec4(0.2f), glm::vec4(1.0f),
 								   1.2f, 0.5f);
 
@@ -119,23 +119,16 @@ Universe *universe = new Universe();
 
 Mouse userMouse;
 
-TopDownCamera userCamera = TopDownCamera(glm::vec3(), 6.25f, 90.0f, 0.0f);
+TopDownCamera userCamera = TopDownCamera(glm::vec3(), 12.5f, 90.0f, 135.0f);
 
-float CalcFrustumScale(float fFovDeg)
-{
-	const float degToRad = 3.14159f * 2.0f / 360.0f;
-	float fFovRad = fFovDeg * degToRad;
-	return 1.0f / tan(fFovRad / 2.0f);
-}
-
-float initialOffset = 1.5f;
+float initialOffset = 1.0f;
 
 void HandleMouse()
 {
 	glm::vec3 cameraPosition = userCamera.ResolveCamPosition();
 
-	float windowWidth = (float)glutGet(GLUT_WINDOW_HEIGHT);
-	float windowHeight = (float)glutGet(GLUT_WINDOW_WIDTH);
+	float windowWidth = (float)glutGet(GLUT_WINDOW_WIDTH);
+	float windowHeight = (float)glutGet(GLUT_WINDOW_HEIGHT);
 
 	if(userMouse.IsLeftButtonDown())
 	{
@@ -143,14 +136,16 @@ void HandleMouse()
 			(g_cameraToClipMatrix, g_modelMatrix, userMouse, 
 			 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 		{
-			if(mainSun->AddSatellite("UnitSphere.xml", 1.5f, initialOffset, 10.0f, 0.5f))
-			{
-				initialOffset += 1.0f;
-			}
-			else std::printf("Satellite cap reached!\n");
+			/*if(*/mainSun->AddSatellite("UnitSphere.xml", 1.5f, initialOffset, 10.0f, 0.25f);// == true)
+			//{
+				initialOffset += 0.75f;
+			//}
+			//else std::printf("Satellite cap reached!\n");
 		}
 
-		std::vector<Satellite*> satellites = mainSun->GetSatellites();
+		mainSun->IsSatelliteClicked(g_cameraToClipMatrix, g_modelMatrix, userMouse, 
+								glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight);
+		/*std::vector<Satellite*> satellites = mainSun->GetSatellites();
 		for(int satellite = 0; satellite < satellites.size(); satellite++)
 		{
 			if(satellites[satellite]->IsClicked
@@ -159,10 +154,12 @@ void HandleMouse()
 			{
 				std::printf("Satellite %d clicked!!!\n", satellite);
 			}
-		}
+		}*/
 	}
 
-	std::vector<Satellite*> satellites = mainSun->GetSatellites();
+	mainSun->IsSatelliteClicked(g_cameraToClipMatrix, g_modelMatrix, userMouse, 
+								glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight);
+	/*std::vector<Satellite*> satellites = mainSun->GetSatellites();
 	for(int satellite = 0; satellite < satellites.size(); satellite++)
 	{
 		if(satellites[satellite]->IsClicked
@@ -171,7 +168,7 @@ void HandleMouse()
 		{
 			std::printf("Satellite %d clicked!!!\n", satellite);
 		}
-	}
+	}*/
 
 	userMouse.ReleaseLeftButton();
 }
@@ -205,14 +202,10 @@ void HandlePassiveMovement(int x, int y)
 }
 
 
-Utility::BasicMeshGeneration::Torus2D torus(1.0f, 2.0f, 360);
-
-
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
 void Init()
 {
 	InitializePrograms();
-	torus.Init();
 	
 	mainSun->LoadMesh("UnitSphere.xml");
 
@@ -248,8 +241,6 @@ void Init()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-int drawCMD = GL_TRIANGLES;
-
 //Called to update the display.
 //You should call glutSwapBuffers after all of your rendering to display what you rendered.
 //If you need continuous updates of the screen, call glutPostRedisplay() at the end of the function.
@@ -261,14 +252,12 @@ void Display()
 
 	glutil::MatrixStack modelMatrix;
 	modelMatrix.SetMatrix(userCamera.CalcMatrix());
-
-	torus.Draw(modelMatrix, g_Interp);
+	
+	g_modelMatrix = modelMatrix.Top();
 
 	universe->UpdateUniverse();
 	universe->RenderUniverse(modelMatrix, g_Lit, g_Unlit, g_Interp);
-
-	g_modelMatrix = modelMatrix.Top();
-
+	
 	HandleMouse();
 	userMouse.OverrideLastPosition(userMouse.GetCurrentPosition());
 
@@ -295,13 +284,6 @@ void Reshape(int width, int height)
 	glutPostRedisplay();
 }
 
-char animationIDs[] =
-{
-	'a', 'b', 'c',
-};
-
-int currAnimID = 0;
-
 
 //Called whenever a key on the keyboard was pressed.
 //The key is given by the ''key'' parameter, which is in ASCII.
@@ -314,15 +296,6 @@ void Keyboard(unsigned char key, int x, int y)
 	case 27:
 		glutLeaveMainLoop();
 		return;
-	case 'a':
-		std::vector<Satellite*> satellites = mainSun->GetSatellites();
-		for(int i = 0; i < satellites.size(); i++)
-		{
-			satellites[i]->SetAnimationID(animationIDs[currAnimID]);
-		}
-		currAnimID++;
-		if(currAnimID > ARRAY_COUNT(animationIDs)) currAnimID = 0;
-		break;
 	}
 
 	glutPostRedisplay();

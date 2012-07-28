@@ -40,7 +40,7 @@ SunLight::SunLight(glm::vec3 newPosition,
 	shininessFactor = newShininesFactor;
 }
 
-void SunLight::Render(glutil::MatrixStack &modelMatrix, const ProgramData &lightData)
+void SunLight::Render(glutil::MatrixStack &modelMatrix, const LitProgData &lightData)
 {
 	glm::vec4 position_cameraSpace = modelMatrix.Top() * glm::vec4(position, 1.0f);
 

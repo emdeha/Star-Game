@@ -60,19 +60,33 @@ public:
 
 	void LoadMesh(const std::string &fileName);
 
-	void Render(glutil::MatrixStack &modelMatrix, const ProgramData &data, const UnlitProgData &unlitData, const InterpProgData &interpData);
+	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &data, const UnlitProgData &unlitData, const InterpProgData &interpData);
 	void Update();
 
 	bool IsClicked(glm::mat4 projMat, glm::mat4 modelMat, 
 				   Mouse userMouse, glm::vec4 cameraPos,
 				   float windowWidth, float windowHeight);
 
-	void LoadClickedAnimation(glutil::MatrixStack &modelMatrix, const ProgramData &data, const UnlitProgData &unlitData, const InterpProgData &interpData);
+	void LoadClickedAnimation(glutil::MatrixStack &modelMatrix, const LitProgData &data, const UnlitProgData &unlitData, const InterpProgData &interpData);
 
-	void SetParent(Sun *newParent);
+	void SetParent(const Sun *newParent);
 	void SetAnimationID(char newAnimationID)
 	{
 		animationID = newAnimationID;
+	}
+
+	void SetIsClicked(bool newIsClicked)
+	{
+		isClicked = newIsClicked;
+	}
+
+	float GetOffsetFromSun()
+	{
+		return offsetFromSun;
+	}
+	float GetDiameter()
+	{
+		return diameter;
 	}
 
 public:
@@ -83,7 +97,6 @@ public:
 private:
 	glm::vec4 CalculatePosition();
 };
-
 
 
 
@@ -98,6 +111,8 @@ private:
 
 	float diameter;
 
+	bool isClicked;
+
 public:
 	Sun();
 	Sun(glm::vec3 newPosition, float newDiameter);
@@ -105,7 +120,7 @@ public:
 	void LoadMesh(const std::string &fileName);
 
 	void Render(glutil::MatrixStack &modelMatrix,
-				const ProgramData &litData, const UnlitProgData &unlitData, const InterpProgData &interpData);
+				const LitProgData &litData, const UnlitProgData &unlitData, const InterpProgData &interpData);
 	void Update();
 
 	bool AddSatellite(const std::string &fileName, 
@@ -119,6 +134,10 @@ public:
 				   Mouse userMouse, glm::vec4 cameraPos,
 				   float windowWidth, float windowHeight);
 
+	void IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat, 
+						    Mouse userMouse, glm::vec4 cameraPos,
+						    float windowWidth, float windowHeight);
+
 public:
 	Sun(const Sun &other);
 	~Sun();
@@ -130,11 +149,10 @@ inline glm::vec4 Sun::GetPosition()
 	return glm::vec4(position, 1.0f);
 }
 
-
-
-inline void Satellite::SetParent(Sun *newParent)
+inline void Satellite::SetParent(const Sun *newParent)
 {
 	parent = new Sun(*newParent);
 }
+
 
 #endif

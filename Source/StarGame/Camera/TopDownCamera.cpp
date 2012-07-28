@@ -46,8 +46,8 @@ glm::vec3 TopDownCamera::ResolveCamPosition()
 	float phi = DegToRad(anglePhi_degs);
 	float theta = DegToRad(angleTheta_degs);
 	
-	float sinTheta = 1.0f;
-	float cosTheta = 0.0f;	
+	float sinTheta = sin(theta);
+	float cosTheta = cos(theta);	
 	float sinPhi = sinf(phi);
 	float cosPhi = cosf(phi);
 

@@ -16,7 +16,6 @@
 
 
 #include "Utility.h"
-#include <memory>
 
 #define PI 3.14159f
 
@@ -47,16 +46,25 @@ bool Utility::Intersections::RayIntersectsSphere(Ray mouseRay, float sphereRadiu
 	else 
 		return false;
 }
+bool Utility::Intersections::RayIntersectsEllipsoid(Ray mouseRay, float sphereRadius, glm::mat4 distortionMat)
+{
+	Ray distortedRay = Ray(distortionMat * mouseRay.origin, distortionMat * mouseRay.direction);
+	return Utility::Intersections::RayIntersectsSphere(distortedRay, sphereRadius);
+}
 
 
-Utility::BasicMeshGeneration::Torus2D::Torus2D(float newInnerRadius, float newOuterRadius, 
+Utility::BasicMeshGeneration::Torus2D::Torus2D(glm::vec4 newColor, glm::vec4 newPosition,
+											   float newInnerRadius, float newOuterRadius, 
 											   int newResolution)
 {
+	assert(newResolution < 360 && newResolution > 3);
+
+	color = newColor;
+	position = newPosition;
+
 	innerRadius = newInnerRadius;
 	outerRadius = newOuterRadius;
 	resolution = newResolution;
-
-	//vertexData.resize(0);
 
 	vao = 0;
 	indexBO = 0;
@@ -65,22 +73,22 @@ Utility::BasicMeshGeneration::Torus2D::Torus2D(float newInnerRadius, float newOu
 
 void Utility::BasicMeshGeneration::Torus2D::Init()
 {
+	// Torus Generation
 	std::vector<float> vertexData;
 	std::vector<unsigned short> indexData;
 
-	short currentCoord = 0;
 	unsigned short currentIndex = 0;
 	int currentIndexPos = 0;
 
 	for(int i = 0; i <= 360; i += 360 / resolution)
 	{		
 		vertexData.push_back(cosf(i * (PI / 180.0f)) * outerRadius);
-		vertexData.push_back(0.0f);
+		vertexData.push_back(position.y);
 		vertexData.push_back(sinf(i * (PI / 180.0f)) * outerRadius);
 		vertexData.push_back(1.0f);
 		
 		vertexData.push_back(cosf(i * (PI / 180.0f)) * innerRadius);
-		vertexData.push_back(0.0f);
+		vertexData.push_back(position.y);
 		vertexData.push_back(sinf(i * (PI / 180.0f)) * innerRadius);
 		vertexData.push_back(1.0f);
 
@@ -88,7 +96,6 @@ void Utility::BasicMeshGeneration::Torus2D::Init()
 		indexData.push_back(currentIndex + 2);		
 
 		currentIndexPos += 2;
-		currentCoord += 8;
 		currentIndex += 2;
 	}
 
@@ -97,7 +104,7 @@ void Utility::BasicMeshGeneration::Torus2D::Init()
 	indexData.push_back(currentIndex - 2);
 
 
-
+	// Initialization of buffer objects
 	glGenBuffers(1, &vertexBO);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
 	glBufferData(GL_ARRAY_BUFFER, 
@@ -118,7 +125,6 @@ void Utility::BasicMeshGeneration::Torus2D::Init()
 	glBindVertexArray(0);
 }
 
-
 void Utility::BasicMeshGeneration::Torus2D::Draw(glutil::MatrixStack &modelMatrix, const InterpProgData &data)
 {
 	glUseProgram(data.theProgram);
@@ -129,13 +135,95 @@ void Utility::BasicMeshGeneration::Torus2D::Draw(glutil::MatrixStack &modelMatri
 		modelMatrix.RotateX(90.0f);
 
 		glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-		glUniform4f(data.colorUnif, 1.0f, 0.0f, 0.0f, 1.0f);
+		glUniform4f(data.colorUnif, color.r, color.g, color.b, color.a);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
 		glEnableVertexAttribArray(data.positionAttrib);
 		glVertexAttribPointer(data.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
 		glDrawElements(GL_TRIANGLE_STRIP, resolution * 4, GL_UNSIGNED_SHORT, 0);
+	}
+	glDisableVertexAttribArray(0);
+	glUseProgram(0);
+}
+
+
+
+Utility::BasicMeshGeneration::Circle::Circle(glm::vec4 newColor, glm::vec4 newPosition,
+											 float newRadius, short newResolution)
+{
+	assert(newResolution < 360 && newResolution > 3.0);
+
+	color = newColor;
+	position = newPosition;
+
+	radius = newRadius;
+	resolution = newResolution;
+
+	vao = 0;
+	indexBO = 0;
+	vertexBO = 0;
+}
+
+void Utility::BasicMeshGeneration::Circle::Init()
+{
+	// Circle Generation
+	std::vector<float> vertexData;
+	std::vector<unsigned short> indexData;
+
+	unsigned short currentIndex = 0;
+
+	for(int i = 0; i <= 360; i += 360 / resolution)
+	{		
+		vertexData.push_back(cosf(i * (PI / 180.0f)) * radius);
+		vertexData.push_back(-0.1f);
+		vertexData.push_back(sinf(i * (PI / 180.0f)) * radius);
+		vertexData.push_back(1.0f);
+
+		indexData.push_back(currentIndex);
+		
+		currentIndex++;
+	}
+
+
+	// Initialization of buffer objects
+	glGenBuffers(1, &vertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+	glBufferData(GL_ARRAY_BUFFER, 
+				 sizeof(float) * vertexData.size(), &vertexData[0], GL_STREAM_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glGenBuffers(1, &indexBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
+				 sizeof(unsigned short) * indexData.size(), &indexData[0], GL_STREAM_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+
+	glBindVertexArray(0);
+}
+
+void Utility::BasicMeshGeneration::Circle::Draw(glutil::MatrixStack &modelMatrix, const InterpProgData &data)
+{
+	glUseProgram(data.theProgram);
+	glBindVertexArray(vao);
+	{
+		glutil::PushStack push(modelMatrix);
+
+		modelMatrix.RotateX(90.0f);
+
+		glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+		glUniform4f(data.colorUnif, color.r, color.g, color.b, color.a);
+
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+		glEnableVertexAttribArray(data.positionAttrib);
+		glVertexAttribPointer(data.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+		glDrawElements(GL_TRIANGLE_FAN, resolution * 4, GL_UNSIGNED_SHORT, 0);
 	}
 	glDisableVertexAttribArray(0);
 	glUseProgram(0);

@@ -66,11 +66,11 @@ void Satellite::LoadMesh(const std::string &fileName)
 	}
 }
 
-void Satellite::Render(glutil::MatrixStack &modelMatrix, const ProgramData &data, const UnlitProgData &unlitData, const InterpProgData &interpData)
+void Satellite::Render(glutil::MatrixStack &modelMatrix, const LitProgData &data, const UnlitProgData &unlitData, const InterpProgData &interpData)
 {
 	{
 		glutil::PushStack push(modelMatrix);
-
+		
 		modelMatrix.Translate(position);
 		modelMatrix.Scale(diameter);
 
@@ -94,7 +94,7 @@ void Satellite::Render(glutil::MatrixStack &modelMatrix, const ProgramData &data
 }
 void Satellite::Update()
 {
-	revolutionDuration.Update();
+	//revolutionDuration.Update();
 
 	float currTimeThroughLoop = revolutionDuration.GetAlpha();
 
@@ -107,206 +107,70 @@ bool Satellite::IsClicked(glm::mat4 projMat, glm::mat4 modelMat,
 						  float windowWidth, float windowHeight)
 {
 	glm::vec4 parentPosition_worldSpace = modelMat * parent->GetPosition();
+	glm::vec4 satellitePos_worldSpace = modelMat * glm::vec4(position, 1.0f);
+
+	glm::vec4 torusPos = parent->GetPosition();
 
 	Utility::Ray mouseRay = 
-		userMouse.GetPickRay(projMat, modelMat, cameraPos, parentPosition_worldSpace, 
-							 windowHeight, windowWidth);
+		userMouse.GetPickRay(projMat, modelMat, cameraPos, torusPos, 
+							 windowWidth, windowHeight);
 
-	float outerRadius = glm::length(position) + diameter / 2.0f;
-	float innerRadius = glm::length(position) - diameter / 2.0f;
+	float outerRadius = offsetFromSun + diameter;
+	float innerRadius = offsetFromSun - diameter;
 
 	if(Utility::Intersections::RayIntersectsSphere(mouseRay, outerRadius) && 
 	   !Utility::Intersections::RayIntersectsSphere(mouseRay, innerRadius))
 	{
+		std::printf("%f\n", outerRadius);
 		isClicked = true;
 		return true;
 	}
 	isClicked = false;
 	return false;
+	/*if(Utility::Intersections::RayIntersectsSphere(mouseRay, offsetFromSun + diameter))
+	{
+		isClicked = true;
+		return true;
+	}
+	isClicked = false;
+	return false;*/
 }
 
-#define UNLIT
-
-void Satellite::LoadClickedAnimation(glutil::MatrixStack &modelMatrix, const ProgramData &data, const UnlitProgData &unlitData, const InterpProgData &interpData)
+void Satellite::LoadClickedAnimation(glutil::MatrixStack &modelMatrix, const LitProgData &data, const UnlitProgData &unlitData, const InterpProgData &interpData)
 {
-	switch(animationID)
-	{
-		case 'a':
-		{
-			float currTimeThroughLoop = revolutionDuration.GetAlpha();
-			
-			{
-				glutil::PushStack push(modelMatrix);
-		
-				modelMatrix.Translate(position);	
-				modelMatrix.RotateZ(80.0f);
-				modelMatrix.RotateZ(glm::degrees(currTimeThroughLoop * 2 * PI));	
-				modelMatrix.Translate(-0.25f, 0.0f, 0.0f);
-				modelMatrix.Scale(0.5f);
-				modelMatrix.RotateX(90.0f);
+	// TODO: Play with blending
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-				glm::mat3 normMatrix = glm::mat3(modelMatrix.Top());
-				normMatrix = glm::transpose(glm::inverse(normMatrix));
-				
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	// TODO: Initialization should be done elsewhere
+	Utility::BasicMeshGeneration::Torus2D torus(
+		glm::vec4(1.0f, 0.0f, 0.0f, 0.5f),
+		parent->GetPosition(),
+		offsetFromSun - diameter, 
+		offsetFromSun + diameter, 90);
 
-#ifdef LIT
-				glUseProgram(data.theProgram);
-				glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-				glUniformMatrix3fv(data.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
-#elif defined UNLIT
-				glUseProgram(unlitData.theProgram);
-				glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-				glUniform4fv(unlitData.objectColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f)));
-#else
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				glUseProgram(interpData.theProgram);
-				glUniformMatrix4fv(interpData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-				//glUniform4fv(interpData.startColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
-#endif
+	torus.Init();
+	torus.Draw(modelMatrix, interpData);
 
-				Framework::Mesh *effectMesh = new Framework::Mesh("UnitPlane.xml");
-				effectMesh->Render();
+	glDisable(GL_BLEND);
 
-				glUseProgram(0);
-			}
-			{
-				glutil::PushStack push(modelMatrix);
-		
-				modelMatrix.Translate(position);	
-				modelMatrix.RotateZ(-80.0f);
-				modelMatrix.RotateZ(glm::degrees(currTimeThroughLoop * 2 * PI));	
-				modelMatrix.Translate(-0.25f, 0.0f, 0.0f);
-				modelMatrix.Scale(0.5f);
-				modelMatrix.RotateX(90.0f);
+	Utility::BasicMeshGeneration::Torus2D torusOut1(
+		glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
+		parent->GetPosition(),
+		offsetFromSun - diameter - 0.05f, 
+		offsetFromSun - diameter, 90);
 
-				glm::mat3 normMatrix = glm::mat3(modelMatrix.Top());
-				normMatrix = glm::transpose(glm::inverse(normMatrix));
+	torusOut1.Init();
+	torusOut1.Draw(modelMatrix, interpData);
 
-#ifdef LIT
-				glUseProgram(data.theProgram);
-				glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-				glUniformMatrix3fv(data.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
-#elif defined UNLIT
-				glUseProgram(unlitData.theProgram);
-				glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-				glUniform4fv(unlitData.objectColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f)));
-#else
-				glUseProgram(interpData.theProgram);
-				glUniformMatrix4fv(interpData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-				//glUniform4fv(interpData.startColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
-#endif
+	Utility::BasicMeshGeneration::Torus2D torusOut2(
+		glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
+		parent->GetPosition(),
+		offsetFromSun + diameter, 
+		offsetFromSun + diameter + 0.05f, 90);
 
-				Framework::Mesh *effectMesh = new Framework::Mesh("UnitPlane.xml");
-				effectMesh->Render();
-
-				glUseProgram(0);
-
-				glDisable(GL_BLEND);
-			}
-		}
-		break;
-		case 'b':
-		{
-			fastTimer.Update();
-
-			float currTimeThroughLoop = fastTimer.GetAlpha();
-			glm::vec3 littlePos;
-
-			{
-				glutil::PushStack push(modelMatrix);
-
-				littlePos.x = cosf(currTimeThroughLoop * (2.0f * PI)) * (offsetFromSun - diameter / 2.0f);
-				littlePos.y = sinf(currTimeThroughLoop * (2.0f * PI)) * (offsetFromSun - diameter / 2.0f);
-
-				modelMatrix.Translate(littlePos);
-				modelMatrix.Scale(0.2f);
-
-				glm::mat3 normMatrix(modelMatrix.Top());
-				normMatrix = glm::transpose(glm::inverse(normMatrix));
-
-#ifndef UNLIT
-				glUseProgram(data.theProgram);
-				glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-				glUniformMatrix3fv(data.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
-				glUniform4fv(data.baseDiffuseColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
-#else
-				glUseProgram(unlitData.theProgram);
-				glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-				glUniform4fv(unlitData.objectColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
-#endif
-
-				mesh->Render("lit");
-
-				glUseProgram(0);
-			}
-			{
-				glutil::PushStack push(modelMatrix);
-
-				littlePos.x = cosf(currTimeThroughLoop * (2.0f * PI)) * (offsetFromSun + diameter / 2.0f);
-				littlePos.y = sinf(currTimeThroughLoop * (2.0f * PI)) * (offsetFromSun + diameter / 2.0f);
-
-				modelMatrix.Translate(littlePos);
-				modelMatrix.Scale(0.2f);
-
-				glm::mat3 normMatrix = glm::mat3(modelMatrix.Top());
-				normMatrix = glm::transpose(glm::inverse(normMatrix));
-
-#ifndef UNLIT
-				glUseProgram(data.theProgram);
-				glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-				glUniformMatrix3fv(data.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
-				glUniform4fv(data.baseDiffuseColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
-#else
-				glUseProgram(unlitData.theProgram);
-				glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-				glUniform4fv(unlitData.objectColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
-#endif
-			
-				mesh->Render("lit");
-
-				glUseProgram(0);
-			}
-		}
-		break;
-		case 'c':
-		{	
-			fastTimer.Update();
-
-			float currTimeThroughLoop = fastTimer.GetAlpha();
-			glm::vec3 littlePos;
-			
-			glutil::PushStack push(modelMatrix);
-
-			modelMatrix.Translate(position);
-
-			littlePos.x = cosf(currTimeThroughLoop * (2.0f * PI)) * diameter;
-			littlePos.y = sinf(currTimeThroughLoop * (2.0f * PI)) * diameter;
-
-			modelMatrix.Translate(littlePos);
-			modelMatrix.Scale(0.5f);
-
-			glm::mat3 normMatrix = glm::mat3(modelMatrix.Top());
-			normMatrix = glm::transpose(glm::inverse(normMatrix));
-
-#ifndef UNLIT
-			glUseProgram(data.theProgram);
-			glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-			glUniformMatrix3fv(data.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
-			glUniform4fv(data.baseDiffuseColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
-#else
-			glUseProgram(unlitData.theProgram);
-			glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-			glUniform4fv(unlitData.objectColorUnif, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
-#endif
-			
-			mesh->Render("lit");
-
-			glUseProgram(0);
-		}
-		break;
-	}
+	torusOut2.Init();
+	torusOut2.Draw(modelMatrix, interpData);
 }
 
 Satellite::Satellite(const Satellite &other)
@@ -354,15 +218,19 @@ Sun::Sun()
 {
 	if(sunMesh != NULL)
 		sunMesh = NULL;
+	satellites.resize(0);
 	position = glm::vec3();
 	diameter = 0.0f;
+	isClicked = false;
 }
 Sun::Sun(glm::vec3 newPosition, float newDiameter)
 {
 	if(sunMesh != NULL)
 		sunMesh = NULL;
+	satellites.resize(0);
 	position = newPosition;
 	diameter = newDiameter;
+	isClicked = false;
 }
 
 void Sun::LoadMesh(const std::string &fileName)
@@ -379,12 +247,19 @@ void Sun::LoadMesh(const std::string &fileName)
 }
 
 void Sun::Render(glutil::MatrixStack &modelMatrix,
-				 const ProgramData &litData, const UnlitProgData &unlitData, const InterpProgData &interpData)
+				 const LitProgData &litData, const UnlitProgData &unlitData, const InterpProgData &interpData)
 {
 	{
 		glutil::PushStack push(modelMatrix);
 		
-		modelMatrix.Translate(position);
+		modelMatrix.Translate(position);		
+
+		int satellitesCount = satellites.size();
+		for(int i = 0; i < satellitesCount; i++)
+		{
+			satellites[i]->Render(modelMatrix, litData, unlitData, interpData);
+		}
+				
 		modelMatrix.Scale(diameter);
 
 		glUseProgram(unlitData.theProgram);
@@ -392,12 +267,11 @@ void Sun::Render(glutil::MatrixStack &modelMatrix,
 		glUniform4f(unlitData.objectColorUnif, 0.8078f, 0.8706f, 0.0f, 1.0f);
 
 		sunMesh->Render("flat");
+	}	
 
-		int satellitesCount = satellites.size();
-		for(int i = 0; i < satellitesCount; i++)
-		{
-			satellites[i]->Render(modelMatrix, litData, unlitData, interpData);
-		}
+	if(isClicked)
+	{
+
 	}
 }
 void Sun::Update()
@@ -411,10 +285,10 @@ void Sun::Update()
 
 bool Sun::AddSatellite(const std::string &fileName, float height, float offset, float speed, float diameter)
 {
-	if(satellites.size() >= 4)
+	/*if(satellites.size() >= 4)
 	{
 		return false;
-	}
+	}*/
 
 	Satellite *sat = new Satellite(Framework::Timer(Framework::Timer::TT_LOOP, speed), height, offset, diameter);
 	sat->LoadMesh(fileName);
@@ -435,13 +309,48 @@ bool Sun::IsClicked(glm::mat4 projMat, glm::mat4 modelMat,
 {
 	Utility::Ray mouseRay = 
 		userMouse.GetPickRay(projMat, modelMat, cameraPos, glm::vec4(position, 1.0f), 
-							 windowHeight, windowWidth);
+							 windowWidth, windowHeight);
 
 	if(Utility::Intersections::RayIntersectsSphere(mouseRay, diameter / 2.0f))
 	{
+		isClicked = true;
 		return true;
 	}
+	isClicked = false;
 	return false;
+}
+
+void Sun::IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat, 
+							 Mouse userMouse, glm::vec4 cameraPos,
+							 float windowWidth, float windowHeight)
+{
+	for(int i = 0; i < satellites.size(); i++)
+	{
+		Utility::Ray mouseRay = 
+			userMouse.GetPickRay(projMat, modelMat, cameraPos, glm::vec4(position, 1.0f), 
+								 windowWidth, windowHeight);
+
+		float outerRadius = satellites[i]->GetOffsetFromSun() + satellites[i]->GetDiameter();
+		float innerRadius = satellites[i]->GetOffsetFromSun() - satellites[i]->GetDiameter();
+
+		//*** HACKS HACKS HACKS ***\\
+
+		// TODO: hack. Should look for a better solution. 
+		//	     If not found, this suits the game's needs.
+		float precisionGain = 1.0f + i / 100.0f;
+
+		glutil::MatrixStack distMat;
+		distMat.Scale(1.0f, 1.0f, 3.0f);
+		//*** HACKS HACKS HACKS ***\\
+
+		if(Utility::Intersections::RayIntersectsEllipsoid(mouseRay, outerRadius / precisionGain, distMat.Top()) && 
+			!Utility::Intersections::RayIntersectsEllipsoid(mouseRay, innerRadius / precisionGain, distMat.Top()))
+		{
+			std::printf("%f\n", outerRadius);
+			satellites[i]->SetIsClicked(true);
+		}
+		else satellites[i]->SetIsClicked(false);
+	}
 }
 
 
@@ -451,6 +360,7 @@ Sun::Sun(const Sun &other)
 	satellites = other.satellites;
 	position = other.position;
 	diameter = other.diameter;
+	isClicked = other.isClicked;
 }
 Sun::~Sun()
 {
@@ -474,6 +384,7 @@ Sun Sun::operator=(const Sun &other)
 	satellites = other.satellites;
 	diameter = other.diameter;
 	position = other.position;
+	isClicked = other.isClicked;
 
 	return *this;
 }

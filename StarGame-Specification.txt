@@ -53,12 +53,12 @@ Save/Load games
 Main game mechanics
 v- Planet movement
 v- 3D Planets 
--- textures
+x- textures
 v- Selection
     orbits
     only upgrades on small planets
     
--- Simple enemies
+x- Simple enemies
 
 GUI System
 
@@ -77,3 +77,8 @@ Resources
     control over the situation
     active
     cheaper
+
+TODO: 
+    1. Fix the problem with the picking of the satellites
+	-- Strange precision loss
+	-- When camera is at an angle, I should do ray-ellipsoid collision detection. The first radius of the ellipsoid would be the circle's radius and the second - the circle\'s radius * sin(cameraAngle)?

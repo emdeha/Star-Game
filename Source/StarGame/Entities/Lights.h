@@ -42,7 +42,7 @@ public:
 			 glm::vec4 newBaseDiffuseColor,
 			 float newLightAttenuation, float newShininesFactor);
 
-	void Render(glutil::MatrixStack &modelMatrix, const ProgramData &lightData);
+	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &lightData);
 };
 
 #endif

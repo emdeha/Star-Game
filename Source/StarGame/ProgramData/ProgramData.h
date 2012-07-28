@@ -18,7 +18,8 @@
 #ifndef PROGRAM_DATA_H
 #define PROGRAM_DATA_H
 
-struct ProgramData
+
+struct LitProgData
 {
 	GLuint theProgram;
 
@@ -42,6 +43,7 @@ struct UnlitProgData
 	GLuint modelToCameraMatrixUnif;
 };
 
+// TODO: Should be 'SimpleProgData' or something like that
 struct InterpProgData
 {
 	GLuint theProgram;
@@ -51,5 +53,6 @@ struct InterpProgData
 
 	GLuint positionAttrib;
 };
+
 
 #endif

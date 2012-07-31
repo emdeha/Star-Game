@@ -15,30 +15,47 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
+/// \ingroup module_StarGame
+
+/// \file Universe.h
+/// \brief Contains the class which wraps the whole game world.
+
 #ifndef UNIVERSE_H
 #define UNIVERSE_H
 
-#include <vector>
 
+#include <vector>
 #include "../Entities/Lights.h"
 #include "../Entities/PlanetBodies.h"
 
+
+/// \class Universe
+/// \brief This class updates, renders and maintains the game world aka Universe.
 class Universe
 {
 private:
-	std::vector<SunLight*> lights;
-	std::vector<Sun*> suns;
-	// std::vector<Enemies*> enemies;
+	std::vector<SunLight> lights; ///< Holds the world's lights.
+	std::vector<std::shared_ptr<Sun>> suns; ///< Holds the world's suns.
+	// std::vector<std::shared_ptr<Enemies>> enemies;
 
 public:
 	Universe();
 
-	void AddSunLight(SunLight *newSunLight);
-	void AddSun(Sun *newSun);
+	void AddSunLight(const SunLight &newSunLight);
+	void AddSun(const std::shared_ptr<Sun> newSun);
 
+	/// \fn UpdateUniverse
+	/// \brief Goes through the game objects and calls their update functions.
 	void UpdateUniverse();
+
+	/// \fn RenderUniverse
+	/// \brief Goes through the game objects and calls their render functions.
 	void RenderUniverse(glutil::MatrixStack &modelMatrix,
-						const LitProgData &litData, const UnlitProgData &unLitData, const InterpProgData &interpData);
+						const LitProgData &litData, 
+						const UnlitProgData &unLitData, 
+						const SimpleProgData &interpData);
+
+	~Universe();
 
 	// TODO: Add Load function
 };

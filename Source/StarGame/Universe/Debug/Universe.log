@@ -1,9 +1,12 @@
-﻿Build started 28.7.2012 г. 18:43:11 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Universe\Universe.vcxproj" on node 2 (build target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 31.7.2012 г. 19:38:55 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Universe\Universe.vcxproj" on node 2 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Debug\Universe.lastbuildstate".
+       InitializeBuildStatus:
          Creating "Debug\Universe.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Debug\Universe.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\Universe.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Universe.cpp
          Universe.cpp
        Lib:
@@ -13,8 +16,8 @@
        FinalizeBuildStatus:
          Deleting file "Debug\Universe.unsuccessfulbuild".
          Touching "Debug\Universe.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Universe\Universe.vcxproj" (build target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Universe\Universe.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.70
+Time Elapsed 00:00:00.87

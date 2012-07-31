@@ -1,13 +1,14 @@
-﻿Build started 28.7.2012 г. 18:34:09 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Mouse\Mouse.vcxproj" on node 3 (build target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 31.7.2012 г. 19:38:59 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Mouse\Mouse.vcxproj" on node 5 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Debug\Mouse.lastbuildstate".
+       InitializeBuildStatus:
          Creating "Debug\Mouse.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Debug\Mouse.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\Mouse.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Mouse.cpp
          Mouse.cpp
-     1>e:\ceci\thegame\source\stargame\mouse\mouse.cpp(113): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
-     1>e:\ceci\thegame\source\stargame\mouse\mouse.cpp(114): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\Mouse.lib" /NOLOGO Debug\Mouse.obj
          Debug\stdafx.obj
@@ -15,8 +16,8 @@
        FinalizeBuildStatus:
          Deleting file "Debug\Mouse.unsuccessfulbuild".
          Touching "Debug\Mouse.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Mouse\Mouse.vcxproj" (build target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Mouse\Mouse.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.66
+Time Elapsed 00:00:00.78

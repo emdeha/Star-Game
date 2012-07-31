@@ -2,12 +2,15 @@
 /** This file is licensed under the MIT License. **/
 
 
+
 #ifndef FRAMEWORK_MOUSE_POLE_H
 #define FRAMEWORK_MOUSE_POLE_H
+
 
 #include <glm/glm.hpp>
 #include <GL/freeglut.h>
 #include <glutil/MousePoles.h>
+
 
 namespace Framework
 {

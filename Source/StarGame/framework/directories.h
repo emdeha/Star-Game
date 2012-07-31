@@ -2,6 +2,7 @@
 /** This file is licensed under the MIT License. **/
 
 
+
 #ifdef WIN32
 #define LOCAL_FILE_DIR "data\\"
 #define GLOBAL_FILE_DIR "..\\data\\"
@@ -11,4 +12,3 @@
 #define LOCAL_FILE_DIR "data/"
 #define GLOBAL_FILE_DIR "../data/"
 #endif //LOAD_X11
-

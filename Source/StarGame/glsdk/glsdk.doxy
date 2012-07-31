@@ -1,0 +1,13 @@
+/**
+\defgroup module_glsdk The Unofficial OpenGL Development Kit
+
+The Unofficial GLSDK is made in order to make OpenGL development easier. 
+
+It is distributed under the <a
+href="http://www.opensource.org/licenses/MIT">MIT License</a>
+
+It has a <a
+href="http://glsdk.sourceforge.net/docs/html/index.html">separate
+documentation</a>
+
+*/

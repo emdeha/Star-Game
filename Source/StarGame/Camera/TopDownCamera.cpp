@@ -15,14 +15,9 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
+
 #include "stdafx.h"
 #include "TopDownCamera.h"
-
-static float DegToRad(float angle_degs)
-{
-	const float fDegToRad = 3.14159f * 2.0f / 360.0f;
-	return angle_degs * fDegToRad;
-}
 
 
 TopDownCamera::TopDownCamera()
@@ -43,8 +38,8 @@ TopDownCamera::TopDownCamera(glm::vec3 newCamTarget,
 
 glm::vec3 TopDownCamera::ResolveCamPosition()
 {
-	float phi = DegToRad(anglePhi_degs);
-	float theta = DegToRad(angleTheta_degs);
+	float phi = glm::radians(anglePhi_degs);
+	float theta = glm::radians(angleTheta_degs);
 	
 	float sinTheta = sin(theta);
 	float cosTheta = cos(theta);	

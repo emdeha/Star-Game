@@ -1,9 +1,12 @@
-﻿Build started 22.7.2012 г. 20:02:09 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Camera\Camera.vcxproj" on node 2 (build target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 31.7.2012 г. 19:38:55 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Camera\Camera.vcxproj" on node 5 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Debug\Camera.lastbuildstate".
+       InitializeBuildStatus:
          Creating "Debug\Camera.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Debug\Camera.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\Camera.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt TopDownCamera.cpp
          TopDownCamera.cpp
        Lib:
@@ -13,8 +16,8 @@
        FinalizeBuildStatus:
          Deleting file "Debug\Camera.unsuccessfulbuild".
          Touching "Debug\Camera.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Camera\Camera.vcxproj" (build target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Camera\Camera.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.25
+Time Elapsed 00:00:00.38

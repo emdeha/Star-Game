@@ -15,6 +15,11 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
+/// \ingroup module_StarGame
+
+/// \file Lights.h
+/// \brief Implements the different types of lights for the scene.
+
 #ifndef LIGHTS_H
 #define LIGHTS_H
 
@@ -23,17 +28,48 @@
 #include <glutil/glutil.h>
 #include "../ProgramData/ProgramData.h"
 
+
+/// \class SunLight
+/// \brief Implements the sun lighting effects.
+
+/// The sun light is not just a simple directional light with only a diffuse color. 
+/// If the scene was an FPS game or something similar we won't need the 'complex' 
+/// implementation made here, but in our case things are different.
+///
+/// The distance between the light and the bodies which it illuminates is very small. Therefore
+/// a simple directional light won't suit our needs. Things just won't look pretty.
+/// 
+/// The implementation of this light is based on calculating the gaussian distribution of
+/// microfacets and calculating each fragment's color based on it. Simply put, we calculate the 
+/// otput color of each pixel based on some roughness of our surface.
+///
+/// The final lighting model is based on the contribution of the `diffuse color`, 
+/// `specular color` and `ambient intensity`. 
+///		- The `diffuse color` is based on a light/surface interaction where the light is 
+///		  reflected at many angles. 
+///		- The `specular color` stands for the shinies of the surface.
+///		- The `ambient intensity` is the random light which comes from all other 
+///		  reflected lights in the scene. It is kind of 'made up'.
+///
+/// Other contributions to the final color are made by: 
+///		- The `attenuation intensity` which is the decrease of the light's intensity
+///		  based on the distance from the light source.
+///		- The cosine of the angle of incidence between the light ray and the surface.
+///		- The `gaussian term`.
+///
+/// For further research you can check out 
+///	[this tutorial](http://www.arcsynthesis.org/gltut/Illumination/Illumination.html).
 class SunLight
 {
 private:
-	glm::vec4 lightIntensity;
-	glm::vec4 ambientIntensity;
-	glm::vec4 baseDiffuseColor;
+	glm::vec4 lightIntensity; ///< The light's intensity.
+	glm::vec4 ambientIntensity;	///< The ambient intensity.
+	glm::vec4 baseDiffuseColor; ///< The diffuse color of the surface which is lit.
 
-	glm::vec3 position;
+	glm::vec3 position; ///< The position of the light source.
 
-	float lightAttenuation;
-	float shininessFactor;
+	float lightAttenuation; ///< The light attenuation factor.
+	float shininessFactor; ///< The shininess (surface roughness) factor.
 
 public:
 	SunLight();
@@ -42,6 +78,8 @@ public:
 			 glm::vec4 newBaseDiffuseColor,
 			 float newLightAttenuation, float newShininesFactor);
 
+	/// \fn Render
+	/// \brief Applies the light to the scene.
 	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &lightData);
 };
 

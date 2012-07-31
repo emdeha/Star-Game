@@ -1,17 +1,20 @@
-﻿Build started 22.7.2012 г. 16:19:14 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\ProgramData\ProgramData.vcxproj" on node 4 (build target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 31.7.2012 г. 19:38:55 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\ProgramData\ProgramData.vcxproj" on node 4 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Debug\ProgramData.lastbuildstate".
+       InitializeBuildStatus:
          Creating "Debug\ProgramData.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Debug\ProgramData.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
        Lib:
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\ProgramData.lib" /NOLOGO Debug\stdafx.obj
          ProgramData.vcxproj -> E:\CECI\TheGame\Source\StarGame\Debug\ProgramData.lib
        FinalizeBuildStatus:
          Deleting file "Debug\ProgramData.unsuccessfulbuild".
          Touching "Debug\ProgramData.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\ProgramData\ProgramData.vcxproj" (build target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\ProgramData\ProgramData.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.02
+Time Elapsed 00:00:00.16

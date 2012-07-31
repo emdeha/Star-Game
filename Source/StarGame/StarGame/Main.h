@@ -1,3 +1,28 @@
+//Copyright 2012, 2013 Tsvetan Tsvetanov
+//This file is part of the Star Game.
+//
+//The Star Game is free software: you can redistribute it and/or modify
+//it under the terms of the GNU General Public License as published by
+//the Free Software Foundation, either version 3 of the License, or
+//(at your option) any later version.
+//
+//The Star Game is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//
+//You should have received a copy of the GNU General Public License
+//along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
+
+
+/// \defgroup module_StarGame Star Game
+/// \ingroup module_StarGame
+/// @{
+/// \file Main.h
+/// \brief Provides methods which are crucial to the program's functioning.
+/// @}
+
+
 #include <string>
 #include <vector>
 #include <stack>
@@ -16,17 +41,43 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "../ProgramData/ProgramData.h"
 
+
+
 #ifdef LOAD_X11
 #define APIENTRY
 #endif
 
+
+/// \fn Init
+/// \brief Used for initialization.
+
+/// Initializes shaders, game objects.
+/// Enables OpenGL enumerators. Sets OpenGL enumerators.
+/// Generates buffers.
 void Init();
+
+/// \fn Display
+/// \brief The main loop of the game.
+
+/// Renders and updates objects.
+/// Handles mouse events.
 void Display();
+
+/// \fn Reshape
+/// \brief Handles screen reshaping.
+
+/// Calculates the new perspective matrix, applies it to all objects in the scene.
+/// Calls glViewport to set the new viewport dimensions.
 void Reshape(int width, int height);
+
+/// \fn Keyboard
+/// \brief Handles key press events.
 void Keyboard(unsigned char key, int x, int y);
 
 unsigned int Defaults(unsigned int displayMode, int &width, int &height);
 
+/// \fn DebugFunc
+/// \brief Outputs debug information.
 void APIENTRY DebugFunc(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
 			   const GLchar* message, GLvoid* userParam)
 {

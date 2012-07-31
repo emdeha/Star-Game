@@ -1,5 +1,5 @@
-﻿Build started 14.7.2012 г. 19:29:04 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\framework\framework.vcxproj" on node 4 (rebuild target(s)).
+﻿Build started 31.7.2012 г. 19:39:08 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\framework\framework.vcxproj" on node 3 (rebuild target(s)).
      1>_PrepareForClean:
          Deleting file "lib\Release\framework.lastbuildstate".
        InitializeBuildStatus:
@@ -410,6 +410,7 @@
                  ]
      1>e:\ceci\thegame\source\stargame\glsdk\glm\glm\core\type_vec2.hpp(52): warning C4201: nonstandard extension used : nameless struct/union
      1>e:\ceci\thegame\source\stargame\glsdk\glm\glm\core\type_vec2.hpp(53): warning C4201: nonstandard extension used : nameless struct/union
+     1>Utility.cpp(71): warning C4244: '=' : conversion from 'int' to 'short', possible loss of data
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"lib\framework.lib" /NOLOGO /LTCG lib\Release\framework.obj
          lib\Release\Mesh.obj
@@ -424,4 +425,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.41
+Time Elapsed 00:00:02.50

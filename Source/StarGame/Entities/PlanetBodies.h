@@ -15,9 +15,13 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
+/// \ingroup module_StarGame
+
+/// \file PlanetBodies.h
+/// \brief Implements the planets.
+
 #ifndef PLANET_BODIES_H
 #define PLANET_BODIES_H
-
 
 #include <glload/gl_3_3.h>
 #include <glutil/glutil.h>
@@ -28,112 +32,219 @@
 #include "../Mouse/Mouse.h"
 
 
-// NOTE: Body positions need to be passed in world space in order to do proper clicking.
+// NOTE: Maybe the meshes of both the sun and satellites must be loaded in the constructors.
+//		 This means removing the LoadMesh function. For now, I will keep it that way in case I
+//		 decide to use different meshes in the future.
 
 class Sun;
 
+
+/// \class Satellite
+/// \brief Represents a sun's satellite.
+
+/// A satellite has a parent around which it rotates. It also has a diameter.
+/// A satellite checks for clicks on it, loads on-click animations, etc.
 class Satellite
 {
 private:
-	Framework::Mesh *mesh;
-	Sun *parent;
+	std::auto_ptr<Framework::Mesh> mesh; ///< Represents the mesh file for the satellite
+	std::auto_ptr<Sun> parent; ///< The satellite's parent
 
-	Framework::Timer revolutionDuration;
-	Framework::Timer fastTimer;
+	Framework::Timer revolutionDuration; ///< The time needed for the satellite to make one revolution around its parent
 
-	glm::vec3 position;
+	glm::vec3 position; ///< The calculated satellite position
 
-	float height;
-	float offsetFromSun;
+	float offsetFromSun; ///< Based on this parameter the satellite's position is calculated	
 
-	float diameter;
+	float diameter; ///< _diameter_ of the satellite
 
 	bool isClicked;
-
-
-	char animationID;
 
 public:
 	Satellite();
 	Satellite(Framework::Timer newRevolutionDuration, 
-			  float newHeight, float newOffsetFromSun, float newDiameter);
+			  float newOffsetFromSun, float newDiameter);
 
+	/// \fn LoadMesh
+	/// \brief Loads the satellite's mesh
 	void LoadMesh(const std::string &fileName);
 
-	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &data, const UnlitProgData &unlitData, const InterpProgData &interpData);
+	/// \fn Render
+	/// \brief Renders the satellite and its on-click animation.
+	void Render(glutil::MatrixStack &modelMatrix, 
+				const LitProgData &litData, 
+				const UnlitProgData &unlitData, 
+				const SimpleProgData &interpData);
+
+	/// \fn Update
+	/// \brief Updates the satellite's position.
+
+	/// The position is based on the current time through the satellite's 
+	/// revolution and its offset from sun.
+	///
+	/// \f$position.x = cos(currTimeThroughLoop \times (2 \times \pi)) \times offsetFromSun\f$
+	///
+	/// \f$position.y = sin(currTimeThroughLoop \times (2 \times \pi)) \times offsetFromSun\f$
 	void Update();
 
+	/// \fn IsClicked
+	/// \brief Checks for click on the satellite.
+
+	/// In order to check for click we need to do two things:
+	///		- To get the mouse ray from the camera to the object
+	///		- To check for intersections between the ray and the object
+	/// Getting the ray is achieved with the userMouse.GetPickRay() function.
+	///
+	/// We check for intersections with Utility::Intersections::RayIntersectsEllipsoid().
+	/// The test against collision of the ray with an ellipsoid because the camera is at an 
+	/// 135.0 degree angle relative to the scene's plane. This leads to orbit squashing
+	/// and the collision checks become inaccurate.
 	bool IsClicked(glm::mat4 projMat, glm::mat4 modelMat, 
 				   Mouse userMouse, glm::vec4 cameraPos,
 				   float windowWidth, float windowHeight);
 
-	void LoadClickedAnimation(glutil::MatrixStack &modelMatrix, const LitProgData &data, const UnlitProgData &unlitData, const InterpProgData &interpData);
+	/// \fn LoadClickedAnimation
+	/// \brief Loads the animation which is played on-click.
+	void LoadClickedAnimation(glutil::MatrixStack &modelMatrix,
+							  const SimpleProgData &interpData);
 
-	void SetParent(const Sun *newParent);
-	void SetAnimationID(char newAnimationID)
-	{
-		animationID = newAnimationID;
-	}
+	/// \fn SetParent
+	/// \brief Sets the satellite's parent. 
+	void SetParent(const Sun &newParent);
 
-	void SetIsClicked(bool newIsClicked)
-	{
-		isClicked = newIsClicked;
-	}
+	/// \fn SetIsClicked
+	/// \brief Sets the isClicked variable to newIsClicked.
+	void SetIsClicked(bool newIsClicked);
 
-	float GetOffsetFromSun()
-	{
-		return offsetFromSun;
-	}
-	float GetDiameter()
-	{
-		return diameter;
-	}
+	/// \fn GetOffsetFromSun
+	/// \brief Gets the satellite's offset from sun.
+
+	// TODO: Not so useful (maybe).
+	float GetOffsetFromSun();
+
+	/// \fn GetDiameter
+	/// \brief Gets the satellite's diameter.
+
+	// TODO: Not so useful (maybe).
+	float GetDiameter();
 
 public:
 	Satellite(const Satellite &other);
 	~Satellite();
 	Satellite operator=(const Satellite &other);
-
-private:
-	glm::vec4 CalculatePosition();
 };
 
 
+inline void Satellite::SetIsClicked(bool newIsClicked)
+{
+	isClicked = newIsClicked;
+}
 
+inline float Satellite::GetOffsetFromSun()
+{
+	return offsetFromSun;
+}
+
+inline float Satellite::GetDiameter()
+{
+	return diameter;
+}
+
+/// \class Sun
+/// \brief Represent the main planet of the solar system.
+
+/// A sun handles the satellites in the scene. All of the sun's satellites
+/// are in a vector of pointers to them.
+///
+/// The sun creates its satellites on-click based on the matter you have. It 
+/// is also the main base of your solar system.
 class Sun
 {
 private:
-	Framework::Mesh *sunMesh;
+	std::auto_ptr<Framework::Mesh> sunMesh; ///< Represents the mesh file for the sun.
 
-	std::vector<Satellite*> satellites;
+	// TODO: Find a solution to the smart_ptr problem. Satellite removal freezes the game.
+	std::vector<Satellite*> satellites; ///< The sun's satellites.
 
-	glm::vec3 position;
+	glm::vec3 position; ///< The sun's position.
 
-	float diameter;
+	float diameter; ///< Its _diameter_.
+
+	int satelliteCap;
 
 	bool isClicked;
 
 public:
 	Sun();
-	Sun(glm::vec3 newPosition, float newDiameter);
+	Sun(glm::vec3 newPosition, float newDiameter, int newSatelliteCap);
 
+	/// \fn LoadMesh
+	/// \brief Loads the sun's mesh.
 	void LoadMesh(const std::string &fileName);
 
+	/// \fn Render
+	/// \brief Renders the sun and calls the satellite's render functions.
+
+	/// *Important* The scaling of the sun's mesh to the desired diameter must be done _after_
+	/// rendering the satellites. If it is not done that way, the scale will be passed
+	/// to the satellites.
+	///
+	/// The sun is rendered with the unlit program.
 	void Render(glutil::MatrixStack &modelMatrix,
-				const LitProgData &litData, const UnlitProgData &unlitData, const InterpProgData &interpData);
+				const LitProgData &litData, const UnlitProgData &unlitData, const SimpleProgData &interpData);
+	
+	/// \fn Update
+	/// \brief Calls the satellite's update functions (for now).
 	void Update();
 
-	bool AddSatellite(const std::string &fileName, 
-					  float height, float offset, float speed, float diameter);
+	/// \fn AddSatellite
+	/// \brief Adds a satellite to the sun.
 
+	/// This function also checks if the satellite cap is reached (for now - 4). 
+	///
+	/// After this check the function creates a new satellite, loads its mesh,
+	/// sets its parent and pushes back the vector with satellites.
+	///
+	///If everything went OK the function returns `true`.
+	bool AddSatellite(const std::string &fileName, 
+					  float offset, float speed, float diameter);
+
+	/// \fn RemoveSatellite()
+	/// \brief Removes the last added satellite.
+	bool RemoveSatellite();
+
+	/// \fn RemoveSatellite(int index)
+	/// \brief Removes the satellite at position `index`
+	bool RemoveSatellite(int index);
+
+	/// \fn GetSatellites
+	/// \brief Gets the sun satellites. Used to access this info from elsewhere.
 	std::vector<Satellite*> GetSatellites();
 
+	/// \fn GetPosition
+	/// \brief Gets the sun position.
 	glm::vec4 GetPosition();
 
+	/// \fn GetSatelliteCap
+	/// \brief Gets the satellite cap limit.
+
+	// NOTE: Maybe not so useful.
+	int GetSatelliteCap();
+
+	/// \fn IsClicked
+	/// \brief Checks if the sun is clicked. 
+
+	/// This check is simpler than the satellite's one (see Satellite::IsClicked). 
+	///
+	/// The function gets the ray from the camera to the body and checks for intersection
+	/// of the ray against a sphere.
+
+	// TODO: Make a Sun on-click animation.
 	bool IsClicked(glm::mat4 projMat, glm::mat4 modelMat, 
 				   Mouse userMouse, glm::vec4 cameraPos,
 				   float windowWidth, float windowHeight);
 
+	// NOTE: Maybe remove
 	void IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat, 
 						    Mouse userMouse, glm::vec4 cameraPos,
 						    float windowWidth, float windowHeight);
@@ -149,10 +260,11 @@ inline glm::vec4 Sun::GetPosition()
 	return glm::vec4(position, 1.0f);
 }
 
-inline void Satellite::SetParent(const Sun *newParent)
+inline int Sun::GetSatelliteCap()
 {
-	parent = new Sun(*newParent);
+	return satelliteCap;
 }
+
 
 
 #endif

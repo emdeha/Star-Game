@@ -200,5 +200,4 @@ namespace Framework
 }
 
 
-
 #endif //INTERPOLATORS_H

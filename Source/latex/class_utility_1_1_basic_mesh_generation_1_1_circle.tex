@@ -1,0 +1,73 @@
+\hypertarget{class_utility_1_1_basic_mesh_generation_1_1_circle}{\section{Utility\-:\-:Basic\-Mesh\-Generation\-:\-:Circle Class Reference}
+\label{class_utility_1_1_basic_mesh_generation_1_1_circle}\index{Utility\-::\-Basic\-Mesh\-Generation\-::\-Circle@{Utility\-::\-Basic\-Mesh\-Generation\-::\-Circle}}
+}
+
+
+Generates and renders a circle.  
+
+
+
+
+{\ttfamily \#include $<$Utility.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_utility_1_1_basic_mesh_generation_1_1_circle_a495cd76f18a985924d661e0b11da9603}{{\bfseries Circle} (glm\-::vec4 new\-Color, glm\-::vec4 new\-Position, float new\-Radius, short new\-Resolution)}\label{class_utility_1_1_basic_mesh_generation_1_1_circle_a495cd76f18a985924d661e0b11da9603}
+
+\item 
+void \hyperlink{class_utility_1_1_basic_mesh_generation_1_1_circle_a9cec759d08091116ff27381b4be7f423}{Init} ()
+\begin{DoxyCompactList}\small\item\em Generates the vertex and index data for the object and binds Open\-G\-L's buffers. \end{DoxyCompactList}\item 
+\hypertarget{class_utility_1_1_basic_mesh_generation_1_1_circle_a468f553bc08e1953cdf7f4943ed7b82e}{void \hyperlink{class_utility_1_1_basic_mesh_generation_1_1_circle_a468f553bc08e1953cdf7f4943ed7b82e}{Draw} (glutil\-::\-Matrix\-Stack \&model\-Matrix, const \hyperlink{struct_interp_prog_data}{Interp\-Prog\-Data} \&data)}\label{class_utility_1_1_basic_mesh_generation_1_1_circle_a468f553bc08e1953cdf7f4943ed7b82e}
+
+\begin{DoxyCompactList}\small\item\em Draws the circle on the scene. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_utility_1_1_basic_mesh_generation_1_1_circle_a0584a28154278a523d7a6f5f279cdbd5}{glm\-::vec4 \hyperlink{class_utility_1_1_basic_mesh_generation_1_1_circle_a0584a28154278a523d7a6f5f279cdbd5}{color}}\label{class_utility_1_1_basic_mesh_generation_1_1_circle_a0584a28154278a523d7a6f5f279cdbd5}
+
+\begin{DoxyCompactList}\small\item\em The color of the object. \end{DoxyCompactList}\item 
+\hypertarget{class_utility_1_1_basic_mesh_generation_1_1_circle_a70517725f0ea6c71d7ef95665854037a}{glm\-::vec4 \hyperlink{class_utility_1_1_basic_mesh_generation_1_1_circle_a70517725f0ea6c71d7ef95665854037a}{position}}\label{class_utility_1_1_basic_mesh_generation_1_1_circle_a70517725f0ea6c71d7ef95665854037a}
+
+\begin{DoxyCompactList}\small\item\em Its position. \end{DoxyCompactList}\item 
+\hypertarget{class_utility_1_1_basic_mesh_generation_1_1_circle_a3c4df53414fede5ba1c30296490f7fff}{unsigned int \hyperlink{class_utility_1_1_basic_mesh_generation_1_1_circle_a3c4df53414fede5ba1c30296490f7fff}{vao}}\label{class_utility_1_1_basic_mesh_generation_1_1_circle_a3c4df53414fede5ba1c30296490f7fff}
+
+\begin{DoxyCompactList}\small\item\em The vertex array object. \end{DoxyCompactList}\item 
+\hypertarget{class_utility_1_1_basic_mesh_generation_1_1_circle_a87cb7efa73e22776333c6f4e7144ee1e}{unsigned int \hyperlink{class_utility_1_1_basic_mesh_generation_1_1_circle_a87cb7efa73e22776333c6f4e7144ee1e}{index\-B\-O}}\label{class_utility_1_1_basic_mesh_generation_1_1_circle_a87cb7efa73e22776333c6f4e7144ee1e}
+
+\begin{DoxyCompactList}\small\item\em The index buffer object for the vertices' indices. \end{DoxyCompactList}\item 
+\hypertarget{class_utility_1_1_basic_mesh_generation_1_1_circle_a392f340df97712eae657d9eec1727451}{unsigned int \hyperlink{class_utility_1_1_basic_mesh_generation_1_1_circle_a392f340df97712eae657d9eec1727451}{vertex\-B\-O}}\label{class_utility_1_1_basic_mesh_generation_1_1_circle_a392f340df97712eae657d9eec1727451}
+
+\begin{DoxyCompactList}\small\item\em The vertex buffer object for the vertices with their attributes. \end{DoxyCompactList}\item 
+\hypertarget{class_utility_1_1_basic_mesh_generation_1_1_circle_a1ff5559ebb2c667a7d83871ee7dcb580}{float {\bfseries radius}}\label{class_utility_1_1_basic_mesh_generation_1_1_circle_a1ff5559ebb2c667a7d83871ee7dcb580}
+
+\item 
+\hypertarget{class_utility_1_1_basic_mesh_generation_1_1_circle_abd88fc73d1f9b7bff3aee6700f349902}{short \hyperlink{class_utility_1_1_basic_mesh_generation_1_1_circle_abd88fc73d1f9b7bff3aee6700f349902}{resolution}}\label{class_utility_1_1_basic_mesh_generation_1_1_circle_abd88fc73d1f9b7bff3aee6700f349902}
+
+\begin{DoxyCompactList}\small\item\em The resolution with which the circle will be rendered. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Generates and renders a circle. 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_utility_1_1_basic_mesh_generation_1_1_circle_a9cec759d08091116ff27381b4be7f423}{\index{Utility\-::\-Basic\-Mesh\-Generation\-::\-Circle@{Utility\-::\-Basic\-Mesh\-Generation\-::\-Circle}!Init@{Init}}
+\index{Init@{Init}!Utility::BasicMeshGeneration::Circle@{Utility\-::\-Basic\-Mesh\-Generation\-::\-Circle}}
+\subsubsection[{Init}]{\setlength{\rightskip}{0pt plus 5cm}Utility\-::\-Basic\-Mesh\-Generation\-::\-Circle\-::\-Init (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_utility_1_1_basic_mesh_generation_1_1_circle_a9cec759d08091116ff27381b4be7f423}
+
+
+Generates the vertex and index data for the object and binds Open\-G\-L's buffers. 
+
+The generation of the vertex data is pretty straightforward (see \hyperlink{class_satellite_a9922529e27792578c7047bb91d27e21f}{Satellite\-::\-Update()}).
+
+The index data is simply every vertex of the circle.
+
+The buffers initialization is straightforward if you are familiar with Open\-G\-L. For further research see \href{http://www.arcsynthesis.org/gltut/}{\tt this book}. 
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+Star\-Game/framework/\hyperlink{_utility_8h}{Utility.\-h}\end{DoxyCompactItemize}

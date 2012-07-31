@@ -15,6 +15,11 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
+/// \ingroup module_StarGame
+
+/// \file ProgramData.h
+/// \brief Contains the structures holding information for various shader programs.
+
 #ifndef PROGRAM_DATA_H
 #define PROGRAM_DATA_H
 
@@ -44,7 +49,7 @@ struct UnlitProgData
 };
 
 // TODO: Should be 'SimpleProgData' or something like that
-struct InterpProgData
+struct SimpleProgData
 {
 	GLuint theProgram;
 

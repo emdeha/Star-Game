@@ -1,0 +1,127 @@
+\hypertarget{class_satellite}{\section{Satellite Class Reference}
+\label{class_satellite}\index{Satellite@{Satellite}}
+}
+
+
+Represents a sun's satellite.  
+
+
+
+
+{\ttfamily \#include $<$Planet\-Bodies.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_satellite_a40c1e6e97b4c8447e7d92b46226a852c}{{\bfseries Satellite} (Framework\-::\-Timer new\-Revolution\-Duration, float new\-Offset\-From\-Sun, float new\-Diameter)}\label{class_satellite_a40c1e6e97b4c8447e7d92b46226a852c}
+
+\item 
+\hypertarget{class_satellite_a810947406b5df21450b07a6f9250d83e}{void \hyperlink{class_satellite_a810947406b5df21450b07a6f9250d83e}{Load\-Mesh} (const std\-::string \&file\-Name)}\label{class_satellite_a810947406b5df21450b07a6f9250d83e}
+
+\begin{DoxyCompactList}\small\item\em Loads the satellite's mesh. \end{DoxyCompactList}\item 
+\hypertarget{class_satellite_acddaeaf0886cdf9f4d8bae100e05d558}{void \hyperlink{class_satellite_acddaeaf0886cdf9f4d8bae100e05d558}{Render} (glutil\-::\-Matrix\-Stack \&model\-Matrix, const \hyperlink{struct_lit_prog_data}{Lit\-Prog\-Data} \&lit\-Data, const \hyperlink{struct_unlit_prog_data}{Unlit\-Prog\-Data} \&unlit\-Data, const \hyperlink{struct_interp_prog_data}{Interp\-Prog\-Data} \&interp\-Data)}\label{class_satellite_acddaeaf0886cdf9f4d8bae100e05d558}
+
+\begin{DoxyCompactList}\small\item\em Renders the satellite and its on-\/click animation. \end{DoxyCompactList}\item 
+void \hyperlink{class_satellite_a9922529e27792578c7047bb91d27e21f}{Update} ()
+\begin{DoxyCompactList}\small\item\em Updates the satellite's position. \end{DoxyCompactList}\item 
+bool \hyperlink{class_satellite_a9701b3bb18389b93b70a75f17008d629}{Is\-Clicked} (glm\-::mat4 proj\-Mat, glm\-::mat4 model\-Mat, \hyperlink{class_mouse}{Mouse} user\-Mouse, glm\-::vec4 camera\-Pos, float window\-Width, float window\-Height)
+\begin{DoxyCompactList}\small\item\em Checks for click on the satellite. \end{DoxyCompactList}\item 
+\hypertarget{class_satellite_a511a833d667e6c52b417232abfa95e70}{void \hyperlink{class_satellite_a511a833d667e6c52b417232abfa95e70}{Load\-Clicked\-Animation} (glutil\-::\-Matrix\-Stack \&model\-Matrix, const \hyperlink{struct_interp_prog_data}{Interp\-Prog\-Data} \&interp\-Data)}\label{class_satellite_a511a833d667e6c52b417232abfa95e70}
+
+\begin{DoxyCompactList}\small\item\em Loads the animation which is played on-\/click. \end{DoxyCompactList}\item 
+\hypertarget{class_satellite_a84782cdb794e9c2d86966bfb0487d428}{void \hyperlink{class_satellite_a84782cdb794e9c2d86966bfb0487d428}{Set\-Parent} (const \hyperlink{class_sun}{Sun} \&new\-Parent)}\label{class_satellite_a84782cdb794e9c2d86966bfb0487d428}
+
+\begin{DoxyCompactList}\small\item\em Sets the satellite's parent. \end{DoxyCompactList}\item 
+\hypertarget{class_satellite_ae55915277ebb216b20c86895c9c4343e}{void \hyperlink{class_satellite_ae55915277ebb216b20c86895c9c4343e}{Set\-Is\-Clicked} (bool new\-Is\-Clicked)}\label{class_satellite_ae55915277ebb216b20c86895c9c4343e}
+
+\begin{DoxyCompactList}\small\item\em Sets the is\-Clicked variable to new\-Is\-Clicked. \end{DoxyCompactList}\item 
+\hypertarget{class_satellite_af93a0103317331a898adf8923a547d7f}{float \hyperlink{class_satellite_af93a0103317331a898adf8923a547d7f}{Get\-Offset\-From\-Sun} ()}\label{class_satellite_af93a0103317331a898adf8923a547d7f}
+
+\begin{DoxyCompactList}\small\item\em Gets the satellite's offset from sun. \end{DoxyCompactList}\item 
+\hypertarget{class_satellite_a563b9bb0e55a27bcb7ac9f134408711a}{float \hyperlink{class_satellite_a563b9bb0e55a27bcb7ac9f134408711a}{Get\-Diameter} ()}\label{class_satellite_a563b9bb0e55a27bcb7ac9f134408711a}
+
+\begin{DoxyCompactList}\small\item\em Gets the satellite's diameter. \end{DoxyCompactList}\item 
+\hypertarget{class_satellite_a3c1f0d849c8885f0b524a64ea478e2eb}{{\bfseries Satellite} (const \hyperlink{class_satellite}{Satellite} \&other)}\label{class_satellite_a3c1f0d849c8885f0b524a64ea478e2eb}
+
+\item 
+\hypertarget{class_satellite_a7fbf21c092b5c43a5cd2db41aa5a78f9}{\hyperlink{class_satellite}{Satellite} {\bfseries operator=} (const \hyperlink{class_satellite}{Satellite} \&other)}\label{class_satellite_a7fbf21c092b5c43a5cd2db41aa5a78f9}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_satellite_a00e43093535d9107b9c3e5911a78b9e6}{std\-::auto\-\_\-ptr$<$ Framework\-::\-Mesh $>$ \hyperlink{class_satellite_a00e43093535d9107b9c3e5911a78b9e6}{mesh}}\label{class_satellite_a00e43093535d9107b9c3e5911a78b9e6}
+
+\begin{DoxyCompactList}\small\item\em Represents the mesh file for the satellite. \end{DoxyCompactList}\item 
+\hypertarget{class_satellite_a4ad51c61fd80af0ae2012156046bc6f1}{std\-::auto\-\_\-ptr$<$ \hyperlink{class_sun}{Sun} $>$ \hyperlink{class_satellite_a4ad51c61fd80af0ae2012156046bc6f1}{parent}}\label{class_satellite_a4ad51c61fd80af0ae2012156046bc6f1}
+
+\begin{DoxyCompactList}\small\item\em The satellite's parent. \end{DoxyCompactList}\item 
+\hypertarget{class_satellite_a7e295ead1d57fa33491d544b316b7419}{Framework\-::\-Timer \hyperlink{class_satellite_a7e295ead1d57fa33491d544b316b7419}{revolution\-Duration}}\label{class_satellite_a7e295ead1d57fa33491d544b316b7419}
+
+\begin{DoxyCompactList}\small\item\em The time needed for the satellite to make one revolution around its parent. \end{DoxyCompactList}\item 
+\hypertarget{class_satellite_a924a136220bcab117d5c61781a287df7}{glm\-::vec3 \hyperlink{class_satellite_a924a136220bcab117d5c61781a287df7}{position}}\label{class_satellite_a924a136220bcab117d5c61781a287df7}
+
+\begin{DoxyCompactList}\small\item\em The calculated satellite position. \end{DoxyCompactList}\item 
+\hypertarget{class_satellite_a3a9cf936be8fdd647e501b048ef6031f}{float \hyperlink{class_satellite_a3a9cf936be8fdd647e501b048ef6031f}{offset\-From\-Sun}}\label{class_satellite_a3a9cf936be8fdd647e501b048ef6031f}
+
+\begin{DoxyCompactList}\small\item\em Based on this parameter the satellite's position is calculated. \end{DoxyCompactList}\item 
+\hypertarget{class_satellite_a24fb12be82187b2009947c4c02f732eb}{float \hyperlink{class_satellite_a24fb12be82187b2009947c4c02f732eb}{diameter}}\label{class_satellite_a24fb12be82187b2009947c4c02f732eb}
+
+\begin{DoxyCompactList}\small\item\em {\itshape diameter} of the satellite \end{DoxyCompactList}\item 
+\hypertarget{class_satellite_addd9824588521e5d6a17bd4a9a9618cf}{bool {\bfseries is\-Clicked}}\label{class_satellite_addd9824588521e5d6a17bd4a9a9618cf}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Represents a sun's satellite. 
+
+A satellite has a parent around which it rotates. It also has a diameter. A satellite checks for clicks on it, loads on-\/click animations, etc. 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_satellite_a9701b3bb18389b93b70a75f17008d629}{\index{Satellite@{Satellite}!Is\-Clicked@{Is\-Clicked}}
+\index{Is\-Clicked@{Is\-Clicked}!Satellite@{Satellite}}
+\subsubsection[{Is\-Clicked}]{\setlength{\rightskip}{0pt plus 5cm}Satellite\-::\-Is\-Clicked (
+\begin{DoxyParamCaption}
+\item[{glm\-::mat4}]{proj\-Mat, }
+\item[{glm\-::mat4}]{model\-Mat, }
+\item[{{\bf Mouse}}]{user\-Mouse, }
+\item[{glm\-::vec4}]{camera\-Pos, }
+\item[{float}]{window\-Width, }
+\item[{float}]{window\-Height}
+\end{DoxyParamCaption}
+)}}\label{class_satellite_a9701b3bb18389b93b70a75f17008d629}
+
+
+Checks for click on the satellite. 
+
+In order to check for click we need to do two things\-:
+\begin{DoxyItemize}
+\item To get the mouse ray from the camera to the object
+\item To check for intersections between the ray and the object Getting the ray is achieved with the user\-Mouse.\-Get\-Pick\-Ray() function.
+\end{DoxyItemize}
+
+We check for intersections with \hyperlink{namespace_utility_1_1_intersections_a74e848c2fa35fc9371d2b99e8f666b2a}{Utility\-::\-Intersections\-::\-Ray\-Intersects\-Ellipsoid()}. The test against collision of the ray with an ellipsoid because the camera is at an 135.\-0 degree angle relative to the scene's plane. This leads to orbit squashing and the collision checks become inaccurate. \hypertarget{class_satellite_a9922529e27792578c7047bb91d27e21f}{\index{Satellite@{Satellite}!Update@{Update}}
+\index{Update@{Update}!Satellite@{Satellite}}
+\subsubsection[{Update}]{\setlength{\rightskip}{0pt plus 5cm}Satellite\-::\-Update (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_satellite_a9922529e27792578c7047bb91d27e21f}
+
+
+Updates the satellite's position. 
+
+\begin{DoxyVerb}       The position is based on the current time through the satellite's 
+       revolution and its offset from sun.
+\end{DoxyVerb}
+
+
+$position.x = cos(currTimeThroughLoop \times (2 \times \pi)) \times offsetFromSun$
+
+$position.y = sin(currTimeThroughLoop \times (2 \times \pi)) \times offsetFromSun$ 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+Star\-Game/\-Entities/\hyperlink{_planet_bodies_8h}{Planet\-Bodies.\-h}\item 
+Star\-Game/\-Entities/Planet\-Bodies.\-cpp\end{DoxyCompactItemize}

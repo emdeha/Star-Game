@@ -1,10 +1,17 @@
-﻿Build started 28.7.2012 г. 18:38:06 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\framework\framework.vcxproj" on node 2 (build target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 31.7.2012 г. 19:38:55 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\framework\framework.vcxproj" on node 3 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "lib\Debug\framework.lastbuildstate".
+       InitializeBuildStatus:
          Creating "lib\Debug\framework.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I. /I..\glsdk\glload\include /I..\glsdk\glimg\include /I..\glsdk\glm /I..\glsdk\glutil\include /I..\glsdk\glmesh\include /I..\glsdk\freeglut\include /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D DEBUG /D _DEBUG /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"lib\Debug\\" /Fd"lib\Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Utility.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I. /I..\glsdk\glload\include /I..\glsdk\glimg\include /I..\glsdk\glm /I..\glsdk\glutil\include /I..\glsdk\glmesh\include /I..\glsdk\freeglut\include /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D DEBUG /D _DEBUG /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"lib\Debug\\" /Fd"lib\Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt framework.cpp Mesh.cpp Scene.cpp Timer.cpp Utility.cpp
          Utility.cpp
+         Timer.cpp
+         Scene.cpp
+         Mesh.cpp
+         framework.cpp
+         Generating Code...
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"lib\frameworkD.lib" /NOLOGO lib\Debug\framework.obj
          lib\Debug\Mesh.obj
@@ -15,8 +22,8 @@
        FinalizeBuildStatus:
          Deleting file "lib\Debug\framework.unsuccessfulbuild".
          Touching "lib\Debug\framework.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\framework\framework.vcxproj" (build target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\framework\framework.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.69
+Time Elapsed 00:00:03.81

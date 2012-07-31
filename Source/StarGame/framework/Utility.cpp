@@ -31,11 +31,14 @@ Utility::Ray::Ray(glm::vec4 newOrigin, glm::vec4 newDirection)
 }
 
 
-bool Utility::Intersections::RayIntersectsSphere(Ray mouseRay, float sphereRadius)
+bool Utility::Intersections::RayIntersectsSphere(Ray mouseRay, glm::vec3 bodyPosition, 
+												 float sphereRadius)
 {
+	glm::vec4 mouseRayOrigin = mouseRay.origin - glm::vec4(bodyPosition, 1.0f);
+
 	float a = glm::dot(mouseRay.direction, mouseRay.direction);
-	float b = glm::dot(mouseRay.direction, mouseRay.origin) * 2.0f;
-	float c = glm::dot(mouseRay.origin, mouseRay.origin) - sphereRadius * sphereRadius;
+	float b = glm::dot(mouseRay.direction, mouseRayOrigin) * 2.0f;
+	float c = glm::dot(mouseRayOrigin, mouseRayOrigin) - sphereRadius * sphereRadius;
 
 	float discriminant = b * b - 4 * a * c;
 
@@ -46,10 +49,11 @@ bool Utility::Intersections::RayIntersectsSphere(Ray mouseRay, float sphereRadiu
 	else 
 		return false;
 }
-bool Utility::Intersections::RayIntersectsEllipsoid(Ray mouseRay, float sphereRadius, glm::mat4 distortionMat)
+bool Utility::Intersections::RayIntersectsEllipsoid(Ray mouseRay, glm::vec3 bodyPosition, 
+													float sphereRadius, glm::mat4 deformationMat)
 {
-	Ray distortedRay = Ray(distortionMat * mouseRay.origin, distortionMat * mouseRay.direction);
-	return Utility::Intersections::RayIntersectsSphere(distortedRay, sphereRadius);
+	Ray distortedRay = Ray(deformationMat * mouseRay.origin, deformationMat * mouseRay.direction);
+	return Utility::Intersections::RayIntersectsSphere(distortedRay, bodyPosition, sphereRadius);
 }
 
 
@@ -125,7 +129,7 @@ void Utility::BasicMeshGeneration::Torus2D::Init()
 	glBindVertexArray(0);
 }
 
-void Utility::BasicMeshGeneration::Torus2D::Draw(glutil::MatrixStack &modelMatrix, const InterpProgData &data)
+void Utility::BasicMeshGeneration::Torus2D::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &data)
 {
 	glUseProgram(data.theProgram);
 	glBindVertexArray(vao);
@@ -207,7 +211,7 @@ void Utility::BasicMeshGeneration::Circle::Init()
 	glBindVertexArray(0);
 }
 
-void Utility::BasicMeshGeneration::Circle::Draw(glutil::MatrixStack &modelMatrix, const InterpProgData &data)
+void Utility::BasicMeshGeneration::Circle::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &data)
 {
 	glUseProgram(data.theProgram);
 	glBindVertexArray(vao);

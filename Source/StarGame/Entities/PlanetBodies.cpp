@@ -18,46 +18,40 @@
 #include "stdafx.h"
 #include "PlanetBodies.h"
 
+#include <algorithm>
+
+
 #define PI 3.14159f
 
 
 Satellite::Satellite()
 {
-	if(mesh != NULL)
-		mesh = NULL;
-	if(parent != NULL)
-		parent = NULL;
+	mesh.reset();
+	parent.reset();
 	revolutionDuration = Framework::Timer(Framework::Timer::TT_LOOP, 0.0f);
 	position = glm::vec3();
-	height = 0.0f;
 	offsetFromSun = 0.0f;
 	diameter = 0.0f;
 	isClicked = false;
-	animationID = '\0';
-	fastTimer = Framework::Timer(Framework::Timer::TT_LOOP, 2.0f);
 }
-Satellite::Satellite(Framework::Timer newRevolutionDuration, 
-					 float newHeight, float newOffsetFromSun, float newDiameter)
+Satellite::Satellite(Framework::Timer newRevolutionDuration,
+					 float newOffsetFromSun, float newDiameter)
 {
-	if(mesh != NULL)
-		mesh = NULL;
-	if(parent != NULL)
-		parent = NULL;
+	mesh.reset();
+	parent.reset();
 	revolutionDuration = newRevolutionDuration;
 	position = glm::vec3();
-	height = newHeight;
 	offsetFromSun = newOffsetFromSun;
 	diameter = newDiameter;
 	isClicked = false;
-	animationID = '\0';
-	fastTimer = Framework::Timer(Framework::Timer::TT_LOOP, 2.0f);
 }
 
 void Satellite::LoadMesh(const std::string &fileName)
 {
 	try
 	{
-		mesh = new Framework::Mesh(fileName);
+		std::auto_ptr<Framework::Mesh> newMesh(new Framework::Mesh(fileName));
+		mesh = newMesh;
 	}
 	catch(std::exception &except)
 	{
@@ -66,7 +60,9 @@ void Satellite::LoadMesh(const std::string &fileName)
 	}
 }
 
-void Satellite::Render(glutil::MatrixStack &modelMatrix, const LitProgData &data, const UnlitProgData &unlitData, const InterpProgData &interpData)
+void Satellite::Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData, 
+														 const UnlitProgData &unlitData, 
+														 const SimpleProgData &interpData)
 {
 	{
 		glutil::PushStack push(modelMatrix);
@@ -77,10 +73,10 @@ void Satellite::Render(glutil::MatrixStack &modelMatrix, const LitProgData &data
 		glm::mat3 normMatrix(modelMatrix.Top());
 		normMatrix = glm::transpose(glm::inverse(normMatrix));
 
-		glUseProgram(data.theProgram);
-		glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-		glUniformMatrix3fv(data.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
-		glUniform4fv(data.baseDiffuseColorUnif, 1, glm::value_ptr(glm::vec4(1.0f)));
+		glUseProgram(litData.theProgram);
+		glUniformMatrix4fv(litData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+		glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+		glUniform4fv(litData.baseDiffuseColorUnif, 1, glm::value_ptr(glm::vec4(1.0f)));
 
 		mesh->Render("lit");
 
@@ -89,12 +85,12 @@ void Satellite::Render(glutil::MatrixStack &modelMatrix, const LitProgData &data
 
 	if(isClicked)
 	{
-		LoadClickedAnimation(modelMatrix, data, unlitData, interpData);
+		LoadClickedAnimation(modelMatrix, interpData);
 	}
 }
 void Satellite::Update()
 {
-	//revolutionDuration.Update();
+	revolutionDuration.Update();
 
 	float currTimeThroughLoop = revolutionDuration.GetAlpha();
 
@@ -106,37 +102,40 @@ bool Satellite::IsClicked(glm::mat4 projMat, glm::mat4 modelMat,
 						  Mouse userMouse, glm::vec4 cameraPos,
 						  float windowWidth, float windowHeight)
 {
-	glm::vec4 parentPosition_worldSpace = modelMat * parent->GetPosition();
-	glm::vec4 satellitePos_worldSpace = modelMat * glm::vec4(position, 1.0f);
-
-	glm::vec4 torusPos = parent->GetPosition();
-
 	Utility::Ray mouseRay = 
-		userMouse.GetPickRay(projMat, modelMat, cameraPos, torusPos, 
+		userMouse.GetPickRay(projMat, modelMat, cameraPos,
 							 windowWidth, windowHeight);
 
 	float outerRadius = offsetFromSun + diameter;
 	float innerRadius = offsetFromSun - diameter;
 
-	if(Utility::Intersections::RayIntersectsSphere(mouseRay, outerRadius) && 
-	   !Utility::Intersections::RayIntersectsSphere(mouseRay, innerRadius))
+
+
+	//*** HACKS HACKS HACKS ***\\
+
+	// TODO: hack. Should look for a better solution. 
+	//	     If not found, this suits the game's needs.
+	// float precisionGain = 1.0f + i / 100.0f;
+	// Solved. Will be left for further investigation
+		
+	glutil::MatrixStack distMat;
+	distMat.Scale(1.0f, 1.0f, 5.0f);
+	//*** HACKS HACKS HACKS ***\\
+
+	
+	glm::vec3 parentPosition = glm::vec3(parent->GetPosition());
+
+	if(Utility::Intersections::RayIntersectsEllipsoid(mouseRay, parentPosition, outerRadius, distMat.Top()) && 
+	   !Utility::Intersections::RayIntersectsEllipsoid(mouseRay, parentPosition, innerRadius, distMat.Top()))
 	{
-		std::printf("%f\n", outerRadius);
 		isClicked = true;
 		return true;
 	}
 	isClicked = false;
 	return false;
-	/*if(Utility::Intersections::RayIntersectsSphere(mouseRay, offsetFromSun + diameter))
-	{
-		isClicked = true;
-		return true;
-	}
-	isClicked = false;
-	return false;*/
 }
 
-void Satellite::LoadClickedAnimation(glutil::MatrixStack &modelMatrix, const LitProgData &data, const UnlitProgData &unlitData, const InterpProgData &interpData)
+void Satellite::LoadClickedAnimation(glutil::MatrixStack &modelMatrix, const SimpleProgData &interpData)
 {
 	// TODO: Play with blending
 	glEnable(GL_BLEND);
@@ -173,26 +172,28 @@ void Satellite::LoadClickedAnimation(glutil::MatrixStack &modelMatrix, const Lit
 	torusOut2.Draw(modelMatrix, interpData);
 }
 
+
+inline void Satellite::SetParent(const Sun &newParent)
+{
+	std::auto_ptr<Sun> pointedParent(new Sun(newParent));
+	parent = pointedParent;
+}
+
+
 Satellite::Satellite(const Satellite &other)
 {
-	mesh = new Framework::Mesh(*other.mesh);
-	parent = new Sun(*other.parent);
+	std::auto_ptr<Framework::Mesh> newMesh(new Framework::Mesh(*other.mesh));
+	mesh = newMesh;
+	std::auto_ptr<Sun> newParent(new Sun(*other.parent));
+	parent = newParent;
+
 	revolutionDuration = other.revolutionDuration;
 	position = other.position;
-	height = other.height;
 	offsetFromSun = other.offsetFromSun;
 	diameter = other.diameter;
 }
 Satellite::~Satellite()
 {
-	if(mesh != NULL)
-	{
-		delete mesh;
-	}
-	if(parent != NULL)
-	{
-		delete parent;
-	}
 }
 Satellite Satellite::operator=(const Satellite &other)
 {
@@ -200,12 +201,14 @@ Satellite Satellite::operator=(const Satellite &other)
 	{
 		return *this;
 	}
+	
+	std::auto_ptr<Framework::Mesh> newMesh(new Framework::Mesh(*other.mesh));
+	mesh = newMesh;
+	std::auto_ptr<Sun> newParent(new Sun(*other.parent));
+	parent = newParent;
 
-	mesh = new Framework::Mesh(*other.mesh);
-	parent = new Sun(*other.parent);
 	revolutionDuration = other.revolutionDuration;
 	position = other.position;
-	height = other.height;
 	offsetFromSun = other.offsetFromSun;
 	diameter = other.diameter;
 
@@ -216,20 +219,20 @@ Satellite Satellite::operator=(const Satellite &other)
 
 Sun::Sun()
 {
-	if(sunMesh != NULL)
-		sunMesh = NULL;
+	sunMesh.reset();
 	satellites.resize(0);
 	position = glm::vec3();
 	diameter = 0.0f;
+	satelliteCap = 0;
 	isClicked = false;
 }
-Sun::Sun(glm::vec3 newPosition, float newDiameter)
+Sun::Sun(glm::vec3 newPosition, float newDiameter, int newSatelliteCap)
 {
-	if(sunMesh != NULL)
-		sunMesh = NULL;
+	sunMesh.reset();
 	satellites.resize(0);
 	position = newPosition;
 	diameter = newDiameter;
+	satelliteCap = newSatelliteCap;
 	isClicked = false;
 }
 
@@ -237,7 +240,8 @@ void Sun::LoadMesh(const std::string &fileName)
 {
 	try
 	{
-		sunMesh = new Framework::Mesh(fileName);
+		std::auto_ptr<Framework::Mesh> newSunMesh(new Framework::Mesh(fileName));
+		sunMesh = newSunMesh;
 	}
 	catch(std::exception &except)
 	{
@@ -247,7 +251,9 @@ void Sun::LoadMesh(const std::string &fileName)
 }
 
 void Sun::Render(glutil::MatrixStack &modelMatrix,
-				 const LitProgData &litData, const UnlitProgData &unlitData, const InterpProgData &interpData)
+				 const LitProgData &litData, 
+				 const UnlitProgData &unlitData, 
+				 const SimpleProgData &interpData)
 {
 	{
 		glutil::PushStack push(modelMatrix);
@@ -283,17 +289,30 @@ void Sun::Update()
 	}
 }
 
-bool Sun::AddSatellite(const std::string &fileName, float height, float offset, float speed, float diameter)
+bool Sun::AddSatellite(const std::string &fileName, float offset, float speed, float diameter)
 {
-	/*if(satellites.size() >= 4)
+	if(satellites.size() >= satelliteCap)
 	{
 		return false;
-	}*/
+	}
 
-	Satellite *sat = new Satellite(Framework::Timer(Framework::Timer::TT_LOOP, speed), height, offset, diameter);
+	Satellite 
+		*sat(new Satellite(Framework::Timer(Framework::Timer::TT_LOOP, speed), offset, diameter));
 	sat->LoadMesh(fileName);
-	sat->SetParent(this);
+	sat->SetParent(*this);
 	satellites.push_back(sat);
+
+	return true;
+}
+
+bool Sun::RemoveSatellite()
+{
+	if(satellites.empty())
+	{
+		return false;
+	}
+
+	satellites.pop_back();
 
 	return true;
 }
@@ -308,10 +327,10 @@ bool Sun::IsClicked(glm::mat4 projMat, glm::mat4 modelMat,
 				    float windowWidth, float windowHeight)
 {
 	Utility::Ray mouseRay = 
-		userMouse.GetPickRay(projMat, modelMat, cameraPos, glm::vec4(position, 1.0f), 
+		userMouse.GetPickRay(projMat, modelMat, cameraPos,
 							 windowWidth, windowHeight);
 
-	if(Utility::Intersections::RayIntersectsSphere(mouseRay, diameter / 2.0f))
+	if(Utility::Intersections::RayIntersectsSphere(mouseRay, position, diameter / 2.0f))
 	{
 		isClicked = true;
 		return true;
@@ -327,26 +346,30 @@ void Sun::IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat,
 	for(int i = 0; i < satellites.size(); i++)
 	{
 		Utility::Ray mouseRay = 
-			userMouse.GetPickRay(projMat, modelMat, cameraPos, glm::vec4(position, 1.0f), 
+			userMouse.GetPickRay(projMat, modelMat, cameraPos,
 								 windowWidth, windowHeight);
 
 		float outerRadius = satellites[i]->GetOffsetFromSun() + satellites[i]->GetDiameter();
 		float innerRadius = satellites[i]->GetOffsetFromSun() - satellites[i]->GetDiameter();
 
+
+
 		//*** HACKS HACKS HACKS ***\\
 
 		// TODO: hack. Should look for a better solution. 
 		//	     If not found, this suits the game's needs.
-		float precisionGain = 1.0f + i / 100.0f;
-
+		// float precisionGain = 1.0f + i / 100.0f;
+		// Solved. Will be left for further investigation
+		
 		glutil::MatrixStack distMat;
-		distMat.Scale(1.0f, 1.0f, 3.0f);
+		distMat.Scale(1.0f, 1.0f, 5.0f);
 		//*** HACKS HACKS HACKS ***\\
 
-		if(Utility::Intersections::RayIntersectsEllipsoid(mouseRay, outerRadius / precisionGain, distMat.Top()) && 
-			!Utility::Intersections::RayIntersectsEllipsoid(mouseRay, innerRadius / precisionGain, distMat.Top()))
+
+
+		if(Utility::Intersections::RayIntersectsEllipsoid(mouseRay, position, outerRadius, distMat.Top()) && 
+		   !Utility::Intersections::RayIntersectsEllipsoid(mouseRay, position, innerRadius, distMat.Top()))
 		{
-			std::printf("%f\n", outerRadius);
 			satellites[i]->SetIsClicked(true);
 		}
 		else satellites[i]->SetIsClicked(false);
@@ -356,23 +379,26 @@ void Sun::IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat,
 
 Sun::Sun(const Sun &other)
 {
-	sunMesh = new Framework::Mesh(*other.sunMesh);
+	std::auto_ptr<Framework::Mesh> newSunMesh(new Framework::Mesh(*other.sunMesh));
+	sunMesh = newSunMesh;
+
 	satellites = other.satellites;
 	position = other.position;
 	diameter = other.diameter;
 	isClicked = other.isClicked;
 }
+
+template <typename T>
+void DeletePointedTo(T *pointedObject)
+{
+	delete pointedObject;
+}
+
 Sun::~Sun()
 {
-	if(sunMesh != NULL)
-	{
-		delete sunMesh;
-	}
-	if(!satellites.empty())
-	{
-		satellites.clear();
-	}
+	std::for_each(satellites.begin(), satellites.end(), DeletePointedTo<Satellite>);
 }
+
 Sun Sun::operator=(const Sun &other)
 {
 	if(this == &other)
@@ -380,7 +406,9 @@ Sun Sun::operator=(const Sun &other)
 		return *this;
 	}
 
-	sunMesh = new Framework::Mesh(*other.sunMesh);
+	std::auto_ptr<Framework::Mesh> newSunMesh(new Framework::Mesh(*other.sunMesh));
+	sunMesh = newSunMesh;
+
 	satellites = other.satellites;
 	diameter = other.diameter;
 	position = other.position;

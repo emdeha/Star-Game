@@ -15,6 +15,8 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
+// TODO: Use smart pointers where needed.
+
 #include "Main.h"
 #include "../Entities/PlanetBodies.h"
 #include "../Entities/Lights.h"
@@ -27,18 +29,18 @@ float g_fzFar = 1000.0f;
 
 LitProgData g_Lit;
 UnlitProgData g_Unlit;
-InterpProgData g_Interp;
+SimpleProgData g_Simple;
 
 const int g_projectionBlockIndex = 2;
 
-InterpProgData LoadInterpProgram(const std::string &strVertexShader, const std::string &strFragmentShader)
+SimpleProgData LoadInterpProgram(const std::string &strVertexShader, const std::string &strFragmentShader)
 {
 	std::vector<GLuint> shaderList;
 
 	shaderList.push_back(Framework::LoadShader(GL_VERTEX_SHADER, strVertexShader));
 	shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, strFragmentShader));
 
-	InterpProgData data;
+	SimpleProgData data;
 	data.theProgram = Framework::CreateProgram(shaderList);
 	data.modelToCameraMatrixUnif = glGetUniformLocation(data.theProgram, "modelToCameraMatrix");
 	data.colorUnif = glGetUniformLocation(data.theProgram, "color");
@@ -98,24 +100,19 @@ void InitializePrograms()
 {
 	g_Lit = LoadLitProgram("PN.vert", "GaussianLighting.frag");
 	g_Unlit = LoadUnlitProgram("PosTransform.vert", "UniformColor.frag");
-	g_Interp = LoadInterpProgram("Interp.vert", "Interp.frag");
+	g_Simple = LoadInterpProgram("Interp.vert", "Interp.frag");
 }
 
 GLuint g_projectionUniformBuffer = 0;
 
-struct ProjectionBlock
-{
-	glm::mat4 cameraToClipMatrix;
-};
-
 glm::mat4 g_cameraToClipMatrix;
 glm::mat4 g_modelMatrix;
 
-Sun *mainSun = new Sun(glm::vec3(0.0f), 1.25f);
-SunLight *mainSunLight = new SunLight(glm::vec3(), glm::vec4(1.0f), glm::vec4(0.2f), glm::vec4(1.0f),
-								   1.2f, 0.5f);
+std::shared_ptr<Sun> mainSun(new Sun(glm::vec3(0.0f), 1.25f, 4));
+SunLight mainSunLight(SunLight(glm::vec3(), glm::vec4(1.0f), glm::vec4(0.2f), glm::vec4(1.0f),
+					  1.2f, 0.5f));
 
-Universe *universe = new Universe();
+Universe *universe(new Universe());
 
 Mouse userMouse;
 
@@ -130,23 +127,38 @@ void HandleMouse()
 	float windowWidth = (float)glutGet(GLUT_WINDOW_WIDTH);
 	float windowHeight = (float)glutGet(GLUT_WINDOW_HEIGHT);
 
+	if(userMouse.IsRightButtonDown())
+	{
+		if(mainSun->IsClicked
+			(g_cameraToClipMatrix, g_modelMatrix, userMouse, 
+			 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
+		{
+			if(mainSun->RemoveSatellite() != true)
+			{
+				std::printf("No satellites.\n");
+			}
+			else 
+			{
+				initialOffset -= 0.75f;
+			}
+		}
+	}
+
 	if(userMouse.IsLeftButtonDown())
 	{
 		if(mainSun->IsClicked
 			(g_cameraToClipMatrix, g_modelMatrix, userMouse, 
 			 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 		{
-			/*if(*/mainSun->AddSatellite("UnitSphere.xml", 1.5f, initialOffset, 10.0f, 0.25f);// == true)
-			//{
+			if(mainSun->AddSatellite("UnitSphere.xml", initialOffset, 10.0f, 0.25f) == true)
+			{
 				initialOffset += 0.75f;
-			//}
-			//else std::printf("Satellite cap reached!\n");
+			}
+			else std::printf("Satellite cap reached!\n");
 		}
 
-		mainSun->IsSatelliteClicked(g_cameraToClipMatrix, g_modelMatrix, userMouse, 
-								glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight);
-		/*std::vector<Satellite*> satellites = mainSun->GetSatellites();
-		for(int satellite = 0; satellite < satellites.size(); satellite++)
+		std::vector<Satellite*> satellites = mainSun->GetSatellites();
+		for(unsigned satellite = 0; satellite < satellites.size(); satellite++)
 		{
 			if(satellites[satellite]->IsClicked
 				(g_cameraToClipMatrix, g_modelMatrix, userMouse, 
@@ -154,13 +166,11 @@ void HandleMouse()
 			{
 				std::printf("Satellite %d clicked!!!\n", satellite);
 			}
-		}*/
+		}
 	}
 
-	mainSun->IsSatelliteClicked(g_cameraToClipMatrix, g_modelMatrix, userMouse, 
-								glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight);
-	/*std::vector<Satellite*> satellites = mainSun->GetSatellites();
-	for(int satellite = 0; satellite < satellites.size(); satellite++)
+	std::vector<Satellite*> satellites = mainSun->GetSatellites();
+	for(unsigned satellite = 0; satellite < satellites.size(); satellite++)
 	{
 		if(satellites[satellite]->IsClicked
 			(g_cameraToClipMatrix, g_modelMatrix, userMouse, 
@@ -168,8 +178,9 @@ void HandleMouse()
 		{
 			std::printf("Satellite %d clicked!!!\n", satellite);
 		}
-	}*/
+	}
 
+	userMouse.ReleaseRightButton();
 	userMouse.ReleaseLeftButton();
 }
 void HandleMouseButtons(int button, int state, int x, int y)
@@ -202,20 +213,25 @@ void HandlePassiveMovement(int x, int y)
 }
 
 
-//Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
-void Init()
+void InitializeScene()
 {
-	InitializePrograms();
-	
 	mainSun->LoadMesh("UnitSphere.xml");
 
 	universe->AddSun(mainSun);
 	universe->AddSunLight(mainSunLight);
+}
+
+//Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
+void Init()
+{
+	InitializePrograms();
+	InitializeScene();
 
 
 	glutMouseFunc(HandleMouseButtons);
 	glutMotionFunc(HandleActiveMovement);
 	glutPassiveMotionFunc(HandlePassiveMovement);
+
 	
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -232,11 +248,11 @@ void Init()
 
 	glGenBuffers(1, &g_projectionUniformBuffer);
 	glBindBuffer(GL_UNIFORM_BUFFER, g_projectionUniformBuffer);
-	glBufferData(GL_UNIFORM_BUFFER, sizeof(ProjectionBlock), NULL, GL_DYNAMIC_DRAW);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 
 	//Bind the static buffers.
 	glBindBufferRange(GL_UNIFORM_BUFFER, g_projectionBlockIndex, g_projectionUniformBuffer,
-		0, sizeof(ProjectionBlock));
+		0, sizeof(glm::mat4));
 
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
@@ -256,7 +272,7 @@ void Display()
 	g_modelMatrix = modelMatrix.Top();
 
 	universe->UpdateUniverse();
-	universe->RenderUniverse(modelMatrix, g_Lit, g_Unlit, g_Interp);
+	universe->RenderUniverse(modelMatrix, g_Lit, g_Unlit, g_Simple);
 	
 	HandleMouse();
 	userMouse.OverrideLastPosition(userMouse.GetCurrentPosition());

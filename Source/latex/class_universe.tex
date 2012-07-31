@@ -1,0 +1,45 @@
+\hypertarget{class_universe}{\section{Universe Class Reference}
+\label{class_universe}\index{Universe@{Universe}}
+}
+
+
+This class updates, renders and maintains the game world aka \hyperlink{class_universe}{Universe}.  
+
+
+
+
+{\ttfamily \#include $<$Universe.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_universe_ade4f13031aff9dbf5c8867334a525a01}{void {\bfseries Add\-Sun\-Light} (\hyperlink{class_sun_light}{Sun\-Light} $\ast$new\-Sun\-Light)}\label{class_universe_ade4f13031aff9dbf5c8867334a525a01}
+
+\item 
+\hypertarget{class_universe_a6c01c73614710200f25ece9d4444a10d}{void {\bfseries Add\-Sun} (\hyperlink{class_sun}{Sun} $\ast$new\-Sun)}\label{class_universe_a6c01c73614710200f25ece9d4444a10d}
+
+\item 
+\hypertarget{class_universe_acae0ef79d1350457b3824a19134f8a3d}{void \hyperlink{class_universe_acae0ef79d1350457b3824a19134f8a3d}{Update\-Universe} ()}\label{class_universe_acae0ef79d1350457b3824a19134f8a3d}
+
+\begin{DoxyCompactList}\small\item\em Goes through the game objects and calls their update functions. \end{DoxyCompactList}\item 
+\hypertarget{class_universe_ace045abe0b7adb4c1ba7c33c69a2bd07}{void \hyperlink{class_universe_ace045abe0b7adb4c1ba7c33c69a2bd07}{Render\-Universe} (glutil\-::\-Matrix\-Stack \&model\-Matrix, const \hyperlink{struct_lit_prog_data}{Lit\-Prog\-Data} \&lit\-Data, const \hyperlink{struct_unlit_prog_data}{Unlit\-Prog\-Data} \&un\-Lit\-Data, const \hyperlink{struct_interp_prog_data}{Interp\-Prog\-Data} \&interp\-Data)}\label{class_universe_ace045abe0b7adb4c1ba7c33c69a2bd07}
+
+\begin{DoxyCompactList}\small\item\em Goes through the game objects and calls their render functions. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_universe_afa686fcb7a6c92e7ef41b1eceec8e5be}{std\-::vector$<$ \hyperlink{class_sun_light}{Sun\-Light} $\ast$ $>$ \hyperlink{class_universe_afa686fcb7a6c92e7ef41b1eceec8e5be}{lights}}\label{class_universe_afa686fcb7a6c92e7ef41b1eceec8e5be}
+
+\begin{DoxyCompactList}\small\item\em Holds the world's lights. \end{DoxyCompactList}\item 
+\hypertarget{class_universe_ad0502cbfe6e9373fd29aaf70fb5133a0}{std\-::vector$<$ \hyperlink{class_sun}{Sun} $\ast$ $>$ \hyperlink{class_universe_ad0502cbfe6e9373fd29aaf70fb5133a0}{suns}}\label{class_universe_ad0502cbfe6e9373fd29aaf70fb5133a0}
+
+\begin{DoxyCompactList}\small\item\em Holds the world's suns. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class updates, renders and maintains the game world aka \hyperlink{class_universe}{Universe}. 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+Star\-Game/\-Universe/\hyperlink{_universe_8h}{Universe.\-h}\item 
+Star\-Game/\-Universe/Universe.\-cpp\end{DoxyCompactItemize}

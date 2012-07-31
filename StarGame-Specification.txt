@@ -28,45 +28,21 @@ system.
     1. GUI
     2. Audio
     3. Networking (Maybe)
-    4. 3DS exporter
+    4. 3DS importer
 
 # Ideas
     -- Maybe TD waves
     -- Environment - 3D objects + plane textures
 
 Progress videos
--- every 2 weeks
+?- every 2 weeks
 
 2 weeks cycle
 
-Multiplayer (maybe)
 
 Solar system attacked by creeps
 -- give loot (resources)
 -- 
-
-1st cycle:
-
-Save/Load games
--- World-like (see pic)
-
-Main game mechanics
-v- Planet movement
-v- 3D Planets 
-x- textures
-v- Selection
-    orbits
-    only upgrades on small planets
-    
-x- Simple enemies
-
-GUI System
-
-Maybe simple fusion engine
--- Combination machine
-
-Maybe sound
-
 
 
 Resources
@@ -82,3 +58,34 @@ TODO:
     1. Fix the problem with the picking of the satellites
 	-- Strange precision loss
 	-- When camera is at an angle, I should do ray-ellipsoid collision detection. The first radius of the ellipsoid would be the circle's radius and the second - the circle\'s radius * sin(cameraAngle)?
+    2. Remove framework files which I don't need.
+
+
+
+1st cycle:
+
+
+Main game mechanics
+v- Planet movement
+v- 3D Planets 
+v- Selection
+    orbits
+    only upgrades on small planets
+
+
+x- textures
+x- Simple enemies
+x- Save/Load games
+      - World-like (see pic)
+
+ 
+
+2nd cycle:
+-- Font system
+-- GUI system
+-- Sound system
+
+
+-- Fix the clicking problem
+-- Enemies
+-- Save/Load system

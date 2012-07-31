@@ -1,0 +1,73 @@
+\hypertarget{class_sun_light}{\section{Sun\-Light Class Reference}
+\label{class_sun_light}\index{Sun\-Light@{Sun\-Light}}
+}
+
+
+Implements the sun lighting effects.  
+
+
+
+
+{\ttfamily \#include $<$Lights.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_sun_light_a60324f930a5714b244e796ad4d7dcb2e}{{\bfseries Sun\-Light} (glm\-::vec3 new\-Position, glm\-::vec4 new\-Light\-Intensity, glm\-::vec4 new\-Ambient\-Intensity, glm\-::vec4 new\-Base\-Diffuse\-Color, float new\-Light\-Attenuation, float new\-Shinines\-Factor)}\label{class_sun_light_a60324f930a5714b244e796ad4d7dcb2e}
+
+\item 
+\hypertarget{class_sun_light_ade6fbab75e4d018d94e5aba20361b4cc}{void \hyperlink{class_sun_light_ade6fbab75e4d018d94e5aba20361b4cc}{Render} (glutil\-::\-Matrix\-Stack \&model\-Matrix, const \hyperlink{struct_lit_prog_data}{Lit\-Prog\-Data} \&light\-Data)}\label{class_sun_light_ade6fbab75e4d018d94e5aba20361b4cc}
+
+\begin{DoxyCompactList}\small\item\em Applies the light to the scene. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_sun_light_a1fe5f1436fda2baea246524224a907b3}{glm\-::vec4 \hyperlink{class_sun_light_a1fe5f1436fda2baea246524224a907b3}{light\-Intensity}}\label{class_sun_light_a1fe5f1436fda2baea246524224a907b3}
+
+\begin{DoxyCompactList}\small\item\em The light's intensity. \end{DoxyCompactList}\item 
+\hypertarget{class_sun_light_ad3284638146c2cea20545a217b87dfc1}{glm\-::vec4 \hyperlink{class_sun_light_ad3284638146c2cea20545a217b87dfc1}{ambient\-Intensity}}\label{class_sun_light_ad3284638146c2cea20545a217b87dfc1}
+
+\begin{DoxyCompactList}\small\item\em The ambient intensity. \end{DoxyCompactList}\item 
+\hypertarget{class_sun_light_a091ee9920e44f4243acbcf13525c08c1}{glm\-::vec4 \hyperlink{class_sun_light_a091ee9920e44f4243acbcf13525c08c1}{base\-Diffuse\-Color}}\label{class_sun_light_a091ee9920e44f4243acbcf13525c08c1}
+
+\begin{DoxyCompactList}\small\item\em The diffuse color of the surface which is lit. \end{DoxyCompactList}\item 
+\hypertarget{class_sun_light_a69194d86c6aaf89e2a98f6e0672c7660}{glm\-::vec3 \hyperlink{class_sun_light_a69194d86c6aaf89e2a98f6e0672c7660}{position}}\label{class_sun_light_a69194d86c6aaf89e2a98f6e0672c7660}
+
+\begin{DoxyCompactList}\small\item\em The position of the light source. \end{DoxyCompactList}\item 
+\hypertarget{class_sun_light_ae19dacac63ebedb1ffe586b145d9c06e}{float \hyperlink{class_sun_light_ae19dacac63ebedb1ffe586b145d9c06e}{light\-Attenuation}}\label{class_sun_light_ae19dacac63ebedb1ffe586b145d9c06e}
+
+\begin{DoxyCompactList}\small\item\em The light attenuation factor. \end{DoxyCompactList}\item 
+\hypertarget{class_sun_light_a17462d147dd00e17383fa563477a1089}{float \hyperlink{class_sun_light_a17462d147dd00e17383fa563477a1089}{shininess\-Factor}}\label{class_sun_light_a17462d147dd00e17383fa563477a1089}
+
+\begin{DoxyCompactList}\small\item\em The shininess (surface roughness) factor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Implements the sun lighting effects. 
+
+The sun light is not just a simple directional light with only a diffuse color. If the scene was an F\-P\-S game or something similar we won't need the 'complex' implementation made here, but in our case things are different.
+
+The distance between the light and the bodies which it illuminates is very small. Therefore a simple directional light won't suit our needs. Things just won't look pretty.
+
+The implementation of this light is based on calculating the gaussian distribution of microfacets and calculating each fragment's color based on it. Simply put, we calculate the otput color of each pixel based on some roughness of our surface.
+
+The final lighting model is based on the contribution of the {\ttfamily diffuse color}, {\ttfamily specular color} and {\ttfamily ambient intensity}.
+\begin{DoxyItemize}
+\item The {\ttfamily diffuse color} is based on a light/surface interaction where the light is reflected at many angles.
+\item The {\ttfamily specular color} stands for the shinies of the surface.
+\item The {\ttfamily ambient intensity} is the random light which comes from all other reflected lights in the scene. It is kind of 'made up'.
+\end{DoxyItemize}
+
+Other contributions to the final color are made by\-:
+\begin{DoxyItemize}
+\item The {\ttfamily attenuation intensity} which is the decrease of the light's intensity based on the distance from the light source.
+\item The cosine of the angle of incidence between the light ray and the surface.
+\item The {\ttfamily gaussian term}.
+\end{DoxyItemize}
+
+For further research you can check out \href{http://www.arcsynthesis.org/gltut/Illumination/Illumination.html}{\tt this tutorial}. 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+Star\-Game/\-Entities/\hyperlink{_lights_8h}{Lights.\-h}\item 
+Star\-Game/\-Entities/Lights.\-cpp\end{DoxyCompactItemize}

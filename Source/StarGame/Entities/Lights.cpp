@@ -23,35 +23,44 @@ SunLight::SunLight()
 	position = glm::vec3();
 	lightIntensity = glm::vec4();
 	ambientIntensity = glm::vec4();
-	baseDiffuseColor = glm::vec4();
 	lightAttenuation = 0.0f;
-	shininessFactor = 0.0f;
+	maxIntensity = 0.0f;
+	gamma = 2.2f;
 }
 SunLight::SunLight(glm::vec3 newPosition,
 				   glm::vec4 newLightIntensity, glm::vec4 newAmbientIntensity,
-				   glm::vec4 newBaseDiffuseColor,
-				   float newLightAttenuation, float newShininesFactor)
+				   float newLightAttenuation, 
+				   float newMaxIntensity, float newGamma)
 {
 	position = newPosition;
 	lightIntensity = newLightIntensity;
 	ambientIntensity = newAmbientIntensity;
-	baseDiffuseColor = newBaseDiffuseColor;
 	lightAttenuation = newLightAttenuation;
-	shininessFactor = newShininesFactor;
+	maxIntensity = newMaxIntensity;
+	gamma = newGamma;
 }
 
-void SunLight::Render(glutil::MatrixStack &modelMatrix, const LitProgData &lightData)
+void SunLight::Render(glutil::MatrixStack &modelMatrix, const LitProgData &lightData,
+					  GLuint lightUniformBuffer)
 {
 	glm::vec4 position_cameraSpace = modelMatrix.Top() * glm::vec4(position, 1.0f);
 
 	glUseProgram(lightData.theProgram);
 
 	glUniform4fv(lightData.lightIntensityUnif, 1, glm::value_ptr(lightIntensity));
-	glUniform4fv(lightData.ambientIntensityUnif, 1, glm::value_ptr(ambientIntensity));
-	glUniform4fv(lightData.baseDiffuseColorUnif, 1, glm::value_ptr(baseDiffuseColor));
 	glUniform3fv(lightData.cameraSpaceLightPosUnif, 1, glm::value_ptr(position_cameraSpace));
-	glUniform1f(lightData.lightAttenuationUnif, lightAttenuation);
-	glUniform1f(lightData.shininessFactorUnif, shininessFactor);
+
+	
+	LightBlockGamma blockLightData;
+
+	blockLightData.ambientIntensity = ambientIntensity;
+	blockLightData.lightAttenuation = lightAttenuation;
+	blockLightData.maxIntensity = maxIntensity;
+	blockLightData.gamma = gamma;
+
+	glBindBuffer(GL_UNIFORM_BUFFER, lightUniformBuffer);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(blockLightData), &blockLightData);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	glUseProgram(0);
 }

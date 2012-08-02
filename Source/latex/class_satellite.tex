@@ -19,14 +19,14 @@ Represents a sun's satellite.
 \hypertarget{class_satellite_a810947406b5df21450b07a6f9250d83e}{void \hyperlink{class_satellite_a810947406b5df21450b07a6f9250d83e}{Load\-Mesh} (const std\-::string \&file\-Name)}\label{class_satellite_a810947406b5df21450b07a6f9250d83e}
 
 \begin{DoxyCompactList}\small\item\em Loads the satellite's mesh. \end{DoxyCompactList}\item 
-\hypertarget{class_satellite_acddaeaf0886cdf9f4d8bae100e05d558}{void \hyperlink{class_satellite_acddaeaf0886cdf9f4d8bae100e05d558}{Render} (glutil\-::\-Matrix\-Stack \&model\-Matrix, const \hyperlink{struct_lit_prog_data}{Lit\-Prog\-Data} \&lit\-Data, const \hyperlink{struct_unlit_prog_data}{Unlit\-Prog\-Data} \&unlit\-Data, const \hyperlink{struct_interp_prog_data}{Interp\-Prog\-Data} \&interp\-Data)}\label{class_satellite_acddaeaf0886cdf9f4d8bae100e05d558}
+\hypertarget{class_satellite_a6c61708e6a955d1676dfb2f779cf0698}{void \hyperlink{class_satellite_a6c61708e6a955d1676dfb2f779cf0698}{Render} (glutil\-::\-Matrix\-Stack \&model\-Matrix, int material\-Block\-Index, float gamma, const \hyperlink{struct_lit_prog_data}{Lit\-Prog\-Data} \&lit\-Data, const \hyperlink{struct_unlit_prog_data}{Unlit\-Prog\-Data} \&unlit\-Data, const \hyperlink{struct_simple_prog_data}{Simple\-Prog\-Data} \&interp\-Data)}\label{class_satellite_a6c61708e6a955d1676dfb2f779cf0698}
 
 \begin{DoxyCompactList}\small\item\em Renders the satellite and its on-\/click animation. \end{DoxyCompactList}\item 
 void \hyperlink{class_satellite_a9922529e27792578c7047bb91d27e21f}{Update} ()
 \begin{DoxyCompactList}\small\item\em Updates the satellite's position. \end{DoxyCompactList}\item 
 bool \hyperlink{class_satellite_a9701b3bb18389b93b70a75f17008d629}{Is\-Clicked} (glm\-::mat4 proj\-Mat, glm\-::mat4 model\-Mat, \hyperlink{class_mouse}{Mouse} user\-Mouse, glm\-::vec4 camera\-Pos, float window\-Width, float window\-Height)
 \begin{DoxyCompactList}\small\item\em Checks for click on the satellite. \end{DoxyCompactList}\item 
-\hypertarget{class_satellite_a511a833d667e6c52b417232abfa95e70}{void \hyperlink{class_satellite_a511a833d667e6c52b417232abfa95e70}{Load\-Clicked\-Animation} (glutil\-::\-Matrix\-Stack \&model\-Matrix, const \hyperlink{struct_interp_prog_data}{Interp\-Prog\-Data} \&interp\-Data)}\label{class_satellite_a511a833d667e6c52b417232abfa95e70}
+\hypertarget{class_satellite_a8234af99478c820231f5d52289b7bca2}{void \hyperlink{class_satellite_a8234af99478c820231f5d52289b7bca2}{Load\-Clicked\-Animation} (glutil\-::\-Matrix\-Stack \&model\-Matrix, const \hyperlink{struct_simple_prog_data}{Simple\-Prog\-Data} \&simple\-Data, float gamma)}\label{class_satellite_a8234af99478c820231f5d52289b7bca2}
 
 \begin{DoxyCompactList}\small\item\em Loads the animation which is played on-\/click. \end{DoxyCompactList}\item 
 \hypertarget{class_satellite_a84782cdb794e9c2d86966bfb0487d428}{void \hyperlink{class_satellite_a84782cdb794e9c2d86966bfb0487d428}{Set\-Parent} (const \hyperlink{class_sun}{Sun} \&new\-Parent)}\label{class_satellite_a84782cdb794e9c2d86966bfb0487d428}
@@ -70,7 +70,13 @@ bool \hyperlink{class_satellite_a9701b3bb18389b93b70a75f17008d629}{Is\-Clicked} 
 \begin{DoxyCompactList}\small\item\em {\itshape diameter} of the satellite \end{DoxyCompactList}\item 
 \hypertarget{class_satellite_addd9824588521e5d6a17bd4a9a9618cf}{bool {\bfseries is\-Clicked}}\label{class_satellite_addd9824588521e5d6a17bd4a9a9618cf}
 
-\end{DoxyCompactItemize}
+\item 
+\hypertarget{class_satellite_a32c179c36f0dfdbdb0317b123087ace2}{int \hyperlink{class_satellite_a32c179c36f0dfdbdb0317b123087ace2}{material\-Block\-Size}}\label{class_satellite_a32c179c36f0dfdbdb0317b123087ace2}
+
+\begin{DoxyCompactList}\small\item\em The size of the material block. Used for uniform buffer init. \end{DoxyCompactList}\item 
+\hypertarget{class_satellite_a8d2a1b2c79145f4ea10937c9f9f6e5f1}{G\-Luint \hyperlink{class_satellite_a8d2a1b2c79145f4ea10937c9f9f6e5f1}{material\-Uniform\-Buffer}}\label{class_satellite_a8d2a1b2c79145f4ea10937c9f9f6e5f1}
+
+\begin{DoxyCompactList}\small\item\em The 'pointer' to the uniform buffer. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -101,7 +107,7 @@ In order to check for click we need to do two things\-:
 \item To check for intersections between the ray and the object Getting the ray is achieved with the user\-Mouse.\-Get\-Pick\-Ray() function.
 \end{DoxyItemize}
 
-We check for intersections with \hyperlink{namespace_utility_1_1_intersections_a74e848c2fa35fc9371d2b99e8f666b2a}{Utility\-::\-Intersections\-::\-Ray\-Intersects\-Ellipsoid()}. The test against collision of the ray with an ellipsoid because the camera is at an 135.\-0 degree angle relative to the scene's plane. This leads to orbit squashing and the collision checks become inaccurate. \hypertarget{class_satellite_a9922529e27792578c7047bb91d27e21f}{\index{Satellite@{Satellite}!Update@{Update}}
+We check for intersections with \hyperlink{namespace_utility_1_1_intersections_a96db5faaa3683901a7f1be805423e618}{Utility\-::\-Intersections\-::\-Ray\-Intersects\-Ellipsoid()}. The test against collision of the ray with an ellipsoid because the camera is at an 135.\-0 degree angle relative to the scene's plane. This leads to orbit squashing and the collision checks become inaccurate. \hypertarget{class_satellite_a9922529e27792578c7047bb91d27e21f}{\index{Satellite@{Satellite}!Update@{Update}}
 \index{Update@{Update}!Satellite@{Satellite}}
 \subsubsection[{Update}]{\setlength{\rightskip}{0pt plus 5cm}Satellite\-::\-Update (
 \begin{DoxyParamCaption}

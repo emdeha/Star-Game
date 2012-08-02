@@ -81,7 +81,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow4" class="tabs3">
     <ul class="tablist">
       <li><a href="#index_a"><span>a</span></a></li>
-      <li><a href="#index_b"><span>b</span></a></li>
       <li><a href="#index_c"><span>c</span></a></li>
       <li><a href="#index_d"><span>d</span></a></li>
       <li><a href="#index_g"><span>g</span></a></li>
@@ -119,21 +118,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>AddSatellite()
 : <a class="el" href="class_sun.html#aa83727a648f0456be4164fd6f2dc1e75">Sun</a>
 </li>
-<li>ambientIntensity
-: <a class="el" href="class_sun_light.html#ad3284638146c2cea20545a217b87dfc1">SunLight</a>
-</li>
 <li>anglePhi_degs
 : <a class="el" href="class_top_down_camera.html#a896c500558bbbddcdf6aacd5a9231f76">TopDownCamera</a>
 </li>
 <li>angleTheta_degs
 : <a class="el" href="class_top_down_camera.html#a834f483f9ee746144f5469bf5879b1b0">TopDownCamera</a>
-</li>
-</ul>
-
-
-<h3><a class="anchor" id="index_b"></a>- b -</h3><ul>
-<li>baseDiffuseColor
-: <a class="el" href="class_sun_light.html#a091ee9920e44f4243acbcf13525c08c1">SunLight</a>
 </li>
 </ul>
 
@@ -158,8 +147,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="class_sun.html#ac35fc9ebc427d9c8c9fd3ee3a12fce82">Sun</a>
 </li>
 <li>Draw()
-: <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_torus2_d.html#a9ea715b46c9021e8d594b2b4fe5052f0">Utility::BasicMeshGeneration::Torus2D</a>
-, <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_circle.html#a468f553bc08e1953cdf7f4943ed7b82e">Utility::BasicMeshGeneration::Circle</a>
+: <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_torus2_d.html#a1e804b9d1f42094ce74b5ed56f157664">Utility::BasicMeshGeneration::Torus2D</a>
+, <a class="el" href="class_satellite_orbit.html#a3b8ab0e39953aa153e6b76ecae5f624e">SatelliteOrbit</a>
+, <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_circle.html#acef62a387da6556686f5d479b3e02faa">Utility::BasicMeshGeneration::Circle</a>
 </li>
 </ul>
 
@@ -176,6 +166,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>GetPosition()
 : <a class="el" href="class_sun.html#a8b531f7cf5b4b39ab1f5f453894f52bd">Sun</a>
+</li>
+<li>GetSatelliteCap()
+: <a class="el" href="class_sun.html#a703c794dafe926c6c41f8d8ee3f6c5a2">Sun</a>
 </li>
 <li>GetSatellites()
 : <a class="el" href="class_sun.html#a69fc54810b99f61d33be2dafafa3273d">Sun</a>
@@ -207,17 +200,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <h3><a class="anchor" id="index_l"></a>- l -</h3><ul>
-<li>lightAttenuation
-: <a class="el" href="class_sun_light.html#ae19dacac63ebedb1ffe586b145d9c06e">SunLight</a>
-</li>
-<li>lightIntensity
-: <a class="el" href="class_sun_light.html#a1fe5f1436fda2baea246524224a907b3">SunLight</a>
-</li>
 <li>lights
-: <a class="el" href="class_universe.html#afa686fcb7a6c92e7ef41b1eceec8e5be">Universe</a>
+: <a class="el" href="class_universe.html#a48a408b8a01b50f05df5fc20ae2e99a8">Universe</a>
 </li>
 <li>LoadClickedAnimation()
-: <a class="el" href="class_satellite.html#a511a833d667e6c52b417232abfa95e70">Satellite</a>
+: <a class="el" href="class_satellite.html#a8234af99478c820231f5d52289b7bca2">Satellite</a>
 </li>
 <li>LoadMesh()
 : <a class="el" href="class_satellite.html#a810947406b5df21450b07a6f9250d83e">Satellite</a>
@@ -227,6 +214,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <h3><a class="anchor" id="index_m"></a>- m -</h3><ul>
+<li>materialBlockSize
+: <a class="el" href="class_satellite.html#a32c179c36f0dfdbdb0317b123087ace2">Satellite</a>
+</li>
+<li>materialUniformBuffer
+: <a class="el" href="class_satellite.html#a8d2a1b2c79145f4ea10937c9f9f6e5f1">Satellite</a>
+</li>
 <li>mesh
 : <a class="el" href="class_satellite.html#a00e43093535d9107b9c3e5911a78b9e6">Satellite</a>
 </li>
@@ -244,31 +237,37 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <h3><a class="anchor" id="index_p"></a>- p -</h3><ul>
+<li>padding
+: <a class="el" href="struct_light_block_gamma.html#a49bf0ee1be155d8c78bf93c5ece2a98e">LightBlockGamma</a>
+, <a class="el" href="struct_material_block.html#a9de448d4d957faf4e125fbaf0a326b49">MaterialBlock</a>
+</li>
 <li>parent
 : <a class="el" href="class_satellite.html#a4ad51c61fd80af0ae2012156046bc6f1">Satellite</a>
 </li>
 <li>position
-: <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_circle.html#a70517725f0ea6c71d7ef95665854037a">Utility::BasicMeshGeneration::Circle</a>
-, <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_torus2_d.html#a9ff1ae36f05e99296564ae7ed68dd1e2">Utility::BasicMeshGeneration::Torus2D</a>
-, <a class="el" href="class_sun.html#acab91a34acacee79bb743089738da5cc">Sun</a>
+: <a class="el" href="class_sun.html#acab91a34acacee79bb743089738da5cc">Sun</a>
 , <a class="el" href="class_satellite.html#a924a136220bcab117d5c61781a287df7">Satellite</a>
-, <a class="el" href="class_sun_light.html#a69194d86c6aaf89e2a98f6e0672c7660">SunLight</a>
+, <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_torus2_d.html#a9ff1ae36f05e99296564ae7ed68dd1e2">Utility::BasicMeshGeneration::Torus2D</a>
+, <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_circle.html#a70517725f0ea6c71d7ef95665854037a">Utility::BasicMeshGeneration::Circle</a>
 </li>
 </ul>
 
 
 <h3><a class="anchor" id="index_r"></a>- r -</h3><ul>
+<li>RemoveSatellite()
+: <a class="el" href="class_sun.html#a274dd9d397333db6a916582ac2a19c46">Sun</a>
+</li>
 <li>Render()
-: <a class="el" href="class_sun_light.html#ade6fbab75e4d018d94e5aba20361b4cc">SunLight</a>
-, <a class="el" href="class_satellite.html#acddaeaf0886cdf9f4d8bae100e05d558">Satellite</a>
-, <a class="el" href="class_sun.html#a84f041fbc0356455b1254600bdf3860f">Sun</a>
+: <a class="el" href="class_satellite.html#a6c61708e6a955d1676dfb2f779cf0698">Satellite</a>
+, <a class="el" href="class_sun.html#a736012a1d04686497506fe25636bcdbb">Sun</a>
+, <a class="el" href="class_sun_light.html#ab07e3bc491af9f3aeb177cbebf1825b6">SunLight</a>
 </li>
 <li>RenderUniverse()
-: <a class="el" href="class_universe.html#ace045abe0b7adb4c1ba7c33c69a2bd07">Universe</a>
+: <a class="el" href="class_universe.html#a9293cf3a90d969d42ba68f17534603a4">Universe</a>
 </li>
 <li>resolution
-: <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_torus2_d.html#a29225a334692b0233e1f88a36a94682e">Utility::BasicMeshGeneration::Torus2D</a>
-, <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_circle.html#abd88fc73d1f9b7bff3aee6700f349902">Utility::BasicMeshGeneration::Circle</a>
+: <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_circle.html#abd88fc73d1f9b7bff3aee6700f349902">Utility::BasicMeshGeneration::Circle</a>
+, <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_torus2_d.html#a29225a334692b0233e1f88a36a94682e">Utility::BasicMeshGeneration::Torus2D</a>
 </li>
 <li>ResolveCamPosition()
 : <a class="el" href="class_top_down_camera.html#a96829fb433ccf1d3857e6681477bc615">TopDownCamera</a>
@@ -281,7 +280,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <h3><a class="anchor" id="index_s"></a>- s -</h3><ul>
 <li>satellites
-: <a class="el" href="class_sun.html#a03e54e773c82aabf5e3fad7b47241333">Sun</a>
+: <a class="el" href="class_sun.html#a0e5857745c6be53c3e2a6e518ff291d6">Sun</a>
 </li>
 <li>SetIsClicked()
 : <a class="el" href="class_satellite.html#ae55915277ebb216b20c86895c9c4343e">Satellite</a>
@@ -289,14 +288,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>SetParent()
 : <a class="el" href="class_satellite.html#a84782cdb794e9c2d86966bfb0487d428">Satellite</a>
 </li>
-<li>shininessFactor
-: <a class="el" href="class_sun_light.html#a17462d147dd00e17383fa563477a1089">SunLight</a>
-</li>
 <li>sunMesh
 : <a class="el" href="class_sun.html#a1aa72a3e0baeabd76642c48b969abf99">Sun</a>
 </li>
 <li>suns
-: <a class="el" href="class_universe.html#ad0502cbfe6e9373fd29aaf70fb5133a0">Universe</a>
+: <a class="el" href="class_universe.html#a958fd8a9e69878b1ae4526ab692ada9e">Universe</a>
 </li>
 </ul>
 
@@ -325,7 +321,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 30 2012 20:01:26 for StarGame by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 2 2012 20:08:08 for StarGame by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.1
 </small></address>

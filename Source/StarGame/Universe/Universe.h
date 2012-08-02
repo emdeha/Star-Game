@@ -38,6 +38,8 @@ private:
 	std::vector<std::shared_ptr<Sun>> suns; ///< Holds the world's suns.
 	// std::vector<std::shared_ptr<Enemies>> enemies;
 
+	float worldGamma;
+
 public:
 	Universe();
 
@@ -50,10 +52,13 @@ public:
 
 	/// \fn RenderUniverse
 	/// \brief Goes through the game objects and calls their render functions.
-	void RenderUniverse(glutil::MatrixStack &modelMatrix,
+	void RenderUniverse(glutil::MatrixStack &modelMatrix, 
+						GLuint materialBlockIndex, GLuint lightUniformBuffer,
 						const LitProgData &litData, 
 						const UnlitProgData &unLitData, 
 						const SimpleProgData &interpData);
+
+	void SetGamma(float newWorldGamma);
 
 	~Universe();
 

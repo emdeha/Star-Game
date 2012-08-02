@@ -125,30 +125,38 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00034"></a><span class="lineno"><a class="code" href="class_universe.html">   34</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_universe.html" title="This class updates, renders and maintains the game world aka Universe.">Universe</a></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="comment">// TODO: Use smart pointers.</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="code" href="class_universe.html#afa686fcb7a6c92e7ef41b1eceec8e5be">   38</a></span>&#160;        std::vector&lt;SunLight*&gt; <a class="code" href="class_universe.html#afa686fcb7a6c92e7ef41b1eceec8e5be" title="Holds the world&#39;s lights.">lights</a>; </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="code" href="class_universe.html#ad0502cbfe6e9373fd29aaf70fb5133a0">   39</a></span>&#160;        std::vector&lt;Sun*&gt; <a class="code" href="class_universe.html#ad0502cbfe6e9373fd29aaf70fb5133a0" title="Holds the world&#39;s suns.">suns</a>; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="comment">// std::vector&lt;Enemies*&gt; enemies;</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="code" href="class_universe.html" title="This class updates, renders and maintains the game world aka Universe.">Universe</a>();</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordtype">void</span> AddSunLight(<a class="code" href="class_sun_light.html" title="Implements the sun lighting effects.">SunLight</a> *newSunLight);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordtype">void</span> AddSun(<a class="code" href="class_sun.html" title="Represent the main planet of the solar system.">Sun</a> *newSun);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_universe.html#acae0ef79d1350457b3824a19134f8a3d" title="Goes through the game objects and calls their update functions.">UpdateUniverse</a>();</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_universe.html#ace045abe0b7adb4c1ba7c33c69a2bd07" title="Goes through the game objects and calls their render functions.">RenderUniverse</a>(glutil::MatrixStack &amp;modelMatrix,</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                                                <span class="keyword">const</span> <a class="code" href="struct_lit_prog_data.html">LitProgData</a> &amp;litData, <span class="keyword">const</span> <a class="code" href="struct_unlit_prog_data.html">UnlitProgData</a> &amp;unLitData, <span class="keyword">const</span> <a class="code" href="struct_interp_prog_data.html">InterpProgData</a> &amp;interpData);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="comment">// TODO: Add Load function</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;};</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="code" href="class_universe.html#a48a408b8a01b50f05df5fc20ae2e99a8">   37</a></span>&#160;        std::vector&lt;SunLight&gt; <a class="code" href="class_universe.html#a48a408b8a01b50f05df5fc20ae2e99a8" title="Holds the world&#39;s lights.">lights</a>; </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="code" href="class_universe.html#a958fd8a9e69878b1ae4526ab692ada9e">   38</a></span>&#160;        std::vector&lt;std::shared_ptr&lt;Sun&gt;&gt; <a class="code" href="class_universe.html#a958fd8a9e69878b1ae4526ab692ada9e" title="Holds the world&#39;s suns.">suns</a>; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="comment">// std::vector&lt;std::shared_ptr&lt;Enemies&gt;&gt; enemies;</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordtype">float</span> worldGamma;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="code" href="class_universe.html" title="This class updates, renders and maintains the game world aka Universe.">Universe</a>();</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordtype">void</span> AddSunLight(<span class="keyword">const</span> <a class="code" href="class_sun_light.html" title="Implements the sun lighting effects.">SunLight</a> &amp;newSunLight);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordtype">void</span> AddSun(<span class="keyword">const</span> std::shared_ptr&lt;Sun&gt; newSun);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_universe.html#acae0ef79d1350457b3824a19134f8a3d" title="Goes through the game objects and calls their update functions.">UpdateUniverse</a>();</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_universe.html#a9293cf3a90d969d42ba68f17534603a4" title="Goes through the game objects and calls their render functions.">RenderUniverse</a>(glutil::MatrixStack &amp;modelMatrix, </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                                                GLuint materialBlockIndex, GLuint lightUniformBuffer,</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                                                <span class="keyword">const</span> <a class="code" href="struct_lit_prog_data.html">LitProgData</a> &amp;litData, </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                                                <span class="keyword">const</span> <a class="code" href="struct_unlit_prog_data.html">UnlitProgData</a> &amp;unLitData, </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                                                <span class="keyword">const</span> <a class="code" href="struct_simple_prog_data.html">SimpleProgData</a> &amp;interpData);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordtype">void</span> SetGamma(<span class="keywordtype">float</span> newWorldGamma);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        ~<a class="code" href="class_universe.html" title="This class updates, renders and maintains the game world aka Universe.">Universe</a>();</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="comment">// TODO: Add Load function</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;};</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 30 2012 20:01:26 for StarGame by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 2 2012 20:08:08 for StarGame by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.1
 </small></address>

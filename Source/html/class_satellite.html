@@ -109,16 +109,16 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a810947406b5df21450b07a6f9250d83e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a810947406b5df21450b07a6f9250d83e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_satellite.html#a810947406b5df21450b07a6f9250d83e">LoadMesh</a> (const std::string &amp;fileName)</td></tr>
 <tr class="memdesc:a810947406b5df21450b07a6f9250d83e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the satellite's mesh. <br/></td></tr>
-<tr class="memitem:acddaeaf0886cdf9f4d8bae100e05d558"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acddaeaf0886cdf9f4d8bae100e05d558"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_satellite.html#acddaeaf0886cdf9f4d8bae100e05d558">Render</a> (glutil::MatrixStack &amp;modelMatrix, const <a class="el" href="struct_lit_prog_data.html">LitProgData</a> &amp;litData, const <a class="el" href="struct_unlit_prog_data.html">UnlitProgData</a> &amp;unlitData, const <a class="el" href="struct_interp_prog_data.html">InterpProgData</a> &amp;interpData)</td></tr>
-<tr class="memdesc:acddaeaf0886cdf9f4d8bae100e05d558"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the satellite and its on-click animation. <br/></td></tr>
+<tr class="memitem:a6c61708e6a955d1676dfb2f779cf0698"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6c61708e6a955d1676dfb2f779cf0698"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_satellite.html#a6c61708e6a955d1676dfb2f779cf0698">Render</a> (glutil::MatrixStack &amp;modelMatrix, int materialBlockIndex, float gamma, const <a class="el" href="struct_lit_prog_data.html">LitProgData</a> &amp;litData, const <a class="el" href="struct_unlit_prog_data.html">UnlitProgData</a> &amp;unlitData, const <a class="el" href="struct_simple_prog_data.html">SimpleProgData</a> &amp;interpData)</td></tr>
+<tr class="memdesc:a6c61708e6a955d1676dfb2f779cf0698"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the satellite and its on-click animation. <br/></td></tr>
 <tr class="memitem:a9922529e27792578c7047bb91d27e21f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_satellite.html#a9922529e27792578c7047bb91d27e21f">Update</a> ()</td></tr>
 <tr class="memdesc:a9922529e27792578c7047bb91d27e21f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the satellite's position.  <a href="#a9922529e27792578c7047bb91d27e21f"></a><br/></td></tr>
 <tr class="memitem:a9701b3bb18389b93b70a75f17008d629"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_satellite.html#a9701b3bb18389b93b70a75f17008d629">IsClicked</a> (glm::mat4 projMat, glm::mat4 modelMat, <a class="el" href="class_mouse.html">Mouse</a> userMouse, glm::vec4 cameraPos, float windowWidth, float windowHeight)</td></tr>
 <tr class="memdesc:a9701b3bb18389b93b70a75f17008d629"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks for click on the satellite.  <a href="#a9701b3bb18389b93b70a75f17008d629"></a><br/></td></tr>
-<tr class="memitem:a511a833d667e6c52b417232abfa95e70"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a511a833d667e6c52b417232abfa95e70"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_satellite.html#a511a833d667e6c52b417232abfa95e70">LoadClickedAnimation</a> (glutil::MatrixStack &amp;modelMatrix, const <a class="el" href="struct_interp_prog_data.html">InterpProgData</a> &amp;interpData)</td></tr>
-<tr class="memdesc:a511a833d667e6c52b417232abfa95e70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the animation which is played on-click. <br/></td></tr>
+<tr class="memitem:a8234af99478c820231f5d52289b7bca2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8234af99478c820231f5d52289b7bca2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_satellite.html#a8234af99478c820231f5d52289b7bca2">LoadClickedAnimation</a> (glutil::MatrixStack &amp;modelMatrix, const <a class="el" href="struct_simple_prog_data.html">SimpleProgData</a> &amp;simpleData, float gamma)</td></tr>
+<tr class="memdesc:a8234af99478c820231f5d52289b7bca2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the animation which is played on-click. <br/></td></tr>
 <tr class="memitem:a84782cdb794e9c2d86966bfb0487d428"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a84782cdb794e9c2d86966bfb0487d428"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_satellite.html#a84782cdb794e9c2d86966bfb0487d428">SetParent</a> (const <a class="el" href="class_sun.html">Sun</a> &amp;newParent)</td></tr>
 <tr class="memdesc:a84782cdb794e9c2d86966bfb0487d428"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the satellite's parent. <br/></td></tr>
@@ -158,6 +158,12 @@ float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 <tr class="memdesc:a24fb12be82187b2009947c4c02f732eb"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>diameter</em> of the satellite <br/></td></tr>
 <tr class="memitem:addd9824588521e5d6a17bd4a9a9618cf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="addd9824588521e5d6a17bd4a9a9618cf"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isClicked</b></td></tr>
+<tr class="memitem:a32c179c36f0dfdbdb0317b123087ace2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a32c179c36f0dfdbdb0317b123087ace2"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_satellite.html#a32c179c36f0dfdbdb0317b123087ace2">materialBlockSize</a></td></tr>
+<tr class="memdesc:a32c179c36f0dfdbdb0317b123087ace2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of the material block. Used for uniform buffer init. <br/></td></tr>
+<tr class="memitem:a8d2a1b2c79145f4ea10937c9f9f6e5f1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8d2a1b2c79145f4ea10937c9f9f6e5f1"></a>
+GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_satellite.html#a8d2a1b2c79145f4ea10937c9f9f6e5f1">materialUniformBuffer</a></td></tr>
+<tr class="memdesc:a8d2a1b2c79145f4ea10937c9f9f6e5f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The 'pointer' to the uniform buffer. <br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Represents a sun's satellite. </p>
@@ -217,7 +223,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isClicked</b></td></t
 <li>To get the mouse ray from the camera to the object</li>
 <li>To check for intersections between the ray and the object Getting the ray is achieved with the userMouse.GetPickRay() function.</li>
 </ul>
-<p>We check for intersections with <a class="el" href="namespace_utility_1_1_intersections.html#a74e848c2fa35fc9371d2b99e8f666b2a" title="Checks for intersection between a ray and an ellipsoid.">Utility::Intersections::RayIntersectsEllipsoid()</a>. The test against collision of the ray with an ellipsoid because the camera is at an 135.0 degree angle relative to the scene's plane. This leads to orbit squashing and the collision checks become inaccurate. </p>
+<p>We check for intersections with <a class="el" href="namespace_utility_1_1_intersections.html#a96db5faaa3683901a7f1be805423e618" title="Checks for intersection between a ray and an ellipsoid.">Utility::Intersections::RayIntersectsEllipsoid()</a>. The test against collision of the ray with an ellipsoid because the camera is at an 135.0 degree angle relative to the scene's plane. This leads to orbit squashing and the collision checks become inaccurate. </p>
 
 </div>
 </div>
@@ -249,7 +255,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isClicked</b></td></t
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 30 2012 20:01:26 for StarGame by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 2 2012 20:08:08 for StarGame by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.1
 </small></address>

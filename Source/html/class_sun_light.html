@@ -104,32 +104,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a60324f930a5714b244e796ad4d7dcb2e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a60324f930a5714b244e796ad4d7dcb2e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SunLight</b> (glm::vec3 newPosition, glm::vec4 newLightIntensity, glm::vec4 newAmbientIntensity, glm::vec4 newBaseDiffuseColor, float newLightAttenuation, float newShininesFactor)</td></tr>
-<tr class="memitem:ade6fbab75e4d018d94e5aba20361b4cc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ade6fbab75e4d018d94e5aba20361b4cc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun_light.html#ade6fbab75e4d018d94e5aba20361b4cc">Render</a> (glutil::MatrixStack &amp;modelMatrix, const <a class="el" href="struct_lit_prog_data.html">LitProgData</a> &amp;lightData)</td></tr>
-<tr class="memdesc:ade6fbab75e4d018d94e5aba20361b4cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies the light to the scene. <br/></td></tr>
+<tr class="memitem:af4ae6d33a13803bd6f0e46deac05f72b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af4ae6d33a13803bd6f0e46deac05f72b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>SunLight</b> (glm::vec3 newPosition, glm::vec4 newLightIntensity, glm::vec4 newAmbientIntensity, float newLightAttenuation, float newMaxIntensity, float newGamma)</td></tr>
+<tr class="memitem:ab07e3bc491af9f3aeb177cbebf1825b6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab07e3bc491af9f3aeb177cbebf1825b6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun_light.html#ab07e3bc491af9f3aeb177cbebf1825b6">Render</a> (glutil::MatrixStack &amp;modelMatrix, const <a class="el" href="struct_lit_prog_data.html">LitProgData</a> &amp;lightData, GLuint lightUniformBuffer)</td></tr>
+<tr class="memdesc:ab07e3bc491af9f3aeb177cbebf1825b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies the light to the scene. <br/></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a1fe5f1436fda2baea246524224a907b3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1fe5f1436fda2baea246524224a907b3"></a>
-glm::vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun_light.html#a1fe5f1436fda2baea246524224a907b3">lightIntensity</a></td></tr>
-<tr class="memdesc:a1fe5f1436fda2baea246524224a907b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The light's intensity. <br/></td></tr>
+glm::vec4&#160;</td><td class="memItemRight" valign="bottom"><b>lightIntensity</b></td></tr>
 <tr class="memitem:ad3284638146c2cea20545a217b87dfc1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad3284638146c2cea20545a217b87dfc1"></a>
-glm::vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun_light.html#ad3284638146c2cea20545a217b87dfc1">ambientIntensity</a></td></tr>
-<tr class="memdesc:ad3284638146c2cea20545a217b87dfc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The ambient intensity. <br/></td></tr>
-<tr class="memitem:a091ee9920e44f4243acbcf13525c08c1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a091ee9920e44f4243acbcf13525c08c1"></a>
-glm::vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun_light.html#a091ee9920e44f4243acbcf13525c08c1">baseDiffuseColor</a></td></tr>
-<tr class="memdesc:a091ee9920e44f4243acbcf13525c08c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The diffuse color of the surface which is lit. <br/></td></tr>
+glm::vec4&#160;</td><td class="memItemRight" valign="bottom"><b>ambientIntensity</b></td></tr>
 <tr class="memitem:a69194d86c6aaf89e2a98f6e0672c7660"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a69194d86c6aaf89e2a98f6e0672c7660"></a>
-glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun_light.html#a69194d86c6aaf89e2a98f6e0672c7660">position</a></td></tr>
-<tr class="memdesc:a69194d86c6aaf89e2a98f6e0672c7660"><td class="mdescLeft">&#160;</td><td class="mdescRight">The position of the light source. <br/></td></tr>
+glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>position</b></td></tr>
 <tr class="memitem:ae19dacac63ebedb1ffe586b145d9c06e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae19dacac63ebedb1ffe586b145d9c06e"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun_light.html#ae19dacac63ebedb1ffe586b145d9c06e">lightAttenuation</a></td></tr>
-<tr class="memdesc:ae19dacac63ebedb1ffe586b145d9c06e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The light attenuation factor. <br/></td></tr>
-<tr class="memitem:a17462d147dd00e17383fa563477a1089"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a17462d147dd00e17383fa563477a1089"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun_light.html#a17462d147dd00e17383fa563477a1089">shininessFactor</a></td></tr>
-<tr class="memdesc:a17462d147dd00e17383fa563477a1089"><td class="mdescLeft">&#160;</td><td class="mdescRight">The shininess (surface roughness) factor. <br/></td></tr>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>lightAttenuation</b></td></tr>
+<tr class="memitem:afa0bf55ee57d63ee4d3e28b9dea542da"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afa0bf55ee57d63ee4d3e28b9dea542da"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>maxIntensity</b></td></tr>
+<tr class="memitem:a9ab694ee6c4b224c75c5780c921e1696"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9ab694ee6c4b224c75c5780c921e1696"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>gamma</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Implements the sun lighting effects. </p>
@@ -156,7 +150,7 @@ float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 30 2012 20:01:26 for StarGame by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 2 2012 20:08:08 for StarGame by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.1
 </small></address>

@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['satellites',['satellites',['../class_sun.html#a03e54e773c82aabf5e3fad7b47241333',1,'Sun']]],
-  ['shininessfactor',['shininessFactor',['../class_sun_light.html#a17462d147dd00e17383fa563477a1089',1,'SunLight']]],
+  ['satellites',['satellites',['../class_sun.html#a0e5857745c6be53c3e2a6e518ff291d6',1,'Sun']]],
   ['sunmesh',['sunMesh',['../class_sun.html#a1aa72a3e0baeabd76642c48b969abf99',1,'Sun']]],
-  ['suns',['suns',['../class_universe.html#ad0502cbfe6e9373fd29aaf70fb5133a0',1,'Universe']]]
+  ['suns',['suns',['../class_universe.html#a958fd8a9e69878b1ae4526ab692ada9e',1,'Universe']]]
 ];

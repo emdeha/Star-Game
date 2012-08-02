@@ -16,6 +16,8 @@
 
 
 // TODO: Use smart pointers where needed.
+// TODO: Find a better way for the 'gamma' value to be distributed.
+// TODO: Place 'CorrectGamma' in 'Utility'
 
 #include "Main.h"
 #include "../Entities/PlanetBodies.h"
@@ -27,13 +29,17 @@
 float g_fzNear = 1.0f;
 float g_fzFar = 1000.0f;
 
+float g_gamma = 2.2f;
+
 LitProgData g_Lit;
 UnlitProgData g_Unlit;
 SimpleProgData g_Simple;
 
+const int g_materialBlockIndex = 0;
+const int g_lightBlockIndex = 1;
 const int g_projectionBlockIndex = 2;
 
-SimpleProgData LoadInterpProgram(const std::string &strVertexShader, const std::string &strFragmentShader)
+SimpleProgData LoadSimpleProgram(const std::string &strVertexShader, const std::string &strFragmentShader)
 {
 	std::vector<GLuint> shaderList;
 
@@ -82,15 +88,17 @@ LitProgData LoadLitProgram(const std::string &strVertexShader, const std::string
 	data.theProgram = Framework::CreateProgram(shaderList);
 	data.modelToCameraMatrixUnif = glGetUniformLocation(data.theProgram, "modelToCameraMatrix");
 	data.lightIntensityUnif = glGetUniformLocation(data.theProgram, "lightIntensity");
-	data.ambientIntensityUnif = glGetUniformLocation(data.theProgram, "ambientIntensity");
 
 	data.normalModelToCameraMatrixUnif = glGetUniformLocation(data.theProgram, "normalModelToCameraMatrix");
 	data.cameraSpaceLightPosUnif = glGetUniformLocation(data.theProgram, "cameraSpaceLightPos");
-	data.lightAttenuationUnif = glGetUniformLocation(data.theProgram, "lightAttenuation");
-	data.shininessFactorUnif = glGetUniformLocation(data.theProgram, "shininessFactor");
-	data.baseDiffuseColorUnif = glGetUniformLocation(data.theProgram, "baseDiffuseColor");
 
+	GLuint materialBlock = glGetUniformBlockIndex(data.theProgram, "Material");
+	GLuint lightBlock = glGetUniformBlockIndex(data.theProgram, "Light");
 	GLuint projectionBlock = glGetUniformBlockIndex(data.theProgram, "Projection");
+
+	if(materialBlock != GL_INVALID_INDEX)
+		glUniformBlockBinding(data.theProgram, materialBlock, g_materialBlockIndex);
+	glUniformBlockBinding(data.theProgram, lightBlock, g_lightBlockIndex);
 	glUniformBlockBinding(data.theProgram, projectionBlock, g_projectionBlockIndex);
 
 	return data;
@@ -100,17 +108,19 @@ void InitializePrograms()
 {
 	g_Lit = LoadLitProgram("PN.vert", "GaussianLighting.frag");
 	g_Unlit = LoadUnlitProgram("PosTransform.vert", "UniformColor.frag");
-	g_Simple = LoadInterpProgram("Interp.vert", "Interp.frag");
+	g_Simple = LoadSimpleProgram("Interp.vert", "Interp.frag");
 }
 
-GLuint g_projectionUniformBuffer = 0;
+GLuint g_projectionUniformBuffer;
+GLuint g_lightUniformBuffer;
 
 glm::mat4 g_cameraToClipMatrix;
 glm::mat4 g_modelMatrix;
 
 std::shared_ptr<Sun> mainSun(new Sun(glm::vec3(0.0f), 1.25f, 4));
-SunLight mainSunLight(SunLight(glm::vec3(), glm::vec4(1.0f), glm::vec4(0.2f), glm::vec4(1.0f),
-					  1.2f, 0.5f));
+SunLight mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 
+					  1.2f,
+					  5.0f, g_gamma));
 
 Universe *universe(new Universe());
 
@@ -119,6 +129,7 @@ Mouse userMouse;
 TopDownCamera userCamera = TopDownCamera(glm::vec3(), 12.5f, 90.0f, 135.0f);
 
 float initialOffset = 1.0f;
+
 
 void HandleMouse()
 {
@@ -246,11 +257,18 @@ void Init()
 	glDepthRange(depthZNear, depthZFar);
 	glEnable(GL_DEPTH_CLAMP);
 
+	glGenBuffers(1, &g_lightUniformBuffer);
+	glBindBuffer(GL_UNIFORM_BUFFER, g_lightUniformBuffer);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(LightBlockGamma), NULL, GL_DYNAMIC_DRAW);
+
 	glGenBuffers(1, &g_projectionUniformBuffer);
 	glBindBuffer(GL_UNIFORM_BUFFER, g_projectionUniformBuffer);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 
 	//Bind the static buffers.
+	glBindBufferRange(GL_UNIFORM_BUFFER, g_lightBlockIndex, g_lightUniformBuffer, 
+		0, sizeof(LightBlockGamma));
+
 	glBindBufferRange(GL_UNIFORM_BUFFER, g_projectionBlockIndex, g_projectionUniformBuffer,
 		0, sizeof(glm::mat4));
 
@@ -272,7 +290,8 @@ void Display()
 	g_modelMatrix = modelMatrix.Top();
 
 	universe->UpdateUniverse();
-	universe->RenderUniverse(modelMatrix, g_Lit, g_Unlit, g_Simple);
+	universe->RenderUniverse(modelMatrix, g_materialBlockIndex, g_lightUniformBuffer, 
+							 g_Lit, g_Unlit, g_Simple);
 	
 	HandleMouse();
 	userMouse.OverrideLastPosition(userMouse.GetCurrentPosition());

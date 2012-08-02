@@ -13,27 +13,34 @@ This class updates, renders and maintains the game world aka \hyperlink{class_un
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{class_universe_ade4f13031aff9dbf5c8867334a525a01}{void {\bfseries Add\-Sun\-Light} (\hyperlink{class_sun_light}{Sun\-Light} $\ast$new\-Sun\-Light)}\label{class_universe_ade4f13031aff9dbf5c8867334a525a01}
+\hypertarget{class_universe_a37bff5a776da7a803b5548f4376eba00}{void {\bfseries Add\-Sun\-Light} (const \hyperlink{class_sun_light}{Sun\-Light} \&new\-Sun\-Light)}\label{class_universe_a37bff5a776da7a803b5548f4376eba00}
 
 \item 
-\hypertarget{class_universe_a6c01c73614710200f25ece9d4444a10d}{void {\bfseries Add\-Sun} (\hyperlink{class_sun}{Sun} $\ast$new\-Sun)}\label{class_universe_a6c01c73614710200f25ece9d4444a10d}
+\hypertarget{class_universe_a60a3909961a95ae35158c63f84ca0182}{void {\bfseries Add\-Sun} (const std\-::shared\-\_\-ptr$<$ \hyperlink{class_sun}{Sun} $>$ new\-Sun)}\label{class_universe_a60a3909961a95ae35158c63f84ca0182}
 
 \item 
 \hypertarget{class_universe_acae0ef79d1350457b3824a19134f8a3d}{void \hyperlink{class_universe_acae0ef79d1350457b3824a19134f8a3d}{Update\-Universe} ()}\label{class_universe_acae0ef79d1350457b3824a19134f8a3d}
 
 \begin{DoxyCompactList}\small\item\em Goes through the game objects and calls their update functions. \end{DoxyCompactList}\item 
-\hypertarget{class_universe_ace045abe0b7adb4c1ba7c33c69a2bd07}{void \hyperlink{class_universe_ace045abe0b7adb4c1ba7c33c69a2bd07}{Render\-Universe} (glutil\-::\-Matrix\-Stack \&model\-Matrix, const \hyperlink{struct_lit_prog_data}{Lit\-Prog\-Data} \&lit\-Data, const \hyperlink{struct_unlit_prog_data}{Unlit\-Prog\-Data} \&un\-Lit\-Data, const \hyperlink{struct_interp_prog_data}{Interp\-Prog\-Data} \&interp\-Data)}\label{class_universe_ace045abe0b7adb4c1ba7c33c69a2bd07}
+\hypertarget{class_universe_a9293cf3a90d969d42ba68f17534603a4}{void \hyperlink{class_universe_a9293cf3a90d969d42ba68f17534603a4}{Render\-Universe} (glutil\-::\-Matrix\-Stack \&model\-Matrix, G\-Luint material\-Block\-Index, G\-Luint light\-Uniform\-Buffer, const \hyperlink{struct_lit_prog_data}{Lit\-Prog\-Data} \&lit\-Data, const \hyperlink{struct_unlit_prog_data}{Unlit\-Prog\-Data} \&un\-Lit\-Data, const \hyperlink{struct_simple_prog_data}{Simple\-Prog\-Data} \&interp\-Data)}\label{class_universe_a9293cf3a90d969d42ba68f17534603a4}
 
-\begin{DoxyCompactList}\small\item\em Goes through the game objects and calls their render functions. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Goes through the game objects and calls their render functions. \end{DoxyCompactList}\item 
+\hypertarget{class_universe_a294abbc29adcdb9d92b1e9a31605d952}{void {\bfseries Set\-Gamma} (float new\-World\-Gamma)}\label{class_universe_a294abbc29adcdb9d92b1e9a31605d952}
+
+\end{DoxyCompactItemize}
 \subsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{class_universe_afa686fcb7a6c92e7ef41b1eceec8e5be}{std\-::vector$<$ \hyperlink{class_sun_light}{Sun\-Light} $\ast$ $>$ \hyperlink{class_universe_afa686fcb7a6c92e7ef41b1eceec8e5be}{lights}}\label{class_universe_afa686fcb7a6c92e7ef41b1eceec8e5be}
+\hypertarget{class_universe_a48a408b8a01b50f05df5fc20ae2e99a8}{std\-::vector$<$ \hyperlink{class_sun_light}{Sun\-Light} $>$ \hyperlink{class_universe_a48a408b8a01b50f05df5fc20ae2e99a8}{lights}}\label{class_universe_a48a408b8a01b50f05df5fc20ae2e99a8}
 
 \begin{DoxyCompactList}\small\item\em Holds the world's lights. \end{DoxyCompactList}\item 
-\hypertarget{class_universe_ad0502cbfe6e9373fd29aaf70fb5133a0}{std\-::vector$<$ \hyperlink{class_sun}{Sun} $\ast$ $>$ \hyperlink{class_universe_ad0502cbfe6e9373fd29aaf70fb5133a0}{suns}}\label{class_universe_ad0502cbfe6e9373fd29aaf70fb5133a0}
+\hypertarget{class_universe_a958fd8a9e69878b1ae4526ab692ada9e}{std\-::vector$<$ std\-::shared\-\_\-ptr\\*
+$<$ \hyperlink{class_sun}{Sun} $>$ $>$ \hyperlink{class_universe_a958fd8a9e69878b1ae4526ab692ada9e}{suns}}\label{class_universe_a958fd8a9e69878b1ae4526ab692ada9e}
 
-\begin{DoxyCompactList}\small\item\em Holds the world's suns. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Holds the world's suns. \end{DoxyCompactList}\item 
+\hypertarget{class_universe_afaf8026ff2c6560ea3ae7ced43765919}{float {\bfseries world\-Gamma}}\label{class_universe_afaf8026ff2c6560ea3ae7ced43765919}
+
+\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}

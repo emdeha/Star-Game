@@ -111,6 +111,7 @@ namespace Utility
 			short resolution; ///< The resolution with which the torus will be rendered.
 
 		public:
+			Torus2D();
 			Torus2D(glm::vec4 newColor, glm::vec4 newPosition,
 					float newInnerRadius, float newOuterRadius, 
 					int newResolution);

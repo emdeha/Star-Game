@@ -21,19 +21,86 @@
 #include <algorithm>
 
 
-#define PI 3.14159f
-
-
-Satellite::Satellite()
+SatelliteOrbit::SatelliteOrbit()
 {
-	mesh.reset();
-	parent.reset();
-	revolutionDuration = Framework::Timer(Framework::Timer::TT_LOOP, 0.0f);
-	position = glm::vec3();
-	offsetFromSun = 0.0f;
-	diameter = 0.0f;
-	isClicked = false;
+	mainColor = glm::vec4();
+	outlineColor = glm::vec4();
+
+	position = glm::vec4();
+
+	outerRadius = 0.0f;
+	innerRadius = 0.0f;
 }
+
+SatelliteOrbit::SatelliteOrbit(glm::vec4 newMainColor, glm::vec4 newOutlineColor,
+							   glm::vec4 newPosition, 
+							   float newOuterRadius, float newInnerRadius,
+							   float gamma)
+{
+	mainColor = CorrectGamma(newMainColor, gamma);
+	outlineColor = CorrectGamma(newOutlineColor, gamma);
+	position = newPosition;
+	outerRadius = newOuterRadius;
+	innerRadius = newInnerRadius;
+
+	mainOrbit = Utility::BasicMeshGeneration::Torus2D(mainColor,
+													  position,
+													  innerRadius,
+													  outerRadius,
+													  90);
+	orbitOutlineOne = Utility::BasicMeshGeneration::Torus2D(outlineColor,
+															position,
+															innerRadius - 0.05f,
+															innerRadius,
+															90);
+	orbitOutlineTwo = Utility::BasicMeshGeneration::Torus2D(outlineColor,
+															position,
+															outerRadius,
+															outerRadius + 0.05f,
+															90);
+	mainOrbit.Init();
+	orbitOutlineOne.Init();
+	orbitOutlineTwo.Init();
+}
+
+void SatelliteOrbit::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &simpleData)
+{
+	// TODO: Play with blending
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	mainOrbit.Draw(modelMatrix, simpleData);
+
+	glDisable(GL_BLEND);
+
+	orbitOutlineOne.Draw(modelMatrix, simpleData);
+	orbitOutlineTwo.Draw(modelMatrix, simpleData);
+}
+
+
+static void GenerateUniformBuffers(int &materialBlockSize, GLuint &materialUniformBuffer)
+{
+	MaterialBlock material;
+	material.diffuseColor = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
+	material.shininessFactor = 0.3f;
+
+
+	int uniformBufferAlignSize = 0;
+	glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignSize);
+
+	materialBlockSize = sizeof(MaterialBlock);
+	materialBlockSize += uniformBufferAlignSize -
+		(materialBlockSize % uniformBufferAlignSize);
+
+	
+	glGenBuffers(1, &materialUniformBuffer);
+	glBindBuffer(GL_UNIFORM_BUFFER, materialUniformBuffer);
+	glBufferData(GL_UNIFORM_BUFFER, materialBlockSize, &material, GL_STATIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
+
 Satellite::Satellite(Framework::Timer newRevolutionDuration,
 					 float newOffsetFromSun, float newDiameter)
 {
@@ -44,6 +111,8 @@ Satellite::Satellite(Framework::Timer newRevolutionDuration,
 	offsetFromSun = newOffsetFromSun;
 	diameter = newDiameter;
 	isClicked = false;
+
+	GenerateUniformBuffers(materialBlockSize, materialUniformBuffer);
 }
 
 void Satellite::LoadMesh(const std::string &fileName)
@@ -60,9 +129,11 @@ void Satellite::LoadMesh(const std::string &fileName)
 	}
 }
 
-void Satellite::Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData, 
-														 const UnlitProgData &unlitData, 
-														 const SimpleProgData &interpData)
+void Satellite::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex, 
+					   float gamma,
+					   const LitProgData &litData, 
+					   const UnlitProgData &unlitData, 
+					   const SimpleProgData &interpData)
 {
 	{
 		glutil::PushStack push(modelMatrix);
@@ -70,22 +141,26 @@ void Satellite::Render(glutil::MatrixStack &modelMatrix, const LitProgData &litD
 		modelMatrix.Translate(position);
 		modelMatrix.Scale(diameter);
 
+		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
+							0, sizeof(MaterialBlock));
+
 		glm::mat3 normMatrix(modelMatrix.Top());
 		normMatrix = glm::transpose(glm::inverse(normMatrix));
-
+		
 		glUseProgram(litData.theProgram);
 		glUniformMatrix4fv(litData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
 		glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
-		glUniform4fv(litData.baseDiffuseColorUnif, 1, glm::value_ptr(glm::vec4(1.0f)));
 
 		mesh->Render("lit");
 
 		glUseProgram(0);
+
+		glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
 	}
 
 	if(isClicked)
 	{
-		LoadClickedAnimation(modelMatrix, interpData);
+		LoadClickedAnimation(modelMatrix, interpData, gamma);
 	}
 }
 void Satellite::Update()
@@ -135,41 +210,14 @@ bool Satellite::IsClicked(glm::mat4 projMat, glm::mat4 modelMat,
 	return false;
 }
 
-void Satellite::LoadClickedAnimation(glutil::MatrixStack &modelMatrix, const SimpleProgData &interpData)
+void Satellite::LoadClickedAnimation(glutil::MatrixStack &modelMatrix, const SimpleProgData &simpleData, float gamma)
 {
-	// TODO: Play with blending
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	SatelliteOrbit orbit(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
+						 parent->GetPosition(), 
+						 offsetFromSun + diameter, offsetFromSun - diameter,
+						 gamma);
 
-	// TODO: Initialization should be done elsewhere
-	Utility::BasicMeshGeneration::Torus2D torus(
-		glm::vec4(1.0f, 0.0f, 0.0f, 0.5f),
-		parent->GetPosition(),
-		offsetFromSun - diameter, 
-		offsetFromSun + diameter, 90);
-
-	torus.Init();
-	torus.Draw(modelMatrix, interpData);
-
-	glDisable(GL_BLEND);
-
-	Utility::BasicMeshGeneration::Torus2D torusOut1(
-		glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
-		parent->GetPosition(),
-		offsetFromSun - diameter - 0.05f, 
-		offsetFromSun - diameter, 90);
-
-	torusOut1.Init();
-	torusOut1.Draw(modelMatrix, interpData);
-
-	Utility::BasicMeshGeneration::Torus2D torusOut2(
-		glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
-		parent->GetPosition(),
-		offsetFromSun + diameter, 
-		offsetFromSun + diameter + 0.05f, 90);
-
-	torusOut2.Init();
-	torusOut2.Draw(modelMatrix, interpData);
+	orbit.Draw(modelMatrix, simpleData);
 }
 
 
@@ -250,7 +298,8 @@ void Sun::LoadMesh(const std::string &fileName)
 	}
 }
 
-void Sun::Render(glutil::MatrixStack &modelMatrix,
+void Sun::Render(glutil::MatrixStack &modelMatrix, GLuint materialBlockIndex,
+				 float gamma,
 				 const LitProgData &litData, 
 				 const UnlitProgData &unlitData, 
 				 const SimpleProgData &interpData)
@@ -263,14 +312,16 @@ void Sun::Render(glutil::MatrixStack &modelMatrix,
 		int satellitesCount = satellites.size();
 		for(int i = 0; i < satellitesCount; i++)
 		{
-			satellites[i]->Render(modelMatrix, litData, unlitData, interpData);
+			satellites[i]->Render(modelMatrix, materialBlockIndex, gamma, litData, unlitData, interpData);
 		}
 				
 		modelMatrix.Scale(diameter);
 
+		glm::vec4 sunColor = CorrectGamma(glm::vec4(0.8078f, 0.8706f, 0.0f, 1.0f), gamma);
+
 		glUseProgram(unlitData.theProgram);
 		glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-		glUniform4f(unlitData.objectColorUnif, 0.8078f, 0.8706f, 0.0f, 1.0f);
+		glUniform4f(unlitData.objectColorUnif, sunColor.x, sunColor.y, sunColor.z, sunColor.w);
 
 		sunMesh->Render("flat");
 	}	

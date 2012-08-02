@@ -104,25 +104,33 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a64feb55bd0c09177f4fca12e6c37cbe4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a64feb55bd0c09177f4fca12e6c37cbe4"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Sun</b> (glm::vec3 newPosition, float newDiameter)</td></tr>
+<tr class="memitem:aa345e142fa2d4d0c5e22e4472cba374a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa345e142fa2d4d0c5e22e4472cba374a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Sun</b> (glm::vec3 newPosition, float newDiameter, int newSatelliteCap)</td></tr>
 <tr class="memitem:a3f3680c0b94268b85cc06e7eff70cb07"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f3680c0b94268b85cc06e7eff70cb07"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#a3f3680c0b94268b85cc06e7eff70cb07">LoadMesh</a> (const std::string &amp;fileName)</td></tr>
 <tr class="memdesc:a3f3680c0b94268b85cc06e7eff70cb07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the sun's mesh. <br/></td></tr>
-<tr class="memitem:a84f041fbc0356455b1254600bdf3860f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#a84f041fbc0356455b1254600bdf3860f">Render</a> (glutil::MatrixStack &amp;modelMatrix, const <a class="el" href="struct_lit_prog_data.html">LitProgData</a> &amp;litData, const <a class="el" href="struct_unlit_prog_data.html">UnlitProgData</a> &amp;unlitData, const <a class="el" href="struct_interp_prog_data.html">InterpProgData</a> &amp;interpData)</td></tr>
-<tr class="memdesc:a84f041fbc0356455b1254600bdf3860f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the sun and calls the satellite's render functions.  <a href="#a84f041fbc0356455b1254600bdf3860f"></a><br/></td></tr>
+<tr class="memitem:a736012a1d04686497506fe25636bcdbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#a736012a1d04686497506fe25636bcdbb">Render</a> (glutil::MatrixStack &amp;modelMatrix, GLuint materialBlockIndex, float gamma, const <a class="el" href="struct_lit_prog_data.html">LitProgData</a> &amp;litData, const <a class="el" href="struct_unlit_prog_data.html">UnlitProgData</a> &amp;unlitData, const <a class="el" href="struct_simple_prog_data.html">SimpleProgData</a> &amp;interpData)</td></tr>
+<tr class="memdesc:a736012a1d04686497506fe25636bcdbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the sun and calls the satellite's render functions.  <a href="#a736012a1d04686497506fe25636bcdbb"></a><br/></td></tr>
 <tr class="memitem:af3bfaeceea178c017478d25afa0dff07"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af3bfaeceea178c017478d25afa0dff07"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#af3bfaeceea178c017478d25afa0dff07">Update</a> ()</td></tr>
 <tr class="memdesc:af3bfaeceea178c017478d25afa0dff07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls the satellite's update functions (for now). <br/></td></tr>
 <tr class="memitem:aa83727a648f0456be4164fd6f2dc1e75"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#aa83727a648f0456be4164fd6f2dc1e75">AddSatellite</a> (const std::string &amp;fileName, float offset, float speed, float <a class="el" href="class_sun.html#ac35fc9ebc427d9c8c9fd3ee3a12fce82">diameter</a>)</td></tr>
 <tr class="memdesc:aa83727a648f0456be4164fd6f2dc1e75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a satellite to the sun.  <a href="#aa83727a648f0456be4164fd6f2dc1e75"></a><br/></td></tr>
+<tr class="memitem:a274dd9d397333db6a916582ac2a19c46"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a274dd9d397333db6a916582ac2a19c46"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#a274dd9d397333db6a916582ac2a19c46">RemoveSatellite</a> ()</td></tr>
+<tr class="memdesc:a274dd9d397333db6a916582ac2a19c46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the last added satellite. <br/></td></tr>
+<tr class="memitem:ad0ab7130cbb46b50968efe2d770c4b21"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad0ab7130cbb46b50968efe2d770c4b21"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#ad0ab7130cbb46b50968efe2d770c4b21">RemoveSatellite</a> (int index)</td></tr>
+<tr class="memdesc:ad0ab7130cbb46b50968efe2d770c4b21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the satellite at position <code>index</code> <br/></td></tr>
 <tr class="memitem:a69fc54810b99f61d33be2dafafa3273d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a69fc54810b99f61d33be2dafafa3273d"></a>
-std::vector&lt; std::shared_ptr<br class="typebreak"/>
-&lt; <a class="el" href="class_satellite.html">Satellite</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#a69fc54810b99f61d33be2dafafa3273d">GetSatellites</a> ()</td></tr>
+std::vector&lt; <a class="el" href="class_satellite.html">Satellite</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#a69fc54810b99f61d33be2dafafa3273d">GetSatellites</a> ()</td></tr>
 <tr class="memdesc:a69fc54810b99f61d33be2dafafa3273d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the sun satellites. Used to access this info from elsewhere. <br/></td></tr>
 <tr class="memitem:a8b531f7cf5b4b39ab1f5f453894f52bd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8b531f7cf5b4b39ab1f5f453894f52bd"></a>
 glm::vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#a8b531f7cf5b4b39ab1f5f453894f52bd">GetPosition</a> ()</td></tr>
 <tr class="memdesc:a8b531f7cf5b4b39ab1f5f453894f52bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the sun position. <br/></td></tr>
+<tr class="memitem:a703c794dafe926c6c41f8d8ee3f6c5a2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a703c794dafe926c6c41f8d8ee3f6c5a2"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#a703c794dafe926c6c41f8d8ee3f6c5a2">GetSatelliteCap</a> ()</td></tr>
+<tr class="memdesc:a703c794dafe926c6c41f8d8ee3f6c5a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the satellite cap limit. <br/></td></tr>
 <tr class="memitem:a07ac47d10ff08b43c74de2b704d0ba5a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#a07ac47d10ff08b43c74de2b704d0ba5a">IsClicked</a> (glm::mat4 projMat, glm::mat4 modelMat, <a class="el" href="class_mouse.html">Mouse</a> userMouse, glm::vec4 cameraPos, float windowWidth, float windowHeight)</td></tr>
 <tr class="memdesc:a07ac47d10ff08b43c74de2b704d0ba5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the sun is clicked.  <a href="#a07ac47d10ff08b43c74de2b704d0ba5a"></a><br/></td></tr>
 <tr class="memitem:a5808caa1b90e6a743df2df5ecb9f9850"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5808caa1b90e6a743df2df5ecb9f9850"></a>
@@ -137,16 +145,17 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a1aa72a3e0baeabd76642c48b969abf99"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1aa72a3e0baeabd76642c48b969abf99"></a>
 std::auto_ptr&lt; Framework::Mesh &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#a1aa72a3e0baeabd76642c48b969abf99">sunMesh</a></td></tr>
 <tr class="memdesc:a1aa72a3e0baeabd76642c48b969abf99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the mesh file for the sun. <br/></td></tr>
-<tr class="memitem:a03e54e773c82aabf5e3fad7b47241333"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a03e54e773c82aabf5e3fad7b47241333"></a>
-std::vector&lt; std::shared_ptr<br class="typebreak"/>
-&lt; <a class="el" href="class_satellite.html">Satellite</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#a03e54e773c82aabf5e3fad7b47241333">satellites</a></td></tr>
-<tr class="memdesc:a03e54e773c82aabf5e3fad7b47241333"><td class="mdescLeft">&#160;</td><td class="mdescRight">The sun's satellites. <br/></td></tr>
+<tr class="memitem:a0e5857745c6be53c3e2a6e518ff291d6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0e5857745c6be53c3e2a6e518ff291d6"></a>
+std::vector&lt; <a class="el" href="class_satellite.html">Satellite</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#a0e5857745c6be53c3e2a6e518ff291d6">satellites</a></td></tr>
+<tr class="memdesc:a0e5857745c6be53c3e2a6e518ff291d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The sun's satellites. <br/></td></tr>
 <tr class="memitem:acab91a34acacee79bb743089738da5cc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acab91a34acacee79bb743089738da5cc"></a>
 glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#acab91a34acacee79bb743089738da5cc">position</a></td></tr>
 <tr class="memdesc:acab91a34acacee79bb743089738da5cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The sun's position. <br/></td></tr>
 <tr class="memitem:ac35fc9ebc427d9c8c9fd3ee3a12fce82"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac35fc9ebc427d9c8c9fd3ee3a12fce82"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#ac35fc9ebc427d9c8c9fd3ee3a12fce82">diameter</a></td></tr>
 <tr class="memdesc:ac35fc9ebc427d9c8c9fd3ee3a12fce82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Its <em>diameter</em>. <br/></td></tr>
+<tr class="memitem:a1c33d5e99fc2c6d51a43043504ecb9a4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1c33d5e99fc2c6d51a43043504ecb9a4"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>satelliteCap</b></td></tr>
 <tr class="memitem:aa7d9c22a62eed3d761394d0acd87c5a3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa7d9c22a62eed3d761394d0acd87c5a3"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isClicked</b></td></tr>
 </table>
@@ -252,7 +261,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isClicked</b></td></t
 
 </div>
 </div>
-<a class="anchor" id="a84f041fbc0356455b1254600bdf3860f"></a>
+<a class="anchor" id="a736012a1d04686497506fe25636bcdbb"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -261,6 +270,18 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isClicked</b></td></t
           <td>(</td>
           <td class="paramtype">glutil::MatrixStack &amp;&#160;</td>
           <td class="paramname"><em>modelMatrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GLuint&#160;</td>
+          <td class="paramname"><em>materialBlockIndex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>gamma</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -277,7 +298,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isClicked</b></td></t
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="struct_interp_prog_data.html">InterpProgData</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="struct_simple_prog_data.html">SimpleProgData</a> &amp;&#160;</td>
           <td class="paramname"><em>interpData</em>&#160;</td>
         </tr>
         <tr>
@@ -301,7 +322,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isClicked</b></td></t
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 30 2012 20:01:26 for StarGame by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 2 2012 20:08:08 for StarGame by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.1
 </small></address>

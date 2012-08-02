@@ -23,6 +23,7 @@
 #ifndef PLANET_BODIES_H
 #define PLANET_BODIES_H
 
+
 #include <glload/gl_3_3.h>
 #include <glutil/glutil.h>
 #include "../framework/framework.h"
@@ -36,7 +37,65 @@
 //		 This means removing the LoadMesh function. For now, I will keep it that way in case I
 //		 decide to use different meshes in the future.
 
+
+/// \fn CorrectGamma()
+/// \brief Applies gamma correction to colors.
+static glm::vec4 CorrectGamma(const glm::vec4 &inputColor, float gamma)
+{
+	glm::vec4 outputColor;
+	outputColor[0] = powf(inputColor[0], 1.0f / gamma);
+	outputColor[1] = powf(inputColor[1], 1.0f / gamma);
+	outputColor[2] = powf(inputColor[2], 1.0f / gamma);
+	outputColor[3] = inputColor[3];
+
+	return outputColor;
+}
+
+
+/// \struct MaterialBlock
+/// \brief Contains the material characteristics of an object.
+struct MaterialBlock
+{
+	glm::vec4 diffuseColor; 
+	glm::vec4 specularColor; 
+	float shininessFactor;
+
+	float padding[3]; ///< Padding for compatibility with GLSL
+};
+
+
 class Sun;
+
+
+/// \class SatelliteOrbit
+/// \brief Highlights the satellite's orbit.
+class SatelliteOrbit
+{
+private:
+	glm::vec4 mainColor; 
+	glm::vec4 outlineColor;
+
+	glm::vec4 position;
+
+	float outerRadius;
+	float innerRadius;
+
+
+	Utility::BasicMeshGeneration::Torus2D mainOrbit;
+	Utility::BasicMeshGeneration::Torus2D orbitOutlineOne;
+	Utility::BasicMeshGeneration::Torus2D orbitOutlineTwo;
+
+public:
+	SatelliteOrbit();
+	SatelliteOrbit(glm::vec4 newMainColor, glm::vec4 newOutlineColor,
+				   glm::vec4 newPosition, 
+				   float newOuterRadius, float newInnerRadius,
+				   float gamma);
+
+	/// \fn Draw
+	/// \brief Draws the orbit.
+	void Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &simpleData);
+};
 
 
 /// \class Satellite
@@ -60,8 +119,11 @@ private:
 
 	bool isClicked;
 
+
+	int materialBlockSize; ///< The size of the material block. Used for uniform buffer init.
+	GLuint materialUniformBuffer; ///< The 'pointer' to the uniform buffer.
+
 public:
-	Satellite();
 	Satellite(Framework::Timer newRevolutionDuration, 
 			  float newOffsetFromSun, float newDiameter);
 
@@ -71,7 +133,8 @@ public:
 
 	/// \fn Render
 	/// \brief Renders the satellite and its on-click animation.
-	void Render(glutil::MatrixStack &modelMatrix, 
+	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
+				float gamma,
 				const LitProgData &litData, 
 				const UnlitProgData &unlitData, 
 				const SimpleProgData &interpData);
@@ -106,7 +169,8 @@ public:
 	/// \fn LoadClickedAnimation
 	/// \brief Loads the animation which is played on-click.
 	void LoadClickedAnimation(glutil::MatrixStack &modelMatrix,
-							  const SimpleProgData &interpData);
+							  const SimpleProgData &simpleData,
+							  float gamma);
 
 	/// \fn SetParent
 	/// \brief Sets the satellite's parent. 
@@ -190,7 +254,8 @@ public:
 	/// to the satellites.
 	///
 	/// The sun is rendered with the unlit program.
-	void Render(glutil::MatrixStack &modelMatrix,
+	void Render(glutil::MatrixStack &modelMatrix, GLuint materialBlockIndex,
+				float gamma,
 				const LitProgData &litData, const UnlitProgData &unlitData, const SimpleProgData &interpData);
 	
 	/// \fn Update

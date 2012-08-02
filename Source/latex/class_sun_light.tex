@@ -13,33 +13,33 @@ Implements the sun lighting effects.
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{class_sun_light_a60324f930a5714b244e796ad4d7dcb2e}{{\bfseries Sun\-Light} (glm\-::vec3 new\-Position, glm\-::vec4 new\-Light\-Intensity, glm\-::vec4 new\-Ambient\-Intensity, glm\-::vec4 new\-Base\-Diffuse\-Color, float new\-Light\-Attenuation, float new\-Shinines\-Factor)}\label{class_sun_light_a60324f930a5714b244e796ad4d7dcb2e}
+\hypertarget{class_sun_light_af4ae6d33a13803bd6f0e46deac05f72b}{{\bfseries Sun\-Light} (glm\-::vec3 new\-Position, glm\-::vec4 new\-Light\-Intensity, glm\-::vec4 new\-Ambient\-Intensity, float new\-Light\-Attenuation, float new\-Max\-Intensity, float new\-Gamma)}\label{class_sun_light_af4ae6d33a13803bd6f0e46deac05f72b}
 
 \item 
-\hypertarget{class_sun_light_ade6fbab75e4d018d94e5aba20361b4cc}{void \hyperlink{class_sun_light_ade6fbab75e4d018d94e5aba20361b4cc}{Render} (glutil\-::\-Matrix\-Stack \&model\-Matrix, const \hyperlink{struct_lit_prog_data}{Lit\-Prog\-Data} \&light\-Data)}\label{class_sun_light_ade6fbab75e4d018d94e5aba20361b4cc}
+\hypertarget{class_sun_light_ab07e3bc491af9f3aeb177cbebf1825b6}{void \hyperlink{class_sun_light_ab07e3bc491af9f3aeb177cbebf1825b6}{Render} (glutil\-::\-Matrix\-Stack \&model\-Matrix, const \hyperlink{struct_lit_prog_data}{Lit\-Prog\-Data} \&light\-Data, G\-Luint light\-Uniform\-Buffer)}\label{class_sun_light_ab07e3bc491af9f3aeb177cbebf1825b6}
 
 \begin{DoxyCompactList}\small\item\em Applies the light to the scene. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{class_sun_light_a1fe5f1436fda2baea246524224a907b3}{glm\-::vec4 \hyperlink{class_sun_light_a1fe5f1436fda2baea246524224a907b3}{light\-Intensity}}\label{class_sun_light_a1fe5f1436fda2baea246524224a907b3}
+\hypertarget{class_sun_light_a1fe5f1436fda2baea246524224a907b3}{glm\-::vec4 {\bfseries light\-Intensity}}\label{class_sun_light_a1fe5f1436fda2baea246524224a907b3}
 
-\begin{DoxyCompactList}\small\item\em The light's intensity. \end{DoxyCompactList}\item 
-\hypertarget{class_sun_light_ad3284638146c2cea20545a217b87dfc1}{glm\-::vec4 \hyperlink{class_sun_light_ad3284638146c2cea20545a217b87dfc1}{ambient\-Intensity}}\label{class_sun_light_ad3284638146c2cea20545a217b87dfc1}
+\item 
+\hypertarget{class_sun_light_ad3284638146c2cea20545a217b87dfc1}{glm\-::vec4 {\bfseries ambient\-Intensity}}\label{class_sun_light_ad3284638146c2cea20545a217b87dfc1}
 
-\begin{DoxyCompactList}\small\item\em The ambient intensity. \end{DoxyCompactList}\item 
-\hypertarget{class_sun_light_a091ee9920e44f4243acbcf13525c08c1}{glm\-::vec4 \hyperlink{class_sun_light_a091ee9920e44f4243acbcf13525c08c1}{base\-Diffuse\-Color}}\label{class_sun_light_a091ee9920e44f4243acbcf13525c08c1}
+\item 
+\hypertarget{class_sun_light_a69194d86c6aaf89e2a98f6e0672c7660}{glm\-::vec3 {\bfseries position}}\label{class_sun_light_a69194d86c6aaf89e2a98f6e0672c7660}
 
-\begin{DoxyCompactList}\small\item\em The diffuse color of the surface which is lit. \end{DoxyCompactList}\item 
-\hypertarget{class_sun_light_a69194d86c6aaf89e2a98f6e0672c7660}{glm\-::vec3 \hyperlink{class_sun_light_a69194d86c6aaf89e2a98f6e0672c7660}{position}}\label{class_sun_light_a69194d86c6aaf89e2a98f6e0672c7660}
+\item 
+\hypertarget{class_sun_light_ae19dacac63ebedb1ffe586b145d9c06e}{float {\bfseries light\-Attenuation}}\label{class_sun_light_ae19dacac63ebedb1ffe586b145d9c06e}
 
-\begin{DoxyCompactList}\small\item\em The position of the light source. \end{DoxyCompactList}\item 
-\hypertarget{class_sun_light_ae19dacac63ebedb1ffe586b145d9c06e}{float \hyperlink{class_sun_light_ae19dacac63ebedb1ffe586b145d9c06e}{light\-Attenuation}}\label{class_sun_light_ae19dacac63ebedb1ffe586b145d9c06e}
+\item 
+\hypertarget{class_sun_light_afa0bf55ee57d63ee4d3e28b9dea542da}{float {\bfseries max\-Intensity}}\label{class_sun_light_afa0bf55ee57d63ee4d3e28b9dea542da}
 
-\begin{DoxyCompactList}\small\item\em The light attenuation factor. \end{DoxyCompactList}\item 
-\hypertarget{class_sun_light_a17462d147dd00e17383fa563477a1089}{float \hyperlink{class_sun_light_a17462d147dd00e17383fa563477a1089}{shininess\-Factor}}\label{class_sun_light_a17462d147dd00e17383fa563477a1089}
+\item 
+\hypertarget{class_sun_light_a9ab694ee6c4b224c75c5780c921e1696}{float {\bfseries gamma}}\label{class_sun_light_a9ab694ee6c4b224c75c5780c921e1696}
 
-\begin{DoxyCompactList}\small\item\em The shininess (surface roughness) factor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}

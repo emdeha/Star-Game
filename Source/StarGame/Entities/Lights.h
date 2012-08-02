@@ -29,6 +29,19 @@
 #include "../ProgramData/ProgramData.h"
 
 
+/// \struct LightBlockGamma
+/// \brief Contains the lighting model information.
+struct LightBlockGamma
+{
+	glm::vec4 ambientIntensity;
+	float lightAttenuation;
+	float maxIntensity;
+	float gamma;
+
+	float padding; ///< Padding for compatibility with GLSL.
+};
+
+
 /// \class SunLight
 /// \brief Implements the sun lighting effects.
 
@@ -62,25 +75,27 @@
 class SunLight
 {
 private:
-	glm::vec4 lightIntensity; ///< The light's intensity.
-	glm::vec4 ambientIntensity;	///< The ambient intensity.
-	glm::vec4 baseDiffuseColor; ///< The diffuse color of the surface which is lit.
+	glm::vec4 lightIntensity;
+	glm::vec4 ambientIntensity;	
 
-	glm::vec3 position; ///< The position of the light source.
+	glm::vec3 position; 
 
-	float lightAttenuation; ///< The light attenuation factor.
-	float shininessFactor; ///< The shininess (surface roughness) factor.
+	float lightAttenuation;
+
+	float maxIntensity;
+	float gamma;
 
 public:
 	SunLight();
 	SunLight(glm::vec3 newPosition,
 			 glm::vec4 newLightIntensity, glm::vec4 newAmbientIntensity,
-			 glm::vec4 newBaseDiffuseColor,
-			 float newLightAttenuation, float newShininesFactor);
+			 float newLightAttenuation, 
+			 float newMaxIntensity, float newGamma);
 
 	/// \fn Render
 	/// \brief Applies the light to the scene.
-	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &lightData);
+	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &lightData,
+				GLuint lightUniformBuffer);
 };
 
 #endif

@@ -94,17 +94,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p>This is the complete list of members for <a class="el" href="class_universe.html">Universe</a>, including all inherited members.</p>
 <table class="directory">
-  <tr bgcolor="#f0f0f0"class="even"><td class="entry"><b>AddSun</b>(Sun *newSun) (defined in <a class="el" href="class_universe.html">Universe</a>)</td><td class="entry"><a class="el" href="class_universe.html">Universe</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>AddSunLight</b>(SunLight *newSunLight) (defined in <a class="el" href="class_universe.html">Universe</a>)</td><td class="entry"><a class="el" href="class_universe.html">Universe</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_universe.html#afa686fcb7a6c92e7ef41b1eceec8e5be">lights</a></td><td class="entry"><a class="el" href="class_universe.html">Universe</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr><td class="entry"><a class="el" href="class_universe.html#ace045abe0b7adb4c1ba7c33c69a2bd07">RenderUniverse</a>(glutil::MatrixStack &amp;modelMatrix, const LitProgData &amp;litData, const UnlitProgData &amp;unLitData, const InterpProgData &amp;interpData)</td><td class="entry"><a class="el" href="class_universe.html">Universe</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_universe.html#ad0502cbfe6e9373fd29aaf70fb5133a0">suns</a></td><td class="entry"><a class="el" href="class_universe.html">Universe</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>Universe</b>() (defined in <a class="el" href="class_universe.html">Universe</a>)</td><td class="entry"><a class="el" href="class_universe.html">Universe</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_universe.html#acae0ef79d1350457b3824a19134f8a3d">UpdateUniverse</a>()</td><td class="entry"><a class="el" href="class_universe.html">Universe</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"class="even"><td class="entry"><b>AddSun</b>(const std::shared_ptr&lt; Sun &gt; newSun) (defined in <a class="el" href="class_universe.html">Universe</a>)</td><td class="entry"><a class="el" href="class_universe.html">Universe</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>AddSunLight</b>(const SunLight &amp;newSunLight) (defined in <a class="el" href="class_universe.html">Universe</a>)</td><td class="entry"><a class="el" href="class_universe.html">Universe</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_universe.html#a48a408b8a01b50f05df5fc20ae2e99a8">lights</a></td><td class="entry"><a class="el" href="class_universe.html">Universe</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_universe.html#a9293cf3a90d969d42ba68f17534603a4">RenderUniverse</a>(glutil::MatrixStack &amp;modelMatrix, GLuint materialBlockIndex, GLuint lightUniformBuffer, const LitProgData &amp;litData, const UnlitProgData &amp;unLitData, const SimpleProgData &amp;interpData)</td><td class="entry"><a class="el" href="class_universe.html">Universe</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"class="even"><td class="entry"><b>SetGamma</b>(float newWorldGamma) (defined in <a class="el" href="class_universe.html">Universe</a>)</td><td class="entry"><a class="el" href="class_universe.html">Universe</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_universe.html#a958fd8a9e69878b1ae4526ab692ada9e">suns</a></td><td class="entry"><a class="el" href="class_universe.html">Universe</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr bgcolor="#f0f0f0"class="even"><td class="entry"><b>Universe</b>() (defined in <a class="el" href="class_universe.html">Universe</a>)</td><td class="entry"><a class="el" href="class_universe.html">Universe</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_universe.html#acae0ef79d1350457b3824a19134f8a3d">UpdateUniverse</a>()</td><td class="entry"><a class="el" href="class_universe.html">Universe</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"class="even"><td class="entry"><b>worldGamma</b> (defined in <a class="el" href="class_universe.html">Universe</a>)</td><td class="entry"><a class="el" href="class_universe.html">Universe</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>~Universe</b>() (defined in <a class="el" href="class_universe.html">Universe</a>)</td><td class="entry"><a class="el" href="class_universe.html">Universe</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 30 2012 20:01:26 for StarGame by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 2 2012 20:08:08 for StarGame by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.1
 </small></address>

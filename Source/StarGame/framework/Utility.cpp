@@ -57,6 +57,22 @@ bool Utility::Intersections::RayIntersectsEllipsoid(Ray mouseRay, glm::vec3 body
 }
 
 
+
+Utility::BasicMeshGeneration::Torus2D::Torus2D()
+{
+	resolution = 3;
+	
+	color = glm::vec4();
+	position = glm::vec4();
+
+	innerRadius = 0.0f;
+	outerRadius = 0.0f;
+
+	vao = 0;
+	indexBO = 0;
+	vertexBO = 0;
+}
+
 Utility::BasicMeshGeneration::Torus2D::Torus2D(glm::vec4 newColor, glm::vec4 newPosition,
 											   float newInnerRadius, float newOuterRadius, 
 											   int newResolution)
@@ -74,6 +90,7 @@ Utility::BasicMeshGeneration::Torus2D::Torus2D(glm::vec4 newColor, glm::vec4 new
 	indexBO = 0;
 	vertexBO = 0;
 }
+
 
 void Utility::BasicMeshGeneration::Torus2D::Init()
 {

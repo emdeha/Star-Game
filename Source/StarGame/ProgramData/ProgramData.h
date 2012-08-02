@@ -31,13 +31,9 @@ struct LitProgData
 	GLuint modelToCameraMatrixUnif;
 
 	GLuint lightIntensityUnif;
-	GLuint ambientIntensityUnif;
 
 	GLuint normalModelToCameraMatrixUnif;
 	GLuint cameraSpaceLightPosUnif;
-	GLuint lightAttenuationUnif;
-	GLuint shininessFactorUnif;
-	GLuint baseDiffuseColorUnif;
 };
 
 struct UnlitProgData

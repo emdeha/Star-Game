@@ -22,6 +22,8 @@ Universe::Universe()
 {
 	lights.resize(0);
 	suns.resize(0);
+
+	worldGamma = 2.2f;
 }
 
 void Universe::AddSunLight(const SunLight &newSunLight)
@@ -33,7 +35,8 @@ void Universe::AddSun(const std::shared_ptr<Sun> newSun)
 	suns.push_back(newSun);
 }
 
-void Universe::RenderUniverse(glutil::MatrixStack &modelMatrix,
+void Universe::RenderUniverse(glutil::MatrixStack &modelMatrix, 
+							  GLuint materialBlockIndex, GLuint lightUniformBuffer,
 							  const LitProgData &litData, 
 							  const UnlitProgData &unLitData, 
 							  const SimpleProgData &interpData)
@@ -41,13 +44,13 @@ void Universe::RenderUniverse(glutil::MatrixStack &modelMatrix,
 	int sizeLights = lights.size();
 	for(int i = 0; i < sizeLights; i++)
 	{
-		lights[i].Render(modelMatrix, litData);
+		lights[i].Render(modelMatrix, litData, lightUniformBuffer);
 	}
 
 	int sizeSuns = suns.size();
 	for(int i = 0; i < sizeSuns; i++)
 	{
-		suns[i]->Render(modelMatrix, litData, unLitData, interpData);
+		suns[i]->Render(modelMatrix, materialBlockIndex, worldGamma, litData, unLitData, interpData);
 	}
 }
 void Universe::UpdateUniverse()
@@ -57,6 +60,11 @@ void Universe::UpdateUniverse()
 	{
 		suns[i]->Update();
 	}
+}
+
+void Universe::SetGamma(float newWorldGamma)
+{
+	worldGamma = newWorldGamma;
 }
 
 Universe::~Universe()

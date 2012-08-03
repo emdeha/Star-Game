@@ -42,7 +42,6 @@
 #include "../ProgramData/ProgramData.h"
 
 
-
 #ifdef LOAD_X11
 #define APIENTRY
 #endif

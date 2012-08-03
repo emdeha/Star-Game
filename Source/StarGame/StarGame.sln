@@ -18,6 +18,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Camera", "Camera\Camera.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mouse", "Mouse\Mouse.vcxproj", "{854D03A0-F808-4790-AAB3-A1842B8DFEED}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Audio", "Audio\Audio.vcxproj", "{DD6314D9-02E5-4DAA-B229-CDCE18221633}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = StarGame.vsmdi
@@ -55,6 +57,10 @@ Global
 		{854D03A0-F808-4790-AAB3-A1842B8DFEED}.Debug|Win32.Build.0 = Debug|Win32
 		{854D03A0-F808-4790-AAB3-A1842B8DFEED}.Release|Win32.ActiveCfg = Release|Win32
 		{854D03A0-F808-4790-AAB3-A1842B8DFEED}.Release|Win32.Build.0 = Release|Win32
+		{DD6314D9-02E5-4DAA-B229-CDCE18221633}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DD6314D9-02E5-4DAA-B229-CDCE18221633}.Debug|Win32.Build.0 = Debug|Win32
+		{DD6314D9-02E5-4DAA-B229-CDCE18221633}.Release|Win32.ActiveCfg = Release|Win32
+		{DD6314D9-02E5-4DAA-B229-CDCE18221633}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -33,6 +33,7 @@
 #include "../Mouse/Mouse.h"
 
 
+
 // NOTE: Maybe the meshes of both the sun and satellites must be loaded in the constructors.
 //		 This means removing the LoadMesh function. For now, I will keep it that way in case I
 //		 decide to use different meshes in the future.

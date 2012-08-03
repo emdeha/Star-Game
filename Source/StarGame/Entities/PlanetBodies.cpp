@@ -17,9 +17,10 @@
 
 #include "stdafx.h"
 #include "PlanetBodies.h"
-
+#include "../Audio/Audio.h"
 #include <algorithm>
 
+Audio sunAudio(5);
 
 SatelliteOrbit::SatelliteOrbit()
 {
@@ -328,7 +329,8 @@ void Sun::Render(glutil::MatrixStack &modelMatrix, GLuint materialBlockIndex,
 
 	if(isClicked)
 	{
-
+		sunAudio.AddFileForPlay("../data/music/onclick.wav");
+		sunAudio.Play("../data/music/onclick.wav");
 	}
 }
 void Sun::Update()

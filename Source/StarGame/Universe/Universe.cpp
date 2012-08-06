@@ -23,7 +23,10 @@ Universe::Universe()
 	lights.resize(0);
 	suns.resize(0);
 
-	worldGamma = 2.2f;
+	//universeMusic.AddFileForPlay("../data/music/onclick.wav", SOUND_NAMES_ONSUNCLICK);
+	//universeMusic.AddFileForPlay("../data/music/background.mp3", SOUND_NAMES_BACKGROUND);
+
+	universeGamma = 2.2f;
 }
 
 void Universe::AddSunLight(const SunLight &newSunLight)
@@ -50,7 +53,7 @@ void Universe::RenderUniverse(glutil::MatrixStack &modelMatrix,
 	int sizeSuns = suns.size();
 	for(int i = 0; i < sizeSuns; i++)
 	{
-		suns[i]->Render(modelMatrix, materialBlockIndex, worldGamma, litData, unLitData, interpData);
+		suns[i]->Render(modelMatrix, materialBlockIndex, universeGamma, litData, unLitData, interpData);
 	}
 }
 void Universe::UpdateUniverse()
@@ -59,12 +62,30 @@ void Universe::UpdateUniverse()
 	for(int i = 0; i < sizeSuns; i++)
 	{
 		suns[i]->Update();
+		if(suns[i]->GetIsClicked())
+		{
+			universeMusic.Play(MUSIC_ON_SUN_CLICK);
+		}
 	}
 }
 
-void Universe::SetGamma(float newWorldGamma)
+void Universe::SetMusic(const std::string &fileName, SoundTypes soundType)
 {
-	worldGamma = newWorldGamma;
+	universeMusic.SetFileForPlay(fileName, soundType);
+}
+void Universe::SetMusicVolume(float volume, ChannelType chType)
+{
+	universeMusic.SetVolume(volume, chType);
+}
+
+void Universe::PlayMusic(SoundTypes soundType)
+{
+	universeMusic.Play(soundType);
+}
+
+void Universe::SetGamma(float newUniverseGamma)
+{
+	universeGamma = newUniverseGamma;
 }
 
 Universe::~Universe()

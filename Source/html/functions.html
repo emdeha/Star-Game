@@ -102,7 +102,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Groups</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Groups</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -244,11 +244,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>parent
 : <a class="el" href="class_satellite.html#a4ad51c61fd80af0ae2012156046bc6f1">Satellite</a>
 </li>
+<li>Play()
+: <a class="el" href="class_audio.html#ae8ad050c9de9ccbf547915afa018d59e">Audio</a>
+</li>
 <li>position
-: <a class="el" href="class_sun.html#acab91a34acacee79bb743089738da5cc">Sun</a>
-, <a class="el" href="class_satellite.html#a924a136220bcab117d5c61781a287df7">Satellite</a>
-, <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_torus2_d.html#a9ff1ae36f05e99296564ae7ed68dd1e2">Utility::BasicMeshGeneration::Torus2D</a>
+: <a class="el" href="class_satellite.html#a924a136220bcab117d5c61781a287df7">Satellite</a>
 , <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_circle.html#a70517725f0ea6c71d7ef95665854037a">Utility::BasicMeshGeneration::Circle</a>
+, <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_torus2_d.html#a9ff1ae36f05e99296564ae7ed68dd1e2">Utility::BasicMeshGeneration::Torus2D</a>
+, <a class="el" href="class_sun.html#acab91a34acacee79bb743089738da5cc">Sun</a>
 </li>
 </ul>
 
@@ -282,11 +285,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>satellites
 : <a class="el" href="class_sun.html#a0e5857745c6be53c3e2a6e518ff291d6">Sun</a>
 </li>
+<li>SetFileForPlay()
+: <a class="el" href="class_audio.html#aba0fe660aeb3893dcd7c9ef7e8f6dd32">Audio</a>
+</li>
 <li>SetIsClicked()
 : <a class="el" href="class_satellite.html#ae55915277ebb216b20c86895c9c4343e">Satellite</a>
 </li>
 <li>SetParent()
 : <a class="el" href="class_satellite.html#a84782cdb794e9c2d86966bfb0487d428">Satellite</a>
+</li>
+<li>SetVolume()
+: <a class="el" href="class_audio.html#a470dc02aeba89291a1e69b8ae26bdcdb">Audio</a>
 </li>
 <li>sunMesh
 : <a class="el" href="class_sun.html#a1aa72a3e0baeabd76642c48b969abf99">Sun</a>
@@ -314,14 +323,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_circle.html#a3c4df53414fede5ba1c30296490f7fff">Utility::BasicMeshGeneration::Circle</a>
 </li>
 <li>vertexBO
-: <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_torus2_d.html#aaab8ca75a092cbd577f1e072e004ff08">Utility::BasicMeshGeneration::Torus2D</a>
-, <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_circle.html#a392f340df97712eae657d9eec1727451">Utility::BasicMeshGeneration::Circle</a>
+: <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_circle.html#a392f340df97712eae657d9eec1727451">Utility::BasicMeshGeneration::Circle</a>
+, <a class="el" href="class_utility_1_1_basic_mesh_generation_1_1_torus2_d.html#aaab8ca75a092cbd577f1e072e004ff08">Utility::BasicMeshGeneration::Torus2D</a>
+</li>
+<li>volumes
+: <a class="el" href="class_audio.html#a363a0b18e35bb5d4e2a7ed292b4de654">Audio</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 2 2012 20:08:08 for StarGame by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Aug 6 2012 18:27:59 for StarGame by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.1
 </small></address>

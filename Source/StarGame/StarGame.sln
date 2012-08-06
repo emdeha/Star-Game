@@ -9,6 +9,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "framework", "framework\framework.vcxproj", "{F4D5FA3D-2A08-5146-A354-4B4F0729A6E3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Entities", "Entities\Entities.vcxproj", "{0E2397AC-13F2-4A38-92C7-8FD02A24C17E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DD6314D9-02E5-4DAA-B229-CDCE18221633} = {DD6314D9-02E5-4DAA-B229-CDCE18221633}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProgramData", "ProgramData\ProgramData.vcxproj", "{B5F4F13F-30DC-4003-B0EE-64718ED4B5EC}"
 EndProject

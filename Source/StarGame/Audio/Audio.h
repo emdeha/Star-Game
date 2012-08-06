@@ -21,12 +21,18 @@
 /// \brief Header for the music handling class.
 
 
+#ifndef AUDIO_H
+#define AUDIO_H
+
 #include <vector>
 #include <map>
+#include <string>
 #include "../fmod/fmod.hpp"
 #include "../fmod/fmod_errors.h"
 
 
+/// \fn CheckForError
+/// \brief Checks if FMOD has generated an error.
 static void CheckForError(FMOD_RESULT result)
 {
 	if(result != FMOD_OK)
@@ -35,6 +41,24 @@ static void CheckForError(FMOD_RESULT result)
 		return;
 	}
 }
+
+/// \enum ChannelType
+/// \brief Holds the types of channels on which music is played.
+enum ChannelType
+{
+	CHANNEL_MASTER, ///< The 'master' music channel.
+	CHANNEL_INTERACTION, ///< The 'interaction' music channel.
+
+	CHANNEL_COUNT,
+};
+
+/// \enum SoundTypes
+/// \brief Holds the types of sounds which will be played.
+enum SoundTypes
+{
+	MUSIC_BACKGROUND, ///< The background music.
+	MUSIC_ON_SUN_CLICK, ///< The on-click music.
+};
 
 /// \class Audio
 /// \brief Handles music, sounds, etc.
@@ -47,18 +71,34 @@ class Audio
 private:
 	int numberOfChannels;
 
-public:
-	Audio(int newNumberOfChannels);
-	
-	void AddFileForPlay(const char *fileName);
+	/// The volume parameters are contained in an array. 
+	/// Each element represents a channels volume. The first index is for
+	/// the master volume, the second for the interactions and so on.
+	float volumes[CHANNEL_COUNT];
 
-	void Play(const char *fileName);
+public:
+	Audio();
+	//Audio(int newNumberOfChannels);
+	
+	/// \fn SetFileForPlay
+	/// \brief Loads a sound for later playing.
+	void SetFileForPlay(const std::string &newFileName, SoundTypes prevSoundType);
+	
+	/// \fn SetVolume
+	/// \brief Fills the `volumes` array which later will be passed to Play().
+	void SetVolume(float volume, ChannelType chType = CHANNEL_MASTER);
+
+	/// \fn Play
+	/// \brief Plays a given song.
+	void Play(SoundTypes soundName, ChannelType chType = CHANNEL_MASTER);
 
 	~Audio();
 
 private:
 	FMOD::System *system;
-	FMOD::Channel *channel;
+	std::vector<FMOD::Channel *> channels;
 
-	std::map<const char *, FMOD::Sound *> audioFiles;
+	std::map<SoundTypes, FMOD::Sound *> audioFiles;
 };
+
+#endif

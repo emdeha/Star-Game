@@ -27,10 +27,10 @@
 #include <vector>
 #include "../Entities/Lights.h"
 #include "../Entities/PlanetBodies.h"
-
+#include "../Audio/Audio.h"
 
 /// \class Universe
-/// \brief This class updates, renders and maintains the game world aka Universe.
+/// \brief This class updates, renders and maintains the game world a.k.a. Universe.
 class Universe
 {
 private:
@@ -38,7 +38,9 @@ private:
 	std::vector<std::shared_ptr<Sun>> suns; ///< Holds the world's suns.
 	// std::vector<std::shared_ptr<Enemies>> enemies;
 
-	float worldGamma;
+	Audio universeMusic;
+
+	float universeGamma;
 
 public:
 	Universe();
@@ -58,7 +60,15 @@ public:
 						const UnlitProgData &unLitData, 
 						const SimpleProgData &interpData);
 
-	void SetGamma(float newWorldGamma);
+
+	void SetMusic(const std::string &fileName, SoundTypes soundType);
+	void SetMusicVolume(float volume, ChannelType chType);
+
+	void PlayMusic(SoundTypes soundType);
+
+	
+	void SetGamma(float newUniverseGamma);
+
 
 	~Universe();
 

@@ -18,8 +18,38 @@
 #include "stdafx.h"
 #include "Audio.h"
 
+#include <iostream>
 
-Audio::Audio(int newNumberOfChannels)
+
+Audio::Audio()
+{
+	audioFiles.clear();
+	numberOfChannels = 32;
+
+	channels.resize(32);
+
+	for(int i = 0; i < CHANNEL_COUNT; i++)
+		volumes[i] = 0.0f;
+
+	FMOD_RESULT result;
+
+	result = FMOD::System_Create(&system);
+	CheckForError(result);
+
+	unsigned int version = 0;
+	result = system->getVersion(&version);
+	CheckForError(result);
+
+	if(version < FMOD_VERSION)
+	{
+		std::printf("You are using an old version of FMOD %08x. This program requires %08x\n", 
+			version, FMOD_VERSION);
+	}
+
+	result = system->init(numberOfChannels, FMOD_INIT_NORMAL, 0);
+	CheckForError(result);
+}
+/*Audio::Audio(int newNumberOfChannels)
 {
 	audioFiles.clear();
 	numberOfChannels = newNumberOfChannels;
@@ -41,44 +71,72 @@ Audio::Audio(int newNumberOfChannels)
 
 	result = system->init(numberOfChannels, FMOD_INIT_NORMAL, 0);
 	CheckForError(result);
-}
+}*/
 
-void Audio::AddFileForPlay(const char *fileName)
+void Audio::SetFileForPlay(const std::string &newFileName, SoundTypes prevSoundType)
 {
 	FMOD_RESULT result;
 
 	FMOD::Sound *newSound;
-	result = system->createSound(fileName, FMOD_HARDWARE, 0, &newSound);
+	result = system->createSound(newFileName.c_str(), FMOD_HARDWARE, 0, &newSound);
 	CheckForError(result);
 
-	audioFiles.insert(std::make_pair(fileName, newSound));
+	if(audioFiles.find(prevSoundType) != audioFiles.end())
+		audioFiles[prevSoundType] = newSound;
+	else audioFiles.insert(std::make_pair(prevSoundType, newSound));
 }
 
-void Audio::Play(const char *fileName)
+void Audio::SetVolume(float volume, ChannelType chType)
+{
+	volumes[chType] = volume;
+	std::printf("%f\n", volumes[chType]);
+}
+
+void Audio::Play(SoundTypes soundType, ChannelType chType)
 {
 	// TODO: Handle errors.
+	if(audioFiles.find(soundType) == audioFiles.end())
+	{
+		std::printf("There is no sound at this index. Check Audio.h.\n");
+		return;
+	}
 
 	FMOD_RESULT result;
-	result = system->playSound(FMOD_CHANNEL_FREE, audioFiles[fileName], false, &channel);
+	result = system->playSound(FMOD_CHANNEL_FREE, audioFiles[soundType], false, &channels[chType]);
 	CheckForError(result);
 
 	system->update();
-}
 
+	if(volumes[chType] != 0.0f)
+	{
+		result = channels[chType]->setVolume(volumes[chType]);
+		CheckForError(result);
+	}
+}
 
 Audio::~Audio()
 {
 	FMOD_RESULT result;
 
-	for(std::map<const char *, FMOD::Sound *>::iterator iter = audioFiles.begin();
+	for(std::map<SoundTypes, FMOD::Sound *>::iterator iter = audioFiles.begin();
 		iter != audioFiles.end(); ++iter)
 	{
 		result = iter->second->release();
 		CheckForError(result);
+
+		delete(*iter).second;
 	}
 
 	result = system->close();
 	CheckForError(result);
 	result = system->release();
 	CheckForError(result);
+
+	delete system;
+	for(std::vector<FMOD::Channel *>::iterator iter = channels.begin();
+		iter != channels.end(); ++iter)
+	{
+		delete *iter;
+	}
+	channels.clear();
 }

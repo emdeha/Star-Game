@@ -26,31 +26,19 @@
 
 #include <glload/gl_3_3.h>
 #include <glutil/glutil.h>
+
 #include "../framework/framework.h"
 #include "../framework/Mesh.h"
 #include "../framework/Timer.h"
+#include "../framework/Utility.h"
+
 #include "../ProgramData/ProgramData.h"
 #include "../Mouse/Mouse.h"
-
 
 
 // NOTE: Maybe the meshes of both the sun and satellites must be loaded in the constructors.
 //		 This means removing the LoadMesh function. For now, I will keep it that way in case I
 //		 decide to use different meshes in the future.
-
-
-/// \fn CorrectGamma()
-/// \brief Applies gamma correction to colors.
-static glm::vec4 CorrectGamma(const glm::vec4 &inputColor, float gamma)
-{
-	glm::vec4 outputColor;
-	outputColor[0] = powf(inputColor[0], 1.0f / gamma);
-	outputColor[1] = powf(inputColor[1], 1.0f / gamma);
-	outputColor[2] = powf(inputColor[2], 1.0f / gamma);
-	outputColor[3] = inputColor[3];
-
-	return outputColor;
-}
 
 
 /// \struct MaterialBlock
@@ -238,6 +226,7 @@ private:
 	int satelliteCap;
 
 	bool isClicked;
+	bool isSatelliteClicked;
 
 public:
 	Sun();
@@ -315,6 +304,9 @@ public:
 						    Mouse userMouse, glm::vec4 cameraPos,
 						    float windowWidth, float windowHeight);
 
+	bool GetIsClicked();
+	bool GetIsSatelliteClicked();
+
 public:
 	Sun(const Sun &other);
 	~Sun();
@@ -329,6 +321,16 @@ inline glm::vec4 Sun::GetPosition()
 inline int Sun::GetSatelliteCap()
 {
 	return satelliteCap;
+}
+
+inline bool Sun::GetIsClicked()
+{
+	return isClicked;
+}
+
+inline bool Sun::GetIsSatelliteClicked()
+{
+	return isSatelliteClicked;
 }
 
 

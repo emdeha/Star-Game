@@ -19,6 +19,19 @@
 
 #define PI 3.14159f
 
+
+glm::vec4 Utility::CorrectGamma(const glm::vec4 &inputColor, float gamma)
+{
+	glm::vec4 outputColor;
+	outputColor[0] = powf(inputColor[0], 1.0f / gamma);
+	outputColor[1] = powf(inputColor[1], 1.0f / gamma);
+	outputColor[2] = powf(inputColor[2], 1.0f / gamma);
+	outputColor[3] = inputColor[3];
+
+	return outputColor;
+}
+
+
 Utility::Ray::Ray()
 {
 	origin = glm::vec4();

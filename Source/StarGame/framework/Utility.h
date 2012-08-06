@@ -30,17 +30,24 @@
 #include <glload/gl_3_3.h>
 #include <glutil/glutil.h>
 #include <glm/glm.hpp>
-#include <vector>
+
 #include "../framework/framework.h"
 #include "../framework/Mesh.h"
 #include "../framework/Timer.h"
+
 #include "../ProgramData/ProgramData.h"
+
+#include <vector>
 
 
 /// \namespace Utility
 /// \brief The utility functions' namespace.
 namespace Utility
-{
+{	
+	/// \fn CorrectGamma()
+	/// \brief Applies gamma correction to colors.
+	glm::vec4 CorrectGamma(const glm::vec4 &inputColor, float gamma);
+	
 	/// \class Ray
 	/// \brief Implements a very simple ray.
 	class Ray

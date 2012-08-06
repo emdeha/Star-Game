@@ -20,8 +20,6 @@
 // TODO: Place 'CorrectGamma' in 'Utility'
 
 #include "Main.h"
-#include "../Entities/PlanetBodies.h"
-#include "../Entities/Lights.h"
 #include "../Universe/Universe.h"
 #include "../Camera/TopDownCamera.h"
 
@@ -131,6 +129,10 @@ TopDownCamera userCamera = TopDownCamera(glm::vec3(), 12.5f, 90.0f, 135.0f);
 float initialOffset = 1.0f;
 
 
+float g_musicVolumeMaster = 0.1f;
+float g_musicVolumeInteraction = 0.1f;
+
+
 void HandleMouse()
 {
 	glm::vec3 cameraPosition = userCamera.ResolveCamPosition();
@@ -230,6 +232,14 @@ void InitializeScene()
 
 	universe->AddSun(mainSun);
 	universe->AddSunLight(mainSunLight);
+
+	universe->SetMusic("../data/music/background.mp3", MUSIC_BACKGROUND);
+	universe->SetMusic("../data/music/onclick.wav", MUSIC_ON_SUN_CLICK);
+
+	//universe->PlayMusic(MUSIC_BACKGROUND);
+	//universe->SetMusicVolume(g_musicVolumeMaster, CHANNEL_MASTER);
+	universe->SetMusicVolume(g_musicVolumeInteraction, CHANNEL_INTERACTION);
+	universe->SetMusicVolume(g_musicVolumeMaster, CHANNEL_MASTER);
 }
 
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
@@ -331,6 +341,9 @@ void Keyboard(unsigned char key, int x, int y)
 	case 27:
 		glutLeaveMainLoop();
 		return;
+	case 32:
+		universe->PlayMusic(MUSIC_BACKGROUND);
+		break;
 	}
 
 	glutPostRedisplay();

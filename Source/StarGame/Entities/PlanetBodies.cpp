@@ -17,10 +17,7 @@
 
 #include "stdafx.h"
 #include "PlanetBodies.h"
-#include "../Audio/Audio.h"
-#include <algorithm>
 
-Audio sunAudio(5);
 
 SatelliteOrbit::SatelliteOrbit()
 {
@@ -38,8 +35,8 @@ SatelliteOrbit::SatelliteOrbit(glm::vec4 newMainColor, glm::vec4 newOutlineColor
 							   float newOuterRadius, float newInnerRadius,
 							   float gamma)
 {
-	mainColor = CorrectGamma(newMainColor, gamma);
-	outlineColor = CorrectGamma(newOutlineColor, gamma);
+	mainColor = Utility::CorrectGamma(newMainColor, gamma);
+	outlineColor = Utility::CorrectGamma(newOutlineColor, gamma);
 	position = newPosition;
 	outerRadius = newOuterRadius;
 	innerRadius = newInnerRadius;
@@ -274,6 +271,7 @@ Sun::Sun()
 	diameter = 0.0f;
 	satelliteCap = 0;
 	isClicked = false;
+	isSatelliteClicked = false;
 }
 Sun::Sun(glm::vec3 newPosition, float newDiameter, int newSatelliteCap)
 {
@@ -283,6 +281,7 @@ Sun::Sun(glm::vec3 newPosition, float newDiameter, int newSatelliteCap)
 	diameter = newDiameter;
 	satelliteCap = newSatelliteCap;
 	isClicked = false;
+	isSatelliteClicked = false;
 }
 
 void Sun::LoadMesh(const std::string &fileName)
@@ -318,7 +317,7 @@ void Sun::Render(glutil::MatrixStack &modelMatrix, GLuint materialBlockIndex,
 				
 		modelMatrix.Scale(diameter);
 
-		glm::vec4 sunColor = CorrectGamma(glm::vec4(0.8078f, 0.8706f, 0.0f, 1.0f), gamma);
+		glm::vec4 sunColor = Utility::CorrectGamma(glm::vec4(0.8078f, 0.8706f, 0.0f, 1.0f), gamma);
 
 		glUseProgram(unlitData.theProgram);
 		glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
@@ -329,8 +328,7 @@ void Sun::Render(glutil::MatrixStack &modelMatrix, GLuint materialBlockIndex,
 
 	if(isClicked)
 	{
-		sunAudio.AddFileForPlay("../data/music/onclick.wav");
-		sunAudio.Play("../data/music/onclick.wav");
+		isClicked = false;
 	}
 }
 void Sun::Update()
@@ -441,15 +439,14 @@ Sun::Sun(const Sun &other)
 	isClicked = other.isClicked;
 }
 
-template <typename T>
-void DeletePointedTo(T *pointedObject)
-{
-	delete pointedObject;
-}
-
 Sun::~Sun()
 {
-	std::for_each(satellites.begin(), satellites.end(), DeletePointedTo<Satellite>);
+	for(std::vector<Satellite *>::iterator iter = satellites.begin();
+		iter != satellites.end(); ++iter)
+	{
+		delete *iter;
+	}
+	satellites.clear();
 }
 
 Sun Sun::operator=(const Sun &other)

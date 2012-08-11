@@ -32,6 +32,12 @@ glm::vec4 Utility::CorrectGamma(const glm::vec4 &inputColor, float gamma)
 }
 
 
+void Utility::CalculateFPS()
+{
+
+}
+
+
 Utility::Ray::Ray()
 {
 	origin = glm::vec4();

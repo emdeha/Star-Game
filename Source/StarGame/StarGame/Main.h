@@ -42,6 +42,7 @@
 #include "../framework/Mesh.h"
 #include "../framework/MousePole.h"
 #include "../framework/Timer.h"
+#include "../framework/Text.h"
 
 #include "../ProgramData/ProgramData.h"
 #include "../Audio/Audio.h"

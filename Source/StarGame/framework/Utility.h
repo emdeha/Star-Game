@@ -48,6 +48,9 @@ namespace Utility
 	/// \brief Applies gamma correction to colors.
 	glm::vec4 CorrectGamma(const glm::vec4 &inputColor, float gamma);
 	
+	// TODO: Implement.
+	void CalculateFPS();
+
 	/// \class Ray
 	/// \brief Implements a very simple ray.
 	class Ray
@@ -177,6 +180,19 @@ namespace Utility
 			/// \fn Draw
 			/// \brief Draws the circle on the scene. 
 			void Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &data);
+		};
+	}
+
+
+	namespace EventUtility
+	{
+		struct EventArgs
+		{
+
+		};
+
+		class Event
+		{
 		};
 	}
 }

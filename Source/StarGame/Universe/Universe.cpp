@@ -23,20 +23,14 @@ Universe::Universe()
 	lights.resize(0);
 	suns.resize(0);
 
+	universeLayouts.clear();
+
 	//universeMusic.AddFileForPlay("../data/music/onclick.wav", SOUND_NAMES_ONSUNCLICK);
 	//universeMusic.AddFileForPlay("../data/music/background.mp3", SOUND_NAMES_BACKGROUND);
 
 	universeGamma = 2.2f;
 }
 
-void Universe::AddSunLight(const SunLight &newSunLight)
-{
-	lights.push_back(newSunLight);
-}
-void Universe::AddSun(const std::shared_ptr<Sun> newSun)
-{
-	suns.push_back(newSun);
-}
 
 void Universe::RenderUniverse(glutil::MatrixStack &modelMatrix, 
 							  GLuint materialBlockIndex, GLuint lightUniformBuffer,
@@ -56,6 +50,18 @@ void Universe::RenderUniverse(glutil::MatrixStack &modelMatrix,
 		suns[i]->Render(modelMatrix, materialBlockIndex, universeGamma, litData, unLitData, interpData);
 	}
 }
+void Universe::RenderCurrentLayout()
+{
+	for(std::map<LayoutType, Layout>::iterator iter = universeLayouts.begin();
+		iter != universeLayouts.end(); ++iter)
+	{
+		if(iter->second.IsSet())
+		{
+			iter->second.Draw();
+			break;
+		}
+	}
+}
 void Universe::UpdateUniverse()
 {
 	int sizeSuns = suns.size();
@@ -69,6 +75,70 @@ void Universe::UpdateUniverse()
 	}
 }
 
+void Universe::StartUniverse()
+{
+	int sizeSuns = suns.size();
+	for(int i = 0; i < sizeSuns; i++)
+	{
+		std::vector<Satellite*> sunSatellites = suns[i]->GetSatellites();
+		for(std::vector<Satellite*>::iterator iter = sunSatellites.begin();
+			iter != sunSatellites.end(); ++iter)
+		{
+			(*iter)->Start();
+			delete *iter;
+		}
+		sunSatellites.clear();
+	}
+}
+void Universe::StopUniverse()
+{
+	int sizeSuns = suns.size();
+	for(int i = 0; i < sizeSuns; i++)
+	{
+		std::vector<Satellite*> sunSatellites = suns[i]->GetSatellites();
+		for(std::vector<Satellite*>::iterator iter = sunSatellites.begin();
+			iter != sunSatellites.end(); ++iter)
+		{
+			(*iter)->Stop();
+			delete *iter;
+		}
+		sunSatellites.clear();
+	}
+}
+
+
+void Universe::AddSunLight(const SunLight &newSunLight)
+{
+	lights.push_back(newSunLight);
+}
+void Universe::AddSun(const std::shared_ptr<Sun> newSun)
+{
+	suns.push_back(newSun);
+}
+
+
+void Universe::AddLayout(Layout &newLayout)
+{
+	universeLayouts.insert(std::make_pair(newLayout.GetLayoutType(), newLayout));
+}
+void Universe::AddLayout(LayoutType layoutType, LayoutInfo layoutInfo)
+{
+	universeLayouts.insert(std::make_pair(layoutType, Layout(layoutType, layoutInfo)));
+}
+bool Universe::HasLayout(LayoutType layoutType)
+{
+	return universeLayouts.find(layoutType) != universeLayouts.end();
+}
+bool Universe::IsLayoutOn(LayoutType layoutType)
+{
+	if(this->HasLayout(layoutType))
+	{
+		return universeLayouts[layoutType].IsSet();
+	}
+	return false;
+}
+
+
 void Universe::SetMusic(const std::string &fileName, SoundTypes soundType)
 {
 	universeMusic.SetFileForPlay(fileName, soundType);
@@ -77,16 +147,17 @@ void Universe::SetMusicVolume(float volume, ChannelType chType)
 {
 	universeMusic.SetVolume(volume, chType);
 }
-
 void Universe::PlayMusic(SoundTypes soundType)
 {
 	universeMusic.Play(soundType);
 }
 
+
 void Universe::SetGamma(float newUniverseGamma)
 {
 	universeGamma = newUniverseGamma;
 }
+
 
 Universe::~Universe()
 {

@@ -55,5 +55,16 @@ struct SimpleProgData
 	GLuint positionAttrib;
 };
 
+struct FontProgData
+{
+	GLuint theProgram;
+
+	GLuint textureUnif;
+	GLuint colorUnif;
+
+	GLuint positionAttrib;
+	GLuint textureCoordAttrib;
+};
+
 
 #endif

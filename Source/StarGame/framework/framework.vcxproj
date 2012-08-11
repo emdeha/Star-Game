@@ -49,7 +49,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;..\glsdk\glload\include;..\glsdk\glimg\include;..\glsdk\glm;..\glsdk\glutil\include;..\glsdk\glmesh\include;..\glsdk\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\freetype\include;..\glsdk\glload\include;..\glsdk\glimg\include;..\glsdk\glm;..\glsdk\glutil\include;..\glsdk\glmesh\include;..\glsdk\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;TIXML_USE_STL;FREEGLUT_STATIC;WIN32;_LIB;FREEGLUT_LIB_PRAGMAS=0;DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -76,7 +76,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>.;..\glsdk\glload\include;..\glsdk\glimg\include;..\glsdk\glm;..\glsdk\glutil\include;..\glsdk\glmesh\include;..\glsdk\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\freetype\include;..\glsdk\glload\include;..\glsdk\glimg\include;..\glsdk\glm;..\glsdk\glutil\include;..\glsdk\glmesh\include;..\glsdk\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;TIXML_USE_STL;FREEGLUT_STATIC;WIN32;_LIB;FREEGLUT_LIB_PRAGMAS=0;RELEASE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
@@ -113,6 +113,7 @@
     <ClInclude Include="rapidxml_helpers.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneBinders.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="UniformBlockArray.h" />
     <ClInclude Include="rapidxml.hpp" />
@@ -128,6 +129,7 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp">
     </ClCompile>
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Timer.cpp">
     </ClCompile>
     <ClCompile Include="Utility.cpp" />

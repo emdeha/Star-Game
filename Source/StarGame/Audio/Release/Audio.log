@@ -1,9 +1,12 @@
-﻿Build started 6.8.2012 г. 18:40:19 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Audio\Audio.vcxproj" on node 2 (build target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 11.8.2012 г. 18:29:13 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Audio\Audio.vcxproj" on node 4 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Release\Audio.lastbuildstate".
+       InitializeBuildStatus:
          Creating "Release\Audio.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Release\Audio.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Release\Audio.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Audio.cpp
          Audio.cpp
        Lib:
@@ -13,8 +16,8 @@
        FinalizeBuildStatus:
          Deleting file "Release\Audio.unsuccessfulbuild".
          Touching "Release\Audio.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Audio\Audio.vcxproj" (build target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Audio\Audio.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.40
+Time Elapsed 00:00:00.57

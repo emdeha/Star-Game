@@ -28,6 +28,7 @@
 #include "../Entities/Lights.h"
 #include "../Entities/PlanetBodies.h"
 #include "../Audio/Audio.h"
+#include "../GUISystem/GUISystem.h"
 
 /// \class Universe
 /// \brief This class updates, renders and maintains the game world a.k.a. Universe.
@@ -38,15 +39,14 @@ private:
 	std::vector<std::shared_ptr<Sun>> suns; ///< Holds the world's suns.
 	// std::vector<std::shared_ptr<Enemies>> enemies;
 
+	std::map<LayoutType, Layout> universeLayouts;
+
 	Audio universeMusic;
 
 	float universeGamma;
 
 public:
 	Universe();
-
-	void AddSunLight(const SunLight &newSunLight);
-	void AddSun(const std::shared_ptr<Sun> newSun);
 
 	/// \fn UpdateUniverse
 	/// \brief Goes through the game objects and calls their update functions.
@@ -60,10 +60,25 @@ public:
 						const UnlitProgData &unLitData, 
 						const SimpleProgData &interpData);
 
+	void RenderCurrentLayout();
+
+
+	void StopUniverse();
+	void StartUniverse();
+	
+	
+	void AddSunLight(const SunLight &newSunLight);
+	void AddSun(const std::shared_ptr<Sun> newSun);
+
+
+	void AddLayout(Layout &newLayout);
+	void AddLayout(LayoutType layoutType, LayoutInfo layoutInfo);
+	bool HasLayout(LayoutType layoutType);
+	bool IsLayoutOn(LayoutType layoutType);
+
 
 	void SetMusic(const std::string &fileName, SoundTypes soundType);
 	void SetMusicVolume(float volume, ChannelType chType);
-
 	void PlayMusic(SoundTypes soundType);
 
 	

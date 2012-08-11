@@ -100,6 +100,7 @@ private:
 
 	Framework::Timer revolutionDuration; ///< The time needed for the satellite to make one revolution around its parent
 
+	glm::vec4 color;
 	glm::vec3 position; ///< The calculated satellite position
 
 	float offsetFromSun; ///< Based on this parameter the satellite's position is calculated	
@@ -114,6 +115,7 @@ private:
 
 public:
 	Satellite(Framework::Timer newRevolutionDuration, 
+			  glm::vec4 newColor,
 			  float newOffsetFromSun, float newDiameter);
 
 	/// \fn LoadMesh
@@ -161,6 +163,7 @@ public:
 							  const SimpleProgData &simpleData,
 							  float gamma);
 
+
 	/// \fn SetParent
 	/// \brief Sets the satellite's parent. 
 	void SetParent(const Sun &newParent);
@@ -180,6 +183,10 @@ public:
 
 	// TODO: Not so useful (maybe).
 	float GetDiameter();
+
+
+	void Stop();
+	void Start();
 
 public:
 	Satellite(const Satellite &other);
@@ -219,6 +226,7 @@ private:
 	// TODO: Find a solution to the smart_ptr problem. Satellite removal freezes the game.
 	std::vector<Satellite*> satellites; ///< The sun's satellites.
 
+	glm::vec4 color;
 	glm::vec3 position; ///< The sun's position.
 
 	float diameter; ///< Its _diameter_.
@@ -230,7 +238,8 @@ private:
 
 public:
 	Sun();
-	Sun(glm::vec3 newPosition, float newDiameter, int newSatelliteCap);
+	Sun(glm::vec3 newPosition, glm::vec4 newColor, 
+		float newDiameter, int newSatelliteCap);
 
 	/// \fn LoadMesh
 	/// \brief Loads the sun's mesh.
@@ -262,6 +271,7 @@ public:
 	///
 	///If everything went OK the function returns `true`.
 	bool AddSatellite(const std::string &fileName, 
+					  glm::vec4 satelliteColor,
 					  float offset, float speed, float diameter);
 
 	/// \fn RemoveSatellite()

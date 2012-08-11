@@ -104,8 +104,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa345e142fa2d4d0c5e22e4472cba374a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa345e142fa2d4d0c5e22e4472cba374a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Sun</b> (glm::vec3 newPosition, float newDiameter, int newSatelliteCap)</td></tr>
+<tr class="memitem:afa36350139c104164631de3beb9ac48c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afa36350139c104164631de3beb9ac48c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Sun</b> (glm::vec3 newPosition, glm::vec4 newColor, float newDiameter, int newSatelliteCap)</td></tr>
 <tr class="memitem:a3f3680c0b94268b85cc06e7eff70cb07"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f3680c0b94268b85cc06e7eff70cb07"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#a3f3680c0b94268b85cc06e7eff70cb07">LoadMesh</a> (const std::string &amp;fileName)</td></tr>
 <tr class="memdesc:a3f3680c0b94268b85cc06e7eff70cb07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the sun's mesh. <br/></td></tr>
@@ -114,8 +114,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:af3bfaeceea178c017478d25afa0dff07"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af3bfaeceea178c017478d25afa0dff07"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#af3bfaeceea178c017478d25afa0dff07">Update</a> ()</td></tr>
 <tr class="memdesc:af3bfaeceea178c017478d25afa0dff07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls the satellite's update functions (for now). <br/></td></tr>
-<tr class="memitem:aa83727a648f0456be4164fd6f2dc1e75"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#aa83727a648f0456be4164fd6f2dc1e75">AddSatellite</a> (const std::string &amp;fileName, float offset, float speed, float <a class="el" href="class_sun.html#ac35fc9ebc427d9c8c9fd3ee3a12fce82">diameter</a>)</td></tr>
-<tr class="memdesc:aa83727a648f0456be4164fd6f2dc1e75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a satellite to the sun.  <a href="#aa83727a648f0456be4164fd6f2dc1e75"></a><br/></td></tr>
+<tr class="memitem:a7f287e1cb43a95e9fbadd38feb8df6bc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#a7f287e1cb43a95e9fbadd38feb8df6bc">AddSatellite</a> (const std::string &amp;fileName, glm::vec4 satelliteColor, float offset, float speed, float <a class="el" href="class_sun.html#ac35fc9ebc427d9c8c9fd3ee3a12fce82">diameter</a>)</td></tr>
+<tr class="memdesc:a7f287e1cb43a95e9fbadd38feb8df6bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a satellite to the sun.  <a href="#a7f287e1cb43a95e9fbadd38feb8df6bc"></a><br/></td></tr>
 <tr class="memitem:a274dd9d397333db6a916582ac2a19c46"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a274dd9d397333db6a916582ac2a19c46"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#a274dd9d397333db6a916582ac2a19c46">RemoveSatellite</a> ()</td></tr>
 <tr class="memdesc:a274dd9d397333db6a916582ac2a19c46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the last added satellite. <br/></td></tr>
@@ -152,6 +152,8 @@ std::auto_ptr&lt; Framework::Mesh &gt;&#160;</td><td class="memItemRight" valign
 <tr class="memitem:a0e5857745c6be53c3e2a6e518ff291d6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0e5857745c6be53c3e2a6e518ff291d6"></a>
 std::vector&lt; <a class="el" href="class_satellite.html">Satellite</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#a0e5857745c6be53c3e2a6e518ff291d6">satellites</a></td></tr>
 <tr class="memdesc:a0e5857745c6be53c3e2a6e518ff291d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The sun's satellites. <br/></td></tr>
+<tr class="memitem:a195adefc09fba9b0382247bad484df4e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a195adefc09fba9b0382247bad484df4e"></a>
+glm::vec4&#160;</td><td class="memItemRight" valign="bottom"><b>color</b></td></tr>
 <tr class="memitem:acab91a34acacee79bb743089738da5cc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acab91a34acacee79bb743089738da5cc"></a>
 glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sun.html#acab91a34acacee79bb743089738da5cc">position</a></td></tr>
 <tr class="memdesc:acab91a34acacee79bb743089738da5cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The sun's position. <br/></td></tr>
@@ -170,7 +172,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSatelliteClicked</b
 <p>A sun handles the satellites in the scene. All of the sun's satellites are in a vector of pointers to them.</p>
 <p>The sun creates its satellites on-click based on the matter you have. It is also the main base of your solar system. </p>
 </div><hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="aa83727a648f0456be4164fd6f2dc1e75"></a>
+<a class="anchor" id="a7f287e1cb43a95e9fbadd38feb8df6bc"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -179,6 +181,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSatelliteClicked</b
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>fileName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">glm::vec4&#160;</td>
+          <td class="paramname"><em>satelliteColor</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -328,7 +336,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSatelliteClicked</b
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Aug 6 2012 18:27:59 for StarGame by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Aug 11 2012 15:32:59 for StarGame by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.1
 </small></address>

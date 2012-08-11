@@ -57,7 +57,9 @@ Resources
 TODO: 
     1. Fix the problem with the picking of the satellites
 	-- Strange precision loss
-	-- When camera is at an angle, I should do ray-ellipsoid collision detection. The first radius of the ellipsoid would be the circle's radius and the second - the circle\'s radius * sin(cameraAngle)?
+	-- When camera is at an angle, I should do ray-ellipsoid collision detection.
+	   The first radius of the ellipsoid would be the circle's radius and the 
+	   second - the circle\'s radius * sin(cameraAngle)?
     2. Remove framework files which I don't need.
 
 
@@ -83,9 +85,9 @@ x- Save/Load games
 2nd cycle:
 -- Font system
 -- GUI system
--- Sound system
+v- Sound system
 
 
--- Fix the clicking problem
+x- Fix the clicking problem
 -- Enemies
 -- Save/Load system

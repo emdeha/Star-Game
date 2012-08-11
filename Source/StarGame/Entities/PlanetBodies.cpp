@@ -76,10 +76,10 @@ void SatelliteOrbit::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData
 }
 
 
-static void GenerateUniformBuffers(int &materialBlockSize, GLuint &materialUniformBuffer)
+static void GenerateUniformBuffers(int &materialBlockSize, glm::vec4 diffuseColor, GLuint &materialUniformBuffer)
 {
 	MaterialBlock material;
-	material.diffuseColor = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	material.diffuseColor = diffuseColor;
 	material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
 	material.shininessFactor = 0.3f;
 
@@ -100,17 +100,19 @@ static void GenerateUniformBuffers(int &materialBlockSize, GLuint &materialUnifo
 
 
 Satellite::Satellite(Framework::Timer newRevolutionDuration,
+					 glm::vec4 newColor,
 					 float newOffsetFromSun, float newDiameter)
 {
 	mesh.reset();
 	parent.reset();
 	revolutionDuration = newRevolutionDuration;
+	color = newColor;
 	position = glm::vec3();
 	offsetFromSun = newOffsetFromSun;
 	diameter = newDiameter;
 	isClicked = false;
 
-	GenerateUniformBuffers(materialBlockSize, materialUniformBuffer);
+	GenerateUniformBuffers(materialBlockSize, color, materialUniformBuffer);
 }
 
 void Satellite::LoadMesh(const std::string &fileName)
@@ -226,6 +228,16 @@ inline void Satellite::SetParent(const Sun &newParent)
 }
 
 
+void Satellite::Stop()
+{
+	revolutionDuration.SetPause();
+}
+void Satellite::Start()
+{
+	revolutionDuration.SetPause(false);
+}
+
+
 Satellite::Satellite(const Satellite &other)
 {
 	std::auto_ptr<Framework::Mesh> newMesh(new Framework::Mesh(*other.mesh));
@@ -267,16 +279,19 @@ Sun::Sun()
 {
 	sunMesh.reset();
 	satellites.resize(0);
+	color = glm::vec4();
 	position = glm::vec3();
 	diameter = 0.0f;
 	satelliteCap = 0;
 	isClicked = false;
 	isSatelliteClicked = false;
 }
-Sun::Sun(glm::vec3 newPosition, float newDiameter, int newSatelliteCap)
+Sun::Sun(glm::vec3 newPosition, glm::vec4 newColor,
+		 float newDiameter, int newSatelliteCap)
 {
 	sunMesh.reset();
 	satellites.resize(0);
+	color = newColor;
 	position = newPosition;
 	diameter = newDiameter;
 	satelliteCap = newSatelliteCap;
@@ -317,7 +332,7 @@ void Sun::Render(glutil::MatrixStack &modelMatrix, GLuint materialBlockIndex,
 				
 		modelMatrix.Scale(diameter);
 
-		glm::vec4 sunColor = Utility::CorrectGamma(glm::vec4(0.8078f, 0.8706f, 0.0f, 1.0f), gamma);
+		glm::vec4 sunColor = Utility::CorrectGamma(color, gamma);
 
 		glUseProgram(unlitData.theProgram);
 		glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
@@ -340,7 +355,9 @@ void Sun::Update()
 	}
 }
 
-bool Sun::AddSatellite(const std::string &fileName, float offset, float speed, float diameter)
+bool Sun::AddSatellite(const std::string &fileName, 
+					   glm::vec4 satelliteColor,
+					   float offset, float speed, float diameter)
 {
 	if(satellites.size() >= satelliteCap)
 	{
@@ -348,7 +365,9 @@ bool Sun::AddSatellite(const std::string &fileName, float offset, float speed, f
 	}
 
 	Satellite 
-		*sat(new Satellite(Framework::Timer(Framework::Timer::TT_LOOP, speed), offset, diameter));
+		*sat(new Satellite(Framework::Timer(Framework::Timer::TT_LOOP, speed),
+						   satelliteColor,
+						   offset, diameter));
 	sat->LoadMesh(fileName);
 	sat->SetParent(*this);
 	satellites.push_back(sat);

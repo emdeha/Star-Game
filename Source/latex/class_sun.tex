@@ -13,7 +13,7 @@ Represent the main planet of the solar system.
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{class_sun_aa345e142fa2d4d0c5e22e4472cba374a}{{\bfseries Sun} (glm\-::vec3 new\-Position, float new\-Diameter, int new\-Satellite\-Cap)}\label{class_sun_aa345e142fa2d4d0c5e22e4472cba374a}
+\hypertarget{class_sun_afa36350139c104164631de3beb9ac48c}{{\bfseries Sun} (glm\-::vec3 new\-Position, glm\-::vec4 new\-Color, float new\-Diameter, int new\-Satellite\-Cap)}\label{class_sun_afa36350139c104164631de3beb9ac48c}
 
 \item 
 \hypertarget{class_sun_a3f3680c0b94268b85cc06e7eff70cb07}{void \hyperlink{class_sun_a3f3680c0b94268b85cc06e7eff70cb07}{Load\-Mesh} (const std\-::string \&file\-Name)}\label{class_sun_a3f3680c0b94268b85cc06e7eff70cb07}
@@ -24,7 +24,7 @@ void \hyperlink{class_sun_a736012a1d04686497506fe25636bcdbb}{Render} (glutil\-::
 \hypertarget{class_sun_af3bfaeceea178c017478d25afa0dff07}{void \hyperlink{class_sun_af3bfaeceea178c017478d25afa0dff07}{Update} ()}\label{class_sun_af3bfaeceea178c017478d25afa0dff07}
 
 \begin{DoxyCompactList}\small\item\em Calls the satellite's update functions (for now). \end{DoxyCompactList}\item 
-bool \hyperlink{class_sun_aa83727a648f0456be4164fd6f2dc1e75}{Add\-Satellite} (const std\-::string \&file\-Name, float offset, float speed, float \hyperlink{class_sun_ac35fc9ebc427d9c8c9fd3ee3a12fce82}{diameter})
+bool \hyperlink{class_sun_a7f287e1cb43a95e9fbadd38feb8df6bc}{Add\-Satellite} (const std\-::string \&file\-Name, glm\-::vec4 satellite\-Color, float offset, float speed, float \hyperlink{class_sun_ac35fc9ebc427d9c8c9fd3ee3a12fce82}{diameter})
 \begin{DoxyCompactList}\small\item\em Adds a satellite to the sun. \end{DoxyCompactList}\item 
 \hypertarget{class_sun_a274dd9d397333db6a916582ac2a19c46}{bool \hyperlink{class_sun_a274dd9d397333db6a916582ac2a19c46}{Remove\-Satellite} ()}\label{class_sun_a274dd9d397333db6a916582ac2a19c46}
 
@@ -67,6 +67,9 @@ bool \hyperlink{class_sun_a07ac47d10ff08b43c74de2b704d0ba5a}{Is\-Clicked} (glm\-
 \hypertarget{class_sun_a0e5857745c6be53c3e2a6e518ff291d6}{std\-::vector$<$ \hyperlink{class_satellite}{Satellite} $\ast$ $>$ \hyperlink{class_sun_a0e5857745c6be53c3e2a6e518ff291d6}{satellites}}\label{class_sun_a0e5857745c6be53c3e2a6e518ff291d6}
 
 \begin{DoxyCompactList}\small\item\em The sun's satellites. \end{DoxyCompactList}\item 
+\hypertarget{class_sun_a195adefc09fba9b0382247bad484df4e}{glm\-::vec4 {\bfseries color}}\label{class_sun_a195adefc09fba9b0382247bad484df4e}
+
+\item 
 \hypertarget{class_sun_acab91a34acacee79bb743089738da5cc}{glm\-::vec3 \hyperlink{class_sun_acab91a34acacee79bb743089738da5cc}{position}}\label{class_sun_acab91a34acacee79bb743089738da5cc}
 
 \begin{DoxyCompactList}\small\item\em The sun's position. \end{DoxyCompactList}\item 
@@ -92,16 +95,17 @@ A sun handles the satellites in the scene. All of the sun's satellites are in a 
 The sun creates its satellites on-\/click based on the matter you have. It is also the main base of your solar system. 
 
 \subsection{Member Function Documentation}
-\hypertarget{class_sun_aa83727a648f0456be4164fd6f2dc1e75}{\index{Sun@{Sun}!Add\-Satellite@{Add\-Satellite}}
+\hypertarget{class_sun_a7f287e1cb43a95e9fbadd38feb8df6bc}{\index{Sun@{Sun}!Add\-Satellite@{Add\-Satellite}}
 \index{Add\-Satellite@{Add\-Satellite}!Sun@{Sun}}
 \subsubsection[{Add\-Satellite}]{\setlength{\rightskip}{0pt plus 5cm}Sun\-::\-Add\-Satellite (
 \begin{DoxyParamCaption}
 \item[{const std\-::string \&}]{file\-Name, }
+\item[{glm\-::vec4}]{satellite\-Color, }
 \item[{float}]{offset, }
 \item[{float}]{speed, }
 \item[{float}]{diameter}
 \end{DoxyParamCaption}
-)}}\label{class_sun_aa83727a648f0456be4164fd6f2dc1e75}
+)}}\label{class_sun_a7f287e1cb43a95e9fbadd38feb8df6bc}
 
 
 Adds a satellite to the sun. 

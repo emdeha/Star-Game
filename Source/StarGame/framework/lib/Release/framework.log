@@ -1,4 +1,4 @@
-﻿Build started 14.8.2012 г. 16:54:11 ч..
+﻿Build started 14.8.2012 г. 18:12:26 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\framework\framework.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "lib\Release\framework.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -206,4 +206,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.96
+Time Elapsed 00:00:01.00

@@ -1,4 +1,4 @@
-﻿Build started 14.8.2012 г. 16:58:09 ч..
+﻿Build started 14.8.2012 г. 18:12:39 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\GUISystem\GUISystem.vcxproj" on node 4 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\GUISystem.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -23,4 +23,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.43
+Time Elapsed 00:00:01.50

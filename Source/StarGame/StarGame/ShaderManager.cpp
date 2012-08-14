@@ -25,9 +25,12 @@
 
 ShaderManager::ShaderManager()
 {
-	blockIndices.insert(std::make_pair(MATERIAL, 0));
-	blockIndices.insert(std::make_pair(LIGHT, 1));
-	blockIndices.insert(std::make_pair(PROJECTION, 2));
+	blockIndices.insert(std::make_pair(BT_MATERIAL, 0));
+	blockIndices.insert(std::make_pair(BT_LIGHT, 1));
+	blockIndices.insert(std::make_pair(BT_PROJECTION, 2));
+
+	uniformBuffers.insert(std::make_pair(UBT_PROJECTION, 0));
+	uniformBuffers.insert(std::make_pair(UBT_LIGHT, 0));
 }
 
 void ShaderManager::LoadLitProgram(const std::string &vertexShader, 
@@ -50,10 +53,10 @@ void ShaderManager::LoadLitProgram(const std::string &vertexShader,
 	GLuint projectionBlock = glGetUniformBlockIndex(litData.theProgram, "Projection");
 
 	if(materialBlock != GL_INVALID_INDEX)
-		glUniformBlockBinding(litData.theProgram, materialBlock, blockIndices[MATERIAL]);
+		glUniformBlockBinding(litData.theProgram, materialBlock, blockIndices[BT_MATERIAL]);
 
-	glUniformBlockBinding(litData.theProgram, lightBlock, blockIndices[LIGHT]);
-	glUniformBlockBinding(litData.theProgram, projectionBlock, blockIndices[PROJECTION]);
+	glUniformBlockBinding(litData.theProgram, lightBlock, blockIndices[BT_LIGHT]);
+	glUniformBlockBinding(litData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
 }
 
 void ShaderManager::LoadUnlitProgram(const std::string &vertexShader, 
@@ -69,7 +72,7 @@ void ShaderManager::LoadUnlitProgram(const std::string &vertexShader,
 	unlitData.objectColorUnif = glGetUniformLocation(unlitData.theProgram, "objectColor");
 
 	GLuint projectionBlock = glGetUniformBlockIndex(unlitData.theProgram, "Projection");
-	glUniformBlockBinding(unlitData.theProgram, projectionBlock, blockIndices[PROJECTION]);
+	glUniformBlockBinding(unlitData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
 }
 
 void ShaderManager::LoadSimpleProgram(const std::string &vertexShader, 
@@ -87,7 +90,7 @@ void ShaderManager::LoadSimpleProgram(const std::string &vertexShader,
 	simpleData.positionAttrib = glGetAttribLocation(simpleData.theProgram, "position");
 
 	GLuint projectionBlock = glGetUniformBlockIndex(simpleData.theProgram, "Projection");	
-	glUniformBlockBinding(simpleData.theProgram, projectionBlock, blockIndices[PROJECTION]);
+	glUniformBlockBinding(simpleData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
 }
 
 void ShaderManager::LoadFontProgram(const std::string &vertexShader, 
@@ -130,5 +133,32 @@ const int ShaderManager::GetBlockIndex(BlockType blockType)
 	if(blockIndices.find(blockType) != blockIndices.end())
 		return blockIndices[blockType];
 
-	else std::printf("The block doesn't exist\n");
+	else 
+	{
+		std::printf("The block doesn't exist\n");
+		return 0;
+	}
+}
+unsigned int ShaderManager::GetUniformBuffer(UniformBufferType uniformBufferType)
+{
+	if(uniformBuffers.find(uniformBufferType) != uniformBuffers.end())
+		return uniformBuffers[uniformBufferType];
+
+	else
+	{
+		std::printf("The uniform buffer doesn't exist\n");
+		return 0;
+	}
+}
+void ShaderManager::SetUniformBuffer(UniformBufferType uniformBufferType,
+									 unsigned int value)
+{
+	if(uniformBuffers.find(uniformBufferType) != uniformBuffers.end())
+		uniformBuffers[uniformBufferType] = value;
+
+	else 
+	{
+		std::printf("The uniform buffer doesn't exist\n");
+		return;
+	}
 }

@@ -27,9 +27,15 @@
 
 enum BlockType
 {
-	MATERIAL,
-	LIGHT, 
-	PROJECTION,
+	BT_MATERIAL,
+	BT_LIGHT, 
+	BT_PROJECTION,
+};
+
+enum UniformBufferType
+{
+	UBT_PROJECTION,
+	UBT_LIGHT,
 };
 
 
@@ -37,6 +43,7 @@ class ShaderManager
 {
 private:
 	std::map<BlockType, int> blockIndices;
+	std::map<UniformBufferType, unsigned int> uniformBuffers; 
 	
 	LitProgData litData;
 	UnlitProgData unlitData;
@@ -57,6 +64,8 @@ public:
 	FontProgData GetFontProgData();
 
 	const int GetBlockIndex(BlockType);
+	unsigned int GetUniformBuffer(UniformBufferType);
+	void SetUniformBuffer(UniformBufferType, unsigned int value);
 };
 
 

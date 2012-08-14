@@ -1,4 +1,4 @@
-﻿Build started 14.8.2012 г. 16:58:09 ч..
+﻿Build started 14.8.2012 г. 18:12:39 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\Universe\Universe.vcxproj" on node 3 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Universe.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -17,4 +17,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.95
+Time Elapsed 00:00:01.04

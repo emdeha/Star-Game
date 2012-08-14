@@ -182,19 +182,6 @@ namespace Utility
 			void Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &data);
 		};
 	}
-
-
-	namespace EventUtility
-	{
-		struct EventArgs
-		{
-
-		};
-
-		class Event
-		{
-		};
-	}
 }
 
 #endif

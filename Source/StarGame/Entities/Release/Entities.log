@@ -1,12 +1,9 @@
-﻿Build started 11.8.2012 г. 18:29:16 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Entities\Entities.vcxproj" on node 3 (rebuild target(s)).
-     1>_PrepareForClean:
-         Deleting file "Release\Entities.lastbuildstate".
-       InitializeBuildStatus:
+﻿Build started 14.8.2012 г. 16:54:13 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Entities\Entities.vcxproj" on node 3 (build target(s)).
+     1>InitializeBuildStatus:
          Creating "Release\Entities.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D RELEASE /D NDEBUG /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Release\Entities.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
-         stdafx.cpp
+         All outputs are up-to-date.
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D RELEASE /D NDEBUG /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Release\Entities.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Lights.cpp PlanetBodies.cpp
          Lights.cpp
          PlanetBodies.cpp
@@ -20,8 +17,8 @@
        FinalizeBuildStatus:
          Deleting file "Release\Entities.unsuccessfulbuild".
          Touching "Release\Entities.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Entities\Entities.vcxproj" (rebuild target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Entities\Entities.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.98
+Time Elapsed 00:00:01.70

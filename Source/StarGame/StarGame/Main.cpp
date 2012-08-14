@@ -20,17 +20,21 @@
 // TODO: Place 'CorrectGamma' in 'Utility'
 // TODO: Make sure everything compiles with the include files removed from 'Microsoft SDKs'
 // TODO: DATA DRIVEN DESIGN!!!
+// TODO: Better error handling.
 
 #include "Main.h"
+#include "ShaderManager.h"
 #include "../Universe/Universe.h"
 #include "../Camera/TopDownCamera.h"
 
+
+ShaderManager shaderManager;
 
 float g_fzNear = 1.0f;
 float g_fzFar = 1000.0f;
 
 float g_gamma = 2.2f;
-
+/*
 LitProgData g_Lit;
 UnlitProgData g_Unlit;
 SimpleProgData g_Simple;
@@ -38,8 +42,8 @@ FontProgData g_Font;
 
 const int g_materialBlockIndex = 0;
 const int g_lightBlockIndex = 1;
-const int g_projectionBlockIndex = 2;
-
+const int g_projectionBlockIndex = 2;*/
+/*
 FontProgData LoadFontProgram(const std::string &strVertexShader, const std::string &strFragmentShader)
 {
 	std::vector<GLuint> shaderList;
@@ -117,18 +121,24 @@ LitProgData LoadLitProgram(const std::string &strVertexShader, const std::string
 
 	if(materialBlock != GL_INVALID_INDEX)
 		glUniformBlockBinding(data.theProgram, materialBlock, g_materialBlockIndex);
+
 	glUniformBlockBinding(data.theProgram, lightBlock, g_lightBlockIndex);
 	glUniformBlockBinding(data.theProgram, projectionBlock, g_projectionBlockIndex);
 
 	return data;
 }
-
+*/
 void InitializePrograms()
 {
-	g_Lit = LoadLitProgram("PN.vert", "GaussianLighting.frag");
+	/*g_Lit = LoadLitProgram("PN.vert", "GaussianLighting.frag");
 	g_Unlit = LoadUnlitProgram("PosTransform.vert", "UniformColor.frag");
 	g_Simple = LoadSimpleProgram("Interp.vert", "Interp.frag");
-	g_Font = LoadFontProgram("Font.vert", "Font.frag");
+	g_Font = LoadFontProgram("Font.vert", "Font.frag");*/
+
+	shaderManager.LoadLitProgram("PN.vert", "GaussianLighting.frag");
+	shaderManager.LoadUnlitProgram("PosTransform.vert", "UniformColor.frag");
+	shaderManager.LoadSimpleProgram("Interp.vert", "Interp.frag");
+	shaderManager.LoadFontProgram("Font.vert", "Font.frag");
 }
 
 GLuint g_projectionUniformBuffer;
@@ -275,16 +285,16 @@ void InitializeScene()
 	universe->AddLayout(LAYOUT_IN_GAME, inGameLayoutInfo);
 }
 
-//Text myText("../data/fonts/AGENCYB.TTF");
+Text myText("../data/fonts/AGENCYB.TTF");
 
-//Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
+
 void Init()
 {
 	InitializePrograms();
 	InitializeScene();
 
-	//myText.Init(glutGet(GLUT_WINDOW_WIDTH), 
-		//		glutGet(GLUT_WINDOW_HEIGHT));
+	myText.Init(glutGet(GLUT_WINDOW_WIDTH), 
+				glutGet(GLUT_WINDOW_HEIGHT));
 
 	glutMouseFunc(HandleMouseButtons);
 	glutMotionFunc(HandleActiveMovement);
@@ -312,20 +322,17 @@ void Init()
 	glBindBuffer(GL_UNIFORM_BUFFER, g_projectionUniformBuffer);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 
-	//Bind the static buffers.
-	glBindBufferRange(GL_UNIFORM_BUFFER, g_lightBlockIndex, g_lightUniformBuffer, 
+	// Bind the static buffers.
+	glBindBufferRange(GL_UNIFORM_BUFFER, shaderManager.GetBlockIndex(LIGHT), g_lightUniformBuffer, 
 		0, sizeof(LightBlockGamma));
 
-	glBindBufferRange(GL_UNIFORM_BUFFER, g_projectionBlockIndex, g_projectionUniformBuffer,
+	glBindBufferRange(GL_UNIFORM_BUFFER, shaderManager.GetBlockIndex(PROJECTION), g_projectionUniformBuffer,
 		0, sizeof(glm::mat4));
 
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 
-//Called to update the display.
-//You should call glutSwapBuffers after all of your rendering to display what you rendered.
-//If you need continuous updates of the screen, call glutPostRedisplay() at the end of the function.
 void Display()
 {
 	glClearDepth(1.0f);
@@ -339,15 +346,18 @@ void Display()
 		g_modelMatrix = modelMatrix.Top();
 
 		universe->UpdateUniverse();
-		universe->RenderUniverse(modelMatrix, g_materialBlockIndex, g_lightUniformBuffer, 
-								 g_Lit, g_Unlit, g_Simple);
+		universe->RenderUniverse(modelMatrix, shaderManager.GetBlockIndex(MATERIAL),
+								 g_lightUniformBuffer, 
+								 shaderManager.GetLitProgData(),
+								 shaderManager.GetUnlitProgData(),
+								 shaderManager.GetSimpleProgData());
 		universe->RenderCurrentLayout();
 	
 	
 
-		/*myText.Print("I am sad", g_Font, glm::vec2(0.0f, 0.0f),
+		myText.Print("I am sad", shaderManager.GetFontProgData(), glm::vec2(0.0f, 0.0f),
 					 glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), 48);
-					 */
+					 
 	}
 	else /*if(universe->IsLayoutOn(LAYOUT_MENU))*/
 	{
@@ -362,8 +372,6 @@ void Display()
 }
 
 
-//Called whenever the window is resized. The new window size is given, in pixels.
-//This is an opportunity to call glViewport or glScissor to keep up with the change in size.
 void Reshape(int width, int height)
 {
 	glutil::MatrixStack persMatrix;
@@ -378,17 +386,9 @@ void Reshape(int width, int height)
 
 	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 	glutPostRedisplay();
-
-
-	//myText.UpdateWindowDimensions(glutGet(GLUT_WINDOW_WIDTH), 
-								 // glutGet(GLUT_WINDOW_HEIGHT));
 }
 
 
-//Called whenever a key on the keyboard was pressed.
-//The key is given by the ''key'' parameter, which is in ASCII.
-//It's often a good idea to have the escape key (ASCII value 27) call glutLeaveMainLoop() to 
-//exit the program.
 void Keyboard(unsigned char key, int x, int y)
 {
 	switch (key)

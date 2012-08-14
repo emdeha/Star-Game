@@ -20,8 +20,12 @@
 /// \file ProgramData.h
 /// \brief Contains the structures holding information for various shader programs.
 
+
 #ifndef PROGRAM_DATA_H
 #define PROGRAM_DATA_H
+
+
+#include <glload/gl_3_3.h>
 
 
 struct LitProgData

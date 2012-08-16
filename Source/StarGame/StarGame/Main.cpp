@@ -26,6 +26,7 @@
 #include "Main.h"
 #include "ShaderManager.h"
 #include "DisplayData.h"
+#include "../framework/EventSystem.h"
 #include "../Universe/Universe.h"
 #include "../Camera/TopDownCamera.h"
 
@@ -66,14 +67,21 @@ void HandleMouse()
 			(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
 			 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 		{
-			if(mainSun->RemoveSatellite() != true)
+			EventArg rightClickEventArg[1];
+			rightClickEventArg[0].argType = "rightClick";
+			rightClickEventArg[0].argument.varType = TYPE_BOOL;
+			rightClickEventArg[0].argument.varBool = true; // `true` for right, `false` for left.
+			Event rightClickEvent = Event(1, EVENT_TYPE_ON_CLICK, rightClickEventArg);
+			
+			mainSun->OnEvent(rightClickEvent);
+			/*if(mainSun->RemoveSatellite() != true)
 			{
 				std::printf("No satellites.\n");
 			}
 			else 
 			{
 				g_initialOffset -= 0.75f;
-			}
+			}*/
 		}
 	}
 
@@ -83,13 +91,20 @@ void HandleMouse()
 			(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
 			 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 		{
-			if(mainSun->AddSatellite("UnitSphere.xml", 
+			/*if(mainSun->AddSatellite("UnitSphere.xml", 
 									 glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
 									 g_initialOffset, 10.0f, 0.25f) == true)
 			{
 				g_initialOffset += 0.75f;
 			}
-			else std::printf("Satellite cap reached!\n");
+			else std::printf("Satellite cap reached!\n");*/
+			EventArg leftClickEventArg[1];
+			leftClickEventArg[0].argType = "rightClick";
+			leftClickEventArg[0].argument.varType = TYPE_BOOL;
+			leftClickEventArg[0].argument.varBool = false; // `true` for right, `false` for left.
+			Event leftClickEvent = Event(1, EVENT_TYPE_ON_CLICK, leftClickEventArg);
+
+			mainSun->OnEvent(leftClickEvent);
 		}
 
 		std::vector<Satellite*> sunSatellites = mainSun->GetSatellites();
@@ -100,7 +115,13 @@ void HandleMouse()
 				(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
 					glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 			{
-				std::printf("Satellite clicked!!!\n");
+				EventArg satelliteClickedEventArg[1];
+				satelliteClickedEventArg[0].argType = "";
+				satelliteClickedEventArg[0].argument.varType = TYPE_NONE;
+				Event satelliteClickedEvent = Event(1, EVENT_TYPE_ON_CLICK, satelliteClickedEventArg);
+
+				(*iter)->OnEvent(satelliteClickedEvent);
+				//std::printf("Satellite clicked!!!\n");
 			}
 		}
 	}
@@ -113,7 +134,13 @@ void HandleMouse()
 			(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
 				glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 		{
-			std::printf("Satellite hovered!!!\n");
+			EventArg satelliteHoveredEventArg[1];
+			satelliteHoveredEventArg[0].argType = "";
+			satelliteHoveredEventArg[0].argument.varType = TYPE_NONE;
+			Event satelliteHoveredEvent = Event(1, EVENT_TYPE_ON_HOVER, satelliteHoveredEventArg);
+
+			(*iter)->OnEvent(satelliteHoveredEvent);
+			//std::printf("Satellite hovered!!!\n");
 		}
 	}
 

@@ -158,6 +158,7 @@ void Satellite::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 		glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
 	}
 
+	// TODO: Put in the OnEvent function.
 	if(isClicked)
 	{
 		LoadClickedAnimation(modelMatrix, interpData, gamma);
@@ -171,6 +172,23 @@ void Satellite::Update()
 
 	position.x = cosf(currTimeThroughLoop * (2.0f * PI)) * offsetFromSun;
 	position.y = sinf(currTimeThroughLoop * (2.0f * PI)) * offsetFromSun;
+}
+
+void Satellite::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
+	case EVENT_TYPE_ON_CLICK:
+		std::printf("Satellite clicked!\n");
+		isClicked = true;
+		break;
+	case EVENT_TYPE_ON_HOVER:
+		std::printf("Satellite hovered!\n");
+		isClicked = true;
+		break;
+	default:
+		break;
+	};
 }
 
 bool Satellite::IsClicked(glm::mat4 projMat, glm::mat4 modelMat, 
@@ -203,10 +221,10 @@ bool Satellite::IsClicked(glm::mat4 projMat, glm::mat4 modelMat,
 	if(Utility::Intersections::RayIntersectsEllipsoid(mouseRay, parentPosition, outerRadius, distMat.Top()) && 
 	   !Utility::Intersections::RayIntersectsEllipsoid(mouseRay, parentPosition, innerRadius, distMat.Top()))
 	{
-		isClicked = true;
+		//isClicked = true;
 		return true;
 	}
-	isClicked = false;
+    isClicked = false;
 	return false;
 }
 
@@ -283,6 +301,7 @@ Sun::Sun()
 	position = glm::vec3();
 	diameter = 0.0f;
 	satelliteCap = 0;
+	satelliteOffset = 1.0f;
 	isClicked = false;
 	isSatelliteClicked = false;
 }
@@ -295,6 +314,7 @@ Sun::Sun(glm::vec3 newPosition, glm::vec4 newColor,
 	position = newPosition;
 	diameter = newDiameter;
 	satelliteCap = newSatelliteCap;
+	satelliteOffset = 1.0f;
 	isClicked = false;
 	isSatelliteClicked = false;
 }
@@ -355,6 +375,41 @@ void Sun::Update()
 	}
 }
 
+void Sun::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
+	case EVENT_TYPE_ON_CLICK:
+		if(_event.GetArgument("rightClick").varBool == true)
+		{
+			if(this->RemoveSatellite() != true)
+			{
+				std::printf("No satellites left.\n");
+			}
+			else 
+			{
+				satelliteOffset -= 0.75f;
+			}
+		}
+		else if(_event.GetArgument("rightClick").varBool == false)
+		{
+			if(this->AddSatellite("UnitSphere.xml", 
+									 glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
+									 satelliteOffset, 10.0f, 0.25f) == true)
+			{
+				satelliteOffset += 0.75f;
+			}
+			else 
+			{
+				std::printf("Satellite cap reached!\n");
+			}
+		}
+		break;
+	default:
+		break;
+	}
+}
+
 bool Sun::AddSatellite(const std::string &fileName, 
 					   glm::vec4 satelliteColor,
 					   float offset, float speed, float diameter)
@@ -402,10 +457,10 @@ bool Sun::IsClicked(glm::mat4 projMat, glm::mat4 modelMat,
 
 	if(Utility::Intersections::RayIntersectsSphere(mouseRay, position, diameter / 2.0f))
 	{
-		isClicked = true;
+		//isClicked = true;
 		return true;
 	}
-	isClicked = false;
+	//isClicked = false;
 	return false;
 }
 

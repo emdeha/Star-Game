@@ -31,6 +31,7 @@
 #include "../framework/Mesh.h"
 #include "../framework/Timer.h"
 #include "../framework/Utility.h"
+#include "../framework/EventSystem.h"
 
 #include "../ProgramData/ProgramData.h"
 #include "../Mouse/Mouse.h"
@@ -141,6 +142,9 @@ public:
 	/// \f$position.y = sin(currTimeThroughLoop \times (2 \times \pi)) \times offsetFromSun\f$
 	void Update();
 
+
+	void OnEvent(Event &_event);
+
 	/// \fn IsClicked
 	/// \brief Checks for click on the satellite.
 
@@ -236,6 +240,8 @@ private:
 	bool isClicked;
 	bool isSatelliteClicked;
 
+	float satelliteOffset;
+
 public:
 	Sun();
 	Sun(glm::vec3 newPosition, glm::vec4 newColor, 
@@ -260,6 +266,8 @@ public:
 	/// \fn Update
 	/// \brief Calls the satellite's update functions (for now).
 	void Update();
+
+	void OnEvent(Event &_event);
 
 	/// \fn AddSatellite
 	/// \brief Adds a satellite to the sun.

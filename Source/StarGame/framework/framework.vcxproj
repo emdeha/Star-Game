@@ -105,6 +105,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="directories.h" />
+    <ClInclude Include="EventSystem.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="framework_all.h" />
     <ClInclude Include="Interpolators.h" />
@@ -123,6 +124,7 @@
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EventSystem.cpp" />
     <ClCompile Include="framework.cpp">
     </ClCompile>
     <ClCompile Include="Mesh.cpp">

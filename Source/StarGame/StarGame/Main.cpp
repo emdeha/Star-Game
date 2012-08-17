@@ -67,13 +67,17 @@ void HandleMouse()
 			(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
 			 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 		{
-			EventArg rightClickEventArg[1];
+			EventArg rightClickEventArg[2];
 			rightClickEventArg[0].argType = "rightClick";
 			rightClickEventArg[0].argument.varType = TYPE_BOOL;
 			rightClickEventArg[0].argument.varBool = true; // `true` for right, `false` for left.
-			Event rightClickEvent = Event(1, EVENT_TYPE_ON_CLICK, rightClickEventArg);
+			rightClickEventArg[1].argType = "object";
+			rightClickEventArg[1].argument.varType = TYPE_STRING;
+			strcpy(rightClickEventArg[1].argument.varString, "sun");
+			Event rightClickEvent = Event(2, EVENT_TYPE_ON_CLICK, rightClickEventArg);
 			
 			mainSun->OnEvent(rightClickEvent);
+			universe->OnEvent(rightClickEvent);
 			/*if(mainSun->RemoveSatellite() != true)
 			{
 				std::printf("No satellites.\n");
@@ -98,13 +102,17 @@ void HandleMouse()
 				g_initialOffset += 0.75f;
 			}
 			else std::printf("Satellite cap reached!\n");*/
-			EventArg leftClickEventArg[1];
+			EventArg leftClickEventArg[2];
 			leftClickEventArg[0].argType = "rightClick";
 			leftClickEventArg[0].argument.varType = TYPE_BOOL;
 			leftClickEventArg[0].argument.varBool = false; // `true` for right, `false` for left.
-			Event leftClickEvent = Event(1, EVENT_TYPE_ON_CLICK, leftClickEventArg);
+			leftClickEventArg[1].argType = "object";
+			leftClickEventArg[1].argument.varType = TYPE_STRING;
+			strcpy(leftClickEventArg[1].argument.varString, "sun"); 
+			Event leftClickEvent = Event(2, EVENT_TYPE_ON_CLICK, leftClickEventArg);
 
 			mainSun->OnEvent(leftClickEvent);
+			universe->OnEvent(leftClickEvent);
 		}
 
 		std::vector<Satellite*> sunSatellites = mainSun->GetSatellites();
@@ -115,12 +123,17 @@ void HandleMouse()
 				(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
 					glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 			{
-				EventArg satelliteClickedEventArg[1];
-				satelliteClickedEventArg[0].argType = "";
-				satelliteClickedEventArg[0].argument.varType = TYPE_NONE;
-				Event satelliteClickedEvent = Event(1, EVENT_TYPE_ON_CLICK, satelliteClickedEventArg);
+				EventArg satelliteClickedEventArg[2];
+				satelliteClickedEventArg[0].argType = "rightClick";
+				satelliteClickedEventArg[0].argument.varType = TYPE_BOOL;
+				satelliteClickedEventArg[0].argument.varBool = false;
+				satelliteClickedEventArg[1].argType = "object";
+				satelliteClickedEventArg[1].argument.varType = TYPE_STRING;
+				strcpy(satelliteClickedEventArg[1].argument.varString, "satellite");
+				Event satelliteClickedEvent = Event(2, EVENT_TYPE_ON_CLICK, satelliteClickedEventArg);
 
 				(*iter)->OnEvent(satelliteClickedEvent);
+				universe->OnEvent(satelliteClickedEvent);
 				//std::printf("Satellite clicked!!!\n");
 			}
 		}
@@ -134,12 +147,20 @@ void HandleMouse()
 			(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
 				glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 		{
-			EventArg satelliteHoveredEventArg[1];
-			satelliteHoveredEventArg[0].argType = "";
-			satelliteHoveredEventArg[0].argument.varType = TYPE_NONE;
-			Event satelliteHoveredEvent = Event(1, EVENT_TYPE_ON_HOVER, satelliteHoveredEventArg);
+			EventArg satelliteHoveredEventArg[2];
+
+			satelliteHoveredEventArg[0].argType = "rightClick";
+			satelliteHoveredEventArg[0].argument.varType = TYPE_BOOL;
+			satelliteHoveredEventArg[0].argument.varBool = false;
+
+			satelliteHoveredEventArg[1].argType = "object";
+			satelliteHoveredEventArg[1].argument.varType = TYPE_STRING;
+			strcpy(satelliteHoveredEventArg[1].argument.varString, "satellite");
+
+			Event satelliteHoveredEvent = Event(2, EVENT_TYPE_ON_HOVER, satelliteHoveredEventArg);
 
 			(*iter)->OnEvent(satelliteHoveredEvent);
+			universe->OnEvent(satelliteHoveredEvent);
 			//std::printf("Satellite hovered!!!\n");
 		}
 	}
@@ -181,6 +202,7 @@ void InitializePrograms()
 	shaderManager.LoadLitProgram("PN.vert", "GaussianLighting.frag");
 	shaderManager.LoadUnlitProgram("PosTransform.vert", "UniformColor.frag");
 	shaderManager.LoadSimpleProgram("Interp.vert", "Interp.frag");
+	shaderManager.LoadSimpleProgramOrtho("Simple.vert", "Simple.frag");
 	shaderManager.LoadFontProgram("Font.vert", "Font.frag");
 }
 
@@ -203,10 +225,15 @@ void InitializeScene()
 	universe->AddLayout(LAYOUT_IN_GAME, inGameLayoutInfo);
 }
 
+Button myButton("sample", "Sample", glm::vec2(0.2f, 0.2f));
+
 void Init()
 {
 	InitializePrograms();
 	InitializeScene();
+
+	myButton.Init("../data/fonts/AGENCYR.TTF",
+				  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	glutMouseFunc(HandleMouseButtons);
 	glutMotionFunc(HandleActiveMovement);
@@ -250,7 +277,6 @@ void Init()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-
 void Display()
 {
 	glClearDepth(1.0f);
@@ -270,8 +296,9 @@ void Display()
 								 shaderManager.GetLitProgData(),
 								 shaderManager.GetUnlitProgData(),
 								 shaderManager.GetSimpleProgData());
-		universe->RenderCurrentLayout();
-					 
+
+		myButton.Draw(shaderManager.GetFontProgData(), shaderManager.GetSimpleProgDataOrtho());
+		universe->RenderCurrentLayout();					 
 	}
 	else /*if(universe->IsLayoutOn(LAYOUT_MENU))*/
 	{
@@ -311,7 +338,14 @@ void Keyboard(unsigned char key, int x, int y)
 		glutLeaveMainLoop();
 		return;
 	case 32:
-		universe->PlayMusic(MUSIC_BACKGROUND);
+		EventArg spaceClickedEventArg[1];
+		spaceClickedEventArg[0].argType = "command";
+		spaceClickedEventArg[0].argument.varType = TYPE_STRING;
+		strcpy(spaceClickedEventArg[0].argument.varString, "playBackgroundMusic");
+		Event spaceClickedEvent = Event(1, EVENT_TYPE_SPACE_BTN_CLICK, spaceClickedEventArg);
+
+		universe->OnEvent(spaceClickedEvent);
+		//universe->PlayMusic(MUSIC_BACKGROUND);
 		break;
 	}
 

@@ -1,5 +1,5 @@
-﻿Build started 6.8.2012 г. 18:49:00 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Audio\Audio.vcxproj" on node 3 (build target(s)).
+﻿Build started 17.8.2012 г. 16:12:43 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Audio\Audio.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Audio.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
@@ -17,4 +17,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.50
+Time Elapsed 00:00:04.99

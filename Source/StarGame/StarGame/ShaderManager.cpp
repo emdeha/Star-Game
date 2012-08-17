@@ -93,6 +93,20 @@ void ShaderManager::LoadSimpleProgram(const std::string &vertexShader,
 	glUniformBlockBinding(simpleData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
 }
 
+void ShaderManager::LoadSimpleProgramOrtho(const std::string &vertexShader,
+										   const std::string &fragmentShader)
+{
+	std::vector<GLuint> shaderList;
+
+	shaderList.push_back(Framework::LoadShader(GL_VERTEX_SHADER, vertexShader));
+	shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, fragmentShader));
+
+	simpleDataOrtho.theProgram = Framework::CreateProgram(shaderList);
+	simpleDataOrtho.colorUnif = glGetUniformLocation(simpleDataOrtho.theProgram, "color");
+
+	simpleDataOrtho.positionAttrib = glGetAttribLocation(simpleDataOrtho.theProgram, "position");
+}
+
 void ShaderManager::LoadFontProgram(const std::string &vertexShader, 
 								    const std::string &fragmentShader)
 {
@@ -121,6 +135,10 @@ UnlitProgData ShaderManager::GetUnlitProgData()
 SimpleProgData ShaderManager::GetSimpleProgData()
 {
 	return simpleData;
+}
+SimpleProgData ShaderManager::GetSimpleProgDataOrtho()
+{
+	return simpleDataOrtho;
 }
 FontProgData ShaderManager::GetFontProgData()
 {

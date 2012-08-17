@@ -48,7 +48,6 @@ struct UnlitProgData
 	GLuint modelToCameraMatrixUnif;
 };
 
-// TODO: Should be 'SimpleProgData' or something like that
 struct SimpleProgData
 {
 	GLuint theProgram;

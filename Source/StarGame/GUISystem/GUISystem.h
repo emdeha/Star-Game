@@ -29,6 +29,7 @@
 #include "../framework/framework.h"
 #include "../framework/Utility.h"
 #include "../framework/Text.h"
+#include "../framework/EventSystem.h"
 
 #include "../ProgramData/ProgramData.h"
 
@@ -39,6 +40,7 @@ enum LayoutType
 
 	LAYOUT_SUB_NEW_GAME,
 	LAYOUT_SUB_LOAD_GAME,
+	LAYOUT_SUB_OPTIONS,
 };
 
 struct LayoutInfo
@@ -80,19 +82,27 @@ public:
 class Button
 {
 private:
+	Text textTitle;
+
 	std::string name;
+	std::string title;
 
 	glm::vec2 position;
 
-	Text buttonText;
+	GLuint vbo;
+	GLuint vao;
 
 public:
 	Button();
-	Button(glm::vec2 newPosition);
+	Button(const std::string &newName, const std::string &newTitle,
+		   glm::vec2 newPosition);
 
-	void HandleEvents();
+	void Init(const std::string fontName,
+			  int windowWidth, int windowHeight);
 
-	void Draw();
+	void OnEvent(Event &_event);
+
+	void Draw(FontProgData fontData, SimpleProgData simpleData);
 };
 
 #endif

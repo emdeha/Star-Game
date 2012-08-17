@@ -1,5 +1,5 @@
-﻿Build started 14.8.2012 г. 18:12:41 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Mouse\Mouse.vcxproj" on node 3 (build target(s)).
+﻿Build started 17.8.2012 г. 17:41:25 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Mouse\Mouse.vcxproj" on node 4 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Mouse.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
@@ -17,4 +17,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.69
+Time Elapsed 00:00:00.66

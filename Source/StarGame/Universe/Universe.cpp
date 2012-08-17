@@ -68,11 +68,32 @@ void Universe::UpdateUniverse()
 	for(int i = 0; i < sizeSuns; i++)
 	{
 		suns[i]->Update();
-		if(suns[i]->GetIsClicked())
+		//if(suns[i]->GetIsClicked())
+		//{
+		//	universeMusic.Play(MUSIC_ON_SUN_CLICK);
+		//}
+	}
+}
+
+void Universe::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
+	case EVENT_TYPE_ON_CLICK:
+		if(strcmp(_event.GetArgument("object").varString, "sun") == 0)
 		{
 			universeMusic.Play(MUSIC_ON_SUN_CLICK);
 		}
-	}
+		break;
+	case EVENT_TYPE_SPACE_BTN_CLICK:
+		if(strcmp(_event.GetArgument("command").varString, "playBackgroundMusic") == 0)
+		{
+			universeMusic.Play(MUSIC_BACKGROUND);
+		}
+		break;
+	default:
+		break;
+	};
 }
 
 void Universe::StartUniverse()

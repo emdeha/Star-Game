@@ -55,6 +55,11 @@ private:
 	int windowWidth;
 	int windowHeight;
 
+	float textMinWidth;
+	float textMaxWidth;
+	float textMinHeight;
+	float textMaxHeight;
+
 	GLuint vbo;
 	GLuint vao;
 
@@ -83,6 +88,24 @@ public:
 			   glm::vec2 position,
 			   glm::vec4 color, 
 			   int fontSize);
+
+
+	float GetTextMinWidth()
+	{
+		return textMinWidth;
+	}
+	float GetTextMaxWidth()
+	{
+		return textMaxWidth;
+	}
+	float GetTextMinHeight()
+	{
+		return textMinHeight;
+	}
+	float GetTextMaxHeight()
+	{
+		return textMaxHeight;
+	}
 };
 
 

@@ -83,7 +83,7 @@ x- Save/Load games
  
 
 2nd cycle:
--- Font system
+v- Font system
 -- GUI system
 v- Sound system
 

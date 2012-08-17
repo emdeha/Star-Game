@@ -21,6 +21,7 @@
 
 Text::Text()
 {
+
 }
 
 Text::Text(const char *fontName)
@@ -36,6 +37,11 @@ Text::Text(const char *fontName)
 		std::printf("Could not open font file.\n");
 		return;
 	}	
+
+	textMinWidth = 3.0f;
+	textMaxWidth = 0.0f;
+	textMinHeight = 3.0f;
+	textMaxHeight = 0.0f;
 }
 
 void Text::Init(int newWindowWidth, int newWindowHeight)
@@ -83,7 +89,6 @@ void Text::Print(const char *text, const FontProgData &fontData,
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
-
 	for(const char *p = text; *p; p++)
 	{
 		if(FT_Load_Char(fontFace, *p, FT_LOAD_RENDER))
@@ -119,7 +124,19 @@ void Text::Print(const char *text, const FontProgData &fontData,
 
 		position.x += (fontFace->glyph->advance.x >> 6) * scale.x;
 		position.y += (fontFace->glyph->advance.y >> 6) * scale.y;
+
+		if(textMinHeight > -finalCoordinates.y - finalCoordinates.w)
+			textMinHeight = -finalCoordinates.y - finalCoordinates.w;
+		if(textMaxHeight < -finalCoordinates.y)
+			textMaxHeight = -finalCoordinates.y;
+
+		if(textMaxWidth < finalCoordinates.x + finalCoordinates.z)
+			textMaxWidth = finalCoordinates.x + finalCoordinates.z;
+		if(textMinWidth > finalCoordinates.x)
+			textMinWidth = finalCoordinates.x;
 	}
+
+	//std::printf("%f, %f\n", textMaxHeight, textMinHeight);
 
 	glDisableVertexAttribArray(fontData.positionAttrib);
 	glDeleteTextures(1, &texture);

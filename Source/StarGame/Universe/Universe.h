@@ -30,6 +30,8 @@
 #include "../Audio/Audio.h"
 #include "../GUISystem/GUISystem.h"
 
+#include "../framework/EventSystem.h"
+
 /// \class Universe
 /// \brief This class updates, renders and maintains the game world a.k.a. Universe.
 class Universe
@@ -51,6 +53,8 @@ public:
 	/// \fn UpdateUniverse
 	/// \brief Goes through the game objects and calls their update functions.
 	void UpdateUniverse();
+
+	void OnEvent(Event &_event);
 
 	/// \fn RenderUniverse
 	/// \brief Goes through the game objects and calls their render functions.

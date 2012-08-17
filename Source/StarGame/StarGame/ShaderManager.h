@@ -48,6 +48,7 @@ private:
 	LitProgData litData;
 	UnlitProgData unlitData;
 	SimpleProgData simpleData;
+	SimpleProgData simpleDataOrtho;
 	FontProgData fontData;
 
 public:
@@ -56,11 +57,13 @@ public:
 	void LoadLitProgram(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadUnlitProgram(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadSimpleProgram(const std::string &vertexShader, const std::string &fragmentShader);
+	void LoadSimpleProgramOrtho(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadFontProgram(const std::string &vertexShader, const std::string &fragmentShader);
 
 	LitProgData GetLitProgData();
 	UnlitProgData GetUnlitProgData();
 	SimpleProgData GetSimpleProgData();
+	SimpleProgData GetSimpleProgDataOrtho();
 	FontProgData GetFontProgData();
 
 	const int GetBlockIndex(BlockType);

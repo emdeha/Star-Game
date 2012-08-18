@@ -19,7 +19,7 @@
 #include "GUISystem.h"
 
 
-GLfloat bufferData[24];
+//GLfloat bufferData[24];
 
 // TODO: Make data-driven
 
@@ -103,7 +103,7 @@ void Button::Init(const std::string fontName,
 	bufferData[22] = 0.0f; bufferData[23] = 1.0f;	
 }
 
-void Button::Draw(FontProgData fontData, SimpleProgData simpleData)
+void Button::Draw(const FontProgData &fontData, const SimpleProgData &simpleData)
 {
 	glUseProgram(simpleData.theProgram);
 	glBindVertexArray(vao);
@@ -151,4 +151,9 @@ void Button::OnEvent(Event &_event)
 		std::printf("Button \'%s\' clicked\n", this->name.c_str());
 		break;
 	}
+}
+
+std::string Button::GetName()
+{
+	return name;
 }

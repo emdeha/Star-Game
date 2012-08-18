@@ -50,14 +50,15 @@ void Universe::RenderUniverse(glutil::MatrixStack &modelMatrix,
 		suns[i]->Render(modelMatrix, materialBlockIndex, universeGamma, litData, unLitData, interpData);
 	}
 }
-void Universe::RenderCurrentLayout()
+void Universe::RenderCurrentLayout(const FontProgData &fontData,
+								   const SimpleProgData &simpleData)
 {
 	for(std::map<LayoutType, Layout>::iterator iter = universeLayouts.begin();
 		iter != universeLayouts.end(); ++iter)
 	{
 		if(iter->second.IsSet())
 		{
-			iter->second.Draw();
+			iter->second.Draw(fontData, simpleData);
 			break;
 		}
 	}
@@ -83,6 +84,16 @@ void Universe::OnEvent(Event &_event)
 		if(strcmp(_event.GetArgument("object").varString, "sun") == 0)
 		{
 			universeMusic.Play(MUSIC_ON_SUN_CLICK);
+		}
+		if(strcmp(_event.GetArgument("object").varString, "exitButton") == 0)
+		{
+			this->SetLayout(LAYOUT_MENU, true);
+			this->SetLayout(LAYOUT_IN_GAME, false);
+		}
+		if(strcmp(_event.GetArgument("object").varString, "newGameButton") == 0)
+		{
+			this->SetLayout(LAYOUT_MENU, false);
+			this->SetLayout(LAYOUT_IN_GAME, true);
 		}
 		break;
 	case EVENT_TYPE_SPACE_BTN_CLICK:
@@ -146,6 +157,16 @@ void Universe::AddLayout(LayoutType layoutType, LayoutInfo layoutInfo)
 {
 	universeLayouts.insert(std::make_pair(layoutType, Layout(layoutType, layoutInfo)));
 }
+Layout Universe::GetLayout(LayoutType layoutType)
+{
+	if(this->HasLayout(layoutType))
+	{
+		return universeLayouts[layoutType];
+	}
+
+	// TODO: Better error handling.
+	std::printf("No such layout\n");
+}
 bool Universe::HasLayout(LayoutType layoutType)
 {
 	return universeLayouts.find(layoutType) != universeLayouts.end();
@@ -157,6 +178,16 @@ bool Universe::IsLayoutOn(LayoutType layoutType)
 		return universeLayouts[layoutType].IsSet();
 	}
 	return false;
+}
+void Universe::SetLayout(LayoutType layoutType, bool isSet)
+{
+	if(this->HasLayout(layoutType))
+	{
+		universeLayouts[layoutType].Set(isSet);
+	}
+
+	// TODO: Better error handling.
+	else std::printf("No such layout\n");
 }
 
 

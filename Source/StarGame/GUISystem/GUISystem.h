@@ -66,10 +66,12 @@ public:
 	Layout();
 	Layout(LayoutType newLayoutType, LayoutInfo newLayoutInfo);
 
-	void AddButtonControl(const Button &newControl);
+	void AddButtonControl(const Button &newButtonControl);
 	void AddSubLayout(const Layout &newSubLayout);
 
-	void Draw();
+	Button GetButtonControl(const std::string &buttonName);
+
+	void Draw(const FontProgData &fontData, const SimpleProgData &simpleData);
 
 	LayoutType GetLayoutType();
 
@@ -83,6 +85,8 @@ class Button
 {
 private:
 	Text textTitle;
+
+	GLfloat bufferData[24];
 
 	std::string name;
 	std::string title;
@@ -124,8 +128,11 @@ public:
 
 	void OnEvent(Event &_event);
 
-	void Draw(FontProgData fontData, SimpleProgData simpleData);
+	void Draw(const FontProgData &fontData, const SimpleProgData &simpleData);
 	void Update(int newWindowWidth, int newWindowHeight);
+
+
+	std::string GetName();
 };
 
 #endif

@@ -58,6 +58,13 @@ Variant Event::GetArgument(const std::string &argType)
 		if(args[i].argType == argType)
 			return args[i].argument;
 	}
+
+	// TODO: Return a `false` argument if no argument is found
+	Variant falseVariant;
+	falseVariant.varType = TYPE_STRING;
+	strcpy(falseVariant.varString, "falseVariant");
+
+	return falseVariant;
 }
 
 EventType Event::GetType()

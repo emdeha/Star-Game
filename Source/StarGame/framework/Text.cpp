@@ -38,10 +38,10 @@ Text::Text(const char *fontName)
 		return;
 	}	
 
-	textMinWidth = 3.0f;
-	textMaxWidth = 0.0f;
-	textMinHeight = 3.0f;
-	textMaxHeight = 0.0f;
+	textMinWidth = 999.0f;
+	textMaxWidth = -999.0f;
+	textMinHeight = 999.0f;
+	textMaxHeight = -999.0f;
 }
 
 void Text::Init(int newWindowWidth, int newWindowHeight)
@@ -157,14 +157,15 @@ void Text::ComputeTextDimensions(const char *text, glm::vec2 position, int fontS
 		position.x += (fontFace->glyph->advance.x >> 6) * scale.x;
 		position.y += (fontFace->glyph->advance.y >> 6) * scale.y;
 
+
 		if(textMinHeight > -finalCoordinates.y - finalCoordinates.w)
 			textMinHeight = -finalCoordinates.y - finalCoordinates.w;
 		if(textMaxHeight < -finalCoordinates.y)
 			textMaxHeight = -finalCoordinates.y;
 
-		if(textMaxWidth < finalCoordinates.x + finalCoordinates.z)
+		if(textMaxWidth < fabsf(finalCoordinates.x + finalCoordinates.z))
 			textMaxWidth = finalCoordinates.x + finalCoordinates.z;
-		if(textMinWidth > finalCoordinates.x)
+		if(textMinWidth > fabsf(finalCoordinates.x))
 			textMinWidth = finalCoordinates.x;
 	}
 };

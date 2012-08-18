@@ -53,9 +53,6 @@ float g_musicVolumeMaster = 0.1f;
 float g_musicVolumeInteraction = 0.1f;
 
 
-Button myButton("sample", "Sample", glm::vec2(0.2f, 0.2f),
-				0.03f, 0.03f, 0.1f, 0.1f,
-				48);
 
 void HandleMouse()
 {
@@ -70,15 +67,6 @@ void HandleMouse()
 			(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
 			 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 		{
-			/*EventArg rightClickEventArg[2];
-			rightClickEventArg[0].argType = "rightClick";
-			rightClickEventArg[0].argument.varType = TYPE_BOOL;
-			rightClickEventArg[0].argument.varBool = true; // `true` for right, `false` for left.
-			rightClickEventArg[1].argType = "object";
-			rightClickEventArg[1].argument.varType = TYPE_STRING;
-			strcpy(rightClickEventArg[1].argument.varString, "sun");
-			Event rightClickEvent = Event(2, EVENT_TYPE_ON_CLICK, rightClickEventArg);*/
-			
 			Event rightClickSunEvent = StockEvents::EventOnRightClick("sun");
 
 			mainSun->OnEvent(rightClickSunEvent);
@@ -88,37 +76,45 @@ void HandleMouse()
 
 	if(userMouse.IsLeftButtonDown())
 	{
-		if(myButton.IsMouseOn(
-			glm::vec2(userMouse.GetClipSpacePosition(windowWidth, windowHeight))))
+		if(universe->IsLayoutOn(LAYOUT_IN_GAME))
 		{
-			/*EventArg rightClickEventArg[1];
-			rightClickEventArg[0].argType = "rightClick";
-			rightClickEventArg[0].argument.varType = TYPE_BOOL;
-			rightClickEventArg[0].argument.varBool = true; // `true` for right, `false` for left.
-			
-			Event rightClickEvent = Event(1, EVENT_TYPE_ON_CLICK, rightClickEventArg);*/
+			if(
+			   universe->GetLayout(LAYOUT_IN_GAME).
+			   GetButtonControl("exit").
+			   IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("exitButton");
 
-			Event leftClickButtonEvent = StockEvents::EventOnLeftClick("sampleButton");
+				universe->GetLayout(LAYOUT_IN_GAME).GetButtonControl("exit").OnEvent(leftClickButtonEvent);
 
-			myButton.OnEvent(leftClickButtonEvent);
-			
-			userMouse.ReleaseLeftButton();
-			return;
+				universe->OnEvent(leftClickButtonEvent);
+
+				userMouse.ReleaseLeftButton();
+				return;
+			}
+		}
+
+		if(universe->IsLayoutOn(LAYOUT_MENU))
+		{
+			if(
+				universe->GetLayout(LAYOUT_MENU).
+				GetButtonControl("newGame").
+				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("newGameButton");
+
+				universe->GetLayout(LAYOUT_MENU).GetButtonControl("newGame").OnEvent(leftClickButtonEvent);
+
+				universe->OnEvent(leftClickButtonEvent);
+			}
 		}
 
 		if(mainSun->IsClicked
 			(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
 			 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 		{
-			/*EventArg leftClickEventArg[2];
-			leftClickEventArg[0].argType = "rightClick";
-			leftClickEventArg[0].argument.varType = TYPE_BOOL;
-			leftClickEventArg[0].argument.varBool = false; // `true` for right, `false` for left.
-			leftClickEventArg[1].argType = "object";
-			leftClickEventArg[1].argument.varType = TYPE_STRING;
-			strcpy(leftClickEventArg[1].argument.varString, "sun"); 
-			Event leftClickEvent = Event(2, EVENT_TYPE_ON_CLICK, leftClickEventArg);*/
-
 			Event leftClickSunEvent = StockEvents::EventOnLeftClick("sun");
 
 			mainSun->OnEvent(leftClickSunEvent);
@@ -133,15 +129,6 @@ void HandleMouse()
 				(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
 					glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 			{
-				/*EventArg satelliteClickedEventArg[2];
-				satelliteClickedEventArg[0].argType = "rightClick";
-				satelliteClickedEventArg[0].argument.varType = TYPE_BOOL;
-				satelliteClickedEventArg[0].argument.varBool = false;
-				satelliteClickedEventArg[1].argType = "object";
-				satelliteClickedEventArg[1].argument.varType = TYPE_STRING;
-				strcpy(satelliteClickedEventArg[1].argument.varString, "satellite");
-				Event satelliteClickedEvent = Event(2, EVENT_TYPE_ON_CLICK, satelliteClickedEventArg);*/
-
 				Event leftClickSatelliteEvent = StockEvents::EventOnLeftClick("satellite");
 
 				(*iter)->OnEvent(leftClickSatelliteEvent);
@@ -164,16 +151,6 @@ void HandleMouse()
 			(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
 				glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 		{
-			/*EventArg satelliteHoveredEventArg[1];
-
-			satelliteHoveredEventArg[0].argType = "rightClick";
-			satelliteHoveredEventArg[0].argument.varType = TYPE_BOOL;
-			satelliteHoveredEventArg[0].argument.varBool = false;
-
-			satelliteHoveredEventArg[1].argType = "object";
-			satelliteHoveredEventArg[1].argument.varType = TYPE_STRING;
-			strcpy(satelliteHoveredEventArg[1].argument.varString, "satellite");*/
-
 			Event satelliteHoveredEvent = StockEvents::EventOnHover();
 
 			(*iter)->OnEvent(satelliteHoveredEvent);
@@ -222,6 +199,90 @@ void InitializePrograms()
 	shaderManager.LoadFontProgram("Font.vert", "Font.frag");
 }
 
+void InitializeGUI()
+{
+	/*Button myButton("sample", "Sample", glm::vec2(0.2f, 0.2f),
+				0.03f, 0.03f, 0.1f, 0.1f,
+				48);
+
+	myButton.Init("../data/fonts/AGENCYR.TTF",
+				  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	LayoutInfo inGameLayoutInfo;
+	inGameLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+	Layout inGameLayout(LAYOUT_IN_GAME, inGameLayoutInfo);
+
+	//inGameLayout.AddButtonControl(myButton);
+
+	universe->AddLayout(inGameLayout);
+	LayoutInfo inGameLayoutInfo;
+	inGameLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+	universe->AddLayout(LAYOUT_IN_GAME, inGameLayoutInfo);*/
+
+
+	LayoutInfo inGameLayoutInfo;
+	inGameLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+	Layout inGameLayout(LAYOUT_IN_GAME, inGameLayoutInfo);
+
+	Button exitButton("exit", "Exit", glm::vec2(0.5f, 0.5f),
+					  0.03f, 0.03f, 0.1f, 0.1f,
+					  48);
+	exitButton.Init("../data/fonts/AGENCYR.TTF",
+				    glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	inGameLayout.AddButtonControl(exitButton);
+
+	universe->AddLayout(inGameLayout);
+	universe->SetLayout(LAYOUT_IN_GAME, false);
+	
+
+
+	LayoutInfo menuLayoutInfo;
+	menuLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.5f, 0.6f, 1.0f);
+
+	Layout menuLayout(LAYOUT_MENU, menuLayoutInfo);
+
+	Button newGameButton("newGame", "New Game", glm::vec2(-0.282f, 0.5f),
+						 0.03f, 0.03f, 0.119f, 0.119f,
+						 48);
+	newGameButton.Init("../data/fonts/AGENCYR.TTF",
+					   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
+	Button saveGameButton("saveGame", "Save Game", glm::vec2(-0.3f, 0.26f),
+						  0.03f, 0.03f, 0.1f, 0.1f,
+						  48);
+	saveGameButton.Init("../data/fonts/AGENCYR.TTF",
+					    glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));	
+
+	Button loadGameButton("loadGame", "Load Game", glm::vec2(-0.3f, 0.02f),
+						  0.03f, 0.03f, 0.1f, 0.1f,
+						  48);
+	loadGameButton.Init("../data/fonts/AGENCYR.TTF",
+					    glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));	
+
+	Button optionsButton("options", "Options", glm::vec2(-0.195f, -0.22f),
+						 0.03f, 0.03f, 0.205f, 0.205f,
+						 48);
+	optionsButton.Init("../data/fonts/AGENCYR.TTF",
+					   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));	
+
+	Button quitButton("quit", "Quit", glm::vec2(-0.087f, -0.495f),
+					  0.03f, 0.03f, 0.31f, 0.31f,
+					  48);
+	quitButton.Init("../data/fonts/AGENCYR.TTF",
+				    glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));	
+
+	menuLayout.AddButtonControl(newGameButton);
+	menuLayout.AddButtonControl(saveGameButton);
+	menuLayout.AddButtonControl(loadGameButton);
+	menuLayout.AddButtonControl(optionsButton);
+	menuLayout.AddButtonControl(quitButton);
+
+	universe->AddLayout(menuLayout);
+	universe->SetLayout(LAYOUT_MENU, true);
+}
+
 void InitializeScene()
 {
 	mainSun->LoadMesh("UnitSphere.xml");
@@ -233,12 +294,9 @@ void InitializeScene()
 	universe->SetMusic("../data/music/onclick.wav", MUSIC_ON_SUN_CLICK);
 
 	universe->SetMusicVolume(g_musicVolumeInteraction, CHANNEL_INTERACTION);
-	universe->SetMusicVolume(g_musicVolumeMaster, CHANNEL_MASTER);
+	universe->SetMusicVolume(g_musicVolumeMaster, CHANNEL_MASTER);	
 
-	LayoutInfo inGameLayoutInfo;
-	inGameLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-
-	universe->AddLayout(LAYOUT_IN_GAME, inGameLayoutInfo);
+	InitializeGUI();
 }
 
 
@@ -246,9 +304,6 @@ void Init()
 {
 	InitializePrograms();
 	InitializeScene();
-
-	myButton.Init("../data/fonts/AGENCYR.TTF",
-				  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	glutMouseFunc(HandleMouseButtons);
 	glutMotionFunc(HandleActiveMovement);
@@ -312,12 +367,14 @@ void Display()
 								 shaderManager.GetUnlitProgData(),
 								 shaderManager.GetSimpleProgData());
 
-		myButton.Draw(shaderManager.GetFontProgData(), shaderManager.GetSimpleProgDataOrtho());
-		universe->RenderCurrentLayout();					 
+		//myButton.Draw(shaderManager.GetFontProgData(), shaderManager.GetSimpleProgDataOrtho());
+		universe->RenderCurrentLayout(shaderManager.GetFontProgData(),
+									  shaderManager.GetSimpleProgDataOrtho());					 
 	}
 	else /*if(universe->IsLayoutOn(LAYOUT_MENU))*/
 	{
-		universe->RenderCurrentLayout();
+		universe->RenderCurrentLayout(shaderManager.GetFontProgData(),
+									  shaderManager.GetSimpleProgDataOrtho());
 	}
 
 	HandleMouse();

@@ -64,7 +64,8 @@ public:
 						const UnlitProgData &unLitData, 
 						const SimpleProgData &interpData);
 
-	void RenderCurrentLayout();
+	void RenderCurrentLayout(const FontProgData &fontData,
+							 const SimpleProgData &simpleData);
 
 
 	void StopUniverse();
@@ -77,8 +78,10 @@ public:
 
 	void AddLayout(Layout &newLayout);
 	void AddLayout(LayoutType layoutType, LayoutInfo layoutInfo);
+	Layout GetLayout(LayoutType layoutType);
 	bool HasLayout(LayoutType layoutType);
 	bool IsLayoutOn(LayoutType layoutType);
+	void SetLayout(LayoutType layoutType, bool isSet);
 
 
 	void SetMusic(const std::string &fileName, SoundTypes soundType);

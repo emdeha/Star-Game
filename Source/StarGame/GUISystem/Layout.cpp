@@ -24,7 +24,7 @@ Layout::Layout()
 	layoutType = LAYOUT_IN_GAME;
 	layoutInfo.backgroundColor = glm::vec4();
 
-//	controls.resize(0);
+	buttonControls.resize(0);
 	subLayouts.resize(0);
 
 	isSet = false;
@@ -34,13 +34,13 @@ Layout::Layout(LayoutType newLayoutType, LayoutInfo newLayoutInfo)
 	layoutType = newLayoutType;
 	layoutInfo = newLayoutInfo;
 
-//	controls.resize(0);
+	buttonControls.resize(0);
 	subLayouts.resize(0);
 
 	isSet = true;
 }
 
-void Layout::Draw()
+void Layout::Draw(const FontProgData &fontData, const SimpleProgData &simpleData)
 {
 	glm::vec4 backgroundColor = layoutInfo.backgroundColor;
 	glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
@@ -48,7 +48,7 @@ void Layout::Draw()
 	for(std::vector<Button>::iterator iter = buttonControls.begin();
 		iter != buttonControls.end(); ++iter)
 	{
-	//	(*iter).Draw();
+		(*iter).Draw(fontData, simpleData);
 	}
 	for(std::vector<Layout>::iterator iter = subLayouts.begin();
 		iter != subLayouts.end();
@@ -56,21 +56,42 @@ void Layout::Draw()
 	{
 		if((*iter).IsSet())
 		{
-			(*iter).Draw();
+			(*iter).Draw(fontData, simpleData);
 		}
 	}
 }
 
 
+void Layout::AddButtonControl(const Button &newButtonControl)
+{
+	buttonControls.push_back(newButtonControl);
+}
+
+
+Button Layout::GetButtonControl(const std::string &buttonName)
+{
+	for(std::vector<Button>::iterator iter = buttonControls.begin();
+		iter != buttonControls.end(); ++iter)
+	{
+		if((*iter).GetName() == buttonName)
+		{
+			return (*iter);
+		}
+	}
+
+	// TODO: Better error handling.
+	std::printf("There is no such control\n");
+}
+
 LayoutType Layout::GetLayoutType()
 {
 	return layoutType;
 }
-inline bool Layout::IsSet()
+bool Layout::IsSet()
 {
 	return isSet;
 }
-inline void Layout::Set(bool newIsSet)
+void Layout::Set(bool newIsSet)
 {
 	isSet = newIsSet;
 }

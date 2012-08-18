@@ -79,6 +79,8 @@ public:
 				   glm::vec4 cameraPos,
 				   float windowWidth, float windowHeight);
 
+	glm::vec2 GetClipSpacePosition(int windowWidth, int windowHeight);
+
 
 	bool IsLeftButtonDown();
 	bool IsRightButtonDown();

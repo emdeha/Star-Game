@@ -82,4 +82,59 @@ public:
 	EventType GetType();
 };
 
+
+class StockEvents
+{
+public:
+	static Event EventOnRightClick(const char *objectName)
+	{
+		EventArg rightClickEventArg[2];
+		rightClickEventArg[0].argType = "rightClick";
+		rightClickEventArg[0].argument.varType = TYPE_BOOL;
+		rightClickEventArg[0].argument.varBool = true; 
+		rightClickEventArg[1].argType = "object";
+		rightClickEventArg[1].argument.varType = TYPE_STRING;
+		strcpy_s(rightClickEventArg[1].argument.varString, objectName);
+
+		return Event(2, EVENT_TYPE_ON_CLICK, rightClickEventArg);
+	}
+	static Event EventOnLeftClick(const char *objectName)
+	{
+		EventArg rightClickEventArg[2];
+		rightClickEventArg[0].argType = "rightClick";
+		rightClickEventArg[0].argument.varType = TYPE_BOOL;
+		rightClickEventArg[0].argument.varBool = false; 
+		rightClickEventArg[1].argType = "object";
+		rightClickEventArg[1].argument.varType = TYPE_STRING;
+		strcpy_s(rightClickEventArg[1].argument.varString, objectName);
+
+		return Event(2, EVENT_TYPE_ON_CLICK, rightClickEventArg);
+	}
+
+	static Event EventOnHover()
+	{
+		EventArg hoverEventArg[1];
+		hoverEventArg[0].argType = "rightClick";
+		hoverEventArg[0].argument.varType = TYPE_BOOL;
+		hoverEventArg[0].argument.varBool = false;
+
+		return Event(1, EVENT_TYPE_ON_HOVER, hoverEventArg);
+	}
+};
+
+
+/*enum CustomEventID
+{
+	EVENT_ID_ON_SUN_RIGHT_CLICK,
+	EVENT_ID_ON_SATELLITE_RIGHT_CLICK,
+	EVENT_ID_ON_SUN_LEFT_CLICK,
+	EVENT_ID_ON_SATELLITE_LEFT_CLICK,
+
+	EVENT_ID_ON_SUN_HOVER,
+	EVENT_ID_ON_SATELLITE_HOVER,
+
+	EVENT_ID_ON_CLICK,
+	EVENT_ID_ON_HOVER,
+};*/
+
 #endif

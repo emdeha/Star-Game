@@ -53,6 +53,9 @@ float g_musicVolumeMaster = 0.1f;
 float g_musicVolumeInteraction = 0.1f;
 
 
+Button myButton("sample", "Sample", glm::vec2(0.2f, 0.2f),
+				0.03f, 0.03f, 0.1f, 0.1f,
+				48);
 
 void HandleMouse()
 {
@@ -67,52 +70,59 @@ void HandleMouse()
 			(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
 			 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 		{
-			EventArg rightClickEventArg[2];
+			/*EventArg rightClickEventArg[2];
 			rightClickEventArg[0].argType = "rightClick";
 			rightClickEventArg[0].argument.varType = TYPE_BOOL;
 			rightClickEventArg[0].argument.varBool = true; // `true` for right, `false` for left.
 			rightClickEventArg[1].argType = "object";
 			rightClickEventArg[1].argument.varType = TYPE_STRING;
 			strcpy(rightClickEventArg[1].argument.varString, "sun");
-			Event rightClickEvent = Event(2, EVENT_TYPE_ON_CLICK, rightClickEventArg);
+			Event rightClickEvent = Event(2, EVENT_TYPE_ON_CLICK, rightClickEventArg);*/
 			
-			mainSun->OnEvent(rightClickEvent);
-			universe->OnEvent(rightClickEvent);
-			/*if(mainSun->RemoveSatellite() != true)
-			{
-				std::printf("No satellites.\n");
-			}
-			else 
-			{
-				g_initialOffset -= 0.75f;
-			}*/
+			Event rightClickSunEvent = StockEvents::EventOnRightClick("sun");
+
+			mainSun->OnEvent(rightClickSunEvent);
+			universe->OnEvent(rightClickSunEvent);
 		}
 	}
 
 	if(userMouse.IsLeftButtonDown())
 	{
+		if(myButton.IsMouseOn(
+			glm::vec2(userMouse.GetClipSpacePosition(windowWidth, windowHeight))))
+		{
+			/*EventArg rightClickEventArg[1];
+			rightClickEventArg[0].argType = "rightClick";
+			rightClickEventArg[0].argument.varType = TYPE_BOOL;
+			rightClickEventArg[0].argument.varBool = true; // `true` for right, `false` for left.
+			
+			Event rightClickEvent = Event(1, EVENT_TYPE_ON_CLICK, rightClickEventArg);*/
+
+			Event leftClickButtonEvent = StockEvents::EventOnLeftClick("sampleButton");
+
+			myButton.OnEvent(leftClickButtonEvent);
+			
+			userMouse.ReleaseLeftButton();
+			return;
+		}
+
 		if(mainSun->IsClicked
 			(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
 			 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 		{
-			/*if(mainSun->AddSatellite("UnitSphere.xml", 
-									 glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-									 g_initialOffset, 10.0f, 0.25f) == true)
-			{
-				g_initialOffset += 0.75f;
-			}
-			else std::printf("Satellite cap reached!\n");*/
-			EventArg leftClickEventArg[2];
+			/*EventArg leftClickEventArg[2];
 			leftClickEventArg[0].argType = "rightClick";
 			leftClickEventArg[0].argument.varType = TYPE_BOOL;
 			leftClickEventArg[0].argument.varBool = false; // `true` for right, `false` for left.
 			leftClickEventArg[1].argType = "object";
 			leftClickEventArg[1].argument.varType = TYPE_STRING;
 			strcpy(leftClickEventArg[1].argument.varString, "sun"); 
-			Event leftClickEvent = Event(2, EVENT_TYPE_ON_CLICK, leftClickEventArg);
+			Event leftClickEvent = Event(2, EVENT_TYPE_ON_CLICK, leftClickEventArg);*/
 
-			mainSun->OnEvent(leftClickEvent);
-			universe->OnEvent(leftClickEvent);
+			Event leftClickSunEvent = StockEvents::EventOnLeftClick("sun");
+
+			mainSun->OnEvent(leftClickSunEvent);
+			universe->OnEvent(leftClickSunEvent);
 		}
 
 		std::vector<Satellite*> sunSatellites = mainSun->GetSatellites();
@@ -123,21 +133,28 @@ void HandleMouse()
 				(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
 					glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 			{
-				EventArg satelliteClickedEventArg[2];
+				/*EventArg satelliteClickedEventArg[2];
 				satelliteClickedEventArg[0].argType = "rightClick";
 				satelliteClickedEventArg[0].argument.varType = TYPE_BOOL;
 				satelliteClickedEventArg[0].argument.varBool = false;
 				satelliteClickedEventArg[1].argType = "object";
 				satelliteClickedEventArg[1].argument.varType = TYPE_STRING;
 				strcpy(satelliteClickedEventArg[1].argument.varString, "satellite");
-				Event satelliteClickedEvent = Event(2, EVENT_TYPE_ON_CLICK, satelliteClickedEventArg);
+				Event satelliteClickedEvent = Event(2, EVENT_TYPE_ON_CLICK, satelliteClickedEventArg);*/
 
-				(*iter)->OnEvent(satelliteClickedEvent);
-				universe->OnEvent(satelliteClickedEvent);
-				//std::printf("Satellite clicked!!!\n");
+				Event leftClickSatelliteEvent = StockEvents::EventOnLeftClick("satellite");
+
+				(*iter)->OnEvent(leftClickSatelliteEvent);
+				universe->OnEvent(leftClickSatelliteEvent);
 			}
 		}
 	}
+
+	/*if(myButton.IsMouseOn(
+		glm::vec2(userMouse.GetClipSpacePosition(windowWidth, windowHeight))))
+	{
+		return;
+	}*/
 
 	std::vector<Satellite*> sunSatellites = mainSun->GetSatellites();
 	for(std::vector<Satellite*>::iterator iter = sunSatellites.begin(); 
@@ -147,7 +164,7 @@ void HandleMouse()
 			(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
 				glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 		{
-			EventArg satelliteHoveredEventArg[2];
+			/*EventArg satelliteHoveredEventArg[1];
 
 			satelliteHoveredEventArg[0].argType = "rightClick";
 			satelliteHoveredEventArg[0].argument.varType = TYPE_BOOL;
@@ -155,13 +172,12 @@ void HandleMouse()
 
 			satelliteHoveredEventArg[1].argType = "object";
 			satelliteHoveredEventArg[1].argument.varType = TYPE_STRING;
-			strcpy(satelliteHoveredEventArg[1].argument.varString, "satellite");
+			strcpy(satelliteHoveredEventArg[1].argument.varString, "satellite");*/
 
-			Event satelliteHoveredEvent = Event(2, EVENT_TYPE_ON_HOVER, satelliteHoveredEventArg);
+			Event satelliteHoveredEvent = StockEvents::EventOnHover();
 
 			(*iter)->OnEvent(satelliteHoveredEvent);
 			universe->OnEvent(satelliteHoveredEvent);
-			//std::printf("Satellite hovered!!!\n");
 		}
 	}
 
@@ -225,7 +241,6 @@ void InitializeScene()
 	universe->AddLayout(LAYOUT_IN_GAME, inGameLayoutInfo);
 }
 
-Button myButton("sample", "Sample", glm::vec2(0.2f, 0.2f));
 
 void Init()
 {
@@ -321,6 +336,8 @@ void Reshape(int width, int height)
 
 	displayData.projectionMatrix = persMatrix.Top();
 
+	//myButton.Update(width, height);
+
 	glBindBuffer(GL_UNIFORM_BUFFER, shaderManager.GetUniformBuffer(UBT_PROJECTION));
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(displayData.projectionMatrix), &displayData.projectionMatrix);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -345,7 +362,6 @@ void Keyboard(unsigned char key, int x, int y)
 		Event spaceClickedEvent = Event(1, EVENT_TYPE_SPACE_BTN_CLICK, spaceClickedEventArg);
 
 		universe->OnEvent(spaceClickedEvent);
-		//universe->PlayMusic(MUSIC_BACKGROUND);
 		break;
 	}
 

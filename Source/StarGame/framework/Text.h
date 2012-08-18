@@ -90,6 +90,9 @@ public:
 			   int fontSize);
 
 
+	void ComputeTextDimensions(const char *text, glm::vec2 position, int fontSize);
+
+
 	float GetTextMinWidth()
 	{
 		return textMinWidth;

@@ -124,6 +124,38 @@ void Text::Print(const char *text, const FontProgData &fontData,
 
 		position.x += (fontFace->glyph->advance.x >> 6) * scale.x;
 		position.y += (fontFace->glyph->advance.y >> 6) * scale.y;
+	}
+
+	glDisableVertexAttribArray(fontData.positionAttrib);
+	glDeleteTextures(1, &texture);
+
+	glUseProgram(0);
+
+	glDisable(GL_BLEND);
+}
+
+
+void Text::ComputeTextDimensions(const char *text, glm::vec2 position, int fontSize)
+{
+	FT_Set_Pixel_Sizes(fontFace, 0, fontSize);
+
+	for(const char *p = text; *p; p++)
+	{
+		if(FT_Load_Char(fontFace, *p, FT_LOAD_RENDER))
+		{
+			continue;
+		}
+
+		glm::vec4 finalCoordinates = glm::vec4();
+		glm::vec2 scale(2.0f / windowWidth, 2.0f / windowHeight);
+		finalCoordinates.x = position.x + fontFace->glyph->bitmap_left * scale.x;
+		finalCoordinates.y = -position.y - fontFace->glyph->bitmap_top * scale.y;
+
+		finalCoordinates.z = fontFace->glyph->bitmap.width * scale.x;
+		finalCoordinates.w = fontFace->glyph->bitmap.rows * scale.y;
+
+		position.x += (fontFace->glyph->advance.x >> 6) * scale.x;
+		position.y += (fontFace->glyph->advance.y >> 6) * scale.y;
 
 		if(textMinHeight > -finalCoordinates.y - finalCoordinates.w)
 			textMinHeight = -finalCoordinates.y - finalCoordinates.w;
@@ -135,13 +167,4 @@ void Text::Print(const char *text, const FontProgData &fontData,
 		if(textMinWidth > finalCoordinates.x)
 			textMinWidth = finalCoordinates.x;
 	}
-
-	//std::printf("%f, %f\n", textMaxHeight, textMinHeight);
-
-	glDisableVertexAttribArray(fontData.positionAttrib);
-	glDeleteTextures(1, &texture);
-
-	glUseProgram(0);
-
-	glDisable(GL_BLEND);
-}
+};

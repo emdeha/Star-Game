@@ -131,3 +131,17 @@ Utility::Ray Mouse::GetPickRay(glm::mat4 projMat, glm::mat4 modelMat,
 
 	return Utility::Ray(rayOrigin, rayDirection);
 }
+
+
+glm::vec2 Mouse::GetClipSpacePosition(int windowWidth, int windowHeight)
+{
+	float mouseX = float(this->currentPosition.x);
+	float mouseY = float(this->currentPosition.y);
+
+	glm::vec2 mousePos_clipSpace = glm::vec2(
+											 ((mouseX * 2.0f) / windowWidth) - 1.0f,
+											 (1.0f - (2.0f * mouseY) / windowHeight)
+											);
+
+	return mousePos_clipSpace;
+}

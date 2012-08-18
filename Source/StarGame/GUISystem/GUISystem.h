@@ -77,7 +77,7 @@ public:
 	void Set(bool newIsSet);
 };
 
-
+// The window dimensions should later be bound only to the 'Layout' class.
 
 class Button
 {
@@ -89,20 +89,43 @@ private:
 
 	glm::vec2 position;
 
+
+	float textMinHeight;
+	float textMaxHeight;
+	float textMinWidth;
+	float textMaxWidth;
+
+
+	float topTextMargin;
+	float bottomTextMargin;
+	float leftTextMargin;
+	float rightTextMargin;
+
+	int textSize;
+
+	int windowWidth;
+	int windowHeight;
+
 	GLuint vbo;
 	GLuint vao;
 
 public:
 	Button();
 	Button(const std::string &newName, const std::string &newTitle,
-		   glm::vec2 newPosition);
+		   glm::vec2 newPosition,
+		   float newTopTextMargin, float newBottomTextMargin, 
+		   float newRightTextMargin, float newLeftTextMargin,
+		   int newTextSize);
 
 	void Init(const std::string fontName,
-			  int windowWidth, int windowHeight);
+			  int newWindowWidth, int newWindowHeight);
+
+	bool IsMouseOn(glm::vec2 mouseCoordinates);
 
 	void OnEvent(Event &_event);
 
 	void Draw(FontProgData fontData, SimpleProgData simpleData);
+	void Update(int newWindowWidth, int newWindowHeight);
 };
 
 #endif

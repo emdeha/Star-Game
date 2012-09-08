@@ -124,8 +124,8 @@ int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 
-	int width = 500;
-	int height = 500;
+	int width = 1680;
+	int height = 1050;
 	unsigned int displayMode = GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH | GLUT_STENCIL;
 	displayMode = Defaults(displayMode, width, height);
 
@@ -136,7 +136,7 @@ int main(int argc, char** argv)
 	glutInitContextFlags(GLUT_DEBUG);
 #endif
 	glutInitWindowSize(width, height); 
-	glutInitWindowPosition(300, 200);
+	glutInitWindowPosition(0, 0);
 	int window = glutCreateWindow(argv[0]);
 
 	glload::LoadFunctions();

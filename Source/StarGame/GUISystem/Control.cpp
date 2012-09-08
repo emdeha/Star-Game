@@ -19,32 +19,49 @@
 #include "GUISystem.h"
 
 
-//GLfloat bufferData[24];
-
 // TODO: Make data-driven
+// TODO: function CalculateMarginsByPercentage();
+
+void Button::ComputeNewAttributes()
+{
+	textTitle.ComputeTextDimensions(title.c_str(), presets[currentPreset].position, 
+												   presets[currentPreset].textSize);
+
+	textMinHeight = textTitle.GetTextMinHeight() - presets[currentPreset].bottomTextMargin;
+	textMaxHeight = textTitle.GetTextMaxHeight() + presets[currentPreset].topTextMargin;
+
+	textMinWidth = textTitle.GetTextMinWidth() - presets[currentPreset].leftTextMargin;
+	textMaxWidth = textTitle.GetTextMaxWidth() + presets[currentPreset].rightTextMargin;
+
+	bufferData[0] = textMaxWidth; bufferData[1] = textMaxHeight;
+	bufferData[2] = 0.0f; bufferData[3] = 1.0f;
+	bufferData[4] = textMaxWidth; bufferData[5] = textMinHeight; 
+	bufferData[6] = 0.0f; bufferData[7] = 1.0f;
+	bufferData[8] = textMinWidth; bufferData[9] = textMaxHeight; 
+	bufferData[10] = 0.0f; bufferData[11] = 1.0f;
+
+	bufferData[12] = textMaxWidth; bufferData[13] = textMinHeight; 
+	bufferData[14] = 0.0f; bufferData[15] = 1.0f;
+	bufferData[16] = textMinWidth; bufferData[17] = textMinHeight; 
+	bufferData[18] = 0.0f; bufferData[19] = 1.0f;
+	bufferData[20] = textMinWidth; bufferData[21] = textMaxHeight; 
+	bufferData[22] = 0.0f; bufferData[23] = 1.0f;
+}
 
 Button::Button()
 {
 	name = "";
 	title = "";
-	position = glm::vec2();
 
 	textMinHeight = 0.0f;
 	textMaxHeight = 0.0f;
 	textMinWidth = 0.0f;
 	textMaxWidth = 0.0f;
 
-	topTextMargin = 0.0f;
-	bottomTextMargin = 0.0f;
-	leftTextMargin = 0.0f;
-	rightTextMargin = 0.0f;
-
-	textSize = 0;
-
 	windowWidth = 0;
 	windowHeight = 0;
 }
-Button::Button(const std::string &newName, const std::string &newTitle,
+/*Button::Button(const std::string &newName, const std::string &newTitle,
 			   glm::vec2 newPosition,
 			   float newTopTextMargin, float newBottomTextMargin, 
 			   float newRightTextMargin, float newLeftTextMargin,
@@ -59,10 +76,56 @@ Button::Button(const std::string &newName, const std::string &newTitle,
 	leftTextMargin = newLeftTextMargin;
 	rightTextMargin = newRightTextMargin;
 
+
+	topTextMargin_percent = 0.0f;
+	bottomTextMargin_percent = 0.0f;
+	leftTextMargin_percent = 0.0f;
+	rightTextMargin_percent = 0.0f;
+
+
 	textSize = newTextSize;
 
 	windowWidth = 0;
 	windowHeight = 0;
+}*/
+Button::Button(const std::string &newName, const std::string &newTitle,
+			   glm::vec2 newPosition,
+			   float buttonTopMargin_percent, float buttonBottomMargin_percent,
+			   float buttonLeftMargin_percent, float buttonRightMargin_percent,
+			   int newTextSize, 
+			   int newWindowWidth, int newWindowHeight,
+			   LayoutPreset newCurrentPreset)
+{
+	// assert(buttonTopMargin_percent > 0.0f);
+	// ...
+	// ...
+	// assert(buttonRightMargin_percent > 0.0f);
+
+	currentPreset = newCurrentPreset;
+
+	name = newName;
+	title = newTitle;
+	presets[newCurrentPreset].position = newPosition;
+	presets[newCurrentPreset].textSize = newTextSize;
+
+	windowWidth = newWindowWidth;
+	windowHeight = newWindowHeight;
+
+
+	presets[newCurrentPreset].topTextMargin_percent = buttonTopMargin_percent;
+	presets[newCurrentPreset].bottomTextMargin_percent = buttonBottomMargin_percent;
+	presets[newCurrentPreset].leftTextMargin_percent = buttonLeftMargin_percent;
+	presets[newCurrentPreset].rightTextMargin_percent = buttonRightMargin_percent;
+
+
+	presets[newCurrentPreset].topTextMargin = 
+		((buttonTopMargin_percent * windowHeight) / 100.0f) / windowHeight;
+	presets[newCurrentPreset].bottomTextMargin = 
+		((buttonBottomMargin_percent * windowHeight) / 100.0f) / windowHeight;
+	presets[newCurrentPreset].leftTextMargin = 
+		((buttonLeftMargin_percent * windowWidth) / 100.0f) / windowWidth;
+	presets[newCurrentPreset].rightTextMargin = 
+		((buttonRightMargin_percent * windowWidth) / 100.0f) / windowWidth;
 }
 
 void Button::Init(const std::string fontName,
@@ -78,29 +141,8 @@ void Button::Init(const std::string fontName,
 
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
-			
 	
-	textTitle.ComputeTextDimensions(title.c_str(), position, textSize);
-
-	textMinHeight = textTitle.GetTextMinHeight() - bottomTextMargin;
-	textMaxHeight = textTitle.GetTextMaxHeight() + topTextMargin;
-
-	textMinWidth = textTitle.GetTextMinWidth() - leftTextMargin;
-	textMaxWidth = textTitle.GetTextMaxWidth() + rightTextMargin;
-
-	bufferData[0] = textMaxWidth; bufferData[1] = textMaxHeight;
-	bufferData[2] = 0.0f; bufferData[3] = 1.0f;
-	bufferData[4] = textMaxWidth; bufferData[5] = textMinHeight; 
-	bufferData[6] = 0.0f; bufferData[7] = 1.0f;
-	bufferData[8] = textMinWidth; bufferData[9] = textMaxHeight; 
-	bufferData[10] = 0.0f; bufferData[11] = 1.0f;
-
-	bufferData[12] = textMaxWidth; bufferData[13] = textMinHeight; 
-	bufferData[14] = 0.0f; bufferData[15] = 1.0f;
-	bufferData[16] = textMinWidth; bufferData[17] = textMinHeight; 
-	bufferData[18] = 0.0f; bufferData[19] = 1.0f;
-	bufferData[20] = textMinWidth; bufferData[21] = textMaxHeight; 
-	bufferData[22] = 0.0f; bufferData[23] = 1.0f;	
+	ComputeNewAttributes();
 }
 
 void Button::Draw(const FontProgData &fontData, const SimpleProgData &simpleData)
@@ -120,7 +162,10 @@ void Button::Draw(const FontProgData &fontData, const SimpleProgData &simpleData
 	glDisableVertexAttribArray(0);
 	glUseProgram(0);
 
-	textTitle.Print(title.c_str(), fontData, position, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), textSize);
+	textTitle.Print(title.c_str(), fontData, 
+					presets[currentPreset].position, 
+					glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
+					presets[currentPreset].textSize);
 }
 
 void Button::Update(int newWindowWidth, int newWindowHeight)
@@ -129,6 +174,17 @@ void Button::Update(int newWindowWidth, int newWindowHeight)
 	windowHeight = newWindowHeight;
 
 	textTitle.UpdateWindowDimensions(windowWidth, windowHeight);
+
+	presets[currentPreset].topTextMargin = 
+		((presets[currentPreset].topTextMargin_percent * windowHeight) / 100.0f) / windowHeight;
+	presets[currentPreset].bottomTextMargin = 
+		((presets[currentPreset].bottomTextMargin_percent * windowHeight) / 100.0f) / windowHeight;
+	presets[currentPreset].leftTextMargin = 
+		((presets[currentPreset].leftTextMargin_percent * windowWidth) / 100.0f) / windowWidth;
+	presets[currentPreset].rightTextMargin = 
+		((presets[currentPreset].rightTextMargin_percent * windowWidth) / 100.0f) / windowWidth;
+
+	ComputeNewAttributes();
 }
 
 bool Button::IsMouseOn(glm::vec2 mouseCoordinates)
@@ -156,4 +212,86 @@ void Button::OnEvent(Event &_event)
 std::string Button::GetName()
 {
 	return name;
+}
+
+void Button::SetTextSize(int newTextSize)
+{
+	// assert(textSize > 0);
+
+	presets[currentPreset].textSize = newTextSize;
+
+	ComputeNewAttributes();
+}
+
+void Button::SetNewMargins(float buttonTopMargin_percent, float buttonBottomMargin_percent,
+				   float buttonLeftMargin_percent, float buttonRightMargin_percent)
+{
+	presets[currentPreset].topTextMargin = 
+		((presets[currentPreset].topTextMargin_percent * windowHeight) / 100.0f) / windowHeight;
+	presets[currentPreset].bottomTextMargin = 
+		((presets[currentPreset].bottomTextMargin_percent * windowHeight) / 100.0f) / windowHeight;
+	presets[currentPreset].leftTextMargin = 
+		((presets[currentPreset].leftTextMargin_percent * windowWidth) / 100.0f) / windowWidth;
+	presets[currentPreset].rightTextMargin = 
+		((presets[currentPreset].rightTextMargin_percent * windowWidth) / 100.0f) / windowWidth;
+
+	ComputeNewAttributes();
+}
+
+void Button::SetNewPosition(glm::vec2 newPosition)
+{
+	presets[currentPreset].position = newPosition;
+
+	ComputeNewAttributes();
+}
+
+
+void Button::AddPreset(LayoutPreset newPreset, 
+					   float newBottomTextMargin_percent, 
+				       float newTopTextMargin_percent,
+				       float newRightTextMargin_percent,
+				       float newLeftTextMargin_percent,
+				       int newTextSize,
+				       glm::vec2 newPosition)
+{
+	//currentPreset = newCurrentPreset;
+
+	presets[newPreset].bottomTextMargin = 
+		((newBottomTextMargin_percent * windowHeight) / 100.0f) / windowHeight;
+	presets[newPreset].topTextMargin = 
+		((newTopTextMargin_percent * windowHeight) / 100.0f) / windowHeight;
+	presets[newPreset].rightTextMargin = 
+		((newRightTextMargin_percent * windowHeight) / 100.0f) / windowHeight;
+	presets[newPreset].leftTextMargin = 
+		((newLeftTextMargin_percent * windowHeight) / 100.0f) / windowHeight;
+
+	presets[newPreset].bottomTextMargin_percent = newBottomTextMargin_percent;
+	presets[newPreset].topTextMargin_percent = newTopTextMargin_percent;
+	presets[newPreset].rightTextMargin_percent = newRightTextMargin_percent;
+	presets[newPreset].leftTextMargin_percent = newLeftTextMargin_percent;
+
+	presets[newPreset].textSize = newTextSize;
+	presets[newPreset].position = newPosition;
+}
+
+void Button::SetPreset(LayoutPreset newCurrentPreset)
+{
+	// TODO: Check if the new preset exists. If it doesn't, use the first preset which exists.
+
+	if(presets[newCurrentPreset].textSize > 0)
+	{
+		currentPreset = newCurrentPreset;
+
+		ComputeNewAttributes();
+	}
+	else
+	{
+		for(int i = 0; i < PRESETS_COUNT; i++)
+		{
+			if(presets[i].textSize > 0)
+			{
+				currentPreset = LayoutPreset(i);
+			}
+		}
+	}
 }

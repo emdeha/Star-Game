@@ -43,8 +43,19 @@ enum LayoutType
 	LAYOUT_SUB_OPTIONS,
 };
 
+enum LayoutPreset
+{
+	SMALL,
+	MEDIUM,
+	BIG,
+
+	PRESETS_COUNT,
+};
+
 struct LayoutInfo
 {
+	int textSize;
+	
 	glm::vec4 backgroundColor;
 };
 
@@ -54,7 +65,6 @@ class Layout
 {
 private:
 	LayoutType layoutType;
-
 	LayoutInfo layoutInfo;
 
 	std::vector<Button> buttonControls;
@@ -72,11 +82,32 @@ public:
 	Button GetButtonControl(const std::string &buttonName);
 
 	void Draw(const FontProgData &fontData, const SimpleProgData &simpleData);
+	void Update(int windowWidth, int windowHeight);
 
 	LayoutType GetLayoutType();
 
 	bool IsSet();
 	void Set(bool newIsSet);
+
+	void SetCurrentPreset(LayoutPreset newCurrentPreset);
+};
+
+
+struct ButtonPresetAttributes
+{
+	glm::vec2 position;
+
+	float topTextMargin_percent;
+	float bottomTextMargin_percent;
+	float leftTextMargin_percent;
+	float rightTextMargin_percent;
+
+	float topTextMargin;
+	float bottomTextMargin;
+	float leftTextMargin;
+	float rightTextMargin;
+
+	int textSize;
 };
 
 // The window dimensions should later be bound only to the 'Layout' class.
@@ -90,22 +121,18 @@ private:
 
 	std::string name;
 	std::string title;
-
-	glm::vec2 position;
-
-
+	
+	
 	float textMinHeight;
 	float textMaxHeight;
 	float textMinWidth;
 	float textMaxWidth;
 
 
-	float topTextMargin;
-	float bottomTextMargin;
-	float leftTextMargin;
-	float rightTextMargin;
+	LayoutPreset currentPreset;
 
-	int textSize;
+	ButtonPresetAttributes presets[3];
+
 
 	int windowWidth;
 	int windowHeight;
@@ -115,11 +142,23 @@ private:
 
 public:
 	Button();
-	Button(const std::string &newName, const std::string &newTitle,
+
+
+	// Maybe this constructor is not needed.
+	/*Button(const std::string &newName, const std::string &newTitle,
 		   glm::vec2 newPosition,
 		   float newTopTextMargin, float newBottomTextMargin, 
 		   float newRightTextMargin, float newLeftTextMargin,
-		   int newTextSize);
+		   int newTextSize);*/
+
+
+	Button(const std::string &newName, const std::string &newTitle,
+		   glm::vec2 newPosition,
+		   float buttonTopMargin_percent, float buttonBottomMargin_percent,
+		   float buttonLeftMargin_percent, float buttonRightMargin_percent,
+		   int newTextSize, 
+		   int newWindowWidth, int newWindowHeight,
+		   LayoutPreset newCurrentPreset);
 
 	void Init(const std::string fontName,
 			  int newWindowWidth, int newWindowHeight);
@@ -131,8 +170,24 @@ public:
 	void Draw(const FontProgData &fontData, const SimpleProgData &simpleData);
 	void Update(int newWindowWidth, int newWindowHeight);
 
+	void ComputeNewAttributes();
+
 
 	std::string GetName();
+
+	void SetTextSize(int newTextSize);
+	void SetNewMargins(float buttonTopMargin_percent, float buttonBottomMargin_percent,
+					   float buttonLeftMargin_percent, float buttonRightMargin_percent);
+	void SetNewPosition(glm::vec2 newPosition);
+
+	void AddPreset(LayoutPreset newPreset,
+				   float newBottomTextMargin_percent, 
+				   float newTopTextMargin_percent,
+				   float newRightTextMargin_percent,
+				   float newLeftTextMargin_percent,
+				   int newTextSize,
+				   glm::vec2 newPosition);
+	void SetPreset(LayoutPreset newCurrentPreset);
 };
 
 #endif

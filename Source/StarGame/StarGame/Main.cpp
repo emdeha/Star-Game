@@ -201,36 +201,28 @@ void InitializePrograms()
 
 void InitializeGUI()
 {
-	/*Button myButton("sample", "Sample", glm::vec2(0.2f, 0.2f),
-				0.03f, 0.03f, 0.1f, 0.1f,
-				48);
-
-	myButton.Init("../data/fonts/AGENCYR.TTF",
-				  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-	LayoutInfo inGameLayoutInfo;
-	inGameLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-
-	Layout inGameLayout(LAYOUT_IN_GAME, inGameLayoutInfo);
-
-	//inGameLayout.AddButtonControl(myButton);
-
-	universe->AddLayout(inGameLayout);
-	LayoutInfo inGameLayoutInfo;
-	inGameLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-
-	universe->AddLayout(LAYOUT_IN_GAME, inGameLayoutInfo);*/
-
-
 	LayoutInfo inGameLayoutInfo;
 	inGameLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
 	Layout inGameLayout(LAYOUT_IN_GAME, inGameLayoutInfo);
 
 	Button exitButton("exit", "Exit", glm::vec2(0.5f, 0.5f),
-					  0.03f, 0.03f, 0.1f, 0.1f,
-					  48);
+					  3.0f, 3.0f, 11.8f, 12.0f,
+					  58,
+					  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+					  MEDIUM);
 	exitButton.Init("../data/fonts/AGENCYR.TTF",
 				    glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
+	exitButton.AddPreset(SMALL,
+						 3.0f, 3.0f, 11.8f, 12.0f,
+						 48,
+						 glm::vec2(0.5f, 0.5f));
+	exitButton.AddPreset(BIG,
+						 3.0f, 3.0f, 11.8f, 12.0f,
+						 68,
+						 glm::vec2(0.5f, 0.5f));
+
 	inGameLayout.AddButtonControl(exitButton);
 
 	universe->AddLayout(inGameLayout);
@@ -239,45 +231,68 @@ void InitializeGUI()
 
 
 	LayoutInfo menuLayoutInfo;
+	menuLayoutInfo.textSize = 48;
 	menuLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.5f, 0.6f, 1.0f);
 
 	Layout menuLayout(LAYOUT_MENU, menuLayoutInfo);
 
-	Button newGameButton("newGame", "New Game", glm::vec2(-0.282f, 0.5f),
-						 0.03f, 0.03f, 0.119f, 0.119f,
-						 48);
+	Button newGameButton("newGame", "New Game", glm::vec2(-0.9f, -0.6f),
+						 0.0f, 0.0f, 0.0f, 0.0f,
+						 48,
+						 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+						 MEDIUM);
 	newGameButton.Init("../data/fonts/AGENCYR.TTF",
 					   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	
+	newGameButton.AddPreset(SMALL,
+							0.0f, 0.0f, 0.0f, 0.0f,
+							28,
+							glm::vec2(-0.9f, -0.62f));
+	newGameButton.AddPreset(BIG,
+							0.0f, 0.0f, 0.0f, 0.0f,
+							68,
+							glm::vec2(-0.9f, -0.58f));
 
-	Button saveGameButton("saveGame", "Save Game", glm::vec2(-0.3f, 0.26f),
-						  0.03f, 0.03f, 0.1f, 0.1f,
-						  48);
+	Button saveGameButton("saveGame", "Save Game", glm::vec2(-0.9f, -0.7f),
+						  0.0f, 0.0f, 0.0f, 0.0f,
+						  48,
+						  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+						  MEDIUM);
 	saveGameButton.Init("../data/fonts/AGENCYR.TTF",
-					    glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));	
+					    glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
-	Button loadGameButton("loadGame", "Load Game", glm::vec2(-0.3f, 0.02f),
-						  0.03f, 0.03f, 0.1f, 0.1f,
-						  48);
-	loadGameButton.Init("../data/fonts/AGENCYR.TTF",
-					    glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));	
+	saveGameButton.AddPreset(SMALL,
+							 0.0f, 0.0f, 0.0f, 0.0f,
+							 28,
+							 glm::vec2(-0.9f, -0.71f));
+	saveGameButton.AddPreset(BIG, 
+							 0.0f, 0.0f, 0.0f, 0.0f,
+							 68,
+							 glm::vec2(-0.9f, -0.69f));
 
-	Button optionsButton("options", "Options", glm::vec2(-0.195f, -0.22f),
-						 0.03f, 0.03f, 0.205f, 0.205f,
-						 48);
-	optionsButton.Init("../data/fonts/AGENCYR.TTF",
-					   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));	
 
-	Button quitButton("quit", "Quit", glm::vec2(-0.087f, -0.495f),
-					  0.03f, 0.03f, 0.31f, 0.31f,
-					  48);
-	quitButton.Init("../data/fonts/AGENCYR.TTF",
-				    glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));	
+	Button quitGameButton("quitGame", "Quit", glm::vec2(-0.9f, -0.8f),
+						  0.0f, 0.0f, 0.0f, 0.0f,
+						  48, 
+						  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+						  MEDIUM);
+	quitGameButton.Init("../data/fonts/AGENCYR.TTF",
+					    glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
+	quitGameButton.AddPreset(SMALL,
+							 0.0f, 0.0f, 0.0f, 0.0f,
+							 28,
+							 glm::vec2(-0.9f, -0.8f));
+	quitGameButton.AddPreset(BIG,
+							 0.0f, 0.0f, 0.0f, 0.0f,
+							 68,
+							 glm::vec2(-0.9f, -0.8f));
+
+
 
 	menuLayout.AddButtonControl(newGameButton);
 	menuLayout.AddButtonControl(saveGameButton);
-	menuLayout.AddButtonControl(loadGameButton);
-	menuLayout.AddButtonControl(optionsButton);
-	menuLayout.AddButtonControl(quitButton);
+	menuLayout.AddButtonControl(quitGameButton);
 
 	universe->AddLayout(menuLayout);
 	universe->SetLayout(LAYOUT_MENU, true);
@@ -392,8 +407,7 @@ void Reshape(int width, int height)
 	persMatrix.Perspective(45.0f, aspectRatio, displayData.zNear, displayData.zFar);
 
 	displayData.projectionMatrix = persMatrix.Top();
-
-	//myButton.Update(width, height);
+	
 
 	glBindBuffer(GL_UNIFORM_BUFFER, shaderManager.GetUniformBuffer(UBT_PROJECTION));
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(displayData.projectionMatrix), &displayData.projectionMatrix);
@@ -401,6 +415,24 @@ void Reshape(int width, int height)
 
 	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 	glutPostRedisplay();
+
+	//universe->UpdateCurrentLayout(width, height);
+	if(width <= 800 || height <= 600)
+	{
+		universe->SetLayoutPreset(SMALL);
+		universe->UpdateCurrentLayout(800, 600);
+	}
+	else if(width > 800 && width <= 1440 ||
+			height > 600 && height <= 900)
+	{
+		universe->SetLayoutPreset(MEDIUM);
+		universe->UpdateCurrentLayout(1440, 900);
+	}
+	else
+	{
+		universe->SetLayoutPreset(BIG);
+		universe->UpdateCurrentLayout(1920, 1080);
+	}
 }
 
 

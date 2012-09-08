@@ -66,6 +66,7 @@ public:
 
 	void RenderCurrentLayout(const FontProgData &fontData,
 							 const SimpleProgData &simpleData);
+	void UpdateCurrentLayout(int windowWidth, int windowHeight);
 
 
 	void StopUniverse();
@@ -81,8 +82,9 @@ public:
 	Layout GetLayout(LayoutType layoutType);
 	bool HasLayout(LayoutType layoutType);
 	bool IsLayoutOn(LayoutType layoutType);
-	void SetLayout(LayoutType layoutType, bool isSet);
 
+	void SetLayout(LayoutType layoutType, bool isSet);
+	void SetLayoutPreset(LayoutPreset layoutPreset);
 
 	void SetMusic(const std::string &fileName, SoundTypes soundType);
 	void SetMusicVolume(float volume, ChannelType chType);

@@ -22,7 +22,9 @@
 Layout::Layout()
 {
 	layoutType = LAYOUT_IN_GAME;
+
 	layoutInfo.backgroundColor = glm::vec4();
+	layoutInfo.textSize = 0;
 
 	buttonControls.resize(0);
 	subLayouts.resize(0);
@@ -32,6 +34,7 @@ Layout::Layout()
 Layout::Layout(LayoutType newLayoutType, LayoutInfo newLayoutInfo)
 {
 	layoutType = newLayoutType;
+
 	layoutInfo = newLayoutInfo;
 
 	buttonControls.resize(0);
@@ -59,6 +62,16 @@ void Layout::Draw(const FontProgData &fontData, const SimpleProgData &simpleData
 			(*iter).Draw(fontData, simpleData);
 		}
 	}
+}
+
+void Layout::Update(int windowWidth, int windowHeight)
+{
+	for(std::vector<Button>::iterator iter = buttonControls.begin();
+		iter != buttonControls.end(); ++iter)
+	{
+		(*iter).Update(windowWidth, windowHeight);
+	}
+	// TODO: Update the sub layouts.
 }
 
 
@@ -94,4 +107,32 @@ bool Layout::IsSet()
 void Layout::Set(bool newIsSet)
 {
 	isSet = newIsSet;
+}
+
+void Layout::SetCurrentPreset(LayoutPreset newCurrentPreset)
+{
+	switch(newCurrentPreset)
+	{
+	case SMALL: 
+		for(std::vector<Button>::iterator iter = buttonControls.begin();
+			iter != buttonControls.end(); ++iter)
+		{
+			(*iter).SetPreset(SMALL);
+		}
+		break;
+	case MEDIUM:
+		for(std::vector<Button>::iterator iter = buttonControls.begin();
+			iter != buttonControls.end(); ++iter)
+		{
+			(*iter).SetPreset(MEDIUM);
+		}
+		break;
+	case BIG:
+		for(std::vector<Button>::iterator iter = buttonControls.begin();
+			iter != buttonControls.end(); ++iter)
+		{
+			(*iter).SetPreset(BIG);
+		}
+		break;
+	}
 }

@@ -75,6 +75,18 @@ void Universe::UpdateUniverse()
 		//}
 	}
 }
+void Universe::UpdateCurrentLayout(int windowWidth, int windowHeight)
+{
+	for(std::map<LayoutType, Layout>::iterator iter = universeLayouts.begin();
+		iter != universeLayouts.end(); ++iter)
+	{
+		if(iter->second.IsSet())
+		{
+			iter->second.Update(windowWidth, windowHeight);
+			break;
+		}
+	}
+}
 
 void Universe::OnEvent(Event &_event)
 {
@@ -208,6 +220,19 @@ void Universe::PlayMusic(SoundTypes soundType)
 void Universe::SetGamma(float newUniverseGamma)
 {
 	universeGamma = newUniverseGamma;
+}
+
+void Universe::SetLayoutPreset(LayoutPreset layoutPreset)
+{
+	for(std::map<LayoutType, Layout>::iterator iter = universeLayouts.begin();
+		iter != universeLayouts.end(); ++iter)
+	{
+		if(iter->second.IsSet())
+		{
+			iter->second.SetCurrentPreset(layoutPreset);
+			break;
+		}
+	}
 }
 
 

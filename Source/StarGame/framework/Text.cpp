@@ -59,6 +59,11 @@ void Text::UpdateWindowDimensions(int newWindowWidth, int newWindowHeight)
 {
 	windowHeight = newWindowHeight;
 	windowWidth = newWindowWidth;
+
+	textMinWidth = 999.0f;
+	textMaxWidth = -999.0f;
+	textMinHeight = 999.0f;
+	textMaxHeight = -999.0f;
 }
 
 void Text::Print(const char *text, const FontProgData &fontData,

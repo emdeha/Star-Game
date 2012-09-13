@@ -1,4 +1,4 @@
-﻿Build started 8.9.2012 г. 19:18:46 ч..
+﻿Build started 13.9.2012 г. 18:59:43 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\StarGame.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -9,6 +9,14 @@
      1>e:\ceci\thegame\source\stargame\stargame\main.cpp(84): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
      1>e:\ceci\thegame\source\stargame\stargame\main.cpp(103): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
      1>e:\ceci\thegame\source\stargame\stargame\main.cpp(103): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>e:\ceci\thegame\source\stargame\stargame\main.cpp(116): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>e:\ceci\thegame\source\stargame\stargame\main.cpp(116): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>e:\ceci\thegame\source\stargame\stargame\main.cpp(129): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>e:\ceci\thegame\source\stargame\stargame\main.cpp(129): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>e:\ceci\thegame\source\stargame\stargame\main.cpp(142): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>e:\ceci\thegame\source\stargame\stargame\main.cpp(142): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>e:\ceci\thegame\source\stargame\stargame\main.cpp(167): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>e:\ceci\thegame\source\stargame\stargame\main.cpp(167): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -35,4 +43,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.71
+Time Elapsed 00:00:04.37

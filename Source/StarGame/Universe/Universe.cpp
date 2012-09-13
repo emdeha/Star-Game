@@ -107,6 +107,18 @@ void Universe::OnEvent(Event &_event)
 			this->SetLayout(LAYOUT_MENU, false);
 			this->SetLayout(LAYOUT_IN_GAME, true);
 		}
+		if(strcmp(_event.GetArgument("object").varString, "saveGameButton") == 0)
+		{
+			this->SetLayout(LAYOUT_SAVE_GAME, true);
+			this->SetLayout(LAYOUT_MENU, false);
+		}
+		if(strcmp(_event.GetArgument("object").varString, "printCmd") == 0)
+		{
+			std::printf("%s", 
+				this->GetLayout(LAYOUT_MENU).GetTextBoxControl("sample")->GetContent().c_str());
+			
+			this->GetLayout(LAYOUT_MENU).GetTextBoxControl("sample")->Clear();
+		}
 		break;
 	case EVENT_TYPE_SPACE_BTN_CLICK:
 		if(strcmp(_event.GetArgument("command").varString, "playBackgroundMusic") == 0)

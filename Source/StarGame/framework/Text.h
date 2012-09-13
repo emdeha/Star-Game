@@ -51,6 +51,7 @@ class Text
 private:
 	FT_Library ft; ///< Handle for the FreeType2 library
 	FT_Face fontFace; ///< The font we will use for our text
+	//FT_Face fontFace_bold;
 
 	int windowWidth;
 	int windowHeight;
@@ -63,11 +64,14 @@ private:
 	GLuint vbo;
 	GLuint vao;
 
+
+	//bool isBold;
+
 public:
 	Text();
 	/// \fn Text
 	/// \brief Initializes the FreeType2 library and sets the text's font
-	Text(const char *fontName);
+	Text(const char *fontName/*, const char *fontName_bold*/);
 
 	/// \fn Init
 	/// \brief Generates the OpenGL buffers needed for text drawing and sets `windowWidth` and `windowHeight`
@@ -91,6 +95,13 @@ public:
 
 
 	void ComputeTextDimensions(const char *text, glm::vec2 position, int fontSize);
+
+	//void SetFont(bool newIsBold);
+
+	/*bool IsBold()
+	{
+		return isBold;
+	}*/
 
 
 	float GetTextMinWidth()

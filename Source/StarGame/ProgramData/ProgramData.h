@@ -53,6 +53,8 @@ struct SimpleProgData
 	GLuint theProgram;
 
 	GLuint modelToCameraMatrixUnif;
+	GLuint projectionMatrixUnif;
+
 	GLuint colorUnif;
 
 	GLuint positionAttrib;
@@ -64,6 +66,8 @@ struct FontProgData
 
 	GLuint textureUnif;
 	GLuint colorUnif;
+
+	GLuint projectionMatrixUnif;
 
 	GLuint positionAttrib;
 	GLuint textureCoordAttrib;

@@ -80,13 +80,13 @@ void HandleMouse()
 		{
 			if(
 			   universe->GetLayout(LAYOUT_IN_GAME).
-			   GetButtonControl("exit").
+			   GetButtonControl("exit")->
 			   IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("exitButton");
 
-				universe->GetLayout(LAYOUT_IN_GAME).GetButtonControl("exit").OnEvent(leftClickButtonEvent);
+				universe->GetLayout(LAYOUT_IN_GAME).GetButtonControl("exit")->OnEvent(leftClickButtonEvent);
 
 				universe->OnEvent(leftClickButtonEvent);
 
@@ -99,15 +99,91 @@ void HandleMouse()
 		{
 			if(
 				universe->GetLayout(LAYOUT_MENU).
-				GetButtonControl("newGame").
+				GetButtonControl("newGame")->
 				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("newGameButton");
 
-				universe->GetLayout(LAYOUT_MENU).GetButtonControl("newGame").OnEvent(leftClickButtonEvent);
+				universe->GetLayout(LAYOUT_MENU).GetButtonControl("newGame")->OnEvent(leftClickButtonEvent);
 
 				universe->OnEvent(leftClickButtonEvent);
+			}
+
+			if(
+				universe->GetLayout(LAYOUT_MENU).
+				GetButtonControl("saveGame")->
+				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("saveGameButton");
+
+				universe->GetLayout(LAYOUT_MENU).GetButtonControl("saveGame")->OnEvent(leftClickButtonEvent);
+
+				universe->OnEvent(leftClickButtonEvent);
+			}
+
+			if(
+				universe->GetLayout(LAYOUT_MENU).
+				GetButtonControl("printCmd")->
+				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("printCmd");
+
+				universe->GetLayout(LAYOUT_MENU).GetButtonControl("printCmd")->OnEvent(leftClickButtonEvent);
+
+				universe->OnEvent(leftClickButtonEvent);
+			}
+
+			if(
+				universe->GetLayout(LAYOUT_MENU).
+				GetTextBoxControl("sample")->
+				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+			  )
+			{
+				Event leftClickTextBoxEvent = StockEvents::EventOnLeftClick("sample");
+
+				universe->GetLayout(LAYOUT_MENU).GetTextBoxControl("sample")->OnEvent(leftClickTextBoxEvent);
+
+				
+				if(universe->GetLayout(LAYOUT_MENU).GetTextBoxControl("sample") != 
+				   universe->GetLayout(LAYOUT_MENU).GetActiveTextBox())
+				{
+					EventArg unclickEventArg[1];
+					unclickEventArg[0].argType = "none";
+					unclickEventArg[0].argument.varType = TYPE_BOOL;
+					unclickEventArg[0].argument.varBool = false;
+
+					Event unclickEvent = Event(1, EVENT_TYPE_UNCLICK, unclickEventArg);
+
+					universe->GetLayout(LAYOUT_MENU).GetActiveTextBox()->OnEvent(unclickEvent);
+				}
+			}
+
+			if(
+				universe->GetLayout(LAYOUT_MENU).
+				GetTextBoxControl("sampleTwo")->
+				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+			  )
+			{
+				Event leftClickTextBoxEvent = StockEvents::EventOnLeftClick("sampleTwo");
+
+				universe->GetLayout(LAYOUT_MENU).GetTextBoxControl("sampleTwo")->OnEvent(leftClickTextBoxEvent);
+
+				
+				if(universe->GetLayout(LAYOUT_MENU).GetTextBoxControl("sampleTwo") != 
+				   universe->GetLayout(LAYOUT_MENU).GetActiveTextBox())
+				{
+					EventArg unclickEventArg[1];
+					unclickEventArg[0].argType = "none";
+					unclickEventArg[0].argument.varType = TYPE_BOOL;
+					unclickEventArg[0].argument.varBool = false;
+
+					Event unclickEvent = Event(1, EVENT_TYPE_UNCLICK, unclickEventArg);
+
+					universe->GetLayout(LAYOUT_MENU).GetActiveTextBox()->OnEvent(unclickEvent);
+				}
 			}
 		}
 
@@ -137,12 +213,6 @@ void HandleMouse()
 		}
 	}
 
-	/*if(myButton.IsMouseOn(
-		glm::vec2(userMouse.GetClipSpacePosition(windowWidth, windowHeight))))
-	{
-		return;
-	}*/
-
 	std::vector<Satellite*> sunSatellites = mainSun->GetSatellites();
 	for(std::vector<Satellite*>::iterator iter = sunSatellites.begin(); 
 		iter != sunSatellites.end(); ++iter)
@@ -157,6 +227,35 @@ void HandleMouse()
 			universe->OnEvent(satelliteHoveredEvent);
 		}
 	}
+
+
+	/*if(universe->IsLayoutOn(LAYOUT_MENU))
+	{
+		if(
+			universe->GetLayout(LAYOUT_MENU).
+			GetButtonControl("newGame").
+			IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+			)
+		{
+			//Event hoverButtonEvent = StockEvents::EventOnHover();
+
+			//universe->GetLayout(LAYOUT_MENU).GetButtonControl("newGame").OnEvent(hoverButtonEvent);
+
+			universe->GetLayout(LAYOUT_MENU).GetButtonControl("newGame").SetFont(true);
+		}
+
+		if(
+			universe->GetLayout(LAYOUT_MENU).
+			GetButtonControl("saveGame").
+			IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+			)
+		{
+			Event hoverButtonEvent = StockEvents::EventOnHover();
+
+			universe->GetLayout(LAYOUT_MENU).GetButtonControl("saveGame").OnEvent(hoverButtonEvent);
+		}
+	}*/
+
 
 	userMouse.ReleaseRightButton();
 	userMouse.ReleaseLeftButton();
@@ -206,19 +305,20 @@ void InitializeGUI()
 
 	Layout inGameLayout(LAYOUT_IN_GAME, inGameLayoutInfo);
 
-	Button exitButton("exit", "Exit", glm::vec2(0.5f, 0.5f),
-					  3.0f, 3.0f, 11.8f, 12.0f,
-					  58,
-					  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
-					  MEDIUM);
-	exitButton.Init("../data/fonts/AGENCYR.TTF",
-				    glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	std::shared_ptr<Button> exitButton(new Button("exit", "Exit", 
+												  glm::vec2(0.5f, 0.5f),
+												  58,
+												  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+												  MEDIUM,
+												  false));
+	exitButton->Init("../data/fonts/AGENCYR.TTF",
+				     glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
-	exitButton.AddPreset(SMALL,
+	exitButton->AddPreset(SMALL,
 						 3.0f, 3.0f, 11.8f, 12.0f,
 						 48,
 						 glm::vec2(0.5f, 0.5f));
-	exitButton.AddPreset(BIG,
+	exitButton->AddPreset(BIG,
 						 3.0f, 3.0f, 11.8f, 12.0f,
 						 68,
 						 glm::vec2(0.5f, 0.5f));
@@ -231,71 +331,120 @@ void InitializeGUI()
 
 
 	LayoutInfo menuLayoutInfo;
-	menuLayoutInfo.textSize = 48;
 	menuLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.5f, 0.6f, 1.0f);
 
 	Layout menuLayout(LAYOUT_MENU, menuLayoutInfo);
 
-	Button newGameButton("newGame", "New Game", glm::vec2(-0.9f, -0.6f),
-						 0.0f, 0.0f, 0.0f, 0.0f,
-						 48,
-						 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
-						 MEDIUM);
-	newGameButton.Init("../data/fonts/AGENCYR.TTF",
+	std::shared_ptr<Button> newGameButton(new Button("newGame", "New Game", glm::vec2(-0.9f, -0.6f),
+										  48,
+										  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+										  MEDIUM,
+										  false));
+	newGameButton->Init("../data/fonts/AGENCYR.TTF",
 					   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 	
-	newGameButton.AddPreset(SMALL,
+	newGameButton->AddPreset(SMALL,
 							0.0f, 0.0f, 0.0f, 0.0f,
 							28,
 							glm::vec2(-0.9f, -0.62f));
-	newGameButton.AddPreset(BIG,
+	newGameButton->AddPreset(BIG,
 							0.0f, 0.0f, 0.0f, 0.0f,
 							68,
 							glm::vec2(-0.9f, -0.58f));
 
-	Button saveGameButton("saveGame", "Save Game", glm::vec2(-0.9f, -0.7f),
-						  0.0f, 0.0f, 0.0f, 0.0f,
-						  48,
-						  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
-						  MEDIUM);
-	saveGameButton.Init("../data/fonts/AGENCYR.TTF",
+	std::shared_ptr<Button> saveGameButton(new Button("saveGame", "Save Game", glm::vec2(-0.9f, -0.7f),
+										   48,
+										   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+										   MEDIUM,
+										   false));
+	saveGameButton->Init("../data/fonts/AGENCYR.TTF",
 					    glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
-	saveGameButton.AddPreset(SMALL,
+	saveGameButton->AddPreset(SMALL,
 							 0.0f, 0.0f, 0.0f, 0.0f,
 							 28,
 							 glm::vec2(-0.9f, -0.71f));
-	saveGameButton.AddPreset(BIG, 
+	saveGameButton->AddPreset(BIG, 
 							 0.0f, 0.0f, 0.0f, 0.0f,
 							 68,
 							 glm::vec2(-0.9f, -0.69f));
 
 
-	Button quitGameButton("quitGame", "Quit", glm::vec2(-0.9f, -0.8f),
-						  0.0f, 0.0f, 0.0f, 0.0f,
-						  48, 
-						  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
-						  MEDIUM);
-	quitGameButton.Init("../data/fonts/AGENCYR.TTF",
+	std::shared_ptr<Button> quitGameButton(new Button("quitGame", "Quit", glm::vec2(-0.9f, -0.8f),
+										   48, 
+										   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+										   MEDIUM,
+										   false));
+	quitGameButton->Init("../data/fonts/AGENCYR.TTF",
 					    glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
-	quitGameButton.AddPreset(SMALL,
+	quitGameButton->AddPreset(SMALL,
 							 0.0f, 0.0f, 0.0f, 0.0f,
 							 28,
 							 glm::vec2(-0.9f, -0.8f));
-	quitGameButton.AddPreset(BIG,
+	quitGameButton->AddPreset(BIG,
 							 0.0f, 0.0f, 0.0f, 0.0f,
 							 68,
 							 glm::vec2(-0.9f, -0.8f));
 
+		
+	std::shared_ptr<TextBox> sample(new TextBox("sample", glm::vec2(0.0f, 0.0f),
+												48, 0.3f, 5,
+												glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+												MEDIUM,
+												true));
+	sample->Init("../data/fonts/AGENCYR.TTF",
+				glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
+	std::shared_ptr<TextBox> sampleTwo(new TextBox("sampleTwo", glm::vec2(0.0f, 0.2f),
+												   48, 0.7f, 20,
+												   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+												   MEDIUM, 
+												   true));
+	sampleTwo->Init("../data/fonts/AGENCYR.TTF",
+					glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
+
+
+	std::shared_ptr<Button> printToCMDButton(new Button("printCmd", "Print", glm::vec2(0.4f, 0.0f),
+														48, 
+														glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+														MEDIUM,
+														false));
+	printToCMDButton->Init("../data/fonts/AGENCYR.TTF",
+						   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
+	
+	menuLayout.AddTextBoxControl(sample);
+	menuLayout.AddTextBoxControl(sampleTwo);
 
 	menuLayout.AddButtonControl(newGameButton);
 	menuLayout.AddButtonControl(saveGameButton);
 	menuLayout.AddButtonControl(quitGameButton);
+	menuLayout.AddButtonControl(printToCMDButton);
 
 	universe->AddLayout(menuLayout);
 	universe->SetLayout(LAYOUT_MENU, true);
+
+
+	LayoutInfo saveGameLayoutInfo;
+	saveGameLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.5f, 0.6f, 1.0f);
+
+	Layout saveGameLayout(LAYOUT_SAVE_GAME, saveGameLayoutInfo);
+
+	std::shared_ptr<Label> saveGameLayoutHeader(new Label("saveGameHeader", "This is the Save Game layout",
+											    glm::vec2(-0.5f, 0.8f),
+											    38,
+											    glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+											    MEDIUM,
+											    false));
+	saveGameLayoutHeader->Init("../data/fonts/AGENCYR.TTF",
+							  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
+	saveGameLayout.AddLabelControl(saveGameLayoutHeader);
+
+	universe->AddLayout(saveGameLayout);
+	universe->SetLayout(LAYOUT_SAVE_GAME, false);
 }
 
 void InitializeScene()
@@ -402,11 +551,11 @@ void Display()
 
 void Reshape(int width, int height)
 {
-	glutil::MatrixStack persMatrix;
+	glutil::MatrixStack projMatrix;
 	float aspectRatio = width / (float)height;
-	persMatrix.Perspective(45.0f, aspectRatio, displayData.zNear, displayData.zFar);
+	projMatrix.Perspective(45.0f, aspectRatio, displayData.zNear, displayData.zFar);
 
-	displayData.projectionMatrix = persMatrix.Top();
+	displayData.projectionMatrix = projMatrix.Top();
 	
 
 	glBindBuffer(GL_UNIFORM_BUFFER, shaderManager.GetUniformBuffer(UBT_PROJECTION));
@@ -415,6 +564,18 @@ void Reshape(int width, int height)
 
 	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 	glutPostRedisplay();
+
+
+	projMatrix.SetIdentity();
+	glUseProgram(shaderManager.GetFontProgData().theProgram);
+		glUniformMatrix4fv(shaderManager.GetFontProgData().projectionMatrixUnif,
+						   1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
+	glUseProgram(0);
+
+	glUseProgram(shaderManager.GetSimpleProgDataOrtho().theProgram);
+		glUniformMatrix4fv(shaderManager.GetSimpleProgDataOrtho().projectionMatrixUnif, 
+						   1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
+	glUseProgram(0);
 
 	//universe->UpdateCurrentLayout(width, height);
 	if(width <= 800 || height <= 600)
@@ -438,19 +599,25 @@ void Reshape(int width, int height)
 
 void Keyboard(unsigned char key, int x, int y)
 {
+	if(universe->IsLayoutOn(LAYOUT_MENU) && 
+	   universe->GetLayout(LAYOUT_MENU).HasActiveTextBox())
+	{
+		universe->GetLayout(LAYOUT_MENU).GetActiveTextBox()->InputChar(key);
+	}
+
 	switch (key)
 	{
 	case 27:
 		glutLeaveMainLoop();
 		return;
 	case 32:
-		EventArg spaceClickedEventArg[1];
+		/*EventArg spaceClickedEventArg[1];
 		spaceClickedEventArg[0].argType = "command";
 		spaceClickedEventArg[0].argument.varType = TYPE_STRING;
 		strcpy(spaceClickedEventArg[0].argument.varString, "playBackgroundMusic");
 		Event spaceClickedEvent = Event(1, EVENT_TYPE_SPACE_BTN_CLICK, spaceClickedEventArg);
 
-		universe->OnEvent(spaceClickedEvent);
+		universe->OnEvent(spaceClickedEvent);*/
 		break;
 	}
 

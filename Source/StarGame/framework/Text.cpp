@@ -20,11 +20,11 @@
 
 
 Text::Text()
-{
-
+{	
+	//isBold = false;
 }
 
-Text::Text(const char *fontName)
+Text::Text(const char *fontName/*, const char *fontName_bold*/)
 {
 	if(FT_Init_FreeType(&ft))
 	{
@@ -37,12 +37,28 @@ Text::Text(const char *fontName)
 		std::printf("Could not open font file.\n");
 		return;
 	}	
+	/*if(FT_New_Face(ft, "../data/fonts/AGENCYB.TTF", 0, &fontFace_bold))
+	{
+		std::printf("Could not open font file.\n");
+		return;
+	}*/
+
+	//isBold = false;
 
 	textMinWidth = 999.0f;
 	textMaxWidth = -999.0f;
 	textMinHeight = 999.0f;
 	textMaxHeight = -999.0f;
 }
+/*
+void Text::SetFont(bool newIsBold)
+{
+	// assert(newIsBold == true);
+
+	fontFace = fontFace_bold;
+
+	isBold = newIsBold;
+}*/
 
 void Text::Init(int newWindowWidth, int newWindowHeight)
 {
@@ -71,13 +87,24 @@ void Text::Print(const char *text, const FontProgData &fontData,
 				 glm::vec4 color,
 				 int fontSize)
 {	
+	FT_Face fontFaceToUse = fontFace;
+	/*if(isBold)
+	{
+		fontFaceToUse = fontFace_bold;
+	}
+	else
+	{*/
+		//fontFaceToUse = fontFace;
+	//}
+
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glUseProgram(fontData.theProgram);
 	glBindVertexArray(vao);
 
-	FT_Set_Pixel_Sizes(fontFace, 0, fontSize);
+	FT_Set_Pixel_Sizes(fontFaceToUse, 0, fontSize);
 	glUniform4fv(fontData.colorUnif, 1, glm::value_ptr(color));
 
 	GLuint texture;
@@ -96,21 +123,21 @@ void Text::Print(const char *text, const FontProgData &fontData,
 	
 	for(const char *p = text; *p; p++)
 	{
-		if(FT_Load_Char(fontFace, *p, FT_LOAD_RENDER))
+		if(FT_Load_Char(fontFaceToUse, *p, FT_LOAD_RENDER))
 		{
 			continue;
 		}
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, fontFace->glyph->bitmap.width, fontFace->glyph->bitmap.rows,
-					 0, GL_RED, GL_UNSIGNED_BYTE, fontFace->glyph->bitmap.buffer);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, fontFaceToUse->glyph->bitmap.width, fontFaceToUse->glyph->bitmap.rows,
+					 0, GL_RED, GL_UNSIGNED_BYTE, fontFaceToUse->glyph->bitmap.buffer);
 
 		glm::vec4 finalCoordinates;
 		glm::vec2 scale(2.0f / windowWidth, 2.0f / windowHeight);
-		finalCoordinates.x = position.x + fontFace->glyph->bitmap_left * scale.x;
-		finalCoordinates.y = -position.y - fontFace->glyph->bitmap_top * scale.y;
+		finalCoordinates.x = position.x + fontFaceToUse->glyph->bitmap_left * scale.x;
+		finalCoordinates.y = -position.y - fontFaceToUse->glyph->bitmap_top * scale.y;
 
-		finalCoordinates.z = fontFace->glyph->bitmap.width * scale.x;
-		finalCoordinates.w = fontFace->glyph->bitmap.rows * scale.y;
+		finalCoordinates.z = fontFaceToUse->glyph->bitmap.width * scale.x;
+		finalCoordinates.w = fontFaceToUse->glyph->bitmap.rows * scale.y;
 
 		const GLfloat bufferData[16] = 
 		{
@@ -127,8 +154,8 @@ void Text::Print(const char *text, const FontProgData &fontData,
 		glBufferData(GL_ARRAY_BUFFER, sizeof(bufferData), bufferData, GL_DYNAMIC_DRAW);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-		position.x += (fontFace->glyph->advance.x >> 6) * scale.x;
-		position.y += (fontFace->glyph->advance.y >> 6) * scale.y;
+		position.x += (fontFaceToUse->glyph->advance.x >> 6) * scale.x;
+		position.y += (fontFaceToUse->glyph->advance.y >> 6) * scale.y;
 	}
 
 	glDisableVertexAttribArray(fontData.positionAttrib);
@@ -142,25 +169,37 @@ void Text::Print(const char *text, const FontProgData &fontData,
 
 void Text::ComputeTextDimensions(const char *text, glm::vec2 position, int fontSize)
 {
-	FT_Set_Pixel_Sizes(fontFace, 0, fontSize);
+	FT_Face fontFaceToUse = fontFace;
+
+	/*if(isBold)
+	{
+		fontFaceToUse = fontFace_bold;
+	}
+	else
+	{
+		fontFaceToUse = fontFace;
+	}*/
+
+
+	FT_Set_Pixel_Sizes(fontFaceToUse, 0, fontSize);
 
 	for(const char *p = text; *p; p++)
 	{
-		if(FT_Load_Char(fontFace, *p, FT_LOAD_RENDER))
+		if(FT_Load_Char(fontFaceToUse, *p, FT_LOAD_RENDER))
 		{
 			continue;
 		}
 
 		glm::vec4 finalCoordinates = glm::vec4();
 		glm::vec2 scale(2.0f / windowWidth, 2.0f / windowHeight);
-		finalCoordinates.x = position.x + fontFace->glyph->bitmap_left * scale.x;
-		finalCoordinates.y = -position.y - fontFace->glyph->bitmap_top * scale.y;
+		finalCoordinates.x = position.x + fontFaceToUse->glyph->bitmap_left * scale.x;
+		finalCoordinates.y = -position.y - fontFaceToUse->glyph->bitmap_top * scale.y;
 
-		finalCoordinates.z = fontFace->glyph->bitmap.width * scale.x;
-		finalCoordinates.w = fontFace->glyph->bitmap.rows * scale.y;
+		finalCoordinates.z = fontFaceToUse->glyph->bitmap.width * scale.x;
+		finalCoordinates.w = fontFaceToUse->glyph->bitmap.rows * scale.y;
 
-		position.x += (fontFace->glyph->advance.x >> 6) * scale.x;
-		position.y += (fontFace->glyph->advance.y >> 6) * scale.y;
+		position.x += (fontFaceToUse->glyph->advance.x >> 6) * scale.x;
+		position.y += (fontFaceToUse->glyph->advance.y >> 6) * scale.y;
 
 
 		if(textMinHeight > -finalCoordinates.y - finalCoordinates.w)

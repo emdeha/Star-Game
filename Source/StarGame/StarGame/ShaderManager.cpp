@@ -102,6 +102,7 @@ void ShaderManager::LoadSimpleProgramOrtho(const std::string &vertexShader,
 	shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, fragmentShader));
 
 	simpleDataOrtho.theProgram = Framework::CreateProgram(shaderList);
+	simpleDataOrtho.projectionMatrixUnif = glGetUniformLocation(simpleDataOrtho.theProgram, "projectionMatrix");
 	simpleDataOrtho.colorUnif = glGetUniformLocation(simpleDataOrtho.theProgram, "color");
 
 	simpleDataOrtho.positionAttrib = glGetAttribLocation(simpleDataOrtho.theProgram, "position");
@@ -118,6 +119,8 @@ void ShaderManager::LoadFontProgram(const std::string &vertexShader,
 	fontData.theProgram = Framework::CreateProgram(shaderList);
 	fontData.colorUnif = glGetUniformLocation(fontData.theProgram, "fontColor");
 	fontData.textureUnif = glGetUniformLocation(fontData.theProgram, "fontTexture");
+
+	fontData.projectionMatrixUnif = glGetUniformLocation(fontData.theProgram, "projection");
 
 	fontData.positionAttrib = glGetAttribLocation(fontData.theProgram, "position");
 	//fontData.textureCoordAttrib = glGetAttribLocation(fontData.theProgram, "textureCoordinates");

@@ -51,7 +51,7 @@ class Text
 private:
 	FT_Library ft; ///< Handle for the FreeType2 library
 	FT_Face fontFace; ///< The font we will use for our text
-	//FT_Face fontFace_bold;
+	FT_Face fontFace_bold;
 
 	int windowWidth;
 	int windowHeight;
@@ -65,7 +65,7 @@ private:
 	GLuint vao;
 
 
-	//bool isBold;
+	bool isBold;
 
 public:
 	Text();
@@ -95,32 +95,46 @@ public:
 
 
 	void ComputeTextDimensions(const char *text, glm::vec2 position, int fontSize);
+	// returns the max corner of the character
+	// the min corner is provided by the position parameter
+	glm::vec2 ComputeCharacterDimensions(char ch, glm::vec2 position, int fontSize);
 
-	//void SetFont(bool newIsBold);
+	void SetFont(bool newIsBold);
 
-	/*bool IsBold()
-	{
-		return isBold;
-	}*/
+	bool IsBold();
 
-
-	float GetTextMinWidth()
-	{
-		return textMinWidth;
-	}
-	float GetTextMaxWidth()
-	{
-		return textMaxWidth;
-	}
-	float GetTextMinHeight()
-	{
-		return textMinHeight;
-	}
-	float GetTextMaxHeight()
-	{
-		return textMaxHeight;
-	}
+	float GetTextMinWidth();
+	float GetTextMaxWidth();
+	float GetTextMinHeight();
+	float GetTextMaxHeight();
 };
+
+inline void Text::SetFont(bool newIsBold)
+{
+	isBold = newIsBold;
+}
+
+inline bool Text::IsBold()
+{
+	return isBold;
+}
+
+inline float Text::GetTextMinWidth()
+{
+	return textMinWidth;
+}
+inline float Text::GetTextMaxWidth()
+{
+	return textMaxWidth;
+}
+inline float Text::GetTextMinHeight()
+{
+	return textMinHeight;
+}
+inline float Text::GetTextMaxHeight()
+{
+	return textMaxHeight;
+}
 
 
 #endif

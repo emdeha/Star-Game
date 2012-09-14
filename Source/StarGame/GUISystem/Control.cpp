@@ -233,9 +233,9 @@ void Button::OnEvent(Event &_event)
 	case EVENT_TYPE_ON_CLICK:
 		std::printf("Button \'%s\' clicked\n", this->name.c_str());
 		break;
-	/*case EVENT_TYPE_ON_HOVER:
-		textTitle.SetFont(true);
-		break;*/
+	//case EVENT_TYPE_ON_HOVER:
+		//textTitle.SetFont(_event.GetArgument("isBold").varBool);
+		//break;
 	}
 }
 

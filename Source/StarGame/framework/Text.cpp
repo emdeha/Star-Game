@@ -21,7 +21,7 @@
 
 Text::Text()
 {	
-	//isBold = false;
+	isBold = false;
 }
 
 Text::Text(const char *fontName/*, const char *fontName_bold*/)
@@ -37,28 +37,20 @@ Text::Text(const char *fontName/*, const char *fontName_bold*/)
 		std::printf("Could not open font file.\n");
 		return;
 	}	
-	/*if(FT_New_Face(ft, "../data/fonts/AGENCYB.TTF", 0, &fontFace_bold))
+	if(FT_New_Face(ft, "../data/fonts/AGENCYB.TTF", 0, &fontFace_bold))
 	{
 		std::printf("Could not open font file.\n");
 		return;
-	}*/
+	}
 
-	//isBold = false;
+	isBold = false;
 
 	textMinWidth = 999.0f;
 	textMaxWidth = -999.0f;
 	textMinHeight = 999.0f;
 	textMaxHeight = -999.0f;
 }
-/*
-void Text::SetFont(bool newIsBold)
-{
-	// assert(newIsBold == true);
 
-	fontFace = fontFace_bold;
-
-	isBold = newIsBold;
-}*/
 
 void Text::Init(int newWindowWidth, int newWindowHeight)
 {
@@ -88,14 +80,14 @@ void Text::Print(const char *text, const FontProgData &fontData,
 				 int fontSize)
 {	
 	FT_Face fontFaceToUse = fontFace;
-	/*if(isBold)
+	if(isBold)
 	{
 		fontFaceToUse = fontFace_bold;
 	}
 	else
-	{*/
-		//fontFaceToUse = fontFace;
-	//}
+	{
+		fontFaceToUse = fontFace;
+	}
 
 
 	glEnable(GL_BLEND);
@@ -166,19 +158,17 @@ void Text::Print(const char *text, const FontProgData &fontData,
 	glDisable(GL_BLEND);
 }
 
-
 void Text::ComputeTextDimensions(const char *text, glm::vec2 position, int fontSize)
 {
 	FT_Face fontFaceToUse = fontFace;
-
-	/*if(isBold)
+	if(isBold)
 	{
 		fontFaceToUse = fontFace_bold;
 	}
 	else
 	{
 		fontFaceToUse = fontFace;
-	}*/
+	}
 
 
 	FT_Set_Pixel_Sizes(fontFaceToUse, 0, fontSize);
@@ -213,3 +203,29 @@ void Text::ComputeTextDimensions(const char *text, glm::vec2 position, int fontS
 			textMinWidth = finalCoordinates.x;
 	}
 };
+
+glm::vec2 Text::ComputeCharacterDimensions(char ch, glm::vec2 position, int fontSize)
+{
+	FT_Face fontFaceToUse = fontFace;
+	if(isBold)
+	{
+		fontFaceToUse = fontFace_bold;
+	}
+	else
+	{
+		fontFaceToUse = fontFace;
+	}
+
+	FT_Set_Pixel_Sizes(fontFaceToUse, 0, fontSize);
+
+	FT_Load_Char(fontFaceToUse, ch, FT_LOAD_RENDER);
+
+	glm::vec2 scale(2.0f / windowWidth, 2.0f / windowHeight);
+
+	glm::vec2 maxCorner;
+	maxCorner.y = -position.y - fontFaceToUse->glyph->bitmap_top * scale.y;
+	maxCorner.x = position.x + fontFaceToUse->glyph->bitmap_left * scale.x + 
+				  fontFaceToUse->glyph->bitmap.width * scale.x;
+
+	return maxCorner;
+}

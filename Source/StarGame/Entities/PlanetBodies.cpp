@@ -277,7 +277,7 @@ Satellite Satellite::operator=(const Satellite &other)
 	{
 		return *this;
 	}
-	
+
 	std::auto_ptr<Framework::Mesh> newMesh(new Framework::Mesh(*other.mesh));
 	mesh = newMesh;
 	std::auto_ptr<Sun> newParent(new Sun(*other.parent));
@@ -533,7 +533,14 @@ Sun Sun::operator=(const Sun &other)
 	std::auto_ptr<Framework::Mesh> newSunMesh(new Framework::Mesh(*other.sunMesh));
 	sunMesh = newSunMesh;
 
-	satellites = other.satellites;
+	//satellites = other.satellites;
+	for(std::vector<Satellite*>::const_iterator iter = other.satellites.begin();
+		iter != satellites.end(); ++iter)
+	{
+		satellites.push_back((*iter));
+	}
+	//------------------------------
+
 	diameter = other.diameter;
 	position = other.position;
 	isClicked = other.isClicked;

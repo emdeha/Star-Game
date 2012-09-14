@@ -229,22 +229,39 @@ void HandleMouse()
 	}
 
 
-	/*if(universe->IsLayoutOn(LAYOUT_MENU))
+	if(universe->IsLayoutOn(LAYOUT_MENU))
 	{
-		if(
+		/*if(
 			universe->GetLayout(LAYOUT_MENU).
-			GetButtonControl("newGame").
+			GetButtonControl("newGame")->
 			IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
 			)
 		{
 			//Event hoverButtonEvent = StockEvents::EventOnHover();
+			EventArg hoverButtonEventArg[1];
+			hoverButtonEventArg[0].argType = "isBold";
+			hoverButtonEventArg[0].argument.varType = TYPE_BOOL;
+			hoverButtonEventArg[0].argument.varBool = true;
 
-			//universe->GetLayout(LAYOUT_MENU).GetButtonControl("newGame").OnEvent(hoverButtonEvent);
+			Event hoverButtonEvent = Event(1, EVENT_TYPE_ON_HOVER, hoverButtonEventArg);
 
-			universe->GetLayout(LAYOUT_MENU).GetButtonControl("newGame").SetFont(true);
+			universe->GetLayout(LAYOUT_MENU).GetButtonControl("newGame")->OnEvent(hoverButtonEvent);
+
+			//universe->GetLayout(LAYOUT_MENU).GetButtonControl("newGame")->SetFont(true);
+		}
+		else
+		{
+			EventArg hoverButtonEventArg[1];
+			hoverButtonEventArg[0].argType = "isBold";
+			hoverButtonEventArg[0].argument.varType = TYPE_BOOL;
+			hoverButtonEventArg[0].argument.varBool = false;
+
+			Event hoverButtonEvent = Event(1, EVENT_TYPE_ON_HOVER, hoverButtonEventArg);
+
+			universe->GetLayout(LAYOUT_MENU).GetButtonControl("newGame")->OnEvent(hoverButtonEvent);
 		}
 
-		if(
+		/*if(
 			universe->GetLayout(LAYOUT_MENU).
 			GetButtonControl("saveGame").
 			IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
@@ -253,8 +270,8 @@ void HandleMouse()
 			Event hoverButtonEvent = StockEvents::EventOnHover();
 
 			universe->GetLayout(LAYOUT_MENU).GetButtonControl("saveGame").OnEvent(hoverButtonEvent);
-		}
-	}*/
+		}*/
+	}
 
 
 	userMouse.ReleaseRightButton();

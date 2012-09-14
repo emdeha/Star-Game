@@ -63,9 +63,13 @@ struct LayoutInfo
 	glm::vec4 backgroundColor;
 };
 
-class Button;
+/*class Button;
 class Label;
-class TextBox;
+class TextBox;*/
+
+class TextControl;
+
+// The window dimensions should later be bound only to the 'Layout' class.
 
 class Layout
 {
@@ -73,9 +77,11 @@ private:
 	LayoutType layoutType;
 	LayoutInfo layoutInfo;
 
-	std::vector<std::shared_ptr<Button>> buttonControls;
-	std::vector<std::shared_ptr<Label>> labelControls;
-	std::vector<std::shared_ptr<TextBox>> textBoxControls;
+	//std::vector<std::shared_ptr<Button>> buttonControls;
+	//std::vector<std::shared_ptr<Label>> labelControls;
+	//std::vector<std::shared_ptr<TextBox>> textBoxControls;
+
+	std::vector<std::shared_ptr<TextControl>> controls;
 	std::vector<std::shared_ptr<Layout>> subLayouts;
 
 	bool isSet;
@@ -84,13 +90,17 @@ public:
 	Layout();
 	Layout(LayoutType newLayoutType, LayoutInfo newLayoutInfo);
 
-	void AddButtonControl(std::shared_ptr<Button> newButtonControl);
-	void AddLabelControl(std::shared_ptr<Label> newLabelControl);
-	void AddTextBoxControl(std::shared_ptr<TextBox> newTextBoxControl);
+	//void AddButtonControl(std::shared_ptr<Button> newButtonControl);
+	//void AddLabelControl(std::shared_ptr<Label> newLabelControl);
+	//void AddTextBoxControl(std::shared_ptr<TextBox> newTextBoxControl);
+
+	void AddControl(std::shared_ptr<TextControl> newControl);
 	void AddSubLayout(std::shared_ptr<Layout> newSubLayout);
 
-	std::shared_ptr<Button> GetButtonControl(const std::string &buttonName);
-	std::shared_ptr<TextBox> GetTextBoxControl(const std::string &textBoxName);
+	//std::shared_ptr<Button> GetButtonControl(const std::string &buttonName);
+	//std::shared_ptr<TextBox> GetTextBoxControl(const std::string &textBoxName);
+
+	std::shared_ptr<TextControl> GetControl(const std::string &controlName);
 
 	void Draw(const FontProgData &fontData, const SimpleProgData &simpleData);
 	void Update(int windowWidth, int windowHeight);
@@ -102,9 +112,11 @@ public:
 
 	void SetCurrentPreset(LayoutPreset newCurrentPreset);
 
-
-	std::shared_ptr<TextBox> GetActiveTextBox();
-	bool HasActiveTextBox();
+	
+	std::shared_ptr<TextControl> GetActiveControl();
+	bool HasActiveControl();
+	//std::shared_ptr<TextBox> GetActiveTextBox();
+	//bool HasActiveTextBox();
 };
 
 
@@ -125,247 +137,164 @@ struct PresetAttributes
 	int textSize;
 };
 
-// The window dimensions should later be bound only to the 'Layout' class.
-
-class Button
+class TextControl
 {
-private:
+protected:
 	LayoutPreset currentPreset;
 	PresetAttributes presets[3];
 
+	Text textToDisplay;
 
-	Text textTitle;
-	std::string name;
-	std::string title;	
-
-
-	glm::vec4 backgroundColor;
-	
-
-	float textMinHeight;
-	float textMaxHeight;
-	float textMinWidth;
-	float textMaxWidth;
-
-
-	int windowWidth;
-	int windowHeight;
-		
-	bool hasBackground;
-
-
-	GLfloat bufferData[24];
-	GLuint vbo;
-	GLuint vao;
-
-public:
-	Button();
-
-	Button(const std::string &newName, const std::string &newTitle, 
-		   glm::vec2 newPosition,
-		   int newTextSize,
-		   int newWindowWidth, int newWindowHeight,
-		   LayoutPreset newCurrentPreset,
-		   bool newHasBackground,
-		   glm::vec4 newBackgroundColor = glm::vec4());
-
-	Button(const std::string &newName, const std::string &newTitle,
-		   glm::vec2 newPosition,
-		   float buttonTopMargin_percent, float buttonBottomMargin_percent,
-		   float buttonLeftMargin_percent, float buttonRightMargin_percent,
-		   int newTextSize, 
-		   int newWindowWidth, int newWindowHeight,
-		   LayoutPreset newCurrentPreset,
-		   bool newHasBackground,
-		   glm::vec4 newBackgroundColor = glm::vec4());
-
-	void Init(const std::string &fontName,
-			  int newWindowWidth, int newWindowHeight);
-
-	bool IsMouseOn(glm::vec2 mouseCoordinates);
-
-	void OnEvent(Event &_event);
-
-	void Draw(const FontProgData &fontData, const SimpleProgData &simpleData);
-	void Update(int newWindowWidth, int newWindowHeight);
-
-	void ComputeNewAttributes();
-
-
-	std::string GetName();
-
-	void SetTextSize(int newTextSize);
-	void SetNewMargins(float buttonTopMargin_percent, float buttonBottomMargin_percent,
-					   float buttonLeftMargin_percent, float buttonRightMargin_percent);
-	void SetNewPosition(glm::vec2 newPosition);
-	void SetBackgroundColor(glm::vec4 newBackgroundColor);
-	void SetFont(bool isBold);
-
-	void AddPreset(LayoutPreset newPreset,
-				   float newBottomTextMargin_percent, 
-				   float newTopTextMargin_percent,
-				   float newRightTextMargin_percent,
-				   float newLeftTextMargin_percent,
-				   int newTextSize,
-				   glm::vec2 newPosition);
-	void SetPreset(LayoutPreset newCurrentPreset);
-};
-
-
-class Label
-{
-private:
-	LayoutPreset currentPreset;
-	PresetAttributes presets[3];
-
-	Text labelText;
 	std::string name;
 	std::string text;
 
-
-	glm::vec4 backgroundColor;
-
-
-	float textMinHeight;
-	float textMaxHeight;
-	float textMinWidth;
-	float textMaxWidth;
-
-
 	int windowWidth;
 	int windowHeight;
 
+	
+	glm::vec2 boxMinCorner;
+	glm::vec2 boxMaxCorner;
+
+	
 	bool hasBackground;
+	bool isActive;
+
 
 	GLfloat bufferData[24];
 	GLuint vbo;
 	GLuint vao;
 
 public:
-	Label();
+	TextControl();
 
-	Label(const std::string &newName, const std::string &newText,
-		  glm::vec2 newPosition,
-		  int newTextSize,
-		  int newWindowWidth, int newWindowHeight,
-		  LayoutPreset newCurrentPreset,
-		  bool newHasBackground);
-	Label(const std::string &newName, const std::string &newText,
-		  glm::vec2 newPosition,
-		  int newTextSize,
-		  float labelTopMargin_percent, float labelBottomMargin_percent,
-		  float labelLeftMargin_percent, float labelRightMargin_percent,
-		  int newWindowWidth, int newWindowHeight,
-		  LayoutPreset newCurrentPreset,
-		  bool newHasBackground);
+	TextControl(LayoutPreset newCurrentPreset,
+				const std::string &newName, const std::string &newText,
+				glm::vec2 newPosition, int newTextSize,
+				int newWindowWidth, int newWindowHeight,
+				bool newHasBackground);
 
+	void Init(const std::string &fontName);
+		
+	virtual void Draw(const FontProgData &fontData, const SimpleProgData &simpleData);
 
-	void Init(const std::string &fontName,
-			  int newWindowWidth, int newWindowHeight);
+	virtual void ComputeNewAttributes();
+	virtual void Update(int newWindowWidth, int newWindowHeight);
 
-	void Draw(const FontProgData &fontData, const SimpleProgData &simpleData);
-	void Update(int newWindowWidth, int newWindowHeight);
+	virtual void OnEvent(Event &_event) = 0;
 
+	virtual bool IsMouseOn(glm::vec2 mouseCoordinates_clipSpace);
+
+	virtual void InputChar(char ch) {}
+	virtual void Clear() {}
+	virtual std::string GetContent() { return ""; }
+
+	bool IsActive();
+
+public:
+	std::string GetName();
 
 	void AddPreset(LayoutPreset newPreset,
-				   float newBottomTextMargin_percent, 
-				   float newTopTextMargin_percent,
-				   float newRightTextMargin_percent,
-				   float newLeftTextMargin_percent,
 				   int newTextSize,
-				   glm::vec2 newPosition);
+				   glm::vec2 newPosition,
+				   float newBottomTextMargin_percent = 0.0f, 
+				   float newTopTextMargin_percent = 0.0f,
+				   float newRightTextMargin_percent = 0.0f,
+				   float newLeftTextMargin_percent = 0.0f);
 	void SetPreset(LayoutPreset newCurrentPreset);
-
-
-	
-	void ComputeNewAttributes();
 };
 
 
+class Button : public TextControl
+{
+public:
+	Button() : TextControl() {}
 
-class TextBox
+	Button(LayoutPreset newCurrentPreset,
+		   const std::string &newName, const std::string &newText,
+		   glm::vec2 newPosition, int newTextSize,
+		   int newWindowWidth, int newWindowHeight,
+		   bool newHasBackground) 
+		   : TextControl(newCurrentPreset, 
+						 newName, newText,
+						 newPosition, newTextSize,
+						 newWindowWidth, newWindowHeight,
+						 newHasBackground) {};
+
+	void OnEvent(Event &_event);
+};
+
+
+class Label : public TextControl
+{
+public:
+	Label() : TextControl() {}
+
+	Label(LayoutPreset newCurrentPreset,
+		  const std::string &newName, const std::string &newText,
+		  glm::vec2 newPosition, int newTextSize,
+		  int newWindowWidth, int newWindowHeight,
+		  bool newHasBackground) 
+		  : TextControl(newCurrentPreset, 
+						newName, newText,
+						newPosition, newTextSize,
+						newWindowWidth, newWindowHeight,
+						newHasBackground) {};
+
+	void OnEvent(Event &_event);
+};
+
+
+class TextBox : public TextControl
 {
 private:
-	LayoutPreset currentPreset;
-	PresetAttributes presets[3];
-
-	Text text;
-
-	std::string name;
-	std::string inputText;
-
 	std::string visibleText;
 
-	float maxHeight;
-	float maxWidth;
+	int maxNumberChars;
 
-	int maxWidthChars;
-
-	int windowWidth;
-	int windowHeight;
-
-	bool hasBackground;
-	bool isHandlingInput;
-
-	GLfloat bufferData[24];
-	GLuint vbo;
-	GLuint vao;
+	//bool isActive;
 
 public:
-	TextBox();
+	TextBox() : TextControl() 
+	{
+		visibleText = "";
+	}
 
-	TextBox(const std::string &newName,
-			glm::vec2 newPosition, int newTextSize,
-			float width, int newMaxWidthChars,
-			int newWindowWidth, int newWindowHeight,
+	TextBox(float maxWidth, int newMaxNumberChars,
 			LayoutPreset newCurrentPreset,
-			bool newHasBackground);
+		    const std::string &newName, const std::string &newText,
+		    glm::vec2 newPosition, int newTextSize,
+		    int newWindowWidth, int newWindowHeight,
+		    bool newHasBackground) 
+		    : TextControl(newCurrentPreset, 
+						  newName, newText,
+						  newPosition, newTextSize,
+						  newWindowWidth, newWindowHeight,
+						  newHasBackground)
+	{
+		visibleText = "";
 
+		boxMaxCorner.x = maxWidth;
+		maxNumberChars = newMaxNumberChars;
+		//isActive = false;
+	}
 
-	void Init(const std::string &fontName,
-		      int newWindowWidth, int newWindowHeight);
-
+	
 	void Draw(const FontProgData &fontData, const SimpleProgData &simpleData);
+
+	void ComputeNewAttributes();
 	void Update(int newWindowWidth, int newWindowHeight);
-
-
-
-	void AddPreset(LayoutPreset newPreset,
-				   int newTextSize,
-				   glm::vec2 newPosition);
-	void SetPreset(LayoutPreset newCurrentPreset);
 
 	void InputChar(char ch);
 	void Clear();
 
-
-	
-	void ComputeNewAttributes();
-
-
 	void OnEvent(Event &_event);
 
-	bool IsMouseOn(glm::vec2 mouseCoordinates);
+	std::string GetContent();
+	void SetContent(std::string newInputText);
 
-	bool IsHandlingInput()
-	{
-		return isHandlingInput;
-	}
+	//bool IsActive();
 
-
-	std::string GetName()
-	{
-		return name;
-	}
-	std::string GetContent()
-	{
-		return inputText;
-	}
-
-	void SetInputText(std::string newInputText)
-	{
-		inputText = newInputText;
-	}
+	bool IsMouseOn(glm::vec2 mousePosition_clipSpace);
 };
 
 #endif

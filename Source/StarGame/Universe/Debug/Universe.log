@@ -1,9 +1,12 @@
-﻿Build started 14.9.2012 г. 17:13:30 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Universe\Universe.vcxproj" on node 3 (build target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 14.9.2012 г. 20:21:24 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Universe\Universe.vcxproj" on node 4 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Debug\Universe.lastbuildstate".
+       InitializeBuildStatus:
          Creating "Debug\Universe.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../freetype/include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Debug\Universe.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../freetype/include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\Universe.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Universe.cpp
          Universe.cpp
      1>e:\ceci\thegame\source\stargame\universe\universe.cpp(193): warning C4715: 'Universe::GetLayout' : not all control paths return a value
@@ -14,8 +17,8 @@
        FinalizeBuildStatus:
          Deleting file "Debug\Universe.unsuccessfulbuild".
          Touching "Debug\Universe.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Universe\Universe.vcxproj" (build target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Universe\Universe.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.97
+Time Elapsed 00:00:01.90

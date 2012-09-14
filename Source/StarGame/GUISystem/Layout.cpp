@@ -25,9 +25,11 @@ Layout::Layout()
 
 	layoutInfo.backgroundColor = glm::vec4();
 
-	buttonControls.resize(0);
-	labelControls.resize(0);
-	textBoxControls.resize(0);
+	//buttonControls.resize(0);
+	//labelControls.resize(0);
+	//textBoxControls.resize(0);
+
+	controls.resize(0);
 	subLayouts.resize(0);
 
 	isSet = false;
@@ -38,9 +40,11 @@ Layout::Layout(LayoutType newLayoutType, LayoutInfo newLayoutInfo)
 
 	layoutInfo = newLayoutInfo;
 
-	buttonControls.resize(0);
-	labelControls.resize(0);
-	textBoxControls.resize(0);
+	//buttonControls.resize(0);
+	//labelControls.resize(0);
+	//textBoxControls.resize(0);
+
+	controls.resize(0);
 	subLayouts.resize(0);
 
 	isSet = true;
@@ -51,7 +55,7 @@ void Layout::Draw(const FontProgData &fontData, const SimpleProgData &simpleData
 	glm::vec4 backgroundColor = layoutInfo.backgroundColor;
 	glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
 
-	for(std::vector<std::shared_ptr<Button>>::iterator iter = buttonControls.begin();
+	/*for(std::vector<std::shared_ptr<Button>>::iterator iter = buttonControls.begin();
 		iter != buttonControls.end(); ++iter)
 	{
 		(*iter)->Draw(fontData, simpleData);
@@ -63,6 +67,11 @@ void Layout::Draw(const FontProgData &fontData, const SimpleProgData &simpleData
 	}
 	for(std::vector<std::shared_ptr<TextBox>>::iterator iter = textBoxControls.begin();
 		iter != textBoxControls.end(); ++iter)
+	{
+		(*iter)->Draw(fontData, simpleData);
+	}*/
+	for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
+		iter != controls.end(); ++iter)
 	{
 		(*iter)->Draw(fontData, simpleData);
 	}
@@ -79,7 +88,7 @@ void Layout::Draw(const FontProgData &fontData, const SimpleProgData &simpleData
 
 void Layout::Update(int windowWidth, int windowHeight)
 {
-	for(std::vector<std::shared_ptr<Button>>::iterator iter = buttonControls.begin();
+	/*for(std::vector<std::shared_ptr<Button>>::iterator iter = buttonControls.begin();
 		iter != buttonControls.end(); ++iter)
 	{
 		(*iter)->Update(windowWidth, windowHeight);
@@ -95,8 +104,12 @@ void Layout::Update(int windowWidth, int windowHeight)
 		iter != textBoxControls.end(); ++iter)
 	{
 		(*iter)->Update(windowWidth, windowHeight);
+	}*/
+	for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
+		iter != controls.end(); ++iter)
+	{
+		(*iter)->Update(windowWidth, windowHeight);
 	}
-
 	for(std::vector<std::shared_ptr<Layout>>::iterator iter = subLayouts.begin();
 		iter != subLayouts.end(); ++iter)
 	{
@@ -105,7 +118,7 @@ void Layout::Update(int windowWidth, int windowHeight)
 }
 
 
-void Layout::AddButtonControl(std::shared_ptr<Button> newButtonControl)
+/*void Layout::AddButtonControl(std::shared_ptr<Button> newButtonControl)
 {
 	buttonControls.push_back(newButtonControl);
 }
@@ -116,13 +129,17 @@ void Layout::AddLabelControl(std::shared_ptr<Label> newLabelControl)
 void Layout::AddTextBoxControl(std::shared_ptr<TextBox> newTextBoxControl)
 {
 	textBoxControls.push_back(newTextBoxControl);
+}*/
+void Layout::AddControl(std::shared_ptr<TextControl> newControl)
+{
+	controls.push_back(newControl);
 }
 void Layout::AddSubLayout(std::shared_ptr<Layout> newSubLayout)
 {
 	subLayouts.push_back(newSubLayout);
 }
 
-
+/*
 std::shared_ptr<Button> Layout::GetButtonControl(const std::string &buttonName)
 {
 	for(std::vector<std::shared_ptr<Button>>::iterator iter = buttonControls.begin();
@@ -150,6 +167,21 @@ std::shared_ptr<TextBox> Layout::GetTextBoxControl(const std::string &textBoxNam
 
 	// TODO: Better error handling.
 	std::printf("There is no such control\n");
+}*/
+
+std::shared_ptr<TextControl> Layout::GetControl(const std::string &controlName)
+{
+	for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
+		iter != controls.end(); ++iter)
+	{
+		if((*iter)->GetName() == controlName)
+		{
+			return (*iter);
+		}
+	}
+
+	// TODO: Better error handling.
+	std::printf("There is no such control\n");
 }
 
 LayoutType Layout::GetLayoutType()
@@ -170,7 +202,12 @@ void Layout::SetCurrentPreset(LayoutPreset newCurrentPreset)
 	switch(newCurrentPreset)
 	{
 	case SMALL: 
-		for(std::vector<std::shared_ptr<Button>>::iterator iter = buttonControls.begin();
+		for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
+			iter != controls.end(); ++iter)
+		{
+			(*iter)->SetPreset(SMALL);
+		}
+		/*for(std::vector<std::shared_ptr<Button>>::iterator iter = buttonControls.begin();
 			iter != buttonControls.end(); ++iter)
 		{
 			(*iter)->SetPreset(SMALL);
@@ -180,9 +217,19 @@ void Layout::SetCurrentPreset(LayoutPreset newCurrentPreset)
 		{
 			(*iter)->SetPreset(SMALL);
 		}
+		for(std::vector<std::shared_ptr<TextBox>>::iterator iter = textBoxControls.begin();
+			iter != textBoxControls.end(); ++iter)
+		{
+			(*iter)->SetPreset(SMALL);
+		}*/
 		break;
 	case MEDIUM:
-		for(std::vector<std::shared_ptr<Button>>::iterator iter = buttonControls.begin();
+		for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
+			iter != controls.end(); ++iter)
+		{
+			(*iter)->SetPreset(MEDIUM);
+		}
+		/*for(std::vector<std::shared_ptr<Button>>::iterator iter = buttonControls.begin();
 			iter != buttonControls.end(); ++iter)
 		{
 			(*iter)->SetPreset(MEDIUM);
@@ -192,9 +239,19 @@ void Layout::SetCurrentPreset(LayoutPreset newCurrentPreset)
 		{
 			(*iter)->SetPreset(MEDIUM);
 		}
+		for(std::vector<std::shared_ptr<TextBox>>::iterator iter = textBoxControls.begin();
+			iter != textBoxControls.end(); ++iter)
+		{
+			(*iter)->SetPreset(MEDIUM);
+		}*/
 		break;
 	case BIG:
-		for(std::vector<std::shared_ptr<Button>>::iterator iter = buttonControls.begin();
+		for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
+			iter != controls.end(); ++iter)
+		{
+			(*iter)->SetPreset(BIG);
+		}
+		/*for(std::vector<std::shared_ptr<Button>>::iterator iter = buttonControls.begin();
 			iter != buttonControls.end(); ++iter)
 		{
 			(*iter)->SetPreset(BIG);
@@ -204,17 +261,47 @@ void Layout::SetCurrentPreset(LayoutPreset newCurrentPreset)
 		{
 			(*iter)->SetPreset(BIG);
 		}
+		for(std::vector<std::shared_ptr<TextBox>>::iterator iter = textBoxControls.begin();
+			iter != textBoxControls.end(); ++iter)
+		{
+			(*iter)->SetPreset(BIG);
+		}*/
 		break;
 	}
 }
 
 
-std::shared_ptr<TextBox> Layout::GetActiveTextBox()
+std::shared_ptr<TextControl> Layout::GetActiveControl()
+{
+	for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
+		iter != controls.end(); ++iter)
+	{
+		if((*iter)->IsActive())
+		{
+			return (*iter);
+		}
+	}
+}
+
+bool Layout::HasActiveControl()
+{
+	for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
+		iter != controls.end(); ++iter)
+	{
+		if((*iter)->IsActive())
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+/*std::shared_ptr<TextBox> Layout::GetActiveTextBox()
 {
 	for(std::vector<std::shared_ptr<TextBox>>::iterator iter = textBoxControls.begin();
 		iter != textBoxControls.end(); ++iter)
 	{
-		if((*iter)->IsHandlingInput())
+		if((*iter)->IsActive())
 		{
 			return (*iter);
 		}
@@ -226,11 +313,11 @@ bool Layout::HasActiveTextBox()
 	for(std::vector<std::shared_ptr<TextBox>>::iterator iter = textBoxControls.begin();
 		iter != textBoxControls.end(); ++iter)
 	{
-		if((*iter)->IsHandlingInput())
+		if((*iter)->IsActive())
 		{
 			return true;
 		}
 	}
 
 	return false;
-}
+}*/

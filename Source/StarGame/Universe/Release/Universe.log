@@ -1,4 +1,4 @@
-﻿Build started 8.9.2012 г. 19:19:00 ч..
+﻿Build started 14.9.2012 г. 20:21:40 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\Universe\Universe.vcxproj" on node 4 (rebuild target(s)).
      1>_PrepareForClean:
          Deleting file "Release\Universe.lastbuildstate".
@@ -20,4 +20,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:05.09
+Time Elapsed 00:00:01.28

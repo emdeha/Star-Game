@@ -1,4 +1,4 @@
-﻿Build started 31.7.2012 г. 19:38:55 ч..
+﻿Build started 14.9.2012 г. 20:21:26 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\Camera\Camera.vcxproj" on node 5 (rebuild target(s)).
      1>_PrepareForClean:
          Deleting file "Debug\Camera.lastbuildstate".
@@ -20,4 +20,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.38
+Time Elapsed 00:00:01.02

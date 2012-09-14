@@ -80,13 +80,13 @@ void HandleMouse()
 		{
 			if(
 			   universe->GetLayout(LAYOUT_IN_GAME).
-			   GetButtonControl("exit")->
+			   GetControl("exit")->
 			   IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("exitButton");
 
-				universe->GetLayout(LAYOUT_IN_GAME).GetButtonControl("exit")->OnEvent(leftClickButtonEvent);
+				universe->GetLayout(LAYOUT_IN_GAME).GetControl("exit")->OnEvent(leftClickButtonEvent);
 
 				universe->OnEvent(leftClickButtonEvent);
 
@@ -99,56 +99,56 @@ void HandleMouse()
 		{
 			if(
 				universe->GetLayout(LAYOUT_MENU).
-				GetButtonControl("newGame")->
+				GetControl("newGame")->
 				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("newGameButton");
 
-				universe->GetLayout(LAYOUT_MENU).GetButtonControl("newGame")->OnEvent(leftClickButtonEvent);
+				universe->GetLayout(LAYOUT_MENU).GetControl("newGame")->OnEvent(leftClickButtonEvent);
 
 				universe->OnEvent(leftClickButtonEvent);
 			}
 
 			if(
 				universe->GetLayout(LAYOUT_MENU).
-				GetButtonControl("saveGame")->
+				GetControl("saveGame")->
 				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("saveGameButton");
 
-				universe->GetLayout(LAYOUT_MENU).GetButtonControl("saveGame")->OnEvent(leftClickButtonEvent);
+				universe->GetLayout(LAYOUT_MENU).GetControl("saveGame")->OnEvent(leftClickButtonEvent);
 
 				universe->OnEvent(leftClickButtonEvent);
 			}
 
 			if(
 				universe->GetLayout(LAYOUT_MENU).
-				GetButtonControl("printCmd")->
+				GetControl("printCmd")->
 				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("printCmd");
 
-				universe->GetLayout(LAYOUT_MENU).GetButtonControl("printCmd")->OnEvent(leftClickButtonEvent);
+				universe->GetLayout(LAYOUT_MENU).GetControl("printCmd")->OnEvent(leftClickButtonEvent);
 
 				universe->OnEvent(leftClickButtonEvent);
 			}
 
 			if(
 				universe->GetLayout(LAYOUT_MENU).
-				GetTextBoxControl("sample")->
+				GetControl("sample")->
 				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickTextBoxEvent = StockEvents::EventOnLeftClick("sample");
 
-				universe->GetLayout(LAYOUT_MENU).GetTextBoxControl("sample")->OnEvent(leftClickTextBoxEvent);
+				universe->GetLayout(LAYOUT_MENU).GetControl("sample")->OnEvent(leftClickTextBoxEvent);
 
 				
-				if(universe->GetLayout(LAYOUT_MENU).GetTextBoxControl("sample") != 
-				   universe->GetLayout(LAYOUT_MENU).GetActiveTextBox())
+				if(universe->GetLayout(LAYOUT_MENU).GetControl("sample") != 
+				   universe->GetLayout(LAYOUT_MENU).GetActiveControl())
 				{
 					EventArg unclickEventArg[1];
 					unclickEventArg[0].argType = "none";
@@ -157,23 +157,23 @@ void HandleMouse()
 
 					Event unclickEvent = Event(1, EVENT_TYPE_UNCLICK, unclickEventArg);
 
-					universe->GetLayout(LAYOUT_MENU).GetActiveTextBox()->OnEvent(unclickEvent);
+					universe->GetLayout(LAYOUT_MENU).GetActiveControl()->OnEvent(unclickEvent);
 				}
 			}
 
 			if(
 				universe->GetLayout(LAYOUT_MENU).
-				GetTextBoxControl("sampleTwo")->
+				GetControl("sampleTwo")->
 				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickTextBoxEvent = StockEvents::EventOnLeftClick("sampleTwo");
 
-				universe->GetLayout(LAYOUT_MENU).GetTextBoxControl("sampleTwo")->OnEvent(leftClickTextBoxEvent);
+				universe->GetLayout(LAYOUT_MENU).GetControl("sampleTwo")->OnEvent(leftClickTextBoxEvent);
 
 				
-				if(universe->GetLayout(LAYOUT_MENU).GetTextBoxControl("sampleTwo") != 
-				   universe->GetLayout(LAYOUT_MENU).GetActiveTextBox())
+				if(universe->GetLayout(LAYOUT_MENU).GetControl("sampleTwo") != 
+				   universe->GetLayout(LAYOUT_MENU).GetActiveControl())
 				{
 					EventArg unclickEventArg[1];
 					unclickEventArg[0].argType = "none";
@@ -182,7 +182,7 @@ void HandleMouse()
 
 					Event unclickEvent = Event(1, EVENT_TYPE_UNCLICK, unclickEventArg);
 
-					universe->GetLayout(LAYOUT_MENU).GetActiveTextBox()->OnEvent(unclickEvent);
+					universe->GetLayout(LAYOUT_MENU).GetActiveControl()->OnEvent(unclickEvent);
 				}
 			}
 		}
@@ -322,25 +322,21 @@ void InitializeGUI()
 
 	Layout inGameLayout(LAYOUT_IN_GAME, inGameLayoutInfo);
 
-	std::shared_ptr<Button> exitButton(new Button("exit", "Exit", 
-												  glm::vec2(0.5f, 0.5f),
-												  58,
+	std::shared_ptr<Button> exitButton(new Button(MEDIUM,
+												  "exit", "Exit", 
+												  glm::vec2(0.5f, 0.5f), 58,
 												  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
-												  MEDIUM,
 												  false));
-	exitButton->Init("../data/fonts/AGENCYR.TTF",
-				     glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	exitButton->Init("../data/fonts/AGENCYR.TTF");
 
 	exitButton->AddPreset(SMALL,
-						 3.0f, 3.0f, 11.8f, 12.0f,
-						 48,
-						 glm::vec2(0.5f, 0.5f));
+						  48,
+						  glm::vec2(0.5f, 0.5f));
 	exitButton->AddPreset(BIG,
-						 3.0f, 3.0f, 11.8f, 12.0f,
-						 68,
-						 glm::vec2(0.5f, 0.5f));
+						  68,
+						  glm::vec2(0.5f, 0.5f));
 
-	inGameLayout.AddButtonControl(exitButton);
+	inGameLayout.AddControl(exitButton);
 
 	universe->AddLayout(inGameLayout);
 	universe->SetLayout(LAYOUT_IN_GAME, false);
@@ -352,93 +348,83 @@ void InitializeGUI()
 
 	Layout menuLayout(LAYOUT_MENU, menuLayoutInfo);
 
-	std::shared_ptr<Button> newGameButton(new Button("newGame", "New Game", glm::vec2(-0.9f, -0.6f),
-										  48,
-										  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
-										  MEDIUM,
-										  false));
-	newGameButton->Init("../data/fonts/AGENCYR.TTF",
-					   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	std::shared_ptr<Button> newGameButton(new Button(MEDIUM,
+													 "newGame", "New Game", 
+													 glm::vec2(-0.9f, -0.6f), 48,
+													 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+													 false));
+	newGameButton->Init("../data/fonts/AGENCYR.TTF");
 	
 	newGameButton->AddPreset(SMALL,
-							0.0f, 0.0f, 0.0f, 0.0f,
 							28,
 							glm::vec2(-0.9f, -0.62f));
 	newGameButton->AddPreset(BIG,
-							0.0f, 0.0f, 0.0f, 0.0f,
 							68,
 							glm::vec2(-0.9f, -0.58f));
 
-	std::shared_ptr<Button> saveGameButton(new Button("saveGame", "Save Game", glm::vec2(-0.9f, -0.7f),
-										   48,
-										   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
-										   MEDIUM,
-										   false));
-	saveGameButton->Init("../data/fonts/AGENCYR.TTF",
-					    glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	std::shared_ptr<Button> saveGameButton(new Button(MEDIUM,
+													  "saveGame", "Save Game", 
+													  glm::vec2(-0.9f, -0.7f), 48,
+													  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+													  false));
+	saveGameButton->Init("../data/fonts/AGENCYR.TTF");
 
 	saveGameButton->AddPreset(SMALL,
-							 0.0f, 0.0f, 0.0f, 0.0f,
-							 28,
-							 glm::vec2(-0.9f, -0.71f));
+							  28,
+							  glm::vec2(-0.9f, -0.71f));
 	saveGameButton->AddPreset(BIG, 
-							 0.0f, 0.0f, 0.0f, 0.0f,
-							 68,
-							 glm::vec2(-0.9f, -0.69f));
+							  68,
+							  glm::vec2(-0.9f, -0.69f));
 
 
-	std::shared_ptr<Button> quitGameButton(new Button("quitGame", "Quit", glm::vec2(-0.9f, -0.8f),
-										   48, 
-										   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
-										   MEDIUM,
-										   false));
-	quitGameButton->Init("../data/fonts/AGENCYR.TTF",
-					    glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	std::shared_ptr<Button> quitGameButton(new Button(MEDIUM,
+													  "quitGame", "Quit", 
+													  glm::vec2(-0.9f, -0.8f), 48, 
+													  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+													  false));
+	quitGameButton->Init("../data/fonts/AGENCYR.TTF");
 
 	quitGameButton->AddPreset(SMALL,
-							 0.0f, 0.0f, 0.0f, 0.0f,
-							 28,
-							 glm::vec2(-0.9f, -0.8f));
+							  28,
+							  glm::vec2(-0.9f, -0.8f));
 	quitGameButton->AddPreset(BIG,
-							 0.0f, 0.0f, 0.0f, 0.0f,
-							 68,
-							 glm::vec2(-0.9f, -0.8f));
+						 	  68,
+							  glm::vec2(-0.9f, -0.8f));
 
 		
-	std::shared_ptr<TextBox> sample(new TextBox("sample", glm::vec2(0.0f, 0.0f),
-												48, 0.3f, 5,
-												glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+	std::shared_ptr<TextBox> sample(new TextBox(0.3f, 5,
 												MEDIUM,
+												"sample", "",
+												glm::vec2(0.0f, 0.0f),	48, 
+												glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
 												true));
-	sample->Init("../data/fonts/AGENCYR.TTF",
-				glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	sample->Init("../data/fonts/AGENCYR.TTF");
 
-	std::shared_ptr<TextBox> sampleTwo(new TextBox("sampleTwo", glm::vec2(0.0f, 0.2f),
-												   48, 0.7f, 20,
+	std::shared_ptr<TextBox> sampleTwo(new TextBox(0.7f, 10,
+												   MEDIUM,
+												   "sampleTwo", "",
+												   glm::vec2(0.0f, 0.2f), 48, 
 												   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
-												   MEDIUM, 
 												   true));
-	sampleTwo->Init("../data/fonts/AGENCYR.TTF",
-					glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	sampleTwo->Init("../data/fonts/AGENCYR.TTF");
 
 
 
-	std::shared_ptr<Button> printToCMDButton(new Button("printCmd", "Print", glm::vec2(0.4f, 0.0f),
-														48, 
+	std::shared_ptr<Button> printToCMDButton(new Button(MEDIUM,
+														"printCmd", "Print", 
+														glm::vec2(0.4f, 0.0f), 48, 
 														glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
-														MEDIUM,
 														false));
-	printToCMDButton->Init("../data/fonts/AGENCYR.TTF",
-						   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	printToCMDButton->Init("../data/fonts/AGENCYR.TTF");
 
+	menuLayout.AddControl(sample);
+	menuLayout.AddControl(sampleTwo);
 	
-	menuLayout.AddTextBoxControl(sample);
-	menuLayout.AddTextBoxControl(sampleTwo);
 
-	menuLayout.AddButtonControl(newGameButton);
-	menuLayout.AddButtonControl(saveGameButton);
-	menuLayout.AddButtonControl(quitGameButton);
-	menuLayout.AddButtonControl(printToCMDButton);
+	menuLayout.AddControl(newGameButton);
+	menuLayout.AddControl(saveGameButton);
+	menuLayout.AddControl(quitGameButton);
+	menuLayout.AddControl(printToCMDButton);
 
 	universe->AddLayout(menuLayout);
 	universe->SetLayout(LAYOUT_MENU, true);
@@ -449,16 +435,14 @@ void InitializeGUI()
 
 	Layout saveGameLayout(LAYOUT_SAVE_GAME, saveGameLayoutInfo);
 
-	std::shared_ptr<Label> saveGameLayoutHeader(new Label("saveGameHeader", "This is the Save Game layout",
-											    glm::vec2(-0.5f, 0.8f),
-											    38,
-											    glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
-											    MEDIUM,
-											    false));
-	saveGameLayoutHeader->Init("../data/fonts/AGENCYR.TTF",
-							  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	std::shared_ptr<Label> saveGameLayoutHeader(new Label(MEDIUM,
+														  "saveGameHeader", "This is the Save Game layout",
+														  glm::vec2(-0.5f, 0.8f), 38,
+														  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+														  false));
+	saveGameLayoutHeader->Init("../data/fonts/AGENCYR.TTF");
 
-	saveGameLayout.AddLabelControl(saveGameLayoutHeader);
+	saveGameLayout.AddControl(saveGameLayoutHeader);
 
 	universe->AddLayout(saveGameLayout);
 	universe->SetLayout(LAYOUT_SAVE_GAME, false);
@@ -617,9 +601,9 @@ void Reshape(int width, int height)
 void Keyboard(unsigned char key, int x, int y)
 {
 	if(universe->IsLayoutOn(LAYOUT_MENU) && 
-	   universe->GetLayout(LAYOUT_MENU).HasActiveTextBox())
+	   universe->GetLayout(LAYOUT_MENU).HasActiveControl())
 	{
-		universe->GetLayout(LAYOUT_MENU).GetActiveTextBox()->InputChar(key);
+		universe->GetLayout(LAYOUT_MENU).GetActiveControl()->InputChar(key);
 	}
 
 	switch (key)

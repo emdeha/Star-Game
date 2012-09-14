@@ -18,97 +18,7 @@
 #include "stdafx.h"
 #include "GUISystem.h"
 
-#include <gl/freeglut.h>
 
-
-void TextBox::ComputeNewAttributes()
-{
-	text.ComputeTextDimensions("|", presets[currentPreset].position,
-									presets[currentPreset].textSize);
-
-	if(hasBackground)
-	{
-		maxHeight = text.GetTextMaxHeight();
-
-		bufferData[0] = maxWidth; bufferData[1] = maxHeight;
-		bufferData[2] = 0.0f; bufferData[3] = 1.0f;
-		bufferData[4] = maxWidth; bufferData[5] = presets[currentPreset].position.y; 
-		bufferData[6] = 0.0f; bufferData[7] = 1.0f;
-		bufferData[8] = presets[currentPreset].position.x; bufferData[9] = maxHeight; 
-		bufferData[10] = 0.0f; bufferData[11] = 1.0f;
-
-		bufferData[12] = maxWidth; bufferData[13] = presets[currentPreset].position.y; 
-		bufferData[14] = 0.0f; bufferData[15] = 1.0f;
-		bufferData[16] = presets[currentPreset].position.x; bufferData[17] = presets[currentPreset].position.y; 
-		bufferData[18] = 0.0f; bufferData[19] = 1.0f;
-		bufferData[20] = presets[currentPreset].position.x; bufferData[21] = maxHeight; 
-		bufferData[22] = 0.0f; bufferData[23] = 1.0f;
-	}
-	else
-	{
-		maxHeight = text.GetTextMaxHeight();
-	}
-}
-
-
-TextBox::TextBox()
-{
-	name = "";
-	inputText = "";
-	visibleText = "";
-
-	maxHeight = 0.0f;
-	maxWidth = 0.0f;
-
-	windowWidth = 0;
-	windowHeight = 0;
-
-	hasBackground = false;
-	isHandlingInput = false;
-}
-
-TextBox::TextBox(const std::string &newName,
-				 glm::vec2 newPosition, int newTextSize,
-				 float width, int newMaxWidthChars,
-				 int newWindowWidth, int newWindowHeight,
-				 LayoutPreset newCurrentPreset,
-				 bool newHasBackground)
-{
-	name = newName;
-	inputText = "";
-	visibleText = "";
-
-	currentPreset = newCurrentPreset;
-	presets[currentPreset].position = newPosition;
-	presets[currentPreset].textSize = newTextSize;
-
-	maxWidth = width;
-	maxWidthChars = newMaxWidthChars;
-	maxHeight = 0.0f;
-
-	windowWidth = newWindowWidth;
-	windowHeight = newWindowHeight;
-
-	hasBackground = newHasBackground;
-	isHandlingInput = false;
-}
-
-void TextBox::Init(const std::string &fontName,
-				   int newWindowWidth, int newWindowHeight)
-{
-	windowWidth = newWindowWidth;
-	windowHeight = newWindowHeight;
-
-	text = Text(fontName.c_str());
-	text.Init(newWindowWidth, newWindowHeight);
-
-	glGenBuffers(1, &vbo);
-	
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	ComputeNewAttributes();
-}
 
 void TextBox::Draw(const FontProgData &fontData, const SimpleProgData &simpleData)
 {
@@ -130,21 +40,53 @@ void TextBox::Draw(const FontProgData &fontData, const SimpleProgData &simpleDat
 		glUseProgram(0);
 	}
 
-	text.Print(visibleText.c_str(), fontData,
-			   presets[currentPreset].position,
-			   glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
-			   presets[currentPreset].textSize);
+	textToDisplay.Print(visibleText.c_str(), fontData,
+					    presets[currentPreset].position,
+					    glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
+					    presets[currentPreset].textSize);
 }
+
+
+void TextBox::ComputeNewAttributes()
+{
+	textToDisplay.ComputeTextDimensions("|", presets[currentPreset].position,
+										presets[currentPreset].textSize);
+
+	if(hasBackground)
+	{
+		boxMaxCorner.y = textToDisplay.GetTextMaxHeight();
+
+		bufferData[0] = boxMaxCorner.x; bufferData[1] = boxMaxCorner.y;
+		bufferData[2] = 0.0f; bufferData[3] = 1.0f;
+		bufferData[4] = boxMaxCorner.x; bufferData[5] = presets[currentPreset].position.y; 
+		bufferData[6] = 0.0f; bufferData[7] = 1.0f;
+		bufferData[8] = presets[currentPreset].position.x; bufferData[9] = boxMaxCorner.y; 
+		bufferData[10] = 0.0f; bufferData[11] = 1.0f;
+
+		bufferData[12] = boxMaxCorner.x; bufferData[13] = presets[currentPreset].position.y; 
+		bufferData[14] = 0.0f; bufferData[15] = 1.0f;
+		bufferData[16] = presets[currentPreset].position.x; bufferData[17] = presets[currentPreset].position.y; 
+		bufferData[18] = 0.0f; bufferData[19] = 1.0f;
+		bufferData[20] = presets[currentPreset].position.x; bufferData[21] = boxMaxCorner.y; 
+		bufferData[22] = 0.0f; bufferData[23] = 1.0f;
+	}
+	else
+	{
+		boxMaxCorner.y = textToDisplay.GetTextMaxHeight();
+	}
+}
+
 
 void TextBox::Update(int newWindowWidth, int newWindowHeight)
 {
 	windowHeight = newWindowHeight;
 	windowWidth = newWindowWidth;
 
-	text.UpdateWindowDimensions(windowWidth, windowHeight);
+	textToDisplay.UpdateWindowDimensions(windowWidth, windowHeight);
 
 	ComputeNewAttributes();
 }
+
 
 // TODO: The text doesn't hide well with the max width computed of characters.
 //		 Use max width in some units.
@@ -155,57 +97,42 @@ void TextBox::InputChar(char ch)
 	// 8 represents the ASCII code of BACKSPACE
 	if((int)ch == 8)
 	{
-		inputText.pop_back();
+		text.pop_back();
 	}
 	else
 	{
-		inputText += ch;
+		text += ch;
 	}
 
-	if(inputText.length() > maxWidthChars)
+	if((int)text.length() > maxNumberChars)
 	{
 		if((int)ch != 8)
 		{
-			for(int i = 0; i < maxWidthChars - 1; i++)
+			for(int i = 0; i < maxNumberChars - 1; i++)
 			{
 				visibleText[i] = visibleText[i + 1];
 			}
-			visibleText[maxWidthChars - 1] = ch;
+			visibleText[maxNumberChars - 1] = ch;
 		}
 		else
 		{
-			for(int i = maxWidthChars - 1; i >= 1; i--)
+			for(int i = maxNumberChars - 1; i >= 1; i--)
 			{
 				visibleText[i] = visibleText[i - 1];
 			}			
-			visibleText[0] = inputText[inputText.length() - maxWidthChars];
+			visibleText[0] = text[text.length() - maxNumberChars];
 		}
 	}
 	else
 	{
-		visibleText = inputText;
+		visibleText = text;
 	}
 }
 
 void TextBox::Clear()
 {
-	inputText = "";
+	text = "";
 	visibleText = "";
-}
-
-bool TextBox::IsMouseOn(glm::vec2 mouseCoordinates)
-{
-	float minHeight = presets[currentPreset].position.y;
-	float minWidth = presets[currentPreset].position.x;
-
-	if(mouseCoordinates.y >  minHeight &&
-	   mouseCoordinates.x > minWidth &&
-	   mouseCoordinates.y < maxHeight &&
-	   mouseCoordinates.x < maxWidth)
-	{
-		return true;
-	}
-	else return false;
 }
 
 void TextBox::OnEvent(Event &_event)
@@ -213,38 +140,39 @@ void TextBox::OnEvent(Event &_event)
 	switch(_event.GetType())
 	{
 	case EVENT_TYPE_ON_CLICK:
-		isHandlingInput = true;
+		isActive = true;
 		break;
 	case EVENT_TYPE_UNCLICK:
-		isHandlingInput = false;
+		isActive = false;
 		break;
 	}
 }
 
-void TextBox::AddPreset(LayoutPreset newPreset,
-						int newTextSize,
-						glm::vec2 newPosition)
+std::string TextBox::GetContent()
 {
-	presets[newPreset].textSize = newTextSize;
-	presets[newPreset].position = newPosition;
+	return text;
+}
+void TextBox::SetContent(std::string newInputText)
+{
+	text = newInputText;
 }
 
-void TextBox::SetPreset(LayoutPreset newCurrentPreset)
+/*bool TextBox::IsActive()
 {
-	if(presets[newCurrentPreset].textSize > 0)
+	return isActive;
+}*/
+
+bool TextBox::IsMouseOn(glm::vec2 mousePosition_clipSpace)
+{
+	float minHeight = presets[currentPreset].position.y;
+	float minWidth = presets[currentPreset].position.x;
+
+	if(mousePosition_clipSpace.y > minHeight &&
+	   mousePosition_clipSpace.x > minWidth &&
+	   mousePosition_clipSpace.y < boxMaxCorner.y &&
+	   mousePosition_clipSpace.x < boxMaxCorner.x)
 	{
-		currentPreset = newCurrentPreset;
-		
-		ComputeNewAttributes();
+		return true;
 	}
-	else
-	{
-		for(int i = 0; i < PRESETS_COUNT; i++)
-		{
-			if(presets[i].textSize > 0)
-			{
-				currentPreset = LayoutPreset(i);
-			}
-		}
-	}
+	else return false;
 }

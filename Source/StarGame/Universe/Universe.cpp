@@ -115,9 +115,9 @@ void Universe::OnEvent(Event &_event)
 		if(strcmp(_event.GetArgument("object").varString, "printCmd") == 0)
 		{
 			std::printf("%s", 
-				this->GetLayout(LAYOUT_MENU).GetTextBoxControl("sample")->GetContent().c_str());
+				this->GetLayout(LAYOUT_MENU).GetControl("sample")->GetContent().c_str());
 			
-			this->GetLayout(LAYOUT_MENU).GetTextBoxControl("sample")->Clear();
+			this->GetLayout(LAYOUT_MENU).GetControl("sample")->Clear();
 		}
 		break;
 	case EVENT_TYPE_SPACE_BTN_CLICK:

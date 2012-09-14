@@ -1,4 +1,4 @@
-﻿Build started 8.9.2012 г. 19:19:00 ч..
+﻿Build started 14.9.2012 г. 20:21:40 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\GUISystem\GUISystem.vcxproj" on node 5 (rebuild target(s)).
      1>_PrepareForClean:
          Deleting file "Release\GUISystem.lastbuildstate".
@@ -7,13 +7,20 @@
        ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Release\GUISystem.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
          stdafx.cpp
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Release\GUISystem.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Control.cpp Layout.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Release\GUISystem.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Button.cpp Control.cpp Label.cpp Layout.cpp TextBox.cpp
+         Button.cpp
          Control.cpp
+         Label.cpp
+     1>Label.cpp(26): warning C4060: switch statement contains no 'case' or 'default' labels
          Layout.cpp
+         TextBox.cpp
        Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Release\GUISystem.lib" /NOLOGO /LTCG Release\Control.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Release\GUISystem.lib" /NOLOGO /LTCG Release\Button.obj
+         Release\Control.obj
+         Release\Label.obj
          Release\Layout.obj
          Release\stdafx.obj
+         Release\TextBox.obj
          GUISystem.vcxproj -> E:\CECI\TheGame\Source\StarGame\Release\GUISystem.lib
        FinalizeBuildStatus:
          Deleting file "Release\GUISystem.unsuccessfulbuild".
@@ -22,4 +29,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:04.91
+Time Elapsed 00:00:02.56

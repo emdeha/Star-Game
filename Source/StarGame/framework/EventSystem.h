@@ -25,6 +25,8 @@
 enum EventType
 {
 	EVENT_TYPE_DEFAULT,
+	EVENT_TYPE_OTHER,
+
 	EVENT_TYPE_ON_CLICK,
 	EVENT_TYPE_ON_HOVER,
 	EVENT_TYPE_SPACE_BTN_CLICK,
@@ -75,6 +77,7 @@ private:
 	short numberOfArgs;
 
 public:
+	Event(EventType newType);
 	Event(short newNumberOfArgs, EventType newType, EventArg newArgs[]);
 
 	Variant GetArgument(const std::string &argType);
@@ -114,12 +117,7 @@ public:
 
 	static Event EventOnHover()
 	{
-		EventArg hoverEventArg[1];
-		hoverEventArg[0].argType = "rightClick";
-		hoverEventArg[0].argument.varType = TYPE_BOOL;
-		hoverEventArg[0].argument.varBool = false;
-
-		return Event(1, EVENT_TYPE_ON_HOVER, hoverEventArg);
+		return Event(EVENT_TYPE_ON_HOVER);
 	}
 };
 

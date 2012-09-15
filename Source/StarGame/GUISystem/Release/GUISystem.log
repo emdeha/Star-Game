@@ -1,12 +1,9 @@
-﻿Build started 14.9.2012 г. 20:21:40 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\GUISystem\GUISystem.vcxproj" on node 5 (rebuild target(s)).
-     1>_PrepareForClean:
-         Deleting file "Release\GUISystem.lastbuildstate".
-       InitializeBuildStatus:
+﻿Build started 15.9.2012 г. 15:38:29 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\GUISystem\GUISystem.vcxproj" on node 4 (build target(s)).
+     1>InitializeBuildStatus:
          Creating "Release\GUISystem.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Release\GUISystem.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
-         stdafx.cpp
+         All outputs are up-to-date.
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Release\GUISystem.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Button.cpp Control.cpp Label.cpp Layout.cpp TextBox.cpp
          Button.cpp
          Control.cpp
@@ -25,8 +22,8 @@
        FinalizeBuildStatus:
          Deleting file "Release\GUISystem.unsuccessfulbuild".
          Touching "Release\GUISystem.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\GUISystem\GUISystem.vcxproj" (rebuild target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\GUISystem\GUISystem.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:02.56
+Time Elapsed 00:00:05.34

@@ -29,6 +29,7 @@
 #include "../framework/EventSystem.h"
 #include "../Universe/Universe.h"
 #include "../Camera/TopDownCamera.h"
+#include "../AssetLoader/GUILoader.h"
 
 
 ShaderManager shaderManager;
@@ -125,6 +126,19 @@ void HandleMouse()
 
 			if(
 				universe->GetLayout(LAYOUT_MENU).
+				GetControl("quitGame")->
+				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("quitGameButton");
+
+				universe->GetLayout(LAYOUT_MENU).GetControl("quitGame")->OnEvent(leftClickButtonEvent);
+
+				universe->OnEvent(leftClickButtonEvent);
+			}
+
+			if(
+				universe->GetLayout(LAYOUT_MENU).
 				GetControl("printCmd")->
 				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
 			  )
@@ -150,12 +164,7 @@ void HandleMouse()
 				if(universe->GetLayout(LAYOUT_MENU).GetControl("sample") != 
 				   universe->GetLayout(LAYOUT_MENU).GetActiveControl())
 				{
-					EventArg unclickEventArg[1];
-					unclickEventArg[0].argType = "none";
-					unclickEventArg[0].argument.varType = TYPE_BOOL;
-					unclickEventArg[0].argument.varBool = false;
-
-					Event unclickEvent = Event(1, EVENT_TYPE_UNCLICK, unclickEventArg);
+					Event unclickEvent = Event(EVENT_TYPE_UNCLICK);
 
 					universe->GetLayout(LAYOUT_MENU).GetActiveControl()->OnEvent(unclickEvent);
 				}
@@ -175,12 +184,7 @@ void HandleMouse()
 				if(universe->GetLayout(LAYOUT_MENU).GetControl("sampleTwo") != 
 				   universe->GetLayout(LAYOUT_MENU).GetActiveControl())
 				{
-					EventArg unclickEventArg[1];
-					unclickEventArg[0].argType = "none";
-					unclickEventArg[0].argument.varType = TYPE_BOOL;
-					unclickEventArg[0].argument.varBool = false;
-
-					Event unclickEvent = Event(1, EVENT_TYPE_UNCLICK, unclickEventArg);
+					Event unclickEvent = Event(EVENT_TYPE_UNCLICK);
 
 					universe->GetLayout(LAYOUT_MENU).GetActiveControl()->OnEvent(unclickEvent);
 				}
@@ -308,11 +312,11 @@ void HandlePassiveMovement(int x, int y)
 
 void InitializePrograms()
 {
-	shaderManager.LoadLitProgram("PN.vert", "GaussianLighting.frag");
-	shaderManager.LoadUnlitProgram("PosTransform.vert", "UniformColor.frag");
-	shaderManager.LoadSimpleProgram("Interp.vert", "Interp.frag");
-	shaderManager.LoadSimpleProgramOrtho("Simple.vert", "Simple.frag");
-	shaderManager.LoadFontProgram("Font.vert", "Font.frag");
+	shaderManager.LoadLitProgram("shaders/PN.vert", "shaders/GaussianLighting.frag");
+	shaderManager.LoadUnlitProgram("shaders/PosTransform.vert", "shaders/UniformColor.frag");
+	shaderManager.LoadSimpleProgram("shaders/Interp.vert", "shaders/Interp.frag");
+	shaderManager.LoadSimpleProgramOrtho("shaders/Simple.vert", "shaders/Simple.frag");
+	shaderManager.LoadFontProgram("shaders/Font.vert", "shaders/Font.frag");
 }
 
 void InitializeGUI()
@@ -325,9 +329,9 @@ void InitializeGUI()
 	std::shared_ptr<Button> exitButton(new Button(MEDIUM,
 												  "exit", "Exit", 
 												  glm::vec2(0.5f, 0.5f), 58,
-												  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
 												  false));
-	exitButton->Init("../data/fonts/AGENCYR.TTF");
+	exitButton->Init("../data/fonts/AGENCYR.TTF",
+					 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	exitButton->AddPreset(SMALL,
 						  48,
@@ -339,7 +343,7 @@ void InitializeGUI()
 	inGameLayout.AddControl(exitButton);
 
 	universe->AddLayout(inGameLayout);
-	universe->SetLayout(LAYOUT_IN_GAME, false);
+	universe->SetLayout(LAYOUT_IN_GAME, true);
 	
 
 
@@ -351,9 +355,9 @@ void InitializeGUI()
 	std::shared_ptr<Button> newGameButton(new Button(MEDIUM,
 													 "newGame", "New Game", 
 													 glm::vec2(-0.9f, -0.6f), 48,
-													 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
 													 false));
-	newGameButton->Init("../data/fonts/AGENCYR.TTF");
+	newGameButton->Init("../data/fonts/AGENCYR.TTF",
+						glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 	
 	newGameButton->AddPreset(SMALL,
 							28,
@@ -365,9 +369,9 @@ void InitializeGUI()
 	std::shared_ptr<Button> saveGameButton(new Button(MEDIUM,
 													  "saveGame", "Save Game", 
 													  glm::vec2(-0.9f, -0.7f), 48,
-													  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
 													  false));
-	saveGameButton->Init("../data/fonts/AGENCYR.TTF");
+	saveGameButton->Init("../data/fonts/AGENCYR.TTF",
+						 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	saveGameButton->AddPreset(SMALL,
 							  28,
@@ -379,10 +383,10 @@ void InitializeGUI()
 
 	std::shared_ptr<Button> quitGameButton(new Button(MEDIUM,
 													  "quitGame", "Quit", 
-													  glm::vec2(-0.9f, -0.8f), 48, 
-													  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+													  glm::vec2(-0.9f, -0.8f), 48,
 													  false));
-	quitGameButton->Init("../data/fonts/AGENCYR.TTF");
+	quitGameButton->Init("../data/fonts/AGENCYR.TTF",
+						 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	quitGameButton->AddPreset(SMALL,
 							  28,
@@ -395,27 +399,27 @@ void InitializeGUI()
 	std::shared_ptr<TextBox> sample(new TextBox(0.3f, 5,
 												MEDIUM,
 												"sample", "",
-												glm::vec2(0.0f, 0.0f),	48, 
-												glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+												glm::vec2(0.0f, 0.0f),	48,
 												true));
-	sample->Init("../data/fonts/AGENCYR.TTF");
+	sample->Init("../data/fonts/AGENCYR.TTF",
+				 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	std::shared_ptr<TextBox> sampleTwo(new TextBox(0.7f, 10,
 												   MEDIUM,
 												   "sampleTwo", "",
-												   glm::vec2(0.0f, 0.2f), 48, 
-												   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+												   glm::vec2(0.0f, 0.2f), 48,
 												   true));
-	sampleTwo->Init("../data/fonts/AGENCYR.TTF");
+	sampleTwo->Init("../data/fonts/AGENCYR.TTF",
+					glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 
 
 	std::shared_ptr<Button> printToCMDButton(new Button(MEDIUM,
 														"printCmd", "Print", 
-														glm::vec2(0.4f, 0.0f), 48, 
-														glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+														glm::vec2(0.4f, 0.0f), 48,
 														false));
-	printToCMDButton->Init("../data/fonts/AGENCYR.TTF");
+	printToCMDButton->Init("../data/fonts/AGENCYR.TTF",
+						   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	menuLayout.AddControl(sample);
 	menuLayout.AddControl(sampleTwo);
@@ -427,7 +431,7 @@ void InitializeGUI()
 	menuLayout.AddControl(printToCMDButton);
 
 	universe->AddLayout(menuLayout);
-	universe->SetLayout(LAYOUT_MENU, true);
+	universe->SetLayout(LAYOUT_MENU, false);
 
 
 	LayoutInfo saveGameLayoutInfo;
@@ -438,9 +442,9 @@ void InitializeGUI()
 	std::shared_ptr<Label> saveGameLayoutHeader(new Label(MEDIUM,
 														  "saveGameHeader", "This is the Save Game layout",
 														  glm::vec2(-0.5f, 0.8f), 38,
-														  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
 														  false));
-	saveGameLayoutHeader->Init("../data/fonts/AGENCYR.TTF");
+	saveGameLayoutHeader->Init("../data/fonts/AGENCYR.TTF",
+							   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	saveGameLayout.AddControl(saveGameLayoutHeader);
 
@@ -450,7 +454,7 @@ void InitializeGUI()
 
 void InitializeScene()
 {
-	mainSun->LoadMesh("UnitSphere.xml");
+	mainSun->LoadMesh("mesh-files/UnitSphere.xml");
 
 	universe->AddSun(mainSun);
 	universe->AddSunLight(mainSunLight);
@@ -532,7 +536,6 @@ void Display()
 								 shaderManager.GetUnlitProgData(),
 								 shaderManager.GetSimpleProgData());
 
-		//myButton.Draw(shaderManager.GetFontProgData(), shaderManager.GetSimpleProgDataOrtho());
 		universe->RenderCurrentLayout(shaderManager.GetFontProgData(),
 									  shaderManager.GetSimpleProgDataOrtho());					 
 	}
@@ -600,6 +603,7 @@ void Reshape(int width, int height)
 
 void Keyboard(unsigned char key, int x, int y)
 {
+	// This needs to be passed as an event.
 	if(universe->IsLayoutOn(LAYOUT_MENU) && 
 	   universe->GetLayout(LAYOUT_MENU).HasActiveControl())
 	{

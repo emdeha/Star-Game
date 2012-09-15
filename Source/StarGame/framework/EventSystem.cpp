@@ -19,9 +19,17 @@
 #include <assert.h>
 
 
+Event::Event(EventType newType)
+{
+	type = newType;
+
+	numberOfArgs = 0;
+}
+
 Event::Event(short newNumberOfArgs, EventType newType, EventArg newArgs[])
 {
-	assert(newNumberOfArgs < MAX_ARGS);
+	assert(newNumberOfArgs < MAX_ARGS && 
+		   newNumberOfArgs >= 0);
 
 	type = newType;
 
@@ -53,18 +61,22 @@ Event::Event(short newNumberOfArgs, EventType newType, EventArg newArgs[])
 
 Variant Event::GetArgument(const std::string &argType)
 {	
-	for(int i = 0; i < numberOfArgs; i++)
+	if(numberOfArgs > 0)
 	{
-		if(args[i].argType == argType)
-			return args[i].argument;
+		for(int i = 0; i < numberOfArgs; i++)
+		{
+			if(args[i].argType == argType)
+				return args[i].argument;
+		}
+
+		// TODO: Return a `false` argument if no argument is found
+		Variant falseVariant;
+		falseVariant.varType = TYPE_STRING;
+		strcpy(falseVariant.varString, "falseVariant");
+
+		return falseVariant;
 	}
-
-	// TODO: Return a `false` argument if no argument is found
-	Variant falseVariant;
-	falseVariant.varType = TYPE_STRING;
-	strcpy(falseVariant.varString, "falseVariant");
-
-	return falseVariant;
+	// else return falseVariant;
 }
 
 EventType Event::GetType()

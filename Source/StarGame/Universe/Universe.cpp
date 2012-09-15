@@ -119,6 +119,11 @@ void Universe::OnEvent(Event &_event)
 			
 			this->GetLayout(LAYOUT_MENU).GetControl("sample")->Clear();
 		}
+		if(strcmp(_event.GetArgument("object").varString, "quitGameButton") == 0)
+		{
+			// Add clean-up if necessary.
+			exit(EXIT_SUCCESS);
+		}
 		break;
 	case EVENT_TYPE_SPACE_BTN_CLICK:
 		if(strcmp(_event.GetArgument("command").varString, "playBackgroundMusic") == 0)

@@ -393,7 +393,7 @@ void Sun::OnEvent(Event &_event)
 		}
 		else if(_event.GetArgument("rightClick").varBool == false)
 		{
-			if(this->AddSatellite("UnitSphere.xml", 
+			if(this->AddSatellite("mesh-files/UnitSphere.xml", 
 								  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
 								  satelliteOffset, 10.0f, 0.25f) == true)
 			{

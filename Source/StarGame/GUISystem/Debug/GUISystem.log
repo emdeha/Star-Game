@@ -1,18 +1,17 @@
-﻿Build started 14.9.2012 г. 20:21:24 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\GUISystem\GUISystem.vcxproj" on node 5 (rebuild target(s)).
-     1>_PrepareForClean:
-         Deleting file "Debug\GUISystem.lastbuildstate".
-       InitializeBuildStatus:
+﻿Build started 15.9.2012 г. 16:24:18 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\GUISystem\GUISystem.vcxproj" on node 3 (build target(s)).
+     1>InitializeBuildStatus:
          Creating "Debug\GUISystem.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Debug\GUISystem.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
-         stdafx.cpp
+         All outputs are up-to-date.
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\GUISystem.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Button.cpp Control.cpp Label.cpp Layout.cpp TextBox.cpp
+         Control.cpp
+         Generating Code...
+         Compiling...
          TextBox.cpp
          Layout.cpp
          Label.cpp
      1>e:\ceci\thegame\source\stargame\guisystem\label.cpp(26): warning C4060: switch statement contains no 'case' or 'default' labels
-         Control.cpp
          Button.cpp
          Generating Code...
      1>e:\ceci\thegame\source\stargame\guisystem\layout.cpp(185): warning C4715: 'Layout::GetControl' : not all control paths return a value
@@ -28,8 +27,8 @@
        FinalizeBuildStatus:
          Deleting file "Debug\GUISystem.unsuccessfulbuild".
          Touching "Debug\GUISystem.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\GUISystem\GUISystem.vcxproj" (rebuild target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\GUISystem\GUISystem.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:03.38
+Time Elapsed 00:00:02.91

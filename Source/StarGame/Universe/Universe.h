@@ -15,6 +15,10 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
+
+// Maybe the music should be contained in the layout.
+
+
 /// \ingroup module_StarGame
 
 /// \file Universe.h
@@ -31,6 +35,7 @@
 #include "../GUISystem/GUISystem.h"
 
 #include "../framework/EventSystem.h"
+
 
 /// \class Universe
 /// \brief This class updates, renders and maintains the game world a.k.a. Universe.

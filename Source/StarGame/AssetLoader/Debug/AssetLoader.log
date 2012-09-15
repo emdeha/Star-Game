@@ -1,0 +1,21 @@
+﻿Build started 15.9.2012 г. 17:48:11 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\AssetLoader\AssetLoader.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\AssetLoader.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../freetype/include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\AssetLoader.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt GUILoader.cpp
+         GUILoader.cpp
+     1>e:\ceci\thegame\source\stargame\assetloader\guiloader.cpp(239): warning C4715: 'GUILoader::GetLayout' : not all control paths return a value
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\AssetLoader.lib" /NOLOGO Debug\GUILoader.obj
+         Debug\stdafx.obj
+         AssetLoader.vcxproj -> E:\CECI\TheGame\Source\StarGame\Debug\AssetLoader.lib
+       FinalizeBuildStatus:
+         Deleting file "Debug\AssetLoader.unsuccessfulbuild".
+         Touching "Debug\AssetLoader.lastbuildstate".
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\AssetLoader\AssetLoader.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.10

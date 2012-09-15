@@ -18,6 +18,7 @@
 #ifndef GUI_SYSTEM_H
 #define GUI_SYSTEM_H
 
+
 #include <vector>
 #include <string>
 
@@ -33,6 +34,7 @@
 
 #include "../ProgramData/ProgramData.h"
 
+
 enum LayoutType
 {
 	LAYOUT_MENU,
@@ -43,10 +45,11 @@ enum LayoutType
 	LAYOUT_LOAD_GAME,
 	LAYOUT_OPTIONS,
 
-	LAYOUT_SUB_NEW_GAME,
+	LAYOUT_OTHER,
+	/*LAYOUT_SUB_NEW_GAME,
 	LAYOUT_SUB_SAVE_GAME,
 	LAYOUT_SUB_LOAD_GAME,
-	LAYOUT_SUB_OPTIONS,
+	LAYOUT_SUB_OPTIONS,*/
 };
 
 enum LayoutPreset
@@ -170,10 +173,10 @@ public:
 	TextControl(LayoutPreset newCurrentPreset,
 				const std::string &newName, const std::string &newText,
 				glm::vec2 newPosition, int newTextSize,
-				int newWindowWidth, int newWindowHeight,
 				bool newHasBackground);
 
-	void Init(const std::string &fontName);
+	void Init(const std::string &fontName, 
+			  int newWindowWidth, int newWindowHeight);
 		
 	virtual void Draw(const FontProgData &fontData, const SimpleProgData &simpleData);
 
@@ -212,12 +215,10 @@ public:
 	Button(LayoutPreset newCurrentPreset,
 		   const std::string &newName, const std::string &newText,
 		   glm::vec2 newPosition, int newTextSize,
-		   int newWindowWidth, int newWindowHeight,
 		   bool newHasBackground) 
 		   : TextControl(newCurrentPreset, 
 						 newName, newText,
 						 newPosition, newTextSize,
-						 newWindowWidth, newWindowHeight,
 						 newHasBackground) {};
 
 	void OnEvent(Event &_event);
@@ -232,12 +233,10 @@ public:
 	Label(LayoutPreset newCurrentPreset,
 		  const std::string &newName, const std::string &newText,
 		  glm::vec2 newPosition, int newTextSize,
-		  int newWindowWidth, int newWindowHeight,
 		  bool newHasBackground) 
 		  : TextControl(newCurrentPreset, 
 						newName, newText,
 						newPosition, newTextSize,
-						newWindowWidth, newWindowHeight,
 						newHasBackground) {};
 
 	void OnEvent(Event &_event);
@@ -263,12 +262,10 @@ public:
 			LayoutPreset newCurrentPreset,
 		    const std::string &newName, const std::string &newText,
 		    glm::vec2 newPosition, int newTextSize,
-		    int newWindowWidth, int newWindowHeight,
 		    bool newHasBackground) 
 		    : TextControl(newCurrentPreset, 
 						  newName, newText,
 						  newPosition, newTextSize,
-						  newWindowWidth, newWindowHeight,
 						  newHasBackground)
 	{
 		visibleText = "";

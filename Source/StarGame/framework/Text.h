@@ -23,6 +23,9 @@
 // TODO: Make a 3D text utility and a hovering text utility.
 // TODO: Make the text formatable.
 
+// The fontFace_bold shouldn't be here maybe. 
+// To Note ^
+
 #ifndef TEXT_H
 #define TEXT_H
 

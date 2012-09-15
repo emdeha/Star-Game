@@ -25,6 +25,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Audio", "Audio\Audio.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GUISystem", "GUISystem\GUISystem.vcxproj", "{06DBBF6B-B713-4370-BEE5-C2810CF7026D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetLoader", "AssetLoader\AssetLoader.vcxproj", "{F0ACC795-F7C6-4CEE-840D-A17BC02D7141}"
+	ProjectSection(ProjectDependencies) = postProject
+		{06DBBF6B-B713-4370-BEE5-C2810CF7026D} = {06DBBF6B-B713-4370-BEE5-C2810CF7026D}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = StarGame.vsmdi
@@ -70,6 +75,10 @@ Global
 		{06DBBF6B-B713-4370-BEE5-C2810CF7026D}.Debug|Win32.Build.0 = Debug|Win32
 		{06DBBF6B-B713-4370-BEE5-C2810CF7026D}.Release|Win32.ActiveCfg = Release|Win32
 		{06DBBF6B-B713-4370-BEE5-C2810CF7026D}.Release|Win32.Build.0 = Release|Win32
+		{F0ACC795-F7C6-4CEE-840D-A17BC02D7141}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F0ACC795-F7C6-4CEE-840D-A17BC02D7141}.Debug|Win32.Build.0 = Debug|Win32
+		{F0ACC795-F7C6-4CEE-840D-A17BC02D7141}.Release|Win32.ActiveCfg = Release|Win32
+		{F0ACC795-F7C6-4CEE-840D-A17BC02D7141}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

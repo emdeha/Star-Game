@@ -37,14 +37,10 @@ TextControl::TextControl()
 TextControl::TextControl(LayoutPreset newCurrentPreset,
 						 const std::string &newName, const std::string &newText,
 						 glm::vec2 newPosition, int newTextSize,
-						 int newWindowWidth, int newWindowHeight,
 						 bool newHasBackground)
 {
 	name = newName;
 	text = newText;
-
-	windowWidth = newWindowWidth;
-	windowHeight = newWindowHeight;
 
 	hasBackground = newHasBackground;
 
@@ -65,8 +61,12 @@ TextControl::TextControl(LayoutPreset newCurrentPreset,
 	isActive = false;
 }
 
-void TextControl::Init(const std::string &fontName)
+void TextControl::Init(const std::string &fontName,
+					   int newWindowWidth, int newWindowHeight)
 {
+	windowWidth = newWindowWidth;
+	windowHeight = newWindowHeight;
+
 	textToDisplay = Text(fontName.c_str()/*, "../data/fonts/AGENCYB.TTF"*/);
 	textToDisplay.Init(windowWidth, windowHeight);
 

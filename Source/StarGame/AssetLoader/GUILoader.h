@@ -19,7 +19,7 @@
 #define GUI_LOADER_H
 
 
-#include <vector>
+#include <map>
 #include <string>
 
 #include "../GUISystem/GUISystem.h"
@@ -28,10 +28,10 @@
 class GUILoader
 {
 private:
-	std::vector<std::shared_ptr<Layout>> layouts;
+	std::map<LayoutType, std::shared_ptr<Layout>> layouts;
 
 public:
-	GUILoader() {}
+	GUILoader() { layouts.clear(); }
 
 	GUILoader(const std::string &fileName,
 			  int windowWidth, int windowHeight);

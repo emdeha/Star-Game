@@ -1,5 +1,5 @@
-﻿Build started 15.9.2012 г. 16:47:38 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" on node 3 (build target(s)).
+﻿Build started 20.9.2012 г. 16:57:41 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\StarGame.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
@@ -25,6 +25,7 @@
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\StarGame.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\glsdk\glload\lib /LIBPATH:..\glsdk\glimg\lib /LIBPATH:..\glsdk\glutil\lib /LIBPATH:..\glsdk\glmesh\lib /LIBPATH:..\glsdk\freeglut\lib ..\freetype\freetype2410_D.lib ..\framework\lib\frameworkD.lib ..\fmod\fmodex_vc.lib glloadD.lib glimgD.lib glutilD.lib glmeshD.lib freeglutD.lib glu32.lib opengl32.lib gdi32.lib winmm.lib user32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\StarGame.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"E:\CECI\TheGame\Source\StarGame\Debug\StarGame.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\CECI\TheGame\Source\StarGame\Debug\StarGame.lib" /MACHINE:X86 Debug\StarGame.exe.embed.manifest.res
          Debug\Main.obj
          Debug\ShaderManager.obj
+         E:\CECI\TheGame\Source\StarGame\Debug\AssetLoader.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Audio.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Camera.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Entities.lib
@@ -45,4 +46,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.02
+Time Elapsed 00:00:02.24

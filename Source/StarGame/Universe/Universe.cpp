@@ -53,12 +53,12 @@ void Universe::RenderUniverse(glutil::MatrixStack &modelMatrix,
 void Universe::RenderCurrentLayout(const FontProgData &fontData,
 								   const SimpleProgData &simpleData)
 {
-	for(std::map<LayoutType, Layout>::iterator iter = universeLayouts.begin();
+	for(std::map<LayoutType, std::shared_ptr<Layout>>::iterator iter = universeLayouts.begin();
 		iter != universeLayouts.end(); ++iter)
 	{
-		if(iter->second.IsSet())
+		if(iter->second->IsSet())
 		{
-			iter->second.Draw(fontData, simpleData);
+			iter->second->Draw(fontData, simpleData);
 			break;
 		}
 	}
@@ -77,12 +77,12 @@ void Universe::UpdateUniverse()
 }
 void Universe::UpdateCurrentLayout(int windowWidth, int windowHeight)
 {
-	for(std::map<LayoutType, Layout>::iterator iter = universeLayouts.begin();
+	for(std::map<LayoutType, std::shared_ptr<Layout>>::iterator iter = universeLayouts.begin();
 		iter != universeLayouts.end(); ++iter)
 	{
-		if(iter->second.IsSet())
+		if(iter->second->IsSet())
 		{
-			iter->second.Update(windowWidth, windowHeight);
+			iter->second->Update(windowWidth, windowHeight);
 			break;
 		}
 	}
@@ -115,9 +115,9 @@ void Universe::OnEvent(Event &_event)
 		if(strcmp(_event.GetArgument("object").varString, "printCmd") == 0)
 		{
 			std::printf("%s", 
-				this->GetLayout(LAYOUT_MENU).GetControl("sample")->GetContent().c_str());
+				this->GetLayout(LAYOUT_MENU)->GetControl("sample")->GetContent().c_str());
 			
-			this->GetLayout(LAYOUT_MENU).GetControl("sample")->Clear();
+			this->GetLayout(LAYOUT_MENU)->GetControl("sample")->Clear();
 		}
 		if(strcmp(_event.GetArgument("object").varString, "quitGameButton") == 0)
 		{
@@ -178,15 +178,15 @@ void Universe::AddSun(const std::shared_ptr<Sun> newSun)
 }
 
 
-void Universe::AddLayout(Layout &newLayout)
+void Universe::AddLayout(const std::shared_ptr<Layout> newLayout)
 {
-	universeLayouts.insert(std::make_pair(newLayout.GetLayoutType(), newLayout));
+	universeLayouts.insert(std::make_pair(newLayout->GetLayoutType(), newLayout));
 }
 void Universe::AddLayout(LayoutType layoutType, LayoutInfo layoutInfo)
 {
-	universeLayouts.insert(std::make_pair(layoutType, Layout(layoutType, layoutInfo)));
+	universeLayouts.insert(std::make_pair(layoutType, std::shared_ptr<Layout>(new Layout(layoutType, layoutInfo))));
 }
-Layout Universe::GetLayout(LayoutType layoutType)
+std::shared_ptr<Layout> Universe::GetLayout(LayoutType layoutType)
 {
 	if(this->HasLayout(layoutType))
 	{
@@ -204,7 +204,7 @@ bool Universe::IsLayoutOn(LayoutType layoutType)
 {
 	if(this->HasLayout(layoutType))
 	{
-		return universeLayouts[layoutType].IsSet();
+		return universeLayouts[layoutType]->IsSet();
 	}
 	return false;
 }
@@ -212,7 +212,7 @@ void Universe::SetLayout(LayoutType layoutType, bool isSet)
 {
 	if(this->HasLayout(layoutType))
 	{
-		universeLayouts[layoutType].Set(isSet);
+		universeLayouts[layoutType]->Set(isSet);
 	}
 
 	// TODO: Better error handling.
@@ -241,12 +241,12 @@ void Universe::SetGamma(float newUniverseGamma)
 
 void Universe::SetLayoutPreset(LayoutPreset layoutPreset)
 {
-	for(std::map<LayoutType, Layout>::iterator iter = universeLayouts.begin();
+	for(std::map<LayoutType, std::shared_ptr<Layout>>::iterator iter = universeLayouts.begin();
 		iter != universeLayouts.end(); ++iter)
 	{
-		if(iter->second.IsSet())
+		if(iter->second->IsSet())
 		{
-			iter->second.SetCurrentPreset(layoutPreset);
+			iter->second->SetCurrentPreset(layoutPreset);
 			break;
 		}
 	}

@@ -46,7 +46,7 @@ private:
 	std::vector<std::shared_ptr<Sun>> suns; ///< Holds the world's suns.
 	// std::vector<std::shared_ptr<Enemies>> enemies;
 
-	std::map<LayoutType, Layout> universeLayouts;
+	std::map<LayoutType, std::shared_ptr<Layout>> universeLayouts;
 
 	Audio universeMusic;
 
@@ -82,9 +82,9 @@ public:
 	void AddSun(const std::shared_ptr<Sun> newSun);
 
 
-	void AddLayout(Layout &newLayout);
+	void AddLayout(const std::shared_ptr<Layout> newLayout);
 	void AddLayout(LayoutType layoutType, LayoutInfo layoutInfo);
-	Layout GetLayout(LayoutType layoutType);
+	std::shared_ptr<Layout> GetLayout(LayoutType layoutType);
 	bool HasLayout(LayoutType layoutType);
 	bool IsLayoutOn(LayoutType layoutType);
 

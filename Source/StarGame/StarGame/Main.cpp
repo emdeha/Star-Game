@@ -80,14 +80,14 @@ void HandleMouse()
 		if(universe->IsLayoutOn(LAYOUT_IN_GAME))
 		{
 			if(
-			   universe->GetLayout(LAYOUT_IN_GAME).
+			   universe->GetLayout(LAYOUT_IN_GAME)->
 			   GetControl("exit")->
 			   IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("exitButton");
 
-				universe->GetLayout(LAYOUT_IN_GAME).GetControl("exit")->OnEvent(leftClickButtonEvent);
+				universe->GetLayout(LAYOUT_IN_GAME)->GetControl("exit")->OnEvent(leftClickButtonEvent);
 
 				universe->OnEvent(leftClickButtonEvent);
 
@@ -99,94 +99,94 @@ void HandleMouse()
 		if(universe->IsLayoutOn(LAYOUT_MENU))
 		{
 			if(
-				universe->GetLayout(LAYOUT_MENU).
+				universe->GetLayout(LAYOUT_MENU)->
 				GetControl("newGame")->
 				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("newGameButton");
 
-				universe->GetLayout(LAYOUT_MENU).GetControl("newGame")->OnEvent(leftClickButtonEvent);
+				universe->GetLayout(LAYOUT_MENU)->GetControl("newGame")->OnEvent(leftClickButtonEvent);
 
 				universe->OnEvent(leftClickButtonEvent);
 			}
 
 			if(
-				universe->GetLayout(LAYOUT_MENU).
+				universe->GetLayout(LAYOUT_MENU)->
 				GetControl("saveGame")->
 				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("saveGameButton");
 
-				universe->GetLayout(LAYOUT_MENU).GetControl("saveGame")->OnEvent(leftClickButtonEvent);
+				universe->GetLayout(LAYOUT_MENU)->GetControl("saveGame")->OnEvent(leftClickButtonEvent);
 
 				universe->OnEvent(leftClickButtonEvent);
 			}
 
 			if(
-				universe->GetLayout(LAYOUT_MENU).
+				universe->GetLayout(LAYOUT_MENU)->
 				GetControl("quitGame")->
 				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("quitGameButton");
 
-				universe->GetLayout(LAYOUT_MENU).GetControl("quitGame")->OnEvent(leftClickButtonEvent);
+				universe->GetLayout(LAYOUT_MENU)->GetControl("quitGame")->OnEvent(leftClickButtonEvent);
 
 				universe->OnEvent(leftClickButtonEvent);
 			}
 
 			if(
-				universe->GetLayout(LAYOUT_MENU).
+				universe->GetLayout(LAYOUT_MENU)->
 				GetControl("printCmd")->
 				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("printCmd");
 
-				universe->GetLayout(LAYOUT_MENU).GetControl("printCmd")->OnEvent(leftClickButtonEvent);
+				universe->GetLayout(LAYOUT_MENU)->GetControl("printCmd")->OnEvent(leftClickButtonEvent);
 
 				universe->OnEvent(leftClickButtonEvent);
 			}
 
 			if(
-				universe->GetLayout(LAYOUT_MENU).
+				universe->GetLayout(LAYOUT_MENU)->
 				GetControl("sample")->
 				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickTextBoxEvent = StockEvents::EventOnLeftClick("sample");
 
-				universe->GetLayout(LAYOUT_MENU).GetControl("sample")->OnEvent(leftClickTextBoxEvent);
+				universe->GetLayout(LAYOUT_MENU)->GetControl("sample")->OnEvent(leftClickTextBoxEvent);
 
 				
-				if(universe->GetLayout(LAYOUT_MENU).GetControl("sample") != 
-				   universe->GetLayout(LAYOUT_MENU).GetActiveControl())
+				if(universe->GetLayout(LAYOUT_MENU)->GetControl("sample") != 
+				   universe->GetLayout(LAYOUT_MENU)->GetActiveControl())
 				{
 					Event unclickEvent = Event(EVENT_TYPE_UNCLICK);
 
-					universe->GetLayout(LAYOUT_MENU).GetActiveControl()->OnEvent(unclickEvent);
+					universe->GetLayout(LAYOUT_MENU)->GetActiveControl()->OnEvent(unclickEvent);
 				}
 			}
 
 			if(
-				universe->GetLayout(LAYOUT_MENU).
+				universe->GetLayout(LAYOUT_MENU)->
 				GetControl("sampleTwo")->
 				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickTextBoxEvent = StockEvents::EventOnLeftClick("sampleTwo");
 
-				universe->GetLayout(LAYOUT_MENU).GetControl("sampleTwo")->OnEvent(leftClickTextBoxEvent);
+				universe->GetLayout(LAYOUT_MENU)->GetControl("sampleTwo")->OnEvent(leftClickTextBoxEvent);
 
 				
-				if(universe->GetLayout(LAYOUT_MENU).GetControl("sampleTwo") != 
-				   universe->GetLayout(LAYOUT_MENU).GetActiveControl())
+				if(universe->GetLayout(LAYOUT_MENU)->GetControl("sampleTwo") != 
+				   universe->GetLayout(LAYOUT_MENU)->GetActiveControl())
 				{
 					Event unclickEvent = Event(EVENT_TYPE_UNCLICK);
 
-					universe->GetLayout(LAYOUT_MENU).GetActiveControl()->OnEvent(unclickEvent);
+					universe->GetLayout(LAYOUT_MENU)->GetActiveControl()->OnEvent(unclickEvent);
 				}
 			}
 		}
@@ -321,7 +321,7 @@ void InitializePrograms()
 
 void InitializeGUI()
 {
-	LayoutInfo inGameLayoutInfo;
+	/*LayoutInfo inGameLayoutInfo;
 	inGameLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
 	Layout inGameLayout(LAYOUT_IN_GAME, inGameLayoutInfo);
@@ -343,14 +343,17 @@ void InitializeGUI()
 	inGameLayout.AddControl(exitButton);
 
 	universe->AddLayout(inGameLayout);
-	universe->SetLayout(LAYOUT_IN_GAME, true);
+	universe->SetLayout(LAYOUT_IN_GAME, true);*/
+
+	GUILoader guiLoader("../data/gui-descriptor/descriptor.txt", 
+						glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
+	universe->AddLayout(guiLoader.GetLayout(LAYOUT_IN_GAME));
 	
-
-
 	LayoutInfo menuLayoutInfo;
 	menuLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.5f, 0.6f, 1.0f);
-
-	Layout menuLayout(LAYOUT_MENU, menuLayoutInfo);
+	
+	std::shared_ptr<Layout> menuLayout(std::shared_ptr<Layout>(new Layout(LAYOUT_MENU, menuLayoutInfo)));
 
 	std::shared_ptr<Button> newGameButton(new Button(MEDIUM,
 													 "newGame", "New Game", 
@@ -421,23 +424,23 @@ void InitializeGUI()
 	printToCMDButton->Init("../data/fonts/AGENCYR.TTF",
 						   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
-	menuLayout.AddControl(sample);
-	menuLayout.AddControl(sampleTwo);
+	menuLayout->AddControl(sample);
+	menuLayout->AddControl(sampleTwo);
 	
 
-	menuLayout.AddControl(newGameButton);
-	menuLayout.AddControl(saveGameButton);
-	menuLayout.AddControl(quitGameButton);
-	menuLayout.AddControl(printToCMDButton);
+	menuLayout->AddControl(newGameButton);
+	menuLayout->AddControl(saveGameButton);
+	menuLayout->AddControl(quitGameButton);
+	menuLayout->AddControl(printToCMDButton);
 
 	universe->AddLayout(menuLayout);
-	universe->SetLayout(LAYOUT_MENU, false);
+	universe->SetLayout(LAYOUT_MENU, true);
 
 
 	LayoutInfo saveGameLayoutInfo;
 	saveGameLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.5f, 0.6f, 1.0f);
 
-	Layout saveGameLayout(LAYOUT_SAVE_GAME, saveGameLayoutInfo);
+	std::shared_ptr<Layout> saveGameLayout(std::shared_ptr<Layout>(new Layout(LAYOUT_SAVE_GAME, saveGameLayoutInfo)));
 
 	std::shared_ptr<Label> saveGameLayoutHeader(new Label(MEDIUM,
 														  "saveGameHeader", "This is the Save Game layout",
@@ -446,7 +449,7 @@ void InitializeGUI()
 	saveGameLayoutHeader->Init("../data/fonts/AGENCYR.TTF",
 							   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
-	saveGameLayout.AddControl(saveGameLayoutHeader);
+	saveGameLayout->AddControl(saveGameLayoutHeader);
 
 	universe->AddLayout(saveGameLayout);
 	universe->SetLayout(LAYOUT_SAVE_GAME, false);
@@ -605,9 +608,9 @@ void Keyboard(unsigned char key, int x, int y)
 {
 	// This needs to be passed as an event.
 	if(universe->IsLayoutOn(LAYOUT_MENU) && 
-	   universe->GetLayout(LAYOUT_MENU).HasActiveControl())
+	   universe->GetLayout(LAYOUT_MENU)->HasActiveControl())
 	{
-		universe->GetLayout(LAYOUT_MENU).GetActiveControl()->InputChar(key);
+		universe->GetLayout(LAYOUT_MENU)->GetActiveControl()->InputChar(key);
 	}
 
 	switch (key)

@@ -26,207 +26,84 @@ GUILoader::GUILoader(const std::string &fileName,
 {
 	std::string line;
 	std::ifstream data(fileName);
-	
+
+	layouts.clear();
+
 
 	LayoutType layoutType;
 	glm::vec4 layoutColor;
-	int layoutIsSet;
+	int layoutIsSet = 0;
+
 
 	std::string controlType;
-	std::string controlName;
-	std::string controlText;
-	int controlHasBackground;
-	LayoutPreset controlCurrPreset;
+	char controlName[30];
+	char controlText[30];
+	int controlHasBackground = 0;
+	LayoutPreset controlCurrPreset = SMALL;
 	PresetAttributes controlPresets[3];
 	LayoutType toLayout;
 
 
 	if(data.is_open())
 	{	
+		//getline(data, line);
 		while(!data.eof())
 		{
 			getline(data, line);
 			char tag[30];
-			sscanf_s(line.c_str(), "%s ", &tag);
+			sscanf(line.c_str(), "%s ", &tag);
 
 			if(strcmp(tag, "layout") == 0)
 			{
-				getline(data, line);
-				sscanf_s(line.c_str(), "%s ", &tag);
-			
-				if(strcmp(tag, "type") == 0)
-				{
-					line.erase(0, 4);
-					line[0] = ' ';
-					sscanf_s(line.c_str(), "%i ", &layoutType);
-					getline(data, line);
-					sscanf_s(line.c_str(), "%s ", &tag);
-				}
-				if(strcmp(tag, "color") == 0)
-				{
-					line.erase(0, 5);
-					line[0] = ' ';
-					sscanf_s(line.c_str(), "%f %f %f %f ", &layoutColor.x,
-														   &layoutColor.y,
-														   &layoutColor.z,
-														   &layoutColor.w);
-					getline(data, line);
-					sscanf_s(line.c_str(), "%s ", &tag);
-				}
-				if(strcmp(tag, "isset") == 0)
-				{
-					line.erase(0, 5);
-					line[0] = ' ';
-					sscanf_s(line.c_str(), "%i ", &layoutIsSet);
-					getline(data, line);
-					sscanf_s(line.c_str(), "%s ", &tag);
-				}
-				if(strcmp(tag, "end") == 0)
-				{
-					break;
-				}
+				line.erase(0, 6);
+				line[0] = ' ';
+				sscanf(line.c_str(), "%i %f %f %f %f %i", &layoutType,
+														  &layoutColor.x,
+														  &layoutColor.y,
+														  &layoutColor.z,
+														  &layoutColor.w,
+														  &layoutIsSet);
+
+				LayoutInfo layoutInfo;
+				layoutInfo.backgroundColor = layoutColor;
+
+				std::shared_ptr<Layout> layout = std::shared_ptr<Layout>(new Layout(layoutType, layoutInfo));
+
+				layouts.insert(std::make_pair(layoutType, layout));
+
+				layouts[layoutType]->Set(layoutIsSet);
 			}
-			if(strcmp(tag, "control") == 0)
+			if(strcmp(tag, "button") == 0)
 			{
-				getline(data, line);
-			
-				if(strcmp(tag, "type") == 0)
-				{
-					line.erase(0, 4);
-					line[0] = ' ';
-					sscanf_s(line.c_str(), "%s ", &controlType);
-					getline(data, line);
-					sscanf_s(line.c_str(), "%s ", &tag);
-				}
-				if(strcmp(tag, "name") == 0)
-				{
-					line.erase(0, 4);
-					line[0] = ' ';
-					sscanf_s(line.c_str(), "%s ", &controlName);
-					getline(data, line);
-					sscanf_s(line.c_str(), "%s ", &tag);
-				}
-				if(strcmp(tag, "text") == 0)
-				{
-					line.erase(0, 4);
-					line[0] = ' ';
-					sscanf_s(line.c_str(), "%s ", &controlText);
-					getline(data, line);
-					sscanf_s(line.c_str(), "%s ", &tag);
-				}
-				if(strcmp(tag, "hasbckg") == 0)
-				{
-					line.erase(0, 7);
-					line[0] = ' ';
-					sscanf_s(line.c_str(), "%i ", &controlHasBackground);
-					getline(data, line);
-					sscanf_s(line.c_str(), "%s ", &tag);
-					if(controlHasBackground == 1)
-					{
-						// add implementation for color getting
-					}
-				}
-				if(strcmp(tag, "preset") == 0)
-				{
-					line.erase(0, 6);
-					line[0] = ' ';
-					sscanf_s(line.c_str(), "%i ", &controlCurrPreset);
-					getline(data, line);
-					switch(controlCurrPreset)
-					{
-					case SMALL:
-						sscanf_s(line.c_str(), "%s ", &tag);
-						if(strcmp(tag, "position") == 0)
-						{
-							line.erase(0, 8);
-							line[0] = ' ';
-							sscanf_s(line.c_str(), "%f %f ", &controlPresets[SMALL].position.x,
-															 &controlPresets[SMALL].position.y);
-							getline(data, line);
-							sscanf_s(line.c_str(), "%s ", &tag);
-						}
-						if(strcmp(tag, "textsize") == 0)
-						{
-							line.erase(0, 8);
-							line[0] = ' ';
-							sscanf_s(line.c_str(), "%i ", &controlPresets[SMALL].textSize);
+				line.erase(0, 6);
+				line[0] = ' ';
+				sscanf(line.c_str(), "%s %s %i %i %f %f %i %i", &controlName,
+																&controlText,
+																&controlHasBackground,
+																&controlCurrPreset,
+																&controlPresets[controlCurrPreset].position.x,
+																&controlPresets[controlCurrPreset].position.y,
+																&controlPresets[controlCurrPreset].textSize,
+																&toLayout);														
 
-							getline(data, line);
-							sscanf_s(line.c_str(), "%s ", &tag);
-						}
-						if(strcmp(tag, "end") == 0)
-						{
-							break;
-						}
-					case MEDIUM:
-						sscanf_s(line.c_str(), "%s ", &tag);
-						if(strcmp(tag, "position") == 0)
-						{
-							line.erase(0, 8);
-							line[0] = ' ';
-							sscanf_s(line.c_str(), "%f %f ", &controlPresets[MEDIUM].position.x,
-															 &controlPresets[MEDIUM].position.y);
-							getline(data, line);
-							sscanf_s(line.c_str(), "%s ", &tag);
-						}
-						if(strcmp(tag, "textsize") == 0)
-						{
-							line.erase(0, 8);
-							line[0] = ' ';
-							sscanf_s(line.c_str(), "%i ", &controlPresets[MEDIUM].textSize);
+				std::shared_ptr<Button> button = std::shared_ptr<Button>(new Button(SMALL,
+																					controlName, controlText,
+																					controlPresets[controlCurrPreset].position,
+																					controlPresets[controlCurrPreset].textSize,
+																					controlHasBackground));
 
-							getline(data, line);
-							sscanf_s(line.c_str(), "%s ", &tag);
-						}
-						if(strcmp(tag, "end") == 0)
-						{
-							break;
-						}
-					case BIG:
-						sscanf_s(line.c_str(), "%s ", &tag);
-						if(strcmp(tag, "position") == 0)
-						{
-							line.erase(0, 8);
-							line[0] = ' ';
-							sscanf_s(line.c_str(), "%f %f ", &controlPresets[BIG].position.x,
-															 &controlPresets[BIG].position.y);
-							getline(data, line);
-							sscanf_s(line.c_str(), "%s ", &tag);
-						}
-						if(strcmp(tag, "textsize") == 0)
-						{
-							line.erase(0, 8);
-							line[0] = ' ';
-							sscanf_s(line.c_str(), "%i ", &controlPresets[BIG].textSize);
+				button->Init("../data/fonts/AGENCYR.TTF", 
+							 windowWidth, windowHeight);
 
-							getline(data, line);
-							sscanf_s(line.c_str(), "%s ", &tag);
-						}
-						if(strcmp(tag, "end") == 0)
-						{
-							break;
-						}
-					}
-				}
-				if(strcmp(tag, "tolayout") == 0)
-				{
-					line.erase(0, 8);
-					line[0] = ' ';
-					sscanf_s(line.c_str(), "%i ", &toLayout);
-
-					getline(data, line);
-					sscanf_s(line.c_str(), "%s ", &tag);
-				}
-				if(strcmp(tag, "end") == 0)
-				{
-					break;
-				}
+				layouts[toLayout]->AddControl(button);
 			}
 			if(strcmp(tag, "endfile") == 0)
 			{
-
+				data.close();
+				return;
 			}
 		}
+		data.close();
 	}
 	else
 	{
@@ -235,23 +112,14 @@ GUILoader::GUILoader(const std::string &fileName,
 		return;
 	}
 
-
-
-
-
 	return;
 }
 
 std::shared_ptr<Layout> GUILoader::GetLayout(LayoutType layoutType)
 {
-	for(std::vector<std::shared_ptr<Layout>>::iterator iter = layouts.begin();
-		iter != layouts.end(); ++iter)
-	{
-		if((*iter)->GetLayoutType() == layoutType)
-		{
-			return (*iter);
-		}
-	}
+	// TODO: Add error check.
 
-	std::printf("No such layout! in GUILoader::GetLayout");
+	return layouts[layoutType];
+
+	//std::printf("No such layout! in GUILoader::GetLayout");
 }

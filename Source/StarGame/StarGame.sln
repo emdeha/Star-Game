@@ -4,6 +4,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StarGame", "StarGame\StarGame.vcxproj", "{8A802BF6-FBD4-463F-BAA2-AA3AC7D619A4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F4D5FA3D-2A08-5146-A354-4B4F0729A6E3} = {F4D5FA3D-2A08-5146-A354-4B4F0729A6E3}
+		{F0ACC795-F7C6-4CEE-840D-A17BC02D7141} = {F0ACC795-F7C6-4CEE-840D-A17BC02D7141}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "framework", "framework\framework.vcxproj", "{F4D5FA3D-2A08-5146-A354-4B4F0729A6E3}"

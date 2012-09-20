@@ -49,14 +49,14 @@ TextControl::TextControl(LayoutPreset newCurrentPreset,
 	presets[currentPreset].position = newPosition;
 	presets[currentPreset].textSize = newTextSize;
 
-	presets[newCurrentPreset].bottomTextMargin = 0.0f;
-	presets[newCurrentPreset].bottomTextMargin_percent = 0.0f;
-	presets[newCurrentPreset].topTextMargin = 0.0f;
-	presets[newCurrentPreset].topTextMargin_percent = 0.0f;
-	presets[newCurrentPreset].leftTextMargin = 0.0f;
-	presets[newCurrentPreset].leftTextMargin_percent = 0.0f;
-	presets[newCurrentPreset].rightTextMargin = 0.0f;
-	presets[newCurrentPreset].rightTextMargin_percent = 0.0f;
+	presets[currentPreset].bottomTextMargin = 0.0f;
+	presets[currentPreset].bottomTextMargin_percent = 0.0f;
+	presets[currentPreset].topTextMargin = 0.0f;
+	presets[currentPreset].topTextMargin_percent = 0.0f;
+	presets[currentPreset].leftTextMargin = 0.0f;
+	presets[currentPreset].leftTextMargin_percent = 0.0f;
+	presets[currentPreset].rightTextMargin = 0.0f;
+	presets[currentPreset].rightTextMargin_percent = 0.0f;
 
 	isActive = false;
 }

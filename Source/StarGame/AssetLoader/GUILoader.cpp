@@ -39,8 +39,12 @@ GUILoader::GUILoader(const std::string &fileName,
 	char controlName[30];
 	char controlText[30];
 	int controlHasBackground = 0;
-	LayoutPreset controlCurrPreset = SMALL;
-	PresetAttributes controlPresets[3];
+	int controlCurrPreset = 0;
+	float textBoxWidth = 0.0f;
+	int textBoxCharWidth = 0;
+	// PresetAttributes controlPresets[3]; !!!
+	glm::vec2 controlPosition;
+	int controlTextSize = 0;
 	LayoutType toLayout;
 
 
@@ -77,25 +81,76 @@ GUILoader::GUILoader(const std::string &fileName,
 			{
 				line.erase(0, 6);
 				line[0] = ' ';
-				sscanf(line.c_str(), "%s %s %i %i %f %f %i %i", &controlName,
+				sscanf(line.c_str(), "%s %s %i %i %i %f %f %i", &controlName,
 																&controlText,
 																&controlHasBackground,
+																&toLayout,
 																&controlCurrPreset,
-																&controlPresets[controlCurrPreset].position.x,
-																&controlPresets[controlCurrPreset].position.y,
-																&controlPresets[controlCurrPreset].textSize,
-																&toLayout);														
+																&controlPosition.x,
+																&controlPosition.y,
+																&controlTextSize);						
 
-				std::shared_ptr<Button> button = std::shared_ptr<Button>(new Button(SMALL,
+				//std::printf("%i ", controlPresets[controlCurrPreset].textSize);
+
+				std::shared_ptr<Button> button = std::shared_ptr<Button>(new Button(LayoutPreset(controlCurrPreset),
 																					controlName, controlText,
-																					controlPresets[controlCurrPreset].position,
-																					controlPresets[controlCurrPreset].textSize,
+																					controlPosition,
+																					controlTextSize,
 																					controlHasBackground));
 
 				button->Init("../data/fonts/AGENCYR.TTF", 
 							 windowWidth, windowHeight);
 
 				layouts[toLayout]->AddControl(button);
+			}
+			if(strcmp(tag, "textbox") == 0)
+			{
+				line.erase(0, 7);
+				line[0] = ' ';
+				sscanf(line.c_str(), "%s %f %i %i %i %i %f %f %i", &controlName,
+																   &textBoxWidth,
+																   &textBoxCharWidth,
+																   &controlHasBackground,
+																   &toLayout,
+																   &controlCurrPreset,
+																   &controlPosition.x,
+																   &controlPosition.y,
+																   &controlTextSize);
+
+				std::shared_ptr<TextBox> textBox = std::shared_ptr<TextBox>(new TextBox(textBoxWidth, textBoxCharWidth,
+																						LayoutPreset(controlCurrPreset),
+																						controlName, "",
+																						controlPosition, 
+																						controlTextSize,
+																						controlHasBackground));
+				textBox->Init("../data/fonts/AGENCYR.TTF", 
+							  windowWidth, windowHeight);
+
+				layouts[toLayout]->AddControl(textBox);
+			}
+			if(strcmp(tag, "label") == 0)
+			{
+				line.erase(0, 5);
+				line[0] = ' ';
+				sscanf(line.c_str(), "%s %s %i %i %i %f %f %i", &controlName,
+																&controlText,																
+																&controlHasBackground,	
+																&toLayout,															
+																&controlCurrPreset,
+																&controlPosition.x,
+																&controlPosition.y,
+																&controlTextSize);
+
+				std::shared_ptr<Label> label = std::shared_ptr<Label>(new Label(LayoutPreset(controlCurrPreset),
+																				controlName, controlText,
+																				controlPosition,
+																				controlTextSize,
+																				controlHasBackground));
+				label->Init("../data/fonts/AGENCYR.TTF", 
+							windowWidth, windowHeight);
+
+				layouts[toLayout]->AddControl(label);
+
 			}
 			if(strcmp(tag, "endfile") == 0)
 			{

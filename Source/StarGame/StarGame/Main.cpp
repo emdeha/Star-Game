@@ -149,7 +149,7 @@ void HandleMouse()
 
 				universe->OnEvent(leftClickButtonEvent);
 			}
-
+			
 			if(
 				universe->GetLayout(LAYOUT_MENU)->
 				GetControl("sample")->
@@ -169,7 +169,7 @@ void HandleMouse()
 					universe->GetLayout(LAYOUT_MENU)->GetActiveControl()->OnEvent(unclickEvent);
 				}
 			}
-
+			
 			if(
 				universe->GetLayout(LAYOUT_MENU)->
 				GetControl("sampleTwo")->
@@ -348,9 +348,12 @@ void InitializeGUI()
 	GUILoader guiLoader("../data/gui-descriptor/descriptor.txt", 
 						glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
+
+	// should be universe->AddLayouts(guiLoader.GetLayouts());
 	universe->AddLayout(guiLoader.GetLayout(LAYOUT_IN_GAME));
-	
-	LayoutInfo menuLayoutInfo;
+	universe->AddLayout(guiLoader.GetLayout(LAYOUT_MENU));
+	universe->AddLayout(guiLoader.GetLayout(LAYOUT_SAVE_GAME));
+	/*LayoutInfo menuLayoutInfo;
 	menuLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.5f, 0.6f, 1.0f);
 	
 	std::shared_ptr<Layout> menuLayout(std::shared_ptr<Layout>(new Layout(LAYOUT_MENU, menuLayoutInfo)));
@@ -452,7 +455,7 @@ void InitializeGUI()
 	saveGameLayout->AddControl(saveGameLayoutHeader);
 
 	universe->AddLayout(saveGameLayout);
-	universe->SetLayout(LAYOUT_SAVE_GAME, false);
+	universe->SetLayout(LAYOUT_SAVE_GAME, false);*/
 }
 
 void InitializeScene()

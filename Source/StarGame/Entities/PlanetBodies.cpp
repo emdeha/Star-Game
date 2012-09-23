@@ -193,7 +193,7 @@ void Satellite::OnEvent(Event &_event)
 
 bool Satellite::IsClicked(glm::mat4 projMat, glm::mat4 modelMat, 
 						  Mouse userMouse, glm::vec4 cameraPos,
-						  float windowWidth, float windowHeight)
+						  int windowWidth, int windowHeight)
 {
 	Utility::Ray mouseRay = 
 		userMouse.GetPickRay(projMat, modelMat, cameraPos,
@@ -449,7 +449,7 @@ std::vector<Satellite*> Sun::GetSatellites()
 
 bool Sun::IsClicked(glm::mat4 projMat, glm::mat4 modelMat, 
 				    Mouse userMouse, glm::vec4 cameraPos,
-				    float windowWidth, float windowHeight)
+				    int windowWidth, int windowHeight)
 {
 	Utility::Ray mouseRay = 
 		userMouse.GetPickRay(projMat, modelMat, cameraPos,
@@ -466,7 +466,7 @@ bool Sun::IsClicked(glm::mat4 projMat, glm::mat4 modelMat,
 
 void Sun::IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat, 
 							 Mouse userMouse, glm::vec4 cameraPos,
-							 float windowWidth, float windowHeight)
+							 int windowWidth, int windowHeight)
 {
 	for(int i = 0; i < satellites.size(); i++)
 	{

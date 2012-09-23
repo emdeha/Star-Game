@@ -178,6 +178,10 @@ void Universe::AddSun(const std::shared_ptr<Sun> newSun)
 }
 
 
+void Universe::AddLayouts(const std::map<LayoutType, std::shared_ptr<Layout>> &newLayouts)
+{
+	universeLayouts.insert(newLayouts.begin(), newLayouts.end());
+}
 void Universe::AddLayout(const std::shared_ptr<Layout> newLayout)
 {
 	universeLayouts.insert(std::make_pair(newLayout->GetLayoutType(), newLayout));

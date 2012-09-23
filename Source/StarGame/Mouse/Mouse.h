@@ -77,7 +77,7 @@ public:
 	///		- Its origin is the camera position.
 	Utility::Ray GetPickRay(glm::mat4 projMat, glm::mat4 modelMat, 
 				   glm::vec4 cameraPos,
-				   float windowWidth, float windowHeight);
+				   int windowWidth, int windowHeight);
 
 	glm::vec2 GetClipSpacePosition(int windowWidth, int windowHeight);
 

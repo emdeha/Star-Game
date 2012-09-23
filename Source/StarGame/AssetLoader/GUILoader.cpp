@@ -21,6 +21,28 @@
 #include <fstream>
 
 
+struct LayoutData
+{
+	LayoutType layoutType;
+	glm::vec4 layoutColor;
+	int layoutIsSet;
+};
+
+struct ControlData
+{
+	char controlName[30];
+	char controlText[30]; // Maybe I should use std::string and convert it to char.
+	int controlHasBackground;
+	
+	PresetAttributes controlPresets[3];
+
+	float textBoxWidth;
+	int textBoxCharWidth;
+
+	LayoutType toLayout;
+};
+
+
 GUILoader::GUILoader(const std::string &fileName,
 					 int windowWidth, int windowHeight)
 {
@@ -30,22 +52,11 @@ GUILoader::GUILoader(const std::string &fileName,
 	layouts.clear();
 
 
-	LayoutType layoutType;
-	glm::vec4 layoutColor;
-	int layoutIsSet = 0;
+	LayoutData layoutData;
+	ControlData controlData;
 
-
-	std::string controlType;
-	char controlName[30];
-	char controlText[30];
-	int controlHasBackground = 0;
-	int controlCurrPreset = 0;
-	float textBoxWidth = 0.0f;
-	int textBoxCharWidth = 0;
-	// PresetAttributes controlPresets[3]; !!!
-	glm::vec2 controlPosition;
-	int controlTextSize = 0;
-	LayoutType toLayout;
+	std::string fontDir = "../data/fonts/";
+	char fontFile[30];
 
 
 	if(data.is_open())
@@ -57,100 +68,161 @@ GUILoader::GUILoader(const std::string &fileName,
 			char tag[30];
 			sscanf(line.c_str(), "%s ", &tag);
 
+			if(strcmp(tag, "mainfont") == 0)
+			{
+				line.erase(0, 8);
+				line[0] = ' ';
+				sscanf(line.c_str(), "%s ", &fontFile);
+
+				fontDir += fontFile;
+			}
 			if(strcmp(tag, "layout") == 0)
 			{
 				line.erase(0, 6);
 				line[0] = ' ';
-				sscanf(line.c_str(), "%i %f %f %f %f %i", &layoutType,
-														  &layoutColor.x,
-														  &layoutColor.y,
-														  &layoutColor.z,
-														  &layoutColor.w,
-														  &layoutIsSet);
+				sscanf(line.c_str(), "%i %f %f %f %f %i", 
+					&layoutData.layoutType,
+					&layoutData.layoutColor.x,
+					&layoutData.layoutColor.y,
+					&layoutData.layoutColor.z,
+					&layoutData.layoutColor.w,
+					&layoutData.layoutIsSet);
 
 				LayoutInfo layoutInfo;
-				layoutInfo.backgroundColor = layoutColor;
+				layoutInfo.backgroundColor = layoutData.layoutColor;
 
-				std::shared_ptr<Layout> layout = std::shared_ptr<Layout>(new Layout(layoutType, layoutInfo));
+				std::shared_ptr<Layout> layout = 
+					std::shared_ptr<Layout>(new Layout(layoutData.layoutType, layoutInfo));
 
-				layouts.insert(std::make_pair(layoutType, layout));
+				layouts.insert(std::make_pair(layoutData.layoutType, layout));
 
-				layouts[layoutType]->Set(layoutIsSet);
+				layouts[layoutData.layoutType]->Set(layoutData.layoutIsSet);
 			}
 			if(strcmp(tag, "button") == 0)
 			{
 				line.erase(0, 6);
 				line[0] = ' ';
-				sscanf(line.c_str(), "%s %s %i %i %i %f %f %i", &controlName,
-																&controlText,
-																&controlHasBackground,
-																&toLayout,
-																&controlCurrPreset,
-																&controlPosition.x,
-																&controlPosition.y,
-																&controlTextSize);						
+				sscanf(line.c_str(), "%s %s %i %i %f %f %i %f %f %i %f %f %i", 
+					&controlData.controlName,
+					&controlData.controlText,
+					&controlData.controlHasBackground,
+					&controlData.toLayout,
+					&controlData.controlPresets[SMALL].position.x,
+					&controlData.controlPresets[SMALL].position.y,
+					&controlData.controlPresets[SMALL].textSize,
+					&controlData.controlPresets[MEDIUM].position.x,
+					&controlData.controlPresets[MEDIUM].position.y,
+					&controlData.controlPresets[MEDIUM].textSize,
+					&controlData.controlPresets[BIG].position.x,
+					&controlData.controlPresets[BIG].position.y,
+					&controlData.controlPresets[BIG].textSize);
 
-				//std::printf("%i ", controlPresets[controlCurrPreset].textSize);
-
-				std::shared_ptr<Button> button = std::shared_ptr<Button>(new Button(LayoutPreset(controlCurrPreset),
-																					controlName, controlText,
-																					controlPosition,
-																					controlTextSize,
-																					controlHasBackground));
-
-				button->Init("../data/fonts/AGENCYR.TTF", 
+				std::shared_ptr<Button> button = 
+					std::shared_ptr<Button>(new Button(LayoutPreset(SMALL),
+													   controlData.controlName, controlData.controlText,
+													   controlData.controlPresets[SMALL].position,
+													   controlData.controlPresets[SMALL].textSize,
+													   controlData.controlHasBackground));
+				
+				button->Init(fontDir, 
 							 windowWidth, windowHeight);
 
-				layouts[toLayout]->AddControl(button);
+				button->AddPreset(MEDIUM, 
+								  controlData.controlPresets[MEDIUM].textSize, 
+								  controlData.controlPresets[MEDIUM].position);
+
+				button->AddPreset(BIG,
+								  controlData.controlPresets[BIG].textSize, 
+								  controlData.controlPresets[BIG].position);
+
+				layouts[controlData.toLayout]->AddControl(button);
 			}
 			if(strcmp(tag, "textbox") == 0)
 			{
 				line.erase(0, 7);
 				line[0] = ' ';
-				sscanf(line.c_str(), "%s %f %i %i %i %i %f %f %i", &controlName,
-																   &textBoxWidth,
-																   &textBoxCharWidth,
-																   &controlHasBackground,
-																   &toLayout,
-																   &controlCurrPreset,
-																   &controlPosition.x,
-																   &controlPosition.y,
-																   &controlTextSize);
+				sscanf(line.c_str(), "%s %f %i %i %i %f %f %i %f %f %i %f %f %i", 
+					&controlData.controlName,
+					&controlData.textBoxWidth,
+					&controlData.textBoxCharWidth,
+					&controlData.controlHasBackground,
+					&controlData.toLayout,
+					&controlData.controlPresets[SMALL].position.x,
+					&controlData.controlPresets[SMALL].position.y,
+					&controlData.controlPresets[SMALL].textSize,
+					&controlData.controlPresets[MEDIUM].position.x,
+					&controlData.controlPresets[MEDIUM].position.y,
+					&controlData.controlPresets[MEDIUM].textSize,
+					&controlData.controlPresets[BIG].position.x,
+					&controlData.controlPresets[BIG].position.y,
+					&controlData.controlPresets[BIG].textSize);
+				
+				std::shared_ptr<TextBox> textBox = 
+					std::shared_ptr<TextBox>(new TextBox(controlData.textBoxWidth, 
+														 controlData.textBoxCharWidth,
+														 LayoutPreset(SMALL),
+														 controlData.controlName, "",
+														 controlData.controlPresets[SMALL].position, 
+														 controlData.controlPresets[SMALL].textSize,
+														 controlData.controlHasBackground));
 
-				std::shared_ptr<TextBox> textBox = std::shared_ptr<TextBox>(new TextBox(textBoxWidth, textBoxCharWidth,
-																						LayoutPreset(controlCurrPreset),
-																						controlName, "",
-																						controlPosition, 
-																						controlTextSize,
-																						controlHasBackground));
-				textBox->Init("../data/fonts/AGENCYR.TTF", 
+				textBox->Init(fontDir, 
 							  windowWidth, windowHeight);
 
-				layouts[toLayout]->AddControl(textBox);
+				textBox->AddPreset(MEDIUM,
+								   controlData.controlPresets[MEDIUM].textSize,
+								   controlData.controlPresets[MEDIUM].position);
+
+				textBox->AddPreset(BIG,
+								   controlData.controlPresets[BIG].textSize,
+								   controlData.controlPresets[BIG].position);
+
+				layouts[controlData.toLayout]->AddControl(textBox);
 			}
 			if(strcmp(tag, "label") == 0)
 			{
 				line.erase(0, 5);
 				line[0] = ' ';
-				sscanf(line.c_str(), "%s %s %i %i %i %f %f %i", &controlName,
-																&controlText,																
-																&controlHasBackground,	
-																&toLayout,															
-																&controlCurrPreset,
-																&controlPosition.x,
-																&controlPosition.y,
-																&controlTextSize);
+				sscanf(line.c_str(), "%s %s %i %i %f %f %i %f %f %i %f %f %i", 
+					&controlData.controlName,
+					&controlData.controlText,																
+					&controlData.controlHasBackground,	
+					&controlData.toLayout,
+					&controlData.controlPresets[SMALL].position.x,
+					&controlData.controlPresets[SMALL].position.y,
+					&controlData.controlPresets[SMALL].textSize,
+					&controlData.controlPresets[MEDIUM].position.x,
+					&controlData.controlPresets[MEDIUM].position.y,
+					&controlData.controlPresets[MEDIUM].textSize,
+					&controlData.controlPresets[BIG].position.x,
+					&controlData.controlPresets[BIG].position.y,
+					&controlData.controlPresets[BIG].textSize);
 
-				std::shared_ptr<Label> label = std::shared_ptr<Label>(new Label(LayoutPreset(controlCurrPreset),
-																				controlName, controlText,
-																				controlPosition,
-																				controlTextSize,
-																				controlHasBackground));
-				label->Init("../data/fonts/AGENCYR.TTF", 
+
+				std::shared_ptr<Label> label = 
+					std::shared_ptr<Label>(new Label(LayoutPreset(SMALL),
+													 controlData.controlName, 
+													 controlData.controlText,
+													 controlData.controlPresets[SMALL].position,
+													 controlData.controlPresets[SMALL].textSize,
+													 controlData.controlHasBackground));
+
+				label->Init(fontDir, 
 							windowWidth, windowHeight);
 
-				layouts[toLayout]->AddControl(label);
+				label->AddPreset(MEDIUM,
+								 controlData.controlPresets[MEDIUM].textSize,
+								 controlData.controlPresets[MEDIUM].position);
 
+				label->AddPreset(BIG,
+								 controlData.controlPresets[BIG].textSize,
+								 controlData.controlPresets[BIG].position);
+
+				layouts[controlData.toLayout]->AddControl(label);
+			}
+			if(strcmp(tag, "**") == 0) // file comments
+			{
+				continue;
 			}
 			if(strcmp(tag, "endfile") == 0)
 			{
@@ -177,4 +249,9 @@ std::shared_ptr<Layout> GUILoader::GetLayout(LayoutType layoutType)
 	return layouts[layoutType];
 
 	//std::printf("No such layout! in GUILoader::GetLayout");
+}
+
+const std::map<LayoutType, std::shared_ptr<Layout>> &GUILoader::GetAllLoadedLayouts()
+{
+	return layouts;
 }

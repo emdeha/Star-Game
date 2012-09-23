@@ -59,8 +59,8 @@ void HandleMouse()
 {
 	glm::vec3 cameraPosition = userCamera.ResolveCamPosition();
 
-	float windowWidth = (float)glutGet(GLUT_WINDOW_WIDTH);
-	float windowHeight = (float)glutGet(GLUT_WINDOW_HEIGHT);
+	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
 
 	if(userMouse.IsRightButtonDown())
 	{
@@ -321,141 +321,10 @@ void InitializePrograms()
 
 void InitializeGUI()
 {
-	/*LayoutInfo inGameLayoutInfo;
-	inGameLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-
-	Layout inGameLayout(LAYOUT_IN_GAME, inGameLayoutInfo);
-
-	std::shared_ptr<Button> exitButton(new Button(MEDIUM,
-												  "exit", "Exit", 
-												  glm::vec2(0.5f, 0.5f), 58,
-												  false));
-	exitButton->Init("../data/fonts/AGENCYR.TTF",
-					 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-
-	exitButton->AddPreset(SMALL,
-						  48,
-						  glm::vec2(0.5f, 0.5f));
-	exitButton->AddPreset(BIG,
-						  68,
-						  glm::vec2(0.5f, 0.5f));
-
-	inGameLayout.AddControl(exitButton);
-
-	universe->AddLayout(inGameLayout);
-	universe->SetLayout(LAYOUT_IN_GAME, true);*/
-
 	GUILoader guiLoader("../data/gui-descriptor/descriptor.txt", 
 						glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
-
-	// should be universe->AddLayouts(guiLoader.GetLayouts());
-	universe->AddLayout(guiLoader.GetLayout(LAYOUT_IN_GAME));
-	universe->AddLayout(guiLoader.GetLayout(LAYOUT_MENU));
-	universe->AddLayout(guiLoader.GetLayout(LAYOUT_SAVE_GAME));
-	/*LayoutInfo menuLayoutInfo;
-	menuLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.5f, 0.6f, 1.0f);
-	
-	std::shared_ptr<Layout> menuLayout(std::shared_ptr<Layout>(new Layout(LAYOUT_MENU, menuLayoutInfo)));
-
-	std::shared_ptr<Button> newGameButton(new Button(MEDIUM,
-													 "newGame", "New Game", 
-													 glm::vec2(-0.9f, -0.6f), 48,
-													 false));
-	newGameButton->Init("../data/fonts/AGENCYR.TTF",
-						glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-	
-	newGameButton->AddPreset(SMALL,
-							28,
-							glm::vec2(-0.9f, -0.62f));
-	newGameButton->AddPreset(BIG,
-							68,
-							glm::vec2(-0.9f, -0.58f));
-
-	std::shared_ptr<Button> saveGameButton(new Button(MEDIUM,
-													  "saveGame", "Save Game", 
-													  glm::vec2(-0.9f, -0.7f), 48,
-													  false));
-	saveGameButton->Init("../data/fonts/AGENCYR.TTF",
-						 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-
-	saveGameButton->AddPreset(SMALL,
-							  28,
-							  glm::vec2(-0.9f, -0.71f));
-	saveGameButton->AddPreset(BIG, 
-							  68,
-							  glm::vec2(-0.9f, -0.69f));
-
-
-	std::shared_ptr<Button> quitGameButton(new Button(MEDIUM,
-													  "quitGame", "Quit", 
-													  glm::vec2(-0.9f, -0.8f), 48,
-													  false));
-	quitGameButton->Init("../data/fonts/AGENCYR.TTF",
-						 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-
-	quitGameButton->AddPreset(SMALL,
-							  28,
-							  glm::vec2(-0.9f, -0.8f));
-	quitGameButton->AddPreset(BIG,
-						 	  68,
-							  glm::vec2(-0.9f, -0.8f));
-
-		
-	std::shared_ptr<TextBox> sample(new TextBox(0.3f, 5,
-												MEDIUM,
-												"sample", "",
-												glm::vec2(0.0f, 0.0f),	48,
-												true));
-	sample->Init("../data/fonts/AGENCYR.TTF",
-				 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-
-	std::shared_ptr<TextBox> sampleTwo(new TextBox(0.7f, 10,
-												   MEDIUM,
-												   "sampleTwo", "",
-												   glm::vec2(0.0f, 0.2f), 48,
-												   true));
-	sampleTwo->Init("../data/fonts/AGENCYR.TTF",
-					glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-
-
-
-	std::shared_ptr<Button> printToCMDButton(new Button(MEDIUM,
-														"printCmd", "Print", 
-														glm::vec2(0.4f, 0.0f), 48,
-														false));
-	printToCMDButton->Init("../data/fonts/AGENCYR.TTF",
-						   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-
-	menuLayout->AddControl(sample);
-	menuLayout->AddControl(sampleTwo);
-	
-
-	menuLayout->AddControl(newGameButton);
-	menuLayout->AddControl(saveGameButton);
-	menuLayout->AddControl(quitGameButton);
-	menuLayout->AddControl(printToCMDButton);
-
-	universe->AddLayout(menuLayout);
-	universe->SetLayout(LAYOUT_MENU, true);
-
-
-	LayoutInfo saveGameLayoutInfo;
-	saveGameLayoutInfo.backgroundColor = glm::vec4(0.0f, 0.5f, 0.6f, 1.0f);
-
-	std::shared_ptr<Layout> saveGameLayout(std::shared_ptr<Layout>(new Layout(LAYOUT_SAVE_GAME, saveGameLayoutInfo)));
-
-	std::shared_ptr<Label> saveGameLayoutHeader(new Label(MEDIUM,
-														  "saveGameHeader", "This is the Save Game layout",
-														  glm::vec2(-0.5f, 0.8f), 38,
-														  false));
-	saveGameLayoutHeader->Init("../data/fonts/AGENCYR.TTF",
-							   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-
-	saveGameLayout->AddControl(saveGameLayoutHeader);
-
-	universe->AddLayout(saveGameLayout);
-	universe->SetLayout(LAYOUT_SAVE_GAME, false);*/
+	universe->AddLayouts(guiLoader.GetAllLoadedLayouts());
 }
 
 void InitializeScene()

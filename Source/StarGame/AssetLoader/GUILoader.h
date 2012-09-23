@@ -20,6 +20,7 @@
 
 
 #include <map>
+#include <vector>
 #include <string>
 
 #include "../GUISystem/GUISystem.h"
@@ -37,6 +38,7 @@ public:
 			  int windowWidth, int windowHeight);
 
 	std::shared_ptr<Layout> GetLayout(LayoutType layoutType);
+	const std::map<LayoutType, std::shared_ptr<Layout>> &GetAllLoadedLayouts();
 };
 
 

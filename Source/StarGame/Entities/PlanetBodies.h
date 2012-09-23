@@ -159,7 +159,7 @@ public:
 	/// and the collision checks become inaccurate.
 	bool IsClicked(glm::mat4 projMat, glm::mat4 modelMat, 
 				   Mouse userMouse, glm::vec4 cameraPos,
-				   float windowWidth, float windowHeight);
+				   int windowWidth, int windowHeight);
 
 	/// \fn LoadClickedAnimation
 	/// \brief Loads the animation which is played on-click.
@@ -315,12 +315,12 @@ public:
 	// TODO: Make a Sun on-click animation.
 	bool IsClicked(glm::mat4 projMat, glm::mat4 modelMat, 
 				   Mouse userMouse, glm::vec4 cameraPos,
-				   float windowWidth, float windowHeight);
+				   int windowWidth, int windowHeight);
 
 	// NOTE: Maybe remove
 	void IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat, 
 						    Mouse userMouse, glm::vec4 cameraPos,
-						    float windowWidth, float windowHeight);
+						    int windowWidth, int windowHeight);
 
 	bool GetIsClicked();
 	bool GetIsSatelliteClicked();

@@ -126,6 +126,32 @@ void ShaderManager::LoadFontProgram(const std::string &vertexShader,
 	//fontData.textureCoordAttrib = glGetAttribLocation(fontData.theProgram, "textureCoordinates");
 }
 
+void ShaderManager::LoadSimpleTextureProgData(const std::string &vertexShader,
+											  const std::string &fragmentShader)
+{
+	std::vector<GLuint> shaderList;
+
+	shaderList.push_back(Framework::LoadShader(GL_VERTEX_SHADER, vertexShader));
+	shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, fragmentShader));
+
+	simpleTextureProgData.theProgram = Framework::CreateProgram(shaderList);
+	simpleTextureProgData.textureUnif = 
+		glGetUniformLocation(simpleTextureProgData.theProgram, "colorTexture");
+	simpleTextureProgData.modelToCameraMatrixUnif =
+		glGetUniformLocation(simpleTextureProgData.theProgram, "modelToCameraMatrix");
+
+	GLuint projectionBlock = 
+		glGetUniformBlockIndex(simpleTextureProgData.theProgram, "Projection");
+	glUniformBlockBinding(simpleTextureProgData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]); 
+
+	simpleTextureProgData.positionAttrib = 
+		glGetAttribLocation(simpleTextureProgData.theProgram, "position");
+	simpleTextureProgData.normalAttrib =
+		glGetAttribLocation(simpleTextureProgData.theProgram, "normal");
+	simpleTextureProgData.textureCoordAttrib =
+		glGetAttribLocation(simpleTextureProgData.theProgram, "texCoord");
+}
+
 
 LitProgData ShaderManager::GetLitProgData()
 {
@@ -146,6 +172,10 @@ SimpleProgData ShaderManager::GetSimpleProgDataOrtho()
 FontProgData ShaderManager::GetFontProgData()
 {
 	return fontData;
+}
+SimpleTextureProgData ShaderManager::GetSimpleTextureProgData()
+{
+	return simpleTextureProgData;
 }
 
 

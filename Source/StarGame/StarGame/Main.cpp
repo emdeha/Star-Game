@@ -30,6 +30,7 @@
 #include "../Universe/Universe.h"
 #include "../Camera/TopDownCamera.h"
 #include "../AssetLoader/GUILoader.h"
+#include "../AssetLoader/MeshLoader.h"
 
 
 ShaderManager shaderManager;
@@ -317,6 +318,7 @@ void InitializePrograms()
 	shaderManager.LoadSimpleProgram("shaders/Interp.vert", "shaders/Interp.frag");
 	shaderManager.LoadSimpleProgramOrtho("shaders/Simple.vert", "shaders/Simple.frag");
 	shaderManager.LoadFontProgram("shaders/Font.vert", "shaders/Font.frag");
+	shaderManager.LoadSimpleTextureProgData("shaders/SimpleTexture.vert", "shaders/SimpleTexture.frag");
 }
 
 void InitializeGUI()
@@ -343,11 +345,14 @@ void InitializeScene()
 	InitializeGUI();
 }
 
+Mesh myMesh;
 
 void Init()
 {
 	InitializePrograms();
 	InitializeScene();
+
+	myMesh.LoadMesh("../data/mesh-files/phoenix_ugv.md2");
 
 	glutMouseFunc(HandleMouseButtons);
 	glutMotionFunc(HandleActiveMovement);
@@ -410,9 +415,12 @@ void Display()
 								 shaderManager.GetLitProgData(),
 								 shaderManager.GetUnlitProgData(),
 								 shaderManager.GetSimpleProgData());
-
+		
 		universe->RenderCurrentLayout(shaderManager.GetFontProgData(),
-									  shaderManager.GetSimpleProgDataOrtho());					 
+									  shaderManager.GetSimpleProgDataOrtho());	
+
+
+		myMesh.Render(modelMatrix, shaderManager.GetSimpleTextureProgData());
 	}
 	else /*if(universe->IsLayoutOn(LAYOUT_MENU))*/
 	{

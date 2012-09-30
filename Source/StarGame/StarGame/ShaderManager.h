@@ -50,6 +50,7 @@ private:
 	SimpleProgData simpleData;
 	SimpleProgData simpleDataOrtho;
 	FontProgData fontData;
+	SimpleTextureProgData simpleTextureProgData;
 
 public:
 	ShaderManager();
@@ -59,12 +60,14 @@ public:
 	void LoadSimpleProgram(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadSimpleProgramOrtho(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadFontProgram(const std::string &vertexShader, const std::string &fragmentShader);
+	void LoadSimpleTextureProgData(const std::string &vertexShader, const std::string &fragmentShader);
 
 	LitProgData GetLitProgData();
 	UnlitProgData GetUnlitProgData();
 	SimpleProgData GetSimpleProgData();
 	SimpleProgData GetSimpleProgDataOrtho();
 	FontProgData GetFontProgData();
+	SimpleTextureProgData GetSimpleTextureProgData();
 
 	const int GetBlockIndex(BlockType);
 	unsigned int GetUniformBuffer(UniformBufferType);

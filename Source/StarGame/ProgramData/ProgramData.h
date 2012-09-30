@@ -73,5 +73,19 @@ struct FontProgData
 	GLuint textureCoordAttrib;
 };
 
+struct SimpleTextureProgData
+{
+	GLuint theProgram;
+
+	GLuint textureUnif;
+
+	GLuint projectionMatrixUnif;
+	GLuint modelToCameraMatrixUnif;
+
+	GLuint positionAttrib;
+	GLuint textureCoordAttrib;
+	GLuint normalAttrib;
+};
+
 
 #endif

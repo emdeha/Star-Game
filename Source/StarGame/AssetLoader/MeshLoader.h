@@ -15,6 +15,10 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
+
+// TODO: Add VAO support.
+
+
 #ifndef MESH_LOADER_H
 #define MESH_LOADER_H
 

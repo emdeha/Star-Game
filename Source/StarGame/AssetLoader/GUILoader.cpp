@@ -31,7 +31,7 @@ struct LayoutData
 struct ControlData
 {
 	char controlName[30];
-	char controlText[30]; // Maybe I should use std::string and convert it to char.
+	char controlText[30]; 
 	int controlHasBackground;
 	
 	PresetAttributes controlPresets[3];
@@ -244,11 +244,14 @@ GUILoader::GUILoader(const std::string &fileName,
 
 std::shared_ptr<Layout> GUILoader::GetLayout(LayoutType layoutType)
 {
-	// TODO: Add error check.
+	if(layouts.find(layoutType) == layouts.end())
+	{
+		// TODO: Better error handling.
+		std::printf("No such layout\n");
+		return false;
+	}
 
 	return layouts[layoutType];
-
-	//std::printf("No such layout! in GUILoader::GetLayout");
 }
 
 const std::map<LayoutType, std::shared_ptr<Layout>> &GUILoader::GetAllLoadedLayouts()

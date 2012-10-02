@@ -19,6 +19,29 @@
 #include "MeshLoader.h"
 
 
+const std::string ExtractDirectory(const std::string &fileName)
+{
+	std::string::size_type slashIndex = fileName.find_last_of("/");
+	std::string directory;
+
+	if(slashIndex == std::string::npos)
+	{
+		directory = ".";
+	}
+	else if(slashIndex == 0)
+	{
+		directory = "/";
+	}
+	else
+	{
+		directory = fileName.substr(0, slashIndex);
+	}
+
+	return directory;
+}
+
+
+
 Mesh::MeshEntry::MeshEntry()
 {
 	vertexBufferObject = -1;
@@ -59,21 +82,18 @@ bool Mesh::LoadMesh(const std::string &fileName)
 {
 	textures.clear();
 
-	bool result = false;	
-	
     const aiScene *scene = 
 		aiImportFile(fileName.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals);
 
 	if(scene)
 	{
-		result = InitFromScene(scene, fileName);
+		return InitFromScene(scene, fileName);
 	}
 	else
 	{
 		std::printf("Error parsing '%s': '%s'\n", fileName.c_str(), aiGetErrorString());
+		return false;
 	}
-
-	return result;
 }
 
 bool Mesh::InitFromScene(const aiScene *scene, const std::string &fileName)
@@ -129,24 +149,7 @@ void Mesh::InitMesh(unsigned int index, const aiMesh *mesh)
 
 bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
 {
-	// Extract the directory part of the file name.
-	std::string::size_type slashIndex = fileName.find_last_of("/");
-	std::string directory;
-
-	if(slashIndex == std::string::npos)
-	{
-		directory = ".";
-	}
-	else if(slashIndex == 0)
-	{
-		directory = "/";
-	}
-	else
-	{
-		directory = fileName.substr(0, slashIndex);
-	}
-
-	bool result = true;
+	std::string directory = ExtractDirectory(fileName);
 
 	// Initialize the materials.
 	for(unsigned int i = 0; i < scene->mNumMaterials; i++)
@@ -164,15 +167,15 @@ bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
 				std::string fullPath = directory + "/" + path.data;
 				textures[i] = std::shared_ptr<Texture>(new Texture());
 
-				if(!textures[i]->Load(fullPath))
+				if(!textures[i]->Load(fullPath, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE))
 				{
 					std::printf("Error loading texture '%s'\n", fullPath.c_str());
-					result = false;
-					result = textures[i]->Load("../data/mesh-files/white.png");
+					return textures[i]->Load("../data/mesh-files/white.png",
+											 GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 				}
 				else
 				{
-					std::printf("Loaded texture '%s'\n", fullPath.c_str());
+					return true;
 				}
 			}
 		}
@@ -183,17 +186,16 @@ bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
 		{
 			textures[i] = std::shared_ptr<Texture>(new Texture());
 
-			result = textures[i]->Load("../data/mesh-files/white.png"); // TODO: Replace with sth useful.
+			return textures[i]->Load("../data/mesh-files/white.png", 
+									 GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 		}
 	}
-
-	return result;
 }
 
 void Mesh::Render(glutil::MatrixStack &modelMatrix,
 				  SimpleTextureProgData progData)
 {
-	glFrontFace(GL_CCW);
+	glFrontFace(GL_CCW); // Fixes face culling issues with rendering
 
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);

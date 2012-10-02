@@ -25,8 +25,6 @@
 #include <glutil/glutil.h>
 #include <glload/gll.hpp>
 
-// TODO: Make shorter
-//#include "../glsdk/glimg/include/glimg/glimg.h"
 #include <FreeImage.h>
 
 
@@ -39,7 +37,12 @@ private:
 public:
 	Texture();
 		
-	bool Load(const std::string &fileName);
+	// Maybe the texture loading characteristics must be kept away from the user.
+	// Later, I will develop a single format which will have default characteristics.
+	bool Load(const std::string &fileName,
+			  GLenum textureStorageFormat, 
+			  GLenum textureComponents, 
+			  GLenum textureComponentsStorageFormat);
 	void CreateSamplers();
 
 	void Bind(GLenum textureUnit);

@@ -75,7 +75,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>C:\Program Files\Assimp\lib\x64\assimp.lib;..\freetype\freetype2410.lib;..\framework\lib\framework.lib;..\fmod\fmodex_vc.lib;glload.lib;glimg.lib;glutil.lib;glmesh.lib;freeglut.lib;glu32.lib;opengl32.lib;gdi32.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>C:/Program Files/Assimp/lib/x86/assimp.lib;FreeImage.lib;..\freetype\freetype2410.lib;..\framework\lib\framework.lib;..\fmod\fmodex_vc.lib;glload.lib;glimg.lib;glutil.lib;glmesh.lib;freeglut.lib;glu32.lib;opengl32.lib;gdi32.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Program Files\Assimp\lib;..\glsdk\glload\lib;..\glsdk\glimg\lib;..\glsdk\glutil\lib;..\glsdk\glmesh\lib;..\glsdk\freeglut\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

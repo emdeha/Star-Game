@@ -1,4 +1,4 @@
-﻿Build started 30.9.2012 г. 18:25:37 ч..
+﻿Build started 2.10.2012 г. 18:12:14 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\AssetLoader\AssetLoader.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\AssetLoader.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -6,6 +6,7 @@
          All outputs are up-to-date.
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Program Files\Assimp\include\assimp" /I../freetype/include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\AssetLoader.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt MeshLoader.cpp
          MeshLoader.cpp
+     1>e:\ceci\thegame\source\stargame\assetloader\meshloader.cpp(194): warning C4715: 'Mesh::InitMaterials' : not all control paths return a value
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\AssetLoader.lib" /LIBPATH:"E:\CECI\Programming\Libraries\assimp--3.0.1270-full\assimp--3.0.1270-sdk\lib" /NOLOGO Debug\GUILoader.obj
          Debug\MeshLoader.obj
@@ -19,4 +20,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.77
+Time Elapsed 00:00:00.86

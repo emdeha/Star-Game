@@ -37,9 +37,11 @@ void Texture::CreateSamplers()
 	//glSamplerParameteri(samplerObject, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 }
 
-bool Texture::Load(const std::string &fileName)
+bool Texture::Load(const std::string &fileName,
+				   GLenum textureStorageFormat, 
+				   GLenum textureComponents, 
+				   GLenum textureComponentsStorageFormat)
 {
-
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 	FIBITMAP *dib(0);
 	BYTE *bits(0);
@@ -68,9 +70,9 @@ bool Texture::Load(const std::string &fileName)
 	glGenTextures(1, &textureObject);
 	glBindTexture(GL_TEXTURE_2D, textureObject);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 
-					height, width,
-					0, GL_RGB, GL_UNSIGNED_BYTE, bits);
+	glTexImage2D(GL_TEXTURE_2D, 0, textureStorageFormat, 
+			     height, width, 0, 
+				 textureComponents, textureComponentsStorageFormat, bits);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 

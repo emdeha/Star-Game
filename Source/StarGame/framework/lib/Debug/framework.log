@@ -1,4 +1,4 @@
-﻿Build started 30.9.2012 г. 15:38:12 ч..
+﻿Build started 2.10.2012 г. 19:41:13 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\framework\framework.vcxproj" on node 4 (build target(s)).
      1>InitializeBuildStatus:
          Creating "lib\Debug\framework.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -6,9 +6,8 @@
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /I..\glsdk\glload\include /I..\glsdk\glimg\include /I..\glsdk\glm /I..\glsdk\glutil\include /I..\glsdk\glmesh\include /I..\glsdk\freeglut\include /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D DEBUG /D _DEBUG /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"lib\Debug\\" /Fd"lib\Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Text.cpp Utility.cpp
          Text.cpp
          Generating Code...
-         Compiling...
+         Skipping... (no relevant changes detected)
          Utility.cpp
-         Generating Code...
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"lib\frameworkD.lib" /NOLOGO lib\Debug\EventSystem.obj
          lib\Debug\framework.obj
@@ -25,4 +24,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.14
+Time Elapsed 00:00:01.97

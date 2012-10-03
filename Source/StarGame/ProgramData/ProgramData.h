@@ -25,7 +25,22 @@
 #define PROGRAM_DATA_H
 
 
+#include <map>
+#include <string>
+
 #include <glload/gl_3_3.h>
+
+
+struct ProgramData
+{
+	GLuint theProgram;
+	// Replace with associative vector
+	std::map<std::string, GLuint> uniforms;
+	std::map<std::string, GLuint> attributes;
+
+	// Maybe the buffers needn't be stored in the program data
+	std::map<std::string, GLuint> uniformBuffers;
+};
 
 
 struct LitProgData

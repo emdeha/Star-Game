@@ -1,5 +1,5 @@
-﻿Build started 30.9.2012 г. 15:38:12 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\ProgramData\ProgramData.vcxproj" on node 4 (build target(s)).
+﻿Build started 2.10.2012 г. 19:41:13 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\ProgramData\ProgramData.vcxproj" on node 3 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\ProgramData.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
@@ -14,4 +14,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.40
+Time Elapsed 00:00:00.65

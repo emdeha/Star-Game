@@ -21,6 +21,8 @@
 // TODO: Make sure everything compiles with the include files removed from 'Microsoft SDKs'
 // TODO: DATA DRIVEN DESIGN!!!
 // TODO: Better error handling.
+// TODO: Fix a bug with satellite selection. 
+//		 When the sun is moved the selection doesn't work properly. Move the sun for an example.
 
 
 #include "Main.h"
@@ -41,6 +43,7 @@ std::shared_ptr<Sun> mainSun(new Sun(glm::vec3(0.0f), glm::vec4(0.738f, 0.738f, 
 SunLight mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 
 					  1.2f,
 					  5.0f, displayData.gamma));
+std::shared_ptr<Spaceship> sampleSpaceship(new Spaceship(glm::vec3(0.0f)));
 
 Universe *universe(new Universe());
 
@@ -332,9 +335,11 @@ void InitializeGUI()
 void InitializeScene()
 {
 	mainSun->LoadMesh("mesh-files/UnitSphere.xml");
+	sampleSpaceship->LoadMesh("mesh-files/UnitSphere.xml");
 
 	universe->AddSun(mainSun);
 	universe->AddSunLight(mainSunLight);
+	universe->AddSpaceship(sampleSpaceship);
 
 	universe->SetMusic("../data/music/background.mp3", MUSIC_BACKGROUND);
 	universe->SetMusic("../data/music/onclick.wav", MUSIC_ON_SUN_CLICK);
@@ -345,14 +350,10 @@ void InitializeScene()
 	InitializeGUI();
 }
 
-Mesh myMesh;
-
 void Init()
 {
 	InitializePrograms();
 	InitializeScene();
-
-	myMesh.LoadMesh("../data/mesh-files/phoenix_ugv.md2");
 
 	glutMouseFunc(HandleMouseButtons);
 	glutMotionFunc(HandleActiveMovement);
@@ -418,9 +419,6 @@ void Display()
 		
 		universe->RenderCurrentLayout(shaderManager.GetFontProgData(),
 									  shaderManager.GetSimpleProgDataOrtho());	
-
-
-		myMesh.Render(modelMatrix, shaderManager.GetSimpleTextureProgData());
 	}
 	else /*if(universe->IsLayoutOn(LAYOUT_MENU))*/
 	{
@@ -465,6 +463,7 @@ void Reshape(int width, int height)
 	glUseProgram(0);
 
 	//universe->UpdateCurrentLayout(width, height);
+	// TODO: Isolate in a separate function.
 	if(width <= 800 || height <= 600)
 	{
 		universe->SetLayoutPreset(SMALL);

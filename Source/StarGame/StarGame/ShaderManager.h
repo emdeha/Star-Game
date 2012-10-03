@@ -44,7 +44,9 @@ class ShaderManager
 private:
 	std::map<BlockType, int> blockIndices;
 	std::map<UniformBufferType, unsigned int> uniformBuffers; 
-	
+
+	std::map<std::string, ProgramData> programDatas;
+
 	LitProgData litData;
 	UnlitProgData unlitData;
 	SimpleProgData simpleData;
@@ -54,6 +56,25 @@ private:
 
 public:
 	ShaderManager();
+
+	void LoadProgram(const std::string &vertexShader, const std::string &fragmentShader,
+					 const std::string &programDataType);
+
+	void AddUniform(const std::string &programDataType, 
+					const std::string &uniformName, 
+					const std::string &uniformNameInShader);
+	void AddAttrubute(const std::string &programDataType,
+					  const std::string &attributeName, 
+					  const std::string &attrubuteNameInShader);
+	
+	void AddUniformBlock(const std::string &programDataType, 
+						 const std::string &uniformBlockName, 
+						 const std::string &uniformBlockNameInShader,
+						 BlockType blockType);
+	
+	ProgramData GetProgramData(const std::string &programDataType);
+
+
 
 	void LoadLitProgram(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadUnlitProgram(const std::string &vertexShader, const std::string &fragmentShader);

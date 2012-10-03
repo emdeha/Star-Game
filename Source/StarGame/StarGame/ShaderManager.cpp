@@ -33,6 +33,47 @@ ShaderManager::ShaderManager()
 	uniformBuffers.insert(std::make_pair(UBT_LIGHT, 0));
 }
 
+void ShaderManager::LoadProgram(const std::string &vertexShader, const std::string &fragmentShader,
+								const std::string &programDataType)
+{
+	std::vector<GLuint> shaderList;
+
+	shaderList.push_back(Framework::LoadShader(GL_VERTEX_SHADER, vertexShader));
+	shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, fragmentShader));
+
+	programDatas[programDataType].theProgram = Framework::CreateProgram(shaderList);
+}
+
+void ShaderManager::AddAttrubute(const std::string &programDataType, 
+								 const std::string &attributeName, const std::string &attributeNameInShader)
+{
+	GLuint attribLocation = 
+		glGetAttribLocation(programDatas[programDataType].theProgram, attributeNameInShader.c_str());
+
+	programDatas[programDataType].attributes.insert(std::make_pair(attributeName, attribLocation));
+}
+void ShaderManager::AddUniform(const std::string &programDataType, 
+							   const std::string &uniformName, 
+							   const std::string &uniformNameInShader)
+{
+	GLuint uniformLocation =
+		glGetUniformLocation(programDatas[programDataType].theProgram, uniformNameInShader.c_str());
+
+	programDatas[programDataType].attributes.insert(std::make_pair(uniformName, uniformLocation));
+}
+void ShaderManager::AddUniformBlock(const std::string &programDataType, 
+									const std::string &uniformBlockName, 
+									const std::string &uniformBlockNameInShader,
+									BlockType blockType)
+{
+	GLuint uniformBlockLocation =
+		glGetUniformBlockIndex(programDatas[programDataType].theProgram, uniformBlockNameInShader.c_str());
+
+	programDatas[programDataType].attributes.insert(std::make_pair(uniformBlockName, uniformBlockLocation));
+
+	glUniformBlockBinding(programDatas[programDataType].theProgram, uniformBlockLocation, blockType);
+}
+
 void ShaderManager::LoadLitProgram(const std::string &vertexShader, 
 								   const std::string &fragmentShader)
 {

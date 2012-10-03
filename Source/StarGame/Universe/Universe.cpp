@@ -22,6 +22,7 @@ Universe::Universe()
 {
 	lights.resize(0);
 	suns.resize(0);
+	spaceships.resize(0);
 
 	universeLayouts.clear();
 
@@ -49,6 +50,12 @@ void Universe::RenderUniverse(glutil::MatrixStack &modelMatrix,
 	{
 		suns[i]->Render(modelMatrix, materialBlockIndex, universeGamma, litData, unLitData, interpData);
 	}
+
+	int sizeSpaceships = spaceships.size();
+	for(int i = 0; i < sizeSpaceships; i++)
+	{
+		spaceships[i]->Render(modelMatrix, materialBlockIndex, universeGamma, litData);
+	}
 }
 void Universe::RenderCurrentLayout(const FontProgData &fontData,
 								   const SimpleProgData &simpleData)
@@ -73,6 +80,12 @@ void Universe::UpdateUniverse()
 		//{
 		//	universeMusic.Play(MUSIC_ON_SUN_CLICK);
 		//}
+	}
+
+	int sizeSpaceships = spaceships.size();
+	for(int i = 0; i < sizeSpaceships; i++)
+	{
+		spaceships[i]->Update();
 	}
 }
 void Universe::UpdateCurrentLayout(int windowWidth, int windowHeight)
@@ -175,6 +188,10 @@ void Universe::AddSunLight(const SunLight &newSunLight)
 void Universe::AddSun(const std::shared_ptr<Sun> newSun)
 {
 	suns.push_back(newSun);
+}
+void Universe::AddSpaceship(const std::shared_ptr<Spaceship> newSpaceship)
+{
+	spaceships.push_back(newSpaceship);
 }
 
 

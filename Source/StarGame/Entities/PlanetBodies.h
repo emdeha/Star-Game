@@ -100,6 +100,9 @@ private:
 	bool isClicked;
 
 
+	int health;
+
+
 	int materialBlockSize; ///< The size of the material block. Used for uniform buffer init.
 	GLuint materialUniformBuffer; ///< The 'pointer' to the uniform buffer.
 
@@ -222,6 +225,10 @@ private:
 	glm::vec4 color;
 	glm::vec3 position; ///< The sun's position.
 
+
+	int health;
+
+
 	float diameter; ///< Its _diameter_.
 
 	int satelliteCap;
@@ -285,13 +292,13 @@ public:
 
 	/// \fn GetPosition
 	/// \brief Gets the sun position.
-	glm::vec4 GetPosition();
+	const glm::vec4 GetPosition() const;
 
 	/// \fn GetSatelliteCap
 	/// \brief Gets the satellite cap limit.
 
 	// NOTE: Maybe not so useful.
-	int GetSatelliteCap();
+	const int GetSatelliteCap() const;
 
 	/// \fn IsClicked
 	/// \brief Checks if the sun is clicked. 
@@ -311,8 +318,11 @@ public:
 						    Mouse userMouse, glm::vec4 cameraPos,
 						    int windowWidth, int windowHeight);
 
-	bool GetIsClicked();
-	bool GetIsSatelliteClicked();
+	const bool GetIsClicked() const;
+	const bool GetIsSatelliteClicked() const;
+
+
+	const float GetRadius() const;
 
 public:
 	Sun(const Sun &other);
@@ -320,24 +330,29 @@ public:
 	Sun operator=(const Sun &other);
 };
 
-inline glm::vec4 Sun::GetPosition()
+inline const glm::vec4 Sun::GetPosition() const 
 {
 	return glm::vec4(position, 1.0f);
 }
 
-inline int Sun::GetSatelliteCap()
+inline const int Sun::GetSatelliteCap() const 
 {
 	return satelliteCap;
 }
 
-inline bool Sun::GetIsClicked()
+inline const bool Sun::GetIsClicked() const 
 {
 	return isClicked;
 }
 
-inline bool Sun::GetIsSatelliteClicked()
+inline const bool Sun::GetIsSatelliteClicked() const 
 {
 	return isSatelliteClicked;
+}
+
+inline const float Sun::GetRadius() const
+{
+	return diameter / 2.0f;
 }
 
 

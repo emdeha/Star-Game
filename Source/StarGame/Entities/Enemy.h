@@ -24,30 +24,80 @@
 #include <glm/glm.hpp>
 
 #include "../framework/Mesh.h"
+#include "../framework/EventSystem.h"
 
 #include "../ProgramData/ProgramData.h"
+#include "../Entities/PlanetBodies.h"
 #include "MaterialBlock.h"
 
 
-class Spaceship
+class Projectile
 {
 private:
 	glm::vec3 position;
+	glm::vec3 velocity;
 
+	int damage;
+
+	bool isDestroyed;
+
+	
 	std::auto_ptr<Framework::Mesh> mesh;
 
 	int materialBlockSize;
 	GLuint materialUniformBuffer;
 
 public:
-	Spaceship(glm::vec3 newPosition);
-
+	Projectile(glm::vec3 newPosition, glm::vec3 newVelocity,
+			   int newDamage);
+	
 	void LoadMesh(const std::string &meshFile);
+	void LoadMesh(const std::auto_ptr<Framework::Mesh> newMesh);
 
-	void Update();
+	void Update(Sun &sun);
 	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 				float gamma, 
 				const LitProgData &litData);
+
+	bool IsTargetHit(glm::vec3 targetPosition, float targetRadius);
+
+	void OnTargetHit(Sun &sun); // Should be an OnEvent(Event &_event);
+
+
+	bool IsDestroyed();
+};
+
+inline bool Projectile::IsDestroyed()
+{
+	return isDestroyed;
+}
+
+
+class Spaceship
+{
+private:
+	glm::vec3 position;
+	glm::vec3 direction;
+
+	int health;
+
+	std::auto_ptr<Projectile> projectile;
+	std::auto_ptr<Framework::Mesh> mesh;
+
+	int materialBlockSize;
+	GLuint materialUniformBuffer;
+
+public:
+	Spaceship(glm::vec3 newPosition, glm::vec3 newDirection);
+
+	void LoadMesh(const std::string &meshFile);
+
+	void Update(Sun &sun);
+	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
+				float gamma, 
+				const LitProgData &litData);
+
+	void OnEvent(Event &_event);
 };
 
 

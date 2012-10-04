@@ -43,9 +43,14 @@ static void GenerateUniformBuffers(int &materialBlockSize,
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-Spaceship::Spaceship(glm::vec3 newPosition)
+Spaceship::Spaceship(glm::vec3 newPosition, glm::vec3 newDirection)
 {
 	position = newPosition;
+	direction = newDirection;
+
+	health = 100;
+
+	projectile = std::auto_ptr<Projectile>(new Projectile(position, direction * 0.05f, 5));
 }
 
 void Spaceship::LoadMesh(const std::string &meshFile)
@@ -62,12 +67,20 @@ void Spaceship::LoadMesh(const std::string &meshFile)
 	}
 
 	GenerateUniformBuffers(materialBlockSize, glm::vec4(0.0f), materialUniformBuffer);
+
+	projectile->LoadMesh(meshFile);
 }
 
-void Spaceship::Update()
+void Spaceship::Update(Sun &sun)
 {
-	position += 0.01;
-	std::printf("moved: %f, %f, %f\n", position.x, position.y, position.z);
+	// position += glm::vec3(0.1f, 0.0f, 0.1f);
+	if(projectile->IsDestroyed())
+	{
+		projectile = std::auto_ptr<Projectile>(new Projectile(position, direction * 0.05f, 5));
+		projectile->LoadMesh("mesh-files/UnitSphere.xml");
+	}
+
+	projectile->Update(sun);
 }
 
 void Spaceship::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
@@ -94,5 +107,21 @@ void Spaceship::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 		glUseProgram(0);
 
 		glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
+	}
+
+	if(!projectile->IsDestroyed())
+	{
+		projectile->Render(modelMatrix, materialBlockIndex, gamma, litData);
+	}
+}
+
+void Spaceship::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
+	case EVENT_TYPE_SHOT_FIRED:
+		break;
+	case EVENT_TYPE_ATTACKED:
+		break;
 	}
 }

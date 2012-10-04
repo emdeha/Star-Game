@@ -85,7 +85,7 @@ void Universe::UpdateUniverse()
 	int sizeSpaceships = spaceships.size();
 	for(int i = 0; i < sizeSpaceships; i++)
 	{
-		spaceships[i]->Update();
+		spaceships[i]->Update(*suns.front().get());
 	}
 }
 void Universe::UpdateCurrentLayout(int windowWidth, int windowHeight)

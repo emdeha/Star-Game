@@ -111,6 +111,7 @@ Satellite::Satellite(Framework::Timer newRevolutionDuration,
 	offsetFromSun = newOffsetFromSun;
 	diameter = newDiameter;
 	isClicked = false;
+	health = 100;
 
 	GenerateUniformBuffers(materialBlockSize, color, materialUniformBuffer);
 }
@@ -304,6 +305,7 @@ Sun::Sun()
 	satelliteOffset = 1.0f;
 	isClicked = false;
 	isSatelliteClicked = false;
+	health = 0;
 }
 Sun::Sun(glm::vec3 newPosition, glm::vec4 newColor,
 		 float newDiameter, int newSatelliteCap)
@@ -317,6 +319,7 @@ Sun::Sun(glm::vec3 newPosition, glm::vec4 newColor,
 	satelliteOffset = 1.0f;
 	isClicked = false;
 	isSatelliteClicked = false;
+	health = 300;
 }
 
 void Sun::LoadMesh(const std::string &fileName)

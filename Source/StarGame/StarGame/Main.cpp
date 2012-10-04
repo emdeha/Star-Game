@@ -43,7 +43,7 @@ std::shared_ptr<Sun> mainSun(new Sun(glm::vec3(0.0f), glm::vec4(0.738f, 0.738f, 
 SunLight mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 
 					  1.2f,
 					  5.0f, displayData.gamma));
-std::shared_ptr<Spaceship> sampleSpaceship(new Spaceship(glm::vec3(0.0f)));
+std::shared_ptr<Spaceship> sampleSpaceship(new Spaceship(glm::vec3(2.5f, 0.0f, 0.0f), glm::vec3(-0.1f, 0.0f, 0.0f)));
 
 Universe *universe(new Universe());
 

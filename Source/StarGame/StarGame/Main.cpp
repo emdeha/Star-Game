@@ -29,8 +29,7 @@
 #include "ShaderManager.h"
 #include "DisplayData.h"
 #include "../framework/EventSystem.h"
-#include "../Universe/Universe.h"
-#include "../Camera/TopDownCamera.h"
+#include "../Scene/Scene.h"
 #include "../AssetLoader/GUILoader.h"
 #include "../AssetLoader/MeshLoader.h"
 
@@ -38,211 +37,208 @@
 ShaderManager shaderManager;
 DisplayData displayData;
 
-std::shared_ptr<Sun> mainSun(new Sun(glm::vec3(0.0f), glm::vec4(0.738f, 0.738f, 0.423f, 1.0f), 
-									 1.25f, 4));
-SunLight mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 
-					  1.2f,
-					  5.0f, displayData.gamma));
-std::shared_ptr<Spaceship> sampleSpaceship(new Spaceship(glm::vec3(2.5f, 0.0f, 0.0f), glm::vec3(-0.1f, 0.0f, 0.0f)));
-
-Universe *universe(new Universe());
-
-Mouse userMouse;
-
-TopDownCamera userCamera = TopDownCamera(glm::vec3(), 12.5f, 90.0f, 135.0f);
-
-float g_initialOffset = 1.0f;
-
-
-float g_musicVolumeMaster = 0.1f;
-float g_musicVolumeInteraction = 0.1f;
-
+Scene *scene = new Scene();
 
 
 void HandleMouse()
 {
-	glm::vec3 cameraPosition = userCamera.ResolveCamPosition();
+	glm::vec3 cameraPosition = scene->GetTopDownCamera().ResolveCamPosition();
 
 	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
 	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
 
-	if(userMouse.IsRightButtonDown())
+	if(scene->GetMouse().IsRightButtonDown())
 	{
-		if(mainSun->IsClicked
-			(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
-			 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
+		if(scene->HasSuns())
 		{
-			Event rightClickSunEvent = StockEvents::EventOnRightClick("sun");
+			if(scene->GetSun()->IsClicked
+				(displayData.projectionMatrix, displayData.modelMatrix, scene->GetMouse(), 
+				 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
+			{
+				Event rightClickSunEvent = StockEvents::EventOnRightClick("sun");
 
-			mainSun->OnEvent(rightClickSunEvent);
-			universe->OnEvent(rightClickSunEvent);
+				scene->GetSun()->OnEvent(rightClickSunEvent);
+				scene->OnEvent(rightClickSunEvent);
+			}
 		}
 	}
 
-	if(userMouse.IsLeftButtonDown())
+	if(scene->GetMouse().IsLeftButtonDown())
 	{
-		if(universe->IsLayoutOn(LAYOUT_IN_GAME))
+		if(scene->IsLayoutOn(LAYOUT_IN_GAME))
 		{
 			if(
-			   universe->GetLayout(LAYOUT_IN_GAME)->
+			   scene->GetLayout(LAYOUT_IN_GAME)->
 			   GetControl("exit")->
-			   IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+			   IsMouseOn(scene->GetMouse().GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("exitButton");
 
-				universe->GetLayout(LAYOUT_IN_GAME)->GetControl("exit")->OnEvent(leftClickButtonEvent);
+				scene->GetLayout(LAYOUT_IN_GAME)->GetControl("exit")->OnEvent(leftClickButtonEvent);
 
-				universe->OnEvent(leftClickButtonEvent);
+				scene->OnEvent(leftClickButtonEvent);
 
-				userMouse.ReleaseLeftButton();
+				scene->GetMouse().ReleaseLeftButton();
 				return;
 			}
 		}
 
-		if(universe->IsLayoutOn(LAYOUT_MENU))
+		if(scene->IsLayoutOn(LAYOUT_MENU))
 		{
 			if(
-				universe->GetLayout(LAYOUT_MENU)->
+				scene->GetLayout(LAYOUT_MENU)->
 				GetControl("newGame")->
-				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+				IsMouseOn(scene->GetMouse().GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("newGameButton");
 
-				universe->GetLayout(LAYOUT_MENU)->GetControl("newGame")->OnEvent(leftClickButtonEvent);
+				scene->GetLayout(LAYOUT_MENU)->GetControl("newGame")->OnEvent(leftClickButtonEvent);
 
-				universe->OnEvent(leftClickButtonEvent);
+				scene->OnEvent(leftClickButtonEvent);
 			}
 
 			if(
-				universe->GetLayout(LAYOUT_MENU)->
+				scene->GetLayout(LAYOUT_MENU)->
 				GetControl("saveGame")->
-				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+				IsMouseOn(scene->GetMouse().GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("saveGameButton");
 
-				universe->GetLayout(LAYOUT_MENU)->GetControl("saveGame")->OnEvent(leftClickButtonEvent);
+				scene->GetLayout(LAYOUT_MENU)->GetControl("saveGame")->OnEvent(leftClickButtonEvent);
 
-				universe->OnEvent(leftClickButtonEvent);
+				scene->OnEvent(leftClickButtonEvent);
 			}
 
 			if(
-				universe->GetLayout(LAYOUT_MENU)->
+				scene->GetLayout(LAYOUT_MENU)->
 				GetControl("quitGame")->
-				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+				IsMouseOn(scene->GetMouse().GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("quitGameButton");
 
-				universe->GetLayout(LAYOUT_MENU)->GetControl("quitGame")->OnEvent(leftClickButtonEvent);
+				scene->GetLayout(LAYOUT_MENU)->GetControl("quitGame")->OnEvent(leftClickButtonEvent);
 
-				universe->OnEvent(leftClickButtonEvent);
+				scene->OnEvent(leftClickButtonEvent);
 			}
 
 			if(
-				universe->GetLayout(LAYOUT_MENU)->
+				scene->GetLayout(LAYOUT_MENU)->
 				GetControl("printCmd")->
-				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+				IsMouseOn(scene->GetMouse().GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("printCmd");
 
-				universe->GetLayout(LAYOUT_MENU)->GetControl("printCmd")->OnEvent(leftClickButtonEvent);
+				scene->GetLayout(LAYOUT_MENU)->GetControl("printCmd")->OnEvent(leftClickButtonEvent);
 
-				universe->OnEvent(leftClickButtonEvent);
+				scene->OnEvent(leftClickButtonEvent);
 			}
 			
 			if(
-				universe->GetLayout(LAYOUT_MENU)->
+				scene->GetLayout(LAYOUT_MENU)->
 				GetControl("sample")->
-				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+				IsMouseOn(scene->GetMouse().GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickTextBoxEvent = StockEvents::EventOnLeftClick("sample");
 
-				universe->GetLayout(LAYOUT_MENU)->GetControl("sample")->OnEvent(leftClickTextBoxEvent);
+				scene->GetLayout(LAYOUT_MENU)->GetControl("sample")->OnEvent(leftClickTextBoxEvent);
 
 				
-				if(universe->GetLayout(LAYOUT_MENU)->GetControl("sample") != 
-				   universe->GetLayout(LAYOUT_MENU)->GetActiveControl())
+				if(scene->GetLayout(LAYOUT_MENU)->GetControl("sample") != 
+				   scene->GetLayout(LAYOUT_MENU)->GetActiveControl())
 				{
 					Event unclickEvent = Event(EVENT_TYPE_UNCLICK);
 
-					universe->GetLayout(LAYOUT_MENU)->GetActiveControl()->OnEvent(unclickEvent);
+					scene->GetLayout(LAYOUT_MENU)->GetActiveControl()->OnEvent(unclickEvent);
 				}
 			}
 			
 			if(
-				universe->GetLayout(LAYOUT_MENU)->
+				scene->GetLayout(LAYOUT_MENU)->
 				GetControl("sampleTwo")->
-				IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+				IsMouseOn(scene->GetMouse().GetClipSpacePosition(windowWidth, windowHeight))
 			  )
 			{
 				Event leftClickTextBoxEvent = StockEvents::EventOnLeftClick("sampleTwo");
 
-				universe->GetLayout(LAYOUT_MENU)->GetControl("sampleTwo")->OnEvent(leftClickTextBoxEvent);
+				scene->GetLayout(LAYOUT_MENU)->GetControl("sampleTwo")->OnEvent(leftClickTextBoxEvent);
 
 				
-				if(universe->GetLayout(LAYOUT_MENU)->GetControl("sampleTwo") != 
-				   universe->GetLayout(LAYOUT_MENU)->GetActiveControl())
+				if(scene->GetLayout(LAYOUT_MENU)->GetControl("sampleTwo") != 
+				   scene->GetLayout(LAYOUT_MENU)->GetActiveControl())
 				{
 					Event unclickEvent = Event(EVENT_TYPE_UNCLICK);
 
-					universe->GetLayout(LAYOUT_MENU)->GetActiveControl()->OnEvent(unclickEvent);
+					scene->GetLayout(LAYOUT_MENU)->GetActiveControl()->OnEvent(unclickEvent);
 				}
 			}
 		}
 
-		if(mainSun->IsClicked
-			(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
-			 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
+		if(scene->IsLayoutOn(LAYOUT_IN_GAME))
 		{
-			Event leftClickSunEvent = StockEvents::EventOnLeftClick("sun");
-
-			mainSun->OnEvent(leftClickSunEvent);
-			universe->OnEvent(leftClickSunEvent);
-		}
-
-		std::vector<Satellite*> sunSatellites = mainSun->GetSatellites();
-		for(std::vector<Satellite*>::iterator iter = sunSatellites.begin(); 
-			iter != sunSatellites.end(); ++iter)
-		{
-			if((*iter)->IsClicked
-				(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
-					glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
+			if(scene->HasSuns())
 			{
-				Event leftClickSatelliteEvent = StockEvents::EventOnLeftClick("satellite");
+				if(scene->GetSun()->IsClicked
+					(displayData.projectionMatrix, displayData.modelMatrix, scene->GetMouse(), 
+					 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
+				{
+					Event leftClickSunEvent = StockEvents::EventOnLeftClick("sun");
 
-				(*iter)->OnEvent(leftClickSatelliteEvent);
-				universe->OnEvent(leftClickSatelliteEvent);
+					scene->GetSun()->OnEvent(leftClickSunEvent);
+					scene->OnEvent(leftClickSunEvent);
+				}
+
+				std::vector<std::shared_ptr<Satellite>> sunSatellites = scene->GetSun()->GetSatellites();
+				for(std::vector<std::shared_ptr<Satellite>>::iterator iter = sunSatellites.begin(); 
+					iter != sunSatellites.end(); ++iter)
+				{
+					if((*iter)->IsClicked
+						(displayData.projectionMatrix, displayData.modelMatrix, scene->GetMouse(), 
+							glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
+					{
+						Event leftClickSatelliteEvent = StockEvents::EventOnLeftClick("satellite");
+
+						(*iter)->OnEvent(leftClickSatelliteEvent);
+						scene->OnEvent(leftClickSatelliteEvent);
+					}
+				}
 			}
 		}
 	}
 
-	std::vector<Satellite*> sunSatellites = mainSun->GetSatellites();
-	for(std::vector<Satellite*>::iterator iter = sunSatellites.begin(); 
-		iter != sunSatellites.end(); ++iter)
+	if(scene->IsLayoutOn(LAYOUT_IN_GAME))
 	{
-		if((*iter)->IsClicked
-			(displayData.projectionMatrix, displayData.modelMatrix, userMouse, 
-				glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
+		if(scene->HasSuns())
 		{
-			Event satelliteHoveredEvent = StockEvents::EventOnHover();
+			std::vector<std::shared_ptr<Satellite>> sunSatellites = scene->GetSun()->GetSatellites();
+			for(std::vector<std::shared_ptr<Satellite>>::iterator iter = sunSatellites.begin(); 
+				iter != sunSatellites.end(); ++iter)
+			{
+				if((*iter)->IsClicked
+					(displayData.projectionMatrix, displayData.modelMatrix, scene->GetMouse(), 
+						glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
+				{
+					Event satelliteHoveredEvent = StockEvents::EventOnHover();
 
-			(*iter)->OnEvent(satelliteHoveredEvent);
-			universe->OnEvent(satelliteHoveredEvent);
+					(*iter)->OnEvent(satelliteHoveredEvent);
+					scene->OnEvent(satelliteHoveredEvent);
+				}
+			}
 		}
 	}
 
 
-	if(universe->IsLayoutOn(LAYOUT_MENU))
+	if(scene->IsLayoutOn(LAYOUT_MENU))
 	{
 		/*if(
 			universe->GetLayout(LAYOUT_MENU).
 			GetButtonControl("newGame")->
-			IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+			IsMouseOn(scene->GetMouse().GetClipSpacePosition(windowWidth, windowHeight))
 			)
 		{
 			//Event hoverButtonEvent = StockEvents::EventOnHover();
@@ -272,7 +268,7 @@ void HandleMouse()
 		/*if(
 			universe->GetLayout(LAYOUT_MENU).
 			GetButtonControl("saveGame").
-			IsMouseOn(userMouse.GetClipSpacePosition(windowWidth, windowHeight))
+			IsMouseOn(scene->GetMouse().GetClipSpacePosition(windowWidth, windowHeight))
 			)
 		{
 			Event hoverButtonEvent = StockEvents::EventOnHover();
@@ -282,36 +278,36 @@ void HandleMouse()
 	}
 
 
-	userMouse.ReleaseRightButton();
-	userMouse.ReleaseLeftButton();
+	scene->GetMouse().ReleaseRightButton();
+	scene->GetMouse().ReleaseLeftButton();
 }
 void HandleMouseButtons(int button, int state, int x, int y)
 {
 	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 	{
-		userMouse.PressLeftButton();
+		scene->GetMouse().PressLeftButton();
 	}
 	if(button == GLUT_LEFT_BUTTON && state == GLUT_UP)
 	{
-		userMouse.ReleaseLeftButton();
+		scene->GetMouse().ReleaseLeftButton();
 	}
 
 	if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
 	{
-		userMouse.PressRightButton();
+		scene->GetMouse().PressRightButton();
 	}
 	if(button == GLUT_RIGHT_BUTTON && state == GLUT_UP)
 	{
-		userMouse.ReleaseRightButton();
+		scene->GetMouse().ReleaseRightButton();
 	}
 }
 void HandleActiveMovement(int x, int y)
 {
-	userMouse.SetCurrentPosition(glm::ivec2(x, y));
+	scene->GetMouse().SetCurrentPosition(glm::ivec2(x, y));
 }
 void HandlePassiveMovement(int x, int y)
 {
-	userMouse.SetCurrentPosition(glm::ivec2(x, y));
+	scene->GetMouse().SetCurrentPosition(glm::ivec2(x, y));
 }
 
 void InitializePrograms()
@@ -329,23 +325,44 @@ void InitializeGUI()
 	GUILoader guiLoader("../data/gui-descriptor/descriptor.txt", 
 						glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
-	universe->AddLayouts(guiLoader.GetAllLoadedLayouts());
+	scene->AddLayouts(guiLoader.GetAllLoadedLayouts());
 }
 
 void InitializeScene()
 {
+	Mouse userMouse;
+	TopDownCamera userCamera = TopDownCamera(glm::vec3(), 12.5f, 90.0f, 135.0f);
+
+
+	std::shared_ptr<Sun> 
+		mainSun(new Sun(glm::vec3(0.0f), glm::vec4(0.738f, 0.738f, 0.423f, 1.0f), 1.25f, 4));
+
+	SunLight 
+		mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, displayData.gamma));
+
+	std::shared_ptr<Spaceship> 
+		sampleSpaceship(new Spaceship(glm::vec3(4.5f, 0.0f, 0.0f), glm::vec3(-0.1f, 0.0f, 0.0f)));
+
+
+
 	mainSun->LoadMesh("mesh-files/UnitSphere.xml");
 	sampleSpaceship->LoadMesh("mesh-files/UnitSphere.xml");
 
-	universe->AddSun(mainSun);
-	universe->AddSunLight(mainSunLight);
-	universe->AddSpaceship(sampleSpaceship);
+	scene->SetMouse(userMouse);
+	scene->SetTopDownCamera(userCamera);
 
-	universe->SetMusic("../data/music/background.mp3", MUSIC_BACKGROUND);
-	universe->SetMusic("../data/music/onclick.wav", MUSIC_ON_SUN_CLICK);
+	scene->AddSun(mainSun);
+	scene->AddSunLight(mainSunLight);
+	scene->AddSpaceship(sampleSpaceship);
 
-	universe->SetMusicVolume(g_musicVolumeInteraction, CHANNEL_INTERACTION);
-	universe->SetMusicVolume(g_musicVolumeMaster, CHANNEL_MASTER);	
+	scene->SetMusic("../data/music/background.mp3", MUSIC_BACKGROUND);
+	scene->SetMusic("../data/music/onclick.wav", MUSIC_ON_SUN_CLICK);
+
+	const float musicVolumeInteraction = 0.1f;
+	const float musicVolumeMaster = 0.1f;
+
+	scene->SetMusicVolume(musicVolumeInteraction, CHANNEL_INTERACTION);
+	scene->SetMusicVolume(musicVolumeMaster, CHANNEL_MASTER);	
 
 	InitializeGUI();
 }
@@ -402,32 +419,32 @@ void Display()
 	glClearDepth(1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	if(universe->IsLayoutOn(LAYOUT_IN_GAME))
+	if(scene->IsLayoutOn(LAYOUT_IN_GAME))
 	{
 		glutil::MatrixStack modelMatrix;
-		modelMatrix.SetMatrix(userCamera.CalcMatrix());
+		modelMatrix.SetMatrix(scene->GetTopDownCamera().CalcMatrix());
 	
 		displayData.modelMatrix = modelMatrix.Top();
 
-		universe->UpdateUniverse();
-		universe->RenderUniverse(modelMatrix, 
-								 shaderManager.GetBlockIndex(BT_MATERIAL),
-								 shaderManager.GetUniformBuffer(UBT_LIGHT), 
-								 shaderManager.GetLitProgData(),
-								 shaderManager.GetUnlitProgData(),
-								 shaderManager.GetSimpleProgData());
+		scene->UpdateScene();
+		scene->RenderScene(modelMatrix, 
+						   shaderManager.GetBlockIndex(BT_MATERIAL),
+						   shaderManager.GetUniformBuffer(UBT_LIGHT), 
+						   shaderManager.GetLitProgData(),
+						   shaderManager.GetUnlitProgData(),
+						   shaderManager.GetSimpleProgData());
 		
-		universe->RenderCurrentLayout(shaderManager.GetFontProgData(),
+		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
 									  shaderManager.GetSimpleProgDataOrtho());	
 	}
 	else /*if(universe->IsLayoutOn(LAYOUT_MENU))*/
 	{
-		universe->RenderCurrentLayout(shaderManager.GetFontProgData(),
-									  shaderManager.GetSimpleProgDataOrtho());
+		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
+								   shaderManager.GetSimpleProgDataOrtho());
 	}
 
 	HandleMouse();
-	userMouse.OverrideLastPosition(userMouse.GetCurrentPosition());
+	scene->GetMouse().OverrideLastPosition(scene->GetMouse().GetCurrentPosition());
 
 	glutSwapBuffers();
 	glutPostRedisplay();
@@ -466,19 +483,19 @@ void Reshape(int width, int height)
 	// TODO: Isolate in a separate function.
 	if(width <= 800 || height <= 600)
 	{
-		universe->SetLayoutPreset(SMALL);
-		universe->UpdateCurrentLayout(800, 600);
+		scene->SetLayoutPreset(SMALL);
+		scene->UpdateCurrentLayout(800, 600);
 	}
 	else if(width > 800 && width <= 1440 ||
 			height > 600 && height <= 900)
 	{
-		universe->SetLayoutPreset(MEDIUM);
-		universe->UpdateCurrentLayout(1440, 900);
+		scene->SetLayoutPreset(MEDIUM);
+		scene->UpdateCurrentLayout(1440, 900);
 	}
 	else
 	{
-		universe->SetLayoutPreset(BIG);
-		universe->UpdateCurrentLayout(1920, 1080);
+		scene->SetLayoutPreset(BIG);
+		scene->UpdateCurrentLayout(1920, 1080);
 	}
 }
 
@@ -486,10 +503,10 @@ void Reshape(int width, int height)
 void Keyboard(unsigned char key, int x, int y)
 {
 	// This needs to be passed as an event.
-	if(universe->IsLayoutOn(LAYOUT_MENU) && 
-	   universe->GetLayout(LAYOUT_MENU)->HasActiveControl())
+	if(scene->IsLayoutOn(LAYOUT_MENU) && 
+	   scene->GetLayout(LAYOUT_MENU)->HasActiveControl())
 	{
-		universe->GetLayout(LAYOUT_MENU)->GetActiveControl()->InputChar(key);
+		scene->GetLayout(LAYOUT_MENU)->GetActiveControl()->InputChar(key);
 	}
 
 	switch (key)

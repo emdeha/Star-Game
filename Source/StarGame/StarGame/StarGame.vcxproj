@@ -110,8 +110,8 @@
     <ProjectReference Include="..\ProgramData\ProgramData.vcxproj">
       <Project>{b5f4f13f-30dc-4003-b0ee-64718ed4b5ec}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Universe\Universe.vcxproj">
-      <Project>{adcf5f7c-7b7d-4ecb-baaf-bcac0db38b6e}</Project>
+    <ProjectReference Include="..\Scene\Scene.vcxproj">
+      <Project>{b8817648-5808-4483-b39d-55ad9c180086}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

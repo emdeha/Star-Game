@@ -85,8 +85,8 @@ public:
 class Satellite
 {
 private:
-	std::auto_ptr<Framework::Mesh> mesh; ///< Represents the mesh file for the satellite
-	std::auto_ptr<Sun> parent; ///< The satellite's parent
+	std::unique_ptr<Framework::Mesh> mesh; ///< Represents the mesh file for the satellite
+	std::unique_ptr<Sun> parent; ///< The satellite's parent
 
 	Framework::Timer revolutionDuration; ///< The time needed for the satellite to make one revolution around its parent
 
@@ -98,6 +98,7 @@ private:
 	float diameter; ///< _diameter_ of the satellite
 
 	bool isClicked;
+	bool isDisabled;
 
 
 	int health;
@@ -133,6 +134,9 @@ public:
 	///
 	/// \f$position.y = sin(currTimeThroughLoop \times (2 \times \pi)) \times offsetFromSun\f$
 	void Update();
+
+
+	void Disable();
 
 
 	void OnEvent(Event &_event);
@@ -180,14 +184,12 @@ public:
 	// TODO: Not so useful (maybe).
 	float GetDiameter();
 
+	glm::vec3 GetPosition();
+
+	int GetHealth();
 
 	void Stop();
 	void Start();
-
-public:
-	Satellite(const Satellite &other);
-	~Satellite();
-	Satellite operator=(const Satellite &other);
 };
 
 
@@ -206,6 +208,17 @@ inline float Satellite::GetDiameter()
 	return diameter;
 }
 
+inline glm::vec3 Satellite::GetPosition()
+{
+	return position;
+}
+
+inline int Satellite::GetHealth()
+{
+	return health;
+}
+
+
 /// \class Sun
 /// \brief Represent the main planet of the solar system.
 
@@ -217,10 +230,10 @@ inline float Satellite::GetDiameter()
 class Sun
 {
 private:
-	std::auto_ptr<Framework::Mesh> sunMesh; ///< Represents the mesh file for the sun.
+	std::unique_ptr<Framework::Mesh> sunMesh; ///< Represents the mesh file for the sun.
 
 	// TODO: Find a solution to the smart_ptr problem. Satellite removal freezes the game.
-	std::vector<Satellite*> satellites; ///< The sun's satellites.
+	std::vector<std::shared_ptr<Satellite>> satellites; ///< The sun's satellites.
 
 	glm::vec4 color;
 	glm::vec3 position; ///< The sun's position.
@@ -276,7 +289,7 @@ public:
 	///If everything went OK the function returns `true`.
 	bool AddSatellite(const std::string &fileName, 
 					  glm::vec4 satelliteColor,
-					  float offset, float speed, float diameter);
+					  float speed, float diameter);
 
 	/// \fn RemoveSatellite()
 	/// \brief Removes the last added satellite.
@@ -284,11 +297,13 @@ public:
 
 	/// \fn RemoveSatellite(int index)
 	/// \brief Removes the satellite at position `index`
-	bool RemoveSatellite(int index);
+	bool RemoveSatellite(std::vector<std::shared_ptr<Satellite>>::iterator index_iterator);
+
+	void RemoveSatellites();
 
 	/// \fn GetSatellites
 	/// \brief Gets the sun satellites. Used to access this info from elsewhere.
-	std::vector<Satellite*> GetSatellites();
+	std::vector<std::shared_ptr<Satellite>> GetSatellites();
 
 	/// \fn GetPosition
 	/// \brief Gets the sun position.
@@ -324,10 +339,10 @@ public:
 
 	const float GetRadius() const;
 
+	const int GetHealth() const;
+
 public:
 	Sun(const Sun &other);
-	~Sun();
-	Sun operator=(const Sun &other);
 };
 
 inline const glm::vec4 Sun::GetPosition() const 
@@ -353,6 +368,11 @@ inline const bool Sun::GetIsSatelliteClicked() const
 inline const float Sun::GetRadius() const
 {
 	return diameter / 2.0f;
+}
+
+inline const int Sun::GetHealth() const
+{
+	return health;
 }
 
 

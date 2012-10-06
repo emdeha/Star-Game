@@ -42,7 +42,7 @@ private:
 	bool isDestroyed;
 
 	
-	std::auto_ptr<Framework::Mesh> mesh;
+	std::unique_ptr<Framework::Mesh> mesh;
 
 	int materialBlockSize;
 	GLuint materialUniformBuffer;
@@ -59,9 +59,9 @@ public:
 				float gamma, 
 				const LitProgData &litData);
 
-	bool IsTargetHit(glm::vec3 targetPosition, float targetRadius);
+	void CheckTargetHit(Sun &sun);
 
-	void OnTargetHit(Sun &sun); // Should be an OnEvent(Event &_event);
+	void OnTargetHit(Sun &sun, Event &_event); // Should be an OnEvent(Event &_event);
 
 
 	bool IsDestroyed();
@@ -81,8 +81,8 @@ private:
 
 	int health;
 
-	std::auto_ptr<Projectile> projectile;
-	std::auto_ptr<Framework::Mesh> mesh;
+	std::unique_ptr<Projectile> projectile;
+	std::unique_ptr<Framework::Mesh> mesh;
 
 	int materialBlockSize;
 	GLuint materialUniformBuffer;

@@ -50,15 +50,14 @@ Spaceship::Spaceship(glm::vec3 newPosition, glm::vec3 newDirection)
 
 	health = 100;
 
-	projectile = std::auto_ptr<Projectile>(new Projectile(position, direction * 0.05f, 5));
+	projectile = std::unique_ptr<Projectile>(new Projectile(position, direction * 1.5f, 5));
 }
 
 void Spaceship::LoadMesh(const std::string &meshFile)
 {
 	try
 	{
-		std::auto_ptr<Framework::Mesh> newMesh(new Framework::Mesh(meshFile));
-		mesh = newMesh;
+		mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFile));
 	}
 	catch(std::exception &except)
 	{
@@ -76,7 +75,7 @@ void Spaceship::Update(Sun &sun)
 	// position += glm::vec3(0.1f, 0.0f, 0.1f);
 	if(projectile->IsDestroyed())
 	{
-		projectile = std::auto_ptr<Projectile>(new Projectile(position, direction * 0.05f, 5));
+		projectile = std::unique_ptr<Projectile>(new Projectile(position, direction * 1.5f, 5));
 		projectile->LoadMesh("mesh-files/UnitSphere.xml");
 	}
 

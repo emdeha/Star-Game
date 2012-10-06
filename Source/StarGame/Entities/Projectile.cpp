@@ -58,8 +58,7 @@ void Projectile::LoadMesh(const std::string &meshFile)
 {
 	try
 	{
-		std::auto_ptr<Framework::Mesh> newMesh(new Framework::Mesh(meshFile));
-		mesh = newMesh;
+		mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFile));
 	}
 	catch(std::exception &except)
 	{
@@ -72,7 +71,7 @@ void Projectile::LoadMesh(const std::string &meshFile)
 
 void Projectile::LoadMesh(const std::auto_ptr<Framework::Mesh> newMesh)
 {
-	mesh = std::auto_ptr<Framework::Mesh>(new Framework::Mesh(*newMesh.get()));
+	mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(*newMesh.get()));
 
 	GenerateUniformBuffers(materialBlockSize, glm::vec4(0.0f), materialUniformBuffer);
 }
@@ -83,12 +82,7 @@ void Projectile::Update(Sun &sun)
 	{
 		position += velocity;
 
-		if(IsTargetHit(glm::vec3(sun.GetPosition()), sun.GetRadius()))
-		{
-			std::printf("%f, %f, %f", sun.GetPosition().x, sun.GetPosition().y, sun.GetPosition().z);
-
-			this->OnTargetHit(sun);
-		}
+		CheckTargetHit(sun);
 	}
 }
 
@@ -120,30 +114,59 @@ void Projectile::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex
 	}
 }
 
-bool Projectile::IsTargetHit(glm::vec3 targetPosition, float targetRadius)
+void Projectile::CheckTargetHit(Sun &sun)
 {
-	glm::vec3 distance = position - targetPosition;
-	float distanceLength = 
-		distance.x * distance.x + distance.y * distance.y + distance.z * distance.z;
-
-	if(distanceLength <= targetRadius * targetRadius)
+	std::vector<std::shared_ptr<Satellite>> sunSatellites = sun.GetSatellites();
+	for(std::vector<std::shared_ptr<Satellite>>::iterator iter = sunSatellites.begin();
+		iter != sunSatellites.end();
+		++iter)
 	{
-		return true;
+		glm::vec3 satellitePosition = glm::vec3((*iter)->GetPosition());
+		float satelliteRadius = (*iter)->GetDiameter();
+
+		glm::vec3 distance = position - satellitePosition;
+		float distanceLength = glm::length(distance);
+
+		if(distanceLength <= satelliteRadius * satelliteRadius)
+		{
+			EventArg satelliteHitEventArg[2];
+			satelliteHitEventArg[0].argType = "damage";
+			satelliteHitEventArg[0].argument.varType = TYPE_INTEGER;
+			satelliteHitEventArg[0].argument.varInteger = damage;
+			satelliteHitEventArg[1].argType = "bodyIndex";
+			satelliteHitEventArg[1].argument.varType = TYPE_FLOAT;
+			satelliteHitEventArg[1].argument.varFloat = (*iter)->GetOffsetFromSun(); 
+			Event satelliteHitEvent(2, EVENT_TYPE_ATTACKED, satelliteHitEventArg);
+
+			OnTargetHit(sun, satelliteHitEvent);
+		}
 	}
-	else return false;
+
+	glm::vec3 sunPosition = glm::vec3(sun.GetPosition());
+	float sunRadius = sun.GetRadius();
+
+	glm::vec3 distance = position - sunPosition;
+	float distanceLength = glm::length(distance);
+
+	if(distanceLength <= sunRadius * sunRadius)
+	{
+		EventArg sunHitEventArg[2];
+		sunHitEventArg[0].argType = "damage";
+		sunHitEventArg[0].argument.varType = TYPE_INTEGER;
+		sunHitEventArg[0].argument.varInteger = damage;
+		sunHitEventArg[1].argType = "bodyIndex";
+		sunHitEventArg[1].argument.varType = TYPE_INTEGER;
+		sunHitEventArg[1].argument.varInteger = -1; // the body index of the sun.
+		Event sunHitEvent(2, EVENT_TYPE_ATTACKED, sunHitEventArg);
+
+		OnTargetHit(sun, sunHitEvent);
+	}
 }
 
-void Projectile::OnTargetHit(Sun &sun)
+void Projectile::OnTargetHit(Sun &sun, Event &_event)
 {
-	EventArg sunHitEventArg[1];
-	sunHitEventArg[0].argType = "damage";
-	sunHitEventArg[0].argument.varType = TYPE_INTEGER;
-	sunHitEventArg[0].argument.varInteger = damage;
-	Event sunHitEvent(1, EVENT_TYPE_ATTACKED, sunHitEventArg);
-
-	sun.OnEvent(sunHitEvent);
-
-	
 	mesh->DeleteObjects();
 	isDestroyed = true;
+
+	sun.OnEvent(_event);	
 }

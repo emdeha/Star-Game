@@ -18,6 +18,8 @@
 #include "stdafx.h"
 #include "PlanetBodies.h"
 
+#include <algorithm>
+
 
 SatelliteOrbit::SatelliteOrbit()
 {
@@ -111,7 +113,8 @@ Satellite::Satellite(Framework::Timer newRevolutionDuration,
 	offsetFromSun = newOffsetFromSun;
 	diameter = newDiameter;
 	isClicked = false;
-	health = 100;
+	isDisabled = false;
+	health = 5;
 
 	GenerateUniformBuffers(materialBlockSize, color, materialUniformBuffer);
 }
@@ -120,8 +123,7 @@ void Satellite::LoadMesh(const std::string &fileName)
 {
 	try
 	{
-		std::auto_ptr<Framework::Mesh> newMesh(new Framework::Mesh(fileName));
-		mesh = newMesh;
+		mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(fileName));
 	}
 	catch(std::exception &except)
 	{
@@ -175,6 +177,11 @@ void Satellite::Update()
 	position.y = sinf(currTimeThroughLoop * (2.0f * PI)) * offsetFromSun;
 }
 
+void Satellite::Disable()
+{
+
+}
+
 void Satellite::OnEvent(Event &_event)
 {
 	switch(_event.GetType())
@@ -187,6 +194,9 @@ void Satellite::OnEvent(Event &_event)
 		std::printf("Satellite hovered!\n");
 		isClicked = true;
 		break;
+	case EVENT_TYPE_ATTACKED:
+		health -= _event.GetArgument("damage").varInteger;
+		std::printf("%i %i \n", _event.GetArgument("bodyIndex").varInteger, health);
 	default:
 		break;
 	};
@@ -242,8 +252,7 @@ void Satellite::LoadClickedAnimation(glutil::MatrixStack &modelMatrix, const Sim
 
 inline void Satellite::SetParent(const Sun &newParent)
 {
-	std::auto_ptr<Sun> pointedParent(new Sun(newParent));
-	parent = pointedParent;
+	parent = std::unique_ptr<Sun>(new Sun(newParent));
 }
 
 
@@ -255,43 +264,6 @@ void Satellite::Start()
 {
 	revolutionDuration.SetPause(false);
 }
-
-
-Satellite::Satellite(const Satellite &other)
-{
-	std::auto_ptr<Framework::Mesh> newMesh(new Framework::Mesh(*other.mesh));
-	mesh = newMesh;
-	std::auto_ptr<Sun> newParent(new Sun(*other.parent));
-	parent = newParent;
-
-	revolutionDuration = other.revolutionDuration;
-	position = other.position;
-	offsetFromSun = other.offsetFromSun;
-	diameter = other.diameter;
-}
-Satellite::~Satellite()
-{
-}
-Satellite Satellite::operator=(const Satellite &other)
-{
-	if(this == &other)
-	{
-		return *this;
-	}
-
-	std::auto_ptr<Framework::Mesh> newMesh(new Framework::Mesh(*other.mesh));
-	mesh = newMesh;
-	std::auto_ptr<Sun> newParent(new Sun(*other.parent));
-	parent = newParent;
-
-	revolutionDuration = other.revolutionDuration;
-	position = other.position;
-	offsetFromSun = other.offsetFromSun;
-	diameter = other.diameter;
-
-	return *this;
-}
-
 
 
 Sun::Sun()
@@ -326,8 +298,7 @@ void Sun::LoadMesh(const std::string &fileName)
 {
 	try
 	{
-		std::auto_ptr<Framework::Mesh> newSunMesh(new Framework::Mesh(fileName));
-		sunMesh = newSunMesh;
+		sunMesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(fileName));
 	}
 	catch(std::exception &except)
 	{
@@ -348,9 +319,11 @@ void Sun::Render(glutil::MatrixStack &modelMatrix, GLuint materialBlockIndex,
 		modelMatrix.Translate(position);		
 
 		int satellitesCount = satellites.size();
-		for(int i = 0; i < satellitesCount; i++)
+		for(std::vector<std::shared_ptr<Satellite>>::iterator iter = satellites.begin();
+			iter != satellites.end();
+			++iter)
 		{
-			satellites[i]->Render(modelMatrix, materialBlockIndex, gamma, litData, unlitData, interpData);
+			(*iter)->Render(modelMatrix, materialBlockIndex, gamma, litData, unlitData, interpData);
 		}
 				
 		modelMatrix.Scale(diameter);
@@ -371,10 +344,22 @@ void Sun::Render(glutil::MatrixStack &modelMatrix, GLuint materialBlockIndex,
 }
 void Sun::Update()
 {
-	int satellitesCount = satellites.size();
-	for(int i = 0; i < satellitesCount; i++)
+	for(std::vector<std::shared_ptr<Satellite>>::iterator iter = satellites.begin();
+		iter != satellites.end();
+		++iter)
 	{
-		satellites[i]->Update();
+		if((*iter)->GetHealth() <= 0)
+		{
+			RemoveSatellite(iter);
+			break;
+		}
+	}
+
+	for(std::vector<std::shared_ptr<Satellite>>::iterator iter = satellites.begin();
+		iter != satellites.end();
+		++iter)
+	{
+		(*iter)->Update();
 	}
 }
 
@@ -385,29 +370,54 @@ void Sun::OnEvent(Event &_event)
 	case EVENT_TYPE_ON_CLICK:
 		if(_event.GetArgument("rightClick").varBool == true)
 		{
-			if(this->RemoveSatellite() != true)
+			if(!this->RemoveSatellite())
 			{
 				std::printf("No satellites left.\n");
-			}
-			else 
-			{
-				satelliteOffset -= 0.75f;
 			}
 		}
 		else if(_event.GetArgument("rightClick").varBool == false)
 		{
-			if(this->AddSatellite("mesh-files/UnitSphere.xml", 
+			if(!this->AddSatellite("mesh-files/UnitSphere.xml", 
 								  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-								  satelliteOffset, 10.0f, 0.25f) == true)
-			{
-				satelliteOffset += 0.75f;
-			}
-			else 
+								  10.0f, 0.25f) == true)
 			{
 				std::printf("Satellite cap reached!\n");
 			}
 		}
 		break;
+	case EVENT_TYPE_ATTACKED:
+		if(_event.GetArgument("bodyIndex").varInteger == -1)
+		{
+			if(satellites.empty())
+				health -= _event.GetArgument("damage").varInteger;
+			// The commented event can't be sent to the universe. That is due to the lack of a global event queue.
+			/*if(health <= 0)
+			{
+				EventArg sunKilledEventArg[2];
+				sunKilledEventArg[0].argType = "what";
+				sunKilledEventArg[0].argument.varType = TYPE_STRING;
+				strcpy(sunKilledEventArg[0].argument.varString, "sun"); 
+				sunKilledEventArg[1].argType = "index";
+				sunKilledEventArg[1].argument.varType = TYPE_INTEGER;
+				sunKilledEventArg[1].argument.varInteger = 0; // Should be some unique index.
+				Event sunKilledEvent(2, EVENT_TYPE_KILLED, sunKilledEventArg);
+
+
+			}*/
+		}
+		else 
+		{
+			for(std::vector<std::shared_ptr<Satellite>>::iterator iter = satellites.begin();
+				iter != satellites.end(); 
+				++iter)
+			{
+				if((*iter)->GetOffsetFromSun() == _event.GetArgument("bodyIndex").varFloat)
+				{
+					(*iter)->OnEvent(_event);
+					break;
+				}
+			}
+		}
 	default:
 		break;
 	}
@@ -415,20 +425,40 @@ void Sun::OnEvent(Event &_event)
 
 bool Sun::AddSatellite(const std::string &fileName, 
 					   glm::vec4 satelliteColor,
-					   float offset, float speed, float diameter)
+					   float speed, float diameter)
 {
 	if(satellites.size() >= satelliteCap)
 	{
 		return false;
 	}
 
-	Satellite 
-		*sat(new Satellite(Framework::Timer(Framework::Timer::TT_LOOP, speed),
-						   satelliteColor,
-						   offset, diameter));
+	std::shared_ptr<Satellite> 
+		sat(new Satellite(Framework::Timer(Framework::Timer::TT_LOOP, speed),
+						  satelliteColor,
+						  satelliteOffset, diameter));
+	satellites.push_back(sat);
 	sat->LoadMesh(fileName);
 	sat->SetParent(*this);
-	satellites.push_back(sat);
+
+	satelliteOffset++;
+
+	return true;
+}
+
+bool Sun::RemoveSatellite(std::vector<std::shared_ptr<Satellite>>::iterator index_iterator)
+{
+	if(satellites.empty())
+	{
+		return false;
+	}
+	if(std::find(satellites.begin(), satellites.end(), (*index_iterator)) == satellites.end())
+	{
+		return false;
+	}
+
+	satelliteOffset = (*index_iterator)->GetOffsetFromSun();
+
+	satellites.erase(index_iterator);
 
 	return true;
 }
@@ -440,12 +470,22 @@ bool Sun::RemoveSatellite()
 		return false;
 	}
 
+	satelliteOffset--;
+
 	satellites.pop_back();
 
 	return true;
 }
 
-std::vector<Satellite*> Sun::GetSatellites()
+void Sun::RemoveSatellites()
+{
+	if(!satellites.empty())
+	{
+		satellites.erase(satellites.begin(), satellites.end());
+	}
+}
+
+std::vector<std::shared_ptr<Satellite>> Sun::GetSatellites()
 {
 	return satellites;
 }
@@ -471,14 +511,16 @@ void Sun::IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat,
 							 Mouse userMouse, glm::vec4 cameraPos,
 							 int windowWidth, int windowHeight)
 {
-	for(int i = 0; i < satellites.size(); i++)
+	for(std::vector<std::shared_ptr<Satellite>>::iterator iter = satellites.begin();
+		iter != satellites.end();
+		++iter)
 	{
 		Utility::Ray mouseRay = 
 			userMouse.GetPickRay(projMat, modelMat, cameraPos,
 								 windowWidth, windowHeight);
 
-		float outerRadius = satellites[i]->GetOffsetFromSun() + satellites[i]->GetDiameter();
-		float innerRadius = satellites[i]->GetOffsetFromSun() - satellites[i]->GetDiameter();
+		float outerRadius = (*iter)->GetOffsetFromSun() + (*iter)->GetDiameter();
+		float innerRadius = (*iter)->GetOffsetFromSun() - (*iter)->GetDiameter();
 
 
 
@@ -498,55 +540,19 @@ void Sun::IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat,
 		if(Utility::Intersections::RayIntersectsEllipsoid(mouseRay, position, outerRadius, distMat.Top()) && 
 		   !Utility::Intersections::RayIntersectsEllipsoid(mouseRay, position, innerRadius, distMat.Top()))
 		{
-			satellites[i]->SetIsClicked(true);
+			(*iter)->SetIsClicked(true);
 		}
-		else satellites[i]->SetIsClicked(false);
+		else (*iter)->SetIsClicked(false);
 	}
 }
 
 
 Sun::Sun(const Sun &other)
 {
-	std::auto_ptr<Framework::Mesh> newSunMesh(new Framework::Mesh(*other.sunMesh));
-	sunMesh = newSunMesh;
+	sunMesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(*other.sunMesh));
 
 	satellites = other.satellites;
 	position = other.position;
 	diameter = other.diameter;
 	isClicked = other.isClicked;
-}
-
-Sun::~Sun()
-{
-	for(std::vector<Satellite *>::iterator iter = satellites.begin();
-		iter != satellites.end(); ++iter)
-	{
-		delete *iter;
-	}
-	satellites.clear();
-}
-
-Sun Sun::operator=(const Sun &other)
-{
-	if(this == &other)
-	{
-		return *this;
-	}
-
-	std::auto_ptr<Framework::Mesh> newSunMesh(new Framework::Mesh(*other.sunMesh));
-	sunMesh = newSunMesh;
-
-	//satellites = other.satellites;
-	for(std::vector<Satellite*>::const_iterator iter = other.satellites.begin();
-		iter != satellites.end(); ++iter)
-	{
-		satellites.push_back((*iter));
-	}
-	//------------------------------
-
-	diameter = other.diameter;
-	position = other.position;
-	isClicked = other.isClicked;
-
-	return *this;
 }

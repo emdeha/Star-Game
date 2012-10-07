@@ -1,0 +1,13 @@
+﻿[C:\Windows\system32\iphlpapi.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7fefb2c0000
+LINECOUNT=1
+1536,7516,1,1,[0 0] 1,0x28d7
+[SUB_END]
+[END]
+

@@ -1,0 +1,13 @@
+﻿[C:\Windows\system32\wmp.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7feee580000
+LINECOUNT=1
+6544,7140,1,1,[1 0] 1,0x38a07
+[SUB_END]
+[END]
+

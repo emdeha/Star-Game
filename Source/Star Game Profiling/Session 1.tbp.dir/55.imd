@@ -1,0 +1,13 @@
+﻿[C:\Windows\SysWOW64\crypt32.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x74da0000
+LINECOUNT=1
+5132,7632,1,1,[1 0] 1,0x9feb
+[SUB_END]
+[END]
+

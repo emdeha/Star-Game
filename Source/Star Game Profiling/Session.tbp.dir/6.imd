@@ -1,0 +1,18 @@
+﻿[C:\Program Files (x86)\Java\jre7\bin\client\jvm.dll]
+SIZE=0
+SAMPS=6
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x71150000
+LINECOUNT=6
+2456,2676,1,1,[0 0] 1,0x627c3
+2456,5080,1,1,[2 0] 1,0xd1041
+2456,3480,1,1,[3 0] 1,0x12a3a1
+2456,1868,1,1,[3 0] 1,0x12b89e
+2456,2676,1,1,[3 0] 1,0x1325fe
+2456,3440,1,1,[1 0] 1,0x26cdc0
+[SUB_END]
+[END]
+

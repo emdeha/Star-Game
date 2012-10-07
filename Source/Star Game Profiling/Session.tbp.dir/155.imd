@@ -1,0 +1,17 @@
+﻿[C:\Windows\system32\UxTheme.dll]
+SIZE=0
+SAMPS=5
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7fefbbf0000
+LINECOUNT=5
+2184,2188,1,1,[3 0] 1,0x106e
+2184,2188,1,1,[2 0] 1,0x1079
+2184,2548,1,1,[1 0] 1,0x1117
+2184,2548,1,1,[1 0] 1,0x6fcc
+2184,2548,1,1,[1 0] 1,0x6fd9
+[SUB_END]
+[END]
+

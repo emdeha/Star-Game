@@ -1,0 +1,13 @@
+﻿[C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.VisualC.E#\7cdc6403448ae28751aaa1a7fb2fd1b5\Microsoft.VisualC.Editor.Implementation.ni.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x77ac0000
+LINECOUNT=1
+6176,2428,1,1,[2 0] 1,0x36481
+[SUB_END]
+[END]
+

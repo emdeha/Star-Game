@@ -1,0 +1,13 @@
+﻿[C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.VisualStu#\4aa275571cfd7ec30a0ece88f7c73775\Microsoft.VisualStudio.Text.UI.ni.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x529f0000
+LINECOUNT=1
+6176,2428,1,1,[0 0] 1,0x1ee10
+[SUB_END]
+[END]
+

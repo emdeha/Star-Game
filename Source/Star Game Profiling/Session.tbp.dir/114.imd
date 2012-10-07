@@ -1,0 +1,19 @@
+﻿[C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.VisualStu#\c188bfbe213805db88a4e5c226bae690\Microsoft.VisualStudio.Text.Data.ni.dll]
+SIZE=0
+SAMPS=7
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x52930000
+LINECOUNT=7
+6176,2428,1,1,[2 0] 1,0x1b1d0
+6176,2428,1,1,[2 0] 1,0x1b206
+6176,2428,1,1,[3 0] 1,0x1b24b
+6176,2428,1,1,[0 0] 1,0x1b25c
+6176,2428,1,1,[2 0] 1,0x1b5b2
+6176,2428,1,1,[3 0] 1,0x1b975
+6176,2428,1,1,[3 0] 1,0x1baca
+[SUB_END]
+[END]
+

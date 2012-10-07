@@ -1,0 +1,13 @@
+﻿[C:\Program Files (x86)\Winamp\Plugins\in_mp3.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7700000
+LINECOUNT=1
+2516,5936,1,1,[2 0] 1,0x40bc
+[SUB_END]
+[END]
+

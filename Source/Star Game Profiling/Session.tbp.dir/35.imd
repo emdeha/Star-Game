@@ -1,0 +1,13 @@
+﻿[C:\Program Files (x86)\Winamp\Plugins\ml_downloads.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7920000
+LINECOUNT=1
+2516,1192,1,1,[1 0] 1,0x6448
+[SUB_END]
+[END]
+

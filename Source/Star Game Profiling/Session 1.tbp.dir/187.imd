@@ -1,0 +1,13 @@
+﻿[unknown module pid (2148)]
+SIZE=0
+SAMPS=2
+ModuleType=5
+NUMSUBSECTIONS=1
+
+[SUB]
+LINECOUNT=2
+2148,2248,1,1,[3 0] 1,0x77250011
+2148,2248,1,1,[3 0] 1,0x77250447
+[SUB_END]
+[END]
+

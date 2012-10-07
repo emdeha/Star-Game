@@ -1,0 +1,15 @@
+﻿[C:\Windows\system32\drivers\ndis.sys]
+SIZE=0
+SAMPS=3
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0xfffff88001676000
+LINECOUNT=3
+1512,948,1,1,[1 0] 1,0x2486
+4,5912,1,1,[0 0] 1,0xb515
+0,0,1,1,[0 0] 1,0x871e9
+[SUB_END]
+[END]
+

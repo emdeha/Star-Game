@@ -1,0 +1,13 @@
+﻿[C:\Program Files (x86)\MSI Afterburner\RTMUI.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x10000000
+LINECOUNT=1
+2488,2492,1,1,[2 0] 1,0x598b
+[SUB_END]
+[END]
+

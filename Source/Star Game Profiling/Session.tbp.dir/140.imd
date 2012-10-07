@@ -1,0 +1,16 @@
+﻿[C:\Windows\system32\DRIVERS\usbhub.sys]
+SIZE=0
+SAMPS=4
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0xfffff88007e3e000
+LINECOUNT=4
+0,0,1,1,[0 0] 1,0x1f62
+0,0,1,1,[0 0] 1,0x33286
+0,0,1,1,[0 0] 1,0x33356
+0,0,1,1,[0 0] 1,0x33a27
+[SUB_END]
+[END]
+

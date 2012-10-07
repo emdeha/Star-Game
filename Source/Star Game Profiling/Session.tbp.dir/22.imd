@@ -1,0 +1,13 @@
+﻿[C:\Program Files (x86)\Steam\Steam.exe]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x350000
+LINECOUNT=1
+2116,2128,1,1,[1 0] 1,0x687d8
+[SUB_END]
+[END]
+

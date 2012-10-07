@@ -1,0 +1,15 @@
+﻿[c:\windows\system32\mmcss.dll]
+SIZE=0
+SAMPS=4
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7fefbe90000
+LINECOUNT=3
+1272,1292,1,1,[1 0] 1,0x1082
+1272,1292,1,1,[1 0] 1,0x1168
+1272,1292,2,1,[1 0] 2,0x116c
+[SUB_END]
+[END]
+

@@ -1,0 +1,17 @@
+﻿[C:\Windows\System32\Drivers\cng.sys]
+SIZE=0
+SAMPS=5
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0xfffff8800135e000
+LINECOUNT=5
+4,56,1,1,[3 0] 1,0x7823
+4,56,1,1,[3 0] 1,0x7a48
+4,56,1,1,[3 0] 1,0x7a9e
+4,44,1,1,[1 0] 1,0x7adb
+4,44,1,1,[1 0] 1,0x7b92
+[SUB_END]
+[END]
+

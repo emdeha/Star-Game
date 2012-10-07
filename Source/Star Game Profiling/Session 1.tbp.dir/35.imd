@@ -1,0 +1,13 @@
+﻿[C:\Program Files\AVAST Software\Avast\aswStrm.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x72440000
+LINECOUNT=1
+1620,2952,1,1,[1 0] 1,0x17f15
+[SUB_END]
+[END]
+

@@ -1,0 +1,16 @@
+﻿[c:\program files (x86)\steam\bin\serverbrowser.dll]
+SIZE=0
+SAMPS=4
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x63650000
+LINECOUNT=4
+2116,2128,1,1,[2 0] 1,0x1a82
+2116,2128,1,1,[3 0] 1,0xe8a0
+2116,2128,1,1,[3 0] 1,0x16611
+2116,2128,1,1,[3 0] 1,0x3d9cd
+[SUB_END]
+[END]
+

@@ -341,12 +341,15 @@ void InitializeScene()
 		mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, displayData.gamma));
 
 	std::shared_ptr<Spaceship> 
-		sampleSpaceship(new Spaceship(glm::vec3(4.5f, 0.0f, 0.0f), glm::vec3(-0.1f, 0.0f, 0.0f)));
+		sampleSpaceship(new Spaceship(glm::vec3(4.5f, 0.0f, 0.0f), glm::vec3(-0.1f, 0.0f, 0.0f), glm::vec3()));
+	std::shared_ptr<Spaceship>
+		sampleSpaceship2(new Spaceship(glm::vec3(0.0f, 4.5f, 0.0f), glm::vec3(0.0f, -0.1f, 0.0f), glm::vec3()));
 
 
 
 	mainSun->LoadMesh("mesh-files/UnitSphere.xml");
 	sampleSpaceship->LoadMesh("mesh-files/UnitSphere.xml");
+	sampleSpaceship2->LoadMesh("mesh-files/UnitSphere.xml");
 
 	scene->SetMouse(userMouse);
 	scene->SetTopDownCamera(userCamera);
@@ -354,6 +357,7 @@ void InitializeScene()
 	scene->AddSun(mainSun);
 	scene->AddSunLight(mainSunLight);
 	scene->AddSpaceship(sampleSpaceship);
+	scene->AddSpaceship(sampleSpaceship2);
 
 	scene->SetMusic("../data/music/background.mp3", MUSIC_BACKGROUND);
 	scene->SetMusic("../data/music/onclick.wav", MUSIC_ON_SUN_CLICK);
@@ -366,6 +370,14 @@ void InitializeScene()
 
 	InitializeGUI();
 }
+
+
+const int TICKS_PER_SECOND = 25;
+const int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
+const int MAX_FRAMESKIP = 5;
+
+unsigned long nextGameTick = 0;
+
 
 void Init()
 {
@@ -412,6 +424,9 @@ void Init()
 		0, sizeof(glm::mat4));
 
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+
+	nextGameTick = GetTickCount();
 }
 
 void Display()
@@ -426,13 +441,25 @@ void Display()
 	
 		displayData.modelMatrix = modelMatrix.Top();
 
-		scene->UpdateScene();
+
+		int loops = 0;
+		while(GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
+		{
+			scene->UpdateScene();
+
+			nextGameTick += SKIP_TICKS;
+			loops++;
+		}
+
+
+		float interpolation = float(GetTickCount() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
 		scene->RenderScene(modelMatrix, 
 						   shaderManager.GetBlockIndex(BT_MATERIAL),
-						   shaderManager.GetUniformBuffer(UBT_LIGHT), 
+						   shaderManager.GetUniformBuffer(UBT_LIGHT),
 						   shaderManager.GetLitProgData(),
 						   shaderManager.GetUnlitProgData(),
-						   shaderManager.GetSimpleProgData());
+						   shaderManager.GetSimpleProgData(),
+						   interpolation);
 		
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
 									  shaderManager.GetSimpleProgDataOrtho());	

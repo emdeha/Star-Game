@@ -1,0 +1,14 @@
+﻿[C:\Windows\WinSxS\x86_microsoft.vc90.mfc_1fc8b3b9a1e18e3b_9.0.30729.6161_none_4bf7e3e2bf9ada4c\mfc90u.dll]
+SIZE=0
+SAMPS=2
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x6bcd0000
+LINECOUNT=2
+3656,3660,1,1,[1 0] 1,0x5cd6a
+3656,3660,1,1,[1 0] 1,0x2174c8
+[SUB_END]
+[END]
+

@@ -43,14 +43,15 @@ static void GenerateUniformBuffers(int &materialBlockSize,
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-Spaceship::Spaceship(glm::vec3 newPosition, glm::vec3 newDirection)
+Spaceship::Spaceship(glm::vec3 newPosition, glm::vec3 newDirection, glm::vec3 newVelocity)
 {
 	position = newPosition;
 	direction = newDirection;
+	velocity = newVelocity;
 
 	health = 100;
 
-	projectile = std::unique_ptr<Projectile>(new Projectile(position, direction * 1.5f, 5));
+	projectile = std::unique_ptr<Projectile>(new Projectile(position, direction * 2.5f, 5));
 }
 
 void Spaceship::LoadMesh(const std::string &meshFile)
@@ -72,11 +73,9 @@ void Spaceship::LoadMesh(const std::string &meshFile)
 
 void Spaceship::Update(Sun &sun)
 {
-	// position += glm::vec3(0.1f, 0.0f, 0.1f);
 	if(projectile->IsDestroyed())
 	{
-		projectile = std::unique_ptr<Projectile>(new Projectile(position, direction * 1.5f, 5));
-		projectile->LoadMesh("mesh-files/UnitSphere.xml");
+		projectile->Recreate(position);
 	}
 
 	projectile->Update(sun);
@@ -84,11 +83,14 @@ void Spaceship::Update(Sun &sun)
 
 void Spaceship::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 					   float gamma, 
-					   const LitProgData &litData)
+					   const LitProgData &litData,
+					   float interpolation)
 {
 	{
 		glutil::PushStack push(modelMatrix);
 
+
+		glm::vec3 viewPosition = position + velocity * interpolation;
 		modelMatrix.Translate(position);
 
 		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
@@ -110,7 +112,8 @@ void Spaceship::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 
 	if(!projectile->IsDestroyed())
 	{
-		projectile->Render(modelMatrix, materialBlockIndex, gamma, litData);
+		projectile->Render(modelMatrix, materialBlockIndex, gamma, litData,
+						   interpolation);
 	}
 }
 

@@ -1,0 +1,16 @@
+﻿[C:\Windows\system32\DRIVERS\hidusb.sys]
+SIZE=0
+SAMPS=4
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0xfffff880097bc000
+LINECOUNT=4
+0,0,1,1,[0 0] 1,0x1d2d
+0,0,1,1,[0 0] 1,0x2170
+0,0,1,1,[0 0] 1,0x49bb
+0,0,1,1,[0 0] 1,0x5086
+[SUB_END]
+[END]
+

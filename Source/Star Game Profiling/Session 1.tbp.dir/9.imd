@@ -1,0 +1,15 @@
+﻿[C:\Program Files (x86)\MSI Afterburner\Bundle\OSDServer\RTSSHooks.dll]
+SIZE=0
+SAMPS=3
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x10000000
+LINECOUNT=3
+5132,7632,1,1,[1 0] 1,0x9de2
+5132,7632,1,1,[1 0] 1,0x9e1b
+5132,7632,1,1,[1 0] 1,0xaa12
+[SUB_END]
+[END]
+

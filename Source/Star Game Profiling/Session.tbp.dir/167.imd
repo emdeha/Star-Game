@@ -1,0 +1,14 @@
+﻿[C:\Windows\system32\drivers\hcmon.sys]
+SIZE=0
+SAMPS=2
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0xfffff88005872000
+LINECOUNT=2
+0,0,1,1,[0 0] 1,0x100b
+4184,4204,1,1,[2 0] 1,0x29c5
+[SUB_END]
+[END]
+

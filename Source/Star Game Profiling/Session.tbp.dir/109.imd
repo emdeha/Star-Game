@@ -1,0 +1,20 @@
+﻿[C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.VisualStu#\446dbba340a9607152b3e9369e71d6de\Microsoft.VisualStudio.Editor.Implementation.ni.dll]
+SIZE=0
+SAMPS=8
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x525d0000
+LINECOUNT=8
+6176,2428,1,1,[2 0] 1,0x52178
+6176,2428,1,1,[3 0] 1,0x52e30
+6176,2428,1,1,[0 0] 1,0x7b000
+6176,2428,1,1,[0 0] 1,0x7c22c
+6176,2428,1,1,[2 0] 1,0x7c247
+6176,2428,1,1,[3 0] 1,0x890b4
+6176,2428,1,1,[3 0] 1,0x90e11
+6176,2428,1,1,[0 0] 1,0x9f9d4
+[SUB_END]
+[END]
+

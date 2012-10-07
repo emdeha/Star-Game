@@ -1,0 +1,16 @@
+﻿[C:\Program Files\Microsoft SQL Server\MSSQL10.SA\MSSQL\Binn\sqlservr.exe]
+SIZE=0
+SAMPS=4
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0xa10000
+LINECOUNT=4
+3108,3760,1,1,[1 0] 1,0x4b42
+3108,4516,1,1,[0 0] 1,0xd965
+3108,4516,1,1,[2 0] 1,0x1935a
+3108,3092,1,1,[0 0] 1,0x2121f
+[SUB_END]
+[END]
+

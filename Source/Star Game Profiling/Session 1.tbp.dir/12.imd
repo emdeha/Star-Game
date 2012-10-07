@@ -1,0 +1,14 @@
+﻿[C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\AMD\gDEBugger\wxbase292u_vc_custom.dll]
+SIZE=0
+SAMPS=2
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x56ca0000
+LINECOUNT=2
+6176,2428,1,1,[2 0] 1,0x54d5
+6176,2428,1,1,[0 0] 1,0x454a9
+[SUB_END]
+[END]
+

@@ -1,0 +1,15 @@
+﻿[C:\Windows\system32\mswsock.dll]
+SIZE=0
+SAMPS=3
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7fefcd30000
+LINECOUNT=3
+1512,6688,1,1,[2 0] 1,0x1cbf
+1512,6688,1,1,[2 0] 1,0x11e35
+1512,2284,1,1,[2 0] 1,0x1bb14
+[SUB_END]
+[END]
+

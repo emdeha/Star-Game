@@ -1,0 +1,15 @@
+﻿[C:\Program Files (x86)\Intel\Intel(R) Rapid Storage Technology\ISDI.dll]
+SIZE=0
+SAMPS=3
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x8e0000
+LINECOUNT=3
+7960,8072,1,1,[3 0] 1,0x1d82f
+7960,8072,1,1,[2 0] 1,0x21b49
+7960,8072,1,1,[3 0] 1,0x23e7e
+[SUB_END]
+[END]
+

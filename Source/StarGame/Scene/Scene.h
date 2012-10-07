@@ -72,7 +72,8 @@ public:
 					 GLuint materialBlockIndex, GLuint lightUniformBuffer,
 					 const LitProgData &litData, 
 					 const UnlitProgData &unLitData, 
-					 const SimpleProgData &interpData);
+					 const SimpleProgData &interpData,
+					 float interpolation);
 
 	void RenderCurrentLayout(const FontProgData &fontData,
 							 const SimpleProgData &simpleData);

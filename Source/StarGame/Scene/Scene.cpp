@@ -34,10 +34,11 @@ Scene::Scene()
 
 
 void Scene::RenderScene(glutil::MatrixStack &modelMatrix, 
-							  GLuint materialBlockIndex, GLuint lightUniformBuffer,
-							  const LitProgData &litData, 
-							  const UnlitProgData &unLitData, 
-							  const SimpleProgData &interpData)
+						GLuint materialBlockIndex, GLuint lightUniformBuffer,
+						const LitProgData &litData, 
+						const UnlitProgData &unLitData, 
+						const SimpleProgData &interpData,
+						float interpolation)
 {
 	int sizeLights = lights.size();
 	for(int i = 0; i < sizeLights; i++)
@@ -48,17 +49,20 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix,
 	int sizeSuns = suns.size();
 	for(int i = 0; i < sizeSuns; i++)
 	{
-		suns[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, unLitData, interpData);
+		suns[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, 
+						litData, unLitData, interpData,
+						interpolation);
 	}
 
 	int sizeSpaceships = spaceships.size();
 	for(int i = 0; i < sizeSpaceships; i++)
 	{
-		spaceships[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData);
+		spaceships[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData,
+							  interpolation);
 	}
 }
 void Scene::RenderCurrentLayout(const FontProgData &fontData,
-								   const SimpleProgData &simpleData)
+								const SimpleProgData &simpleData)
 {
 	for(std::map<LayoutType, std::shared_ptr<Layout>>::iterator iter = sceneLayouts.begin();
 		iter != sceneLayouts.end(); ++iter)

@@ -88,12 +88,14 @@ void Projectile::Update(Sun &sun)
 
 void Projectile::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 						float gamma, 
-						const LitProgData &litData)
+						const LitProgData &litData,
+						float interpolation)
 {
 	{
 		glutil::PushStack push(modelMatrix);
 
-		modelMatrix.Translate(position);
+		glm::vec3 viewPosition = position + velocity * interpolation;
+		modelMatrix.Translate(viewPosition);
 		modelMatrix.Scale(0.1f);
 
 		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
@@ -163,9 +165,14 @@ void Projectile::CheckTargetHit(Sun &sun)
 	}
 }
 
+
+void Projectile::Recreate(glm::vec3 newPosition)
+{
+	position = newPosition;
+	isDestroyed = false;
+}
 void Projectile::OnTargetHit(Sun &sun, Event &_event)
 {
-	mesh->DeleteObjects();
 	isDestroyed = true;
 
 	sun.OnEvent(_event);	

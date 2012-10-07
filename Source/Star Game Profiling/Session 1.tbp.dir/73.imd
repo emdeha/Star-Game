@@ -1,0 +1,13 @@
+﻿[C:\Windows\SysWOW64\winmm.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x70df0000
+LINECOUNT=1
+5132,7632,1,1,[1 0] 1,0x26e7
+[SUB_END]
+[END]
+

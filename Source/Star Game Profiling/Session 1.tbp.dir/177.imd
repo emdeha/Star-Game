@@ -1,0 +1,17 @@
+﻿[c:\program files (x86)\steam\bin\friendsui.dll]
+SIZE=0
+SAMPS=5
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x63810000
+LINECOUNT=5
+2116,2128,1,1,[3 0] 1,0x1ae2
+2116,2128,1,1,[0 0] 1,0x60b2
+2116,2128,1,1,[3 0] 1,0x3bea1
+2116,2128,1,1,[2 0] 1,0xaeb6f
+2116,2128,1,1,[0 0] 1,0xaeb9f
+[SUB_END]
+[END]
+

@@ -1,0 +1,512 @@
+﻿TBPFILEVERSION=11
+[ENV]
+CPU=4
+NumEvents=1
+MODULES=207
+SAMPS=80931
+TIMESTAMP=нед 7. окт 11:17:07 2012
+MISSED=0
+CPUFAMILY=6,10
+Event 0,4095,10
+TOPOLOGY,0,0,0
+TOPOLOGY,1,1,1
+TOPOLOGY,2,2,2
+TOPOLOGY,3,3,3
+TOTAL=[0 0] 20234,[1 0] 20233,[2 0] 20234,[3 0] 20230
+[END]
+
+[PROCESSDATA]
+0,71838,4,[0 0] 18564,[1 0] 18403,[2 0] 17188,[3 0] 17683,0,0,System Idle
+4,469,4,[0 0] 92,[1 0] 177,[2 0] 122,[3 0] 78,0,0,unknown module pid (4)
+652,4,2,[2 0] 1,[3 0] 3,0,0,C:\Windows\SysWOW64\lsass.exe
+788,3,3,[1 0] 1,[2 0] 1,[3 0] 1,1,0,C:\Windows\SysWOW64\svchost.exe
+876,7,2,[0 0] 6,[2 0] 1,0,0,C:\Windows\SysWOW64\csrss.exe
+944,198,4,[0 0] 89,[1 0] 69,[2 0] 27,[3 0] 13,0,0,C:\Windows\SysWOW64\csrss.exe
+1060,1,1,[1 0] 1,1,0,C:\Program Files (x86)\NVIDIA Corporation\3D Vision\nvSCPAPISvr.exe
+1104,1,1,[0 0] 1,1,0,C:\Windows\SysWOW64\svchost.exe
+1204,5,1,[0 0] 5,1,0,C:\Windows\SysWOW64\svchost.exe
+1244,1278,4,[0 0] 232,[1 0] 286,[2 0] 352,[3 0] 408,1,0,C:\Windows\SysWOW64\svchost.exe
+1272,52,4,[0 0] 2,[1 0] 43,[2 0] 4,[3 0] 3,1,0,C:\Windows\SysWOW64\svchost.exe
+1364,353,4,[0 0] 19,[1 0] 326,[2 0] 3,[3 0] 5,0,0,unknown module pid (1364)
+1436,2,1,[0 0] 2,1,0,C:\Windows\SysWOW64\svchost.exe
+1512,11,4,[0 0] 1,[1 0] 5,[2 0] 3,[3 0] 2,1,0,C:\Windows\SysWOW64\svchost.exe
+1536,3,3,[1 0] 1,[2 0] 1,[3 0] 1,1,0,C:\Windows\SysWOW64\svchost.exe
+1620,10,4,[0 0] 2,[1 0] 5,[2 0] 1,[3 0] 2,1,0,C:\Program Files\AVAST Software\Avast\AvastSvc.exe
+1908,1,1,[0 0] 1,0,0,C:\Windows\SysWOW64\spoolsv.exe
+1928,43,4,[0 0] 21,[1 0] 5,[2 0] 8,[3 0] 9,0,0,C:\Windows\System32\conhost.exe
+2060,3,2,[0 0] 1,[1 0] 2,0,0,C:\Windows\SysWOW64\taskhost.exe
+2116,298,4,[0 0] 119,[1 0] 22,[2 0] 50,[3 0] 107,1,0,C:\Program Files (x86)\Steam\Steam.exe
+2148,365,4,[0 0] 24,[1 0] 15,[2 0] 4,[3 0] 322,0,0,C:\Windows\SysWOW64\Dwm.exe
+2184,393,4,[0 0] 71,[1 0] 208,[2 0] 11,[3 0] 103,0,0,C:\Windows\Explorer.EXE
+2456,36,4,[0 0] 6,[1 0] 12,[2 0] 7,[3 0] 11,1,0,C:\Program Files (x86)\BubbleUPnP Server\BubbleUPnPServer.exe
+2488,121,4,[0 0] 12,[1 0] 11,[2 0] 82,[3 0] 16,1,0,C:\Program Files (x86)\MSI Afterburner\MSIAfterburner.exe
+2516,119,4,[0 0] 34,[1 0] 26,[2 0] 25,[3 0] 34,1,0,C:\Program Files (x86)\Winamp\winamp.exe
+2760,3,3,[0 0] 1,[2 0] 1,[3 0] 1,1,0,C:\Program Files (x86)\Intel\Intel(R) Rapid Storage Technology\IAStorIcon.exe
+3108,1,1,[1 0] 1,0,0,C:\Program Files\Microsoft SQL Server\MSSQL10.SA\MSSQL\Binn\sqlservr.exe
+3520,1,1,[0 0] 1,0,0,C:\Program Files\Microsoft SQL Server\MSSQL10.SQLEXPRESS\MSSQL\Binn\sqlservr.exe
+3612,1,1,[0 0] 1,0,0,C:\Program Files\TortoiseSVN\bin\TSVNCache.exe
+3656,6,2,[1 0] 3,[2 0] 3,1,0,C:\Program Files\AVAST Software\Avast\AvastUI.exe
+3940,7,3,[0 0] 1,[1 0] 2,[3 0] 4,1,0,C:\Program Files (x86)\Browny02\Brother\BrStMonW.exe
+4088,1,1,[3 0] 1,1,0,C:\Windows\SysWOW64\svchost.exe
+4184,1,1,[2 0] 1,0,0,C:\Program Files (x86)\Common Files\VMware\USB\vmware-usbarbitrator64.exe
+4244,1,1,[3 0] 1,1,0,C:\Windows\SysWOW64\vmnat.exe
+4348,1,1,[1 0] 1,0,0,C:\Program Files\Common Files\Microsoft Shared\Windows Live\WLIDSVC.EXE
+4440,1,1,[1 0] 1,1,0,C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe
+4496,13,3,[1 0] 3,[2 0] 5,[3 0] 5,1,0,C:\Program Files (x86)\VMware\VMware Workstation\vmware-authd.exe
+4652,19,4,[0 0] 1,[1 0] 12,[2 0] 1,[3 0] 5,1,0,C:\Windows\SysWOW64\svchost.exe
+5284,1,1,[0 0] 1,1,0,C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe
+5464,7,2,[0 0] 2,[1 0] 5,1,0,C:\Program Files (x86)\VMware\VMware Workstation\vmware-hostd.exe
+5876,1,1,[0 0] 1,1,0,C:\Program Files (x86)\NVIDIA Corporation\NVIDIA Update Core\daemonu.exe
+5976,12,4,[0 0] 4,[1 0] 4,[2 0] 2,[3 0] 2,1,0,C:\Program Files (x86)\Browny02\BrYNSvc.exe
+6012,2,2,[1 0] 1,[2 0] 1,1,0,C:\Windows\SysWOW64\SearchIndexer.exe
+6100,1,1,[2 0] 1,1,0,C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe
+6176,1757,4,[0 0] 443,[1 0] 150,[2 0] 269,[3 0] 895,1,0,C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe
+6252,47,4,[0 0] 6,[1 0] 22,[2 0] 1,[3 0] 18,1,0,C:\Windows\SysWOW64\svchost.exe
+6544,1,1,[1 0] 1,0,0,C:\Program Files\Windows Media Player\wmpnetwk.exe
+6808,2394,4,[0 0] 153,[1 0] 313,[2 0] 1723,[3 0] 205,1,0,E:\CECI\TheGame\Source\StarGame\Debug\StarGame.exe
+7256,20,4,[0 0] 4,[1 0] 6,[2 0] 8,[3 0] 2,1,0,C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcpackages\VCPkgSrv.exe
+7960,14,4,[0 0] 3,[1 0] 4,[2 0] 1,[3 0] 6,1,0,C:\Program Files (x86)\Intel\Intel(R) Rapid Storage Technology\IAStorDataMgrSvc.exe
+8016,681,4,[0 0] 305,[1 0] 29,[2 0] 113,[3 0] 234,1,0,C:\Program Files (x86)\AMD\CodeAnalyst\bin\CodeAnalyst.exe
+8092,323,4,[0 0] 3,[1 0] 57,[2 0] 213,[3 0] 50,1,0,C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcpackages\vcpkgsrv.exe
+[END]
+
+[MODDATA]
+8016,2,2,[0 0] 1,[3 0] 1,1,C:\Program Files (x86)\AMD\CodeAnalyst\bin\CodeAnalyst.exe
+8016,53,4,[0 0] 20,[1 0] 2,[2 0] 9,[3 0] 22,1,C:\Program Files (x86)\AMD\CodeAnalyst\bin\QtCore4.dll
+8016,184,4,[0 0] 75,[1 0] 9,[2 0] 34,[3 0] 66,1,C:\Program Files (x86)\AMD\CodeAnalyst\bin\QtGui4.dll
+5976,1,1,[0 0] 1,1,C:\Program Files (x86)\Browny02\BrMonitor.dll
+3940,1,1,[3 0] 1,1,C:\Program Files (x86)\Browny02\Brother\BrStMonW.exe
+7960,3,2,[2 0] 1,[3 0] 2,1,C:\Program Files (x86)\Intel\Intel(R) Rapid Storage Technology\ISDI.dll
+2456,6,4,[0 0] 1,[1 0] 1,[2 0] 1,[3 0] 3,1,C:\Program Files (x86)\Java\jre7\bin\client\jvm.dll
+2488,3,2,[2 0] 2,[3 0] 1,1,C:\Program Files (x86)\MSI Afterburner\MSIAfterburner.exe
+2488,1,1,[2 0] 1,1,C:\Program Files (x86)\MSI Afterburner\RTMUI.dll
+2488,1,1,[2 0] 1,1,C:\Program Files (x86)\MSI Afterburner\RTUI.dll
+6176,2,2,[0 0] 1,[3 0] 1,1,C:\Program Files (x86)\Microsoft SQL Server Compact Edition\v3.5\sqlceqp35.dll
+6176,3,1,[3 0] 3,1,C:\Program Files (x86)\Microsoft SQL Server Compact Edition\v3.5\sqlcese35.dll
+6176,5,4,[0 0] 1,[1 0] 1,[2 0] 1,[3 0] 2,1,C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\AMD\gDEBugger\QtCoreAmdDt4744.dll
+6176,2,2,[0 0] 1,[3 0] 1,1,C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\AMD\gDEBugger\gDEBuggerVSPackage.dll
+6176,2,2,[0 0] 1,[3 0] 1,1,C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\AMD\gDEBugger\wxmsw292u_core_vc_custom.dll
+6176,73,4,[0 0] 15,[1 0] 3,[2 0] 7,[3 0] 48,1,C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\msenv.dll
+6176,1,1,[3 0] 1,1,C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\Packages\Debugger\vsdebug.dll
+6176,3,2,[0 0] 1,[3 0] 2,1,C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcpackages\VCProject.dll
+7256,5,1,[2 0] 5,1,C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcpackages\cpfe.dll
+8092,26,3,[1 0] 2,[2 0] 18,[3 0] 6,1,C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcpackages\cpfe.dll
+6176,18,3,[0 0] 6,[2 0] 3,[3 0] 9,1,C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcpackages\vcpkg.dll
+8092,20,3,[1 0] 2,[2 0] 12,[3 0] 6,1,C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcpackages\vcpkgsrv.exe
+2116,5,3,[0 0] 2,[2 0] 2,[3 0] 1,1,C:\Program Files (x86)\Steam\Steam.dll
+2116,1,1,[1 0] 1,1,C:\Program Files (x86)\Steam\Steam.exe
+2116,10,3,[0 0] 7,[2 0] 2,[3 0] 1,1,C:\Program Files (x86)\Steam\SteamUI.dll
+2116,3,2,[0 0] 2,[3 0] 1,1,C:\Program Files (x86)\Steam\bin\chromehtml.DLL
+2116,1,1,[0 0] 1,1,C:\Program Files (x86)\Steam\bin\libcef.dll
+2116,2,1,[3 0] 2,1,C:\Program Files (x86)\Steam\bin\steamservice.dll
+2116,22,4,[0 0] 12,[1 0] 2,[2 0] 2,[3 0] 6,1,C:\Program Files (x86)\Steam\bin\vgui2_s.DLL
+2116,48,4,[0 0] 8,[1 0] 3,[2 0] 9,[3 0] 28,1,C:\Program Files (x86)\Steam\steamclient.dll
+2116,7,2,[0 0] 3,[3 0] 4,1,C:\Program Files (x86)\Steam\tier0_s.dll
+2116,6,3,[0 0] 3,[2 0] 1,[3 0] 2,1,C:\Program Files (x86)\Steam\vstdlib_s.dll
+5464,1,1,[0 0] 1,1,C:\Program Files (x86)\VMware\VMware Workstation\vmware-hostd.exe
+2516,1,1,[1 0] 1,1,C:\Program Files (x86)\Winamp\Plugins\gen_ff.dll
+2516,2,1,[3 0] 2,1,C:\Program Files (x86)\Winamp\Plugins\gen_jumpex.dll
+2516,5,4,[0 0] 2,[1 0] 1,[2 0] 1,[3 0] 1,1,C:\Program Files (x86)\Winamp\Plugins\in_wm.dll
+2516,1,1,[1 0] 1,1,C:\Program Files (x86)\Winamp\Plugins\ml_downloads.dll
+2516,6,2,[0 0] 2,[3 0] 4,1,C:\Program Files (x86)\Winamp\winamp.exe
+3656,1,1,[2 0] 1,1,C:\Program Files\AVAST Software\Avast\Aavm4h.dll
+3656,1,1,[2 0] 1,1,C:\Program Files\AVAST Software\Avast\aswData.dll
+6808,7,2,[2 0] 6,[3 0] 1,1,C:\Program Files\AVAST Software\Avast\snxhk.dll
+8092,1,1,[1 0] 1,1,C:\Program Files\AVAST Software\Avast\snxhk.dll
+3108,1,1,[1 0] 1,0,C:\Program Files\Microsoft SQL Server\MSSQL10.SA\MSSQL\Binn\sqlservr.exe
+3520,1,1,[0 0] 1,0,C:\Program Files\Microsoft SQL Server\MSSQL10.SQLEXPRESS\MSSQL\Binn\sqlservr.exe
+6252,37,3,[0 0] 4,[1 0] 18,[3 0] 15,0,C:\ProgramData\Microsoft\Windows Defender\Definition Updates\{41565099-E46A-42F3-8A1A-7149BEAA6ED1}\mpengine.dll
+2184,15,2,[0 0] 1,[1 0] 14,0,C:\Windows\Explorer.EXE
+7960,1,1,[0 0] 1,1,C:\Windows\Microsoft.NET\Framework\v2.0.50727\mscorwks.dll
+6176,8,3,[0 0] 3,[2 0] 2,[3 0] 3,1,C:\Windows\Microsoft.NET\Framework\v4.0.30319\WPF\PresentationNative_v0400.dll
+6176,41,4,[0 0] 18,[1 0] 10,[2 0] 4,[3 0] 9,1,C:\Windows\Microsoft.NET\Framework\v4.0.30319\WPF\wpfgfx_v0400.dll
+6176,384,4,[0 0] 97,[1 0] 25,[2 0] 62,[3 0] 200,1,C:\Windows\Microsoft.NET\Framework\v4.0.30319\clr.dll
+788,2,2,[2 0] 1,[3 0] 1,0,C:\Windows\SYSTEM32\ntdll.dll
+944,1,1,[0 0] 1,0,C:\Windows\SYSTEM32\ntdll.dll
+1244,69,4,[0 0] 3,[1 0] 28,[2 0] 18,[3 0] 20,0,C:\Windows\SYSTEM32\ntdll.dll
+1436,1,1,[0 0] 1,0,C:\Windows\SYSTEM32\ntdll.dll
+1512,2,2,[1 0] 1,[2 0] 1,0,C:\Windows\SYSTEM32\ntdll.dll
+1536,1,1,[1 0] 1,0,C:\Windows\SYSTEM32\ntdll.dll
+2148,16,3,[0 0] 1,[1 0] 2,[3 0] 13,0,C:\Windows\SYSTEM32\ntdll.dll
+2184,33,4,[0 0] 12,[1 0] 9,[2 0] 1,[3 0] 11,0,C:\Windows\SYSTEM32\ntdll.dll
+4652,2,2,[1 0] 1,[3 0] 1,0,C:\Windows\SYSTEM32\ntdll.dll
+5976,1,1,[0 0] 1,0,C:\Windows\SYSTEM32\ntdll.dll
+6176,4,3,[0 0] 2,[1 0] 1,[3 0] 1,0,C:\Windows\SYSTEM32\ntdll.dll
+6252,1,1,[3 0] 1,0,C:\Windows\SYSTEM32\ntdll.dll
+7960,1,1,[3 0] 1,0,C:\Windows\SYSTEM32\ntdll.dll
+8016,1,1,[2 0] 1,0,C:\Windows\SYSTEM32\ntdll.dll
+2116,3,2,[0 0] 2,[2 0] 1,0,C:\Windows\SYSTEM32\wow64.dll
+2488,3,3,[0 0] 1,[2 0] 1,[3 0] 1,0,C:\Windows\SYSTEM32\wow64.dll
+6100,1,1,[2 0] 1,0,C:\Windows\SYSTEM32\wow64.dll
+6176,16,4,[0 0] 4,[1 0] 3,[2 0] 4,[3 0] 5,0,C:\Windows\SYSTEM32\wow64.dll
+7960,1,1,[1 0] 1,0,C:\Windows\SYSTEM32\wow64.dll
+8016,8,3,[0 0] 3,[2 0] 2,[3 0] 3,0,C:\Windows\SYSTEM32\wow64.dll
+1620,1,1,[2 0] 1,0,C:\Windows\SYSTEM32\wow64cpu.dll
+2116,28,3,[0 0] 12,[2 0] 5,[3 0] 11,0,C:\Windows\SYSTEM32\wow64cpu.dll
+2456,4,2,[1 0] 1,[2 0] 3,0,C:\Windows\SYSTEM32\wow64cpu.dll
+2488,3,2,[1 0] 1,[2 0] 2,0,C:\Windows\SYSTEM32\wow64cpu.dll
+2516,12,3,[0 0] 6,[1 0] 1,[3 0] 5,0,C:\Windows\SYSTEM32\wow64cpu.dll
+3940,1,1,[3 0] 1,0,C:\Windows\SYSTEM32\wow64cpu.dll
+4244,1,1,[3 0] 1,0,C:\Windows\SYSTEM32\wow64cpu.dll
+4496,1,1,[1 0] 1,0,C:\Windows\SYSTEM32\wow64cpu.dll
+5876,1,1,[0 0] 1,0,C:\Windows\SYSTEM32\wow64cpu.dll
+6176,16,4,[0 0] 3,[1 0] 2,[2 0] 2,[3 0] 9,0,C:\Windows\SYSTEM32\wow64cpu.dll
+7960,1,1,[1 0] 1,0,C:\Windows\SYSTEM32\wow64cpu.dll
+8016,21,3,[0 0] 10,[2 0] 4,[3 0] 7,0,C:\Windows\SYSTEM32\wow64cpu.dll
+2116,2,2,[2 0] 1,[3 0] 1,0,C:\Windows\SYSTEM32\wow64win.dll
+2516,1,1,[1 0] 1,0,C:\Windows\SYSTEM32\wow64win.dll
+6176,17,4,[0 0] 6,[1 0] 1,[2 0] 1,[3 0] 9,0,C:\Windows\SYSTEM32\wow64win.dll
+8016,8,4,[0 0] 4,[1 0] 1,[2 0] 2,[3 0] 1,0,C:\Windows\SYSTEM32\wow64win.dll
+6176,5,3,[0 0] 3,[2 0] 1,[3 0] 1,1,C:\Windows\SysWOW64\ATL100.DLL
+2516,3,2,[2 0] 1,[3 0] 2,1,C:\Windows\SysWOW64\AUDIOSES.DLL
+2148,1,1,[3 0] 1,0,C:\Windows\SysWOW64\Dwm.exe
+6808,22,4,[0 0] 1,[1 0] 2,[2 0] 17,[3 0] 2,1,C:\Windows\SysWOW64\KernelBase.dll
+8092,18,3,[1 0] 1,[2 0] 14,[3 0] 3,1,C:\Windows\SysWOW64\KernelBase.dll
+2488,3,2,[1 0] 1,[2 0] 2,1,C:\Windows\SysWOW64\MFC42.DLL
+6176,3,2,[0 0] 1,[3 0] 2,1,C:\Windows\SysWOW64\MSVCR100.dll
+8016,10,4,[0 0] 4,[1 0] 2,[2 0] 1,[3 0] 3,1,C:\Windows\SysWOW64\MSVCR100.dll
+6176,10,3,[0 0] 5,[1 0] 3,[3 0] 2,1,C:\Windows\SysWOW64\MSVCR100_CLR0400.dll
+8092,3,1,[1 0] 3,1,C:\Windows\SysWOW64\cryptsp.dll
+6176,6,3,[0 0] 4,[1 0] 1,[2 0] 1,1,C:\Windows\SysWOW64\d3d9.dll
+2516,6,3,[0 0] 1,[2 0] 4,[3 0] 1,1,C:\Windows\SysWOW64\dsound.dll
+6176,1,1,[0 0] 1,1,C:\Windows\SysWOW64\dwmapi.dll
+6808,2,2,[1 0] 1,[2 0] 1,1,C:\Windows\SysWOW64\dwmapi.dll
+6176,33,4,[0 0] 19,[1 0] 2,[2 0] 3,[3 0] 9,1,C:\Windows\SysWOW64\dwrite.dll
+6808,549,4,[0 0] 51,[1 0] 167,[2 0] 248,[3 0] 83,1,C:\Windows\SysWOW64\fmodex.dll
+6808,32,4,[0 0] 5,[1 0] 3,[2 0] 19,[3 0] 5,1,C:\Windows\SysWOW64\msvcp100d.dll
+8092,16,4,[0 0] 2,[1 0] 1,[2 0] 10,[3 0] 3,1,C:\Windows\SysWOW64\msvcr100.dll
+6808,55,4,[0 0] 2,[1 0] 7,[2 0] 41,[3 0] 5,1,C:\Windows\SysWOW64\msvcr100d.dll
+6808,5,1,[2 0] 5,1,C:\Windows\SysWOW64\msvcrt.dll
+2116,1,1,[3 0] 1,1,C:\Windows\SysWOW64\mswsock.dll
+2516,2,2,[1 0] 1,[3 0] 1,1,C:\Windows\SysWOW64\mswsock.dll
+6176,1,1,[1 0] 1,1,C:\Windows\SysWOW64\msxml6.dll
+1060,1,1,[1 0] 1,1,C:\Windows\SysWOW64\ntdll.dll
+2116,14,4,[0 0] 5,[1 0] 2,[2 0] 3,[3 0] 4,1,C:\Windows\SysWOW64\ntdll.dll
+2456,5,2,[0 0] 1,[3 0] 4,1,C:\Windows\SysWOW64\ntdll.dll
+2488,4,1,[2 0] 4,1,C:\Windows\SysWOW64\ntdll.dll
+2516,4,2,[2 0] 3,[3 0] 1,1,C:\Windows\SysWOW64\ntdll.dll
+5464,2,2,[0 0] 1,[1 0] 1,1,C:\Windows\SysWOW64\ntdll.dll
+5976,1,1,[3 0] 1,1,C:\Windows\SysWOW64\ntdll.dll
+6176,37,4,[0 0] 15,[1 0] 6,[2 0] 5,[3 0] 11,1,C:\Windows\SysWOW64\ntdll.dll
+6808,165,4,[0 0] 9,[1 0] 14,[2 0] 136,[3 0] 6,1,C:\Windows\SysWOW64\ntdll.dll
+7256,2,2,[0 0] 1,[1 0] 1,1,C:\Windows\SysWOW64\ntdll.dll
+8016,26,4,[0 0] 10,[1 0] 1,[2 0] 9,[3 0] 6,1,C:\Windows\SysWOW64\ntdll.dll
+8092,23,3,[1 0] 5,[2 0] 13,[3 0] 5,1,C:\Windows\SysWOW64\ntdll.dll
+2488,4,3,[1 0] 1,[2 0] 2,[3 0] 1,1,C:\Windows\SysWOW64\nvapi.dll
+6176,35,4,[0 0] 13,[1 0] 12,[2 0] 6,[3 0] 4,1,C:\Windows\SysWOW64\nvd3dum.dll
+6176,1,1,[2 0] 1,1,C:\Windows\SysWOW64\nvoglv32.DLL
+6808,463,4,[0 0] 24,[1 0] 29,[2 0] 397,[3 0] 13,1,C:\Windows\SysWOW64\nvoglv32.dll
+6808,9,2,[1 0] 1,[2 0] 8,1,C:\Windows\SysWOW64\opengl32.dll
+6176,2,2,[0 0] 1,[3 0] 1,1,C:\Windows\SysWOW64\pcwum.DLL
+6176,5,3,[0 0] 1,[1 0] 1,[3 0] 3,1,C:\Windows\SysWOW64\uxtheme.dll
+6808,5,2,[0 0] 1,[2 0] 4,1,C:\Windows\SysWOW64\uxtheme.dll
+8016,7,3,[0 0] 3,[1 0] 2,[3 0] 2,1,C:\Windows\SysWOW64\uxtheme.dll
+4,3,3,[1 0] 1,[2 0] 1,[3 0] 1,0,C:\Windows\System32\Drivers\Ntfs.sys
+1244,26,4,[0 0] 1,[1 0] 5,[2 0] 10,[3 0] 10,0,C:\Windows\System32\Drivers\Ntfs.sys
+1928,3,2,[0 0] 2,[1 0] 1,0,C:\Windows\System32\Drivers\Ntfs.sys
+2184,1,1,[3 0] 1,0,C:\Windows\System32\Drivers\Ntfs.sys
+6012,1,1,[1 0] 1,0,C:\Windows\System32\Drivers\Ntfs.sys
+6808,9,3,[1 0] 1,[2 0] 7,[3 0] 1,0,C:\Windows\System32\Drivers\Ntfs.sys
+8092,24,4,[0 0] 1,[1 0] 2,[2 0] 18,[3 0] 3,0,C:\Windows\System32\Drivers\Ntfs.sys
+1512,1,1,[3 0] 1,0,C:\Windows\System32\Drivers\aswSP.SYS
+1928,1,1,[2 0] 1,0,C:\Windows\System32\Drivers\aswSP.SYS
+2488,4,3,[0 0] 1,[2 0] 1,[3 0] 2,0,C:\Windows\System32\Drivers\aswSP.SYS
+4496,1,1,[3 0] 1,0,C:\Windows\System32\Drivers\aswSP.SYS
+4652,2,2,[0 0] 1,[2 0] 1,0,C:\Windows\System32\Drivers\aswSP.SYS
+6808,4,3,[0 0] 1,[2 0] 2,[3 0] 1,0,C:\Windows\System32\Drivers\aswSP.SYS
+8092,4,2,[1 0] 2,[2 0] 2,0,C:\Windows\System32\Drivers\aswSP.SYS
+944,2,2,[0 0] 1,[1 0] 1,0,C:\Windows\System32\Drivers\aswSnx.SYS
+2184,4,2,[1 0] 3,[3 0] 1,0,C:\Windows\System32\Drivers\aswSnx.SYS
+2488,2,2,[2 0] 1,[3 0] 1,0,C:\Windows\System32\Drivers\aswSnx.SYS
+6176,2,2,[0 0] 1,[3 0] 1,0,C:\Windows\System32\Drivers\aswSnx.SYS
+6252,1,1,[3 0] 1,0,C:\Windows\System32\Drivers\aswSnx.SYS
+6808,1,1,[2 0] 1,0,C:\Windows\System32\Drivers\aswSnx.SYS
+8016,11,4,[0 0] 5,[1 0] 1,[2 0] 2,[3 0] 3,0,C:\Windows\System32\Drivers\aswSnx.SYS
+8092,2,1,[2 0] 2,0,C:\Windows\System32\Drivers\aswSnx.SYS
+4,6,2,[1 0] 4,[3 0] 2,0,C:\Windows\System32\Drivers\cng.sys
+2184,1,1,[1 0] 1,0,C:\Windows\System32\UIAnimation.dll
+944,3,2,[1 0] 1,[2 0] 2,0,C:\Windows\System32\cdd.dll
+1928,1,1,[3 0] 1,0,C:\Windows\System32\cdd.dll
+2184,1,1,[1 0] 1,0,C:\Windows\System32\cdd.dll
+8016,2,1,[0 0] 2,0,C:\Windows\System32\cdd.dll
+0,11,1,[0 0] 11,0,C:\Windows\System32\drivers\dxgkrnl.sys
+4,1,1,[0 0] 1,0,C:\Windows\System32\drivers\dxgkrnl.sys
+944,2,1,[2 0] 2,0,C:\Windows\System32\drivers\dxgkrnl.sys
+2148,18,2,[1 0] 1,[3 0] 17,0,C:\Windows\System32\drivers\dxgkrnl.sys
+2488,1,1,[2 0] 1,0,C:\Windows\System32\drivers\dxgkrnl.sys
+6808,16,3,[1 0] 1,[2 0] 13,[3 0] 2,0,C:\Windows\System32\drivers\dxgkrnl.sys
+0,20,1,[0 0] 20,0,C:\Windows\System32\drivers\dxgmms1.sys
+4,104,4,[0 0] 19,[1 0] 51,[2 0] 27,[3 0] 7,0,C:\Windows\System32\drivers\dxgmms1.sys
+944,3,2,[1 0] 1,[2 0] 2,0,C:\Windows\System32\drivers\dxgmms1.sys
+2148,6,2,[0 0] 2,[3 0] 4,0,C:\Windows\System32\drivers\dxgmms1.sys
+6176,4,3,[0 0] 2,[1 0] 1,[3 0] 1,0,C:\Windows\System32\drivers\dxgmms1.sys
+6808,32,3,[1 0] 1,[2 0] 30,[3 0] 1,0,C:\Windows\System32\drivers\dxgmms1.sys
+4,1,1,[0 0] 1,0,C:\Windows\System32\drivers\fwpkclnt.sys
+4,6,3,[0 0] 1,[1 0] 3,[3 0] 2,0,C:\Windows\System32\drivers\tcpip.sys
+4652,3,1,[1 0] 3,0,C:\Windows\System32\drivers\tcpip.sys
+4,2,2,[1 0] 1,[2 0] 1,0,C:\Windows\System32\drivers\watchdog.sys
+2148,1,1,[0 0] 1,0,C:\Windows\System32\drivers\watchdog.sys
+6808,2,1,[2 0] 2,0,C:\Windows\System32\drivers\watchdog.sys
+1928,2,1,[0 0] 2,0,C:\Windows\System32\gdi32.dll
+1928,1,1,[0 0] 1,0,C:\Windows\System32\imm32.dll
+1928,2,2,[2 0] 1,[3 0] 1,0,C:\Windows\System32\ntdll.dll
+6252,1,1,[1 0] 1,0,C:\Windows\System32\tdh.dll
+1928,1,1,[3 0] 1,0,C:\Windows\System32\user32.dll
+1928,2,1,[0 0] 2,0,C:\Windows\System32\usp10.dll
+876,5,2,[0 0] 4,[2 0] 1,0,C:\Windows\System32\win32k.sys
+944,88,4,[0 0] 56,[1 0] 21,[2 0] 4,[3 0] 7,0,C:\Windows\System32\win32k.sys
+1928,10,3,[0 0] 8,[1 0] 1,[3 0] 1,0,C:\Windows\System32\win32k.sys
+2116,32,4,[0 0] 16,[1 0] 1,[2 0] 6,[3 0] 9,0,C:\Windows\System32\win32k.sys
+2148,13,1,[3 0] 13,0,C:\Windows\System32\win32k.sys
+2184,101,4,[0 0] 1,[1 0] 90,[2 0] 3,[3 0] 7,0,C:\Windows\System32\win32k.sys
+2488,25,4,[0 0] 2,[1 0] 1,[2 0] 19,[3 0] 3,0,C:\Windows\System32\win32k.sys
+2516,4,2,[0 0] 1,[1 0] 3,0,C:\Windows\System32\win32k.sys
+3656,1,1,[1 0] 1,0,C:\Windows\System32\win32k.sys
+3940,2,2,[1 0] 1,[3 0] 1,0,C:\Windows\System32\win32k.sys
+6176,37,4,[0 0] 11,[1 0] 3,[2 0] 5,[3 0] 18,0,C:\Windows\System32\win32k.sys
+6808,55,4,[0 0] 2,[1 0] 9,[2 0] 43,[3 0] 1,0,C:\Windows\System32\win32k.sys
+8016,184,4,[0 0] 81,[1 0] 4,[2 0] 33,[3 0] 66,0,C:\Windows\System32\win32k.sys
+6808,10,2,[1 0] 2,[2 0] 8,0,C:\Windows\System32\wow64.dll
+8092,1,1,[2 0] 1,0,C:\Windows\System32\wow64.dll
+6808,26,4,[0 0] 1,[1 0] 7,[2 0] 16,[3 0] 2,0,C:\Windows\System32\wow64cpu.dll
+8092,1,1,[2 0] 1,0,C:\Windows\System32\wow64cpu.dll
+6808,6,3,[0 0] 1,[2 0] 4,[3 0] 1,0,C:\Windows\System32\wow64win.dll
+2184,20,4,[0 0] 5,[1 0] 1,[2 0] 2,[3 0] 12,0,C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.7601.17514_none_fa396087175ac9ac\comctl32.dll
+6176,1,1,[3 0] 1,1,C:\Windows\WinSxS\x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.6195_none_d09154e044272b9a\MSVCR80.dll
+2516,2,2,[1 0] 1,[2 0] 1,1,C:\Windows\WinSxS\x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.30729.6161_none_50934f2ebcb7eb57\MSVCR90.dll
+3656,2,1,[1 0] 2,1,C:\Windows\WinSxS\x86_microsoft.vc90.mfc_1fc8b3b9a1e18e3b_9.0.30729.6161_none_4bf7e3e2bf9ada4c\mfc90u.dll
+6176,2,2,[0 0] 1,[2 0] 1,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.Build\ea96520470ea72f55921b2c439fa9fd4\Microsoft.Build.ni.dll
+6176,1,1,[2 0] 1,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.VisualC.E#\7cdc6403448ae28751aaa1a7fb2fd1b5\Microsoft.VisualC.Editor.Implementation.ni.dll
+6176,2,1,[3 0] 2,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.VisualStu#\08927b4d39c03e89a78bc29b333c050d\Microsoft.VisualStudio.ni.dll
+6176,4,2,[2 0] 1,[3 0] 3,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.VisualStu#\3e3630c8762a83d6c0a9c6df4abf2657\Microsoft.VisualStudio.Shell.10.0.ni.dll
+6176,7,2,[2 0] 1,[3 0] 6,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.VisualStu#\435b119d9985f7fcff5d17451d107b2f\Microsoft.VisualStudio.Platform.WindowManagement.ni.dll
+6176,8,3,[0 0] 3,[2 0] 2,[3 0] 3,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.VisualStu#\446dbba340a9607152b3e9369e71d6de\Microsoft.VisualStudio.Editor.Implementation.ni.dll
+6176,32,4,[0 0] 17,[1 0] 4,[2 0] 1,[3 0] 10,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.VisualStu#\4550dfa3558d984796bd7c8c677d8d1a\Microsoft.VisualStudio.Platform.VSEditor.ni.dll
+6176,1,1,[0 0] 1,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.VisualStu#\4aa275571cfd7ec30a0ece88f7c73775\Microsoft.VisualStudio.Text.UI.ni.dll
+6176,1,1,[2 0] 1,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.VisualStu#\a992a442c0108476d10a613e507fa89c\Microsoft.VisualStudio.Shell.ViewManager.ni.dll
+6176,3,3,[1 0] 1,[2 0] 1,[3 0] 1,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.VisualStu#\bc4aba38a78df0c4f14f972dd84e913a\Microsoft.VisualStudio.Text.Logic.ni.dll
+6176,7,3,[0 0] 1,[2 0] 3,[3 0] 3,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.VisualStu#\c188bfbe213805db88a4e5c226bae690\Microsoft.VisualStudio.Text.Data.ni.dll
+6176,3,2,[0 0] 1,[3 0] 2,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.VisualStu#\c61a8d1dbe16c94756047f081dce6e26\Microsoft.VisualStudio.Shell.UI.Internal.ni.dll
+6176,425,4,[0 0] 60,[1 0] 33,[2 0] 71,[3 0] 261,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\PresentationCore\b460188cf6862491550a006c3660e2e6\PresentationCore.ni.dll
+6176,62,4,[0 0] 8,[1 0] 8,[2 0] 8,[3 0] 38,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\PresentationFramewo#\bcec0e7db1d027328cc8cd702185fa66\PresentationFramework.ni.dll
+6176,1,1,[0 0] 1,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\System.Core\3e4f9b3b78f0f13b7469a14e69d756ef\System.Core.ni.dll
+6176,1,1,[0 0] 1,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\System.Windows.Forms\c06946b464ae8dd22151e0a6f310c976\System.Windows.Forms.ni.dll
+6176,1,1,[3 0] 1,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\System.Xaml\a181199f8dec15116e1c2eb4a79ec22b\System.Xaml.ni.dll
+6176,4,2,[2 0] 1,[3 0] 3,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\System\9cf67ed1b743fbc3dd6b78fbc0595236\System.ni.dll
+6176,109,4,[0 0] 17,[1 0] 6,[2 0] 15,[3 0] 71,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\WindowsBase\1d3c2d83da69c30ba8edf5cfea3c0057\WindowsBase.ni.dll
+6176,48,4,[0 0] 13,[1 0] 4,[2 0] 9,[3 0] 22,1,C:\Windows\assembly\NativeImages_v4.0.30319_32\mscorlib\1bdf7de454340e0ea9fc455aeaec49d9\mscorlib.ni.dll
+0,16,1,[0 0] 16,0,C:\Windows\system32\DRIVERS\HDAudBus.sys
+4,1,1,[1 0] 1,0,C:\Windows\system32\DRIVERS\HDAudBus.sys
+2116,1,1,[0 0] 1,0,C:\Windows\system32\DRIVERS\HDAudBus.sys
+0,16,1,[0 0] 16,0,C:\Windows\system32\DRIVERS\HECIx64.sys
+6176,1,1,[0 0] 1,0,C:\Windows\system32\DRIVERS\HECIx64.sys
+0,12,1,[0 0] 12,0,C:\Windows\system32\DRIVERS\HIDCLASS.SYS
+0,1,1,[0 0] 1,0,C:\Windows\system32\DRIVERS\HIDPARSE.SYS
+0,4,1,[0 0] 4,0,C:\Windows\system32\DRIVERS\Rt64win7.sys
+4,1,1,[0 0] 1,0,C:\Windows\system32\DRIVERS\Rt64win7.sys
+0,73,1,[0 0] 73,0,C:\Windows\system32\DRIVERS\USBPORT.SYS
+4,1,1,[0 0] 1,0,C:\Windows\system32\DRIVERS\USBPORT.SYS
+1244,1,1,[0 0] 1,0,C:\Windows\system32\DRIVERS\USBPORT.SYS
+2116,1,1,[0 0] 1,0,C:\Windows\system32\DRIVERS\USBPORT.SYS
+2184,1,1,[0 0] 1,0,C:\Windows\system32\DRIVERS\USBPORT.SYS
+6176,2,1,[0 0] 2,0,C:\Windows\system32\DRIVERS\USBPORT.SYS
+8016,2,1,[0 0] 2,0,C:\Windows\system32\DRIVERS\USBPORT.SYS
+4,1,1,[2 0] 1,0,C:\Windows\system32\DRIVERS\cdrom.sys
+4,1,1,[3 0] 1,0,C:\Windows\system32\DRIVERS\fltsrv.sys
+0,4,1,[0 0] 4,0,C:\Windows\system32\DRIVERS\hidusb.sys
+0,5,2,[0 0] 4,[1 0] 1,0,C:\Windows\system32\DRIVERS\intelppm.sys
+1244,1,1,[3 0] 1,0,C:\Windows\system32\DRIVERS\intelppm.sys
+6808,1,1,[2 0] 1,0,C:\Windows\system32\DRIVERS\intelppm.sys
+0,3,1,[0 0] 3,0,C:\Windows\system32\DRIVERS\mouclass.sys
+944,3,1,[1 0] 3,0,C:\Windows\system32\DRIVERS\mouclass.sys
+0,5,1,[0 0] 5,0,C:\Windows\system32\DRIVERS\mouhid.sys
+0,217,1,[0 0] 217,0,C:\Windows\system32\DRIVERS\nvlddmkm.sys
+4,70,4,[0 0] 17,[1 0] 20,[2 0] 15,[3 0] 18,0,C:\Windows\system32\DRIVERS\nvlddmkm.sys
+944,14,4,[0 0] 1,[1 0] 8,[2 0] 4,[3 0] 1,0,C:\Windows\system32\DRIVERS\nvlddmkm.sys
+1244,1,1,[0 0] 1,0,C:\Windows\system32\DRIVERS\nvlddmkm.sys
+1928,1,1,[0 0] 1,0,C:\Windows\system32\DRIVERS\nvlddmkm.sys
+2060,1,1,[0 0] 1,0,C:\Windows\system32\DRIVERS\nvlddmkm.sys
+2116,1,1,[0 0] 1,0,C:\Windows\system32\DRIVERS\nvlddmkm.sys
+2148,12,2,[0 0] 3,[3 0] 9,0,C:\Windows\system32\DRIVERS\nvlddmkm.sys
+2488,6,4,[0 0] 1,[1 0] 1,[2 0] 2,[3 0] 2,0,C:\Windows\system32\DRIVERS\nvlddmkm.sys
+2516,1,1,[0 0] 1,0,C:\Windows\system32\DRIVERS\nvlddmkm.sys
+6176,10,2,[0 0] 9,[1 0] 1,0,C:\Windows\system32\DRIVERS\nvlddmkm.sys
+6808,106,4,[0 0] 9,[1 0] 11,[2 0] 75,[3 0] 11,0,C:\Windows\system32\DRIVERS\nvlddmkm.sys
+8016,7,1,[0 0] 7,0,C:\Windows\system32\DRIVERS\nvlddmkm.sys
+4,5,4,[0 0] 1,[1 0] 2,[2 0] 1,[3 0] 1,0,C:\Windows\system32\DRIVERS\tdrpman.sys
+1244,18,4,[0 0] 1,[1 0] 6,[2 0] 6,[3 0] 5,0,C:\Windows\system32\DRIVERS\tdrpman.sys
+6808,6,3,[1 0] 1,[2 0] 4,[3 0] 1,0,C:\Windows\system32\DRIVERS\tdrpman.sys
+8092,4,3,[1 0] 1,[2 0] 2,[3 0] 1,0,C:\Windows\system32\DRIVERS\tdrpman.sys
+0,2,1,[0 0] 2,0,C:\Windows\system32\DRIVERS\usbccgp.sys
+0,86,1,[0 0] 86,0,C:\Windows\system32\DRIVERS\usbehci.sys
+4,1,1,[0 0] 1,0,C:\Windows\system32\DRIVERS\usbehci.sys
+2148,1,1,[0 0] 1,0,C:\Windows\system32\DRIVERS\usbehci.sys
+6176,4,1,[0 0] 4,0,C:\Windows\system32\DRIVERS\usbehci.sys
+6808,1,1,[0 0] 1,0,C:\Windows\system32\DRIVERS\usbehci.sys
+0,4,1,[0 0] 4,0,C:\Windows\system32\DRIVERS\usbhub.sys
+4088,1,1,[3 0] 1,0,C:\Windows\system32\DRIVERS\usbscan.sys
+4,1,1,[0 0] 1,0,C:\Windows\system32\DRIVERS\vidsflt.sys
+2148,2,1,[3 0] 2,0,C:\Windows\system32\GDI32.dll
+2184,5,2,[1 0] 4,[2 0] 1,0,C:\Windows\system32\GDI32.dll
+2148,3,2,[1 0] 1,[3 0] 2,0,C:\Windows\system32\KERNELBASE.dll
+2184,6,3,[0 0] 1,[1 0] 3,[3 0] 2,0,C:\Windows\system32\KERNELBASE.dll
+3612,1,1,[0 0] 1,0,C:\Windows\system32\KERNELBASE.dll
+4652,1,1,[3 0] 1,0,C:\Windows\system32\KERNELBASE.dll
+2184,1,1,[1 0] 1,0,C:\Windows\system32\LPK.dll
+4652,1,1,[1 0] 1,0,C:\Windows\system32\MSASN1.dll
+6012,1,1,[2 0] 1,0,C:\Windows\system32\MSSRCH.DLL
+2184,5,3,[0 0] 1,[1 0] 2,[3 0] 2,0,C:\Windows\system32\OLEAUT32.dll
+2184,12,2,[0 0] 7,[3 0] 5,0,C:\Windows\system32\PROPSYS.dll
+1104,1,1,[0 0] 1,0,C:\Windows\system32\RPCRT4.dll
+1204,1,1,[0 0] 1,0,C:\Windows\system32\RPCRT4.dll
+1512,1,1,[3 0] 1,0,C:\Windows\system32\RPCRT4.dll
+2184,39,3,[0 0] 9,[1 0] 10,[3 0] 20,0,C:\Windows\system32\SHELL32.dll
+2184,4,3,[0 0] 1,[1 0] 1,[3 0] 2,0,C:\Windows\system32\SHLWAPI.dll
+2148,1,1,[3 0] 1,0,C:\Windows\system32\USER32.dll
+2184,35,3,[0 0] 14,[1 0] 5,[3 0] 16,0,C:\Windows\system32\USER32.dll
+2148,1,1,[3 0] 1,0,C:\Windows\system32\USP10.dll
+2184,23,2,[1 0] 22,[3 0] 1,0,C:\Windows\system32\USP10.dll
+2184,5,3,[1 0] 3,[2 0] 1,[3 0] 1,0,C:\Windows\system32\UxTheme.dll
+4652,1,1,[3 0] 1,0,C:\Windows\system32\WS2_32.dll
+2148,3,2,[2 0] 1,[3 0] 2,0,C:\Windows\system32\d3d10_1core.dll
+0,2,1,[0 0] 2,0,C:\Windows\system32\drivers\ACPI.sys
+4,4,2,[1 0] 2,[3 0] 2,0,C:\Windows\system32\drivers\CAPROF.sys
+4,2,2,[1 0] 1,[3 0] 1,0,C:\Windows\system32\drivers\NETIO.SYS
+1536,1,1,[3 0] 1,0,C:\Windows\system32\drivers\NETIO.SYS
+4,1,1,[1 0] 1,0,C:\Windows\system32\drivers\RTKVHD64.sys
+4,2,1,[3 0] 2,0,C:\Windows\system32\drivers\Wdf01000.sys
+1620,1,1,[3 0] 1,0,C:\Windows\system32\drivers\afd.sys
+2116,1,1,[2 0] 1,0,C:\Windows\system32\drivers\afd.sys
+4,1,1,[2 0] 1,0,C:\Windows\system32\drivers\aswMonFlt.sys
+1244,11,3,[1 0] 1,[2 0] 3,[3 0] 7,0,C:\Windows\system32\drivers\aswMonFlt.sys
+6808,3,1,[2 0] 3,0,C:\Windows\system32\drivers\aswMonFlt.sys
+8092,9,3,[1 0] 1,[2 0] 7,[3 0] 1,0,C:\Windows\system32\drivers\aswMonFlt.sys
+4,1,1,[3 0] 1,0,C:\Windows\system32\drivers\fileinfo.sys
+1244,1,1,[1 0] 1,0,C:\Windows\system32\drivers\fileinfo.sys
+6808,2,1,[2 0] 2,0,C:\Windows\system32\drivers\fileinfo.sys
+8092,5,3,[1 0] 1,[2 0] 3,[3 0] 1,0,C:\Windows\system32\drivers\fileinfo.sys
+4,8,3,[1 0] 4,[2 0] 2,[3 0] 2,0,C:\Windows\system32\drivers\fltmgr.sys
+1244,30,4,[0 0] 1,[1 0] 8,[2 0] 4,[3 0] 17,0,C:\Windows\system32\drivers\fltmgr.sys
+6808,18,2,[1 0] 1,[2 0] 17,0,C:\Windows\system32\drivers\fltmgr.sys
+8092,31,3,[1 0] 3,[2 0] 24,[3 0] 4,0,C:\Windows\system32\drivers\fltmgr.sys
+0,1,1,[0 0] 1,0,C:\Windows\system32\drivers\hcmon.sys
+4184,1,1,[2 0] 1,0,C:\Windows\system32\drivers\hcmon.sys
+0,4,1,[0 0] 4,0,C:\Windows\system32\drivers\iaStor.sys
+4,5,3,[0 0] 1,[2 0] 2,[3 0] 2,0,C:\Windows\system32\drivers\iaStor.sys
+2184,1,1,[0 0] 1,0,C:\Windows\system32\drivers\iaStor.sys
+7960,1,1,[3 0] 1,0,C:\Windows\system32\drivers\iaStor.sys
+0,1,1,[0 0] 1,0,C:\Windows\system32\drivers\ndis.sys
+4,1,1,[0 0] 1,0,C:\Windows\system32\drivers\ndis.sys
+1512,1,1,[1 0] 1,0,C:\Windows\system32\drivers\ndis.sys
+1536,1,1,[2 0] 1,0,C:\Windows\system32\drivers\nsiproxy.sys
+4652,1,1,[1 0] 1,0,C:\Windows\system32\drivers\nsiproxy.sys
+2148,117,4,[0 0] 5,[1 0] 5,[2 0] 1,[3 0] 106,0,C:\Windows\system32\dwmcore.dll
+2148,4,1,[3 0] 4,0,C:\Windows\system32\dwmredir.dll
+2148,11,1,[3 0] 11,0,C:\Windows\system32\dxgi.dll
+0,8,3,[0 0] 6,[1 0] 1,[3 0] 1,0,C:\Windows\system32\hal.dll
+652,1,1,[3 0] 1,0,C:\Windows\system32\hal.dll
+944,1,1,[0 0] 1,0,C:\Windows\system32\hal.dll
+1928,1,1,[1 0] 1,0,C:\Windows\system32\hal.dll
+6808,1,1,[0 0] 1,0,C:\Windows\system32\hal.dll
+2148,1,1,[3 0] 1,0,C:\Windows\system32\kernel32.dll
+2184,8,3,[0 0] 1,[1 0] 4,[3 0] 3,0,C:\Windows\system32\kernel32.dll
+1244,218,4,[0 0] 48,[1 0] 49,[2 0] 68,[3 0] 53,0,C:\Windows\system32\msvcrt.dll
+1512,1,1,[1 0] 1,0,C:\Windows\system32\msvcrt.dll
+2148,11,3,[0 0] 2,[1 0] 1,[3 0] 8,0,C:\Windows\system32\msvcrt.dll
+2184,13,3,[0 0] 2,[1 0] 7,[3 0] 4,0,C:\Windows\system32\msvcrt.dll
+0,71343,4,[0 0] 18072,[1 0] 18401,[2 0] 17188,[3 0] 17682,0,C:\Windows\system32\ntoskrnl.exe
+4,239,4,[0 0] 46,[1 0] 86,[2 0] 71,[3 0] 36,0,C:\Windows\system32\ntoskrnl.exe
+652,3,2,[2 0] 1,[3 0] 2,0,C:\Windows\system32\ntoskrnl.exe
+788,1,1,[1 0] 1,0,C:\Windows\system32\ntoskrnl.exe
+876,2,1,[0 0] 2,0,C:\Windows\system32\ntoskrnl.exe
+944,81,4,[0 0] 29,[1 0] 34,[2 0] 13,[3 0] 5,0,C:\Windows\system32\ntoskrnl.exe
+1204,4,1,[0 0] 4,0,C:\Windows\system32\ntoskrnl.exe
+1244,156,4,[0 0] 12,[1 0] 36,[2 0] 34,[3 0] 74,0,C:\Windows\system32\ntoskrnl.exe
+1272,47,4,[0 0] 2,[1 0] 38,[2 0] 4,[3 0] 3,0,C:\Windows\system32\ntoskrnl.exe
+1364,9,2,[1 0] 8,[2 0] 1,0,C:\Windows\system32\ntoskrnl.exe
+1436,1,1,[0 0] 1,0,C:\Windows\system32\ntoskrnl.exe
+1512,5,3,[0 0] 1,[1 0] 2,[2 0] 2,0,C:\Windows\system32\ntoskrnl.exe
+1620,6,3,[0 0] 1,[1 0] 4,[3 0] 1,0,C:\Windows\system32\ntoskrnl.exe
+1908,1,1,[0 0] 1,0,C:\Windows\system32\ntoskrnl.exe
+1928,18,4,[0 0] 5,[1 0] 2,[2 0] 6,[3 0] 5,0,C:\Windows\system32\ntoskrnl.exe
+2060,2,1,[1 0] 2,0,C:\Windows\system32\ntoskrnl.exe
+2116,81,4,[0 0] 29,[1 0] 10,[2 0] 14,[3 0] 28,0,C:\Windows\system32\ntoskrnl.exe
+2148,58,4,[0 0] 3,[1 0] 5,[2 0] 1,[3 0] 49,0,C:\Windows\system32\ntoskrnl.exe
+2184,55,4,[0 0] 13,[1 0] 26,[2 0] 3,[3 0] 13,0,C:\Windows\system32\ntoskrnl.exe
+2456,13,4,[0 0] 2,[1 0] 5,[2 0] 3,[3 0] 3,0,C:\Windows\system32\ntoskrnl.exe
+2488,50,4,[0 0] 7,[1 0] 4,[2 0] 35,[3 0] 4,0,C:\Windows\system32\ntoskrnl.exe
+2516,42,4,[0 0] 13,[1 0] 8,[2 0] 8,[3 0] 13,0,C:\Windows\system32\ntoskrnl.exe
+2760,2,2,[0 0] 1,[2 0] 1,0,C:\Windows\system32\ntoskrnl.exe
+3940,2,2,[1 0] 1,[3 0] 1,0,C:\Windows\system32\ntoskrnl.exe
+4348,1,1,[1 0] 1,0,C:\Windows\system32\ntoskrnl.exe
+4440,1,1,[1 0] 1,0,C:\Windows\system32\ntoskrnl.exe
+4496,11,3,[1 0] 2,[2 0] 5,[3 0] 4,0,C:\Windows\system32\ntoskrnl.exe
+4652,7,2,[1 0] 6,[3 0] 1,0,C:\Windows\system32\ntoskrnl.exe
+5464,4,1,[1 0] 4,0,C:\Windows\system32\ntoskrnl.exe
+5976,7,3,[0 0] 2,[1 0] 4,[2 0] 1,0,C:\Windows\system32\ntoskrnl.exe
+6176,58,4,[0 0] 11,[1 0] 4,[2 0] 13,[3 0] 30,0,C:\Windows\system32\ntoskrnl.exe
+6252,5,3,[0 0] 1,[1 0] 3,[2 0] 1,0,C:\Windows\system32\ntoskrnl.exe
+6808,165,4,[0 0] 17,[1 0] 14,[2 0] 105,[3 0] 29,0,C:\Windows\system32\ntoskrnl.exe
+7256,10,4,[0 0] 1,[1 0] 4,[2 0] 3,[3 0] 2,0,C:\Windows\system32\ntoskrnl.exe
+7960,6,3,[0 0] 2,[1 0] 2,[3 0] 2,0,C:\Windows\system32\ntoskrnl.exe
+8016,107,4,[0 0] 54,[1 0] 3,[2 0] 8,[3 0] 42,0,C:\Windows\system32\ntoskrnl.exe
+8092,127,3,[1 0] 32,[2 0] 80,[3 0] 15,0,C:\Windows\system32\ntoskrnl.exe
+2148,82,3,[0 0] 6,[2 0] 1,[3 0] 75,0,C:\Windows\system32\nvwgf2umx.dll
+1272,1,1,[1 0] 1,0,C:\Windows\system32\ole32.dll
+2184,4,3,[0 0] 1,[1 0] 1,[3 0] 2,0,C:\Windows\system32\ole32.dll
+4652,1,1,[3 0] 1,0,C:\Windows\system32\rsaenh.dll
+2148,2,1,[3 0] 2,0,C:\Windows\system32\uDWM.dll
+6544,1,1,[1 0] 1,0,C:\Windows\system32\wmp.dll
+2116,1,1,[0 0] 1,1,C:\Windows\syswow64\GDI32.dll
+6176,1,1,[3 0] 1,1,C:\Windows\syswow64\GDI32.dll
+8016,18,3,[0 0] 9,[2 0] 5,[3 0] 4,1,C:\Windows\syswow64\GDI32.dll
+8016,1,1,[3 0] 1,1,C:\Windows\syswow64\IMM32.dll
+1620,1,1,[0 0] 1,1,C:\Windows\syswow64\KERNELBASE.dll
+2116,10,4,[0 0] 3,[1 0] 1,[2 0] 1,[3 0] 5,1,C:\Windows\syswow64\KERNELBASE.dll
+2488,1,1,[1 0] 1,1,C:\Windows\syswow64\KERNELBASE.dll
+2516,10,4,[0 0] 3,[1 0] 2,[2 0] 4,[3 0] 1,1,C:\Windows\syswow64\KERNELBASE.dll
+2760,1,1,[3 0] 1,1,C:\Windows\syswow64\KERNELBASE.dll
+5284,1,1,[0 0] 1,1,C:\Windows\syswow64\KERNELBASE.dll
+5976,1,1,[2 0] 1,1,C:\Windows\syswow64\KERNELBASE.dll
+6176,13,4,[0 0] 3,[1 0] 1,[2 0] 4,[3 0] 5,1,C:\Windows\syswow64\KERNELBASE.dll
+8016,3,2,[0 0] 1,[3 0] 2,1,C:\Windows\syswow64\KERNELBASE.dll
+6176,1,1,[3 0] 1,1,C:\Windows\syswow64\MSCTF.dll
+8016,1,1,[0 0] 1,1,C:\Windows\syswow64\MSCTF.dll
+6176,3,2,[0 0] 2,[3 0] 1,1,C:\Windows\syswow64\OLEAUT32.dll
+5976,1,1,[3 0] 1,1,C:\Windows\syswow64\RPCRT4.dll
+6176,4,2,[2 0] 3,[3 0] 1,1,C:\Windows\syswow64\RPCRT4.dll
+7256,2,2,[0 0] 1,[1 0] 1,1,C:\Windows\syswow64\RPCRT4.dll
+6176,1,1,[0 0] 1,1,C:\Windows\syswow64\SHLWAPI.dll
+2116,8,3,[0 0] 5,[1 0] 1,[2 0] 2,1,C:\Windows\syswow64\USER32.dll
+2488,6,3,[1 0] 1,[2 0] 4,[3 0] 1,1,C:\Windows\syswow64\USER32.dll
+2516,6,2,[1 0] 4,[3 0] 2,1,C:\Windows\syswow64\USER32.dll
+6176,24,4,[0 0] 5,[1 0] 3,[2 0] 3,[3 0] 13,1,C:\Windows\syswow64\USER32.dll
+8016,19,4,[0 0] 10,[1 0] 3,[2 0] 2,[3 0] 4,1,C:\Windows\syswow64\USER32.dll
+7256,1,1,[0 0] 1,1,C:\Windows\syswow64\USP10.dll
+8016,2,2,[0 0] 1,[2 0] 1,1,C:\Windows\syswow64\USP10.dll
+2116,1,1,[3 0] 1,1,C:\Windows\syswow64\WS2_32.dll
+1620,1,1,[1 0] 1,1,C:\Windows\syswow64\kernel32.dll
+2116,4,3,[0 0] 1,[1 0] 1,[3 0] 2,1,C:\Windows\syswow64\kernel32.dll
+2488,1,1,[2 0] 1,1,C:\Windows\syswow64\kernel32.dll
+2516,10,4,[0 0] 5,[1 0] 2,[2 0] 2,[3 0] 1,1,C:\Windows\syswow64\kernel32.dll
+3656,1,1,[2 0] 1,1,C:\Windows\syswow64\kernel32.dll
+6176,8,3,[0 0] 3,[1 0] 2,[2 0] 3,1,C:\Windows\syswow64\kernel32.dll
+8016,4,3,[0 0] 2,[1 0] 1,[3 0] 1,1,C:\Windows\syswow64\kernel32.dll
+2488,3,1,[2 0] 3,1,C:\Windows\syswow64\msvcrt.dll
+2516,1,1,[2 0] 1,1,C:\Windows\syswow64\msvcrt.dll
+6176,4,3,[0 0] 2,[1 0] 1,[3 0] 1,1,C:\Windows\syswow64\msvcrt.dll
+3940,1,1,[0 0] 1,1,C:\Windows\syswow64\ole32.dll
+6176,9,2,[0 0] 1,[3 0] 8,1,C:\Windows\syswow64\ole32.dll
+6808,594,4,[0 0] 26,[1 0] 36,[2 0] 493,[3 0] 39,1,E:\CECI\TheGame\Source\StarGame\Debug\StarGame.exe
+2116,4,1,[0 0] 4,1,c:\program files (x86)\steam\bin\serverbrowser.dll
+1272,4,1,[1 0] 4,0,c:\windows\system32\mmcss.dll
+1244,746,4,[0 0] 164,[1 0] 152,[2 0] 209,[3 0] 221,0,c:\windows\system32\sysmain.dll
+1364,344,4,[0 0] 19,[1 0] 318,[2 0] 2,[3 0] 5,0,unknown module pid (1364)
+2148,1,1,[3 0] 1,0,unknown module pid (2148)
+2456,8,3,[0 0] 2,[1 0] 5,[3 0] 1,0,unknown module pid (2456)
+6176,114,4,[0 0] 39,[1 0] 6,[2 0] 19,[3 0] 50,0,unknown module pid (6176)
+6252,2,2,[0 0] 1,[3 0] 1,0,unknown module pid (6252)
+6808,22,4,[0 0] 1,[1 0] 5,[2 0] 15,[3 0] 1,0,unknown module pid (6808)
+8092,8,2,[2 0] 6,[3 0] 2,0,unknown module pid (8092)
+[END]
+

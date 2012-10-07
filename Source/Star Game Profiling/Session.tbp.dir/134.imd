@@ -1,0 +1,17 @@
+﻿[C:\Windows\system32\DRIVERS\mouclass.sys]
+SIZE=0
+SAMPS=6
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0xfffff880079d2000
+LINECOUNT=5
+944,120,1,1,[1 0] 1,0x26ee
+944,120,1,1,[1 0] 1,0x26ff
+944,120,1,1,[1 0] 1,0x41eb
+0,0,2,1,[0 0] 2,0x428f
+0,0,1,1,[0 0] 1,0x4600
+[SUB_END]
+[END]
+

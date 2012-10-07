@@ -1,0 +1,13 @@
+﻿[C:\Program Files (x86)\Browny02\BrMonitor.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x1cf0000
+LINECOUNT=1
+5976,6828,1,1,[0 0] 1,0xa74f
+[SUB_END]
+[END]
+

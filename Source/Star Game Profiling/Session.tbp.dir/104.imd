@@ -1,0 +1,14 @@
+﻿[C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.Build\ea96520470ea72f55921b2c439fa9fd4\Microsoft.Build.ni.dll]
+SIZE=0
+SAMPS=2
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x51580000
+LINECOUNT=2
+6176,2428,1,1,[2 0] 1,0x12e783
+6176,2428,1,1,[0 0] 1,0x13091a
+[SUB_END]
+[END]
+

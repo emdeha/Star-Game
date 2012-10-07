@@ -1,0 +1,13 @@
+﻿[c:\windows\system32\dhcpcore.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7fefb080000
+LINECOUNT=1
+1204,7608,1,1,[3 0] 1,0x1287
+[SUB_END]
+[END]
+

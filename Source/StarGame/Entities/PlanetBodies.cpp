@@ -136,11 +136,13 @@ void Satellite::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 					   float gamma,
 					   const LitProgData &litData, 
 					   const UnlitProgData &unlitData, 
-					   const SimpleProgData &interpData)
+					   const SimpleProgData &interpData,
+					   float interpolation)
 {
 	{
 		glutil::PushStack push(modelMatrix);
 		
+
 		modelMatrix.Translate(position);
 		modelMatrix.Scale(diameter);
 
@@ -311,7 +313,8 @@ void Sun::Render(glutil::MatrixStack &modelMatrix, GLuint materialBlockIndex,
 				 float gamma,
 				 const LitProgData &litData, 
 				 const UnlitProgData &unlitData, 
-				 const SimpleProgData &interpData)
+				 const SimpleProgData &interpData,
+				 float interpolation)
 {
 	{
 		glutil::PushStack push(modelMatrix);
@@ -323,7 +326,11 @@ void Sun::Render(glutil::MatrixStack &modelMatrix, GLuint materialBlockIndex,
 			iter != satellites.end();
 			++iter)
 		{
-			(*iter)->Render(modelMatrix, materialBlockIndex, gamma, litData, unlitData, interpData);
+			(*iter)->Render(modelMatrix, 
+							materialBlockIndex, 
+							gamma, 
+							litData, unlitData, interpData,
+							interpolation);
 		}
 				
 		modelMatrix.Scale(diameter);

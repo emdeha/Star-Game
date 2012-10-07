@@ -1,0 +1,13 @@
+﻿[C:\Windows\System32\user32.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x76bd0000
+LINECOUNT=1
+1928,6852,1,1,[3 0] 1,0xeafa
+[SUB_END]
+[END]
+

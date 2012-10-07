@@ -1,0 +1,17 @@
+﻿[C:\Windows\system32\drivers\aswMonFlt.sys]
+SIZE=0
+SAMPS=6
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0xfffff88009266000
+LINECOUNT=5
+2184,3332,1,1,[2 0] 1,0x1815
+4,7076,2,1,[0 0] 2,0x18a4
+4,24,1,1,[2 0] 1,0x199d
+5132,3472,1,1,[3 0] 1,0x6525
+4,7076,1,1,[0 0] 1,0x9246
+[SUB_END]
+[END]
+

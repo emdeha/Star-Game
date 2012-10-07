@@ -1,0 +1,13 @@
+﻿[C:\Program Files\AVAST Software\Avast\aswData.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x726b0000
+LINECOUNT=1
+3656,3660,1,1,[2 0] 1,0xbfe7
+[SUB_END]
+[END]
+

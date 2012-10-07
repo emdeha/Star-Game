@@ -1,0 +1,13 @@
+﻿[C:\Windows\system32\drivers\CAPROF.sys]
+SIZE=0
+SAMPS=3
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0xfffff8800c784000
+LINECOUNT=1
+4,7076,3,2,[0 0] 2,[3 0] 1,0xb6ab
+[SUB_END]
+[END]
+

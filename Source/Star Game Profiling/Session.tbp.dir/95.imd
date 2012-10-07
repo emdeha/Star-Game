@@ -1,0 +1,14 @@
+﻿[C:\Windows\System32\usp10.dll]
+SIZE=0
+SAMPS=2
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7feff1c0000
+LINECOUNT=2
+1928,6852,1,1,[0 0] 1,0x1574e
+1928,6852,1,1,[0 0] 1,0x51bf4
+[SUB_END]
+[END]
+

@@ -122,7 +122,8 @@ public:
 				float gamma,
 				const LitProgData &litData, 
 				const UnlitProgData &unlitData, 
-				const SimpleProgData &interpData);
+				const SimpleProgData &interpData,
+				float interpolation);
 
 	/// \fn Update
 	/// \brief Updates the satellite's position.
@@ -270,7 +271,10 @@ public:
 	/// The sun is rendered with the unlit program.
 	void Render(glutil::MatrixStack &modelMatrix, GLuint materialBlockIndex,
 				float gamma,
-				const LitProgData &litData, const UnlitProgData &unlitData, const SimpleProgData &interpData);
+				const LitProgData &litData, 
+				const UnlitProgData &unlitData, 
+				const SimpleProgData &interpData,
+				float interpolation);
 	
 	/// \fn Update
 	/// \brief Calls the satellite's update functions (for now).

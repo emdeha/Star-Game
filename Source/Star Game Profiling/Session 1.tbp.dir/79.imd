@@ -1,0 +1,13 @@
+﻿[C:\Windows\System32\Drivers\msrpc.sys]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0xfffff88001300000
+LINECOUNT=1
+2008,4140,1,1,[2 0] 1,0x201ec
+[SUB_END]
+[END]
+

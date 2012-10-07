@@ -1,0 +1,13 @@
+﻿[C:\Program Files (x86)\VMware\VMware Workstation\vmware-hostd.exe]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x400000
+LINECOUNT=1
+5464,6440,1,1,[0 0] 1,0x34dd2
+[SUB_END]
+[END]
+

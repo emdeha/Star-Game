@@ -57,13 +57,15 @@ public:
 	void Update(Sun &sun);
 	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 				float gamma, 
-				const LitProgData &litData);
+				const LitProgData &litData,
+				float interpolation);
 
 	void CheckTargetHit(Sun &sun);
 
 	void OnTargetHit(Sun &sun, Event &_event); // Should be an OnEvent(Event &_event);
 
-
+	
+	void Recreate(glm::vec3 newPosition);
 	bool IsDestroyed();
 };
 
@@ -78,6 +80,7 @@ class Spaceship
 private:
 	glm::vec3 position;
 	glm::vec3 direction;
+	glm::vec3 velocity;
 
 	int health;
 
@@ -88,14 +91,15 @@ private:
 	GLuint materialUniformBuffer;
 
 public:
-	Spaceship(glm::vec3 newPosition, glm::vec3 newDirection);
+	Spaceship(glm::vec3 newPosition, glm::vec3 newDirection, glm::vec3 newVelocity);
 
 	void LoadMesh(const std::string &meshFile);
 
 	void Update(Sun &sun);
 	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 				float gamma, 
-				const LitProgData &litData);
+				const LitProgData &litData,
+				float interpolation);
 
 	void OnEvent(Event &_event);
 };

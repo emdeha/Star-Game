@@ -1,0 +1,13 @@
+﻿[C:\Windows\assembly\NativeImages_v4.0.30319_32\System.Core\3e4f9b3b78f0f13b7469a14e69d756ef\System.Core.ni.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x5f020000
+LINECOUNT=1
+6176,2428,1,1,[0 0] 1,0x1a570a
+[SUB_END]
+[END]
+

@@ -1,0 +1,15 @@
+﻿[C:\Program Files (x86)\MSI Afterburner\MSIAfterburner.exe]
+SIZE=0
+SAMPS=3
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x400000
+LINECOUNT=3
+2488,2492,1,1,[2 0] 1,0x1b4ab
+2488,2492,1,1,[2 0] 1,0x1b57d
+2488,2492,1,1,[3 0] 1,0x20f73
+[SUB_END]
+[END]
+

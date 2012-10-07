@@ -1,0 +1,15 @@
+﻿[C:\Program Files (x86)\Winamp\Plugins\in_wm.dll]
+SIZE=0
+SAMPS=3
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7810000
+LINECOUNT=3
+2516,5844,1,1,[0 0] 1,0x157f3
+2516,5844,1,1,[0 0] 1,0x15857
+2516,1192,1,1,[1 0] 1,0x2f124
+[SUB_END]
+[END]
+

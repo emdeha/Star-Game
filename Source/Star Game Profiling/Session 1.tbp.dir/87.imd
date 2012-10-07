@@ -1,0 +1,13 @@
+﻿[C:\Windows\System32\msvcrt.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7feff290000
+LINECOUNT=1
+7668,5256,1,1,[2 0] 1,0x6ffa4
+[SUB_END]
+[END]
+

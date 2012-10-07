@@ -1,0 +1,14 @@
+﻿[unknown module pid (1204)]
+SIZE=0
+SAMPS=3
+ModuleType=5
+NUMSUBSECTIONS=1
+
+[SUB]
+LINECOUNT=3
+1204,3532,1,1,[2 0] 1,0x70000
+1204,7608,1,1,[1 0] 1,0x70000
+1204,7608,1,1,[0 0] 1,0x701af
+[SUB_END]
+[END]
+

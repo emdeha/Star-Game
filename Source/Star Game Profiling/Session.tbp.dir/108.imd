@@ -1,0 +1,19 @@
+﻿[C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.VisualStu#\435b119d9985f7fcff5d17451d107b2f\Microsoft.VisualStudio.Platform.WindowManagement.ni.dll]
+SIZE=0
+SAMPS=7
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x5ce80000
+LINECOUNT=7
+6176,2428,1,1,[3 0] 1,0x43e80
+6176,2428,1,1,[3 0] 1,0x604f7
+6176,2428,1,1,[3 0] 1,0x6bdf5
+6176,2428,1,1,[3 0] 1,0x6cc34
+6176,2428,1,1,[3 0] 1,0x712a4
+6176,2428,1,1,[2 0] 1,0x7ab31
+6176,2428,1,1,[3 0] 1,0x19e4f9
+[SUB_END]
+[END]
+

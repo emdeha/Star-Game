@@ -1,0 +1,14 @@
+﻿[C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcpackages\vcpkg.dll]
+SIZE=0
+SAMPS=2
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x50b90000
+LINECOUNT=2
+6176,2428,1,1,[1 0] 1,0xb303
+6176,2428,1,1,[0 0] 1,0x77e23
+[SUB_END]
+[END]
+

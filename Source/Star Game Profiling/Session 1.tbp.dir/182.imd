@@ -1,0 +1,14 @@
+﻿[c:\windows\system32\nlasvc.dll]
+SIZE=0
+SAMPS=2
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7fef0f40000
+LINECOUNT=2
+1536,1568,1,1,[1 0] 1,0x1478
+1536,8064,1,1,[1 0] 1,0x4ce0
+[SUB_END]
+[END]
+

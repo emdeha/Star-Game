@@ -1,0 +1,15 @@
+﻿[C:\Program Files (x86)\Microsoft SQL Server Compact Edition\v3.5\sqlcese35.dll]
+SIZE=0
+SAMPS=3
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7d550000
+LINECOUNT=3
+6176,1556,1,1,[3 0] 1,0x7d98
+6176,1556,1,1,[3 0] 1,0x1e9e0
+6176,1556,1,1,[3 0] 1,0x20b12
+[SUB_END]
+[END]
+

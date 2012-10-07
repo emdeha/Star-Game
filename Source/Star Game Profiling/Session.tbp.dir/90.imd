@@ -1,0 +1,14 @@
+﻿[C:\Windows\System32\gdi32.dll]
+SIZE=0
+SAMPS=2
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7fefe0a0000
+LINECOUNT=2
+1928,6852,1,1,[0 0] 1,0x3054
+1928,6852,1,1,[0 0] 1,0x3385
+[SUB_END]
+[END]
+

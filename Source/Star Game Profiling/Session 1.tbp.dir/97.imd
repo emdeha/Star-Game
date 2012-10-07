@@ -1,0 +1,13 @@
+﻿[C:\Windows\assembly\NativeImages_v2.0.50727_32\IsdiInterop\dafa5aa2ced6d9e09f8c277efd72b846\IsdiInterop.ni.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x5d910000
+LINECOUNT=1
+7960,8072,1,1,[2 0] 1,0x1a280
+[SUB_END]
+[END]
+

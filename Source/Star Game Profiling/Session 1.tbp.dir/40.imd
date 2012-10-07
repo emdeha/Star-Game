@@ -1,0 +1,13 @@
+﻿[C:\Windows\Microsoft.NET\Framework\v2.0.50727\mscorwks.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x73060000
+LINECOUNT=1
+2760,784,1,1,[2 0] 1,0x5ffb9
+[SUB_END]
+[END]
+

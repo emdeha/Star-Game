@@ -1,0 +1,13 @@
+﻿[C:\Windows\SysWOW64\lsass.exe]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0xffdf0000
+LINECOUNT=1
+652,740,1,1,[1 0] 1,0x2f17
+[SUB_END]
+[END]
+

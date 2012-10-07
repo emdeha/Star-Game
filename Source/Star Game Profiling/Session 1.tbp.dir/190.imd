@@ -1,0 +1,12 @@
+﻿[unknown module pid (6012)]
+SIZE=0
+SAMPS=1
+ModuleType=5
+NUMSUBSECTIONS=1
+
+[SUB]
+LINECOUNT=1
+6012,7028,1,1,[2 0] 1,0x80000
+[SUB_END]
+[END]
+

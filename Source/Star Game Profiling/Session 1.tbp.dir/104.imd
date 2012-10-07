@@ -1,0 +1,14 @@
+﻿[C:\Windows\assembly\NativeImages_v4.0.30319_32\Microsoft.VisualStu#\ca5b7a14d1473a21643420fb2b6d3d46\Microsoft.VisualStudio.Project.VisualC.VCProjectEngine.ni.dll]
+SIZE=0
+SAMPS=2
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x51a70000
+LINECOUNT=2
+6176,2428,1,1,[0 0] 1,0x89357
+6176,2428,1,1,[2 0] 1,0x1c9bfa
+[SUB_END]
+[END]
+

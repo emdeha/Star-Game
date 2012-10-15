@@ -100,7 +100,21 @@ void Scene::UpdateScene()
 	for(int i = 0; i < sizeSpaceships; i++)
 	{
 		if(!suns.empty())
-			spaceships[i]->Update(*suns.front().get());
+		{
+			spaceships[i]->Update(false, *suns.front().get());
+		}
+		else 
+		{
+			spaceships[i]->Update(true);
+		}
+	}
+}
+void Scene::UpdateFusion(char key)
+{
+	Event eventToSend = sceneFusionInput.Update(key);
+	if(eventToSend.GetType() != EVENT_TYPE_EMPTY)
+	{
+		OnEvent(eventToSend);
 	}
 }
 void Scene::UpdateCurrentLayout(int windowWidth, int windowHeight)
@@ -159,6 +173,43 @@ void Scene::OnEvent(Event &_event)
 			sceneMusic.Play(MUSIC_BACKGROUND);
 		}
 		break;
+	case EVENT_TYPE_OTHER:
+		if(strcmp(_event.GetArgument("what_event").varString, "fusion_seq") == 0)
+		{
+			if(strcmp(_event.GetArgument("buttons").varString, "qqqf") == 0)
+			{
+				if(HasSuns())
+				{
+					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
+										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
+										  10.0f, 0.25f,
+										  SatelliteType(SATELLITE_FIRE), 
+										  5);
+				}
+			}
+			if(strcmp(_event.GetArgument("buttons").varString, "wwwf") == 0)
+			{
+				if(HasSuns())
+				{
+					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
+										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
+										  10.0f, 0.25f,
+										  SatelliteType(SATELLITE_WATER), 
+										  5);
+				}
+			}
+			if(strcmp(_event.GetArgument("buttons").varString, "eeef") == 0)
+			{
+				if(HasSuns())
+				{
+					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
+										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
+										  10.0f, 0.25f,
+										  SatelliteType(SATELLITE_EARTH), 
+										  5);
+				}
+			}
+		}
 	default:
 		break;
 	};
@@ -277,6 +328,11 @@ void Scene::SetMouse(const Mouse &newMouse)
 void Scene::SetGamma(float newSceneGamma)
 {
 	sceneGamma = newSceneGamma;
+}
+
+void Scene::SetFusion(const FusionInput &newFusionInput)
+{
+	sceneFusionInput = newFusionInput;
 }
 
 void Scene::SetLayoutPreset(LayoutPreset layoutPreset)

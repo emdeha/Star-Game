@@ -45,11 +45,13 @@ static void GenerateUniformBuffers(int &materialBlockSize,
 
 
 Projectile::Projectile(glm::vec3 newPosition, glm::vec3 newVelocity,
-					   int newDamage)
+					   int newDamage, int newLifeSpan)
 {
 	position = newPosition;
 	velocity = newVelocity;
 	damage = newDamage;
+
+	lifeSpan = newLifeSpan;
 
 	isDestroyed = false;
 }
@@ -66,7 +68,9 @@ void Projectile::LoadMesh(const std::string &meshFile)
 		throw;
 	}
 
-	GenerateUniformBuffers(materialBlockSize, glm::vec4(0.0f), materialUniformBuffer);
+	GenerateUniformBuffers(materialBlockSize, 
+						   glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
+						   materialUniformBuffer);
 }
 
 void Projectile::LoadMesh(const std::auto_ptr<Framework::Mesh> newMesh)
@@ -78,9 +82,20 @@ void Projectile::LoadMesh(const std::auto_ptr<Framework::Mesh> newMesh)
 
 void Projectile::Update(Sun &sun)
 {
+	if(sun.GetHealth() <= 0)
+	{
+		isDestroyed = true;
+	}
+
+	if(lifeSpan <= 0)
+	{
+		isDestroyed = true;
+	}
+
 	if(!isDestroyed)
 	{
 		position += velocity;
+		lifeSpan--;
 
 		CheckTargetHit(sun);
 	}
@@ -166,9 +181,13 @@ void Projectile::CheckTargetHit(Sun &sun)
 }
 
 
-void Projectile::Recreate(glm::vec3 newPosition)
+void Projectile::Recreate(glm::vec3 newPosition, 
+						  glm::vec3 newVelocity, 
+						  int newLifeSpan)
 {
 	position = newPosition;
+	velocity = newVelocity;
+	lifeSpan = newLifeSpan;
 	isDestroyed = false;
 }
 void Projectile::OnTargetHit(Sun &sun, Event &_event)

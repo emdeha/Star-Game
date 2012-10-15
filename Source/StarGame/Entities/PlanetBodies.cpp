@@ -103,18 +103,20 @@ static void GenerateUniformBuffers(int &materialBlockSize, glm::vec4 diffuseColo
 
 Satellite::Satellite(Framework::Timer newRevolutionDuration,
 					 glm::vec4 newColor,
-					 float newOffsetFromSun, float newDiameter)
+					 float newOffsetFromSun, float newDiameter,
+					 SatelliteType satelliteType, int newHealth)
 {
 	mesh.reset();
 	parent.reset();
 	revolutionDuration = newRevolutionDuration;
 	color = newColor;
 	position = glm::vec3();
-	offsetFromSun = newOffsetFromSun;
+	skillType.satelliteOffsetFromSun = newOffsetFromSun;
+	skillType.satelliteTypeForSkill = satelliteType;
 	diameter = newDiameter;
 	isClicked = false;
 	isDisabled = false;
-	health = 5;
+	health = newHealth;
 
 	GenerateUniformBuffers(materialBlockSize, color, materialUniformBuffer);
 }
@@ -174,6 +176,7 @@ void Satellite::Update()
 	revolutionDuration.Update();
 
 	float currTimeThroughLoop = revolutionDuration.GetAlpha();
+	float offsetFromSun = skillType.satelliteOffsetFromSun;
 
 	position.x = cosf(currTimeThroughLoop * (2.0f * PI)) * offsetFromSun;
 	position.y = sinf(currTimeThroughLoop * (2.0f * PI)) * offsetFromSun;
@@ -198,7 +201,6 @@ void Satellite::OnEvent(Event &_event)
 		break;
 	case EVENT_TYPE_ATTACKED:
 		health -= _event.GetArgument("damage").varInteger;
-		std::printf("%i %i \n", _event.GetArgument("bodyIndex").varInteger, health);
 	default:
 		break;
 	};
@@ -211,6 +213,8 @@ bool Satellite::IsClicked(glm::mat4 projMat, glm::mat4 modelMat,
 	Utility::Ray mouseRay = 
 		userMouse.GetPickRay(projMat, modelMat, cameraPos,
 							 windowWidth, windowHeight);
+
+	float offsetFromSun = skillType.satelliteOffsetFromSun;
 
 	float outerRadius = offsetFromSun + diameter;
 	float innerRadius = offsetFromSun - diameter;
@@ -243,6 +247,8 @@ bool Satellite::IsClicked(glm::mat4 projMat, glm::mat4 modelMat,
 
 void Satellite::LoadClickedAnimation(glutil::MatrixStack &modelMatrix, const SimpleProgData &simpleData, float gamma)
 {
+	float offsetFromSun = skillType.satelliteOffsetFromSun;
+
 	SatelliteOrbit orbit(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
 						 parent->GetPosition(), 
 						 offsetFromSun + diameter, offsetFromSun - diameter,
@@ -276,13 +282,13 @@ Sun::Sun()
 	position = glm::vec3();
 	diameter = 0.0f;
 	satelliteCap = 0;
-	satelliteOffset = 1.0f;
 	isClicked = false;
 	isSatelliteClicked = false;
 	health = 0;
+	currentSatelliteType = 0;
 }
 Sun::Sun(glm::vec3 newPosition, glm::vec4 newColor,
-		 float newDiameter, int newSatelliteCap)
+		 float newDiameter, int newSatelliteCap, int newHealth)
 {
 	sunMesh.reset();
 	satellites.resize(0);
@@ -290,10 +296,11 @@ Sun::Sun(glm::vec3 newPosition, glm::vec4 newColor,
 	position = newPosition;
 	diameter = newDiameter;
 	satelliteCap = newSatelliteCap;
-	satelliteOffset = 1.0f;
 	isClicked = false;
 	isSatelliteClicked = false;
 	health = 300;
+	currentSatelliteType = 0;
+	health = newHealth;
 }
 
 void Sun::LoadMesh(const std::string &fileName)
@@ -357,6 +364,7 @@ void Sun::Update()
 	{
 		if((*iter)->GetHealth() <= 0)
 		{
+			typesTable[(*iter)->GetSatelliteType()] = false;
 			RemoveSatellite(iter);
 			break;
 		}
@@ -367,6 +375,18 @@ void Sun::Update()
 		++iter)
 	{
 		(*iter)->Update();
+	}
+}
+
+static int FindEmptySatelliteType()
+{
+	for(int type = 0; type < 4; type++)
+	{
+		if(typesTable[type] == false)
+		{
+			typesTable[type] = true;
+			return type;
+		}
 	}
 }
 
@@ -381,12 +401,22 @@ void Sun::OnEvent(Event &_event)
 			{
 				std::printf("No satellites left.\n");
 			}
+			else
+			{
+				typesTable[satellites.size()] = false;
+			}
 		}
 		else if(_event.GetArgument("rightClick").varBool == false)
 		{
-			if(!this->AddSatellite("mesh-files/UnitSphere.xml", 
+			if(this->AddSatellite("mesh-files/UnitSphere.xml", 
 								  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-								  10.0f, 0.25f) == true)
+								  10.0f, 0.25f,
+								  SatelliteType(FindEmptySatelliteType()), 
+								  5))
+			{
+				//currentSatelliteType = FindEmptySatelliteType();
+			}
+			else
 			{
 				std::printf("Satellite cap reached!\n");
 			}
@@ -396,8 +426,11 @@ void Sun::OnEvent(Event &_event)
 		if(_event.GetArgument("bodyIndex").varInteger == -1)
 		{
 			if(satellites.empty())
+			{
 				health -= _event.GetArgument("damage").varInteger;
-			// The commented event can't be sent to the universe. That is due to the lack of a global event queue.
+			}
+			// The commented event can't be sent to the universe. 
+			// That is due to the lack of a global event queue.
 			/*if(health <= 0)
 			{
 				EventArg sunKilledEventArg[2];
@@ -408,8 +441,6 @@ void Sun::OnEvent(Event &_event)
 				sunKilledEventArg[1].argument.varType = TYPE_INTEGER;
 				sunKilledEventArg[1].argument.varInteger = 0; // Should be some unique index.
 				Event sunKilledEvent(2, EVENT_TYPE_KILLED, sunKilledEventArg);
-
-
 			}*/
 		}
 		else 
@@ -432,22 +463,39 @@ void Sun::OnEvent(Event &_event)
 
 bool Sun::AddSatellite(const std::string &fileName, 
 					   glm::vec4 satelliteColor,
-					   float speed, float diameter)
+					   float speed, float diameter,
+					   SatelliteType type, int satelliteHealth)
 {
 	if(satellites.size() >= satelliteCap)
 	{
 		return false;
 	}
 
+	float satelliteOffset = 0.0f;
+	switch(type)
+	{
+	case SATELLITE_FIRE:
+		satelliteOffset = 1.0f;
+		break;
+	case SATELLITE_WATER:
+		satelliteOffset = 1.75f;
+		break;
+	case SATELLITE_AIR:
+		satelliteOffset = 2.5f;
+		break;
+	case SATELLITE_EARTH:
+		satelliteOffset = 3.25f;
+		break;
+	}
+
 	std::shared_ptr<Satellite> 
 		sat(new Satellite(Framework::Timer(Framework::Timer::TT_LOOP, speed),
 						  satelliteColor,
-						  satelliteOffset, diameter));
+						  satelliteOffset, diameter,
+						  type, satelliteHealth));
 	satellites.push_back(sat);
 	sat->LoadMesh(fileName);
 	sat->SetParent(*this);
-
-	satelliteOffset++;
 
 	return true;
 }
@@ -463,8 +511,6 @@ bool Sun::RemoveSatellite(std::vector<std::shared_ptr<Satellite>>::iterator inde
 		return false;
 	}
 
-	satelliteOffset = (*index_iterator)->GetOffsetFromSun();
-
 	satellites.erase(index_iterator);
 
 	return true;
@@ -476,8 +522,6 @@ bool Sun::RemoveSatellite()
 	{
 		return false;
 	}
-
-	satelliteOffset--;
 
 	satellites.pop_back();
 
@@ -495,6 +539,30 @@ void Sun::RemoveSatellites()
 std::vector<std::shared_ptr<Satellite>> Sun::GetSatellites()
 {
 	return satellites;
+}
+
+std::shared_ptr<Satellite> Sun::GetOuterSatellite()
+{
+	if(!satellites.empty())
+	{
+		float maxOffset = 0.0f;
+		std::shared_ptr<Satellite> outerSatellite;
+
+		for(std::vector<std::shared_ptr<Satellite>>::iterator iter = satellites.begin();
+			iter != satellites.end();
+			++iter)
+		{
+			if((*iter)->GetOffsetFromSun() > maxOffset)
+			{
+				maxOffset = (*iter)->GetOffsetFromSun();
+				outerSatellite = (*iter);
+			}
+		}
+
+		return outerSatellite;
+	}
+
+	return NULL;
 }
 
 bool Sun::IsClicked(glm::mat4 projMat, glm::mat4 modelMat, 

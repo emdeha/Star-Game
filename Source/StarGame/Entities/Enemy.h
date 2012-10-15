@@ -15,6 +15,10 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
+// TODO: If two projectiles try to kill the sun in the same time, 
+//		 the one that didn't succeed freezes and starts to flicker infinitely.
+
+
 #ifndef ENEMY_H
 #define ENEMY_H
 
@@ -38,6 +42,7 @@ private:
 	glm::vec3 velocity;
 
 	int damage;
+	int lifeSpan;
 
 	bool isDestroyed;
 
@@ -49,7 +54,7 @@ private:
 
 public:
 	Projectile(glm::vec3 newPosition, glm::vec3 newVelocity,
-			   int newDamage);
+			   int newDamage, int newLifeSpan);
 	
 	void LoadMesh(const std::string &meshFile);
 	void LoadMesh(const std::auto_ptr<Framework::Mesh> newMesh);
@@ -65,7 +70,9 @@ public:
 	void OnTargetHit(Sun &sun, Event &_event); // Should be an OnEvent(Event &_event);
 
 	
-	void Recreate(glm::vec3 newPosition);
+	void Recreate(glm::vec3 newPosition, 
+				  glm::vec3 newVelocity,
+				  int newLifeSpan);
 	bool IsDestroyed();
 };
 
@@ -84,6 +91,10 @@ private:
 
 	int health;
 
+	float projectileSpeed;
+	int projectileLifeSpan;
+	int projectileDamage;
+
 	std::unique_ptr<Projectile> projectile;
 	std::unique_ptr<Framework::Mesh> mesh;
 
@@ -91,11 +102,15 @@ private:
 	GLuint materialUniformBuffer;
 
 public:
-	Spaceship(glm::vec3 newPosition, glm::vec3 newDirection, glm::vec3 newVelocity);
+	Spaceship(glm::vec3 newPosition, 
+			  glm::vec3 newDirection, 
+			  glm::vec3 newVelocity,
+			  float newProjectileSpeed,
+			  int newProjectileLifeSpan, int newProjectileDamage);
 
 	void LoadMesh(const std::string &meshFile);
 
-	void Update(Sun &sun);
+	void Update(bool isSunKilled, Sun &sun = Sun());
 	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 				float gamma, 
 				const LitProgData &litData,

@@ -335,15 +335,21 @@ void InitializeScene()
 
 
 	std::shared_ptr<Sun> 
-		mainSun(new Sun(glm::vec3(0.0f), glm::vec4(0.738f, 0.738f, 0.423f, 1.0f), 1.25f, 4));
+		mainSun(new Sun(glm::vec3(0.0f), glm::vec4(0.738f, 0.738f, 0.423f, 1.0f), 1.25f, 4, 50));
 
 	SunLight 
 		mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, displayData.gamma));
 
 	std::shared_ptr<Spaceship> 
-		sampleSpaceship(new Spaceship(glm::vec3(4.5f, 0.0f, 0.0f), glm::vec3(-0.1f, 0.0f, 0.0f), glm::vec3()));
+		sampleSpaceship(new Spaceship(glm::vec3(4.5f, 0.0f, 0.0f), 
+									  glm::vec3(-1.0f, 0.0f, 0.0f), 
+									  glm::vec3(),
+									  0.3f, 20, 0));
 	std::shared_ptr<Spaceship>
-		sampleSpaceship2(new Spaceship(glm::vec3(0.0f, 4.5f, 0.0f), glm::vec3(0.0f, -0.1f, 0.0f), glm::vec3()));
+		sampleSpaceship2(new Spaceship(glm::vec3(0.0f, 4.5f, 0.0f), 
+									   glm::vec3(0.0f, -1.0f, 0.0f), 
+									   glm::vec3(),
+									   0.3f, 20, 0));
 
 
 
@@ -367,6 +373,11 @@ void InitializeScene()
 
 	scene->SetMusicVolume(musicVolumeInteraction, CHANNEL_INTERACTION);
 	scene->SetMusicVolume(musicVolumeMaster, CHANNEL_MASTER);	
+
+	scene->SetFusion(FusionInput('f'));
+	scene->AddFusionSequence('q', 'q', 'q');
+	scene->AddFusionSequence('e', 'e', 'e');
+	scene->AddFusionSequence('w', 'w', 'w');
 
 	InitializeGUI();
 }
@@ -551,6 +562,8 @@ void Keyboard(unsigned char key, int x, int y)
 		universe->OnEvent(spaceClickedEvent);*/
 		break;
 	}
+
+	scene->UpdateFusion(key);
 
 	glutPostRedisplay();
 }

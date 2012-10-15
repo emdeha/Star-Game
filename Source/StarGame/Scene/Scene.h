@@ -32,6 +32,7 @@
 #include "../Entities/Lights.h"
 #include "../Entities/PlanetBodies.h"
 #include "../Entities/Enemy.h"
+#include "../Fusion/FusionInput.h"
 #include "../Mouse/Mouse.h"
 #include "../Camera/TopDownCamera.h"
 #include "../Audio/Audio.h"
@@ -51,6 +52,7 @@ private:
 
 	std::map<LayoutType, std::shared_ptr<Layout>> sceneLayouts;
 
+	FusionInput sceneFusionInput;
 	Mouse sceneMouse;
 	TopDownCamera sceneTopDownCamera;
 	Audio sceneMusic;
@@ -60,13 +62,15 @@ private:
 public:
 	Scene();
 
-	/// \fn UpdateUniverse
+	/// \fn UpdateScene
 	/// \brief Goes through the game objects and calls their update functions.
 	void UpdateScene();
 
+	void UpdateFusion(char key);
+
 	void OnEvent(Event &_event);
 
-	/// \fn RenderUniverse
+	/// \fn RenderScene
 	/// \brief Goes through the game objects and calls their render functions.
 	void RenderScene(glutil::MatrixStack &modelMatrix, 
 					 GLuint materialBlockIndex, GLuint lightUniformBuffer,
@@ -83,7 +87,11 @@ public:
 	void StopScene();
 	void StartScene();
 	
-	
+	void AddFusionSequence(char buttonA, char buttonB, char buttonC)
+	{
+		sceneFusionInput.AddSequence(buttonA, buttonB, buttonC);
+	}
+
 	void AddSunLight(const SunLight &newSunLight);
 	void AddSun(const std::shared_ptr<Sun> newSun);
 	void AddSpaceship(const std::shared_ptr<Spaceship> newSpaceship);
@@ -107,6 +115,8 @@ public:
 	void SetMouse(const Mouse &newMouse);
 	
 	void SetGamma(float newSceneGamma);
+
+	void SetFusion(const FusionInput &newFusionInput);
 
 
 	TopDownCamera &GetTopDownCamera();

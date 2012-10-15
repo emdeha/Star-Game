@@ -43,7 +43,11 @@ static void GenerateUniformBuffers(int &materialBlockSize,
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-Spaceship::Spaceship(glm::vec3 newPosition, glm::vec3 newDirection, glm::vec3 newVelocity)
+Spaceship::Spaceship(glm::vec3 newPosition, 
+					 glm::vec3 newDirection, 
+					 glm::vec3 newVelocity,
+					 float newProjectileSpeed,
+					 int newProjectileLifeSpan, int newProjectileDamage)
 {
 	position = newPosition;
 	direction = newDirection;
@@ -51,7 +55,15 @@ Spaceship::Spaceship(glm::vec3 newPosition, glm::vec3 newDirection, glm::vec3 ne
 
 	health = 100;
 
-	projectile = std::unique_ptr<Projectile>(new Projectile(position, direction * 2.5f, 5));
+	projectileSpeed = newProjectileSpeed;
+	projectileLifeSpan = newProjectileLifeSpan;
+	projectileDamage = newProjectileDamage;
+
+	projectile = 
+		std::unique_ptr<Projectile>(new Projectile(position, 
+												   direction * projectileSpeed, 
+												   projectileDamage, 
+												   projectileLifeSpan));
 }
 
 void Spaceship::LoadMesh(const std::string &meshFile)
@@ -66,19 +78,39 @@ void Spaceship::LoadMesh(const std::string &meshFile)
 		throw;
 	}
 
-	GenerateUniformBuffers(materialBlockSize, glm::vec4(0.0f), materialUniformBuffer);
+	GenerateUniformBuffers(materialBlockSize, 
+						   glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), 
+						   materialUniformBuffer);
 
 	projectile->LoadMesh(meshFile);
 }
 
-void Spaceship::Update(Sun &sun)
+void Spaceship::Update(bool isSunKilled, Sun &sun)
 {
-	if(projectile->IsDestroyed())
+	if(!isSunKilled)
 	{
-		projectile->Recreate(position);
-	}
+		if(projectile->IsDestroyed())
+		{
+			glm::vec3 newDirection = glm::vec3();
 
-	projectile->Update(sun);
+			if(sun.HasSatellites())
+			{
+				glm::vec3 satellitePosition = sun.GetOuterSatellite()->GetPosition();
+				newDirection = satellitePosition - position;
+			}
+			else
+			{
+				newDirection = glm::vec3(sun.GetPosition()) - position;
+			}
+
+			newDirection = glm::normalize(newDirection);
+			projectile->Recreate(position, 
+									newDirection * projectileSpeed, 
+									projectileLifeSpan);
+		}
+
+		projectile->Update(sun);
+	}
 }
 
 void Spaceship::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,

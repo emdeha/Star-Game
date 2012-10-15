@@ -43,6 +43,25 @@
 //		 decide to use different meshes in the future.
 
 
+enum SatelliteType
+{
+	SATELLITE_FIRE,
+	SATELLITE_WATER,
+	SATELLITE_AIR,
+	SATELLITE_EARTH,
+};
+
+struct SatelliteSkill
+{
+	SatelliteType satelliteTypeForSkill;
+	float satelliteOffsetFromSun;
+
+	// Add skill characteristics
+};
+
+
+static bool typesTable[] = { false, false, false, false };
+
 class Sun;
 
 
@@ -93,7 +112,8 @@ private:
 	glm::vec4 color;
 	glm::vec3 position; ///< The calculated satellite position
 
-	float offsetFromSun; ///< Based on this parameter the satellite's position is calculated	
+	SatelliteSkill skillType;
+	// float offsetFromSun; ///< Based on this parameter the satellite's position is calculated	
 
 	float diameter; ///< _diameter_ of the satellite
 
@@ -110,7 +130,9 @@ private:
 public:
 	Satellite(Framework::Timer newRevolutionDuration, 
 			  glm::vec4 newColor,
-			  float newOffsetFromSun, float newDiameter);
+			  float newOffsetFromSun, float newDiameter,
+			  SatelliteType satelliteType, 
+			  int health);
 
 	/// \fn LoadMesh
 	/// \brief Loads the satellite's mesh
@@ -185,6 +207,9 @@ public:
 	// TODO: Not so useful (maybe).
 	float GetDiameter();
 
+
+	SatelliteType GetSatelliteType();
+
 	glm::vec3 GetPosition();
 
 	int GetHealth();
@@ -201,7 +226,7 @@ inline void Satellite::SetIsClicked(bool newIsClicked)
 
 inline float Satellite::GetOffsetFromSun()
 {
-	return offsetFromSun;
+	return skillType.satelliteOffsetFromSun;
 }
 
 inline float Satellite::GetDiameter()
@@ -217,6 +242,11 @@ inline glm::vec3 Satellite::GetPosition()
 inline int Satellite::GetHealth()
 {
 	return health;
+}
+
+inline SatelliteType Satellite::GetSatelliteType()
+{
+	return skillType.satelliteTypeForSkill;
 }
 
 
@@ -239,7 +269,6 @@ private:
 	glm::vec4 color;
 	glm::vec3 position; ///< The sun's position.
 
-
 	int health;
 
 
@@ -250,12 +279,14 @@ private:
 	bool isClicked;
 	bool isSatelliteClicked;
 
-	float satelliteOffset;
+	// These two will be needed only for testing purposes.
+	int currentSatelliteType;
 
 public:
 	Sun();
 	Sun(glm::vec3 newPosition, glm::vec4 newColor, 
-		float newDiameter, int newSatelliteCap);
+		float newDiameter, 
+		int newSatelliteCap, int newHealth);
 
 	/// \fn LoadMesh
 	/// \brief Loads the sun's mesh.
@@ -293,7 +324,8 @@ public:
 	///If everything went OK the function returns `true`.
 	bool AddSatellite(const std::string &fileName, 
 					  glm::vec4 satelliteColor,
-					  float speed, float diameter);
+					  float speed, float diameter,
+					  SatelliteType type, int satelliteHealth);
 
 	/// \fn RemoveSatellite()
 	/// \brief Removes the last added satellite.
@@ -319,6 +351,9 @@ public:
 	// NOTE: Maybe not so useful.
 	const int GetSatelliteCap() const;
 
+
+	std::shared_ptr<Satellite> GetOuterSatellite();
+
 	/// \fn IsClicked
 	/// \brief Checks if the sun is clicked. 
 
@@ -336,6 +371,8 @@ public:
 	void IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat, 
 						    Mouse userMouse, glm::vec4 cameraPos,
 						    int windowWidth, int windowHeight);
+
+	bool HasSatellites();
 
 	const bool GetIsClicked() const;
 	const bool GetIsSatelliteClicked() const;
@@ -377,6 +414,12 @@ inline const float Sun::GetRadius() const
 inline const int Sun::GetHealth() const
 {
 	return health;
+}
+
+inline bool Sun::HasSatellites()
+{
+	return !satellites.empty(); // '!' because empty retrns true if the vector is empty. 
+								// We need to check if it is not.
 }
 
 

@@ -30,6 +30,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetLoader", "AssetLoader\
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Scene", "Scene\Scene.vcxproj", "{B8817648-5808-4483-B39D-55AD9C180086}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A35D6336-E27F-47C8-BD8C-356F97DC2846} = {A35D6336-E27F-47C8-BD8C-356F97DC2846}
+		{F4D5FA3D-2A08-5146-A354-4B4F0729A6E3} = {F4D5FA3D-2A08-5146-A354-4B4F0729A6E3}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fusion", "Fusion\Fusion.vcxproj", "{A35D6336-E27F-47C8-BD8C-356F97DC2846}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -80,6 +86,10 @@ Global
 		{B8817648-5808-4483-B39D-55AD9C180086}.Debug|Win32.Build.0 = Debug|Win32
 		{B8817648-5808-4483-B39D-55AD9C180086}.Release|Win32.ActiveCfg = Release|Win32
 		{B8817648-5808-4483-B39D-55AD9C180086}.Release|Win32.Build.0 = Release|Win32
+		{A35D6336-E27F-47C8-BD8C-356F97DC2846}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A35D6336-E27F-47C8-BD8C-356F97DC2846}.Debug|Win32.Build.0 = Debug|Win32
+		{A35D6336-E27F-47C8-BD8C-356F97DC2846}.Release|Win32.ActiveCfg = Release|Win32
+		{A35D6336-E27F-47C8-BD8C-356F97DC2846}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

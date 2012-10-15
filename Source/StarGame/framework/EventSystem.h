@@ -24,6 +24,7 @@
 
 enum EventType
 {
+	EVENT_TYPE_EMPTY,
 	EVENT_TYPE_DEFAULT,
 	EVENT_TYPE_OTHER,
 
@@ -122,6 +123,11 @@ public:
 	static Event EventOnHover()
 	{
 		return Event(EVENT_TYPE_ON_HOVER);
+	}
+
+	static Event EmptyEvent()
+	{
+		return Event(EVENT_TYPE_EMPTY);
 	}
 };
 

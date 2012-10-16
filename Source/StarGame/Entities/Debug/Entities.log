@@ -1,16 +1,14 @@
-﻿Build started 15.10.2012 г. 19:38:02 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Entities\Entities.vcxproj" on node 3 (build target(s)).
+﻿Build started 16.10.2012 г. 18:44:03 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Entities\Entities.vcxproj" on node 4 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Entities.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          All outputs are up-to-date.
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D DEBUG /D _DEBUG /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Enemy.cpp PlanetBodies.cpp Projectile.cpp
-         Enemy.cpp
-         Generating Code...
-         Compiling...
          Projectile.cpp
          PlanetBodies.cpp
      1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(469): warning C4018: '>=' : signed/unsigned mismatch
+         Enemy.cpp
          Generating Code...
      1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(391): warning C4715: 'FindEmptySatelliteType' : not all control paths return a value
        Lib:
@@ -27,4 +25,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.18
+Time Elapsed 00:00:01.97

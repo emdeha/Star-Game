@@ -176,7 +176,7 @@ void Scene::OnEvent(Event &_event)
 	case EVENT_TYPE_OTHER:
 		if(strcmp(_event.GetArgument("what_event").varString, "fusion_seq") == 0)
 		{
-			if(strcmp(_event.GetArgument("buttons").varString, "qqqf") == 0)
+			if(strcmp(_event.GetArgument("buttons").varString, "qqq") == 0)
 			{
 				if(HasSuns())
 				{
@@ -187,7 +187,7 @@ void Scene::OnEvent(Event &_event)
 										  5);
 				}
 			}
-			if(strcmp(_event.GetArgument("buttons").varString, "wwwf") == 0)
+			if(strcmp(_event.GetArgument("buttons").varString, "www") == 0)
 			{
 				if(HasSuns())
 				{
@@ -198,7 +198,7 @@ void Scene::OnEvent(Event &_event)
 										  5);
 				}
 			}
-			if(strcmp(_event.GetArgument("buttons").varString, "eeef") == 0)
+			if(strcmp(_event.GetArgument("buttons").varString, "eee") == 0)
 			{
 				if(HasSuns())
 				{
@@ -210,6 +210,7 @@ void Scene::OnEvent(Event &_event)
 				}
 			}
 		}
+		break;
 	default:
 		break;
 	};

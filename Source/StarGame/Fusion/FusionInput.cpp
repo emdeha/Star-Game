@@ -19,6 +19,9 @@
 #include "FusionInput.h"
 
 /*
+FusionSequence::FusionSequence()
+{
+}
 FusionSequence::FusionSequence(char newEndButton, char buttonA, char buttonB, char buttonC)
 {
 	buttons[0] = buttonA;
@@ -47,7 +50,6 @@ Event FusionSequence::Update(char newButton)
 	}
 	if(newButton == endButton)
 	{
-		// Send event.
 		nextButton = 0;
 		isFinished = true;
 
@@ -72,12 +74,13 @@ Event FusionSequence::Update(char newButton)
 	if(newButton == buttons[nextButton])
 	{
 		nextButton++;
+		return StockEvents::EmptyEvent();
 	}
-}*/
+}
 
 
 
-/*FusionInput::FusionInput()
+FusionInput::FusionInput()
 {
 	sequences.resize(0);
 }
@@ -89,15 +92,16 @@ FusionInput::FusionInput(char newSequenceEndButton)
 
 void FusionInput::AddSequence(char buttonA, char buttonB, char buttonC)
 {
-	sequences.push_back(FusionSequence(sequenceEndButton, buttonA, buttonB, buttonC));
+	sequences.push_back(
+		std::shared_ptr<FusionSequence>(new FusionSequence(sequenceEndButton, buttonA, buttonB, buttonC)));
 }
 
 Event FusionInput::Update(char newButton)
 {
-	for(std::vector<FusionSequence>::iterator iter = sequences.begin();
+	for(std::vector<std::shared_ptr<FusionSequence>>::iterator iter = sequences.begin();
 		iter != sequences.end(); ++iter)
 	{
-		Event eventToReturn = iter->Update(newButton);
+		Event eventToReturn = (*iter)->Update(newButton);
 		if(eventToReturn.GetType() != EVENT_TYPE_EMPTY)
 		{
 			return eventToReturn;

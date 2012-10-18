@@ -1,4 +1,4 @@
-﻿Build started 16.10.2012 г. 20:31:46 ч..
+﻿Build started 18.10.2012 г. 18:56:57 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\Scene\Scene.vcxproj" on node 3 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Scene.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -22,4 +22,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.93
+Time Elapsed 00:00:01.64

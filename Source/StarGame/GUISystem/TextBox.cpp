@@ -27,16 +27,19 @@ void TextBox::Draw(const FontProgData &fontData, const SimpleProgData &simpleDat
 		glUseProgram(simpleData.theProgram);
 		glBindVertexArray(vao);
 		{
-			glUniform4f(simpleData.colorUnif, 1.0f, 1.0f, 1.0f, 1.0f);
+			glUniform4f(simpleData.colorUnif, 1.0f, 1.0f, 0.0f, 1.0f);
+
+			glUniformMatrix4fv(simpleData.modelToCameraMatrixUnif, 1, GL_FALSE, 
+							   glm::value_ptr(glm::mat4(1.0f)));
 
 			glBindBuffer(GL_ARRAY_BUFFER, vbo);
 			glEnableVertexAttribArray(simpleData.positionAttrib);
 			glVertexAttribPointer(simpleData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-			glBufferData(GL_ARRAY_BUFFER, sizeof(bufferData), bufferData, GL_DYNAMIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(bufferData), bufferData, GL_STATIC_DRAW);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
-		glDisableVertexAttribArray(0);
+		glBindVertexArray(0);
 		glUseProgram(0);
 	}
 

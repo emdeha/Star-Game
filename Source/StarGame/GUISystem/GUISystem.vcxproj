@@ -79,6 +79,7 @@
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Control.cpp" />
+    <ClCompile Include="ImageBox.cpp" />
     <ClCompile Include="Label.cpp" />
     <ClCompile Include="Layout.cpp" />
     <ClCompile Include="stdafx.cpp">

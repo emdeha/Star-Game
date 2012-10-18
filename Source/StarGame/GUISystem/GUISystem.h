@@ -140,6 +140,41 @@ struct PresetAttributes
 	int textSize;
 };
 
+
+class ImageBox
+{
+private:
+	LayoutPreset currentPreset;
+	glm::vec2 presetPosition[3];
+
+	float width; 
+	float height;
+	
+	std::string name;
+
+	bool isActive;
+
+	GLfloat bufferData[18];
+	GLuint vbo;
+	GLuint vao;
+
+	GLuint imageID;
+
+public:
+	ImageBox();
+	ImageBox(LayoutPreset newCurrentPreset,
+			 const std::string &newName, 
+			 glm::vec2 newPosition,
+			 float newWidth, float newHeight);
+
+
+	void Init();
+
+
+	void Draw(const SimpleProgData &simpleData);
+};
+
+
 class TextControl
 {
 protected:

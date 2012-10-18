@@ -127,11 +127,13 @@ void ShaderManager::LoadSimpleProgram(const std::string &vertexShader,
 	simpleData.theProgram = Framework::CreateProgram(shaderList);
 	simpleData.modelToCameraMatrixUnif = glGetUniformLocation(simpleData.theProgram, "modelToCameraMatrix");
 	simpleData.colorUnif = glGetUniformLocation(simpleData.theProgram, "color");
+	simpleData.projectionMatrixUnif = glGetUniformLocation(simpleData.theProgram, "cameraToClipMatrix");
 
 	simpleData.positionAttrib = glGetAttribLocation(simpleData.theProgram, "position");
 
-	GLuint projectionBlock = glGetUniformBlockIndex(simpleData.theProgram, "Projection");	
-	glUniformBlockBinding(simpleData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
+
+	//GLuint projectionBlock = glGetUniformBlockIndex(simpleData.theProgram, "Projection");	
+	//glUniformBlockBinding(simpleData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
 }
 
 void ShaderManager::LoadSimpleProgramOrtho(const std::string &vertexShader,

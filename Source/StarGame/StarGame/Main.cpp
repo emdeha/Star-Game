@@ -39,6 +39,8 @@ DisplayData displayData;
 
 Scene *scene = new Scene();
 
+ImageBox box(SMALL, "sample", glm::vec2(100.0f, 500.0f), 30.0f, 400.0f);
+
 
 void HandleMouse()
 {
@@ -314,7 +316,7 @@ void InitializePrograms()
 {
 	shaderManager.LoadLitProgram("shaders/PN.vert", "shaders/GaussianLighting.frag");
 	shaderManager.LoadUnlitProgram("shaders/PosTransform.vert", "shaders/UniformColor.frag");
-	shaderManager.LoadSimpleProgram("shaders/Interp.vert", "shaders/Interp.frag");
+	shaderManager.LoadSimpleProgram("shaders/PosColorLocalTransform.vert", "shaders/Interp.frag");
 	shaderManager.LoadSimpleProgramOrtho("shaders/Simple.vert", "shaders/Simple.frag");
 	shaderManager.LoadFontProgram("shaders/Font.vert", "shaders/Font.frag");
 	shaderManager.LoadSimpleTextureProgData("shaders/SimpleTexture.vert", "shaders/SimpleTexture.frag");
@@ -379,6 +381,8 @@ void InitializeScene()
 	scene->AddFusionSequence('e', 'e', 'e');
 	scene->AddFusionSequence('w', 'w', 'w');
 
+	box.Init();
+
 	InitializeGUI();
 }
 
@@ -388,6 +392,8 @@ const int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
 const int MAX_FRAMESKIP = 5;
 
 unsigned long nextGameTick = 0;
+
+
 
 
 void Init()
@@ -448,8 +454,10 @@ void Display()
 	if(scene->IsLayoutOn(LAYOUT_IN_GAME))
 	{
 		glutil::MatrixStack modelMatrix;
+		
+		box.Draw(shaderManager.GetSimpleProgData());
+
 		modelMatrix.SetMatrix(scene->GetTopDownCamera().CalcMatrix());
-	
 		displayData.modelMatrix = modelMatrix.Top();
 
 
@@ -473,17 +481,17 @@ void Display()
 						   interpolation);
 		
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
-									  shaderManager.GetSimpleProgDataOrtho());	
+								   shaderManager.GetSimpleProgData());	
 	}
-	else /*if(universe->IsLayoutOn(LAYOUT_MENU))*/
+	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
-								   shaderManager.GetSimpleProgDataOrtho());
+								   shaderManager.GetSimpleProgData());
 	}
 
 	HandleMouse();
 	scene->GetMouse().OverrideLastPosition(scene->GetMouse().GetCurrentPosition());
-
+	
 	glutSwapBuffers();
 	glutPostRedisplay();
 }
@@ -502,8 +510,6 @@ void Reshape(int width, int height)
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(displayData.projectionMatrix), &displayData.projectionMatrix);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
-	glutPostRedisplay();
 
 
 	projMatrix.SetIdentity();
@@ -511,9 +517,10 @@ void Reshape(int width, int height)
 		glUniformMatrix4fv(shaderManager.GetFontProgData().projectionMatrixUnif,
 						   1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
 	glUseProgram(0);
-
-	glUseProgram(shaderManager.GetSimpleProgDataOrtho().theProgram);
-		glUniformMatrix4fv(shaderManager.GetSimpleProgDataOrtho().projectionMatrixUnif, 
+	
+	projMatrix.Orthographic((float)width, 0.0f, (float)height, 0.0f, 1.0f, 1000.0f);
+	glUseProgram(shaderManager.GetSimpleProgData().theProgram);
+		glUniformMatrix4fv(shaderManager.GetSimpleProgData().projectionMatrixUnif, 
 						   1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
 	glUseProgram(0);
 
@@ -535,6 +542,9 @@ void Reshape(int width, int height)
 		scene->SetLayoutPreset(BIG);
 		scene->UpdateCurrentLayout(1920, 1080);
 	}
+
+	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
+	glutPostRedisplay();
 }
 
 

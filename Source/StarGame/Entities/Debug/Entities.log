@@ -1,16 +1,12 @@
-﻿Build started 16.10.2012 г. 18:44:03 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Entities\Entities.vcxproj" on node 4 (build target(s)).
+﻿Build started 18.10.2012 г. 18:56:57 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Entities\Entities.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Entities.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          All outputs are up-to-date.
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D DEBUG /D _DEBUG /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Enemy.cpp PlanetBodies.cpp Projectile.cpp
-         Projectile.cpp
-         PlanetBodies.cpp
-     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(469): warning C4018: '>=' : signed/unsigned mismatch
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D DEBUG /D _DEBUG /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Enemy.cpp
+         Skipping... (no relevant changes detected)
          Enemy.cpp
-         Generating Code...
-     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(391): warning C4715: 'FindEmptySatelliteType' : not all control paths return a value
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\Entities.lib" /NOLOGO Debug\Enemy.obj
          Debug\Lights.obj
@@ -25,4 +21,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.97
+Time Elapsed 00:00:00.82

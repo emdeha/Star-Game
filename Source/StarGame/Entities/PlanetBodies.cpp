@@ -148,6 +148,7 @@ void Satellite::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 		modelMatrix.Translate(position);
 		modelMatrix.Scale(diameter);
 
+
 		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
 							0, sizeof(MaterialBlock));
 

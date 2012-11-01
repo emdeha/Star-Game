@@ -39,7 +39,9 @@ DisplayData displayData;
 
 Scene *scene = new Scene();
 
-ImageBox box(SMALL, "sample", glm::vec2(100.0f, 500.0f), 30.0f, 400.0f);
+ImageBox box(SMALL, "sample", glm::vec2(375.0f, 570.0f), 50.0f, 50.0f);
+ImageBox boxTwo(SMALL, "sampleTwo", glm::vec2(430.0f, 570.0f), 50.0f, 50.0f);
+ImageBox boxThree(SMALL, "sampleThree", glm::vec2(485.0f, 570.0f), 50.0f, 50.0f);
 
 
 void HandleMouse()
@@ -72,7 +74,7 @@ void HandleMouse()
 			if(
 			   scene->GetLayout(LAYOUT_IN_GAME)->
 			   GetControl("exit")->
-			   IsMouseOn(scene->GetMouse().GetClipSpacePosition(windowWidth, windowHeight))
+			   IsMouseOn(glm::vec2(scene->GetMouse().GetCurrentPosition()))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("exitButton");
@@ -91,7 +93,7 @@ void HandleMouse()
 			if(
 				scene->GetLayout(LAYOUT_MENU)->
 				GetControl("newGame")->
-				IsMouseOn(scene->GetMouse().GetClipSpacePosition(windowWidth, windowHeight))
+				IsMouseOn(glm::vec2(scene->GetMouse().GetCurrentPosition()))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("newGameButton");
@@ -104,7 +106,7 @@ void HandleMouse()
 			if(
 				scene->GetLayout(LAYOUT_MENU)->
 				GetControl("saveGame")->
-				IsMouseOn(scene->GetMouse().GetClipSpacePosition(windowWidth, windowHeight))
+				IsMouseOn(glm::vec2(scene->GetMouse().GetCurrentPosition()))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("saveGameButton");
@@ -117,7 +119,7 @@ void HandleMouse()
 			if(
 				scene->GetLayout(LAYOUT_MENU)->
 				GetControl("quitGame")->
-				IsMouseOn(scene->GetMouse().GetClipSpacePosition(windowWidth, windowHeight))
+				IsMouseOn(glm::vec2(scene->GetMouse().GetCurrentPosition()))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("quitGameButton");
@@ -130,7 +132,7 @@ void HandleMouse()
 			if(
 				scene->GetLayout(LAYOUT_MENU)->
 				GetControl("printCmd")->
-				IsMouseOn(scene->GetMouse().GetClipSpacePosition(windowWidth, windowHeight))
+				IsMouseOn(glm::vec2(scene->GetMouse().GetCurrentPosition()))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("printCmd");
@@ -143,7 +145,7 @@ void HandleMouse()
 			if(
 				scene->GetLayout(LAYOUT_MENU)->
 				GetControl("sample")->
-				IsMouseOn(scene->GetMouse().GetClipSpacePosition(windowWidth, windowHeight))
+				IsMouseOn(glm::vec2(scene->GetMouse().GetCurrentPosition()))
 			  )
 			{
 				Event leftClickTextBoxEvent = StockEvents::EventOnLeftClick("sample");
@@ -163,7 +165,7 @@ void HandleMouse()
 			if(
 				scene->GetLayout(LAYOUT_MENU)->
 				GetControl("sampleTwo")->
-				IsMouseOn(scene->GetMouse().GetClipSpacePosition(windowWidth, windowHeight))
+				IsMouseOn(glm::vec2(scene->GetMouse().GetCurrentPosition()))
 			  )
 			{
 				Event leftClickTextBoxEvent = StockEvents::EventOnLeftClick("sampleTwo");
@@ -316,10 +318,11 @@ void InitializePrograms()
 {
 	shaderManager.LoadLitProgram("shaders/PN.vert", "shaders/GaussianLighting.frag");
 	shaderManager.LoadUnlitProgram("shaders/PosTransform.vert", "shaders/UniformColor.frag");
-	shaderManager.LoadSimpleProgram("shaders/PosColorLocalTransform.vert", "shaders/Interp.frag");
-	shaderManager.LoadSimpleProgramOrtho("shaders/Simple.vert", "shaders/Simple.frag");
+	shaderManager.LoadSimpleProgram("shaders/PosColorLocalTransform.vert", "shaders/ColorPassThrough.frag");
+	shaderManager.LoadSimpleNoUBProgram("shaders/PosTransformNoUB.vert", "shaders/ColorPassThrough.frag");
 	shaderManager.LoadFontProgram("shaders/Font.vert", "shaders/Font.frag");
 	shaderManager.LoadSimpleTextureProgData("shaders/SimpleTexture.vert", "shaders/SimpleTexture.frag");
+	shaderManager.LoadTextureProgData("shaders/Texture.vert", "shaders/Texture.frag");
 }
 
 void InitializeGUI()
@@ -382,6 +385,8 @@ void InitializeScene()
 	scene->AddFusionSequence('w', 'w', 'w');
 
 	box.Init();
+	boxTwo.Init();
+	boxThree.Init();
 
 	InitializeGUI();
 }
@@ -454,13 +459,12 @@ void Display()
 	if(scene->IsLayoutOn(LAYOUT_IN_GAME))
 	{
 		glutil::MatrixStack modelMatrix;
-		
-		box.Draw(shaderManager.GetSimpleProgData());
 
 		modelMatrix.SetMatrix(scene->GetTopDownCamera().CalcMatrix());
 		displayData.modelMatrix = modelMatrix.Top();
-
-
+		
+		
+		
 		int loops = 0;
 		while(GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
 		{
@@ -479,14 +483,20 @@ void Display()
 						   shaderManager.GetUnlitProgData(),
 						   shaderManager.GetSimpleProgData(),
 						   interpolation);
+				
 		
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
-								   shaderManager.GetSimpleProgData());	
+								   shaderManager.GetSimpleNoUBProgData());
+
+		// BUGGY: A strange problem appears when trying to draw these before drawing the satellites
+		box.Draw(shaderManager.GetSimpleNoUBProgData());
+		boxTwo.Draw(shaderManager.GetSimpleNoUBProgData());
+		boxThree.Draw(shaderManager.GetSimpleNoUBProgData());
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
-								   shaderManager.GetSimpleProgData());
+								   shaderManager.GetSimpleNoUBProgData());
 	}
 
 	HandleMouse();
@@ -513,20 +523,28 @@ void Reshape(int width, int height)
 
 
 	projMatrix.SetIdentity();
+	projMatrix.Orthographic((float)width, 0.0f, (float)height, 0.0f, 1.0f, 1000.0f);
+
+	// BUGGY: There is a conflict in the shaders about the projection matrix
+	//displayData.projectionMatrix = projMatrix.Top();
+
 	glUseProgram(shaderManager.GetFontProgData().theProgram);
+
 		glUniformMatrix4fv(shaderManager.GetFontProgData().projectionMatrixUnif,
 						   1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
+
 	glUseProgram(0);
 	
-	projMatrix.Orthographic((float)width, 0.0f, (float)height, 0.0f, 1.0f, 1000.0f);
-	glUseProgram(shaderManager.GetSimpleProgData().theProgram);
-		glUniformMatrix4fv(shaderManager.GetSimpleProgData().projectionMatrixUnif, 
+	glUseProgram(shaderManager.GetSimpleNoUBProgData().theProgram);
+
+		glUniformMatrix4fv(shaderManager.GetSimpleNoUBProgData().projectionMatrixUnif, 
 						   1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
+
 	glUseProgram(0);
 
-	//universe->UpdateCurrentLayout(width, height);
+	scene->UpdateCurrentLayout(width, height);
 	// TODO: Isolate in a separate function.
-	if(width <= 800 || height <= 600)
+	/*if(width <= 800 || height <= 600)
 	{
 		scene->SetLayoutPreset(SMALL);
 		scene->UpdateCurrentLayout(800, 600);
@@ -541,7 +559,7 @@ void Reshape(int width, int height)
 	{
 		scene->SetLayoutPreset(BIG);
 		scene->UpdateCurrentLayout(1920, 1080);
-	}
+	}*/
 
 	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 	glutPostRedisplay();
@@ -573,7 +591,10 @@ void Keyboard(unsigned char key, int x, int y)
 		break;
 	}
 
-	scene->UpdateFusion(key);
+	if(scene->IsLayoutOn(LAYOUT_IN_GAME))
+	{
+		scene->UpdateFusion(key);
+	}
 
 	glutPostRedisplay();
 }

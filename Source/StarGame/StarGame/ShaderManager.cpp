@@ -23,6 +23,103 @@
 #include "framework.h"
 
 
+
+Program::Program()
+{
+	data.theProgram = 0;
+	data.uniformData.clear();
+	data.attributeData.clear();
+}
+
+void Program::AddDataElement(ProgramDataType whatData, 
+							 const std::string &dataElementName, GLuint dataElement)
+{
+	switch(whatData)
+	{
+	case PDT_UNIFORM:
+		data.uniformData.insert(std::make_pair(dataElementName, dataElement));
+		break;
+	case PDT_ATTRIBUTE:
+		data.attributeData.insert(std::make_pair(dataElementName, dataElement));
+		break;
+	default:
+		// Handle errors.
+		return;
+	}
+}
+
+void Program::SetData(ProgramDataType whatData,
+					  const std::map<std::string, GLuint> &newData)
+{
+	switch(whatData)
+	{
+	case PDT_UNIFORM:
+		data.uniformData.insert(newData.begin(), newData.end());
+		break;
+	case PDT_ATTRIBUTE:
+		data.attributeData.insert(newData.begin(), newData.end());
+		break;
+	default:
+		// Handle errors.
+		return;
+	}
+}
+
+
+void Program::BuildProgram(const std::string &vertexShaderName, const std::string &fragmentShaderName)
+{
+	std::vector<GLuint> shaderList;
+
+	shaderList.push_back(Framework::LoadShader(GL_VERTEX_SHADER, vertexShaderName));
+	shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, fragmentShaderName));
+
+	data.theProgram = Framework::CreateProgram(shaderList);
+
+
+	for(std::map<std::string, GLuint>::iterator iter = data.uniformData.begin();
+		iter != data.uniformData.end();
+		++iter)
+	{
+		iter->second = glGetUniformLocation(data.theProgram, iter->first.c_str());
+	}
+
+	for(std::map<std::string, GLuint>::iterator iter = data.attributeData.begin();
+		iter != data.attributeData.end();
+		++iter)
+	{
+		iter->second = glGetAttribLocation(data.theProgram, iter->first.c_str());
+	}
+}
+
+
+
+ShaderProgramContainer::ShaderProgramContainer()
+{
+	shaderPrograms.clear();
+}
+
+
+void ShaderProgramContainer::AddProgram(const std::string &newProgramName, const Program &newProgram)
+{
+	shaderPrograms.insert(std::make_pair(newProgramName, newProgram));
+}
+
+
+void ShaderProgramContainer::LoadProgram(const std::string &programName,
+										 const std::string &vertexShaderName, const std::string &fragmentShaderName)
+{
+	// TODO: Check if the program exists.
+
+	shaderPrograms[programName].BuildProgram(vertexShaderName, fragmentShaderName);
+}
+
+Program ShaderProgramContainer::GetProgram(const std::string &programName)
+{
+	return shaderPrograms[programName];
+}
+
+
+
 ShaderManager::ShaderManager()
 {
 	blockIndices.insert(std::make_pair(BT_MATERIAL, 0));
@@ -127,28 +224,33 @@ void ShaderManager::LoadSimpleProgram(const std::string &vertexShader,
 	simpleData.theProgram = Framework::CreateProgram(shaderList);
 	simpleData.modelToCameraMatrixUnif = glGetUniformLocation(simpleData.theProgram, "modelToCameraMatrix");
 	simpleData.colorUnif = glGetUniformLocation(simpleData.theProgram, "color");
-	simpleData.projectionMatrixUnif = glGetUniformLocation(simpleData.theProgram, "cameraToClipMatrix");
+	//simpleData.projectionMatrixUnif = glGetUniformLocation(simpleData.theProgram, "cameraToClipMatrix");
 
 	simpleData.positionAttrib = glGetAttribLocation(simpleData.theProgram, "position");
 
 
-	//GLuint projectionBlock = glGetUniformBlockIndex(simpleData.theProgram, "Projection");	
-	//glUniformBlockBinding(simpleData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
+	GLuint projectionBlock = glGetUniformBlockIndex(simpleData.theProgram, "Projection");	
+	glUniformBlockBinding(simpleData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
 }
 
-void ShaderManager::LoadSimpleProgramOrtho(const std::string &vertexShader,
-										   const std::string &fragmentShader)
+void ShaderManager::LoadSimpleNoUBProgram(const std::string &vertexShader, 
+										  const std::string &fragmentShader)	
 {
 	std::vector<GLuint> shaderList;
 
 	shaderList.push_back(Framework::LoadShader(GL_VERTEX_SHADER, vertexShader));
 	shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, fragmentShader));
 
-	simpleDataOrtho.theProgram = Framework::CreateProgram(shaderList);
-	simpleDataOrtho.projectionMatrixUnif = glGetUniformLocation(simpleDataOrtho.theProgram, "projectionMatrix");
-	simpleDataOrtho.colorUnif = glGetUniformLocation(simpleDataOrtho.theProgram, "color");
+	simpleNoUBData.theProgram = Framework::CreateProgram(shaderList);
+	simpleNoUBData.modelToCameraMatrixUnif = 
+		glGetUniformLocation(simpleNoUBData.theProgram, "modelToCameraMatrix");
+	simpleNoUBData.colorUnif = 
+		glGetUniformLocation(simpleNoUBData.theProgram, "color");
+	simpleNoUBData.projectionMatrixUnif = 
+		glGetUniformLocation(simpleNoUBData.theProgram, "cameraToClipMatrix");
 
-	simpleDataOrtho.positionAttrib = glGetAttribLocation(simpleDataOrtho.theProgram, "position");
+	simpleNoUBData.positionAttrib =
+		glGetAttribLocation(simpleNoUBData.theProgram, "position");
 }
 
 void ShaderManager::LoadFontProgram(const std::string &vertexShader, 
@@ -195,6 +297,25 @@ void ShaderManager::LoadSimpleTextureProgData(const std::string &vertexShader,
 		glGetAttribLocation(simpleTextureProgData.theProgram, "texCoord");
 }
 
+void ShaderManager::LoadTextureProgData(const std::string &vertexShader, 
+										const std::string &fragmentShader)
+{
+	std::vector<GLuint> shaderList;
+
+	shaderList.push_back(Framework::LoadShader(GL_VERTEX_SHADER, vertexShader));
+	shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, fragmentShader));
+
+	textureProgData.theProgram = Framework::CreateProgram(shaderList);
+
+
+	textureProgData.modelToCameraMatrixUnif = 
+		glGetUniformLocation(textureProgData.theProgram, "modelToCameraMatrix");
+	textureProgData.projectionMatrixUnif = 
+		glGetUniformLocation(textureProgData.theProgram, "cameraToClipMatrix");
+	textureProgData.colorTextureUnif =
+		glGetUniformLocation(textureProgData.theProgram, "colorTexture");
+}
+
 
 LitProgData ShaderManager::GetLitProgData()
 {
@@ -208,9 +329,9 @@ SimpleProgData ShaderManager::GetSimpleProgData()
 {
 	return simpleData;
 }
-SimpleProgData ShaderManager::GetSimpleProgDataOrtho()
+SimpleProgData ShaderManager::GetSimpleNoUBProgData()
 {
-	return simpleDataOrtho;
+	return simpleNoUBData;
 }
 FontProgData ShaderManager::GetFontProgData()
 {

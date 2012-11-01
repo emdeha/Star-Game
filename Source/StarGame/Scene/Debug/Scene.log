@@ -1,9 +1,12 @@
-﻿Build started 18.10.2012 г. 18:56:57 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Scene\Scene.vcxproj" on node 3 (build target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 1.11.2012 г. 10:23:21 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Scene\Scene.vcxproj" on node 2 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Debug\Scene.lastbuildstate".
+       InitializeBuildStatus:
          Creating "Debug\Scene.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../freetype/include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Debug\Scene.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../freetype/include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\Scene.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Scene.cpp
          Scene.cpp
      1>e:\ceci\thegame\source\stargame\fusion\fusioninput.h(50): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
@@ -18,8 +21,8 @@
        FinalizeBuildStatus:
          Deleting file "Debug\Scene.unsuccessfulbuild".
          Touching "Debug\Scene.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Scene\Scene.vcxproj" (build target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Scene\Scene.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.64
+Time Elapsed 00:00:01.33

@@ -39,6 +39,63 @@ enum UniformBufferType
 };
 
 
+enum ProgramDataType
+{
+	PDT_UNIFORM,
+	PDT_ATTRIBUTE,
+};
+
+
+
+class Program
+{
+private:
+	struct ProgramData
+	{
+		GLuint theProgram;
+
+		std::map<std::string, GLuint> uniformData;
+		std::map<std::string, GLuint> attributeData;
+	};
+
+	ProgramData data;
+
+public:
+	Program();
+	
+	void AddDataElement(ProgramDataType whatData,
+						const std::string &dataElementName, GLuint dataElement);
+
+	void SetData(ProgramDataType whatData,
+				 const std::map<std::string, GLuint> &newData);
+
+	
+	void BuildProgram(const std::string &vertexShaderName, const std::string &fragmentShaderName);
+};
+
+
+class ShaderProgramContainer
+{
+private:
+	std::map<std::string, Program> shaderPrograms;
+
+public:
+	ShaderProgramContainer();
+
+
+	void AddProgram(const std::string &newProgramName, const Program &newProgram);
+
+
+	void LoadProgram(const std::string &programName,
+					 const std::string &vertexShaderName, const std::string &fragmentShaderName);
+
+	Program GetProgram(const std::string &programName);
+};
+
+
+
+
+
 class ShaderManager
 {
 private:
@@ -50,9 +107,11 @@ private:
 	LitProgData litData;
 	UnlitProgData unlitData;
 	SimpleProgData simpleData;
-	SimpleProgData simpleDataOrtho;
+	SimpleProgData simpleNoUBData;
 	FontProgData fontData;
 	SimpleTextureProgData simpleTextureProgData;
+
+	TextureProgData textureProgData;
 
 public:
 	ShaderManager();
@@ -79,16 +138,18 @@ public:
 	void LoadLitProgram(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadUnlitProgram(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadSimpleProgram(const std::string &vertexShader, const std::string &fragmentShader);
-	void LoadSimpleProgramOrtho(const std::string &vertexShader, const std::string &fragmentShader);
+	void LoadSimpleNoUBProgram(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadFontProgram(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadSimpleTextureProgData(const std::string &vertexShader, const std::string &fragmentShader);
+	void LoadTextureProgData(const std::string &vertexShader, const std::string &fragmentShader);
 
 	LitProgData GetLitProgData();
 	UnlitProgData GetUnlitProgData();
 	SimpleProgData GetSimpleProgData();
-	SimpleProgData GetSimpleProgDataOrtho();
+	SimpleProgData GetSimpleNoUBProgData();
 	FontProgData GetFontProgData();
 	SimpleTextureProgData GetSimpleTextureProgData();
+	TextureProgData GetTextureProgData();
 
 	const int GetBlockIndex(BlockType);
 	unsigned int GetUniformBuffer(UniformBufferType);

@@ -67,7 +67,7 @@ void TextControl::Init(const std::string &fontName,
 	windowWidth = newWindowWidth;
 	windowHeight = newWindowHeight;
 
-	textToDisplay = Text(fontName.c_str()/*, "../data/fonts/AGENCYB.TTF"*/);
+	textToDisplay = Text(fontName.c_str());
 	textToDisplay.Init(windowWidth, windowHeight);
 
 	glGenBuffers(1, &vbo);
@@ -85,6 +85,8 @@ void TextControl::ComputeNewAttributes()
 
 	if(hasBackground)
 	{
+		/// Not tested!!!
+
 		boxMinCorner.y = textToDisplay.GetTextMinHeight() - presets[currentPreset].bottomTextMargin;
 		boxMaxCorner.y = textToDisplay.GetTextMaxHeight() + presets[currentPreset].topTextMargin;
 
@@ -107,9 +109,9 @@ void TextControl::ComputeNewAttributes()
 	}
 	else
 	{
-		boxMinCorner.y = textToDisplay.GetTextMinHeight();
+		boxMinCorner.y = presets[currentPreset].position.y;
 		boxMaxCorner.y = textToDisplay.GetTextMaxHeight();
-		boxMinCorner.x = textToDisplay.GetTextMinWidth();
+		boxMinCorner.x = presets[currentPreset].position.x;
 		boxMaxCorner.x = textToDisplay.GetTextMaxWidth();
 	}
 }
@@ -204,12 +206,20 @@ void TextControl::SetPreset(LayoutPreset newCurrentPreset)
 	}
 }
 
-bool TextControl::IsMouseOn(glm::vec2 mousePosition_clipSpace)
+bool TextControl::IsMouseOn(glm::vec2 mouseCoordinates_windowSpace)
 {
-	if(mousePosition_clipSpace.y > boxMinCorner.y &&
-	   mousePosition_clipSpace.x > boxMinCorner.x &&
-	   mousePosition_clipSpace.y < boxMaxCorner.y &&
-	   mousePosition_clipSpace.x < boxMaxCorner.x)
+	mouseCoordinates_windowSpace.y = windowHeight - mouseCoordinates_windowSpace.y;
+	
+	float minHeight = boxMinCorner.y;
+	float minWidth = boxMinCorner.x;
+
+	float maxHeight = windowHeight - boxMaxCorner.y;
+	float maxWidth = windowWidth - boxMaxCorner.x;
+
+	if(mouseCoordinates_windowSpace.y > minHeight &&
+	   mouseCoordinates_windowSpace.x > minWidth &&
+	   mouseCoordinates_windowSpace.y < maxHeight &&
+	   mouseCoordinates_windowSpace.x < maxWidth)
 	{
 		return true;
 	}

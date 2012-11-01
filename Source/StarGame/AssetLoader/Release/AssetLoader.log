@@ -1,10 +1,13 @@
-﻿Build started 16.10.2012 г. 18:44:52 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\AssetLoader\AssetLoader.vcxproj" on node 5 (build target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 1.11.2012 г. 10:23:36 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\AssetLoader\AssetLoader.vcxproj" on node 3 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Release\AssetLoader.lastbuildstate".
+       InitializeBuildStatus:
          Creating "Release\AssetLoader.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /I"C:\Program Files\Assimp\include\assimp" /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Release\AssetLoader.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt GUILoader.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /I"C:\Program Files\Assimp\include\assimp" /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Release\AssetLoader.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /I"C:\Program Files\Assimp\include\assimp" /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Release\AssetLoader.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt GUILoader.cpp MeshLoader.cpp Texture.cpp
          GUILoader.cpp
      1>GUILoader.cpp(69): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdio.h(325) : see declaration of 'sscanf'
@@ -22,6 +25,8 @@
      1>GUILoader.cpp(199): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdio.h(325) : see declaration of 'sscanf'
      1>GUILoader.cpp(208): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+         MeshLoader.cpp
+         Texture.cpp
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Release\AssetLoader.lib" /NOLOGO /LTCG Release\GUILoader.obj
          Release\MeshLoader.obj
@@ -31,8 +36,8 @@
        FinalizeBuildStatus:
          Deleting file "Release\AssetLoader.unsuccessfulbuild".
          Touching "Release\AssetLoader.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\AssetLoader\AssetLoader.vcxproj" (build target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\AssetLoader\AssetLoader.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.66
+Time Elapsed 00:00:01.87

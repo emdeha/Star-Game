@@ -10,5 +10,5 @@ out vec4 outputColor;
 void main()
 {
 	outputColor = vec4(1.0, 1.0, 1.0, 
-	texture(fontTexture, texCoord).r) * fontColor;
+					   texture(fontTexture, texCoord).r) * fontColor;
 }

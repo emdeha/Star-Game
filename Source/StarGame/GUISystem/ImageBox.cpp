@@ -40,18 +40,24 @@ ImageBox::ImageBox(LayoutPreset newCurrentPreset,
 
 void ImageBox::Init()
 {
-	bufferData[0] = width; bufferData[1] = height; 
+	bufferData[0] = presetPosition[currentPreset].x - width; 
+	bufferData[1] = presetPosition[currentPreset].y - height; 
 	bufferData[2] = 0.0f;
-	bufferData[3] = width; bufferData[4] = presetPosition[currentPreset].y; 
+	bufferData[3] = presetPosition[currentPreset].x -  width; 
+	bufferData[4] = presetPosition[currentPreset].y; 
 	bufferData[5] = 0.0f; 
-	bufferData[6] = presetPosition[currentPreset].x; bufferData[7] = height; 
+	bufferData[6] = presetPosition[currentPreset].x;
+	bufferData[7] = presetPosition[currentPreset].y - height; 
 	bufferData[8] = 0.0f; 
 
-	bufferData[9] = width; bufferData[10] = presetPosition[currentPreset].y;
+	bufferData[9] = presetPosition[currentPreset].x - width; 
+	bufferData[10] = presetPosition[currentPreset].y;
 	bufferData[11] = 0.0f;
-	bufferData[12] = presetPosition[currentPreset].x; bufferData[13] = presetPosition[currentPreset].y;
+	bufferData[12] = presetPosition[currentPreset].x; 
+	bufferData[13] = presetPosition[currentPreset].y;
 	bufferData[14] = 0.0f; 
-	bufferData[15] = presetPosition[currentPreset].x; bufferData[16] = height;
+	bufferData[15] = presetPosition[currentPreset].x; 
+	bufferData[16] = presetPosition[currentPreset].y - height;
 	bufferData[17] = 0.0f;
 
 

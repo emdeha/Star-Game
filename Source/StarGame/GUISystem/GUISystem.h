@@ -167,10 +167,9 @@ public:
 			 glm::vec2 newPosition,
 			 float newWidth, float newHeight);
 
-
 	void Init();
 
-
+public:
 	void Draw(const SimpleProgData &simpleData);
 };
 
@@ -220,7 +219,7 @@ public:
 
 	virtual void OnEvent(Event &_event) = 0;
 
-	virtual bool IsMouseOn(glm::vec2 mouseCoordinates_clipSpace);
+	virtual bool IsMouseOn(glm::vec2 mouseCoordinates_windowSpace);
 
 	virtual void InputChar(char ch) {}
 	virtual void Clear() {}
@@ -324,9 +323,7 @@ public:
 	std::string GetContent();
 	void SetContent(std::string newInputText);
 
-	//bool IsActive();
-
-	bool IsMouseOn(glm::vec2 mousePosition_clipSpace);
+	bool IsMouseOn(glm::vec2 mouseCoordinates_windowSpace);
 };
 
 #endif

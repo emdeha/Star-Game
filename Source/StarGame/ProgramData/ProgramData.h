@@ -43,6 +43,16 @@ struct ProgramData
 };
 
 
+struct TextureProgData
+{
+	GLuint theProgram;
+
+	GLuint modelToCameraMatrixUnif;
+	GLuint projectionMatrixUnif;
+
+	GLuint colorTextureUnif;
+};
+
 struct LitProgData
 {
 	GLuint theProgram;

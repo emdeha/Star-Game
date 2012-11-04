@@ -51,6 +51,9 @@ struct TextureProgData
 	GLuint projectionMatrixUnif;
 
 	GLuint colorTextureUnif;
+
+	GLuint positionAttrib;
+	GLuint texturePosAttrib;
 };
 
 struct LitProgData

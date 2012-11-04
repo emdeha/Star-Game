@@ -1,10 +1,12 @@
 #version 330
 
-uniform sampler2D colorTexture;
+in vec2 finalTexCoord;
 
 out vec4 outputColor;
 
+uniform sampler2D _sampler;
+
 void main()
 {
-	outputColor = texture(colorTexture, colorCoord);
+	outputColor = texture2D(_sampler, finalTexCoord).rgba;
 }

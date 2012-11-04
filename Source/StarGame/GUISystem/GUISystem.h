@@ -140,6 +140,7 @@ struct PresetAttributes
 	int textSize;
 };
 
+#include "../AssetLoader/Texture.h"
 
 class ImageBox
 {
@@ -154,11 +155,17 @@ private:
 
 	bool isActive;
 
-	GLfloat bufferData[18];
-	GLuint vbo;
+	GLfloat vertexData[16];
+	GLfloat textureCoordsData[8];
+	GLuint indicesData[6];
+
+	GLuint vertexBO;
+	GLuint textureCoordsBO;
+	GLuint indicesBO;
 	GLuint vao;
 
-	GLuint imageID;
+	
+	std::shared_ptr<Texture> texture;
 
 public:
 	ImageBox();
@@ -170,7 +177,8 @@ public:
 	void Init();
 
 public:
-	void Draw(const SimpleProgData &simpleData);
+	void Draw(const TextureProgData &textureData, 
+			  glutil::MatrixStack &modelMatrix);
 };
 
 

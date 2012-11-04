@@ -313,7 +313,12 @@ void ShaderManager::LoadTextureProgData(const std::string &vertexShader,
 	textureProgData.projectionMatrixUnif = 
 		glGetUniformLocation(textureProgData.theProgram, "cameraToClipMatrix");
 	textureProgData.colorTextureUnif =
-		glGetUniformLocation(textureProgData.theProgram, "colorTexture");
+		glGetUniformLocation(textureProgData.theProgram, "_sampler");
+
+	textureProgData.positionAttrib = 
+		glGetAttribLocation(textureProgData.theProgram, "position");
+	textureProgData.texturePosAttrib =
+		glGetAttribLocation(textureProgData.theProgram, "texCoord");
 }
 
 
@@ -340,6 +345,10 @@ FontProgData ShaderManager::GetFontProgData()
 SimpleTextureProgData ShaderManager::GetSimpleTextureProgData()
 {
 	return simpleTextureProgData;
+}
+TextureProgData ShaderManager::GetTextureProgData()
+{
+	return textureProgData;
 }
 
 

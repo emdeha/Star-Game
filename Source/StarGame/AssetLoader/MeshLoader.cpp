@@ -149,7 +149,7 @@ void Mesh::InitMesh(unsigned int index, const aiMesh *mesh)
 
 bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
 {
-	std::string directory = ExtractDirectory(fileName);
+	/*std::string directory = ExtractDirectory(fileName);
 
 	// Initialize the materials.
 	for(unsigned int i = 0; i < scene->mNumMaterials; i++)
@@ -189,7 +189,8 @@ bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
 			return textures[i]->Load("../data/mesh-files/white.png", 
 									 GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 		}
-	}
+	}*/
+	return false;
 }
 
 void Mesh::Render(glutil::MatrixStack &modelMatrix,

@@ -31,22 +31,19 @@
 class Texture
 {
 private:
+	std::string fileName;
+
+	GLenum textureTarget;
 	GLuint textureObject;
-	GLuint samplerObject;
 
 public:
-	Texture();
+	Texture(GLenum newTextureTarget, const std::string &newFileName);
 		
 	// Maybe the texture loading characteristics must be kept away from the user.
 	// Later, I will develop a single format which will have default characteristics.
-	bool Load(const std::string &fileName,
-			  GLenum textureStorageFormat, 
-			  GLenum textureComponents, 
-			  GLenum textureComponentsStorageFormat);
-	void CreateSamplers();
+	bool Load();
 
 	void Bind(GLenum textureUnit);
-	void Unbind(GLenum textureUnit);
 };
 
 #endif

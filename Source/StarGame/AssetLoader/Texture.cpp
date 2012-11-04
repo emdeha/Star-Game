@@ -22,29 +22,22 @@
 #include "Texture.h"
 
 
-Texture::Texture()
+Texture::Texture(GLenum newTextureTarget, const std::string &newFileName)
 {
 #ifdef FREEIMAGE_LIB
 	FreeImage_Initialize();
 #endif
+
+	textureTarget = newTextureTarget;
+	fileName = newFileName;
 }
 
-void Texture::CreateSamplers()
-{
-	//glGenSamplers(1, &samplerObject);
-
-	//glSamplerParameteri(samplerObject, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	//glSamplerParameteri(samplerObject, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-}
-
-bool Texture::Load(const std::string &fileName,
-				   GLenum textureStorageFormat, 
-				   GLenum textureComponents, 
-				   GLenum textureComponentsStorageFormat)
+bool Texture::Load()
 {
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 	FIBITMAP *dib(0);
 	BYTE *bits(0);
+
 	unsigned int width(0), height(0);
 
 	fif = FreeImage_GetFileType(fileName.c_str(), 0);
@@ -67,27 +60,27 @@ bool Texture::Load(const std::string &fileName,
 	if((bits == 0) || (width == 0) || (height == 0))
 		return false;
 
+
+	glActiveTexture(GL_TEXTURE0);
 	glGenTextures(1, &textureObject);
-	glBindTexture(GL_TEXTURE_2D, textureObject);
+	glBindTexture(textureTarget, textureObject);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, textureStorageFormat, 
-			     height, width, 0, 
-				 textureComponents, textureComponentsStorageFormat, bits);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+	glTexImage2D(textureTarget, 0, GL_RGBA, 
+			     width, height, 0, 
+				 GL_BGRA, GL_UNSIGNED_BYTE, bits);
+
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameterf(textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameterf(textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	
 	return true;
 }
 
 void Texture::Bind(GLenum textureUnit)
 {
 	glActiveTexture(textureUnit);
-	glBindTexture(GL_TEXTURE_2D, textureObject);
-	//glBindSampler(textureUnit, samplerObject);
-}
-
-void Texture::Unbind(GLenum textureUnit)
-{
-	glBindTexture(GL_TEXTURE_2D, 0);
-	//glBindSampler(textureUnit, 0);
+	glBindTexture(textureTarget, textureObject);
 }

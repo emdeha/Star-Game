@@ -384,6 +384,12 @@ void InitializeScene()
 	scene->AddFusionSequence('e', 'e', 'e');
 	scene->AddFusionSequence('w', 'w', 'w');
 
+
+
+	glUseProgram(shaderManager.GetTextureProgData().theProgram);
+	glUniform1i(shaderManager.GetTextureProgData().colorTextureUnif, 0);
+	glUseProgram(0);
+
 	box.Init();
 	boxTwo.Init();
 	boxThree.Init();
@@ -456,6 +462,7 @@ void Display()
 	glClearDepth(1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
 	if(scene->IsLayoutOn(LAYOUT_IN_GAME))
 	{
 		glutil::MatrixStack modelMatrix;
@@ -489,9 +496,9 @@ void Display()
 								   shaderManager.GetSimpleNoUBProgData());
 
 		// BUGGY: A strange problem appears when trying to draw these before drawing the satellites
-		box.Draw(shaderManager.GetSimpleNoUBProgData());
-		boxTwo.Draw(shaderManager.GetSimpleNoUBProgData());
-		boxThree.Draw(shaderManager.GetSimpleNoUBProgData());
+		box.Draw(shaderManager.GetTextureProgData(), modelMatrix);
+		boxTwo.Draw(shaderManager.GetTextureProgData(), modelMatrix);
+		boxThree.Draw(shaderManager.GetTextureProgData(), modelMatrix);
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{
@@ -525,8 +532,8 @@ void Reshape(int width, int height)
 	projMatrix.SetIdentity();
 	projMatrix.Orthographic((float)width, 0.0f, (float)height, 0.0f, 1.0f, 1000.0f);
 
-	// BUGGY: There is a conflict in the shaders about the projection matrix
-	//displayData.projectionMatrix = projMatrix.Top();
+	
+	// TODO: Make the orthographic matrix an UBO
 
 	glUseProgram(shaderManager.GetFontProgData().theProgram);
 
@@ -540,6 +547,13 @@ void Reshape(int width, int height)
 		glUniformMatrix4fv(shaderManager.GetSimpleNoUBProgData().projectionMatrixUnif, 
 						   1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
 
+	glUseProgram(0);
+
+	glUseProgram(shaderManager.GetTextureProgData().theProgram);
+		
+		glUniformMatrix4fv(shaderManager.GetTextureProgData().projectionMatrixUnif,
+						   1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
+	
 	glUseProgram(0);
 
 	scene->UpdateCurrentLayout(width, height);

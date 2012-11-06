@@ -25,7 +25,7 @@ ImageBox::ImageBox()
 
 	isActive = false;
 
-	texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/work.png"));
+	texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-empty.png"));
 }
 ImageBox::ImageBox(LayoutPreset newCurrentPreset,
 			       const std::string &newName, 
@@ -39,7 +39,7 @@ ImageBox::ImageBox(LayoutPreset newCurrentPreset,
 	name = newName;
 	isActive = false;
 
-	texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/work.png"));
+	texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-empty.png"));
 }
 
 void ImageBox::Init()
@@ -100,13 +100,38 @@ void ImageBox::Init()
 	}
 }
 
-void ImageBox::Draw(const TextureProgData &textureData,
-					glutil::MatrixStack &modelMatrix)
+
+void ImageBox::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
+	case EVENT_TYPE_OTHER:
+		if(strcmp(_event.GetArgument("what_event").varString, "fusion_button") == 0)
+		{
+			std::string button = _event.GetArgument("what_button").varString;
+
+			if(strcmp(button.c_str(), "but_q") == 0)
+			{
+				texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-q.png"));
+				if(!texture->Load())
+				{
+					std::printf("Error loading texture");
+					return;
+				}
+				break;
+			}
+		}
+		break;
+	}
+}
+
+
+void ImageBox::Draw(const TextureProgData &textureData)
 {
 	glUseProgram(textureData.theProgram);
 	glBindVertexArray(vao);
 	{
-		glUniformMatrix4fv(textureData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+		glUniformMatrix4fv(textureData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
 
 
 		glEnableVertexAttribArray(textureData.positionAttrib);

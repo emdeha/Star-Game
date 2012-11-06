@@ -112,8 +112,20 @@ public:
 		}
 		currentInputSequence += newButton;
 
+		// TODO: Should I check whether the input button is part of the sequence?
+		EventArg currentInputButtonEventArg[2];
+		currentInputButtonEventArg[0].argType = "what_event";
+		currentInputButtonEventArg[0].argument.varType = TYPE_STRING;
+		strcpy(currentInputButtonEventArg[0].argument.varString, "fusion_button");
+		currentInputButtonEventArg[1].argType = "what_button";
+		currentInputButtonEventArg[1].argument.varType = TYPE_STRING;
+		std::string newButtonString = "but_";
+		newButtonString += newButton;
+		std::printf(newButtonString.c_str());
+		strcpy(currentInputButtonEventArg[1].argument.varString, newButtonString.c_str());
+		Event currentInputButtonEvent = Event(2, EVENT_TYPE_OTHER, currentInputButtonEventArg);
 
-		return StockEvents::EmptyEvent();
+		return currentInputButtonEvent;
 	}
 };
 

@@ -109,12 +109,12 @@ void Scene::UpdateScene()
 		}
 	}
 }
-void Scene::UpdateFusion(char key)
+void Scene::UpdateFusion(char key, Event &returnedFusionEvent)
 {
-	Event eventToSend = sceneFusionInput.Update(key);
-	if(eventToSend.GetType() != EVENT_TYPE_EMPTY)
+	returnedFusionEvent = sceneFusionInput.Update(key);
+	if(returnedFusionEvent.GetType() != EVENT_TYPE_EMPTY)
 	{
-		OnEvent(eventToSend);
+		OnEvent(returnedFusionEvent);
 	}
 }
 void Scene::UpdateCurrentLayout(int windowWidth, int windowHeight)

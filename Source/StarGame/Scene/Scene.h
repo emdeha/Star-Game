@@ -66,7 +66,7 @@ public:
 	/// \brief Goes through the game objects and calls their update functions.
 	void UpdateScene();
 
-	void UpdateFusion(char key);
+	void UpdateFusion(char key, Event &returnedFusionEvent);
 
 	void OnEvent(Event &_event);
 

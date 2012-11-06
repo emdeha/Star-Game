@@ -1,4 +1,4 @@
-﻿Build started 4.11.2012 г. 18:05:39 ч..
+﻿Build started 6.11.2012 г. 08:44:06 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\Scene\Scene.vcxproj" on node 3 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Scene.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -9,6 +9,10 @@
      1>e:\ceci\thegame\source\stargame\fusion\fusioninput.h(50): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(105) : see declaration of 'strcpy'
      1>e:\ceci\thegame\source\stargame\fusion\fusioninput.h(53): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(105) : see declaration of 'strcpy'
+     1>e:\ceci\thegame\source\stargame\fusion\fusioninput.h(119): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(105) : see declaration of 'strcpy'
+     1>e:\ceci\thegame\source\stargame\fusion\fusioninput.h(125): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(105) : see declaration of 'strcpy'
      1>e:\ceci\thegame\source\stargame\scene\scene.cpp(282): warning C4715: 'Scene::GetLayout' : not all control paths return a value
        Lib:
@@ -22,4 +26,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.94
+Time Elapsed 00:00:00.91

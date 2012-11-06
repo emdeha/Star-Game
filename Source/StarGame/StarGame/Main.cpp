@@ -496,9 +496,9 @@ void Display()
 								   shaderManager.GetSimpleNoUBProgData());
 
 		// BUGGY: A strange problem appears when trying to draw these before drawing the satellites
-		box.Draw(shaderManager.GetTextureProgData(), modelMatrix);
-		boxTwo.Draw(shaderManager.GetTextureProgData(), modelMatrix);
-		boxThree.Draw(shaderManager.GetTextureProgData(), modelMatrix);
+		box.Draw(shaderManager.GetTextureProgData());
+		boxTwo.Draw(shaderManager.GetTextureProgData());
+		boxThree.Draw(shaderManager.GetTextureProgData());
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{
@@ -607,7 +607,9 @@ void Keyboard(unsigned char key, int x, int y)
 
 	if(scene->IsLayoutOn(LAYOUT_IN_GAME))
 	{
-		scene->UpdateFusion(key);
+		Event returnedFusionEvent = StockEvents::EmptyEvent();
+		scene->UpdateFusion(key, returnedFusionEvent);
+		box.OnEvent(returnedFusionEvent);
 	}
 
 	glutPostRedisplay();

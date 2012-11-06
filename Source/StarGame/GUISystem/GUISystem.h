@@ -176,9 +176,10 @@ public:
 
 	void Init();
 
+	void OnEvent(Event &_event);
+
 public:
-	void Draw(const TextureProgData &textureData, 
-			  glutil::MatrixStack &modelMatrix);
+	void Draw(const TextureProgData &textureData);
 };
 
 

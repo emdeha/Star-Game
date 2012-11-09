@@ -130,6 +130,11 @@ void Scene::UpdateCurrentLayout(int windowWidth, int windowHeight)
 	}
 }
 
+void Scene::AddFusionSequence(char buttonA, char buttonB, char buttonC)
+{
+	sceneFusionInput.AddSequence(buttonA, buttonB, buttonC);
+}
+
 void Scene::OnEvent(Event &_event)
 {
 	switch(_event.GetType())

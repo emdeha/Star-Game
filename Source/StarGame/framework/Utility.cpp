@@ -268,3 +268,64 @@ void Utility::BasicMeshGeneration::Circle::Draw(glutil::MatrixStack &modelMatrix
 	glDisableVertexAttribArray(0);
 	glUseProgram(0);
 }
+
+
+
+Utility::BasicMeshGeneration::Square::Square(glm::vec4 newColor, 
+											 glm::vec4 newPosition, glm::vec4 newMaxCorner)
+{
+	color = newColor;
+	position = newPosition;
+	maxCorner = newMaxCorner;
+
+	vao = 0;
+	indexBO = 0;
+	vertexBO = 0;
+}
+
+void Utility::BasicMeshGeneration::Square::Init()
+{
+	std::vector<float> vertexData;
+	std::vector<unsigned int> indexData;
+
+
+	vertexData.push_back(position.x);
+	vertexData.push_back(position.y - maxCorner.y);
+	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x - maxCorner.x);
+	vertexData.push_back(position.y - maxCorner.y);
+	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x - maxCorner.x);
+	vertexData.push_back(position.y);
+	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x);
+	vertexData.push_back(position.y);
+	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
+
+
+	indexData.push_back(0); indexData.push_back(1); indexData.push_back(2);
+	indexData.push_back(2); indexData.push_back(3); indexData.push_back(0);
+
+
+	glGenBuffers(1, &vertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+	glBufferData(GL_ARRAY_BUFFER, 
+				 sizeof(float) * vertexData.size(), &vertexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glGenBuffers(1, &indexBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
+				 sizeof(unsigned short) * indexData.size(), &indexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+
+	glBindVertexArray(0);
+}

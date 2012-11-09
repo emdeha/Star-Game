@@ -39,9 +39,9 @@ DisplayData displayData;
 
 Scene *scene = new Scene();
 
-ImageBox box(SMALL, "sample", glm::vec2(375.0f, 570.0f), 50.0f, 50.0f);
-ImageBox boxTwo(SMALL, "sampleTwo", glm::vec2(430.0f, 570.0f), 50.0f, 50.0f);
-ImageBox boxThree(SMALL, "sampleThree", glm::vec2(485.0f, 570.0f), 50.0f, 50.0f);
+ImageBox box(SMALL, "sample", glm::vec2(375.0f, 570.0f), 50.0f, 50.0f, 3);
+ImageBox boxTwo(SMALL, "sampleTwo", glm::vec2(430.0f, 570.0f), 50.0f, 50.0f, 2);
+ImageBox boxThree(SMALL, "sampleThree", glm::vec2(485.0f, 570.0f), 50.0f, 50.0f, 1);
 
 
 void HandleMouse()
@@ -412,10 +412,6 @@ void Init()
 	InitializePrograms();
 	InitializeScene();
 
-	glutMouseFunc(HandleMouseButtons);
-	glutMotionFunc(HandleActiveMovement);
-	glutPassiveMotionFunc(HandlePassiveMovement);
-
 	
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -610,6 +606,8 @@ void Keyboard(unsigned char key, int x, int y)
 		Event returnedFusionEvent = StockEvents::EmptyEvent();
 		scene->UpdateFusion(key, returnedFusionEvent);
 		box.OnEvent(returnedFusionEvent);
+		boxTwo.OnEvent(returnedFusionEvent);
+		boxThree.OnEvent(returnedFusionEvent);
 	}
 
 	glutPostRedisplay();

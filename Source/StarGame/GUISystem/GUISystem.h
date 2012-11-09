@@ -66,9 +66,11 @@ struct LayoutInfo
 	glm::vec4 backgroundColor;
 };
 
-/*class Button;
+/*
+class Button;
 class Label;
-class TextBox;*/
+class TextBox;
+*/
 
 class TextControl;
 
@@ -80,9 +82,6 @@ private:
 	LayoutType layoutType;
 	LayoutInfo layoutInfo;
 
-	//std::vector<std::shared_ptr<Button>> buttonControls;
-	//std::vector<std::shared_ptr<Label>> labelControls;
-	//std::vector<std::shared_ptr<TextBox>> textBoxControls;
 
 	std::vector<std::shared_ptr<TextControl>> controls;
 	std::vector<std::shared_ptr<Layout>> subLayouts;
@@ -93,15 +92,10 @@ public:
 	Layout();
 	Layout(LayoutType newLayoutType, LayoutInfo newLayoutInfo);
 
-	//void AddButtonControl(std::shared_ptr<Button> newButtonControl);
-	//void AddLabelControl(std::shared_ptr<Label> newLabelControl);
-	//void AddTextBoxControl(std::shared_ptr<TextBox> newTextBoxControl);
 
 	void AddControl(std::shared_ptr<TextControl> newControl);
 	void AddSubLayout(std::shared_ptr<Layout> newSubLayout);
 
-	//std::shared_ptr<Button> GetButtonControl(const std::string &buttonName);
-	//std::shared_ptr<TextBox> GetTextBoxControl(const std::string &textBoxName);
 
 	std::shared_ptr<TextControl> GetControl(const std::string &controlName);
 
@@ -151,6 +145,8 @@ private:
 	float width; 
 	float height;
 	
+	int index; // TODO: Only for the fusion box. Should refactor.
+
 	std::string name;
 
 	bool isActive;
@@ -172,7 +168,8 @@ public:
 	ImageBox(LayoutPreset newCurrentPreset,
 			 const std::string &newName, 
 			 glm::vec2 newPosition,
-			 float newWidth, float newHeight);
+			 float newWidth, float newHeight,
+			 int newIndex);
 
 	void Init();
 

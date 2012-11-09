@@ -101,6 +101,9 @@
     <ProjectReference Include="..\Entities\Entities.vcxproj">
       <Project>{0e2397ac-13f2-4a38-92c7-8fd02a24c17e}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Fusion\Fusion.vcxproj">
+      <Project>{a35d6336-e27f-47c8-bd8c-356f97dc2846}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\GUISystem\GUISystem.vcxproj">
       <Project>{06dbbf6b-b713-4370-bee5-c2810cf7026d}</Project>
     </ProjectReference>

@@ -31,33 +31,9 @@ private:
 	char buttons[4];
 
 public:
-	FusionSequence(char buttonA = '\0', char buttonB = '\0', char buttonC = '\0')
-	{
-		buttons[0] = buttonA;
-		buttons[1] = buttonB;
-		buttons[2] = buttonC;
-		buttons[3] = '\0';
-		// buttons[3] = buttonD; -- if we decide to make the fusion use three buttons
-	}
+	FusionSequence(char buttonA = '\0', char buttonB = '\0', char buttonC = '\0');
 
-	Event Update(const std::string &currentInputSequence)
-	{
-		if(currentInputSequence == buttons)
-		{ 
-			EventArg fusionCompletedEventArg[2];
-			fusionCompletedEventArg[0].argType = "what_event";
-			fusionCompletedEventArg[0].argument.varType = TYPE_STRING;
-			strcpy(fusionCompletedEventArg[0].argument.varString, "fusion_seq");
-			fusionCompletedEventArg[1].argType = "buttons";
-			fusionCompletedEventArg[1].argument.varType = TYPE_STRING;
-			strcpy(fusionCompletedEventArg[1].argument.varString, buttons);
-			Event fusionCompletedEvent = Event(2, EVENT_TYPE_OTHER, fusionCompletedEventArg);
-
-			return fusionCompletedEvent;
-		}
-
-		return StockEvents::EmptyEvent();
-	}
+	Event Update(const std::string &currentInputSequence);
 };
 
 
@@ -71,62 +47,12 @@ private:
 	char sequenceEndButton;
 
 public:
-	FusionInput()
-	{
-		sequences.resize(0);		
-	}
-	FusionInput(char newSequenceEndButton)
-	{
-		sequences.resize(0);
-		sequenceEndButton = newSequenceEndButton;
-	}
+	FusionInput();
+	FusionInput(char newSequenceEndButton);
 
-	void AddSequence(char buttonA = ' ', char buttonB = ' ', char buttonC = ' ')
-	{
-		sequences.push_back(FusionSequence(buttonA, buttonB, buttonC));
-	}
+	void AddSequence(char buttonA = ' ', char buttonB = ' ', char buttonC = ' ');
 
-	Event Update(char newButton)
-	{
-		if(newButton == sequenceEndButton)
-		{
-			for(std::vector<FusionSequence>::iterator iter = sequences.begin();
-				iter != sequences.end(); ++iter)
-			{
-				Event eventToReturn = (iter)->Update(currentInputSequence);				
-				if(eventToReturn.GetType() != EVENT_TYPE_EMPTY)
-				{
-					currentInputSequence.resize(0);
-					return eventToReturn;
-				}
-			}
-
-			currentInputSequence.resize(0);
-			return StockEvents::EmptyEvent();
-		}
-
-		if(currentInputSequence.length() >= 3)
-		{
-			std::printf("You can't input more buttons. Type \'F\' if you want to send fusion.\n");
-			return StockEvents::EmptyEvent();
-		}
-		currentInputSequence += newButton;
-
-		// TODO: Should I check whether the input button is part of the sequence?
-		EventArg currentInputButtonEventArg[2];
-		currentInputButtonEventArg[0].argType = "what_event";
-		currentInputButtonEventArg[0].argument.varType = TYPE_STRING;
-		strcpy(currentInputButtonEventArg[0].argument.varString, "fusion_button");
-		currentInputButtonEventArg[1].argType = "what_button";
-		currentInputButtonEventArg[1].argument.varType = TYPE_STRING;
-		std::string newButtonString = "but_";
-		newButtonString += newButton;
-		std::printf(newButtonString.c_str());
-		strcpy(currentInputButtonEventArg[1].argument.varString, newButtonString.c_str());
-		Event currentInputButtonEvent = Event(2, EVENT_TYPE_OTHER, currentInputButtonEventArg);
-
-		return currentInputButtonEvent;
-	}
+	Event Update(char newButton);
 };
 
 

@@ -25,12 +25,15 @@ ImageBox::ImageBox()
 
 	isActive = false;
 
+	index = 0;
+
 	texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-empty.png"));
 }
 ImageBox::ImageBox(LayoutPreset newCurrentPreset,
 			       const std::string &newName, 
 				   glm::vec2 newPosition,
-				   float newWidth, float newHeight)
+				   float newWidth, float newHeight,
+				   int newIndex)
 {
 	currentPreset = newCurrentPreset;
 	presetPosition[currentPreset] = newPosition;
@@ -38,6 +41,8 @@ ImageBox::ImageBox(LayoutPreset newCurrentPreset,
 	height = newHeight;
 	name = newName;
 	isActive = false;
+
+	index = newIndex;
 
 	texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-empty.png"));
 }
@@ -110,15 +115,44 @@ void ImageBox::OnEvent(Event &_event)
 		{
 			std::string button = _event.GetArgument("what_button").varString;
 
-			if(strcmp(button.c_str(), "but_q") == 0)
+			if(_event.GetArgument("button_pos").varInteger == index)
 			{
-				texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-q.png"));
-				if(!texture->Load())
+				if(strcmp(button.c_str(), "q") == 0)
 				{
-					std::printf("Error loading texture");
-					return;
+					texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-q.png"));
+					if(!texture->Load())
+					{
+						std::printf("Error loading texture");
+						return;
+					}
 				}
-				break;
+				if(strcmp(button.c_str(), "w") == 0)
+				{
+					texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-w.png"));
+					if(!texture->Load())
+					{
+						std::printf("Error loading texture");
+						return;
+					}
+				}
+				if(strcmp(button.c_str(), "e") == 0)
+				{
+					texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-e.png"));
+					if(!texture->Load())
+					{
+						std::printf("Error loading texture");
+						return;
+					}
+				}
+			}
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "fusion_seq") == 0)
+		{
+			texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-empty.png"));
+			if(!texture->Load())
+			{
+				std::printf("Error loading texture");
+				return;
 			}
 		}
 		break;

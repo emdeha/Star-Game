@@ -79,6 +79,24 @@ void Reshape(int width, int height);
 /// \brief Handles key press events.
 void Keyboard(unsigned char key, int x, int y);
 
+
+/// \fn HandleMouse
+/// \brief Handles mouse events.
+void HandleMouse();
+
+/// \fn HandleMouseButtons
+/// \brief Handles the pressing of the mouse buttons.
+void HandleMouseButtons(int button, int state, int x, int y);
+
+/// \fn HandleActiveMovement
+/// \brief Handles the active movement of the mouse.
+void HandleActiveMovement(int x, int y);
+
+/// \fn HandlePassiveMovement
+/// \brief Handles the passive movement of the mouse.
+void HandlePassiveMovement(int x, int y);
+
+
 unsigned int Defaults(unsigned int displayMode, int &width, int &height);
 
 /// \fn DebugFunc
@@ -162,6 +180,9 @@ int main(int argc, char** argv)
 	glutDisplayFunc(Display); 
 	glutReshapeFunc(Reshape);
 	glutKeyboardFunc(Keyboard);
+	glutMouseFunc(HandleMouseButtons);
+	glutMotionFunc(HandleActiveMovement);
+	glutPassiveMotionFunc(HandlePassiveMovement);
 	glutMainLoop();
 	return 0;
 }

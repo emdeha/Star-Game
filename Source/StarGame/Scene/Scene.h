@@ -87,10 +87,7 @@ public:
 	void StopScene();
 	void StartScene();
 	
-	void AddFusionSequence(char buttonA, char buttonB, char buttonC)
-	{
-		sceneFusionInput.AddSequence(buttonA, buttonB, buttonC);
-	}
+	void AddFusionSequence(char buttonA, char buttonB, char buttonC);
 
 	void AddSunLight(const SunLight &newSunLight);
 	void AddSun(const std::shared_ptr<Sun> newSun);

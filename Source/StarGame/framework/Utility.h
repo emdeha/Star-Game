@@ -181,6 +181,29 @@ namespace Utility
 			/// \brief Draws the circle on the scene. 
 			void Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &data);
 		};
+
+		/// \class Square
+		/// \brief Generates and renders a square
+		class Square
+		{
+		private:
+			glm::vec4 color;
+			glm::vec4 position;
+
+			glm::vec4 maxCorner;
+
+			GLuint vao;
+			GLuint indexBO;
+			GLuint vertexBO;
+
+		public:
+			Square(glm::vec4 newColor, 
+				   glm::vec4 newPosition, glm::vec4 newMaxCorner);
+
+			void Init();
+
+			void Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &data);
+		};
 	}
 }
 

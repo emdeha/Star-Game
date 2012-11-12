@@ -190,19 +190,53 @@ namespace Utility
 			glm::vec4 color;
 			glm::vec4 position;
 
-			glm::vec4 maxCorner;
+			float width;
+			float height;
 
 			GLuint vao;
 			GLuint indexBO;
 			GLuint vertexBO;
 
-		public:
-			Square(glm::vec4 newColor, 
-				   glm::vec4 newPosition, glm::vec4 newMaxCorner);
+			
+			bool isCoordinateSystemBottomLeft;
 
-			void Init();
+		public:
+			Square() {}
+			Square(glm::vec4 newColor, 
+				   glm::vec4 newPosition, 
+				   float newWidth, float newHeight,
+				   bool newIsCoordinateSystemBottomLeft);
+
+			void Init(int windowWidth = 0, int windowHeight = 0);
 
 			void Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &data);
+
+
+			glm::vec4 GetPosition()
+			{
+				return position;
+			}
+			float GetWidth()
+			{
+				return width;
+			}
+			float GetHeight()
+			{
+				return height;
+			}
+
+			void SetPosition(glm::vec4 newPosition)
+			{
+				position = newPosition;
+			}
+			void SetWidth(float newWidth)
+			{
+				width = newWidth;
+			}
+			void SetHeight(float newHeight)
+			{
+				height = newHeight;
+			}
 		};
 	}
 }

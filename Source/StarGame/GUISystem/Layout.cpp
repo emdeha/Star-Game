@@ -25,10 +25,6 @@ Layout::Layout()
 
 	layoutInfo.backgroundColor = glm::vec4();
 
-	//buttonControls.resize(0);
-	//labelControls.resize(0);
-	//textBoxControls.resize(0);
-
 	controls.resize(0);
 	subLayouts.resize(0);
 
@@ -39,10 +35,6 @@ Layout::Layout(LayoutType newLayoutType, LayoutInfo newLayoutInfo)
 	layoutType = newLayoutType;
 
 	layoutInfo = newLayoutInfo;
-
-	//buttonControls.resize(0);
-	//labelControls.resize(0);
-	//textBoxControls.resize(0);
 
 	controls.resize(0);
 	subLayouts.resize(0);
@@ -55,21 +47,7 @@ void Layout::Draw(const FontProgData &fontData, const SimpleProgData &simpleData
 	glm::vec4 backgroundColor = layoutInfo.backgroundColor;
 	glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
 
-	/*for(std::vector<std::shared_ptr<Button>>::iterator iter = buttonControls.begin();
-		iter != buttonControls.end(); ++iter)
-	{
-		(*iter)->Draw(fontData, simpleData);
-	}
-	for(std::vector<std::shared_ptr<Label>>::iterator iter = labelControls.begin();
-		iter != labelControls.end(); ++iter)
-	{
-		(*iter)->Draw(fontData, simpleData);
-	}
-	for(std::vector<std::shared_ptr<TextBox>>::iterator iter = textBoxControls.begin();
-		iter != textBoxControls.end(); ++iter)
-	{
-		(*iter)->Draw(fontData, simpleData);
-	}*/
+
 	for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
 		iter != controls.end(); ++iter)
 	{
@@ -88,23 +66,6 @@ void Layout::Draw(const FontProgData &fontData, const SimpleProgData &simpleData
 
 void Layout::Update(int windowWidth, int windowHeight)
 {
-	/*for(std::vector<std::shared_ptr<Button>>::iterator iter = buttonControls.begin();
-		iter != buttonControls.end(); ++iter)
-	{
-		(*iter)->Update(windowWidth, windowHeight);
-	}
-	
-	for(std::vector<std::shared_ptr<Label>>::iterator iter = labelControls.begin();
-		iter != labelControls.end(); ++iter)
-	{
-		(*iter)->Update(windowWidth, windowHeight);
-	}
-
-	for(std::vector<std::shared_ptr<TextBox>>::iterator iter = textBoxControls.begin();
-		iter != textBoxControls.end(); ++iter)
-	{
-		(*iter)->Update(windowWidth, windowHeight);
-	}*/
 	for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
 		iter != controls.end(); ++iter)
 	{
@@ -118,18 +79,6 @@ void Layout::Update(int windowWidth, int windowHeight)
 }
 
 
-/*void Layout::AddButtonControl(std::shared_ptr<Button> newButtonControl)
-{
-	buttonControls.push_back(newButtonControl);
-}
-void Layout::AddLabelControl(std::shared_ptr<Label> newLabelControl)
-{
-	labelControls.push_back(newLabelControl);
-}
-void Layout::AddTextBoxControl(std::shared_ptr<TextBox> newTextBoxControl)
-{
-	textBoxControls.push_back(newTextBoxControl);
-}*/
 void Layout::AddControl(std::shared_ptr<TextControl> newControl)
 {
 	controls.push_back(newControl);
@@ -139,35 +88,6 @@ void Layout::AddSubLayout(std::shared_ptr<Layout> newSubLayout)
 	subLayouts.push_back(newSubLayout);
 }
 
-/*
-std::shared_ptr<Button> Layout::GetButtonControl(const std::string &buttonName)
-{
-	for(std::vector<std::shared_ptr<Button>>::iterator iter = buttonControls.begin();
-		iter != buttonControls.end(); ++iter)
-	{
-		if((*iter)->GetName() == buttonName)
-		{
-			return (*iter);
-		}
-	}
-
-	// TODO: Better error handling.
-	std::printf("There is no such control\n");
-}
-std::shared_ptr<TextBox> Layout::GetTextBoxControl(const std::string &textBoxName)
-{
-	for(std::vector<std::shared_ptr<TextBox>>::iterator iter = textBoxControls.begin();
-		iter != textBoxControls.end(); ++iter)
-	{
-		if((*iter)->GetName() == textBoxName)
-		{
-			return (*iter);
-		}
-	}
-
-	// TODO: Better error handling.
-	std::printf("There is no such control\n");
-}*/
 
 std::shared_ptr<TextControl> Layout::GetControl(const std::string &controlName)
 {
@@ -207,21 +127,6 @@ void Layout::SetCurrentPreset(LayoutPreset newCurrentPreset)
 		{
 			(*iter)->SetPreset(SMALL);
 		}
-		/*for(std::vector<std::shared_ptr<Button>>::iterator iter = buttonControls.begin();
-			iter != buttonControls.end(); ++iter)
-		{
-			(*iter)->SetPreset(SMALL);
-		}
-		for(std::vector<std::shared_ptr<Label>>::iterator iter = labelControls.begin();
-			iter != labelControls.end(); ++iter)
-		{
-			(*iter)->SetPreset(SMALL);
-		}
-		for(std::vector<std::shared_ptr<TextBox>>::iterator iter = textBoxControls.begin();
-			iter != textBoxControls.end(); ++iter)
-		{
-			(*iter)->SetPreset(SMALL);
-		}*/
 		break;
 	case MEDIUM:
 		for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
@@ -229,21 +134,6 @@ void Layout::SetCurrentPreset(LayoutPreset newCurrentPreset)
 		{
 			(*iter)->SetPreset(MEDIUM);
 		}
-		/*for(std::vector<std::shared_ptr<Button>>::iterator iter = buttonControls.begin();
-			iter != buttonControls.end(); ++iter)
-		{
-			(*iter)->SetPreset(MEDIUM);
-		}
-		for(std::vector<std::shared_ptr<Label>>::iterator iter = labelControls.begin();
-			iter != labelControls.end(); ++iter)
-		{
-			(*iter)->SetPreset(MEDIUM);
-		}
-		for(std::vector<std::shared_ptr<TextBox>>::iterator iter = textBoxControls.begin();
-			iter != textBoxControls.end(); ++iter)
-		{
-			(*iter)->SetPreset(MEDIUM);
-		}*/
 		break;
 	case BIG:
 		for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
@@ -251,21 +141,6 @@ void Layout::SetCurrentPreset(LayoutPreset newCurrentPreset)
 		{
 			(*iter)->SetPreset(BIG);
 		}
-		/*for(std::vector<std::shared_ptr<Button>>::iterator iter = buttonControls.begin();
-			iter != buttonControls.end(); ++iter)
-		{
-			(*iter)->SetPreset(BIG);
-		}
-		for(std::vector<std::shared_ptr<Label>>::iterator iter = labelControls.begin();
-			iter != labelControls.end(); ++iter)
-		{
-			(*iter)->SetPreset(BIG);
-		}
-		for(std::vector<std::shared_ptr<TextBox>>::iterator iter = textBoxControls.begin();
-			iter != textBoxControls.end(); ++iter)
-		{
-			(*iter)->SetPreset(BIG);
-		}*/
 		break;
 	}
 }
@@ -296,28 +171,3 @@ bool Layout::HasActiveControl()
 
 	return false;
 }
-/*std::shared_ptr<TextBox> Layout::GetActiveTextBox()
-{
-	for(std::vector<std::shared_ptr<TextBox>>::iterator iter = textBoxControls.begin();
-		iter != textBoxControls.end(); ++iter)
-	{
-		if((*iter)->IsActive())
-		{
-			return (*iter);
-		}
-	}
-}
-
-bool Layout::HasActiveTextBox()
-{
-	for(std::vector<std::shared_ptr<TextBox>>::iterator iter = textBoxControls.begin();
-		iter != textBoxControls.end(); ++iter)
-	{
-		if((*iter)->IsActive())
-		{
-			return true;
-		}
-	}
-
-	return false;
-}*/

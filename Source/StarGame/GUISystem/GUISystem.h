@@ -195,17 +195,18 @@ protected:
 	int windowHeight;
 
 	
-	glm::vec2 boxMinCorner;
-	glm::vec2 boxMaxCorner;
+	Utility::BasicMeshGeneration::Square controlSquare;
+	//glm::vec2 boxMinCorner;
+	//glm::vec2 boxMaxCorner;
 
 	
 	bool hasBackground;
 	bool isActive;
 
 
-	GLfloat bufferData[24];
-	GLuint vbo;
-	GLuint vao;
+	//GLfloat bufferData[24];
+	//GLuint vbo;
+	//GLuint vao;
 
 public:
 	TextControl();
@@ -310,7 +311,9 @@ public:
 	{
 		visibleText = "";
 
-		boxMaxCorner.x = maxWidth;
+		//controlSquare.SetMaxCorner(glm::vec4(maxWidth, 0.0f, 0.0f, 1.0f));
+		controlSquare.SetWidth(maxWidth);
+		//boxMaxCorner.x = maxWidth;
 		maxNumberChars = newMaxNumberChars;
 		//isActive = false;
 	}

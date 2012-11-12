@@ -272,43 +272,56 @@ void Utility::BasicMeshGeneration::Circle::Draw(glutil::MatrixStack &modelMatrix
 
 
 Utility::BasicMeshGeneration::Square::Square(glm::vec4 newColor, 
-											 glm::vec4 newPosition, glm::vec4 newMaxCorner)
+											 glm::vec4 newPosition,
+											 float newWidth, float newHeight,
+											 bool newIsCoordinateSytemBottomLeft)
 {
 	color = newColor;
 	position = newPosition;
-	maxCorner = newMaxCorner;
+	width = newWidth;
+	height = newHeight;
 
 	vao = 0;
 	indexBO = 0;
 	vertexBO = 0;
+
+	isCoordinateSystemBottomLeft = newIsCoordinateSytemBottomLeft;
 }
 
-void Utility::BasicMeshGeneration::Square::Init()
+void Utility::BasicMeshGeneration::Square::Init(int windowWidth, int windowHeight)
 {
+	glm::vec2 positionRelativeToCoordSystem = glm::vec2(position);
+	if(isCoordinateSystemBottomLeft)
+	{
+		positionRelativeToCoordSystem.x = windowWidth - positionRelativeToCoordSystem.x;
+		positionRelativeToCoordSystem.y = windowHeight - positionRelativeToCoordSystem.y;
+	}
+
+
 	std::vector<float> vertexData;
 	std::vector<unsigned int> indexData;
 
-
-	vertexData.push_back(position.x);
-	vertexData.push_back(position.y - maxCorner.y);
+	
+	vertexData.push_back(positionRelativeToCoordSystem.x);
+	vertexData.push_back(positionRelativeToCoordSystem.y - height);
 	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
 
-	vertexData.push_back(position.x - maxCorner.x);
-	vertexData.push_back(position.y - maxCorner.y);
+	vertexData.push_back(positionRelativeToCoordSystem.x - width);
+	vertexData.push_back(positionRelativeToCoordSystem.y - height);
 	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
 
-	vertexData.push_back(position.x - maxCorner.x);
-	vertexData.push_back(position.y);
+	vertexData.push_back(positionRelativeToCoordSystem.x - width);
+	vertexData.push_back(positionRelativeToCoordSystem.y);
 	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
 
-	vertexData.push_back(position.x);
-	vertexData.push_back(position.y);
+	vertexData.push_back(positionRelativeToCoordSystem.x);
+	vertexData.push_back(positionRelativeToCoordSystem.y);
 	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
 
 
 	indexData.push_back(0); indexData.push_back(1); indexData.push_back(2);
 	indexData.push_back(2); indexData.push_back(3); indexData.push_back(0);
-
+	
 
 	glGenBuffers(1, &vertexBO);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
@@ -319,7 +332,7 @@ void Utility::BasicMeshGeneration::Square::Init()
 	glGenBuffers(1, &indexBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
-				 sizeof(unsigned short) * indexData.size(), &indexData[0], GL_STATIC_DRAW);
+				 sizeof(unsigned int) * indexData.size(), &indexData[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	glGenVertexArrays(1, &vao);
@@ -328,4 +341,24 @@ void Utility::BasicMeshGeneration::Square::Init()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
 
 	glBindVertexArray(0);
+}
+
+void Utility::BasicMeshGeneration::Square::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &data)
+{
+	glUseProgram(data.theProgram);
+	glBindVertexArray(vao);
+	{
+		glutil::PushStack push(modelMatrix);
+
+		glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+		glUniform4f(data.colorUnif, color.r, color.g, color.b, color.a);
+
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+		glEnableVertexAttribArray(data.positionAttrib);
+		glVertexAttribPointer(data.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	}
+	glDisableVertexAttribArray(0);
+	glUseProgram(0);
 }

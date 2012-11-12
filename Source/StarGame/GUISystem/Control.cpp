@@ -59,6 +59,11 @@ TextControl::TextControl(LayoutPreset newCurrentPreset,
 	presets[currentPreset].rightTextMargin_percent = 0.0f;
 
 	isActive = false;
+
+	controlSquare =
+		Utility::BasicMeshGeneration::Square(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), 
+											 glm::vec4(newPosition, 0.0f, 1.0f),
+											 0.0f, newTextSize, true);
 }
 
 void TextControl::Init(const std::string &fontName,
@@ -70,10 +75,11 @@ void TextControl::Init(const std::string &fontName,
 	textToDisplay = Text(fontName.c_str());
 	textToDisplay.Init(windowWidth, windowHeight);
 
-	glGenBuffers(1, &vbo);
+	controlSquare.Init(windowWidth, windowHeight);
+	//glGenBuffers(1, &vbo);
 
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	//glGenVertexArrays(1, &vao);
+	//glBindVertexArray(vao);
 	
 	ComputeNewAttributes();
 }
@@ -87,12 +93,18 @@ void TextControl::ComputeNewAttributes()
 	{
 		/// Not tested!!!
 
+		glm::vec2 boxMaxCorner;
+		glm::vec2 boxMinCorner;
+
 		boxMinCorner.y = textToDisplay.GetTextMinHeight() - presets[currentPreset].bottomTextMargin;
 		boxMaxCorner.y = textToDisplay.GetTextMaxHeight() + presets[currentPreset].topTextMargin;
 
 		boxMinCorner.x = textToDisplay.GetTextMinWidth() - presets[currentPreset].leftTextMargin;
 		boxMaxCorner.x = textToDisplay.GetTextMaxWidth() + presets[currentPreset].rightTextMargin;
 
+		controlSquare.SetPosition(glm::vec4(boxMinCorner, 0.0f, 1.0f));
+		//controlSquare.SetHeight
+		/*
 		bufferData[0] = boxMaxCorner.x; bufferData[1] = boxMaxCorner.y;
 		bufferData[2] = 0.0f; bufferData[3] = 1.0f;
 		bufferData[4] = boxMaxCorner.x; bufferData[5] = boxMinCorner.y; 
@@ -106,13 +118,22 @@ void TextControl::ComputeNewAttributes()
 		bufferData[18] = 0.0f; bufferData[19] = 1.0f;
 		bufferData[20] = boxMinCorner.x; bufferData[21] = boxMaxCorner.y; 
 		bufferData[22] = 0.0f; bufferData[23] = 1.0f;
+		*/
 	}
 	else
 	{
+		glm::vec2 boxMinCorner;
+		glm::vec2 boxMaxCorner;
+
 		boxMinCorner.y = presets[currentPreset].position.y;
 		boxMaxCorner.y = textToDisplay.GetTextMaxHeight();
 		boxMinCorner.x = presets[currentPreset].position.x;
 		boxMaxCorner.x = textToDisplay.GetTextMaxWidth();
+
+		controlSquare.SetPosition(glm::vec4(boxMinCorner, 0.0f, 1.0f));
+		controlSquare.SetHeight(textToDisplay.GetTextMaxHeight());
+		controlSquare.SetWidth(textToDisplay.GetTextMaxWidth());
+		//controlSquare.SetMaxCorner(glm::vec4(boxMaxCorner, 0.0f, 1.0f));
 	}
 }
 
@@ -120,6 +141,11 @@ void TextControl::Draw(const FontProgData &fontData, const SimpleProgData &simpl
 {
 	if(hasBackground)
 	{
+		glutil::MatrixStack identityMatStack;
+		identityMatStack.SetIdentity();
+
+		controlSquare.Draw(identityMatStack, simpleData);
+		/*
 		glUseProgram(simpleData.theProgram);
 		glBindVertexArray(vao);
 		{
@@ -134,6 +160,7 @@ void TextControl::Draw(const FontProgData &fontData, const SimpleProgData &simpl
 		}
 		glDisableVertexAttribArray(0);
 		glUseProgram(0);
+		*/
 	}
 
 	textToDisplay.Print(text.c_str(), fontData, 
@@ -209,13 +236,19 @@ void TextControl::SetPreset(LayoutPreset newCurrentPreset)
 bool TextControl::IsMouseOn(glm::vec2 mouseCoordinates_windowSpace)
 {
 	mouseCoordinates_windowSpace.y = windowHeight - mouseCoordinates_windowSpace.y;
-	
+
+	float minHeight = controlSquare.GetPosition().y;
+	float minWidth = controlSquare.GetPosition().x;
+
+	float maxHeight = windowHeight - controlSquare.GetHeight();
+	float maxWidth = windowWidth - controlSquare.GetWidth();
+	/*
 	float minHeight = boxMinCorner.y;
 	float minWidth = boxMinCorner.x;
 
 	float maxHeight = windowHeight - boxMaxCorner.y;
 	float maxWidth = windowWidth - boxMaxCorner.x;
-
+	*/
 	if(mouseCoordinates_windowSpace.y > minHeight &&
 	   mouseCoordinates_windowSpace.x > minWidth &&
 	   mouseCoordinates_windowSpace.y < maxHeight &&

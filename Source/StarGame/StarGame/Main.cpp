@@ -44,6 +44,10 @@ ImageBox boxTwo(SMALL, "sampleTwo", glm::vec2(430.0f, 570.0f), 50.0f, 50.0f, 2);
 ImageBox boxThree(SMALL, "sampleThree", glm::vec2(485.0f, 570.0f), 50.0f, 50.0f, 1);
 
 
+Utility::BasicMeshGeneration::Square testSquare;
+//std::shared_ptr<TextControl> testButton;
+
+
 void HandleMouse()
 {
 	glm::vec3 cameraPosition = scene->GetTopDownCamera().ResolveCamPosition();
@@ -331,6 +335,18 @@ void InitializeGUI()
 						glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	scene->AddLayouts(guiLoader.GetAllLoadedLayouts());
+
+
+	//*testSquare = 
+	//	Utility::BasicMeshGeneration::Square(glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), 
+											///glm::vec4(400, 300, 0.0f, 1.0f),
+											// 50.0f, 50.0f);
+
+	//testSquare.Init();
+	//testButton = std::shared_ptr<TextControl>(new Button(BIG, "test", "TEST", glm::vec2(400, 300), 64, true));
+	//testButton->Init("../data/fonts/AGENCYR.TTF", glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
+	//scene->GetLayout(LAYOUT_MENU)->AddControl(testButton);
 }
 
 void InitializeScene()
@@ -500,6 +516,11 @@ void Display()
 	{
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
 								   shaderManager.GetSimpleNoUBProgData());
+
+		glutil::MatrixStack modelMatrix;
+		modelMatrix.SetIdentity();
+
+		//testSquare.Draw(modelMatrix, shaderManager.GetSimpleNoUBProgData());
 	}
 
 	HandleMouse();

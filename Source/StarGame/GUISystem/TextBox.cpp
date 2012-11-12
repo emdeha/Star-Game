@@ -24,6 +24,11 @@ void TextBox::Draw(const FontProgData &fontData, const SimpleProgData &simpleDat
 {
 	if(hasBackground)
 	{
+		glutil::MatrixStack identityMatStack;
+		identityMatStack.SetIdentity();
+
+		controlSquare.Draw(identityMatStack, simpleData);
+		/*
 		glUseProgram(simpleData.theProgram);
 		glBindVertexArray(vao);
 		{
@@ -41,6 +46,7 @@ void TextBox::Draw(const FontProgData &fontData, const SimpleProgData &simpleDat
 		}
 		glBindVertexArray(0);
 		glUseProgram(0);
+		*/
 	}
 
 	glm::vec2 textPosition = presets[currentPreset].position;
@@ -57,10 +63,31 @@ void TextBox::ComputeNewAttributes()
 	textToDisplay.ComputeTextDimensions("|", presets[currentPreset].position,
 											 presets[currentPreset].textSize);
 
-	glm::vec2 maxCorner, minCorner;
-
 	if(hasBackground)
-	{
+	{		
+		glm::vec4 position = glm::vec4(presets[currentPreset].position, 0.0f, 1.0f);
+
+		controlSquare.SetPosition(position);
+		controlSquare.SetHeight(presets[currentPreset].textSize);
+
+		/*glm::vec2 maxCorner;
+		glm::vec2 minCorner;
+
+		//maxCorner = glm::vec2(controlSquare.GetMaxCorner().x,
+		//					  controlSquare.GetMaxCorner().y) + 
+		//					  presets[currentPreset].position;
+		//maxCorner.y += presets[currentPreset].textSize;
+		minCorner = presets[currentPreset].position;
+
+		maxCorner.x = windowWidth - maxCorner.x;
+		maxCorner.y = windowHeight - maxCorner.y;
+		minCorner.x = windowWidth - minCorner.x;
+		minCorner.y = windowHeight - minCorner.y;
+
+
+		controlSquare.SetHeight(controlSquare.GetHeight() + presets[currentPreset].textSize);
+		controlSquare.SetPosition(glm::vec4(minCorner, 0.0f, 1.0f));*/
+		/*
 		maxCorner = boxMaxCorner + presets[currentPreset].position;
 		maxCorner.y += presets[currentPreset].textSize; // Make it a member of the class
 		minCorner = presets[currentPreset].position;
@@ -70,8 +97,8 @@ void TextBox::ComputeNewAttributes()
 		maxCorner.y = windowHeight - maxCorner.y;
 		minCorner.x = windowWidth - minCorner.x;
 		minCorner.y = windowHeight - minCorner.y;
-
-
+		*/
+		/*
 		bufferData[0] = maxCorner.x; bufferData[1] = maxCorner.y;
 		bufferData[2] = 0.0f; bufferData[3] = 1.0f;
 		bufferData[4] = maxCorner.x; bufferData[5] = minCorner.y; 
@@ -85,10 +112,14 @@ void TextBox::ComputeNewAttributes()
 		bufferData[18] = 0.0f; bufferData[19] = 1.0f;
 		bufferData[20] = minCorner.x; bufferData[21] = maxCorner.y; 
 		bufferData[22] = 0.0f; bufferData[23] = 1.0f;
+		*/
 	}
 	else
 	{
+		glm::vec2 boxMaxCorner;
 		boxMaxCorner.y = presets[currentPreset].textSize;
+
+		controlSquare.SetHeight(presets[currentPreset].textSize);
 	}
 }
 
@@ -177,11 +208,20 @@ bool TextBox::IsMouseOn(glm::vec2 mouseCoordinates_windowSpace)
 {
 	mouseCoordinates_windowSpace.y = windowHeight - mouseCoordinates_windowSpace.y;
 
+
+	float minHeight = controlSquare.GetPosition().y;
+	float minWidth = controlSquare.GetPosition().x;
+
+	float maxHeight = minHeight + controlSquare.GetHeight();
+	float maxWidth = minWidth + controlSquare.GetWidth();
+
+	/*
 	float minHeight = presets[currentPreset].position.y;
 	float minWidth = presets[currentPreset].position.x;
 
 	float maxHeight = minHeight + presets[currentPreset].textSize;
 	float maxWidth = minWidth + boxMaxCorner.x;
+	*/
 
 	if(mouseCoordinates_windowSpace.y > minHeight &&
 	   mouseCoordinates_windowSpace.x > minWidth &&

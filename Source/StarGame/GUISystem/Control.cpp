@@ -76,10 +76,6 @@ void TextControl::Init(const std::string &fontName,
 	textToDisplay.Init(windowWidth, windowHeight);
 
 	controlSquare.Init(windowWidth, windowHeight);
-	//glGenBuffers(1, &vbo);
-
-	//glGenVertexArrays(1, &vao);
-	//glBindVertexArray(vao);
 	
 	ComputeNewAttributes();
 }
@@ -133,7 +129,6 @@ void TextControl::ComputeNewAttributes()
 		controlSquare.SetPosition(glm::vec4(boxMinCorner, 0.0f, 1.0f));
 		controlSquare.SetHeight(textToDisplay.GetTextMaxHeight());
 		controlSquare.SetWidth(textToDisplay.GetTextMaxWidth());
-		//controlSquare.SetMaxCorner(glm::vec4(boxMaxCorner, 0.0f, 1.0f));
 	}
 }
 
@@ -145,22 +140,6 @@ void TextControl::Draw(const FontProgData &fontData, const SimpleProgData &simpl
 		identityMatStack.SetIdentity();
 
 		controlSquare.Draw(identityMatStack, simpleData);
-		/*
-		glUseProgram(simpleData.theProgram);
-		glBindVertexArray(vao);
-		{
-			glUniform4f(simpleData.colorUnif, 1.0f, 0.0f, 0.0f, 1.0f);
-
-			glBindBuffer(GL_ARRAY_BUFFER, vbo);
-			glEnableVertexAttribArray(simpleData.positionAttrib);
-			glVertexAttribPointer(simpleData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-			glBufferData(GL_ARRAY_BUFFER, sizeof(bufferData), bufferData, GL_DYNAMIC_DRAW);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-		}
-		glDisableVertexAttribArray(0);
-		glUseProgram(0);
-		*/
 	}
 
 	textToDisplay.Print(text.c_str(), fontData, 
@@ -242,13 +221,8 @@ bool TextControl::IsMouseOn(glm::vec2 mouseCoordinates_windowSpace)
 
 	float maxHeight = windowHeight - controlSquare.GetHeight();
 	float maxWidth = windowWidth - controlSquare.GetWidth();
-	/*
-	float minHeight = boxMinCorner.y;
-	float minWidth = boxMinCorner.x;
 
-	float maxHeight = windowHeight - boxMaxCorner.y;
-	float maxWidth = windowWidth - boxMaxCorner.x;
-	*/
+
 	if(mouseCoordinates_windowSpace.y > minHeight &&
 	   mouseCoordinates_windowSpace.x > minWidth &&
 	   mouseCoordinates_windowSpace.y < maxHeight &&

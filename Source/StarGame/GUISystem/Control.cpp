@@ -63,7 +63,7 @@ TextControl::TextControl(LayoutPreset newCurrentPreset,
 	controlSquare =
 		Utility::Primitives::Square(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), 
 											 glm::vec4(newPosition, 0.0f, 1.0f),
-											 0.0f, newTextSize, true);
+											 0.0f, (float)newTextSize, true);
 }
 
 void TextControl::Init(const std::string &fontName,

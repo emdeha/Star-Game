@@ -142,8 +142,8 @@ private:
 	LayoutPreset currentPreset;
 	glm::vec2 presetPosition[3];
 
-	//float width; 
-	//float height;
+	float width; 
+	float height;
 	
 	int index; // TODO: Only for the fusion box. Should refactor.
 
@@ -152,19 +152,7 @@ private:
 	bool isActive;
 
 	Utility::Primitives::Sprite boxSprite;
-	/*
-	GLfloat vertexData[16];
-	GLfloat textureCoordsData[8];
-	GLuint indicesData[6];
 
-	GLuint vertexBO;
-	GLuint textureCoordsBO;
-	GLuint indicesBO;
-	GLuint vao;
-
-	
-	std::shared_ptr<Texture> texture;
-	*/
 public:
 	ImageBox();
 	ImageBox(LayoutPreset newCurrentPreset,

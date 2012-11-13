@@ -49,14 +49,14 @@ void TextBox::ComputeNewAttributes()
 		glm::vec4 position = glm::vec4(presets[currentPreset].position, 0.0f, 1.0f);
 
 		controlSquare.SetPosition(position);
-		controlSquare.SetHeight(presets[currentPreset].textSize);
+		controlSquare.SetHeight((float)presets[currentPreset].textSize);
 	}
 	else
 	{
 		glm::vec2 boxMaxCorner;
-		boxMaxCorner.y = presets[currentPreset].textSize;
+		boxMaxCorner.y = (float)presets[currentPreset].textSize;
 
-		controlSquare.SetHeight(presets[currentPreset].textSize);
+		controlSquare.SetHeight((float)presets[currentPreset].textSize);
 	}
 }
 

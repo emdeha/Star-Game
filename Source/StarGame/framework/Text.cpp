@@ -128,8 +128,8 @@ void Text::Print(const char *text, const FontProgData &fontData,
 		finalCoordinates.x = (position.x + fontFaceToUse->glyph->bitmap_left);
 		finalCoordinates.y = (position.y + fontFaceToUse->glyph->bitmap_top);
 
-		finalCoordinates.z = fontFaceToUse->glyph->bitmap.width;
-		finalCoordinates.w = fontFaceToUse->glyph->bitmap.rows;
+		finalCoordinates.z = (float)fontFaceToUse->glyph->bitmap.width;
+		finalCoordinates.w = (float)fontFaceToUse->glyph->bitmap.rows;
 		
 
 		glm::vec2 firstVertex = glm::vec2(finalCoordinates.x,
@@ -197,8 +197,8 @@ void Text::ComputeTextDimensions(const char *text, glm::vec2 position, int fontS
 		finalCoordinates.x = position.x + fontFaceToUse->glyph->bitmap_left;
 		finalCoordinates.y = position.y + fontFaceToUse->glyph->bitmap_top;
 
-		finalCoordinates.z = fontFaceToUse->glyph->bitmap.width;
-		finalCoordinates.w = fontFaceToUse->glyph->bitmap.rows;
+		finalCoordinates.z = (float)fontFaceToUse->glyph->bitmap.width;
+		finalCoordinates.w = (float)fontFaceToUse->glyph->bitmap.rows;
 
 		position.x += (fontFaceToUse->glyph->advance.x >> 6);
 		position.y += (fontFaceToUse->glyph->advance.y >> 6);

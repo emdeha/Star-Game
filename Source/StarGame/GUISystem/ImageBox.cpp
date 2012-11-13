@@ -26,10 +26,6 @@ ImageBox::ImageBox()
 	isActive = false;
 
 	index = 0;
-
-	boxSprite = 
-		Utility::Primitives::Sprite(glm::vec2(), 0.0f, 0.0f, false, "../data/images/fusion-empty.png");
-	//texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-empty.png"));
 }
 ImageBox::ImageBox(LayoutPreset newCurrentPreset,
 			       const std::string &newName, 
@@ -39,8 +35,8 @@ ImageBox::ImageBox(LayoutPreset newCurrentPreset,
 {
 	currentPreset = newCurrentPreset;
 	presetPosition[currentPreset] = newPosition;
-	//width = newWidth;
-	//height = newHeight;
+	width = newWidth;
+	height = newHeight;
 	name = newName;
 	isActive = false;
 
@@ -48,69 +44,11 @@ ImageBox::ImageBox(LayoutPreset newCurrentPreset,
 
 	boxSprite = 
 		Utility::Primitives::Sprite(newPosition, newWidth, newHeight, false, "../data/images/fusion-empty.png");
-	//texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-empty.png"));
 }
 
 void ImageBox::Init()
 {
 	boxSprite.Init();
-
-	/*
-	vertexData[0] = presetPosition[currentPreset].x; 
-	vertexData[1] = presetPosition[currentPreset].y - height; 
-	vertexData[2] = 0.0f; vertexData[3] = 1.0f;
-
-	vertexData[4] = presetPosition[currentPreset].x - width; 
-	vertexData[5] = presetPosition[currentPreset].y - height; 
-	vertexData[6] = 0.0f; vertexData[7] = 1.0f;
-
-	vertexData[8] = presetPosition[currentPreset].x - width;
-	vertexData[9] = presetPosition[currentPreset].y; 
-	vertexData[10] = 0.0f; vertexData[11] = 1.0f;
-
-	vertexData[12] = presetPosition[currentPreset].x; 
-	vertexData[13] = presetPosition[currentPreset].y;
-	vertexData[14] = 0.0f; vertexData[15] = 1.0f;
-
-
-	textureCoordsData[0] = 0.0f; textureCoordsData[1] = 1.0f;
-	textureCoordsData[2] = 1.0f; textureCoordsData[3] = 1.0f;
-	textureCoordsData[4] = 1.0f; textureCoordsData[5] = 0.0f;
-	textureCoordsData[6] = 0.0f; textureCoordsData[7] = 0.0f;
-
-
-	indicesData[0] = 0; indicesData[1] = 1; indicesData[2] = 2;
-	indicesData[3] = 2; indicesData[4] = 3; indicesData[5] = 0;
-
-	
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);	
-
-
-	glGenBuffers(1, &vertexBO);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);	
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	
-	glGenBuffers(1, &textureCoordsBO);
-	glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoordsData), textureCoordsData, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-
-	glGenBuffers(1, &indicesBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicesData), indicesData, GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	
-
-	if(!texture->Load())
-	{
-		std::printf("Error loading texture");
-		return;
-	}
-	*/
 }
 
 
@@ -128,52 +66,20 @@ void ImageBox::OnEvent(Event &_event)
 				if(strcmp(button.c_str(), "q") == 0)
 				{
 					boxSprite.ChangeTexture("../data/images/fusion-q.png");
-					/*
-					texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-q.png"));
-					if(!texture->Load())
-					{
-						std::printf("Error loading texture");
-						return;
-					}
-					*/
 				}
 				if(strcmp(button.c_str(), "w") == 0)
 				{
 					boxSprite.ChangeTexture("../data/images/fusion-w.png");
-					/*
-					texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-w.png"));
-					if(!texture->Load())
-					{
-						std::printf("Error loading texture");
-						return;
-					}
-					*/
 				}
 				if(strcmp(button.c_str(), "e") == 0)
 				{
 					boxSprite.ChangeTexture("../data/images/fusion-e.png");
-					/*
-					texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-e.png"));
-					if(!texture->Load())
-					{
-						std::printf("Error loading texture");
-						return;
-					}
-					*/
 				}
 			}
 		}
 		if(strcmp(_event.GetArgument("what_event").varString, "fusion_seq") == 0)
 		{
 			boxSprite.ChangeTexture("../data/images/fusion-empty.png");
-			/*
-			texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-empty.png"));
-			if(!texture->Load())
-			{
-				std::printf("Error loading texture");
-				return;
-			}
-			*/
 		}
 		break;
 	}
@@ -186,32 +92,4 @@ void ImageBox::Draw(const TextureProgData &textureData)
 	identityMat.SetIdentity();
 
 	boxSprite.Draw(identityMat, textureData);
-	/*
-	glUseProgram(textureData.theProgram);
-	glBindVertexArray(vao);
-	{
-		glUniformMatrix4fv(textureData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
-
-
-		glEnableVertexAttribArray(textureData.positionAttrib);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
-		glVertexAttribPointer(textureData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-		glEnableVertexAttribArray(textureData.texturePosAttrib);
-		glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
-		glVertexAttribPointer(textureData.texturePosAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-		
-		texture->Bind(GL_TEXTURE0);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-
-		glDisableVertexAttribArray(textureData.positionAttrib);
-		glDisableVertexAttribArray(textureData.texturePosAttrib);
-	}
-	glBindVertexArray(0);
-	glUseProgram(0);
-	*/
 }

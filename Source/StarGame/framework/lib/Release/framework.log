@@ -1,5 +1,5 @@
-﻿Build started 1.11.2012 г. 10:23:32 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\framework\framework.vcxproj" on node 4 (rebuild target(s)).
+﻿Build started 13.11.2012 г. 08:13:53 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\framework\framework.vcxproj" on node 3 (rebuild target(s)).
      1>_PrepareForClean:
          Deleting file "lib\Release\framework.lastbuildstate".
        InitializeBuildStatus:
@@ -315,10 +315,6 @@
                  ]
      1>e:\ceci\thegame\source\stargame\glsdk\glm\glm\core\type_vec2.hpp(52): warning C4201: nonstandard extension used : nameless struct/union
      1>e:\ceci\thegame\source\stargame\glsdk\glm\glm\core\type_vec2.hpp(53): warning C4201: nonstandard extension used : nameless struct/union
-     1>Text.cpp(131): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>Text.cpp(132): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>Text.cpp(200): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>Text.cpp(201): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
          Timer.cpp
      1>e:\ceci\thegame\source\stargame\glsdk\glm\glm\core\type_vec2.hpp(51): warning C4201: nonstandard extension used : nameless struct/union
                  e:\ceci\thegame\source\stargame\glsdk\glm\glm\core\type_vec2.hpp(176) : see reference to class template instantiation 'glm::detail::tvec2<T>' being compiled
@@ -509,6 +505,8 @@
      1>e:\ceci\thegame\source\stargame\glsdk\glm\glm\core\type_vec2.hpp(52): warning C4201: nonstandard extension used : nameless struct/union
      1>e:\ceci\thegame\source\stargame\glsdk\glm\glm\core\type_vec2.hpp(53): warning C4201: nonstandard extension used : nameless struct/union
      1>Utility.cpp(106): warning C4244: '=' : conversion from 'int' to 'short', possible loss of data
+     1>Utility.cpp(387): warning C4100: 'windowHeight' : unreferenced formal parameter
+     1>Utility.cpp(387): warning C4100: 'windowWidth' : unreferenced formal parameter
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"lib\framework.lib" /NOLOGO /LTCG lib\Release\EventSystem.obj
          lib\Release\framework.obj
@@ -525,4 +523,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.46
+Time Elapsed 00:00:03.37

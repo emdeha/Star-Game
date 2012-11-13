@@ -1,16 +1,22 @@
-﻿Build started 1.11.2012 г. 11:12:11 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" on node 3 (build target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 13.11.2012 г. 08:13:58 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" on node 3 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Release\StarGame.lastbuildstate".
+       InitializeBuildStatus:
          Creating "Release\StarGame.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Program Files\Assimp\include\assimp" /I..\freetype\include /I..\framework /I..\glsdk\glload\include /I..\glsdk\glimg\include /I..\glsdk\glm /I..\glsdk\glutil\include /I..\glsdk\glmesh\include /I..\glsdk\freeglut\include /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D RELEASE /D NDEBUG /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp ShaderManager.cpp
+         Main.cpp
+         ShaderManager.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\CECI\TheGame\Source\StarGame\Release\StarGame.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Program Files\Assimp\lib" /LIBPATH:..\glsdk\glload\lib /LIBPATH:..\glsdk\glimg\lib /LIBPATH:..\glsdk\glutil\lib /LIBPATH:..\glsdk\glmesh\lib /LIBPATH:..\glsdk\freeglut\lib "C:/Program Files/Assimp/lib/x86/assimp.lib" FreeImage.lib ..\freetype\freetype2410.lib ..\framework\lib\framework.lib ..\fmod\fmodex_vc.lib glload.lib glimg.lib glutil.lib glmesh.lib freeglut.lib glu32.lib opengl32.lib gdi32.lib winmm.lib user32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\StarGame.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"E:\CECI\TheGame\Source\StarGame\Release\StarGame.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\CECI\TheGame\Source\StarGame\Release\StarGame.lib" /MACHINE:X86 Release\Main.obj
          Release\ShaderManager.obj
          E:\CECI\TheGame\Source\StarGame\Release\AssetLoader.lib
          E:\CECI\TheGame\Source\StarGame\Release\Audio.lib
          E:\CECI\TheGame\Source\StarGame\Release\Camera.lib
+         E:\CECI\TheGame\Source\StarGame\framework\lib\framework.lib
          E:\CECI\TheGame\Source\StarGame\Release\Entities.lib
+         E:\CECI\TheGame\Source\StarGame\Release\Fusion.lib
          E:\CECI\TheGame\Source\StarGame\Release\GUISystem.lib
          E:\CECI\TheGame\Source\StarGame\Release\Mouse.lib
          E:\CECI\TheGame\Source\StarGame\Release\ProgramData.lib
@@ -19,12 +25,12 @@
      1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(392): warning C4715: 'FindEmptySatelliteType' : not all control paths return a value
      1>e:\ceci\programming\myprograms\opengl\opengl tasks\mckesson\tutorial 0.3.8\glsdk\freeglut\src\freeglut_structure.c(579): warning C4706: assignment within conditional expression
      1>e:\ceci\programming\myprograms\opengl\opengl tasks\mckesson\tutorial 0.3.8\glsdk\freeglut\src\freeglut_structure.c(590): warning C4706: assignment within conditional expression
-     1>e:\ceci\thegame\source\stargame\guisystem\layout.cpp(284): warning C4715: 'Layout::GetActiveControl' : not all control paths return a value
+     1>e:\ceci\thegame\source\stargame\guisystem\layout.cpp(159): warning C4715: 'Layout::GetActiveControl' : not all control paths return a value
      1>e:\ceci\thegame\source\stargame\framework\eventsystem.cpp(80): warning C4715: 'Event::GetArgument' : not all control paths return a value
-     1>e:\ceci\thegame\source\stargame\guisystem\layout.cpp(185): warning C4715: 'Layout::GetControl' : not all control paths return a value
+     1>e:\ceci\thegame\source\stargame\guisystem\layout.cpp(105): warning C4715: 'Layout::GetControl' : not all control paths return a value
      1>e:\ceci\programming\myprograms\opengl\opengl tasks\mckesson\tutorial 0.3.8\glsdk\freeglut\src\freeglut_init.c(404): warning C4706: assignment within conditional expression
      1>e:\ceci\programming\myprograms\opengl\opengl tasks\mckesson\tutorial 0.3.8\glsdk\freeglut\src\freeglut_init.c(410): warning C4706: assignment within conditional expression
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(282): warning C4715: 'Scene::GetLayout' : not all control paths return a value
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(287): warning C4715: 'Scene::GetLayout' : not all control paths return a value
      1>e:\ceci\programming\myprograms\opengl\opengl tasks\mckesson\tutorial 0.3.8\glsdk\freeglut\src\freeglut_callbacks.c(103): warning C4706: assignment within conditional expression
      1>e:\ceci\programming\myprograms\opengl\opengl tasks\mckesson\tutorial 0.3.8\glsdk\freeglut\src\freeglut_callbacks.c(109): warning C4706: assignment within conditional expression
      1>e:\ceci\programming\myprograms\opengl\opengl tasks\mckesson\tutorial 0.3.8\glsdk\freeglut\src\freeglut_font.c(155): warning C4706: assignment within conditional expression
@@ -36,8 +42,8 @@
        FinalizeBuildStatus:
          Deleting file "Release\StarGame.unsuccessfulbuild".
          Touching "Release\StarGame.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" (build target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:11.70
+Time Elapsed 00:00:08.92

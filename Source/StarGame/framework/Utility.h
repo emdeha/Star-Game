@@ -36,6 +36,7 @@
 #include "../framework/Timer.h"
 
 #include "../ProgramData/ProgramData.h"
+#include "../AssetLoader/Texture.h"
 
 #include <vector>
 
@@ -100,9 +101,9 @@ namespace Utility
 								    float sphereRadius, glm::mat4 deformationMat);
 	}
 
-	/// \namespace Utility::BasicMeshGeneration
+	/// \namespace Utility::Primitives
 	/// \brief Has functions for generating basic figures like circles, toruses and others.
-	namespace BasicMeshGeneration
+	namespace Primitives
 	{
 		/// \class Torus2D
 		/// \brief Generates and renders a 2D torus.
@@ -237,6 +238,38 @@ namespace Utility
 			{
 				height = newHeight;
 			}
+		};
+
+
+		class Sprite
+		{
+		private:
+			glm::vec2 position;
+
+			float width;
+			float height;
+
+			GLuint vertexBO;
+			GLuint indexBO;
+			GLuint textureCoordsBO;
+			GLuint vao;
+
+			std::shared_ptr<Texture> texture;
+
+			bool isCoordinateSystemBottomLeft;
+
+		public:
+			Sprite() {};
+			Sprite(glm::vec2 newPosition,
+				   float newWidth, float newHeight,
+				   bool newIsCoordinateSystemBottomLeft,
+				   const std::string &textureFileName);
+
+			void Init(int windowWidth = 0, int windowHeight = 0);
+
+			void Draw(glutil::MatrixStack modelMat, const TextureProgData &textureData);
+
+			void ChangeTexture(const std::string &textureFileName);
 		};
 	}
 }

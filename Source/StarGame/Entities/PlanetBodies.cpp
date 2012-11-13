@@ -43,17 +43,17 @@ SatelliteOrbit::SatelliteOrbit(glm::vec4 newMainColor, glm::vec4 newOutlineColor
 	outerRadius = newOuterRadius;
 	innerRadius = newInnerRadius;
 
-	mainOrbit = Utility::BasicMeshGeneration::Torus2D(mainColor,
+	mainOrbit = Utility::Primitives::Torus2D(mainColor,
 													  position,
 													  innerRadius,
 													  outerRadius,
 													  90);
-	orbitOutlineOne = Utility::BasicMeshGeneration::Torus2D(outlineColor,
+	orbitOutlineOne = Utility::Primitives::Torus2D(outlineColor,
 															position,
 															innerRadius - 0.05f,
 															innerRadius,
 															90);
-	orbitOutlineTwo = Utility::BasicMeshGeneration::Torus2D(outlineColor,
+	orbitOutlineTwo = Utility::Primitives::Torus2D(outlineColor,
 															position,
 															outerRadius,
 															outerRadius + 0.05f,

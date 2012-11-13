@@ -44,7 +44,7 @@ ImageBox boxTwo(SMALL, "sampleTwo", glm::vec2(430.0f, 570.0f), 50.0f, 50.0f, 2);
 ImageBox boxThree(SMALL, "sampleThree", glm::vec2(485.0f, 570.0f), 50.0f, 50.0f, 1);
 
 
-Utility::BasicMeshGeneration::Square testSquare;
+Utility::Primitives::Square testSquare;
 //std::shared_ptr<TextControl> testButton;
 
 
@@ -338,7 +338,7 @@ void InitializeGUI()
 
 
 	//*testSquare = 
-	//	Utility::BasicMeshGeneration::Square(glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), 
+	//	Utility::Primitives::Square(glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), 
 											///glm::vec4(400, 300, 0.0f, 1.0f),
 											// 50.0f, 50.0f);
 

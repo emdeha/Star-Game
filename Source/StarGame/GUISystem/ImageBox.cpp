@@ -27,7 +27,9 @@ ImageBox::ImageBox()
 
 	index = 0;
 
-	texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-empty.png"));
+	boxSprite = 
+		Utility::Primitives::Sprite(glm::vec2(), 0.0f, 0.0f, false, "../data/images/fusion-empty.png");
+	//texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-empty.png"));
 }
 ImageBox::ImageBox(LayoutPreset newCurrentPreset,
 			       const std::string &newName, 
@@ -37,18 +39,23 @@ ImageBox::ImageBox(LayoutPreset newCurrentPreset,
 {
 	currentPreset = newCurrentPreset;
 	presetPosition[currentPreset] = newPosition;
-	width = newWidth;
-	height = newHeight;
+	//width = newWidth;
+	//height = newHeight;
 	name = newName;
 	isActive = false;
 
 	index = newIndex;
 
-	texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-empty.png"));
+	boxSprite = 
+		Utility::Primitives::Sprite(newPosition, newWidth, newHeight, false, "../data/images/fusion-empty.png");
+	//texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-empty.png"));
 }
 
 void ImageBox::Init()
 {
+	boxSprite.Init();
+
+	/*
 	vertexData[0] = presetPosition[currentPreset].x; 
 	vertexData[1] = presetPosition[currentPreset].y - height; 
 	vertexData[2] = 0.0f; vertexData[3] = 1.0f;
@@ -103,6 +110,7 @@ void ImageBox::Init()
 		std::printf("Error loading texture");
 		return;
 	}
+	*/
 }
 
 
@@ -119,41 +127,53 @@ void ImageBox::OnEvent(Event &_event)
 			{
 				if(strcmp(button.c_str(), "q") == 0)
 				{
+					boxSprite.ChangeTexture("../data/images/fusion-q.png");
+					/*
 					texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-q.png"));
 					if(!texture->Load())
 					{
 						std::printf("Error loading texture");
 						return;
 					}
+					*/
 				}
 				if(strcmp(button.c_str(), "w") == 0)
 				{
+					boxSprite.ChangeTexture("../data/images/fusion-w.png");
+					/*
 					texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-w.png"));
 					if(!texture->Load())
 					{
 						std::printf("Error loading texture");
 						return;
 					}
+					*/
 				}
 				if(strcmp(button.c_str(), "e") == 0)
 				{
+					boxSprite.ChangeTexture("../data/images/fusion-e.png");
+					/*
 					texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-e.png"));
 					if(!texture->Load())
 					{
 						std::printf("Error loading texture");
 						return;
 					}
+					*/
 				}
 			}
 		}
 		if(strcmp(_event.GetArgument("what_event").varString, "fusion_seq") == 0)
 		{
+			boxSprite.ChangeTexture("../data/images/fusion-empty.png");
+			/*
 			texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, "../data/images/fusion-empty.png"));
 			if(!texture->Load())
 			{
 				std::printf("Error loading texture");
 				return;
 			}
+			*/
 		}
 		break;
 	}
@@ -162,6 +182,11 @@ void ImageBox::OnEvent(Event &_event)
 
 void ImageBox::Draw(const TextureProgData &textureData)
 {
+	glutil::MatrixStack identityMat;
+	identityMat.SetIdentity();
+
+	boxSprite.Draw(identityMat, textureData);
+	/*
 	glUseProgram(textureData.theProgram);
 	glBindVertexArray(vao);
 	{
@@ -188,4 +213,5 @@ void ImageBox::Draw(const TextureProgData &textureData)
 	}
 	glBindVertexArray(0);
 	glUseProgram(0);
+	*/
 }

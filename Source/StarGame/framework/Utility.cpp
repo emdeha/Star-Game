@@ -77,7 +77,7 @@ bool Utility::Intersections::RayIntersectsEllipsoid(Ray mouseRay, glm::vec3 body
 
 
 
-Utility::BasicMeshGeneration::Torus2D::Torus2D()
+Utility::Primitives::Torus2D::Torus2D()
 {
 	resolution = 3;
 	
@@ -92,7 +92,7 @@ Utility::BasicMeshGeneration::Torus2D::Torus2D()
 	vertexBO = 0;
 }
 
-Utility::BasicMeshGeneration::Torus2D::Torus2D(glm::vec4 newColor, glm::vec4 newPosition,
+Utility::Primitives::Torus2D::Torus2D(glm::vec4 newColor, glm::vec4 newPosition,
 											   float newInnerRadius, float newOuterRadius, 
 											   int newResolution)
 {
@@ -111,7 +111,7 @@ Utility::BasicMeshGeneration::Torus2D::Torus2D(glm::vec4 newColor, glm::vec4 new
 }
 
 
-void Utility::BasicMeshGeneration::Torus2D::Init()
+void Utility::Primitives::Torus2D::Init()
 {
 	// Torus Generation
 	std::vector<float> vertexData;
@@ -165,7 +165,7 @@ void Utility::BasicMeshGeneration::Torus2D::Init()
 	glBindVertexArray(0);
 }
 
-void Utility::BasicMeshGeneration::Torus2D::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &data)
+void Utility::Primitives::Torus2D::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &data)
 {
 	glUseProgram(data.theProgram);
 	glBindVertexArray(vao);
@@ -189,7 +189,7 @@ void Utility::BasicMeshGeneration::Torus2D::Draw(glutil::MatrixStack &modelMatri
 
 
 
-Utility::BasicMeshGeneration::Circle::Circle(glm::vec4 newColor, glm::vec4 newPosition,
+Utility::Primitives::Circle::Circle(glm::vec4 newColor, glm::vec4 newPosition,
 											 float newRadius, short newResolution)
 {
 	assert(newResolution < 360 && newResolution > 3.0);
@@ -205,7 +205,7 @@ Utility::BasicMeshGeneration::Circle::Circle(glm::vec4 newColor, glm::vec4 newPo
 	vertexBO = 0;
 }
 
-void Utility::BasicMeshGeneration::Circle::Init()
+void Utility::Primitives::Circle::Init()
 {
 	// Circle Generation
 	std::vector<float> vertexData;
@@ -247,7 +247,7 @@ void Utility::BasicMeshGeneration::Circle::Init()
 	glBindVertexArray(0);
 }
 
-void Utility::BasicMeshGeneration::Circle::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &data)
+void Utility::Primitives::Circle::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &data)
 {
 	glUseProgram(data.theProgram);
 	glBindVertexArray(vao);
@@ -271,7 +271,7 @@ void Utility::BasicMeshGeneration::Circle::Draw(glutil::MatrixStack &modelMatrix
 
 
 
-Utility::BasicMeshGeneration::Square::Square(glm::vec4 newColor, 
+Utility::Primitives::Square::Square(glm::vec4 newColor, 
 											 glm::vec4 newPosition,
 											 float newWidth, float newHeight,
 											 bool newIsCoordinateSytemBottomLeft)
@@ -288,7 +288,7 @@ Utility::BasicMeshGeneration::Square::Square(glm::vec4 newColor,
 	isCoordinateSystemBottomLeft = newIsCoordinateSytemBottomLeft;
 }
 
-void Utility::BasicMeshGeneration::Square::Init(int windowWidth, int windowHeight)
+void Utility::Primitives::Square::Init(int windowWidth, int windowHeight)
 {
 	glm::vec2 positionRelativeToCoordSystem = glm::vec2(position);
 	if(isCoordinateSystemBottomLeft)
@@ -299,7 +299,7 @@ void Utility::BasicMeshGeneration::Square::Init(int windowWidth, int windowHeigh
 
 
 	std::vector<float> vertexData;
-	std::vector<unsigned int> indexData;
+	std::vector<unsigned short> indexData;
 
 	
 	vertexData.push_back(positionRelativeToCoordSystem.x);
@@ -332,7 +332,7 @@ void Utility::BasicMeshGeneration::Square::Init(int windowWidth, int windowHeigh
 	glGenBuffers(1, &indexBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
-				 sizeof(unsigned int) * indexData.size(), &indexData[0], GL_STATIC_DRAW);
+				 sizeof(unsigned short) * indexData.size(), &indexData[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	glGenVertexArrays(1, &vao);
@@ -343,7 +343,7 @@ void Utility::BasicMeshGeneration::Square::Init(int windowWidth, int windowHeigh
 	glBindVertexArray(0);
 }
 
-void Utility::BasicMeshGeneration::Square::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &data)
+void Utility::Primitives::Square::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &data)
 {
 	glUseProgram(data.theProgram);
 	glBindVertexArray(vao);
@@ -357,8 +357,146 @@ void Utility::BasicMeshGeneration::Square::Draw(glutil::MatrixStack &modelMatrix
 		glEnableVertexAttribArray(data.positionAttrib);
 		glVertexAttribPointer(data.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 	}
 	glDisableVertexAttribArray(0);
 	glUseProgram(0);
+}
+
+
+
+Utility::Primitives::Sprite::Sprite(glm::vec2 newPosition,
+									float newWidth, float newHeight,
+									bool newIsCoordinateSystemBottomLeft,
+									const std::string &textureFileName)
+{
+	position = newPosition;
+	width = newWidth;
+	height = newHeight;
+
+	vao = 0;
+	indexBO = 0;
+	vertexBO = 0;
+	textureCoordsBO = 0;
+
+	isCoordinateSystemBottomLeft = newIsCoordinateSystemBottomLeft;
+
+	texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, textureFileName));
+}
+
+void Utility::Primitives::Sprite::Init(int windowWidth, int windowHeight)
+{
+	std::vector<float> vertexData;
+	std::vector<float> textureCoordsData;
+	std::vector<unsigned short> indexData;
+
+	
+	glm::vec2 positionRelativeToCoordSystem = glm::vec2(position);
+	if(isCoordinateSystemBottomLeft)
+	{
+	}
+
+
+	vertexData.push_back(positionRelativeToCoordSystem.x);
+	vertexData.push_back(positionRelativeToCoordSystem.y - height);
+	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
+
+	vertexData.push_back(positionRelativeToCoordSystem.x - width);
+	vertexData.push_back(positionRelativeToCoordSystem.y - height);
+	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
+
+	vertexData.push_back(positionRelativeToCoordSystem.x - width);
+	vertexData.push_back(positionRelativeToCoordSystem.y);
+	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
+
+	vertexData.push_back(positionRelativeToCoordSystem.x);
+	vertexData.push_back(positionRelativeToCoordSystem.y);
+	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
+
+
+	textureCoordsData.push_back(0.0f); textureCoordsData.push_back(1.0f);
+	textureCoordsData.push_back(1.0f); textureCoordsData.push_back(1.0f);
+	textureCoordsData.push_back(1.0f); textureCoordsData.push_back(0.0f);
+	textureCoordsData.push_back(0.0f); textureCoordsData.push_back(0.0f);
+
+
+	indexData.push_back(0); indexData.push_back(1); indexData.push_back(2);
+	indexData.push_back(2); indexData.push_back(3); indexData.push_back(0);
+
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+
+	glGenBuffers(1, &vertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);	
+	glBufferData(GL_ARRAY_BUFFER, 
+				 sizeof(float) * vertexData.size(), &vertexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	
+	glGenBuffers(1, &textureCoordsBO);
+	glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
+	glBufferData(GL_ARRAY_BUFFER, 
+				 sizeof(float) * textureCoordsData.size(), &textureCoordsData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+	glGenBuffers(1, &indexBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
+				 sizeof(unsigned short) * indexData.size(), &indexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	
+
+	// TODO: Better error-handling needed
+	if(!texture->Load())
+	{
+		std::printf("Error loading texture");
+		return;
+	}
+}
+
+void Utility::Primitives::Sprite::Draw(glutil::MatrixStack modelMat, const TextureProgData &textureData)
+{
+	glUseProgram(textureData.theProgram);
+	glBindVertexArray(vao);
+	{
+		glUniformMatrix4fv(
+			textureData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMat.Top()));
+
+		glEnableVertexAttribArray(textureData.positionAttrib);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+		glVertexAttribPointer(textureData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+		
+		glEnableVertexAttribArray(textureData.texturePosAttrib);
+		glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
+		glVertexAttribPointer(textureData.texturePosAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+
+		texture->Bind(GL_TEXTURE0);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+
+
+		glDisableVertexAttribArray(textureData.positionAttrib);
+		glDisableVertexAttribArray(textureData.texturePosAttrib);
+
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+	glBindVertexArray(0);
+	glUseProgram(0);
+}
+
+void Utility::Primitives::Sprite::ChangeTexture(const std::string &textureFileName)
+{
+	texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, textureFileName));
+	if(!texture->Load())
+	{
+		std::printf("Error loading texture");
+		return;
+	}
 }

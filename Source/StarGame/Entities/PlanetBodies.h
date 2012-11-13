@@ -79,9 +79,9 @@ private:
 	float innerRadius;
 
 
-	Utility::BasicMeshGeneration::Torus2D mainOrbit;
-	Utility::BasicMeshGeneration::Torus2D orbitOutlineOne;
-	Utility::BasicMeshGeneration::Torus2D orbitOutlineTwo;
+	Utility::Primitives::Torus2D mainOrbit;
+	Utility::Primitives::Torus2D orbitOutlineOne;
+	Utility::Primitives::Torus2D orbitOutlineTwo;
 
 public:
 	SatelliteOrbit();

@@ -61,7 +61,7 @@ TextControl::TextControl(LayoutPreset newCurrentPreset,
 	isActive = false;
 
 	controlSquare =
-		Utility::BasicMeshGeneration::Square(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), 
+		Utility::Primitives::Square(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), 
 											 glm::vec4(newPosition, 0.0f, 1.0f),
 											 0.0f, newTextSize, true);
 }

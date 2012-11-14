@@ -244,7 +244,7 @@ namespace Utility
 		class Sprite
 		{
 		private:
-			glm::vec2 position;
+			glm::vec4 position;
 
 			float width;
 			float height;
@@ -254,18 +254,18 @@ namespace Utility
 			GLuint textureCoordsBO;
 			GLuint vao;
 
-			std::shared_ptr<Texture> texture;
+			std::shared_ptr<Texture2D> texture;
 
 			bool isCoordinateSystemBottomLeft;
 
 		public:
 			Sprite() {};
-			Sprite(glm::vec2 newPosition,
+			Sprite(glm::vec4 newPosition,
 				   float newWidth, float newHeight,
-				   bool newIsCoordinateSystemBottomLeft,
-				   const std::string &textureFileName);
+				   bool newIsCoordinateSystemBottomLeft);
 
-			void Init(int windowWidth = 0, int windowHeight = 0);
+			void Init(const std::string &textureFileName, 
+					  int windowWidth = 0, int windowHeight = 0);
 
 			void Draw(glutil::MatrixStack modelMat, const TextureProgData &textureData);
 

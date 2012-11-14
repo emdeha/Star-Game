@@ -365,10 +365,9 @@ void Utility::Primitives::Square::Draw(glutil::MatrixStack &modelMatrix, const S
 
 
 
-Utility::Primitives::Sprite::Sprite(glm::vec2 newPosition,
+Utility::Primitives::Sprite::Sprite(glm::vec4 newPosition,
 									float newWidth, float newHeight,
-									bool newIsCoordinateSystemBottomLeft,
-									const std::string &textureFileName)
+									bool newIsCoordinateSystemBottomLeft)
 {
 	position = newPosition;
 	width = newWidth;
@@ -381,17 +380,18 @@ Utility::Primitives::Sprite::Sprite(glm::vec2 newPosition,
 
 	isCoordinateSystemBottomLeft = newIsCoordinateSystemBottomLeft;
 
-	texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, textureFileName));
+	texture = std::shared_ptr<Texture2D>(new Texture2D());
 }
 
-void Utility::Primitives::Sprite::Init(int windowWidth, int windowHeight)
+void Utility::Primitives::Sprite::Init(const std::string &textureFileName, 
+									   int windowWidth, int windowHeight)
 {
 	std::vector<float> vertexData;
 	std::vector<float> textureCoordsData;
 	std::vector<unsigned short> indexData;
 
 	
-	glm::vec2 positionRelativeToCoordSystem = glm::vec2(position);
+	glm::vec3 positionRelativeToCoordSystem = glm::vec3(position);
 	if(isCoordinateSystemBottomLeft)
 	{
 	}
@@ -399,19 +399,19 @@ void Utility::Primitives::Sprite::Init(int windowWidth, int windowHeight)
 
 	vertexData.push_back(positionRelativeToCoordSystem.x);
 	vertexData.push_back(positionRelativeToCoordSystem.y - height);
-	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
+	vertexData.push_back(positionRelativeToCoordSystem.z); vertexData.push_back(1.0f);
 
 	vertexData.push_back(positionRelativeToCoordSystem.x - width);
 	vertexData.push_back(positionRelativeToCoordSystem.y - height);
-	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
+	vertexData.push_back(positionRelativeToCoordSystem.z); vertexData.push_back(1.0f);
 
 	vertexData.push_back(positionRelativeToCoordSystem.x - width);
 	vertexData.push_back(positionRelativeToCoordSystem.y);
-	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
+	vertexData.push_back(positionRelativeToCoordSystem.z); vertexData.push_back(1.0f);
 
 	vertexData.push_back(positionRelativeToCoordSystem.x);
 	vertexData.push_back(positionRelativeToCoordSystem.y);
-	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
+	vertexData.push_back(positionRelativeToCoordSystem.z); vertexData.push_back(1.0f);
 
 
 	textureCoordsData.push_back(0.0f); textureCoordsData.push_back(1.0f);
@@ -450,7 +450,7 @@ void Utility::Primitives::Sprite::Init(int windowWidth, int windowHeight)
 	
 
 	// TODO: Better error-handling needed
-	if(!texture->Load())
+	if(!texture->Load(textureFileName))
 	{
 		std::printf("Error loading texture");
 		return;
@@ -493,8 +493,8 @@ void Utility::Primitives::Sprite::Draw(glutil::MatrixStack modelMat, const Textu
 
 void Utility::Primitives::Sprite::ChangeTexture(const std::string &textureFileName)
 {
-	texture = std::shared_ptr<Texture>(new Texture(GL_TEXTURE_2D, textureFileName));
-	if(!texture->Load())
+	texture = std::shared_ptr<Texture2D>(new Texture2D());
+	if(!texture->Load(textureFileName))
 	{
 		std::printf("Error loading texture");
 		return;

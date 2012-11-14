@@ -1,16 +1,12 @@
-﻿Build started 13.11.2012 г. 08:13:44 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" on node 3 (rebuild target(s)).
-     1>_PrepareForClean:
-         Deleting file "Debug\StarGame.lastbuildstate".
-       InitializeBuildStatus:
+﻿Build started 14.11.2012 г. 18:21:52 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
          Creating "Debug\StarGame.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Program Files\Assimp\include\assimp" /I..\freetype\include /I..\framework /I..\glsdk\glload\include /I..\glsdk\glimg\include /I..\glsdk\glm /I..\glsdk\glutil\include /I..\glsdk\glmesh\include /I..\glsdk\freeglut\include /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D DEBUG /D _DEBUG /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp ShaderManager.cpp
-         ShaderManager.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Program Files\Assimp\include\assimp" /I..\freetype\include /I..\framework /I..\glsdk\glload\include /I..\glsdk\glimg\include /I..\glsdk\glm /I..\glsdk\glutil\include /I..\glsdk\glmesh\include /I..\glsdk\freeglut\include /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D DEBUG /D _DEBUG /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp
          Main.cpp
-         Generating Code...
        ManifestResourceCompile:
-         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\StarGame.exe.embed.manifest.res" Debug\StarGame_manifest.rc 
+         All outputs are up-to-date.
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\StarGame.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Program Files\Assimp\lib" /LIBPATH:..\glsdk\glload\lib /LIBPATH:..\glsdk\glimg\lib /LIBPATH:..\glsdk\glutil\lib /LIBPATH:..\glsdk\glmesh\lib /LIBPATH:..\glsdk\freeglut\lib "C:/Program Files/Assimp/lib/x86/assimp.lib" FreeImage.lib ..\freetype\freetype2410_D.lib ..\framework\lib\frameworkD.lib ..\fmod\fmodex_vc.lib glloadD.lib glimgD.lib glutilD.lib glmeshD.lib freeglutD.lib glu32.lib opengl32.lib gdi32.lib winmm.lib user32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\StarGame.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"E:\CECI\TheGame\Source\StarGame\Debug\StarGame.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\CECI\TheGame\Source\StarGame\Debug\StarGame.lib" /MACHINE:X86 Debug\StarGame.exe.embed.manifest.res
          Debug\Main.obj
@@ -18,37 +14,24 @@
          E:\CECI\TheGame\Source\StarGame\Debug\AssetLoader.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Audio.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Camera.lib
-         E:\CECI\TheGame\Source\StarGame\framework\lib\frameworkD.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Entities.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Fusion.lib
          E:\CECI\TheGame\Source\StarGame\Debug\GUISystem.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Mouse.lib
+         E:\CECI\TheGame\Source\StarGame\Debug\ParticleEngine.lib
          E:\CECI\TheGame\Source\StarGame\Debug\ProgramData.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Scene.lib
        Manifest:
-         Deleting file "Debug\StarGame.exe.embed.manifest".
          C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\StarGame.exe.embed.manifest" /manifest Debug\StarGame.exe.intermediate.manifest
-         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\StarGame.exe.embed.manifest.res" Debug\StarGame_manifest.rc 
+         All outputs are up-to-date.
        LinkEmbedManifest:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\StarGame.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Program Files\Assimp\lib" /LIBPATH:..\glsdk\glload\lib /LIBPATH:..\glsdk\glimg\lib /LIBPATH:..\glsdk\glutil\lib /LIBPATH:..\glsdk\glmesh\lib /LIBPATH:..\glsdk\freeglut\lib "C:/Program Files/Assimp/lib/x86/assimp.lib" FreeImage.lib ..\freetype\freetype2410_D.lib ..\framework\lib\frameworkD.lib ..\fmod\fmodex_vc.lib glloadD.lib glimgD.lib glutilD.lib glmeshD.lib freeglutD.lib glu32.lib opengl32.lib gdi32.lib winmm.lib user32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\StarGame.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"E:\CECI\TheGame\Source\StarGame\Debug\StarGame.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\CECI\TheGame\Source\StarGame\Debug\StarGame.lib" /MACHINE:X86 Debug\StarGame.exe.embed.manifest.res
-         Debug\Main.obj
-         Debug\ShaderManager.obj
-         E:\CECI\TheGame\Source\StarGame\Debug\AssetLoader.lib
-         E:\CECI\TheGame\Source\StarGame\Debug\Audio.lib
-         E:\CECI\TheGame\Source\StarGame\Debug\Camera.lib
-         E:\CECI\TheGame\Source\StarGame\framework\lib\frameworkD.lib
-         E:\CECI\TheGame\Source\StarGame\Debug\Entities.lib
-         E:\CECI\TheGame\Source\StarGame\Debug\Fusion.lib
-         E:\CECI\TheGame\Source\StarGame\Debug\GUISystem.lib
-         E:\CECI\TheGame\Source\StarGame\Debug\Mouse.lib
-         E:\CECI\TheGame\Source\StarGame\Debug\ProgramData.lib
-         E:\CECI\TheGame\Source\StarGame\Debug\Scene.lib
+         All outputs are up-to-date.
          StarGame.vcxproj -> E:\CECI\TheGame\Source\StarGame\Debug\StarGame.exe
        FinalizeBuildStatus:
          Deleting file "Debug\StarGame.unsuccessfulbuild".
          Touching "Debug\StarGame.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" (rebuild target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:02.43
+Time Elapsed 00:00:02.30

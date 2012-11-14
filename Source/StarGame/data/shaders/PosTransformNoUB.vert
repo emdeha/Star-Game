@@ -1,13 +1,19 @@
 #version 330
 
+layout(std140) uniform;
+
 layout (location = 0) in vec4 position;
 
 smooth out vec4 theColor;
 
 uniform vec4 color;
 
+uniform OrthographicProjection
+{
+	mat4 cameraToClipMatrix;
+};
 uniform mat4 modelToCameraMatrix;
-uniform mat4 cameraToClipMatrix;
+
 
 void main()
 {

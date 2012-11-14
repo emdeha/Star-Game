@@ -43,12 +43,12 @@ ImageBox::ImageBox(LayoutPreset newCurrentPreset,
 	index = newIndex;
 
 	boxSprite = 
-		Utility::Primitives::Sprite(newPosition, newWidth, newHeight, false, "../data/images/fusion-empty.png");
+		Utility::Primitives::Sprite(glm::vec4(newPosition, 0.0f, 1.0f), newWidth, newHeight, false);
 }
 
 void ImageBox::Init()
 {
-	boxSprite.Init();
+	boxSprite.Init("../data/images/fusion-empty.png");
 }
 
 

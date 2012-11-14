@@ -118,18 +118,6 @@ Program ShaderProgramContainer::GetProgram(const std::string &programName)
 	return shaderPrograms[programName];
 }
 
-
-
-ShaderManager::ShaderManager()
-{
-	blockIndices.insert(std::make_pair(BT_MATERIAL, 0));
-	blockIndices.insert(std::make_pair(BT_LIGHT, 1));
-	blockIndices.insert(std::make_pair(BT_PROJECTION, 2));
-
-	uniformBuffers.insert(std::make_pair(UBT_PROJECTION, 0));
-	uniformBuffers.insert(std::make_pair(UBT_LIGHT, 0));
-}
-
 void ShaderManager::LoadProgram(const std::string &vertexShader, const std::string &fragmentShader,
 								const std::string &programDataType)
 {
@@ -169,6 +157,23 @@ void ShaderManager::AddUniformBlock(const std::string &programDataType,
 	programDatas[programDataType].attributes.insert(std::make_pair(uniformBlockName, uniformBlockLocation));
 
 	glUniformBlockBinding(programDatas[programDataType].theProgram, uniformBlockLocation, blockType);
+}
+
+
+
+
+
+
+ShaderManager::ShaderManager()
+{
+	blockIndices.insert(std::make_pair(BT_MATERIAL, 0));
+	blockIndices.insert(std::make_pair(BT_LIGHT, 1));
+	blockIndices.insert(std::make_pair(BT_PROJECTION, 2));
+	blockIndices.insert(std::make_pair(BT_ORTHOGRAPHIC, 3));
+
+	uniformBuffers.insert(std::make_pair(UBT_PROJECTION, 0));
+	uniformBuffers.insert(std::make_pair(UBT_ORTHOGRAPHIC, 0));
+	uniformBuffers.insert(std::make_pair(UBT_LIGHT, 0));
 }
 
 void ShaderManager::LoadLitProgram(const std::string &vertexShader, 
@@ -251,6 +256,10 @@ void ShaderManager::LoadSimpleNoUBProgram(const std::string &vertexShader,
 
 	simpleNoUBData.positionAttrib =
 		glGetAttribLocation(simpleNoUBData.theProgram, "position");
+
+
+	GLuint projectionBlock = glGetUniformBlockIndex(simpleNoUBData.theProgram, "OrthographicProjection");
+	glUniformBlockBinding(simpleNoUBData.theProgram, projectionBlock, blockIndices[BT_ORTHOGRAPHIC]);
 }
 
 void ShaderManager::LoadFontProgram(const std::string &vertexShader, 
@@ -268,6 +277,10 @@ void ShaderManager::LoadFontProgram(const std::string &vertexShader,
 	fontData.projectionMatrixUnif = glGetUniformLocation(fontData.theProgram, "projection");
 
 	fontData.positionAttrib = glGetAttribLocation(fontData.theProgram, "position");
+
+
+	GLuint projectionBlock = glGetUniformBlockIndex(fontData.theProgram, "OrthographicProjection");
+	glUniformBlockBinding(fontData.theProgram, projectionBlock, blockIndices[BT_ORTHOGRAPHIC]);
 	//fontData.textureCoordAttrib = glGetAttribLocation(fontData.theProgram, "textureCoordinates");
 }
 
@@ -319,6 +332,10 @@ void ShaderManager::LoadTextureProgData(const std::string &vertexShader,
 		glGetAttribLocation(textureProgData.theProgram, "position");
 	textureProgData.texturePosAttrib =
 		glGetAttribLocation(textureProgData.theProgram, "texCoord");
+
+
+	GLuint projectionBlock = glGetUniformBlockIndex(textureProgData.theProgram, "OrthographicProjection");
+	glUniformBlockBinding(textureProgData.theProgram, projectionBlock, blockIndices[BT_ORTHOGRAPHIC]);
 }
 
 

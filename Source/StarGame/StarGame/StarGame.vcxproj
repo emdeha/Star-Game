@@ -110,6 +110,9 @@
     <ProjectReference Include="..\Mouse\Mouse.vcxproj">
       <Project>{854d03a0-f808-4790-aab3-a1842b8dfeed}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\ParticleEngine\ParticleEngine.vcxproj">
+      <Project>{2e742ce0-402c-476e-8974-bad3f5967057}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\ProgramData\ProgramData.vcxproj">
       <Project>{b5f4f13f-30dc-4003-b0ee-64718ed4b5ec}</Project>
     </ProjectReference>

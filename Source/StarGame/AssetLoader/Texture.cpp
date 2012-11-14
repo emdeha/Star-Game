@@ -22,17 +22,14 @@
 #include "Texture.h"
 
 
-Texture::Texture(GLenum newTextureTarget, const std::string &newFileName)
+Texture2D::Texture2D()
 {
 #ifdef FREEIMAGE_LIB
 	FreeImage_Initialize();
 #endif
-
-	textureTarget = newTextureTarget;
-	fileName = newFileName;
 }
 
-bool Texture::Load()
+bool Texture2D::Load(const std::string &fileName)
 {
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 	FIBITMAP *dib(0);
@@ -61,26 +58,30 @@ bool Texture::Load()
 		return false;
 
 
-	glActiveTexture(GL_TEXTURE0);
 	glGenTextures(1, &textureObject);
-	glBindTexture(textureTarget, textureObject);
+	glBindTexture(GL_TEXTURE_2D, textureObject);
 
-
-	glTexImage2D(textureTarget, 0, GL_RGBA, 
-			     width, height, 0, 
-				 GL_BGRA, GL_UNSIGNED_BYTE, bits);
+	glTexImage2D(GL_TEXTURE_2D, // texture type
+				 0, 
+				 GL_RGBA, // how OpenGL will store the texture data
+			     width, // width
+				 height, // height
+				 0, // must always be 0
+				 GL_BGRA, // we are uploading four components to the texture
+				 GL_UNSIGNED_BYTE, // each component is stored in a single byte
+				 bits); // the texture's data
 
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameterf(textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameterf(textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
 	return true;
 }
 
-void Texture::Bind(GLenum textureUnit)
+void Texture2D::Bind(GLenum textureUnit)
 {
 	glActiveTexture(textureUnit);
-	glBindTexture(textureTarget, textureObject);
+	glBindTexture(GL_TEXTURE_2D, textureObject);
 }

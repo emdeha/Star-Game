@@ -28,20 +28,17 @@
 #include <FreeImage.h>
 
 
-class Texture
+class Texture2D
 {
 private:
-	std::string fileName;
-
-	GLenum textureTarget;
 	GLuint textureObject;
 
 public:
-	Texture(GLenum newTextureTarget, const std::string &newFileName);
+	Texture2D();
 		
 	// Maybe the texture loading characteristics must be kept away from the user.
 	// Later, I will develop a single format which will have default characteristics.
-	bool Load();
+	bool Load(const std::string &fileName);
 
 	void Bind(GLenum textureUnit);
 };

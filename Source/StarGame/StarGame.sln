@@ -37,6 +37,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Scene", "Scene\Scene.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fusion", "Fusion\Fusion.vcxproj", "{A35D6336-E27F-47C8-BD8C-356F97DC2846}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ParticleEngine", "ParticleEngine\ParticleEngine.vcxproj", "{2E742CE0-402C-476E-8974-BAD3F5967057}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = StarGame.vsmdi
@@ -90,6 +92,10 @@ Global
 		{A35D6336-E27F-47C8-BD8C-356F97DC2846}.Debug|Win32.Build.0 = Debug|Win32
 		{A35D6336-E27F-47C8-BD8C-356F97DC2846}.Release|Win32.ActiveCfg = Release|Win32
 		{A35D6336-E27F-47C8-BD8C-356F97DC2846}.Release|Win32.Build.0 = Release|Win32
+		{2E742CE0-402C-476E-8974-BAD3F5967057}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2E742CE0-402C-476E-8974-BAD3F5967057}.Debug|Win32.Build.0 = Debug|Win32
+		{2E742CE0-402C-476E-8974-BAD3F5967057}.Release|Win32.ActiveCfg = Release|Win32
+		{2E742CE0-402C-476E-8974-BAD3F5967057}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

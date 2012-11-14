@@ -80,7 +80,7 @@ private:
 	};
 
 	std::vector<MeshEntry> entries;
-	std::vector<std::shared_ptr<Texture>> textures;
+	std::vector<std::shared_ptr<Texture2D>> textures;
 
 public:
 	Mesh();

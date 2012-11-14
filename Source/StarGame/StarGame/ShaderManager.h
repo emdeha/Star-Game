@@ -30,11 +30,13 @@ enum BlockType
 	BT_MATERIAL,
 	BT_LIGHT, 
 	BT_PROJECTION,
+	BT_ORTHOGRAPHIC,
 };
 
 enum UniformBufferType
 {
 	UBT_PROJECTION,
+	UBT_ORTHOGRAPHIC, 
 	UBT_LIGHT,
 };
 
@@ -132,6 +134,8 @@ public:
 						 BlockType blockType);
 	
 	ProgramData GetProgramData(const std::string &programDataType);
+
+
 
 
 

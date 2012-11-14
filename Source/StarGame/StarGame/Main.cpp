@@ -32,6 +32,7 @@
 #include "../Scene/Scene.h"
 #include "../AssetLoader/GUILoader.h"
 #include "../AssetLoader/MeshLoader.h"
+#include "../ParticleEngine/Engine.h"
 
 
 ShaderManager shaderManager;
@@ -44,8 +45,7 @@ ImageBox boxTwo(SMALL, "sampleTwo", glm::vec2(430.0f, 570.0f), 50.0f, 50.0f, 2);
 ImageBox boxThree(SMALL, "sampleThree", glm::vec2(485.0f, 570.0f), 50.0f, 50.0f, 1);
 
 
-Utility::Primitives::Square testSquare;
-//std::shared_ptr<TextControl> testButton;
+SimpleParticleEmitter testEmitter(glm::vec3(), 100);
 
 
 void HandleMouse()
@@ -335,18 +335,6 @@ void InitializeGUI()
 						glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	scene->AddLayouts(guiLoader.GetAllLoadedLayouts());
-
-
-	//*testSquare = 
-	//	Utility::Primitives::Square(glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), 
-											///glm::vec4(400, 300, 0.0f, 1.0f),
-											// 50.0f, 50.0f);
-
-	//testSquare.Init();
-	//testButton = std::shared_ptr<TextControl>(new Button(BIG, "test", "TEST", glm::vec2(400, 300), 64, true));
-	//testButton->Init("../data/fonts/AGENCYR.TTF", glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-
-	//scene->GetLayout(LAYOUT_MENU)->AddControl(testButton);
 }
 
 void InitializeScene()
@@ -428,6 +416,9 @@ void Init()
 	InitializePrograms();
 	InitializeScene();
 
+
+	testEmitter.Init();
+
 	
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -454,6 +445,12 @@ void Init()
 	glBindBuffer(GL_UNIFORM_BUFFER, projectionUniformBuffer);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 
+	GLuint orthographicUniformBuffer = 0;
+	glGenBuffers(1, &orthographicUniformBuffer);
+	shaderManager.SetUniformBuffer(UBT_ORTHOGRAPHIC, orthographicUniformBuffer);
+	glBindBuffer(GL_UNIFORM_BUFFER, orthographicUniformBuffer);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+
 	// Bind the static buffers.
 	glBindBufferRange(GL_UNIFORM_BUFFER, shaderManager.GetBlockIndex(BT_LIGHT), 
 		lightUniformBuffer, 
@@ -461,6 +458,10 @@ void Init()
 
 	glBindBufferRange(GL_UNIFORM_BUFFER, shaderManager.GetBlockIndex(BT_PROJECTION), 
 		projectionUniformBuffer,
+		0, sizeof(glm::mat4));
+
+	glBindBufferRange(GL_UNIFORM_BUFFER, shaderManager.GetBlockIndex(BT_ORTHOGRAPHIC),
+		orthographicUniformBuffer,
 		0, sizeof(glm::mat4));
 
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -502,6 +503,10 @@ void Display()
 						   shaderManager.GetUnlitProgData(),
 						   shaderManager.GetSimpleProgData(),
 						   interpolation);
+
+
+		//testEmitter.Update();
+		//testEmitter.Draw(modelMatrix, shaderManager.GetTextureProgData());
 				
 		
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
@@ -516,11 +521,6 @@ void Display()
 	{
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
 								   shaderManager.GetSimpleNoUBProgData());
-
-		glutil::MatrixStack modelMatrix;
-		modelMatrix.SetIdentity();
-
-		//testSquare.Draw(modelMatrix, shaderManager.GetSimpleNoUBProgData());
 	}
 
 	HandleMouse();
@@ -545,13 +545,17 @@ void Reshape(int width, int height)
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 
-
 	projMatrix.SetIdentity();
 	projMatrix.Orthographic((float)width, 0.0f, (float)height, 0.0f, 1.0f, 1000.0f);
 
-	
-	// TODO: Make the orthographic matrix an UBO
+	displayData.projectionMatrix = projMatrix.Top();
 
+
+	glBindBuffer(GL_UNIFORM_BUFFER, shaderManager.GetUniformBuffer(UBT_ORTHOGRAPHIC));
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(displayData.projectionMatrix), &displayData.projectionMatrix);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	// TODO: Make the orthographic matrix an UBO
+/*
 	glUseProgram(shaderManager.GetFontProgData().theProgram);
 
 		glUniformMatrix4fv(shaderManager.GetFontProgData().projectionMatrixUnif,
@@ -565,7 +569,7 @@ void Reshape(int width, int height)
 						   1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
 
 	glUseProgram(0);
-
+	
 	glUseProgram(shaderManager.GetTextureProgData().theProgram);
 		
 		glUniformMatrix4fv(shaderManager.GetTextureProgData().projectionMatrixUnif,
@@ -573,6 +577,7 @@ void Reshape(int width, int height)
 	
 	glUseProgram(0);
 
+	*/
 	scene->UpdateCurrentLayout(width, height);
 	// TODO: Isolate in a separate function.
 	/*if(width <= 800 || height <= 600)

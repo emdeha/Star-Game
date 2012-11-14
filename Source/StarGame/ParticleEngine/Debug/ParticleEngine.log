@@ -1,0 +1,20 @@
+﻿Build started 14.11.2012 г. 18:03:28 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\ParticleEngine\ParticleEngine.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\ParticleEngine.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\ParticleEngine.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Engine.cpp
+         Engine.cpp
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\ParticleEngine.lib" /NOLOGO Debug\Engine.obj
+         Debug\stdafx.obj
+         ParticleEngine.vcxproj -> E:\CECI\TheGame\Source\StarGame\Debug\ParticleEngine.lib
+       FinalizeBuildStatus:
+         Deleting file "Debug\ParticleEngine.unsuccessfulbuild".
+         Touching "Debug\ParticleEngine.lastbuildstate".
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\ParticleEngine\ParticleEngine.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.71

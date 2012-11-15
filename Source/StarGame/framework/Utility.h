@@ -244,6 +244,7 @@ namespace Utility
 		class Sprite
 		{
 		private:
+			glm::vec4 color;
 			glm::vec4 position;
 
 			float width;
@@ -260,7 +261,7 @@ namespace Utility
 
 		public:
 			Sprite() {};
-			Sprite(glm::vec4 newPosition,
+			Sprite(glm::vec4 newPosition, glm::vec4 newColor,
 				   float newWidth, float newHeight,
 				   bool newIsCoordinateSystemBottomLeft);
 
@@ -268,6 +269,45 @@ namespace Utility
 					  int windowWidth = 0, int windowHeight = 0);
 
 			void Draw(glutil::MatrixStack modelMat, const TextureProgData &textureData);
+
+			void ChangeTexture(const std::string &textureFileName);
+		};
+
+
+		class SpriteArray
+		{	
+		private:
+			glm::vec4 color;
+			std::vector<glm::vec4> positions;
+
+			float width; 
+			float height;
+
+			int spritesCount;
+
+			GLuint vertexBO;
+			GLuint indexBO;
+			GLuint textureCoordsBO;
+			GLuint vao;
+
+			std::shared_ptr<Texture2D> texture;
+
+			bool isCoordinateSystemBottomLeft;
+
+		public:
+			SpriteArray() {}
+			SpriteArray(glm::vec4 newColor,
+						float newWidth, float newHeight,
+						bool newIsCoordinateSystemBottomLeft);
+			
+			void Init(int newSpritesCount,
+					  const std::string &textureFileName, 
+					  int windowWidth = 0, int windowHeight = 0);
+
+			//void AddPosition(glm::vec4 newPosition);
+
+			void Draw(glutil::MatrixStack modelMat, const TextureProgData &textureData,
+					  std::vector<glm::vec3> particlePositions);
 
 			void ChangeTexture(const std::string &textureFileName);
 		};

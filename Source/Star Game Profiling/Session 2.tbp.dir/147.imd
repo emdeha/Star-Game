@@ -1,0 +1,12 @@
+﻿[Unknown Kernel Samples]
+SIZE=0
+SAMPS=1
+ModuleType=6
+NUMSUBSECTIONS=1
+
+[SUB]
+LINECOUNT=1
+7708,1124,1,1,[0 0] 1,0xfffffa800e2cd4ec
+[SUB_END]
+[END]
+

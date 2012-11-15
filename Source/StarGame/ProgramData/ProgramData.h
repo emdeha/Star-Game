@@ -47,6 +47,8 @@ struct TextureProgData
 {
 	GLuint theProgram;
 
+	GLuint colorUnif;
+
 	GLuint modelToCameraMatrixUnif;
 	GLuint projectionMatrixUnif;
 

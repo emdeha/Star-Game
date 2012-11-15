@@ -112,8 +112,8 @@ private:
 	SimpleProgData simpleNoUBData;
 	FontProgData fontData;
 	SimpleTextureProgData simpleTextureProgData;
-
 	TextureProgData textureProgData;
+	TextureProgData perspTextureProgData;
 
 public:
 	ShaderManager();
@@ -146,6 +146,8 @@ public:
 	void LoadFontProgram(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadSimpleTextureProgData(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadTextureProgData(const std::string &vertexShader, const std::string &fragmentShader);
+	void LoadPerspectiveTextureProgData(const std::string &vertexShader, const std::string &fragmentShader);
+
 
 	LitProgData GetLitProgData();
 	UnlitProgData GetUnlitProgData();
@@ -154,6 +156,8 @@ public:
 	FontProgData GetFontProgData();
 	SimpleTextureProgData GetSimpleTextureProgData();
 	TextureProgData GetTextureProgData();
+	TextureProgData GetPerspectiveTextureProgData();
+
 
 	const int GetBlockIndex(BlockType);
 	unsigned int GetUniformBuffer(UniformBufferType);

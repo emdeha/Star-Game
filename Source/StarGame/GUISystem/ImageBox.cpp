@@ -43,7 +43,9 @@ ImageBox::ImageBox(LayoutPreset newCurrentPreset,
 	index = newIndex;
 
 	boxSprite = 
-		Utility::Primitives::Sprite(glm::vec4(newPosition, 0.0f, 1.0f), newWidth, newHeight, false);
+		Utility::Primitives::Sprite(glm::vec4(newPosition, 0.0f, 1.0f), 
+									glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
+									newWidth, newHeight, false);
 }
 
 void ImageBox::Init()
@@ -65,7 +67,7 @@ void ImageBox::OnEvent(Event &_event)
 			{
 				if(strcmp(button.c_str(), "q") == 0)
 				{
-					boxSprite.ChangeTexture("../data/images/fusion-q.png");
+					boxSprite.ChangeTexture("../data/images/fusion-q-.png");
 				}
 				if(strcmp(button.c_str(), "w") == 0)
 				{
@@ -91,5 +93,10 @@ void ImageBox::Draw(const TextureProgData &textureData)
 	glutil::MatrixStack identityMat;
 	identityMat.SetIdentity();
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	boxSprite.Draw(identityMat, textureData);
+
+	glDisable(GL_BLEND);
 }

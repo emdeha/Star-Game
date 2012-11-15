@@ -1,0 +1,13 @@
+﻿[C:\Windows\SysWOW64\wshtcpip.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x731c0000
+LINECOUNT=1
+6680,5016,1,1,[2 0] 1,0x12a6
+[SUB_END]
+[END]
+

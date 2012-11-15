@@ -95,4 +95,35 @@ Fetch=0
 OpSample=0
 EventGroupCount=0
 
+Name=Session 2
+Notes=
+Launch="E:\CECI\TheGame\Source\StarGame\Debug\StarGame.exe" 
+WorkDir=E:\CECI\TheGame\Source\StarGame\Debug
+StopOnApp=0
+BreakAfter=0
+Duration=20
+StartPaused=0
+StartImmediately=0
+CSS=0
+CssInterval=10
+StartDelay=0
+CssUnwind=10
+Affinity=15
+SaveRaw=0
+CLUtilEnabled=0
+CLUtilChecked=0
+LdStEnabled=0
+LdStChecked=0
+ApplyProcFilter= 0
+UtilMask= 0
+Pids= 9648,
+EnvVars=
+ProfileFile=Session 2.tbp
+Cpus=4
+Profile=1
+msInterval=1
+Fetch=0
+OpSample=0
+EventGroupCount=0
+
 [End]

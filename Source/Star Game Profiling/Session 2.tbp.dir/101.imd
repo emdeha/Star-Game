@@ -1,0 +1,15 @@
+﻿[C:\Windows\system32\DRIVERS\vpcnfltr.sys]
+SIZE=0
+SAMPS=3
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0xfffff880071e4000
+LINECOUNT=3
+9648,9600,1,1,[1 0] 1,0x27c4
+6680,5016,1,1,[0 0] 1,0x2cb9
+4,10356,1,1,[0 0] 1,0x381c
+[SUB_END]
+[END]
+

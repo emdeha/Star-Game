@@ -1,0 +1,13 @@
+﻿[c:\windows\system32\ssdpsrv.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7feefb80000
+LINECOUNT=1
+5768,4164,1,1,[0 0] 1,0x2593f
+[SUB_END]
+[END]
+

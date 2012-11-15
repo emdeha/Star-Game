@@ -45,7 +45,7 @@ ImageBox boxTwo(SMALL, "sampleTwo", glm::vec2(430.0f, 570.0f), 50.0f, 50.0f, 2);
 ImageBox boxThree(SMALL, "sampleThree", glm::vec2(485.0f, 570.0f), 50.0f, 50.0f, 1);
 
 
-SimpleParticleEmitter testEmitter(glm::vec3(), 100);
+SimpleParticleEmitter testEmitter(glm::vec3(0.0f, 3.0f, 0.0f), 10000);
 
 
 void HandleMouse()
@@ -327,6 +327,7 @@ void InitializePrograms()
 	shaderManager.LoadFontProgram("shaders/Font.vert", "shaders/Font.frag");
 	shaderManager.LoadSimpleTextureProgData("shaders/SimpleTexture.vert", "shaders/SimpleTexture.frag");
 	shaderManager.LoadTextureProgData("shaders/Texture.vert", "shaders/Texture.frag");
+	shaderManager.LoadPerspectiveTextureProgData("shaders/TexturePerspective.vert", "shaders/Texture.frag");
 }
 
 void InitializeGUI()
@@ -411,8 +412,32 @@ unsigned long nextGameTick = 0;
 
 
 
+unsigned int frameCount = 0;
+const char WINDOW_TITLE[] = "Test Playground: ";
+
+void TimerFunction(int value)
+{
+	if(value != 0)
+	{
+		char *tempString = (char *)malloc(512 + strlen(WINDOW_TITLE));
+
+		sprintf(tempString, "%s %i frames per second", WINDOW_TITLE, frameCount * 4);
+
+		glutSetWindowTitle(tempString);
+		free(tempString);
+	}
+
+	frameCount = 0;
+	glutTimerFunc(250, TimerFunction, 1);
+}
+
+
+
 void Init()
 {
+	glutTimerFunc(0, TimerFunction, 0);
+
+
 	InitializePrograms();
 	InitializeScene();
 
@@ -472,6 +497,9 @@ void Init()
 
 void Display()
 {
+	frameCount++;
+
+
 	glClearDepth(1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -505,8 +533,8 @@ void Display()
 						   interpolation);
 
 
-		//testEmitter.Update();
-		//testEmitter.Draw(modelMatrix, shaderManager.GetTextureProgData());
+		testEmitter.Update();
+		testEmitter.Draw(modelMatrix, shaderManager.GetPerspectiveTextureProgData());
 				
 		
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
@@ -554,30 +582,8 @@ void Reshape(int width, int height)
 	glBindBuffer(GL_UNIFORM_BUFFER, shaderManager.GetUniformBuffer(UBT_ORTHOGRAPHIC));
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(displayData.projectionMatrix), &displayData.projectionMatrix);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	// TODO: Make the orthographic matrix an UBO
-/*
-	glUseProgram(shaderManager.GetFontProgData().theProgram);
 
-		glUniformMatrix4fv(shaderManager.GetFontProgData().projectionMatrixUnif,
-						   1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
 
-	glUseProgram(0);
-	
-	glUseProgram(shaderManager.GetSimpleNoUBProgData().theProgram);
-
-		glUniformMatrix4fv(shaderManager.GetSimpleNoUBProgData().projectionMatrixUnif, 
-						   1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
-
-	glUseProgram(0);
-	
-	glUseProgram(shaderManager.GetTextureProgData().theProgram);
-		
-		glUniformMatrix4fv(shaderManager.GetTextureProgData().projectionMatrixUnif,
-						   1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
-	
-	glUseProgram(0);
-
-	*/
 	scene->UpdateCurrentLayout(width, height);
 	// TODO: Isolate in a separate function.
 	/*if(width <= 800 || height <= 600)

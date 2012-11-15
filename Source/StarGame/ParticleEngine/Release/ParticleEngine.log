@@ -1,10 +1,9 @@
-﻿Build started 13.11.2012 г. 08:25:54 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\ParticleEngine\ParticleEngine.vcxproj" on node 2 (build target(s)).
+﻿Build started 14.11.2012 г. 19:06:11 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\ParticleEngine\ParticleEngine.vcxproj" on node 4 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Release\ParticleEngine.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Release\ParticleEngine.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
-         stdafx.cpp
+         All outputs are up-to-date.
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Release\ParticleEngine.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Engine.cpp
          Engine.cpp
        Lib:
@@ -18,4 +17,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.61
+Time Elapsed 00:00:01.00

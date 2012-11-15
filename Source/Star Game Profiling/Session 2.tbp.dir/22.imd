@@ -1,0 +1,14 @@
+﻿[C:\Program Files\AVAST Software\Avast\AvastUI.exe]
+SIZE=0
+SAMPS=2
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0xea0000
+LINECOUNT=2
+5668,5672,1,1,[2 0] 1,0xbb821
+5668,5672,1,1,[2 0] 1,0x2b985c
+[SUB_END]
+[END]
+

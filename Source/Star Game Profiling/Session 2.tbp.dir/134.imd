@@ -1,0 +1,13 @@
+﻿[C:\Windows\system32\uDWM.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7fef62e0000
+LINECOUNT=1
+4412,4452,1,1,[2 0] 1,0x15c7
+[SUB_END]
+[END]
+

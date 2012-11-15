@@ -1,0 +1,16 @@
+﻿[unknown module pid (1832)]
+SIZE=0
+SAMPS=5
+ModuleType=5
+NUMSUBSECTIONS=1
+
+[SUB]
+LINECOUNT=5
+1832,3872,1,1,[0 0] 1,0xd1f920
+1832,2304,1,1,[2 0] 1,0xd273e4
+1832,2304,1,1,[3 0] 1,0xd27cd7
+1832,3876,1,1,[3 0] 1,0xd2a141
+1832,2292,1,1,[1 0] 1,0xd97027
+[SUB_END]
+[END]
+

@@ -1,0 +1,13 @@
+﻿[C:\Program Files\AVAST Software\Avast\aswSqLt.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x743c0000
+LINECOUNT=1
+1496,1992,1,1,[1 0] 1,0xca80
+[SUB_END]
+[END]
+

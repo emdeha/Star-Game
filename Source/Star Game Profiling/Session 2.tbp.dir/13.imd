@@ -1,0 +1,15 @@
+﻿[C:\Program Files (x86)\Steam\Steam.dll]
+SIZE=0
+SAMPS=3
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x30000000
+LINECOUNT=3
+780,5056,1,1,[2 0] 1,0x14ab1
+780,5056,1,1,[2 0] 1,0x1512e7
+780,5056,1,1,[1 0] 1,0x18f79a
+[SUB_END]
+[END]
+

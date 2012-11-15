@@ -365,10 +365,11 @@ void Utility::Primitives::Square::Draw(glutil::MatrixStack &modelMatrix, const S
 
 
 
-Utility::Primitives::Sprite::Sprite(glm::vec4 newPosition,
+Utility::Primitives::Sprite::Sprite(glm::vec4 newPosition, glm::vec4 newColor,
 									float newWidth, float newHeight,
 									bool newIsCoordinateSystemBottomLeft)
 {
+	color = newColor;
 	position = newPosition;
 	width = newWidth;
 	height = newHeight;
@@ -465,6 +466,8 @@ void Utility::Primitives::Sprite::Draw(glutil::MatrixStack modelMat, const Textu
 		glUniformMatrix4fv(
 			textureData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMat.Top()));
 
+		glUniform4f(textureData.colorUnif, color.r, color.g, color.b, color.a);
+
 		glEnableVertexAttribArray(textureData.positionAttrib);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
 		glVertexAttribPointer(textureData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
@@ -499,4 +502,183 @@ void Utility::Primitives::Sprite::ChangeTexture(const std::string &textureFileNa
 		std::printf("Error loading texture");
 		return;
 	}
+}
+
+
+
+Utility::Primitives::SpriteArray::SpriteArray(glm::vec4 newColor,
+										  	  float newWidth, float newHeight,
+											  bool newIsCoordinateSystemBottomLeft)
+{
+	color = newColor;
+	positions.resize(0);
+	width = newWidth;
+	height = newHeight;
+
+	vao = 0;
+	indexBO = 0;
+	vertexBO = 0;
+	textureCoordsBO = 0;
+
+	isCoordinateSystemBottomLeft = newIsCoordinateSystemBottomLeft;
+
+	texture = std::shared_ptr<Texture2D>(new Texture2D());
+}
+
+void Utility::Primitives::SpriteArray::Init(int newSpritesCount,
+											const std::string &textureFileName, 
+											int windowWidth, int windowHeight)
+{
+	std::vector<float> vertexData;
+	std::vector<float> textureCoordsData;
+	std::vector<unsigned short> indexData;
+
+	spritesCount = newSpritesCount;
+	
+
+	glm::vec3 positionRelativeToCoordSystem = glm::vec3();
+	if(isCoordinateSystemBottomLeft)
+	{
+	}
+
+
+	vertexData.push_back(positionRelativeToCoordSystem.x);
+	vertexData.push_back(positionRelativeToCoordSystem.y - height);
+	vertexData.push_back(positionRelativeToCoordSystem.z); vertexData.push_back(1.0f);
+
+	vertexData.push_back(positionRelativeToCoordSystem.x - width);
+	vertexData.push_back(positionRelativeToCoordSystem.y - height);
+	vertexData.push_back(positionRelativeToCoordSystem.z); vertexData.push_back(1.0f);
+
+	vertexData.push_back(positionRelativeToCoordSystem.x - width);
+	vertexData.push_back(positionRelativeToCoordSystem.y);
+	vertexData.push_back(positionRelativeToCoordSystem.z); vertexData.push_back(1.0f);
+
+	vertexData.push_back(positionRelativeToCoordSystem.x);
+	vertexData.push_back(positionRelativeToCoordSystem.y);
+	vertexData.push_back(positionRelativeToCoordSystem.z); vertexData.push_back(1.0f);
+
+	
+	textureCoordsData.push_back(0.0f); textureCoordsData.push_back(1.0f);
+	textureCoordsData.push_back(1.0f); textureCoordsData.push_back(1.0f);
+	textureCoordsData.push_back(1.0f); textureCoordsData.push_back(0.0f);
+	textureCoordsData.push_back(0.0f); textureCoordsData.push_back(0.0f);
+
+
+	indexData.push_back(0); indexData.push_back(1); indexData.push_back(2);
+	indexData.push_back(2); indexData.push_back(3); indexData.push_back(0);
+
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+
+	glGenBuffers(1, &vertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+	glBufferData(GL_ARRAY_BUFFER,
+				 sizeof(float) * vertexData.size(), &vertexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glGenBuffers(1, &textureCoordsBO);
+	glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
+	glBufferData(GL_ARRAY_BUFFER, 
+				 sizeof(float) * textureCoordsData.size(), &textureCoordsData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glGenBuffers(1, &indexBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
+				 sizeof(unsigned short) * indexData.size(), &indexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	if(!texture->Load(textureFileName))
+	{
+		std::printf("Error loading texture");
+		return;
+	}
+}
+/*
+void Utility::Primitives::SpriteArray::AddPosition(glm::vec4 newPosition)
+{
+	positions.push_back(newPosition);
+
+	
+	glm::vec3 positionRelativeToCoordSystem = glm::vec3(positions.back());
+	if(isCoordinateSystemBottomLeft)
+	{
+	}
+
+
+	std::vector<float> updatedVertexData;
+
+	updatedVertexData.push_back(positionRelativeToCoordSystem.x);
+	updatedVertexData.push_back(positionRelativeToCoordSystem.y - height);
+	updatedVertexData.push_back(positionRelativeToCoordSystem.z); updatedVertexData.push_back(1.0f);
+
+	updatedVertexData.push_back(positionRelativeToCoordSystem.x - width);
+	updatedVertexData.push_back(positionRelativeToCoordSystem.y - height);
+	updatedVertexData.push_back(positionRelativeToCoordSystem.z); updatedVertexData.push_back(1.0f);
+
+	updatedVertexData.push_back(positionRelativeToCoordSystem.x - width);
+	updatedVertexData.push_back(positionRelativeToCoordSystem.y);
+	updatedVertexData.push_back(positionRelativeToCoordSystem.z); updatedVertexData.push_back(1.0f);
+
+	updatedVertexData.push_back(positionRelativeToCoordSystem.x);
+	updatedVertexData.push_back(positionRelativeToCoordSystem.y);
+	updatedVertexData.push_back(positionRelativeToCoordSystem.z); updatedVertexData.push_back(1.0f);
+
+
+	int offset = (positions.size() - 1) * 16;
+
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+	glBufferSubData(GL_ARRAY_BUFFER, offset, sizeof(float) * updatedVertexData.size(), &updatedVertexData[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}*/
+
+void Utility::Primitives::SpriteArray::Draw(glutil::MatrixStack modelMat,
+											const TextureProgData &textureData,
+											std::vector<glm::vec3> particlePositions)
+{
+	glUseProgram(textureData.theProgram);
+	glBindVertexArray(vao);
+	{
+		glUniform4f(textureData.colorUnif, color.r, color.g, color.b, color.a);
+
+		glEnableVertexAttribArray(textureData.texturePosAttrib);
+		glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
+		glVertexAttribPointer(textureData.texturePosAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+
+		texture->Bind(GL_TEXTURE0);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+
+		for(int i = 0; i < spritesCount; i++)
+		{
+			glutil::PushStack push(modelMat);
+
+			modelMat.Translate(particlePositions[i].x, particlePositions[i].y, particlePositions[i].z);
+
+			glUniformMatrix4fv(
+				textureData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMat.Top()));
+
+
+			glEnableVertexAttribArray(textureData.positionAttrib);
+			glVertexAttribPointer(textureData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+		}
+
+
+		glDisableVertexAttribArray(textureData.positionAttrib);
+		glDisableVertexAttribArray(textureData.texturePosAttrib);
+
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+	glBindVertexArray(0);
+	glUseProgram(0);
 }

@@ -1,0 +1,14 @@
+﻿[c:\windows\system32\bfe.dll]
+SIZE=0
+SAMPS=2
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7fefa100000
+LINECOUNT=2
+1656,7884,1,1,[0 0] 1,0x3043
+1656,7884,1,1,[0 0] 1,0x308c
+[SUB_END]
+[END]
+

@@ -328,6 +328,9 @@ void ShaderManager::LoadTextureProgData(const std::string &vertexShader,
 	textureProgData.colorTextureUnif =
 		glGetUniformLocation(textureProgData.theProgram, "_sampler");
 
+	textureProgData.colorUnif =
+		glGetUniformLocation(textureProgData.theProgram, "color");
+
 	textureProgData.positionAttrib = 
 		glGetAttribLocation(textureProgData.theProgram, "position");
 	textureProgData.texturePosAttrib =
@@ -336,6 +339,36 @@ void ShaderManager::LoadTextureProgData(const std::string &vertexShader,
 
 	GLuint projectionBlock = glGetUniformBlockIndex(textureProgData.theProgram, "OrthographicProjection");
 	glUniformBlockBinding(textureProgData.theProgram, projectionBlock, blockIndices[BT_ORTHOGRAPHIC]);
+}
+
+void ShaderManager::LoadPerspectiveTextureProgData(const std::string &vertexShader, 
+												   const std::string &fragmentShader)
+{
+	std::vector<GLuint> shaderList;
+
+	shaderList.push_back(Framework::LoadShader(GL_VERTEX_SHADER, vertexShader));
+	shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, fragmentShader));
+
+	perspTextureProgData.theProgram = Framework::CreateProgram(shaderList);
+
+
+	perspTextureProgData.modelToCameraMatrixUnif = 
+		glGetUniformLocation(perspTextureProgData.theProgram, "modelToCameraMatrix");
+	perspTextureProgData.projectionMatrixUnif = 
+		glGetUniformLocation(perspTextureProgData.theProgram, "cameraToClipMatrix");
+	perspTextureProgData.colorTextureUnif =
+		glGetUniformLocation(perspTextureProgData.theProgram, "_sampler");
+	perspTextureProgData.colorUnif =
+		glGetUniformLocation(perspTextureProgData.theProgram, "color");
+
+	perspTextureProgData.positionAttrib = 
+		glGetAttribLocation(perspTextureProgData.theProgram, "position");
+	perspTextureProgData.texturePosAttrib =
+		glGetAttribLocation(perspTextureProgData.theProgram, "texCoord");
+
+
+	GLuint projectionBlock = glGetUniformBlockIndex(perspTextureProgData.theProgram, "Projection");
+	glUniformBlockBinding(perspTextureProgData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
 }
 
 
@@ -366,6 +399,10 @@ SimpleTextureProgData ShaderManager::GetSimpleTextureProgData()
 TextureProgData ShaderManager::GetTextureProgData()
 {
 	return textureProgData;
+}
+TextureProgData ShaderManager::GetPerspectiveTextureProgData()
+{
+	return perspTextureProgData;
 }
 
 

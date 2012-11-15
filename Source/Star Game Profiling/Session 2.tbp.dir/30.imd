@@ -1,0 +1,16 @@
+﻿[C:\Users\USER\AppData\Local\Akamai\netsession_win.exe]
+SIZE=0
+SAMPS=4
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x400000
+LINECOUNT=4
+5320,848,1,1,[3 0] 1,0x1ebf
+5320,5160,1,1,[0 0] 1,0x80a3
+5320,5160,1,1,[2 0] 1,0x135ea
+5320,848,1,1,[3 0] 1,0x17af38
+[SUB_END]
+[END]
+

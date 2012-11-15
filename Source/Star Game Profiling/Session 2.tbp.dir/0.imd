@@ -1,0 +1,13 @@
+﻿[C:\Program Files (x86)\AMD\CodeAnalyst\bin\CodeAnalyst.exe]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x850000
+LINECOUNT=1
+7708,1124,1,1,[1 0] 1,0xe0b2a
+[SUB_END]
+[END]
+

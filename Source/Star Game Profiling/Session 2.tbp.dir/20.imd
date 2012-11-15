@@ -1,0 +1,13 @@
+﻿[C:\Program Files (x86)\WandouLabs\AdbWinApi.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x6bd10000
+LINECOUNT=1
+6340,6420,1,1,[2 0] 1,0x5dab
+[SUB_END]
+[END]
+

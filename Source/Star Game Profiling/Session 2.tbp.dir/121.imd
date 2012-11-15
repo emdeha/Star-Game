@@ -1,0 +1,20 @@
+﻿[C:\Windows\system32\drivers\iaStor.sys]
+SIZE=0
+SAMPS=8
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0xfffff88001223000
+LINECOUNT=8
+0,0,1,1,[0 0] 1,0x6584
+0,0,1,1,[0 0] 1,0x77f9
+4,212,1,1,[2 0] 1,0x9edc
+9648,9600,1,1,[0 0] 1,0x2489e
+0,0,1,1,[0 0] 1,0x248a9
+0,0,1,1,[0 0] 1,0x2c9de
+0,0,1,1,[0 0] 1,0x2ca11
+0,0,1,1,[0 0] 1,0x741f6
+[SUB_END]
+[END]
+

@@ -1,0 +1,13 @@
+﻿[C:\Windows\SysWOW64\AudioSes.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x70a20000
+LINECOUNT=1
+9648,7156,1,1,[1 0] 1,0x13b1
+[SUB_END]
+[END]
+

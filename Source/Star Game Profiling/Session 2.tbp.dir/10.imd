@@ -1,0 +1,13 @@
+﻿[C:\Program Files (x86)\MSI Afterburner\RTUI.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x2b0000
+LINECOUNT=1
+4444,4448,1,1,[0 0] 1,0xe3c3
+[SUB_END]
+[END]
+

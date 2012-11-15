@@ -1,0 +1,14 @@
+﻿[C:\Program Files (x86)\Steam\vstdlib_s.dll]
+SIZE=0
+SAMPS=2
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x6d020000
+LINECOUNT=2
+780,2652,1,1,[0 0] 1,0x14ebd
+780,2652,1,1,[1 0] 1,0x14f62
+[SUB_END]
+[END]
+

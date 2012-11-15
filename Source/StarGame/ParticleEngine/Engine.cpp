@@ -19,40 +19,56 @@
 #include "Engine.h"
 
 
-SimpleParticleEmitter::SimpleParticleEmitter(glm::vec3 newPosition, int numberOfParticles)
+SimpleParticleEmitter::SimpleParticleEmitter(glm::vec3 newPosition, int newNumberOfParticles)
 {
 	position = newPosition;
+	numberOfParticles = newNumberOfParticles;
 
+
+	particleSprites = 
+		Utility::Primitives::SpriteArray(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 0.1f, 0.1f, false);
 	particles.resize(numberOfParticles);
 }
 
 void SimpleParticleEmitter::Init()
 {
-	for(std::vector<SimpleParticle>::iterator iter = particles.begin(); 
-		iter != particles.end(); ++iter)
+	particleSprites.Init(numberOfParticles,
+						 "../data/images/diamond.png");
+	for(int i = 0; i < particles.size(); i++)
 	{
-		*iter = SimpleParticle(position, glm::vec3());
-		iter->Init();
+		particles[i] = SimpleParticle(position, glm::vec3());
+		particles[i].Init();
+		//particleSprites.AddPosition(glm::vec4(particles[i].GetPosition(), 1.0f));
 	}
 }
 
 void SimpleParticleEmitter::Update()
 {
-	for(std::vector<SimpleParticle>::iterator iter = particles.begin(); 
-		iter != particles.end(); ++iter)
+	for(int i = 0; i < particles.size(); i++)
 	{
-		iter->Update();
+		particles[i].Update();
 	}
 }
 
 void SimpleParticleEmitter::Draw(glutil::MatrixStack &modelMat, 
 								 const TextureProgData &textureProgData)
 {
-	for(std::vector<SimpleParticle>::iterator iter = particles.begin(); 
-		iter != particles.end(); ++iter)
+	particleSprites.Draw(modelMat, textureProgData, GetParticlePositions());
+	/*for(int i = 0; i < particles.size(); i++)
 	{
-		iter->Draw(modelMat, textureProgData);
+		particles[i].Draw(modelMat, textureProgData);
+	}*/
+}
+
+std::vector<glm::vec3> SimpleParticleEmitter::GetParticlePositions()
+{
+	std::vector<glm::vec3> positions;
+	for(int i = 0; i < numberOfParticles; i++)
+	{
+		positions.push_back(particles[i].GetPosition());
 	}
+
+	return positions;
 }
 
 
@@ -63,8 +79,11 @@ SimpleParticle::SimpleParticle(glm::vec3 newPosition, glm::vec3 newVelocity)
 						 ((float)rand() / (float)RAND_MAX) / 100.0f, 
 						 0.0f);
 
-	particleSprite = Utility::Primitives::Sprite(glm::vec4(position, 1.0f), 0.1f, 0.1f, false);
-	particleSprite.Init("../data/images/particle.png");
+	/*particleSprite = 
+		Utility::Primitives::Sprite(glm::vec4(position, 1.0f),
+									glm::vec4(1.0f, 0.5f, 0.7f, 1.0f),
+									0.1f, 0.1f, false);
+	particleSprite.Init("../data/images/diamond.png");*/
 }
 
 void SimpleParticle::Init()
@@ -76,9 +95,9 @@ void SimpleParticle::Update()
 	position += velocity;
 }
 
-void SimpleParticle::Draw(glutil::MatrixStack &modelMat, const TextureProgData &textureProgData)
+void SimpleParticle::Draw(/*glutil::MatrixStack &modelMat, const TextureProgData &textureProgData*/)
 {
-	{
+	/*{
 		glutil::PushStack push(modelMat);
 
 		modelMat.Translate(position.x, position.y, position.z);
@@ -89,5 +108,5 @@ void SimpleParticle::Draw(glutil::MatrixStack &modelMat, const TextureProgData &
 		particleSprite.Draw(modelMat, textureProgData);
 
 		glDisable(GL_BLEND);
-	}
+	}*/
 }

@@ -1,0 +1,13 @@
+﻿[C:\Windows\system32\DRIVERS\idmwfp.sys]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0xfffff880019d3000
+LINECOUNT=1
+1496,9408,1,1,[2 0] 1,0x548a
+[SUB_END]
+[END]
+

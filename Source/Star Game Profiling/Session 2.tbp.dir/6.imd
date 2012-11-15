@@ -1,0 +1,13 @@
+﻿[C:\Program Files (x86)\Java\jre7\bin\msvcr100.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x73c50000
+LINECOUNT=1
+1832,3984,1,1,[3 0] 1,0x10176
+[SUB_END]
+[END]
+

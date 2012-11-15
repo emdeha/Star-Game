@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<OSV version="1" >
+	<Entry hdr="Target Application Info" >
+		<Entry hdr="PID : 9648" val="E:\CECI\TheGame\Source\StarGame\Debug\StarGame.exe" >
+			<Entry hdr="TID : 3284" val="0.003 sec" />
+			<Entry hdr="TID : 4352" val="1335.04 sec" />
+			<Entry hdr="TID : 4396" val="0.003 sec" />
+			<Entry hdr="TID : 5992" val="1335.07 sec" />
+			<Entry hdr="TID : 7156" val="1335.07 sec" />
+			<Entry hdr="TID : 8936" val="1335.07 sec" />
+			<Entry hdr="TID : 10272" val="0.001 sec" />
+			<Entry hdr="TID : 10332" val="1335.05 sec" />
+		</Entry>
+	</Entry>
+	<Entry hdr="System-wide Profile" >
+		<Entry hdr="Number of Processes" val="59  [View Processes]" lnk = "proc:Session 2.tbp" />
+		<Entry hdr="Number of Modules" val="164  [View Modules]" lnk = "sys:Session 2.tbp" />
+	</Entry>
+</OSV>

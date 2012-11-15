@@ -1,0 +1,13 @@
+﻿[C:\Program Files (x86)\MSI Afterburner\RTHAL.dll]
+SIZE=0
+SAMPS=1
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x380000
+LINECOUNT=1
+4444,4448,1,1,[2 0] 1,0x226c3
+[SUB_END]
+[END]
+

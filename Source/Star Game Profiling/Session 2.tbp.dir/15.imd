@@ -1,0 +1,16 @@
+﻿[C:\Program Files (x86)\Steam\bin\steamservice.dll]
+SIZE=0
+SAMPS=4
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x6c7c0000
+LINECOUNT=4
+780,5172,1,1,[2 0] 1,0x36a1
+780,5172,1,1,[1 0] 1,0x6518
+780,5172,1,1,[1 0] 1,0x1c2de
+780,5172,1,1,[1 0] 1,0x1c960
+[SUB_END]
+[END]
+

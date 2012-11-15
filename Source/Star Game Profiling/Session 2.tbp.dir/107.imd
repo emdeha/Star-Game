@@ -1,0 +1,14 @@
+﻿[C:\Windows\system32\SHELL32.dll]
+SIZE=0
+SAMPS=2
+ModuleType=1
+NUMSUBSECTIONS=1
+
+[SUB]
+BASEADDR=0x7fefdb50000
+LINECOUNT=2
+4312,11132,1,1,[0 0] 1,0xa4cf0
+4312,11132,1,1,[2 0] 1,0xa56d0
+[SUB_END]
+[END]
+

@@ -31,17 +31,22 @@ class SimpleParticleEmitter
 private:
 	glm::vec3 position;
 
+	int numberOfParticles;
+
+	Utility::Primitives::SpriteArray particleSprites;
 	std::vector<SimpleParticle> particles;
 
 public:
 	SimpleParticleEmitter() {}
-	SimpleParticleEmitter(glm::vec3 newPosition, int numberOfParticles);
+	SimpleParticleEmitter(glm::vec3 newPosition, int newNumberOfParticles);
 
 	void Init();
 
 	void Update();
 
 	void Draw(glutil::MatrixStack &modelMat, const TextureProgData &textureProgData);
+
+	std::vector<glm::vec3> GetParticlePositions();
 };
 
 
@@ -52,7 +57,7 @@ private:
 	glm::vec3 velocity;
 
 
-	Utility::Primitives::Sprite particleSprite;
+	//Utility::Primitives::Sprite particleSprite;
 
 public:
 	SimpleParticle() {};
@@ -62,7 +67,12 @@ public:
 
 	void Update();
 
-	void Draw(glutil::MatrixStack &modelMat, const TextureProgData &textureProgData);
+	void Draw(/*glutil::MatrixStack &modelMat, const TextureProgData &textureProgData*/);
+
+	glm::vec3 GetPosition()
+	{
+		return position;
+	}
 };
 
 

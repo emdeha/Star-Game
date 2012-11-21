@@ -76,4 +76,41 @@ public:
 };
 
 
+
+class TransformFeedbackParticleEmitter
+{
+private:
+	void UpdateParticles(const ParticleProgData &particleData, int deltaTime_milliseconds);
+	void RenderParticles(glutil::MatrixStack &modelMatrix, const BillboardProgData &billboardData, 
+						 glm::vec3 cameraPosition);
+
+
+	bool isFirst;
+
+	GLuint currentVertexBuffer;
+	GLuint currentTransformFeedbackBuffer;
+
+	GLuint vao;
+
+	GLuint particleVBO[2];
+	GLuint particleTFBO[2];
+
+	RandomTexture randomTexture; // TODO: Should be sth like directionsTexture
+	std::shared_ptr<Texture2D> texture;
+
+	int time;
+
+public:
+	TransformFeedbackParticleEmitter();
+	~TransformFeedbackParticleEmitter();
+
+	bool Init(const BillboardProgData &billboardData, const ParticleProgData &particleData,
+			  const glm::vec3 &position);
+
+	void Render(glutil::MatrixStack &modelMatrix,
+				const BillboardProgData &billboardData, const ParticleProgData &particleData,
+				glm::vec3 cameraPosition, int deltaTime_milliseconds);
+};
+
+
 #endif

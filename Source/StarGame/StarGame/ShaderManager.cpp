@@ -23,6 +23,8 @@
 #include "framework.h"
 
 
+// TODO: Check if each uniform and attribute location is gathered correctly
+
 
 Program::Program()
 {
@@ -371,6 +373,70 @@ void ShaderManager::LoadPerspectiveTextureProgData(const std::string &vertexShad
 	glUniformBlockBinding(perspTextureProgData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
 }
 
+void ShaderManager::LoadBillboardProgData(const std::string &vertexShader,
+										  const std::string &geometryShader,
+										  const std::string &fragmentShader)
+{
+	std::vector<GLuint> shaderList;
+
+	shaderList.push_back(Framework::LoadShader(GL_VERTEX_SHADER, vertexShader));
+	shaderList.push_back(Framework::LoadShader(GL_GEOMETRY_SHADER, geometryShader));
+	shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, fragmentShader));
+
+	billboardProgData.theProgram = Framework::CreateProgram(shaderList);
+
+
+	billboardProgData.cameraPositionUnif = 
+		glGetUniformLocation(billboardProgData.theProgram, "cameraPosition");
+	billboardProgData.cameraToClipMatrixUnif = 
+		glGetUniformLocation(billboardProgData.theProgram, "cameraToClipMatrix");
+	billboardProgData.modelToCameraMatrixUnif = 
+		glGetUniformLocation(billboardProgData.theProgram, "modelToCameraMatrix");
+	billboardProgData.samplerUnif = 
+		glGetUniformLocation(billboardProgData.theProgram, "_sampler");
+	billboardProgData.billboardSizeUnif =
+		glGetUniformLocation(billboardProgData.theProgram, "billboardSize");
+	
+	billboardProgData.positionAttrib =
+		glGetAttribLocation(billboardProgData.theProgram, "position");
+	billboardProgData.textureCoordAttrib =
+		glGetAttribLocation(billboardProgData.theProgram, "texCoord");
+}
+
+void ShaderManager::LoadParticleProgData(const std::string &vertexShader, 
+										 const std::string &geometryShader)
+{
+	std::vector<GLuint> shaderList;
+
+	shaderList.push_back(Framework::LoadShader(GL_VERTEX_SHADER, vertexShader));
+	shaderList.push_back(Framework::LoadShader(GL_GEOMETRY_SHADER, geometryShader));
+
+	particleProgData.theProgram = Framework::CreateProgram(shaderList);
+
+
+	particleProgData.deltaTime_millisecondsUnif = 
+		glGetUniformLocation(particleProgData.theProgram, "deltaTime_milliseconds");
+	particleProgData.launcherLifetimeUnif = 
+		glGetUniformLocation(particleProgData.theProgram, "launcherLifetime");
+	particleProgData.randomTextureUnif = 
+		glGetUniformLocation(particleProgData.theProgram, "randomDirections");
+	particleProgData.secondaryShellLifetimeUnif = 
+		glGetUniformLocation(particleProgData.theProgram, "secondaryShellLifetime");
+	particleProgData.shellLifetimeUnif = 
+		glGetUniformLocation(particleProgData.theProgram, "shellLifetime");
+	particleProgData.timeUnif = 
+		glGetUniformLocation(particleProgData.theProgram, "time");
+
+	particleProgData.particleAgeAttrib = 
+		glGetAttribLocation(particleProgData.theProgram, "age");
+	particleProgData.particlePositionAttrib = 
+		glGetAttribLocation(particleProgData.theProgram, "position");
+	particleProgData.particleTypeAttrib = 
+		glGetAttribLocation(particleProgData.theProgram, "type");
+	particleProgData.particleVelocityAttrib = 
+		glGetAttribLocation(particleProgData.theProgram, "velocity");
+}
+
 
 LitProgData ShaderManager::GetLitProgData()
 {
@@ -403,6 +469,14 @@ TextureProgData ShaderManager::GetTextureProgData()
 TextureProgData ShaderManager::GetPerspectiveTextureProgData()
 {
 	return perspTextureProgData;
+}
+BillboardProgData ShaderManager::GetBillboardProgData()
+{
+	return billboardProgData;
+}
+ParticleProgData ShaderManager::GetParticleProgData()
+{
+	return particleProgData;
 }
 
 

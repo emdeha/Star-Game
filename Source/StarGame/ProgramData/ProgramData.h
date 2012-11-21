@@ -43,6 +43,37 @@ struct ProgramData
 };
 
 
+struct ParticleProgData
+{
+	GLuint theProgram;
+
+	GLuint deltaTime_millisecondsUnif;
+	GLuint randomTextureUnif;
+	GLuint timeUnif;
+	GLuint launcherLifetimeUnif;
+	GLuint shellLifetimeUnif;
+	GLuint secondaryShellLifetimeUnif;
+
+	GLuint particleTypeAttrib;
+	GLuint particlePositionAttrib;
+	GLuint particleVelocityAttrib;
+	GLuint particleAgeAttrib;
+};
+
+struct BillboardProgData
+{
+	GLuint theProgram;
+
+	GLuint positionAttrib;
+	GLuint textureCoordAttrib;
+
+	GLuint modelToCameraMatrixUnif;
+	GLuint cameraToClipMatrixUnif;
+	GLuint cameraPositionUnif;
+	GLuint samplerUnif;
+	GLuint billboardSizeUnif;
+};
+
 struct TextureProgData
 {
 	GLuint theProgram;

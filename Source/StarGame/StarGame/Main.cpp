@@ -24,6 +24,8 @@
 // TODO: Fix a bug with satellite selection. 
 //		 When the sun is moved the selection doesn't work properly. Move the sun for an example.
 
+#include <ctime>
+
 
 #include "Main.h"
 #include "ShaderManager.h"
@@ -46,6 +48,14 @@ ImageBox boxThree(SMALL, "sampleThree", glm::vec2(485.0f, 570.0f), 50.0f, 50.0f,
 
 
 SimpleParticleEmitter testEmitter(glm::vec3(0.0f, 3.0f, 0.0f), 10000);
+
+TransformFeedbackParticleEmitter testTFEmitter;
+
+
+long long GetCurrentTimeMillis()
+{
+	return time(0) * 1000;
+}
 
 
 void HandleMouse()
@@ -328,6 +338,8 @@ void InitializePrograms()
 	shaderManager.LoadSimpleTextureProgData("shaders/SimpleTexture.vert", "shaders/SimpleTexture.frag");
 	shaderManager.LoadTextureProgData("shaders/Texture.vert", "shaders/Texture.frag");
 	shaderManager.LoadPerspectiveTextureProgData("shaders/TexturePerspective.vert", "shaders/Texture.frag");
+	shaderManager.LoadBillboardProgData("shaders/BillboardShader.vert", "shaders/BillboardShader.geom", "shaders/BillboardShader.frag");
+	shaderManager.LoadParticleProgData("shaders/ParticleShader.vert", "shaders/ParticleShader.geom");
 }
 
 void InitializeGUI()
@@ -431,10 +443,13 @@ void TimerFunction(int value)
 	glutTimerFunc(250, TimerFunction, 1);
 }
 
+long long currentTime_milliseconds;
 
 
 void Init()
 {
+	currentTime_milliseconds = GetCurrentTimeMillis();
+
 	glutTimerFunc(0, TimerFunction, 0);
 
 
@@ -443,6 +458,9 @@ void Init()
 
 
 	testEmitter.Init();
+	testTFEmitter.Init(shaderManager.GetBillboardProgData(), 
+					   shaderManager.GetParticleProgData(), 
+					   glm::vec3());
 
 	
 	glEnable(GL_CULL_FACE);
@@ -506,6 +524,13 @@ void Display()
 
 	if(scene->IsLayoutOn(LAYOUT_IN_GAME))
 	{
+		long long timeNow_milliseconds = GetCurrentTimeMillis();
+		assert(timeNow_milliseconds >= currentTime_milliseconds); // TODO: remove in release
+		unsigned int deltaTime_milliseconds = 
+			(unsigned int)(timeNow_milliseconds - currentTime_milliseconds);
+		currentTime_milliseconds = timeNow_milliseconds;
+
+
 		glutil::MatrixStack modelMatrix;
 
 		modelMatrix.SetMatrix(scene->GetTopDownCamera().CalcMatrix());
@@ -533,9 +558,14 @@ void Display()
 						   interpolation);
 
 
-		testEmitter.Update();
-		testEmitter.Draw(modelMatrix, shaderManager.GetPerspectiveTextureProgData());
-				
+		//testEmitter.Update();
+		//testEmitter.Draw(modelMatrix, shaderManager.GetPerspectiveTextureProgData());
+		testTFEmitter.Render(modelMatrix, 
+							 shaderManager.GetBillboardProgData(), 
+							 shaderManager.GetParticleProgData(),
+							 scene->GetTopDownCamera().ResolveCamPosition(),
+							 deltaTime_milliseconds);
+							 
 		
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
 								   shaderManager.GetSimpleNoUBProgData());

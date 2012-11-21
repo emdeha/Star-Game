@@ -85,3 +85,37 @@ void Texture2D::Bind(GLenum textureUnit)
 	glActiveTexture(textureUnit);
 	glBindTexture(GL_TEXTURE_2D, textureObject);
 }
+
+
+
+RandomTexture::RandomTexture()
+{
+	textureObject = 0;
+}
+
+bool RandomTexture::InitRandomTexture(unsigned int size)
+{
+	std::vector<glm::vec3> randomData(size);
+
+	for(unsigned int i = 0; i < size; i++)
+	{
+		randomData[i].x = float(rand()) / RAND_MAX;
+		randomData[i].y = float(rand()) / RAND_MAX;
+		randomData[i].z = float(rand()) / RAND_MAX;
+	}
+
+	glGenTextures(1, &textureObject);
+	glBindTexture(GL_TEXTURE_1D, textureObject);
+	glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB, size, 0, GL_RGB, GL_FLOAT, &randomData[0]);
+	glTexParameterf(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+
+	return true;
+}
+
+void RandomTexture::Bind(GLenum textureUnit)
+{
+	glActiveTexture(textureUnit);
+	glBindTexture(GL_TEXTURE_1D, textureObject);
+}

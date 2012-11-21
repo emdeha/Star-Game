@@ -115,6 +115,9 @@ private:
 	TextureProgData textureProgData;
 	TextureProgData perspTextureProgData;
 
+	BillboardProgData billboardProgData;
+	ParticleProgData particleProgData;
+
 public:
 	ShaderManager();
 
@@ -139,6 +142,8 @@ public:
 
 
 
+
+
 	void LoadLitProgram(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadUnlitProgram(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadSimpleProgram(const std::string &vertexShader, const std::string &fragmentShader);
@@ -147,6 +152,12 @@ public:
 	void LoadSimpleTextureProgData(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadTextureProgData(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadPerspectiveTextureProgData(const std::string &vertexShader, const std::string &fragmentShader);
+
+	void LoadBillboardProgData(const std::string &vertexShader, 
+							   const std::string &geometryShader,
+							   const std::string &fragmentShader);
+	void LoadParticleProgData(const std::string &vertexShader,
+							  const std::string &geometryShader);
 
 
 	LitProgData GetLitProgData();
@@ -157,6 +168,9 @@ public:
 	SimpleTextureProgData GetSimpleTextureProgData();
 	TextureProgData GetTextureProgData();
 	TextureProgData GetPerspectiveTextureProgData();
+
+	BillboardProgData GetBillboardProgData();
+	ParticleProgData GetParticleProgData();
 
 
 	const int GetBlockIndex(BlockType);

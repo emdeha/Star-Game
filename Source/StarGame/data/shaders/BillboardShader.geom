@@ -13,7 +13,6 @@ uniform float billboardSize;
 
 out vec2 texCoord;
 
-
 void main()
 {
 	vec3 _position = gl_in[0].gl_Position.xyz;

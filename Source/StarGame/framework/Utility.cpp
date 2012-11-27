@@ -647,7 +647,7 @@ void Utility::Primitives::SpriteArray::Draw(glutil::MatrixStack modelMat,
 		glEnableVertexAttribArray(textureData.texturePosAttrib);
 		glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
 		glVertexAttribPointer(textureData.texturePosAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
+		
 
 		texture->Bind(GL_TEXTURE0);
 
@@ -659,14 +659,12 @@ void Utility::Primitives::SpriteArray::Draw(glutil::MatrixStack modelMat,
 			glutil::PushStack push(modelMat);
 
 			modelMat.Translate(particlePositions[i].x, particlePositions[i].y, particlePositions[i].z);
-
-			glUniformMatrix4fv(
-				textureData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMat.Top()));
-
-
+			
 			glEnableVertexAttribArray(textureData.positionAttrib);
 			glVertexAttribPointer(textureData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
+			glUniformMatrix4fv(
+				textureData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMat.Top()));
 
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 		}

@@ -1,9 +1,12 @@
-﻿Build started 20.11.2012 г. 19:19:28 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Mouse\Mouse.vcxproj" on node 3 (build target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 27.11.2012 г. 19:32:04 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Mouse\Mouse.vcxproj" on node 5 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Debug\Mouse.lastbuildstate".
+       InitializeBuildStatus:
          Creating "Debug\Mouse.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Debug\Mouse.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\Mouse.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Mouse.cpp
          Mouse.cpp
        Lib:
@@ -13,8 +16,8 @@
        FinalizeBuildStatus:
          Deleting file "Debug\Mouse.unsuccessfulbuild".
          Touching "Debug\Mouse.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Mouse\Mouse.vcxproj" (build target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Mouse\Mouse.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.84
+Time Elapsed 00:00:01.12

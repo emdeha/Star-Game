@@ -58,6 +58,7 @@ bool Texture2D::Load(const std::string &fileName)
 		return false;
 
 
+	glActiveTexture(GL_TEXTURE0);
 	glGenTextures(1, &textureObject);
 	glBindTexture(GL_TEXTURE_2D, textureObject);
 

@@ -72,6 +72,7 @@ struct BillboardProgData
 	GLuint cameraPositionUnif;
 	GLuint samplerUnif;
 	GLuint billboardSizeUnif;
+	GLuint deltaPositionUnif;
 };
 
 struct TextureProgData

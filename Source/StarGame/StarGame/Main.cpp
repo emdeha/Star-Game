@@ -47,9 +47,8 @@ ImageBox boxTwo(SMALL, "sampleTwo", glm::vec2(430.0f, 570.0f), 50.0f, 50.0f, 2);
 ImageBox boxThree(SMALL, "sampleThree", glm::vec2(485.0f, 570.0f), 50.0f, 50.0f, 1);
 
 
-SimpleParticleEmitter testEmitter(glm::vec3(0.0f, 3.0f, 0.0f), 10000);
 
-TransformFeedbackParticleEmitter testTFEmitter;
+ParticleEmitter testEmitter;
 
 
 long long GetCurrentTimeMillis()
@@ -457,11 +456,6 @@ void Init()
 	InitializeScene();
 
 
-	testEmitter.Init();
-	testTFEmitter.Init(shaderManager.GetBillboardProgData(), 
-					   shaderManager.GetParticleProgData(), 
-					   glm::vec3());
-
 	
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -510,6 +504,12 @@ void Init()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 
+	//////////////////////////////////////
+	testEmitter = ParticleEmitter(glm::vec3(0.0f, 2.0f, 0.0f), 100000);
+	testEmitter.Init(shaderManager.GetBillboardProgData());
+	//////////////////////////////////////
+
+
 	nextGameTick = GetTickCount();
 }
 
@@ -520,17 +520,10 @@ void Display()
 
 	glClearDepth(1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	
 
 	if(scene->IsLayoutOn(LAYOUT_IN_GAME))
 	{
-		long long timeNow_milliseconds = GetCurrentTimeMillis();
-		assert(timeNow_milliseconds >= currentTime_milliseconds); // TODO: remove in release
-		unsigned int deltaTime_milliseconds = 
-			(unsigned int)(timeNow_milliseconds - currentTime_milliseconds);
-		currentTime_milliseconds = timeNow_milliseconds;
-
-
 		glutil::MatrixStack modelMatrix;
 
 		modelMatrix.SetMatrix(scene->GetTopDownCamera().CalcMatrix());
@@ -557,18 +550,14 @@ void Display()
 						   shaderManager.GetSimpleProgData(),
 						   interpolation);
 
-
-		//testEmitter.Update();
-		//testEmitter.Draw(modelMatrix, shaderManager.GetPerspectiveTextureProgData());
-		testTFEmitter.Render(modelMatrix, 
-							 shaderManager.GetBillboardProgData(), 
-							 shaderManager.GetParticleProgData(),
-							 scene->GetTopDownCamera().ResolveCamPosition(),
-							 deltaTime_milliseconds);
-							 
 		
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
 								   shaderManager.GetSimpleNoUBProgData());
+
+		testEmitter.Update();
+		testEmitter.Render(modelMatrix, 
+						   scene->GetTopDownCamera().ResolveCamPosition(), 
+						   shaderManager.GetBillboardProgData());
 
 		// BUGGY: A strange problem appears when trying to draw these before drawing the satellites
 		box.Draw(shaderManager.GetTextureProgData());
@@ -597,7 +586,11 @@ void Reshape(int width, int height)
 
 	displayData.projectionMatrix = projMatrix.Top();
 	
-
+	glUseProgram(shaderManager.GetBillboardProgData().theProgram);
+	glUniformMatrix4fv(shaderManager.GetBillboardProgData().cameraToClipMatrixUnif, 
+					   1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
+	glUseProgram(0);
+	
 	glBindBuffer(GL_UNIFORM_BUFFER, shaderManager.GetUniformBuffer(UBT_PROJECTION));
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(displayData.projectionMatrix), &displayData.projectionMatrix);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -606,14 +599,14 @@ void Reshape(int width, int height)
 	projMatrix.SetIdentity();
 	projMatrix.Orthographic((float)width, 0.0f, (float)height, 0.0f, 1.0f, 1000.0f);
 
-	displayData.projectionMatrix = projMatrix.Top();
+	//displayData.projectionMatrix = projMatrix.Top(); <- bugs the clicking mechanism
 
 
 	glBindBuffer(GL_UNIFORM_BUFFER, shaderManager.GetUniformBuffer(UBT_ORTHOGRAPHIC));
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(displayData.projectionMatrix), &displayData.projectionMatrix);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(displayData.projectionMatrix), &projMatrix.Top());
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-
+	
 	scene->UpdateCurrentLayout(width, height);
 	// TODO: Isolate in a separate function.
 	/*if(width <= 800 || height <= 600)

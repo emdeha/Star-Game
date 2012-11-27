@@ -396,6 +396,8 @@ void ShaderManager::LoadBillboardProgData(const std::string &vertexShader,
 		glGetUniformLocation(billboardProgData.theProgram, "_sampler");
 	billboardProgData.billboardSizeUnif =
 		glGetUniformLocation(billboardProgData.theProgram, "billboardSize");
+	billboardProgData.deltaPositionUnif =
+		glGetUniformLocation(billboardProgData.theProgram, "deltaPosition");
 	
 	billboardProgData.positionAttrib =
 		glGetAttribLocation(billboardProgData.theProgram, "position");

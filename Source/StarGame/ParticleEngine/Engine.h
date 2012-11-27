@@ -24,93 +24,37 @@
 #include <vector>
 
 
-class SimpleParticle;
-
-class SimpleParticleEmitter
+struct Particle
 {
-private:
-	glm::vec3 position;
-
-	int numberOfParticles;
-
-	Utility::Primitives::SpriteArray particleSprites;
-	std::vector<SimpleParticle> particles;
-
-public:
-	SimpleParticleEmitter() {}
-	SimpleParticleEmitter(glm::vec3 newPosition, int newNumberOfParticles);
-
-	void Init();
-
-	void Update();
-
-	void Draw(glutil::MatrixStack &modelMat, const TextureProgData &textureProgData);
-
-	std::vector<glm::vec3> GetParticlePositions();
-};
-
-
-class SimpleParticle
-{
-private:
 	glm::vec3 position;
 	glm::vec3 velocity;
-
-
-	//Utility::Primitives::Sprite particleSprite;
-
-public:
-	SimpleParticle() {};
-	SimpleParticle(glm::vec3 newPosition, glm::vec3 newVelocity);
-
-	void Init();
-
-	void Update();
-
-	void Draw(/*glutil::MatrixStack &modelMat, const TextureProgData &textureProgData*/);
-
-	glm::vec3 GetPosition()
-	{
-		return position;
-	}
 };
 
-
-
-class TransformFeedbackParticleEmitter
+class ParticleEmitter
 {
 private:
-	void UpdateParticles(const ParticleProgData &particleData, int deltaTime_milliseconds);
-	void RenderParticles(glutil::MatrixStack &modelMatrix, const BillboardProgData &billboardData, 
-						 glm::vec3 cameraPosition);
+	std::vector<Particle> particles;
 
-
-	bool isFirst;
-
-	GLuint currentVertexBuffer;
-	GLuint currentTransformFeedbackBuffer;
+	glm::vec3 position;
+	int particleCount;
 
 	GLuint vao;
-
-	GLuint particleVBO[2];
-	GLuint particleTFBO[2];
-
-	RandomTexture randomTexture; // TODO: Should be sth like directionsTexture
-	std::shared_ptr<Texture2D> texture;
-
-	int time;
+	GLuint vertexBO;
+	
+	Texture2D texture;
 
 public:
-	TransformFeedbackParticleEmitter();
-	~TransformFeedbackParticleEmitter();
+	ParticleEmitter() {}
+	ParticleEmitter(glm::vec3 newPosition, int newParticleCount);
 
-	bool Init(const BillboardProgData &billboardData, const ParticleProgData &particleData,
-			  const glm::vec3 &position);
+	void Init(const BillboardProgData &billboardedProgData);
 
+	void Update();
 	void Render(glutil::MatrixStack &modelMatrix,
-				const BillboardProgData &billboardData, const ParticleProgData &particleData,
-				glm::vec3 cameraPosition, int deltaTime_milliseconds);
+				glm::vec3 cameraPosition,
+				const BillboardProgData &billboardedProgData);
 };
+
 
 
 #endif

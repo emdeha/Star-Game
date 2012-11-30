@@ -44,20 +44,4 @@ public:
 };
 
 
-
-// TODO: Make it a Texture1D class with a utility for creating textures
-class RandomTexture
-{
-private:
-	GLuint textureObject;
-
-public:
-	RandomTexture();
-
-	bool InitRandomTexture(unsigned int size);
-
-	void Bind(GLenum textureUnit);
-};
-
-
 #endif

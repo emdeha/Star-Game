@@ -33,16 +33,21 @@ Program::Program()
 	data.attributeData.clear();
 }
 
+void Program::AddShader(GLenum shaderType, const std::string &shaderFileName)
+{
+	data.shaderNames.insert(std::make_pair(shaderType, shaderFileName));
+}
+
 void Program::AddDataElement(ProgramDataType whatData, 
-							 const std::string &dataElementName, GLuint dataElement)
+							 const std::string &dataElementName)
 {
 	switch(whatData)
 	{
 	case PDT_UNIFORM:
-		data.uniformData.insert(std::make_pair(dataElementName, dataElement));
+		data.uniformData.insert(std::make_pair(dataElementName, 0));
 		break;
 	case PDT_ATTRIBUTE:
-		data.attributeData.insert(std::make_pair(dataElementName, dataElement));
+		data.attributeData.insert(std::make_pair(dataElementName, 0));
 		break;
 	default:
 		// Handle errors.
@@ -67,14 +72,33 @@ void Program::SetData(ProgramDataType whatData,
 	}
 }
 
+std::map<std::string, GLuint> Program::GetData()
+{
+	typedef std::map<std::string, GLuint> DataMap;
+	DataMap allData;
 
-void Program::BuildProgram(const std::string &vertexShaderName, const std::string &fragmentShaderName)
+	allData.insert(data.uniformData.begin(), data.uniformData.end());
+	for(DataMap::iterator iter = data.attributeData.begin();
+		iter != data.attributeData.end();
+		++iter)
+	{
+		allData.insert(std::make_pair(iter->first, iter->second));
+	}
+
+	return allData;
+}
+
+void Program::BuildProgram()
 {
 	std::vector<GLuint> shaderList;
 
-	shaderList.push_back(Framework::LoadShader(GL_VERTEX_SHADER, vertexShaderName));
-	shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, fragmentShaderName));
-
+	for(std::map<GLenum, std::string>::iterator iter = data.shaderNames.begin();
+		iter != data.shaderNames.end();
+		++iter)
+	{
+		shaderList.push_back(Framework::LoadShader(iter->first, iter->second.c_str()));
+	}
+			
 	data.theProgram = Framework::CreateProgram(shaderList);
 
 
@@ -107,12 +131,11 @@ void ShaderProgramContainer::AddProgram(const std::string &newProgramName, const
 }
 
 
-void ShaderProgramContainer::LoadProgram(const std::string &programName,
-										 const std::string &vertexShaderName, const std::string &fragmentShaderName)
+void ShaderProgramContainer::LoadProgram(const std::string &programName)
 {
 	// TODO: Check if the program exists.
 
-	shaderPrograms[programName].BuildProgram(vertexShaderName, fragmentShaderName);
+	shaderPrograms[programName].BuildProgram();
 }
 
 Program ShaderProgramContainer::GetProgram(const std::string &programName)

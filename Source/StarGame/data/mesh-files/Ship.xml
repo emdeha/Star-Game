@@ -1023,5 +1023,9 @@
 		<source attrib="0" />
 		<source attrib="1" />
 	</vao>
+	<vao name="lit" >
+		<source attrib="0" />
+	        <source attrib="2" />
+	</vao>
 	<arrays cmd="triangles" start="0" count="336" />
 </mesh>

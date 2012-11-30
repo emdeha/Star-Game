@@ -18,6 +18,9 @@
 // TODO: If two projectiles try to kill the sun in the same time, 
 //		 the one that didn't succeed freezes and starts to flicker infinitely.
 
+// MEASURING UNITS - 1.0f = 1/10 of screen on camera spherical coords = (12.5f, 90.0f, 135.0f)
+// Should make them some other type
+
 
 #ifndef ENEMY_H
 #define ENEMY_H
@@ -33,6 +36,14 @@
 #include "../ProgramData/ProgramData.h"
 #include "../Entities/PlanetBodies.h"
 #include "MaterialBlock.h"
+
+
+enum BehaviorState
+{
+	ATTACK_STATE,
+	EVADE_STATE,
+	PATROL_STATE, 
+};
 
 
 class Projectile
@@ -82,18 +93,36 @@ inline bool Projectile::IsDestroyed()
 }
 
 
+struct PatrolRoute
+{
+	std::vector<glm::vec3> patrolPoints;
+	int currentPatrolPointIndex;
+	int nextPatrolPointIndex;
+	int lastPatrolPointIndex;
+};
+
+
 class Spaceship
 {
 private:
 	glm::vec3 position;
-	glm::vec3 direction;
 	glm::vec3 velocity;
+
+	float rotationX;
+	float rotationY;
+	float scaleFactor;
+
+	float lineOfSight;
 
 	int health;
 
 	float projectileSpeed;
 	int projectileLifeSpan;
 	int projectileDamage;
+
+	BehaviorState currentState;
+
+	PatrolRoute patrolRoute;
 
 	std::unique_ptr<Projectile> projectile;
 	std::unique_ptr<Framework::Mesh> mesh;
@@ -103,12 +132,17 @@ private:
 
 public:
 	Spaceship(glm::vec3 newPosition, 
-			  glm::vec3 newDirection, 
 			  glm::vec3 newVelocity,
+			  float newRotationX,
+			  float newRotationY,
+			  float newScaleFactor,
 			  float newProjectileSpeed,
 			  int newProjectileLifeSpan, int newProjectileDamage);
 
 	void LoadMesh(const std::string &meshFile);
+	void LoadProjectileMesh(const std::string &meshFile);
+
+	void UpdateAI(Sun &sun);
 
 	void Update(bool isSunKilled, Sun &sun = Sun());
 	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,

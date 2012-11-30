@@ -19,6 +19,7 @@
 #include "Engine.h"
 
 
+
 ParticleEmitter::ParticleEmitter(glm::vec3 newPosition, int newParticleCount)
 {
 	position = newPosition;
@@ -31,17 +32,7 @@ ParticleEmitter::ParticleEmitter(glm::vec3 newPosition, int newParticleCount)
 
 	texture = Texture2D();
 	texture.Load("../data/images/particle.png");
-}
 
-void ParticleEmitter::Init(const BillboardProgData &billboardedProgData)
-{
-	for(int i = 0; i < particleCount; i++)
-	{
-		particles[i].position = glm::vec3();
-		particles[i].velocity = glm::vec3((float)rand() / RAND_MAX * 0.01f,
-										  (float)rand() / RAND_MAX * 0.01f,
-										  (float)rand() / RAND_MAX * 0.01f);
-	}
 
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -52,11 +43,23 @@ void ParticleEmitter::Init(const BillboardProgData &billboardedProgData)
 	
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+}
+
+void ParticleEmitter::Init(const BillboardProgData &billboardedProgData)
+{
+	for(int i = 0; i < particleCount; i++)
+	{
+		particles[i].position = position;
+		particles[i].velocity = glm::vec3((float)rand() / RAND_MAX * 0.01f,
+										  (float)rand() / RAND_MAX * 0.01f,
+										  (float)rand() / RAND_MAX * 0.01f);
+	}
 
 	glUseProgram(billboardedProgData.theProgram);
 	glUniform1f(billboardedProgData.billboardSizeUnif, 0.1f);
 	glUseProgram(0);
 }
+
 
 void ParticleEmitter::Update()
 {
@@ -68,23 +71,23 @@ void ParticleEmitter::Update()
 
 void ParticleEmitter::Render(glutil::MatrixStack &modelMatrix,
 							 glm::vec3 cameraPosition,
-							 const BillboardProgData &billboardedProgData)
+							 const BillboardProgData &programData)
 {
 	glutil::PushStack push(modelMatrix);
 
-	glUseProgram(billboardedProgData.theProgram);
+	glUseProgram(programData.theProgram);
 
 	
-	glUniformMatrix4fv(billboardedProgData.modelToCameraMatrixUnif,
+	glUniformMatrix4fv(programData.modelToCameraMatrixUnif,
 					   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-	glUniform3f(billboardedProgData.cameraPositionUnif, 
+	glUniform3f(programData.cameraPositionUnif, 
 				cameraPosition.x, cameraPosition.y, cameraPosition.z);
 
 	texture.Bind(GL_TEXTURE0);
 
 	for(int i = 0; i < particleCount; i++)
 	{
-		glUniform3f(billboardedProgData.deltaPositionUnif, 
+		glUniform3f(programData.deltaPositionUnif, 
 					particles[i].position.x, particles[i].position.y, particles[i].position.z);
 
 		glDrawArrays(GL_POINTS, 0, 1);

@@ -20,6 +20,7 @@
 
 
 #include <map>
+#include <vector>
 #include <string>
 
 #include "../ProgramData/ProgramData.h"
@@ -56,6 +57,8 @@ private:
 	{
 		GLuint theProgram;
 
+		std::map<GLenum, std::string> shaderNames;
+
 		std::map<std::string, GLuint> uniformData;
 		std::map<std::string, GLuint> attributeData;
 	};
@@ -65,14 +68,22 @@ private:
 public:
 	Program();
 	
+	void AddShader(GLenum shaderType, const std::string &shaderFileName);
+
 	void AddDataElement(ProgramDataType whatData,
-						const std::string &dataElementName, GLuint dataElement);
+						const std::string &dataElementName);
 
 	void SetData(ProgramDataType whatData,
 				 const std::map<std::string, GLuint> &newData);
 
+	std::map<std::string, GLuint> GetData();
+	GLuint GetProgramObject()
+	{
+		return data.theProgram;
+	}
+
 	
-	void BuildProgram(const std::string &vertexShaderName, const std::string &fragmentShaderName);
+	void BuildProgram();
 };
 
 
@@ -88,8 +99,7 @@ public:
 	void AddProgram(const std::string &newProgramName, const Program &newProgram);
 
 
-	void LoadProgram(const std::string &programName,
-					 const std::string &vertexShaderName, const std::string &fragmentShaderName);
+	void LoadProgram(const std::string &programName);
 
 	Program GetProgram(const std::string &programName);
 };

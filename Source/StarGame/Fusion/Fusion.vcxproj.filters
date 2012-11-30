@@ -27,6 +27,9 @@
     <ClInclude Include="FusionInput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FusionSkills.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

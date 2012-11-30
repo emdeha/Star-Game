@@ -20,20 +20,24 @@
 
 
 #include "../framework/Utility.h"
-
+#include "../StarGame/ShaderManager.h"
 #include <vector>
 
 
-struct Particle
+// Tried the policy based design but it was too slow. 
+// The other solution I can think of is function pointers.
+
+struct StandardParticle
 {
 	glm::vec3 position;
 	glm::vec3 velocity;
 };
 
+
 class ParticleEmitter
 {
 private:
-	std::vector<Particle> particles;
+	std::vector<StandardParticle> particles;
 
 	glm::vec3 position;
 	int particleCount;
@@ -52,8 +56,12 @@ public:
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix,
 				glm::vec3 cameraPosition,
-				const BillboardProgData &billboardedProgData);
+				const BillboardProgData &programData);
 };
+
+
+
+
 
 
 

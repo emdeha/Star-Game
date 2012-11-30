@@ -44,26 +44,53 @@ static void GenerateUniformBuffers(int &materialBlockSize,
 }
 
 Spaceship::Spaceship(glm::vec3 newPosition, 
-					 glm::vec3 newDirection, 
 					 glm::vec3 newVelocity,
+					 float newRotationX,
+					 float newRotationY,
+					 float newScaleFactor,
 					 float newProjectileSpeed,
 					 int newProjectileLifeSpan, int newProjectileDamage)
 {
 	position = newPosition;
-	direction = newDirection;
 	velocity = newVelocity;
 
+	rotationX = newRotationX;
+	rotationY = newRotationY;
+	scaleFactor = newScaleFactor;
+
 	health = 100;
+
+	currentState = PATROL_STATE;
 
 	projectileSpeed = newProjectileSpeed;
 	projectileLifeSpan = newProjectileLifeSpan;
 	projectileDamage = newProjectileDamage;
 
+	lineOfSight = 3.0f;
+
 	projectile = 
 		std::unique_ptr<Projectile>(new Projectile(position, 
-												   direction * projectileSpeed, 
+												   velocity * projectileSpeed, 
 												   projectileDamage, 
 												   projectileLifeSpan));
+
+
+	patrolRoute.patrolPoints.push_back(position);
+	patrolRoute.patrolPoints.push_back(glm::vec3(4.5f, 4.0f, 0.0f));
+	patrolRoute.patrolPoints.push_back(glm::vec3(0.0f, 4.0f, 0.0f));
+	//patrolRoute.patrolPoints.push_back(position);
+	patrolRoute.currentPatrolPointIndex = 0;
+	patrolRoute.lastPatrolPointIndex = 0;
+	patrolRoute.nextPatrolPointIndex = 1;
+
+	velocity = 
+		glm::normalize(patrolRoute.patrolPoints[patrolRoute.nextPatrolPointIndex] - 
+					   patrolRoute.patrolPoints[patrolRoute.currentPatrolPointIndex]) * 0.1f; // 0.1f - speed
+}
+
+void Spaceship::LoadProjectileMesh(const std::string &meshFile)
+{
+	projectile->LoadMesh(meshFile);
 }
 
 void Spaceship::LoadMesh(const std::string &meshFile)
@@ -85,10 +112,12 @@ void Spaceship::LoadMesh(const std::string &meshFile)
 	projectile->LoadMesh(meshFile);
 }
 
-void Spaceship::Update(bool isSunKilled, Sun &sun)
+void Spaceship::UpdateAI(Sun &sun)
 {
-	if(!isSunKilled)
-	{
+	if(currentState == ATTACK_STATE)
+	{	
+		velocity = glm::vec3();
+
 		if(projectile->IsDestroyed())
 		{
 			glm::vec3 newDirection = glm::vec3();
@@ -105,11 +134,73 @@ void Spaceship::Update(bool isSunKilled, Sun &sun)
 
 			newDirection = glm::normalize(newDirection);
 			projectile->Recreate(position, 
-									newDirection * projectileSpeed, 
-									projectileLifeSpan);
+								 newDirection * projectileSpeed, 
+								 projectileLifeSpan);
 		}
 
 		projectile->Update(sun);
+	}
+	else if(currentState == EVADE_STATE)
+	{
+		position += velocity;
+	}
+	else if(currentState == PATROL_STATE)
+	{		
+		if(patrolRoute.patrolPoints.size() - 1 > patrolRoute.nextPatrolPointIndex)
+		{
+			glm::vec3 vectorBetweenShipAndPatrolPoint = 
+				patrolRoute.patrolPoints[patrolRoute.nextPatrolPointIndex] -
+				position;
+			float distanceBetweenShipAndPatrolPoint = glm::length(vectorBetweenShipAndPatrolPoint);
+
+			float a = 0;
+
+			if(distanceBetweenShipAndPatrolPoint <= 0.1f)
+			{		
+				patrolRoute.currentPatrolPointIndex = patrolRoute.nextPatrolPointIndex;
+				patrolRoute.nextPatrolPointIndex++;
+
+				glm::vec3 vectorBetweenPatrolPoints = 
+					patrolRoute.patrolPoints[patrolRoute.nextPatrolPointIndex] -
+					patrolRoute.patrolPoints[patrolRoute.currentPatrolPointIndex];
+
+				velocity = glm::normalize(vectorBetweenPatrolPoints) * 0.1f; // 0.1f - speed. 
+			}
+		}
+		else
+		{
+			patrolRoute.currentPatrolPointIndex = patrolRoute.patrolPoints.size();
+			patrolRoute.nextPatrolPointIndex = 0;
+		}
+		position += velocity;
+		
+		glm::vec3 vectorFromSunToSpaceship = glm::vec3(sun.GetPosition()) - position;
+		float distanceBetweenSunAndSpaceship = glm::length(vectorFromSunToSpaceship);
+
+		if(distanceBetweenSunAndSpaceship < lineOfSight)
+		{
+			currentState = ATTACK_STATE;
+		}
+	}
+}
+
+void Spaceship::Update(bool isSunKilled, Sun &sun)
+{
+	if(health <= 20)
+	{
+		glm::vec3 newVelocity = (glm::vec3(sun.GetPosition()) - position) * 0.1f;
+		newVelocity = glm::normalize(-newVelocity);
+		currentState = EVADE_STATE;
+	}
+
+	if(!isSunKilled)
+	{
+		UpdateAI(sun);
+	}
+	else
+	{
+		currentState = PATROL_STATE;
+		velocity = glm::vec3(-0.1f, 0.0f, 0.0f);
 	}
 }
 
@@ -123,7 +214,11 @@ void Spaceship::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 
 
 		glm::vec3 viewPosition = position + velocity * interpolation;
-		modelMatrix.Translate(position);
+		modelMatrix.Translate(viewPosition);
+		modelMatrix.Scale(scaleFactor);
+		modelMatrix.RotateX(rotationX);
+		modelMatrix.RotateY(rotationY);
+
 
 		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
 						  0, sizeof(MaterialBlock));
@@ -142,7 +237,7 @@ void Spaceship::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 		glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
 	}
 
-	if(!projectile->IsDestroyed())
+	if(!projectile->IsDestroyed() && currentState == ATTACK_STATE)
 	{
 		projectile->Render(modelMatrix, materialBlockIndex, gamma, litData,
 						   interpolation);

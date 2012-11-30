@@ -362,21 +362,27 @@ void InitializeScene()
 		mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, displayData.gamma));
 
 	std::shared_ptr<Spaceship> 
-		sampleSpaceship(new Spaceship(glm::vec3(4.5f, 0.0f, 0.0f), 
-									  glm::vec3(-1.0f, 0.0f, 0.0f), 
-									  glm::vec3(),
+		sampleSpaceship(new Spaceship(glm::vec3(4.5f, 0.0f, 0.0f),  
+									  glm::vec3(-0.1f, 0.0f, 0.0f),
+									  90.0f, 
+									  0.0f, 
+									  0.15f,
 									  0.3f, 20, 0));
 	std::shared_ptr<Spaceship>
 		sampleSpaceship2(new Spaceship(glm::vec3(0.0f, 4.5f, 0.0f), 
-									   glm::vec3(0.0f, -1.0f, 0.0f), 
 									   glm::vec3(),
+									   90.0f, 
+									   0.0f, 
+									   0.15f,
 									   0.3f, 20, 0));
 
 
 
 	mainSun->LoadMesh("mesh-files/UnitSphere.xml");
-	sampleSpaceship->LoadMesh("mesh-files/UnitSphere.xml");
-	sampleSpaceship2->LoadMesh("mesh-files/UnitSphere.xml");
+	sampleSpaceship->LoadMesh("mesh-files/Ship.xml");
+	sampleSpaceship->LoadProjectileMesh("mesh-files/UnitSphere.xml");
+	sampleSpaceship2->LoadMesh("mesh-files/Ship.xml");
+	sampleSpaceship2->LoadProjectileMesh("mesh-files/UnitSphere.xml");
 
 	scene->SetMouse(userMouse);
 	scene->SetTopDownCamera(userCamera);
@@ -384,7 +390,7 @@ void InitializeScene()
 	scene->AddSun(mainSun);
 	scene->AddSunLight(mainSunLight);
 	scene->AddSpaceship(sampleSpaceship);
-	scene->AddSpaceship(sampleSpaceship2);
+	//scene->AddSpaceship(sampleSpaceship2);
 
 	scene->SetMusic("../data/music/background.mp3", MUSIC_BACKGROUND);
 	scene->SetMusic("../data/music/onclick.wav", MUSIC_ON_SUN_CLICK);
@@ -505,8 +511,10 @@ void Init()
 
 
 	//////////////////////////////////////
-	testEmitter = ParticleEmitter(glm::vec3(0.0f, 2.0f, 0.0f), 100000);
+	/*
+	testEmitter = ParticleEmitter(glm::vec3(0.0f, 0.0f, 0.0f), 10000);
 	testEmitter.Init(shaderManager.GetBillboardProgData());
+	*/
 	//////////////////////////////////////
 
 
@@ -554,10 +562,12 @@ void Display()
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
 								   shaderManager.GetSimpleNoUBProgData());
 
+		/*
 		testEmitter.Update();
 		testEmitter.Render(modelMatrix, 
 						   scene->GetTopDownCamera().ResolveCamPosition(), 
 						   shaderManager.GetBillboardProgData());
+		*/
 
 		// BUGGY: A strange problem appears when trying to draw these before drawing the satellites
 		box.Draw(shaderManager.GetTextureProgData());

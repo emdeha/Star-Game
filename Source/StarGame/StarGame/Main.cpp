@@ -47,8 +47,11 @@ ImageBox boxTwo(SMALL, "sampleTwo", glm::vec2(430.0f, 570.0f), 50.0f, 50.0f, 2);
 ImageBox boxThree(SMALL, "sampleThree", glm::vec2(485.0f, 570.0f), 50.0f, 50.0f, 1);
 
 
+Swarm testSwarm;
+
 
 ParticleEmitter testEmitter;
+//SwarmEmitter testSwarm;
 
 
 long long GetCurrentTimeMillis()
@@ -339,6 +342,7 @@ void InitializePrograms()
 	shaderManager.LoadPerspectiveTextureProgData("shaders/TexturePerspective.vert", "shaders/Texture.frag");
 	shaderManager.LoadBillboardProgData("shaders/BillboardShader.vert", "shaders/BillboardShader.geom", "shaders/BillboardShader.frag");
 	shaderManager.LoadParticleProgData("shaders/ParticleShader.vert", "shaders/ParticleShader.geom");
+	shaderManager.LoadBillboardProgDataNoTexture("shaders/BillboardShader.vert", "shaders/BillboardShaderNoTexture.geom", "shaders/BillboardShaderNoTexture.frag");
 }
 
 void InitializeGUI()
@@ -509,7 +513,12 @@ void Init()
 
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-
+	testSwarm = Swarm(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(), 0.1f, 
+					  100, 10, 10, 1, shaderManager.GetBillboardProgDataNoTexture());
+	/*
+	testSwarm = SwarmEmitter(glm::vec3(0.0f, 3.0f, 0.0f), 100);
+	testSwarm.Init(shaderManager.GetBillboardProgDataNoTexture());
+	*/
 	//////////////////////////////////////
 	/*
 	testEmitter = ParticleEmitter(glm::vec3(0.0f, 0.0f, 0.0f), 10000);
@@ -562,6 +571,14 @@ void Display()
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
 								   shaderManager.GetSimpleNoUBProgData());
 
+		testSwarm.Update();
+		testSwarm.Render(modelMatrix, scene->GetTopDownCamera().ResolveCamPosition(), 
+						 shaderManager.GetBillboardProgDataNoTexture());
+		/*
+		testSwarm.Update();
+		testSwarm.Render(modelMatrix, scene->GetTopDownCamera().ResolveCamPosition(),
+						 shaderManager.GetBillboardProgDataNoTexture());
+		*/
 		/*
 		testEmitter.Update();
 		testEmitter.Render(modelMatrix, 
@@ -598,6 +615,11 @@ void Reshape(int width, int height)
 	
 	glUseProgram(shaderManager.GetBillboardProgData().theProgram);
 	glUniformMatrix4fv(shaderManager.GetBillboardProgData().cameraToClipMatrixUnif, 
+					   1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
+	glUseProgram(0);
+
+	glUseProgram(shaderManager.GetBillboardProgDataNoTexture().theProgram);
+	glUniformMatrix4fv(shaderManager.GetBillboardProgDataNoTexture().cameraToClipMatrixUnif,		
 					   1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
 	glUseProgram(0);
 	

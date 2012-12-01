@@ -61,6 +61,28 @@ public:
 
 
 
+class SwarmEmitter
+{
+private:
+	std::vector<StandardParticle> particles;
+
+	glm::vec3 position;
+	int particleCount;
+
+	GLuint vao;
+	GLuint vertexBO;
+
+public:
+	SwarmEmitter() {}
+	SwarmEmitter(glm::vec3 newPosition, int newParticleCount);
+
+	void Init(const BillboardProgDataNoTexture &billboardProgDataNoTexture);
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix,
+				glm::vec3 cameraPosition,
+				const BillboardProgDataNoTexture &billboardProgDataNoTexture);
+};
 
 
 

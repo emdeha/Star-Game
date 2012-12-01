@@ -77,7 +77,9 @@ Spaceship::Spaceship(glm::vec3 newPosition,
 
 	patrolRoute.patrolPoints.push_back(position);
 	patrolRoute.patrolPoints.push_back(glm::vec3(4.5f, 4.0f, 0.0f));
-	patrolRoute.patrolPoints.push_back(glm::vec3(0.0f, 4.0f, 0.0f));
+	patrolRoute.patrolPoints.push_back(glm::vec3(-4.5f, 4.0f, 0.0f));
+	patrolRoute.patrolPoints.push_back(glm::vec3(-4.5f, -4.0f, 0.0f));
+	patrolRoute.patrolPoints.push_back(glm::vec3(4.5f, -4.0f, 0.0f));
 	//patrolRoute.patrolPoints.push_back(position);
 	patrolRoute.currentPatrolPointIndex = 0;
 	patrolRoute.lastPatrolPointIndex = 0;
@@ -146,19 +148,21 @@ void Spaceship::UpdateAI(Sun &sun)
 	}
 	else if(currentState == PATROL_STATE)
 	{		
-		if(patrolRoute.patrolPoints.size() - 1 > patrolRoute.nextPatrolPointIndex)
+		if(patrolRoute.patrolPoints.size() > patrolRoute.nextPatrolPointIndex)
 		{
 			glm::vec3 vectorBetweenShipAndPatrolPoint = 
 				patrolRoute.patrolPoints[patrolRoute.nextPatrolPointIndex] -
 				position;
 			float distanceBetweenShipAndPatrolPoint = glm::length(vectorBetweenShipAndPatrolPoint);
 
-			float a = 0;
-
 			if(distanceBetweenShipAndPatrolPoint <= 0.1f)
 			{		
 				patrolRoute.currentPatrolPointIndex = patrolRoute.nextPatrolPointIndex;
 				patrolRoute.nextPatrolPointIndex++;
+				if(patrolRoute.nextPatrolPointIndex >= patrolRoute.patrolPoints.size())
+				{
+					patrolRoute.nextPatrolPointIndex = 0;
+				}
 
 				glm::vec3 vectorBetweenPatrolPoints = 
 					patrolRoute.patrolPoints[patrolRoute.nextPatrolPointIndex] -
@@ -167,11 +171,11 @@ void Spaceship::UpdateAI(Sun &sun)
 				velocity = glm::normalize(vectorBetweenPatrolPoints) * 0.1f; // 0.1f - speed. 
 			}
 		}
-		else
+		/*else
 		{
-			patrolRoute.currentPatrolPointIndex = patrolRoute.patrolPoints.size();
+			patrolRoute.currentPatrolPointIndex = patrolRoute.patrolPoints.size() - 1;
 			patrolRoute.nextPatrolPointIndex = 0;
-		}
+		}*/
 		position += velocity;
 		
 		glm::vec3 vectorFromSunToSpaceship = glm::vec3(sun.GetPosition()) - position;
@@ -250,6 +254,46 @@ void Spaceship::OnEvent(Event &_event)
 	{
 	case EVENT_TYPE_SHOT_FIRED:
 		break;
+	case EVENT_TYPE_ATTACKED:
+		break;
+	}
+}
+
+
+
+Swarm::Swarm(glm::vec3 newPosition, glm::vec3 newDirection, float newSpeed,
+			 int newSwarmEntitiesCount, int newHealth, int newDamage, int newTime_milliseconds,
+			 const BillboardProgDataNoTexture &billboardProgramNoTexture)
+{
+	position = newPosition;
+	direction = newDirection;
+	speed = newSpeed;
+	swarmEntitiesCount = newSwarmEntitiesCount;
+	health = newHealth;
+	damageOverTime.damage = newDamage;
+	damageOverTime.time_milliseconds = newTime_milliseconds;
+	currentState = PATROL_STATE;
+	swarmBody = SwarmEmitter(position, swarmEntitiesCount);
+	swarmBody.Init(billboardProgramNoTexture);
+}
+
+void Swarm::Update()
+{
+	swarmBody.Update();
+	//position += direction * speed;
+}
+
+void Swarm::Render(glutil::MatrixStack &modelMatrix,
+				   glm::vec3 cameraPosition,
+				   const BillboardProgDataNoTexture &billboardProgramNoTexture)
+{
+	swarmBody.Render(modelMatrix, cameraPosition, billboardProgramNoTexture);
+}
+
+void Swarm::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
 	case EVENT_TYPE_ATTACKED:
 		break;
 	}

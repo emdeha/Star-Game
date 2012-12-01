@@ -97,3 +97,79 @@ void ParticleEmitter::Render(glutil::MatrixStack &modelMatrix,
 
 	glUseProgram(0);
 }
+
+
+
+SwarmEmitter::SwarmEmitter(glm::vec3 newPosition, int newParticleCount)
+{
+	position = newPosition;
+	particleCount = newParticleCount;
+
+	particles.resize(particleCount);
+
+	vao = 0;
+	vertexBO = 0;
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	glGenBuffers(1, &vertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3, glm::value_ptr(position), GL_STATIC_DRAW);
+	
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+}
+
+void SwarmEmitter::Init(const BillboardProgDataNoTexture &billboardProgDataNoTexture)
+{
+	for(int i = 0; i < particleCount; i++)
+	{
+		particles[i].position = position + glm::vec3(2.0f * (float) rand() / RAND_MAX, 
+													 2.0f * (float) rand() / RAND_MAX, 
+													 2.0f * (float) rand() / RAND_MAX);
+		particles[i].velocity = (glm::vec3() - position) * 0.0001f;
+	}
+
+	glUseProgram(billboardProgDataNoTexture.theProgram);
+	glUniform1f(billboardProgDataNoTexture.billboardSizeUnif, 0.1f);
+	glUseProgram(0);
+}
+
+void SwarmEmitter::Update()
+{
+	for(int i = 0; i < particles.size(); i++)
+	{
+		particles[i].position += particles[i].velocity;
+	}
+}
+
+void SwarmEmitter::Render(glutil::MatrixStack &modelMatrix,
+						  glm::vec3 cameraPosition,
+						  const BillboardProgDataNoTexture &billboardProgDataNoTexture)
+{
+	glutil::PushStack push(modelMatrix);
+
+	glUseProgram(billboardProgDataNoTexture.theProgram);
+
+	
+	glUniformMatrix4fv(billboardProgDataNoTexture.modelToCameraMatrixUnif,
+					   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+	glUniform3f(billboardProgDataNoTexture.cameraPositionUnif, 
+				cameraPosition.x, cameraPosition.y, cameraPosition.z);
+	glUniform4f(billboardProgDataNoTexture.colorUnif,
+				1.0f, 0.0f, 0.0f, 1.0f);
+
+
+	for(int i = 0; i < particleCount; i++)
+	{
+		glUniform3f(billboardProgDataNoTexture.deltaPositionUnif, 
+					particles[i].position.x, particles[i].position.y, particles[i].position.z);
+
+		glDrawArrays(GL_POINTS, 0, 1);
+	}
+
+	glDisableVertexAttribArray(0);
+
+	glUseProgram(0);
+}

@@ -37,6 +37,8 @@
 #include "../Entities/PlanetBodies.h"
 #include "MaterialBlock.h"
 
+#include "../ParticleEngine/Engine.h"
+
 
 enum BehaviorState
 {
@@ -152,6 +154,46 @@ public:
 
 	void OnEvent(Event &_event);
 };
+
+
+struct DamageOverTime
+{
+	int damage;
+	int time_milliseconds;
+};
+
+
+class Swarm
+{
+private:
+	glm::vec3 position;
+	glm::vec3 direction;
+	float speed;
+
+	int swarmEntitiesCount;
+	int health;
+	DamageOverTime damageOverTime;
+
+	BehaviorState currentState;
+
+	SwarmEmitter swarmBody;
+
+public:
+	Swarm() {}
+	Swarm(glm::vec3 newPosition, glm::vec3 newDirection, float newSpeed,
+		  int newSwarmEntitiesCount, int newHealth, int newDamage, int newTime_milliseconds,
+		  const BillboardProgDataNoTexture &billboardProgramNoTexture);
+
+	void UpdateAI(Sun &sun);
+	void Update();
+
+	void Render(glutil::MatrixStack &modelMatrix, 
+				glm::vec3 cameraPosition,
+				const BillboardProgDataNoTexture &billboardProgramNoTexture);
+
+	void OnEvent(Event &_event);
+};
+
 
 
 #endif

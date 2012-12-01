@@ -75,6 +75,20 @@ struct BillboardProgData
 	GLuint deltaPositionUnif;
 };
 
+struct BillboardProgDataNoTexture
+{
+	GLuint theProgram;
+
+	GLuint positionAttrib;
+
+	GLuint modelToCameraMatrixUnif;
+	GLuint cameraToClipMatrixUnif;
+	GLuint cameraPositionUnif;
+	GLuint billboardSizeUnif;
+	GLuint deltaPositionUnif;
+	GLuint colorUnif;
+};
+
 struct TextureProgData
 {
 	GLuint theProgram;

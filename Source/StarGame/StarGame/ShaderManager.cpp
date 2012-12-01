@@ -396,6 +396,36 @@ void ShaderManager::LoadPerspectiveTextureProgData(const std::string &vertexShad
 	glUniformBlockBinding(perspTextureProgData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
 }
 
+void ShaderManager::LoadBillboardProgDataNoTexture(const std::string &vertexShader,
+												   const std::string &geometryShader,
+												   const std::string &fragmentShader)
+{
+	std::vector<GLuint> shaderList;
+
+	shaderList.push_back(Framework::LoadShader(GL_VERTEX_SHADER, vertexShader));
+	shaderList.push_back(Framework::LoadShader(GL_GEOMETRY_SHADER, geometryShader));
+	shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, fragmentShader));
+
+	billboardProgDataNoTexture.theProgram = Framework::CreateProgram(shaderList);
+
+
+	billboardProgDataNoTexture.cameraPositionUnif = 
+		glGetUniformLocation(billboardProgDataNoTexture.theProgram, "cameraPosition");
+	billboardProgDataNoTexture.cameraToClipMatrixUnif =
+		glGetUniformLocation(billboardProgDataNoTexture.theProgram, "cameraToClipMatrix");
+	billboardProgDataNoTexture.modelToCameraMatrixUnif =
+		glGetUniformLocation(billboardProgDataNoTexture.theProgram, "modelToCameraMatrix");
+	billboardProgDataNoTexture.colorUnif = 
+		glGetUniformLocation(billboardProgDataNoTexture.theProgram, "color");
+	billboardProgDataNoTexture.billboardSizeUnif =
+		glGetUniformLocation(billboardProgDataNoTexture.theProgram, "billboardSize");
+	billboardProgDataNoTexture.deltaPositionUnif =
+		glGetUniformLocation(billboardProgDataNoTexture.theProgram, "deltaPosition");
+
+	billboardProgDataNoTexture.positionAttrib = 
+		glGetAttribLocation(billboardProgDataNoTexture.theProgram, "position");
+}
+
 void ShaderManager::LoadBillboardProgData(const std::string &vertexShader,
 										  const std::string &geometryShader,
 										  const std::string &fragmentShader)
@@ -494,6 +524,10 @@ TextureProgData ShaderManager::GetTextureProgData()
 TextureProgData ShaderManager::GetPerspectiveTextureProgData()
 {
 	return perspTextureProgData;
+}
+BillboardProgDataNoTexture ShaderManager::GetBillboardProgDataNoTexture()
+{
+	return billboardProgDataNoTexture;
 }
 BillboardProgData ShaderManager::GetBillboardProgData()
 {

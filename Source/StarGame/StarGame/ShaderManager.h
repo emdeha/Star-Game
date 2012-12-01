@@ -124,7 +124,7 @@ private:
 	SimpleTextureProgData simpleTextureProgData;
 	TextureProgData textureProgData;
 	TextureProgData perspTextureProgData;
-
+	BillboardProgDataNoTexture billboardProgDataNoTexture;
 	BillboardProgData billboardProgData;
 	ParticleProgData particleProgData;
 
@@ -162,7 +162,9 @@ public:
 	void LoadSimpleTextureProgData(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadTextureProgData(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadPerspectiveTextureProgData(const std::string &vertexShader, const std::string &fragmentShader);
-
+	void LoadBillboardProgDataNoTexture(const std::string &vertexShader,
+										const std::string &geometryShader,
+										const std::string &fragmentShader);
 	void LoadBillboardProgData(const std::string &vertexShader, 
 							   const std::string &geometryShader,
 							   const std::string &fragmentShader);
@@ -178,7 +180,7 @@ public:
 	SimpleTextureProgData GetSimpleTextureProgData();
 	TextureProgData GetTextureProgData();
 	TextureProgData GetPerspectiveTextureProgData();
-
+	BillboardProgDataNoTexture GetBillboardProgDataNoTexture();
 	BillboardProgData GetBillboardProgData();
 	ParticleProgData GetParticleProgData();
 

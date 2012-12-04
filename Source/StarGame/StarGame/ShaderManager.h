@@ -26,6 +26,12 @@
 #include "../ProgramData/ProgramData.h"
 
 
+
+// TODO: Dynamic enums for shader variables would speed up the 
+//		 generic shader manager
+
+
+
 enum BlockType
 {
 	BT_MATERIAL,

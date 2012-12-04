@@ -183,6 +183,18 @@ void Satellite::Update()
 	position.y = sinf(currTimeThroughLoop * (2.0f * PI)) * offsetFromSun;
 }
 
+glm::vec3 Satellite::GetVelocity()
+{
+	float currTimeThroughLoop = revolutionDuration.GetAlpha();
+	float offsetFromSun = skillType.satelliteOffsetFromSun;
+
+	glm::vec3 satelliteVelocity;
+	satelliteVelocity.x = cosf(currTimeThroughLoop * (2.0f * PI)) * offsetFromSun;
+	satelliteVelocity.y = sinf(currTimeThroughLoop * (2.0f * PI)) * offsetFromSun;
+
+	return satelliteVelocity;
+}
+
 void Satellite::Disable()
 {
 
@@ -299,7 +311,6 @@ Sun::Sun(glm::vec3 newPosition, glm::vec4 newColor,
 	satelliteCap = newSatelliteCap;
 	isClicked = false;
 	isSatelliteClicked = false;
-	health = 300;
 	currentSatelliteType = 0;
 	health = newHealth;
 }

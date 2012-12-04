@@ -1,4 +1,4 @@
-﻿Build started 1.12.2012 г. 19:07:24 ч..
+﻿Build started 3.12.2012 г. 19:39:39 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\Fusion\Fusion.vcxproj" on node 4 (rebuild target(s)).
      1>_PrepareForClean:
          Deleting file "Debug\Fusion.lastbuildstate".
@@ -28,4 +28,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.73
+Time Elapsed 00:00:00.66

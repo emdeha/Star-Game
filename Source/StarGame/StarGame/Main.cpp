@@ -371,14 +371,14 @@ void InitializeScene()
 									  90.0f, 
 									  0.0f, 
 									  0.15f,
-									  0.3f, 20, 0));
+									  0.3f, 20, 1));
 	std::shared_ptr<Spaceship>
 		sampleSpaceship2(new Spaceship(glm::vec3(0.0f, 4.5f, 0.0f), 
 									   glm::vec3(),
 									   90.0f, 
 									   0.0f, 
 									   0.15f,
-									   0.3f, 20, 0));
+									   0.3f, 20, 1));
 
 
 
@@ -393,7 +393,7 @@ void InitializeScene()
 
 	scene->AddSun(mainSun);
 	scene->AddSunLight(mainSunLight);
-	scene->AddSpaceship(sampleSpaceship);
+	//scene->AddSpaceship(sampleSpaceship);
 	//scene->AddSpaceship(sampleSpaceship2);
 
 	scene->SetMusic("../data/music/background.mp3", MUSIC_BACKGROUND);
@@ -513,8 +513,9 @@ void Init()
 
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-	testSwarm = Swarm(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(), 0.1f, 
-					  100, 10, 10, 1, shaderManager.GetBillboardProgDataNoTexture());
+	testSwarm = Swarm(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -0.001f, 0.0f), 
+					  100, 100, 10, 1000, 2.0f, 
+					  shaderManager.GetBillboardProgDataNoTexture());
 	/*
 	testSwarm = SwarmEmitter(glm::vec3(0.0f, 3.0f, 0.0f), 100);
 	testSwarm.Init(shaderManager.GetBillboardProgDataNoTexture());
@@ -540,7 +541,7 @@ void Display()
 	
 
 	if(scene->IsLayoutOn(LAYOUT_IN_GAME))
-	{
+	{		
 		glutil::MatrixStack modelMatrix;
 
 		modelMatrix.SetMatrix(scene->GetTopDownCamera().CalcMatrix());
@@ -571,7 +572,16 @@ void Display()
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
 								   shaderManager.GetSimpleNoUBProgData());
 
-		testSwarm.Update();
+		// TODO: Put in the while cycle
+		if(scene->HasSuns())
+		{
+			testSwarm.Update(false, *scene->GetSun());
+		}
+		else
+		{
+			testSwarm.Update(true);
+		}
+		// TODO: Add interpolation
 		testSwarm.Render(modelMatrix, scene->GetTopDownCamera().ResolveCamPosition(), 
 						 shaderManager.GetBillboardProgDataNoTexture());
 		/*

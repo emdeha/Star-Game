@@ -83,6 +83,8 @@ void Scene::UpdateScene()
 		{
 			suns.front()->RemoveSatellites();
 			suns.pop_back();
+			lights.pop_back(); // got to find the light connected to the sun
+							   // even if I remove the light the ship is still lit
 		}
 	}
 

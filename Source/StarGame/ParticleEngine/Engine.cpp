@@ -125,9 +125,9 @@ void SwarmEmitter::Init(const BillboardProgDataNoTexture &billboardProgDataNoTex
 {
 	for(int i = 0; i < particleCount; i++)
 	{
-		particles[i].position = position + glm::vec3(2.0f * (float) rand() / RAND_MAX, 
-													 2.0f * (float) rand() / RAND_MAX, 
-													 2.0f * (float) rand() / RAND_MAX);
+		particles[i].position = position + glm::vec3(2.0f * (float) rand() / RAND_MAX - 1.0f, 
+													 2.0f * (float) rand() / RAND_MAX - 1.0f, 
+													 2.0f * (float) rand() / RAND_MAX - 1.0f);
 		particles[i].velocity = (glm::vec3() - position) * 0.0001f;
 	}
 
@@ -141,6 +141,13 @@ void SwarmEmitter::Update()
 	for(int i = 0; i < particles.size(); i++)
 	{
 		particles[i].position += particles[i].velocity;
+	}
+}
+void SwarmEmitter::Update(glm::vec3 otherVelocity)
+{
+	for(int i = 0; i < particles.size(); i++)
+	{
+		particles[i].position += otherVelocity;
 	}
 }
 

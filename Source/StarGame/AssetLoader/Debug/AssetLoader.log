@@ -1,4 +1,4 @@
-﻿Build started 1.12.2012 г. 19:07:28 ч..
+﻿Build started 3.12.2012 г. 19:39:43 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\AssetLoader\AssetLoader.vcxproj" on node 4 (rebuild target(s)).
      1>_PrepareForClean:
          Deleting file "Debug\AssetLoader.lastbuildstate".
@@ -41,4 +41,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.30
+Time Elapsed 00:00:02.25

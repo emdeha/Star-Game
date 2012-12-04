@@ -18,6 +18,8 @@
 #include "stdafx.h"
 #include "Enemy.h"
 
+#include <ctime>
+
 
 static void GenerateUniformBuffers(int &materialBlockSize, 
 								   glm::vec4 diffuseColor,
@@ -79,7 +81,7 @@ Spaceship::Spaceship(glm::vec3 newPosition,
 	patrolRoute.patrolPoints.push_back(glm::vec3(4.5f, 4.0f, 0.0f));
 	patrolRoute.patrolPoints.push_back(glm::vec3(-4.5f, 4.0f, 0.0f));
 	patrolRoute.patrolPoints.push_back(glm::vec3(-4.5f, -4.0f, 0.0f));
-	patrolRoute.patrolPoints.push_back(glm::vec3(4.5f, -4.0f, 0.0f));
+	patrolRoute.patrolPoints.push_back(glm::vec3(4.5f, 4.0f, 0.0f));
 	//patrolRoute.patrolPoints.push_back(position);
 	patrolRoute.currentPatrolPointIndex = 0;
 	patrolRoute.lastPatrolPointIndex = 0;
@@ -88,6 +90,7 @@ Spaceship::Spaceship(glm::vec3 newPosition,
 	velocity = 
 		glm::normalize(patrolRoute.patrolPoints[patrolRoute.nextPatrolPointIndex] - 
 					   patrolRoute.patrolPoints[patrolRoute.currentPatrolPointIndex]) * 0.1f; // 0.1f - speed
+	patrolRoute.lastVelocity = velocity;
 }
 
 void Spaceship::LoadProjectileMesh(const std::string &meshFile)
@@ -171,11 +174,6 @@ void Spaceship::UpdateAI(Sun &sun)
 				velocity = glm::normalize(vectorBetweenPatrolPoints) * 0.1f; // 0.1f - speed. 
 			}
 		}
-		/*else
-		{
-			patrolRoute.currentPatrolPointIndex = patrolRoute.patrolPoints.size() - 1;
-			patrolRoute.nextPatrolPointIndex = 0;
-		}*/
 		position += velocity;
 		
 		glm::vec3 vectorFromSunToSpaceship = glm::vec3(sun.GetPosition()) - position;
@@ -183,6 +181,7 @@ void Spaceship::UpdateAI(Sun &sun)
 
 		if(distanceBetweenSunAndSpaceship < lineOfSight)
 		{
+			patrolRoute.lastVelocity = velocity;
 			currentState = ATTACK_STATE;
 		}
 	}
@@ -203,8 +202,12 @@ void Spaceship::Update(bool isSunKilled, Sun &sun)
 	}
 	else
 	{
+		if(velocity == glm::vec3())
+		{
+			velocity = patrolRoute.lastVelocity;
+		}
 		currentState = PATROL_STATE;
-		velocity = glm::vec3(-0.1f, 0.0f, 0.0f);
+		UpdateAI(Sun());
 	}
 }
 
@@ -261,25 +264,148 @@ void Spaceship::OnEvent(Event &_event)
 
 
 
-Swarm::Swarm(glm::vec3 newPosition, glm::vec3 newDirection, float newSpeed,
+Swarm::Swarm(glm::vec3 newPosition, glm::vec3 newVelocity,
 			 int newSwarmEntitiesCount, int newHealth, int newDamage, int newTime_milliseconds,
+			 float newLineOfSight,
 			 const BillboardProgDataNoTexture &billboardProgramNoTexture)
 {
 	position = newPosition;
-	direction = newDirection;
-	speed = newSpeed;
+	velocity = newVelocity;
 	swarmEntitiesCount = newSwarmEntitiesCount;
 	health = newHealth;
 	damageOverTime.damage = newDamage;
 	damageOverTime.time_milliseconds = newTime_milliseconds;
-	currentState = PATROL_STATE;
+	currentState = IDLE_STATE;
+	lineOfSight = newLineOfSight;
 	swarmBody = SwarmEmitter(position, swarmEntitiesCount);
 	swarmBody.Init(billboardProgramNoTexture);
+	isDestroyed = false;
+	isCommanded = false;
+
+	attackTimer = Framework::Timer(Framework::Timer::Type::TT_INFINITE);
 }
 
-void Swarm::Update()
+void Swarm::AttackSolarSystem(Sun &sun)
 {
-	swarmBody.Update();
+	// TODO: Add a timer
+
+	EventArg sunDamage_perTime[2];
+	sunDamage_perTime[0].argType = "damage";
+	sunDamage_perTime[0].argument.varType = TYPE_INTEGER;
+	sunDamage_perTime[0].argument.varInteger = damageOverTime.damage;
+	sunDamage_perTime[1].argType = "bodyIndex";
+	sunDamage_perTime[1].argument.varType = TYPE_INTEGER;
+	sunDamage_perTime[1].argument.varInteger = -1;
+	Event sunDamageEvent(2, EVENT_TYPE_ATTACKED, sunDamage_perTime);
+
+	sun.OnEvent(sunDamageEvent);
+}
+
+void Swarm::UpdateAI(Sun &sun)
+{
+	if(currentState == ATTACK_STATE)
+	{
+		glm::vec3 vectorBetweenPlanetAndSwarm = glm::vec3();
+		if(sun.HasSatellites())
+		{
+			vectorBetweenPlanetAndSwarm = sun.GetOuterSatellite()->GetPosition() - position;
+		}
+		else
+		{
+			vectorBetweenPlanetAndSwarm = glm::vec3(sun.GetPosition()) - position;
+		}
+		float distanceBetweenPlanetAndSwarm = glm::length(vectorBetweenPlanetAndSwarm);
+
+
+		// TODO: Check if the sun has satellites
+		if(distanceBetweenPlanetAndSwarm <= 
+			sun.GetOuterSatellite()->GetDiameter() * sun.GetOuterSatellite()->GetDiameter())
+		{
+			velocity = sun.GetOuterSatellite()->GetVelocity();
+
+			if(attackTimer.GetTimeSinceStart() * 1000.0f >= damageOverTime.time_milliseconds)
+			{
+				AttackSolarSystem(sun);
+				attackTimer.Reset();
+			}
+		}
+		else if(distanceBetweenPlanetAndSwarm <= sun.GetRadius() * sun.GetRadius())
+		{
+			velocity = glm::vec3();
+
+			if(attackTimer.GetTimeSinceStart() * 1000.0f >= damageOverTime.time_milliseconds)
+			{
+				AttackSolarSystem(sun);
+				attackTimer.Reset();
+			}
+		}
+		else
+		{
+			glm::vec3 direction = glm::vec3();
+			if(sun.HasSatellites())
+			{
+				direction = sun.GetOuterSatellite()->GetPosition() - position;
+			}
+			else
+			{
+				direction = glm::vec3(sun.GetPosition()) - position;
+			}
+
+			if(!isCommanded)
+			{
+				direction = glm::normalize(direction);
+				velocity = direction * 0.01f;
+			}
+
+			if(health <= 20.0f)
+			{
+				currentState = EVADE_STATE;
+			}
+		
+			isCommanded = true;
+		}
+	}
+	else if(currentState == EVADE_STATE)
+	{
+		position -= velocity;
+	}
+	else if(currentState == IDLE_STATE)
+	{
+		glm::vec3 vectorFromPlanetToSwarm = glm::vec3();
+		if(sun.HasSatellites())
+		{
+			vectorFromPlanetToSwarm = sun.GetOuterSatellite()->GetPosition() - position;
+		}
+		else vectorFromPlanetToSwarm = glm::vec3(sun.GetPosition()) - position;
+
+		float distanceBetweenPlanetAndSwarm = glm::length(vectorFromPlanetToSwarm);
+
+		if(distanceBetweenPlanetAndSwarm < lineOfSight) // 3.0f line of sight
+		{
+			currentState = ATTACK_STATE;
+		}
+	}
+}
+
+void Swarm::Update(bool isSunKilled, Sun &sun)
+{
+	attackTimer.Update();
+
+	if(!isSunKilled)
+	{
+		position += velocity;
+		this->UpdateAI(sun);
+		swarmBody.Update(velocity);
+
+		if(health <= 0)
+		{
+			isDestroyed = true;
+		}
+	}
+	else
+	{
+		currentState = IDLE_STATE;
+	}
 	//position += direction * speed;
 }
 

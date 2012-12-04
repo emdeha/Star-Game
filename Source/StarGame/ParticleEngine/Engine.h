@@ -79,6 +79,7 @@ public:
 	void Init(const BillboardProgDataNoTexture &billboardProgDataNoTexture);
 
 	void Update();
+	void Update(glm::vec3 otherVelocity);
 	void Render(glutil::MatrixStack &modelMatrix,
 				glm::vec3 cameraPosition,
 				const BillboardProgDataNoTexture &billboardProgDataNoTexture);

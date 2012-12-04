@@ -207,10 +207,11 @@ public:
 	// TODO: Not so useful (maybe).
 	float GetDiameter();
 
-
+	
 	SatelliteType GetSatelliteType();
 
 	glm::vec3 GetPosition();
+	glm::vec3 GetVelocity();
 
 	int GetHealth();
 

@@ -45,6 +45,7 @@ enum BehaviorState
 	ATTACK_STATE,
 	EVADE_STATE,
 	PATROL_STATE, 
+	IDLE_STATE,
 };
 
 
@@ -98,6 +99,7 @@ inline bool Projectile::IsDestroyed()
 struct PatrolRoute
 {
 	std::vector<glm::vec3> patrolPoints;
+	glm::vec3 lastVelocity;
 	int currentPatrolPointIndex;
 	int nextPatrolPointIndex;
 	int lastPatrolPointIndex;
@@ -159,7 +161,7 @@ public:
 struct DamageOverTime
 {
 	int damage;
-	int time_milliseconds;
+	unsigned int time_milliseconds;
 };
 
 
@@ -167,30 +169,39 @@ class Swarm
 {
 private:
 	glm::vec3 position;
-	glm::vec3 direction;
-	float speed;
+	glm::vec3 velocity;
 
 	int swarmEntitiesCount;
 	int health;
 	DamageOverTime damageOverTime;
 
+	float lineOfSight;
+
+	bool isDestroyed;
+	bool isCommanded;
+
 	BehaviorState currentState;
 
 	SwarmEmitter swarmBody;
 
+	Framework::Timer attackTimer;
+
+	void AttackSolarSystem(Sun &sun);
+
 public:
 	Swarm() {}
-	Swarm(glm::vec3 newPosition, glm::vec3 newDirection, float newSpeed,
+	Swarm(glm::vec3 newPosition, glm::vec3 newVelocity,
 		  int newSwarmEntitiesCount, int newHealth, int newDamage, int newTime_milliseconds,
+		  float newLineOfSight,
 		  const BillboardProgDataNoTexture &billboardProgramNoTexture);
 
 	void UpdateAI(Sun &sun);
-	void Update();
+	void Update(bool isSunKilled, Sun &sun = Sun());
 
 	void Render(glutil::MatrixStack &modelMatrix, 
 				glm::vec3 cameraPosition,
 				const BillboardProgDataNoTexture &billboardProgramNoTexture);
-
+	
 	void OnEvent(Event &_event);
 };
 

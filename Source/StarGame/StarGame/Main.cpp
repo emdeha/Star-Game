@@ -48,6 +48,7 @@ ImageBox boxThree(SMALL, "sampleThree", glm::vec2(485.0f, 570.0f), 50.0f, 50.0f,
 
 
 Swarm testSwarm;
+FastSuicideBomber testBomber;
 
 
 ParticleEmitter testEmitter;
@@ -513,6 +514,12 @@ void Init()
 
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
+
+	testBomber = FastSuicideBomber(glm::vec3(0.0f, 4.0f, 0.0f), glm::vec3(0.0f, -0.01f, 0.0f),
+								   100, 10, 3.0f, 1.0f);
+	testBomber.LoadMesh("mesh-files/UnitSphere.xml");
+
+
 	testSwarm = Swarm(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -0.001f, 0.0f), 
 					  100, 100, 10, 1000, 2.0f, 
 					  shaderManager.GetBillboardProgDataNoTexture());
@@ -554,6 +561,15 @@ void Display()
 		{
 			scene->UpdateScene();
 
+			if(scene->HasSuns())
+			{
+				testBomber.Update(false, *scene->GetSun());
+			}
+			else
+			{
+				testBomber.Update(true);
+			}
+
 			nextGameTick += SKIP_TICKS;
 			loops++;
 		}
@@ -568,10 +584,16 @@ void Display()
 						   shaderManager.GetSimpleProgData(),
 						   interpolation);
 
+
+
 		
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
 								   shaderManager.GetSimpleNoUBProgData());
+		testBomber.Render(modelMatrix, shaderManager.GetLitProgData(), 
+						  shaderManager.GetBlockIndex(BT_MATERIAL), 
+						  interpolation, 2.2f);
 
+		/*
 		// TODO: Put in the while cycle
 		if(scene->HasSuns())
 		{
@@ -584,6 +606,8 @@ void Display()
 		// TODO: Add interpolation
 		testSwarm.Render(modelMatrix, scene->GetTopDownCamera().ResolveCamPosition(), 
 						 shaderManager.GetBillboardProgDataNoTexture());
+		*/
+
 		/*
 		testSwarm.Update();
 		testSwarm.Render(modelMatrix, scene->GetTopDownCamera().ResolveCamPosition(),

@@ -60,7 +60,7 @@ Spaceship::Spaceship(glm::vec3 newPosition,
 	rotationY = newRotationY;
 	scaleFactor = newScaleFactor;
 
-	health = 100;
+	health = 100; // TODO: newHealth!
 
 	currentState = PATROL_STATE;
 
@@ -114,7 +114,7 @@ void Spaceship::LoadMesh(const std::string &meshFile)
 						   glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), 
 						   materialUniformBuffer);
 
-	projectile->LoadMesh(meshFile);
+	projectile->LoadMesh(meshFile); // TODO: maybe this should be removed
 }
 
 void Spaceship::UpdateAI(Sun &sun)
@@ -285,17 +285,23 @@ Swarm::Swarm(glm::vec3 newPosition, glm::vec3 newVelocity,
 	attackTimer = Framework::Timer(Framework::Timer::Type::TT_INFINITE);
 }
 
-void Swarm::AttackSolarSystem(Sun &sun)
+void Swarm::AttackSolarSystem(Sun &sun, bool isSatellite, float bodyIndex)
 {
-	// TODO: Add a timer
-
 	EventArg sunDamage_perTime[2];
 	sunDamage_perTime[0].argType = "damage";
 	sunDamage_perTime[0].argument.varType = TYPE_INTEGER;
 	sunDamage_perTime[0].argument.varInteger = damageOverTime.damage;
 	sunDamage_perTime[1].argType = "bodyIndex";
-	sunDamage_perTime[1].argument.varType = TYPE_INTEGER;
-	sunDamage_perTime[1].argument.varInteger = -1;
+	if(isSatellite)
+	{
+		sunDamage_perTime[1].argument.varType = TYPE_FLOAT;
+		sunDamage_perTime[1].argument.varFloat = bodyIndex;
+	}
+	else
+	{
+		sunDamage_perTime[1].argument.varType = TYPE_INTEGER;
+		sunDamage_perTime[1].argument.varInteger = -1;
+	}
 	Event sunDamageEvent(2, EVENT_TYPE_ATTACKED, sunDamage_perTime);
 
 	sun.OnEvent(sunDamageEvent);
@@ -317,52 +323,66 @@ void Swarm::UpdateAI(Sun &sun)
 		float distanceBetweenPlanetAndSwarm = glm::length(vectorBetweenPlanetAndSwarm);
 
 
-		// TODO: Check if the sun has satellites
-		if(distanceBetweenPlanetAndSwarm <= 
-			sun.GetOuterSatellite()->GetDiameter() * sun.GetOuterSatellite()->GetDiameter())
+		if(sun.HasSatellites())
 		{
-			velocity = sun.GetOuterSatellite()->GetVelocity();
-
-			if(attackTimer.GetTimeSinceStart() * 1000.0f >= damageOverTime.time_milliseconds)
+			if(distanceBetweenPlanetAndSwarm <= 
+				sun.GetOuterSatellite()->GetDiameter() * sun.GetOuterSatellite()->GetDiameter())
 			{
-				AttackSolarSystem(sun);
-				attackTimer.Reset();
+				//velocity = sun.GetOuterSatellite()->GetVelocity();
+
+				if(attackTimer.GetTimeSinceStart() * 1000.0f >= damageOverTime.time_milliseconds)
+				{
+					AttackSolarSystem(sun, true, sun.GetOuterSatellite()->GetOffsetFromSun());
+					attackTimer.Reset();
+				}
 			}
-		}
-		else if(distanceBetweenPlanetAndSwarm <= sun.GetRadius() * sun.GetRadius())
-		{
-			velocity = glm::vec3();
+			else
+			{				
+				glm::vec3 vectorToSatellite = 
+					sun.GetOuterSatellite()->GetPosition() - position;
 
-			if(attackTimer.GetTimeSinceStart() * 1000.0f >= damageOverTime.time_milliseconds)
-			{
-				AttackSolarSystem(sun);
-				attackTimer.Reset();
+				velocity = glm::normalize(vectorToSatellite) * 0.003f; // TODO: Magick
 			}
 		}
 		else
 		{
-			glm::vec3 direction = glm::vec3();
-			if(sun.HasSatellites())
+			if(distanceBetweenPlanetAndSwarm <= sun.GetRadius() * sun.GetRadius())
 			{
-				direction = sun.GetOuterSatellite()->GetPosition() - position;
+				isCommanded = false;
+
+				velocity = glm::vec3();
+
+				if(attackTimer.GetTimeSinceStart() * 1000.0f >= damageOverTime.time_milliseconds)
+				{
+					AttackSolarSystem(sun);
+					attackTimer.Reset();
+				}
 			}
 			else
 			{
-				direction = glm::vec3(sun.GetPosition()) - position;
-			}
+				glm::vec3 direction = glm::vec3();
+				if(sun.HasSatellites())
+				{
+					direction = sun.GetOuterSatellite()->GetPosition() - position;
+				}
+				else
+				{
+					direction = glm::vec3(sun.GetPosition()) - position;
+				}
 
-			if(!isCommanded)
-			{
-				direction = glm::normalize(direction);
-				velocity = direction * 0.01f;
-			}
+				if(!isCommanded)
+				{
+					direction = glm::normalize(direction);
+					velocity = direction * 0.01f;
+				}
 
-			if(health <= 20.0f)
-			{
-				currentState = EVADE_STATE;
-			}
+				if(health <= 20.0f)
+				{
+					currentState = EVADE_STATE;
+				}
 		
-			isCommanded = true;
+				isCommanded = true;
+			}
 		}
 	}
 	else if(currentState == EVADE_STATE)
@@ -380,7 +400,7 @@ void Swarm::UpdateAI(Sun &sun)
 
 		float distanceBetweenPlanetAndSwarm = glm::length(vectorFromPlanetToSwarm);
 
-		if(distanceBetweenPlanetAndSwarm < lineOfSight) // 3.0f line of sight
+		if(distanceBetweenPlanetAndSwarm < lineOfSight)
 		{
 			currentState = ATTACK_STATE;
 		}
@@ -420,6 +440,196 @@ void Swarm::OnEvent(Event &_event)
 {
 	switch(_event.GetType())
 	{
+	case EVENT_TYPE_ATTACKED:
+		break;
+	}
+}
+
+
+
+FastSuicideBomber::FastSuicideBomber(glm::vec3 newPosition, glm::vec3 newVelocity,
+									 int newHealth, int newDamage, float newLineOfSight,
+									 float newScaleFactor)
+{
+	position = newPosition;
+	velocity = newVelocity;
+
+	health = newHealth;
+	damage = newDamage;
+
+	lineOfSight = newLineOfSight;
+
+	scaleFactor = newScaleFactor;
+
+	currentState = IDLE_STATE;
+
+	isDestroyed = false;
+}
+
+void FastSuicideBomber::LoadMesh(const std::string &meshFile)
+{
+	try
+	{
+		mesh = std::auto_ptr<Framework::Mesh>(new Framework::Mesh(meshFile));
+	}
+	catch(std::exception &except)
+	{
+		printf("%s\n", except.what());
+		throw;
+	}
+
+	GenerateUniformBuffers(materialBlockSize,
+						   glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
+						   materialUniformBuffer);
+}
+
+void FastSuicideBomber::AttackSolarSystem(Sun &sun, bool isSatellite, float bodyIndex)
+{
+	EventArg damageEventArgs[2];
+	damageEventArgs[0].argType = "damage";
+	damageEventArgs[0].argument.varType = TYPE_INTEGER;
+	damageEventArgs[0].argument.varInteger = damage;
+	damageEventArgs[1].argType = "bodyIndex";
+	if(isSatellite)
+	{
+		damageEventArgs[1].argument.varType = TYPE_FLOAT;
+		damageEventArgs[1].argument.varFloat = bodyIndex;
+	}
+	else
+	{
+		damageEventArgs[1].argument.varType = TYPE_INTEGER;
+		damageEventArgs[1].argument.varInteger = -1;
+	}
+	Event damageEvent(2, EVENT_TYPE_ATTACKED, damageEventArgs);
+
+	sun.OnEvent(damageEvent);
+}
+
+void FastSuicideBomber::UpdateAI(Sun &sun)
+{
+	if(currentState == ATTACK_STATE)
+	{
+		if(sun.HasSatellites())
+		{
+			glm::vec3 vectorBetweenSatelliteAndBomber = 
+				sun.GetOuterSatellite()->GetPosition() - position;
+			float distanceBetweenSatelliteAndBomber = glm::length(vectorBetweenSatelliteAndBomber);
+
+			if(distanceBetweenSatelliteAndBomber <=
+			   sun.GetOuterSatellite()->GetDiameter() * sun.GetOuterSatellite()->GetDiameter())
+			{
+				AttackSolarSystem(sun, true, sun.GetOuterSatellite()->GetOffsetFromSun());
+			}
+			else
+			{
+				glm::vec3 vectorToSatellite =
+					sun.GetOuterSatellite()->GetPosition() - position;
+
+				velocity = glm::normalize(vectorToSatellite) * 0.003f; // TODO: Magick
+			}
+		}
+		else
+		{
+			glm::vec3 vectorBetweenSunAndBomber = glm::vec3(sun.GetPosition()) - position;
+			float distanceBetweenSunAndBomber = glm::length(vectorBetweenSunAndBomber);
+
+			if(distanceBetweenSunAndBomber <= sun.GetRadius() * sun.GetRadius())
+			{
+				AttackSolarSystem(sun);
+				isDestroyed = true;
+				// Destroy yourself
+			}
+			else
+			{
+				glm::vec3 direction = glm::vec3();
+				direction = glm::vec3(sun.GetPosition()) - position;
+
+				direction = glm::normalize(direction);
+				velocity = direction * 0.03f;
+			}
+		}
+	}
+	else if(currentState == IDLE_STATE)
+	{
+		glm::vec3 vectorFromPlanetToBomber = glm::vec3();
+		if(sun.HasSatellites())
+		{
+			vectorFromPlanetToBomber = sun.GetOuterSatellite()->GetPosition() - position;
+		}
+		else
+		{
+			vectorFromPlanetToBomber = glm::vec3(sun.GetPosition()) - position;
+		}
+
+		float distanceBetweenPlanetAndBomber = glm::length(vectorFromPlanetToBomber);
+
+		if(distanceBetweenPlanetAndBomber < lineOfSight)
+		{
+			currentState = ATTACK_STATE;
+		}
+	}
+}
+
+void FastSuicideBomber::Update(bool isSunKilled, Sun &sun)
+{
+	if(!isDestroyed)
+	{
+		if(!isSunKilled)
+		{
+			position += velocity;
+			this->UpdateAI(sun);
+
+			if(health <= 0)
+			{
+				isDestroyed = true;
+				// Destroy yourself
+			}
+		}
+		else
+		{
+			currentState = IDLE_STATE;
+		}
+	}
+}
+
+void FastSuicideBomber::Render(glutil::MatrixStack &modelMatrix,
+							   const LitProgData &litData,
+							   int materialBlockIndex,
+							   float interpolation, float gamma)
+{
+	if(!isDestroyed)
+	{
+		glutil::PushStack push(modelMatrix);
+
+		glm::vec3 viewPosition = position + velocity * interpolation;
+		modelMatrix.Translate(viewPosition);
+		modelMatrix.Scale(scaleFactor);
+
+		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
+						  0, sizeof(MaterialBlock));
+
+		glm::mat3 normMatrix(modelMatrix.Top());
+		normMatrix = glm::transpose(glm::inverse(normMatrix));
+
+		glUseProgram(litData.theProgram);
+		glUniformMatrix4fv(litData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+		glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+
+		mesh->Render("lit");
+
+		glUseProgram(0);
+
+		glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
+
+	}
+}
+
+void FastSuicideBomber::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
+	case EVENT_TYPE_SHOT_FIRED:
+		break;
 	case EVENT_TYPE_ATTACKED:
 		break;
 	}

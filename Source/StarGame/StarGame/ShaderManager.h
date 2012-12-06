@@ -55,7 +55,6 @@ enum ProgramDataType
 };
 
 
-
 class Program
 {
 private:

@@ -186,7 +186,7 @@ private:
 
 	Framework::Timer attackTimer;
 
-	void AttackSolarSystem(Sun &sun);
+	void AttackSolarSystem(Sun &sun, bool isSatellite = false, float bodyIndex = -1.0f);
 
 public:
 	Swarm() {}
@@ -205,6 +205,48 @@ public:
 	void OnEvent(Event &_event);
 };
 
+
+class FastSuicideBomber
+{
+private:
+	glm::vec3 position;
+	glm::vec3 velocity;
+
+	int health;
+	int damage;
+
+	float lineOfSight;
+
+	float scaleFactor;
+
+	BehaviorState currentState;
+
+	std::auto_ptr<Framework::Mesh> mesh;
+
+	int materialBlockSize;
+	GLuint materialUniformBuffer;
+
+	bool isDestroyed;
+
+	void AttackSolarSystem(Sun &sun, bool isSatellite = false, float bodyIndex = -1.0f);
+
+public:
+	FastSuicideBomber() {}
+	FastSuicideBomber(glm::vec3 newPosition, glm::vec3 newVelocity,
+					  int newHealth, int newDamage, float newLineOfSight, 
+					  float newScaleFactor);
+
+	void LoadMesh(const std::string &meshFile);
+
+	void UpdateAI(Sun &sun);
+	void Update(bool isSunKilled, Sun &sun = Sun());
+
+	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData, 
+				int materialBlockIndex,
+				float interpolation, float gamma);
+
+	void OnEvent(Event &_event);
+};
 
 
 #endif

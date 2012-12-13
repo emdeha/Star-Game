@@ -33,6 +33,16 @@ struct StandardParticle
 	glm::vec3 velocity;
 };
 
+struct ExplosionParticle
+{
+	glm::vec4 color;
+
+	glm::vec3 position;
+	glm::vec3 velocity;
+
+	float lifeTime;
+};
+
 
 class ParticleEmitter
 {
@@ -86,6 +96,44 @@ public:
 };
 
 
+
+class ExplosionEmitter
+{
+private:
+	std::vector<ExplosionParticle> particles;
+	
+	bool isActive;
+	bool isDead;
+
+	glm::vec3 position;
+	float velocityMultiplier;
+	int particleCount;
+
+	int particleLifeTime;
+
+	GLuint vao;
+	GLuint vertexBO;
+
+public:
+	ExplosionEmitter() {}
+	ExplosionEmitter(glm::vec3 newPosition, int newParticleCount,
+					 int newParticleLifeTime,
+					 float newVelocityMultiplier);
+
+	void Init(const BillboardProgDataNoTexture &billboardProgDataNoTexture);
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix,
+				glm::vec3 cameraPosition,
+				const BillboardProgDataNoTexture &billboardProgDataNoTexture);
+
+	void SetPosition(glm::vec3 newPosition);
+
+	void Activate();
+	bool IsActive();
+
+	bool IsDead();
+};
 
 
 #endif

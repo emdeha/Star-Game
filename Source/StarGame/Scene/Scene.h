@@ -49,6 +49,8 @@ private:
 	std::vector<SunLight> lights; ///< Holds the world's lights.
 	std::vector<std::shared_ptr<Sun>> suns; ///< Holds the world's suns.
 	std::vector<std::shared_ptr<Spaceship>> spaceships; ///< Holds the world's enemies.
+	std::vector<std::shared_ptr<FastSuicideBomber>> fastSuicideBombers;
+	std::vector<ExplosionEmitter> explosionEmitters;
 
 	std::map<LayoutType, std::shared_ptr<Layout>> sceneLayouts;
 
@@ -77,6 +79,7 @@ public:
 					 const LitProgData &litData, 
 					 const UnlitProgData &unLitData, 
 					 const SimpleProgData &interpData,
+					 const BillboardProgDataNoTexture &billboardNoTextureData,
 					 float interpolation);
 
 	void RenderCurrentLayout(const FontProgData &fontData,
@@ -87,12 +90,15 @@ public:
 	void StopScene();
 	void StartScene();
 	
-	void AddFusionSequence(char buttonA, char buttonB, char buttonC);
+	void AddFusionSequence(std::string sequenceName, 
+						   char buttonA, char buttonB, char buttonC);
 
 	void AddSunLight(const SunLight &newSunLight);
 	void AddSun(const std::shared_ptr<Sun> newSun);
 	void AddSpaceship(const std::shared_ptr<Spaceship> newSpaceship);
+	void AddFastSuicideBomber(const std::shared_ptr<FastSuicideBomber> newFastSuicideBomber);
 
+	void AddExplosionEmitter(const ExplosionEmitter &newExplosionEmitter);
 
 	void AddLayouts(const std::map<LayoutType, std::shared_ptr<Layout>> &newLayouts);
 	void AddLayout(const std::shared_ptr<Layout> newLayout);

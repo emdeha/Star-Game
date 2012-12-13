@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 #include "FusionInput.h"
+#include <algorithm>
 
 
 FusionSequence::FusionSequence(char buttonA, char buttonB, char buttonC)
@@ -26,6 +27,11 @@ FusionSequence::FusionSequence(char buttonA, char buttonB, char buttonC)
 	buttons[2] = buttonC;
 	buttons[3] = '\0';
 	// buttons[3] = buttonD; -- if we decide to make the fusion use three buttons
+}
+
+std::string FusionSequence::GetButtons()
+{
+	return buttons;
 }
 
 Event FusionSequence::Update(const std::string &currentInputSequence)
@@ -59,19 +65,51 @@ FusionInput::FusionInput(char newSequenceEndButton)
 	sequenceEndButton = newSequenceEndButton;
 }
 
-void FusionInput::AddSequence(char buttonA, char buttonB, char buttonC)
+void FusionInput::AddSequence(std::string sequenceName,
+							  char buttonA, char buttonB, char buttonC)
 {
-	sequences.push_back(FusionSequence(buttonA, buttonB, buttonC));
+	// std::lower_bound returns "the first position in which a value can be inserted 
+	// without violating the ordering".
+	// Therefore, I must make sure that while inserting a new sequence it is unique.
+
+	sequences.push_back(std::make_pair(sequenceName, FusionSequence(buttonA, buttonB, buttonC)));
+	std::sort(sequences.begin(), sequences.end(),
+			  [](const std::pair<std::string, FusionSequence> &first, 
+				 const std::pair<std::string, FusionSequence> &second)
+	             { 
+					 return first.first < second.first; 
+				 });
+}
+
+std::string FusionInput::GetSequenceButtons(std::string sequenceName)
+{
+	std::vector<std::pair<std::string, FusionSequence>>::iterator lowerBound;
+	lowerBound = std::lower_bound(sequences.begin(), sequences.end(), sequenceName, 
+								  [](const std::pair<std::string, FusionSequence> &current,
+									 const std::string seqName)
+									 { 
+							   			 return current.first == seqName; 
+									 });
+
+	if(lowerBound == sequences.begin())
+	{
+		lowerBound = sequences.end();
+		return (--lowerBound)->second.GetButtons();
+	}
+	else
+	{
+		return (--lowerBound)->second.GetButtons();
+	}
 }
 
 Event FusionInput::Update(char newButton)
 {
 	if(newButton == sequenceEndButton)
 	{
-		for(std::vector<FusionSequence>::iterator iter = sequences.begin();
+		for(std::vector<std::pair<std::string, FusionSequence>>::iterator iter = sequences.begin();
 			iter != sequences.end(); ++iter)
 		{
-			Event eventToReturn = (iter)->Update(currentInputSequence);				
+			Event eventToReturn = (iter)->second.Update(currentInputSequence);				
 			if(eventToReturn.GetType() != EVENT_TYPE_EMPTY)
 			{
 				currentInputSequence.resize(0);

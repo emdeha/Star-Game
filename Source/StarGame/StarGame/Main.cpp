@@ -46,13 +46,9 @@ ImageBox box(SMALL, "sample", glm::vec2(375.0f, 570.0f), 50.0f, 50.0f, 3);
 ImageBox boxTwo(SMALL, "sampleTwo", glm::vec2(430.0f, 570.0f), 50.0f, 50.0f, 2);
 ImageBox boxThree(SMALL, "sampleThree", glm::vec2(485.0f, 570.0f), 50.0f, 50.0f, 1);
 
-
-Swarm testSwarm;
 FastSuicideBomber testBomber;
 
-
-ParticleEmitter testEmitter;
-//SwarmEmitter testSwarm;
+ExplosionEmitter testExplosion;
 
 
 long long GetCurrentTimeMillis()
@@ -381,6 +377,15 @@ void InitializeScene()
 									   0.15f,
 									   0.3f, 20, 1));
 
+	std::shared_ptr<FastSuicideBomber>
+		sampleFastSuicideBomber(new FastSuicideBomber(glm::vec3(0.0f, 4.5f, 0.0f),
+													  glm::vec3(0.0f, -0.05f, 0.0f), 
+													  100, 
+													  50, 
+													  3.0f, 
+													  0.5f));
+	sampleFastSuicideBomber->LoadMesh("mesh-files/UnitSphere.xml");
+
 
 
 	mainSun->LoadMesh("mesh-files/UnitSphere.xml");
@@ -394,7 +399,8 @@ void InitializeScene()
 
 	scene->AddSun(mainSun);
 	scene->AddSunLight(mainSunLight);
-	//scene->AddSpaceship(sampleSpaceship);
+	//scene->AddFastSuicideBomber(sampleFastSuicideBomber);
+	scene->AddSpaceship(sampleSpaceship);
 	//scene->AddSpaceship(sampleSpaceship2);
 
 	scene->SetMusic("../data/music/background.mp3", MUSIC_BACKGROUND);
@@ -407,10 +413,14 @@ void InitializeScene()
 	scene->SetMusicVolume(musicVolumeMaster, CHANNEL_MASTER);	
 
 	scene->SetFusion(FusionInput('f'));
-	scene->AddFusionSequence('q', 'q', 'q');
-	scene->AddFusionSequence('e', 'e', 'e');
-	scene->AddFusionSequence('w', 'w', 'w');
+	scene->AddFusionSequence("fireSatellite", 'q', 'q', 'q');
+	scene->AddFusionSequence("earthSatellite", 'e', 'e', 'e');
+	scene->AddFusionSequence("waterSatellite", 'w', 'w', 'w');
 
+
+	testExplosion = ExplosionEmitter(glm::vec3(0.0f, 2.0f, 0.0f), 300, 30, 0.1f);
+	testExplosion.Init(shaderManager.GetBillboardProgDataNoTexture());
+	scene->AddExplosionEmitter(testExplosion);
 
 
 	glUseProgram(shaderManager.GetTextureProgData().theProgram);
@@ -514,26 +524,10 @@ void Init()
 
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-
-	testBomber = FastSuicideBomber(glm::vec3(0.0f, 4.0f, 0.0f), glm::vec3(0.0f, -0.01f, 0.0f),
-								   100, 10, 3.0f, 1.0f);
-	testBomber.LoadMesh("mesh-files/UnitSphere.xml");
-
-
-	testSwarm = Swarm(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -0.001f, 0.0f), 
-					  100, 100, 10, 1000, 2.0f, 
-					  shaderManager.GetBillboardProgDataNoTexture());
 	/*
-	testSwarm = SwarmEmitter(glm::vec3(0.0f, 3.0f, 0.0f), 100);
-	testSwarm.Init(shaderManager.GetBillboardProgDataNoTexture());
+	testExplosion = ExplosionEmitter(glm::vec3(0.0f, 2.0f, 0.0f), 1000, 100);
+	testExplosion.Init(shaderManager.GetBillboardProgDataNoTexture());
 	*/
-	//////////////////////////////////////
-	/*
-	testEmitter = ParticleEmitter(glm::vec3(0.0f, 0.0f, 0.0f), 10000);
-	testEmitter.Init(shaderManager.GetBillboardProgData());
-	*/
-	//////////////////////////////////////
-
 
 	nextGameTick = GetTickCount();
 }
@@ -553,22 +547,12 @@ void Display()
 
 		modelMatrix.SetMatrix(scene->GetTopDownCamera().CalcMatrix());
 		displayData.modelMatrix = modelMatrix.Top();
-		
-		
+
 		
 		int loops = 0;
 		while(GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
 		{
 			scene->UpdateScene();
-
-			if(scene->HasSuns())
-			{
-				testBomber.Update(false, *scene->GetSun());
-			}
-			else
-			{
-				testBomber.Update(true);
-			}
 
 			nextGameTick += SKIP_TICKS;
 			loops++;
@@ -582,43 +566,17 @@ void Display()
 						   shaderManager.GetLitProgData(),
 						   shaderManager.GetUnlitProgData(),
 						   shaderManager.GetSimpleProgData(),
+						   shaderManager.GetBillboardProgDataNoTexture(),
 						   interpolation);
-
-
-
+		
 		
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
 								   shaderManager.GetSimpleNoUBProgData());
-		testBomber.Render(modelMatrix, shaderManager.GetLitProgData(), 
-						  shaderManager.GetBlockIndex(BT_MATERIAL), 
-						  interpolation, 2.2f);
 
-		/*
-		// TODO: Put in the while cycle
-		if(scene->HasSuns())
-		{
-			testSwarm.Update(false, *scene->GetSun());
-		}
-		else
-		{
-			testSwarm.Update(true);
-		}
-		// TODO: Add interpolation
-		testSwarm.Render(modelMatrix, scene->GetTopDownCamera().ResolveCamPosition(), 
-						 shaderManager.GetBillboardProgDataNoTexture());
-		*/
-
-		/*
-		testSwarm.Update();
-		testSwarm.Render(modelMatrix, scene->GetTopDownCamera().ResolveCamPosition(),
-						 shaderManager.GetBillboardProgDataNoTexture());
-		*/
-		/*
-		testEmitter.Update();
-		testEmitter.Render(modelMatrix, 
-						   scene->GetTopDownCamera().ResolveCamPosition(), 
-						   shaderManager.GetBillboardProgData());
-		*/
+		//testExplosion.Update();
+		//testExplosion.Render(modelMatrix, scene->GetTopDownCamera().ResolveCamPosition(),
+		//					 shaderManager.GetBillboardProgDataNoTexture());
+		
 
 		// BUGGY: A strange problem appears when trying to draw these before drawing the satellites
 		box.Draw(shaderManager.GetTextureProgData());

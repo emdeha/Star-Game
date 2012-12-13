@@ -23,6 +23,8 @@ Scene::Scene()
 	lights.resize(0);
 	suns.resize(0);
 	spaceships.resize(0);
+	fastSuicideBombers.resize(0);
+	explosionEmitters.resize(0);
 
 	sceneLayouts.clear();
 
@@ -38,6 +40,7 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix,
 						const LitProgData &litData, 
 						const UnlitProgData &unLitData, 
 						const SimpleProgData &interpData,
+						const BillboardProgDataNoTexture &billboardNoTextureData,
 						float interpolation)
 {
 	int sizeLights = lights.size();
@@ -59,6 +62,23 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix,
 	{
 		spaceships[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData,
 							  interpolation);
+	}
+
+	int sizeFastSuicideBombers = fastSuicideBombers.size();
+	for(int i = 0; i < sizeFastSuicideBombers; i++)
+	{
+		fastSuicideBombers[i]->Render(modelMatrix, litData, materialBlockIndex, interpolation, 
+									  sceneGamma);
+	}
+
+	int sizeExplosionEmitters = explosionEmitters.size();
+	for(int i = 0; i < sizeExplosionEmitters; i++)
+	{
+		if(explosionEmitters[i].IsActive())
+		{
+			explosionEmitters[i].Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), 
+										billboardNoTextureData);
+		}
 	}
 }
 void Scene::RenderCurrentLayout(const FontProgData &fontData,
@@ -110,6 +130,38 @@ void Scene::UpdateScene()
 			spaceships[i]->Update(true);
 		}
 	}
+
+	int sizeFastSuicideBombers = fastSuicideBombers.size();
+	for(int i = 0; i < sizeFastSuicideBombers; i++)
+	{
+		Event returnedEvent = StockEvents::EmptyEvent();
+
+		if(!suns.empty())
+		{
+			returnedEvent = fastSuicideBombers[i]->Update(false, *suns.front().get());
+		}
+		else
+		{
+			returnedEvent = fastSuicideBombers[i]->Update(true);
+		}
+
+		this->OnEvent(returnedEvent);
+	}
+
+	int sizeExplosionEmitters = explosionEmitters.size();
+	for(int i = 0; i < sizeExplosionEmitters; i++)
+	{
+		if(explosionEmitters[i].IsActive())
+		{
+			explosionEmitters[i].Update();
+		}
+		if(explosionEmitters[i].IsDead())
+		{
+			std::vector<ExplosionEmitter>::iterator currentEmitter = 
+				explosionEmitters.begin() + i;
+			explosionEmitters.erase(currentEmitter);
+		}
+	}
 }
 void Scene::UpdateFusion(char key, Event &returnedFusionEvent)
 {
@@ -132,9 +184,15 @@ void Scene::UpdateCurrentLayout(int windowWidth, int windowHeight)
 	}
 }
 
-void Scene::AddFusionSequence(char buttonA, char buttonB, char buttonC)
+void Scene::AddFusionSequence(std::string sequenceName, 
+							  char buttonA, char buttonB, char buttonC)
 {
-	sceneFusionInput.AddSequence(buttonA, buttonB, buttonC);
+	sceneFusionInput.AddSequence(sequenceName, buttonA, buttonB, buttonC);
+}
+
+void Scene::AddExplosionEmitter(const ExplosionEmitter &newExplosionEmitter)
+{
+	explosionEmitters.push_back(newExplosionEmitter);
 }
 
 void Scene::OnEvent(Event &_event)
@@ -183,7 +241,8 @@ void Scene::OnEvent(Event &_event)
 	case EVENT_TYPE_OTHER:
 		if(strcmp(_event.GetArgument("what_event").varString, "fusion_seq") == 0)
 		{
-			if(strcmp(_event.GetArgument("buttons").varString, "qqq") == 0)
+			if(strcmp(_event.GetArgument("buttons").varString, 
+					  sceneFusionInput.GetSequenceButtons("fireSatellite").c_str()) == 0)
 			{
 				if(HasSuns())
 				{
@@ -194,7 +253,9 @@ void Scene::OnEvent(Event &_event)
 										  5);
 				}
 			}
-			if(strcmp(_event.GetArgument("buttons").varString, "www") == 0)
+			if(strcmp(_event.GetArgument("buttons").varString, 
+					  //"www"
+					  sceneFusionInput.GetSequenceButtons("waterSatellite").c_str()) == 0)
 			{
 				if(HasSuns())
 				{
@@ -205,7 +266,8 @@ void Scene::OnEvent(Event &_event)
 										  5);
 				}
 			}
-			if(strcmp(_event.GetArgument("buttons").varString, "eee") == 0)
+			if(strcmp(_event.GetArgument("buttons").varString, 
+					  sceneFusionInput.GetSequenceButtons("earthSatellite").c_str()) == 0)
 			{
 				if(HasSuns())
 				{
@@ -216,6 +278,14 @@ void Scene::OnEvent(Event &_event)
 										  5);
 				}
 			}
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "explStarted") == 0)
+		{
+			int explosionIndex = _event.GetArgument("expl_index").varInteger;
+			// TODO: add bounds check
+			explosionEmitters[explosionIndex].SetPosition(
+				fastSuicideBombers[explosionIndex]->GetPosition());
+			explosionEmitters[explosionIndex].Activate();
 		}
 		break;
 	default:
@@ -262,6 +332,10 @@ void Scene::AddSun(const std::shared_ptr<Sun> newSun)
 void Scene::AddSpaceship(const std::shared_ptr<Spaceship> newSpaceship)
 {
 	spaceships.push_back(newSpaceship);
+}
+void Scene::AddFastSuicideBomber(const std::shared_ptr<FastSuicideBomber> newFastSuicideBomber)
+{
+	fastSuicideBombers.push_back(newFastSuicideBomber);
 }
 
 

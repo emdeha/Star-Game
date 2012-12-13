@@ -1,4 +1,4 @@
-﻿Build started 6.12.2012 г. 18:29:39 ч..
+﻿Build started 13.12.2012 г. 20:13:09 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\Scene\Scene.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Scene.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -6,7 +6,7 @@
          All outputs are up-to-date.
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../freetype/include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\Scene.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Scene.cpp
          Scene.cpp
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(289): warning C4715: 'Scene::GetLayout' : not all control paths return a value
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(363): warning C4715: 'Scene::GetLayout' : not all control paths return a value
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\Scene.lib" /NOLOGO Debug\Scene.obj
          Debug\stdafx.obj
@@ -18,4 +18,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.21
+Time Elapsed 00:00:01.06

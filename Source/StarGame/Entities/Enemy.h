@@ -30,6 +30,7 @@
 #include <glutil/glutil.h>
 #include <glm/glm.hpp>
 
+
 #include "../framework/Mesh.h"
 #include "../framework/EventSystem.h"
 
@@ -228,7 +229,7 @@ private:
 
 	bool isDestroyed;
 
-	void AttackSolarSystem(Sun &sun, bool isSatellite = false, float bodyIndex = -1.0f);
+	Event AttackSolarSystem(Sun &sun, bool isSatellite = false, float bodyIndex = -1.0f);
 
 public:
 	FastSuicideBomber() {}
@@ -238,12 +239,17 @@ public:
 
 	void LoadMesh(const std::string &meshFile);
 
-	void UpdateAI(Sun &sun);
-	void Update(bool isSunKilled, Sun &sun = Sun());
+	Event UpdateAI(Sun &sun);
+	Event Update(bool isSunKilled, Sun &sun = Sun());
 
 	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData, 
 				int materialBlockIndex,
 				float interpolation, float gamma);
+
+	glm::vec3 GetPosition()
+	{
+		return position;
+	}
 
 	void OnEvent(Event &_event);
 };

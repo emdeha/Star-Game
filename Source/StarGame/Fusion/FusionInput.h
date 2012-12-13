@@ -33,6 +33,8 @@ private:
 public:
 	FusionSequence(char buttonA = '\0', char buttonB = '\0', char buttonC = '\0');
 
+	std::string GetButtons();
+
 	Event Update(const std::string &currentInputSequence);
 };
 
@@ -41,7 +43,7 @@ public:
 class FusionInput
 {
 private:
-	std::vector<FusionSequence> sequences;
+	std::vector<std::pair<std::string, FusionSequence>> sequences;
 
 	std::string currentInputSequence;
 	char sequenceEndButton;
@@ -50,7 +52,10 @@ public:
 	FusionInput();
 	FusionInput(char newSequenceEndButton);
 
-	void AddSequence(char buttonA = ' ', char buttonB = ' ', char buttonC = ' ');
+	void AddSequence(std::string sequenceName,
+					 char buttonA = ' ', char buttonB = ' ', char buttonC = ' ');
+
+	std::string GetSequenceButtons(std::string sequenceName);
 
 	Event Update(char newButton);
 };

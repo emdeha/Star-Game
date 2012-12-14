@@ -134,17 +134,16 @@ void Scene::UpdateScene()
 	int sizeFastSuicideBombers = fastSuicideBombers.size();
 	for(int i = 0; i < sizeFastSuicideBombers; i++)
 	{
-		Event returnedEvent = StockEvents::EmptyEvent();
-
 		if(!suns.empty())
 		{
-			returnedEvent = fastSuicideBombers[i]->Update(false, *suns.front().get());
+			fastSuicideBombers[i]->Update(false, *suns.front().get());
 		}
 		else
 		{
-			returnedEvent = fastSuicideBombers[i]->Update(true);
+			fastSuicideBombers[i]->Update(true);
 		}
 
+		Event returnedEvent = fastSuicideBombers[i]->GetGeneratedEvents()[0];
 		this->OnEvent(returnedEvent);
 	}
 

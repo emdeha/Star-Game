@@ -223,13 +223,14 @@ private:
 	BehaviorState currentState;
 
 	std::auto_ptr<Framework::Mesh> mesh;
+	std::vector<Event> generatedEvents;
 
 	int materialBlockSize;
 	GLuint materialUniformBuffer;
 
 	bool isDestroyed;
 
-	Event AttackSolarSystem(Sun &sun, bool isSatellite = false, float bodyIndex = -1.0f);
+	void AttackSolarSystem(Sun &sun, bool isSatellite = false, float bodyIndex = -1.0f);
 
 public:
 	FastSuicideBomber() {}
@@ -239,12 +240,16 @@ public:
 
 	void LoadMesh(const std::string &meshFile);
 
-	Event UpdateAI(Sun &sun);
-	Event Update(bool isSunKilled, Sun &sun = Sun());
+	void UpdateAI(Sun &sun);
+	void Update(bool isSunKilled, Sun &sun = Sun());
 
 	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData, 
 				int materialBlockIndex,
 				float interpolation, float gamma);
+
+	// Gets the generated events and destroys them
+	std::vector<Event> GetGeneratedEvents();
+	//void CleanupGeneratedEvent(const Event &_event);
 
 	glm::vec3 GetPosition()
 	{

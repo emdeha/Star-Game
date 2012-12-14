@@ -266,6 +266,7 @@ private:
 
 	// TODO: Find a solution to the smart_ptr problem. Satellite removal freezes the game.
 	std::vector<std::shared_ptr<Satellite>> satellites; ///< The sun's satellites.
+	std::vector<Event> generatedEvents;
 
 	glm::vec4 color;
 	glm::vec3 position; ///< The sun's position.
@@ -374,6 +375,11 @@ public:
 						    int windowWidth, int windowHeight);
 
 	bool HasSatellites();
+
+	// Gets the generated events and destroys them
+	std::vector<Event> GetGeneratedEvents();
+	// Cleans a generated event. ERROR PRONE!!!
+	// void CleanupGeneratedEvent(const Event &_event);
 
 	const bool GetIsClicked() const;
 	const bool GetIsSatelliteClicked() const;

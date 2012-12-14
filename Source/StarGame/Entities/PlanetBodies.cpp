@@ -291,6 +291,7 @@ Sun::Sun()
 {
 	sunMesh.reset();
 	satellites.resize(0);
+	generatedEvents.resize(0);
 	color = glm::vec4();
 	position = glm::vec3();
 	diameter = 0.0f;
@@ -305,6 +306,7 @@ Sun::Sun(glm::vec3 newPosition, glm::vec4 newColor,
 {
 	sunMesh.reset();
 	satellites.resize(0);
+	generatedEvents.resize(0);
 	color = newColor;
 	position = newPosition;
 	diameter = newDiameter;
@@ -443,7 +445,7 @@ void Sun::OnEvent(Event &_event)
 			}
 			// The commented event can't be sent to the universe. 
 			// That is due to the lack of a global event queue.
-			/*if(health <= 0)
+			if(health <= 0)
 			{
 				EventArg sunKilledEventArg[2];
 				sunKilledEventArg[0].argType = "what";
@@ -453,7 +455,9 @@ void Sun::OnEvent(Event &_event)
 				sunKilledEventArg[1].argument.varType = TYPE_INTEGER;
 				sunKilledEventArg[1].argument.varInteger = 0; // Should be some unique index.
 				Event sunKilledEvent(2, EVENT_TYPE_KILLED, sunKilledEventArg);
-			}*/
+
+				generatedEvents.push_back(sunKilledEvent);
+			}
 		}
 		else 
 		{
@@ -633,6 +637,29 @@ void Sun::IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat,
 	}
 }
 
+std::vector<Event> Sun::GetGeneratedEvents()
+{
+	std::vector<Event> eventsToReturn;
+
+	if(generatedEvents.size() > 0)
+	{
+		eventsToReturn = generatedEvents;
+		generatedEvents.resize(0);
+	}
+	else 
+	{
+		eventsToReturn.push_back(StockEvents::EmptyEvent());
+	}
+
+	return eventsToReturn;
+}
+/*void Sun::CleanupGeneratedEvent(const Event &_event)
+{
+	if(generatedEvents.end() != std::find(generatedEvents.begin(), generatedEvents.end(), _event))
+	{
+		generatedEvents.erase(std::find(generatedEvents.begin(), generatedEvents.end(), _event));
+	}
+}*/
 
 Sun::Sun(const Sun &other)
 {

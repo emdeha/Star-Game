@@ -1,4 +1,4 @@
-﻿Build started 13.12.2012 г. 20:16:19 ч..
+﻿Build started 14.12.2012 г. 19:09:10 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" on node 3 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\StarGame.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -13,13 +13,14 @@
          E:\CECI\TheGame\Source\StarGame\Debug\AssetLoader.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Audio.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Camera.lib
+         E:\CECI\TheGame\Source\StarGame\framework\lib\frameworkD.lib
+         E:\CECI\TheGame\Source\StarGame\Debug\Scene.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Entities.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Fusion.lib
          E:\CECI\TheGame\Source\StarGame\Debug\GUISystem.lib
          E:\CECI\TheGame\Source\StarGame\Debug\Mouse.lib
          E:\CECI\TheGame\Source\StarGame\Debug\ParticleEngine.lib
          E:\CECI\TheGame\Source\StarGame\Debug\ProgramData.lib
-         E:\CECI\TheGame\Source\StarGame\Debug\Scene.lib
        Manifest:
          C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\StarGame.exe.embed.manifest" /manifest Debug\StarGame.exe.intermediate.manifest
          All outputs are up-to-date.
@@ -33,4 +34,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.06
+Time Elapsed 00:00:01.04

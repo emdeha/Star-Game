@@ -399,8 +399,8 @@ void InitializeScene()
 
 	scene->AddSun(mainSun);
 	scene->AddSunLight(mainSunLight);
-	//scene->AddFastSuicideBomber(sampleFastSuicideBomber);
-	scene->AddSpaceship(sampleSpaceship);
+	scene->AddFastSuicideBomber(sampleFastSuicideBomber);
+	//scene->AddSpaceship(sampleSpaceship);
 	//scene->AddSpaceship(sampleSpaceship2);
 
 	scene->SetMusic("../data/music/background.mp3", MUSIC_BACKGROUND);

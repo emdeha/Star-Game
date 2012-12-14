@@ -38,7 +38,7 @@ public:
 			   float newRange,
 			   char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
 
-	
+	void Update();
 };
 
 

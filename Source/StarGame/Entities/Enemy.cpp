@@ -461,7 +461,7 @@ FastSuicideBomber::FastSuicideBomber(glm::vec3 newPosition, glm::vec3 newVelocit
 	scaleFactor = newScaleFactor;
 
 	currentState = IDLE_STATE;
-
+	generatedEvents.resize(0);
 	isDestroyed = false;
 }
 
@@ -482,7 +482,7 @@ void FastSuicideBomber::LoadMesh(const std::string &meshFile)
 						   materialUniformBuffer);
 }
 
-Event FastSuicideBomber::AttackSolarSystem(Sun &sun, bool isSatellite, float bodyIndex)
+void FastSuicideBomber::AttackSolarSystem(Sun &sun, bool isSatellite, float bodyIndex)
 {
 	EventArg damageEventArgs[2];
 	damageEventArgs[0].argType = "damage";
@@ -515,14 +515,12 @@ Event FastSuicideBomber::AttackSolarSystem(Sun &sun, bool isSatellite, float bod
 
 	Event explodeEvent(2, EVENT_TYPE_OTHER, explodeEventArgs);
 
-	return explodeEvent;
+	generatedEvents.push_back(explodeEvent);
 	//scene.OnEvent(explodeEvent);
 }
 
-Event FastSuicideBomber::UpdateAI(Sun &sun)
+void FastSuicideBomber::UpdateAI(Sun &sun)
 {
-	Event returnedEvent = StockEvents::EmptyEvent();
-
 	if(currentState == ATTACK_STATE)
 	{
 		if(sun.HasSatellites())
@@ -535,7 +533,7 @@ Event FastSuicideBomber::UpdateAI(Sun &sun)
 			   sun.GetOuterSatellite()->GetDiameter() * 
 			   sun.GetOuterSatellite()->GetDiameter())
 			{
-				returnedEvent = AttackSolarSystem(sun, true, sun.GetOuterSatellite()->GetOffsetFromSun());
+				AttackSolarSystem(sun, true, sun.GetOuterSatellite()->GetOffsetFromSun());
 			}
 			else
 			{
@@ -552,7 +550,7 @@ Event FastSuicideBomber::UpdateAI(Sun &sun)
 
 			if(distanceBetweenSunAndBomber <= sun.GetRadius() * sun.GetRadius())
 			{
-				returnedEvent = AttackSolarSystem(sun);
+				AttackSolarSystem(sun);
 				isDestroyed = true;
 				// Destroy yourself
 			}
@@ -585,20 +583,16 @@ Event FastSuicideBomber::UpdateAI(Sun &sun)
 			currentState = ATTACK_STATE;
 		}
 	}
-
-	return returnedEvent;
 }
 
-Event FastSuicideBomber::Update(bool isSunKilled, Sun &sun)
+void FastSuicideBomber::Update(bool isSunKilled, Sun &sun)
 {
-	Event returnedEvent = StockEvents::EmptyEvent();
-
 	if(!isDestroyed)
 	{
 		if(!isSunKilled)
 		{
 			position += velocity;
-			returnedEvent = this->UpdateAI(sun);
+			this->UpdateAI(sun);
 
 			if(health <= 0)
 			{
@@ -611,8 +605,6 @@ Event FastSuicideBomber::Update(bool isSunKilled, Sun &sun)
 			currentState = IDLE_STATE;
 		}
 	}
-
-	return returnedEvent;
 }
 
 void FastSuicideBomber::Render(glutil::MatrixStack &modelMatrix,
@@ -644,6 +636,23 @@ void FastSuicideBomber::Render(glutil::MatrixStack &modelMatrix,
 
 		glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
 	}
+}
+
+std::vector<Event> FastSuicideBomber::GetGeneratedEvents()
+{
+	std::vector<Event> eventsToReturn;
+
+	if(generatedEvents.size() > 0)
+	{
+		eventsToReturn = generatedEvents;
+		generatedEvents.resize(0);
+	}
+	else 
+	{
+		eventsToReturn.push_back(StockEvents::EmptyEvent());
+	}
+
+	return eventsToReturn;
 }
 
 void FastSuicideBomber::OnEvent(Event &_event)

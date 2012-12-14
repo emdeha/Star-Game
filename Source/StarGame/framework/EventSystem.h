@@ -82,6 +82,7 @@ private:
 	short numberOfArgs;
 
 public:
+	Event() {}
 	Event(EventType newType);
 	Event(short newNumberOfArgs, EventType newType, EventArg newArgs[]);
 

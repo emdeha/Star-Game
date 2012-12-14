@@ -32,3 +32,7 @@ BasicSkill::BasicSkill(int newDamage, int newDefense,
 	fusionCombination[3] = '\0';
 }
 
+void BasicSkill::Update()
+{
+
+}

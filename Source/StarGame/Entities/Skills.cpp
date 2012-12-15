@@ -19,9 +19,9 @@
 #include "Skills.h"
 
 
-BasicSkill::BasicSkill(int newDamage, int newDefense,
-					   float newRange,
-					   char fusionCombA, char fusionCombB, char fusionCombC)
+RaySkill::RaySkill(int newDamage, int newDefense,
+				   float newRange,
+				   char fusionCombA, char fusionCombB, char fusionCombC)
 {
 	damage = newDamage;
 	defense = newDefense;
@@ -30,9 +30,19 @@ BasicSkill::BasicSkill(int newDamage, int newDefense,
 	fusionCombination[1] = fusionCombB;
 	fusionCombination[2] = fusionCombC;
 	fusionCombination[3] = '\0';
+
+	ray = RayEmitter(glm::vec3(), 100, range);
+	ray.Init();
 }
 
-void BasicSkill::Update()
+void RaySkill::Update()
 {
+	ray.Update();
+}
 
+void RaySkill::Render(glutil::MatrixStack &modelMatrix,
+					  glm::vec3 cameraPosition,
+					  const BillboardProgDataNoTexture &progData)
+{
+	ray.Render(modelMatrix, cameraPosition, progData);
 }

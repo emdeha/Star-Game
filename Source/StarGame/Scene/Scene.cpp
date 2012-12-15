@@ -82,14 +82,15 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix,
 	}
 }
 void Scene::RenderCurrentLayout(const FontProgData &fontData,
-								const SimpleProgData &simpleData)
+								const SimpleProgData &simpleData,
+								const TextureProgData &textureData)
 {
 	for(std::map<LayoutType, std::shared_ptr<Layout>>::iterator iter = sceneLayouts.begin();
 		iter != sceneLayouts.end(); ++iter)
 	{
 		if(iter->second->IsSet())
 		{
-			iter->second->Draw(fontData, simpleData);
+			iter->second->Draw(fontData, simpleData, textureData);
 			break;
 		}
 	}

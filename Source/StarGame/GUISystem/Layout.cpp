@@ -42,7 +42,8 @@ Layout::Layout(LayoutType newLayoutType, LayoutInfo newLayoutInfo)
 	isSet = true;
 }
 
-void Layout::Draw(const FontProgData &fontData, const SimpleProgData &simpleData)
+void Layout::Draw(const FontProgData &fontData, const SimpleProgData &simpleData,
+				  const TextureProgData &textureData)
 {
 	glm::vec4 backgroundColor = layoutInfo.backgroundColor;
 	glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
@@ -51,7 +52,14 @@ void Layout::Draw(const FontProgData &fontData, const SimpleProgData &simpleData
 	for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
 		iter != controls.end(); ++iter)
 	{
-		(*iter)->Draw(fontData, simpleData);
+		if((*iter)->IsImageBox())
+		{
+			(*iter)->Draw(textureData);
+		}
+		else
+		{
+			(*iter)->Draw(fontData, simpleData);
+		}
 	}
 	for(std::vector<std::shared_ptr<Layout>>::iterator iter = subLayouts.begin();
 		iter != subLayouts.end();
@@ -59,7 +67,7 @@ void Layout::Draw(const FontProgData &fontData, const SimpleProgData &simpleData
 	{
 		if((*iter)->IsSet())
 		{
-			(*iter)->Draw(fontData, simpleData);
+			(*iter)->Draw(fontData, simpleData, textureData);
 		}
 	}
 }

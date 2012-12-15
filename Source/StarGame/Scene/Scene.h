@@ -83,7 +83,8 @@ public:
 					 float interpolation);
 
 	void RenderCurrentLayout(const FontProgData &fontData,
-							 const SimpleProgData &simpleData);
+							 const SimpleProgData &simpleData,
+							 const TextureProgData &textureData);
 	void UpdateCurrentLayout(int windowWidth, int windowHeight);
 
 

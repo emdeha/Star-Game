@@ -213,7 +213,7 @@ ExplosionEmitter::ExplosionEmitter(glm::vec3 newPosition, int newParticleCount,
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
-void ExplosionEmitter::Init(const BillboardProgDataNoTexture &billboardProgDataNoTexture)
+void ExplosionEmitter::Init()
 {
 	for(int i = 0; i < particleCount; i++)
 	{
@@ -227,10 +227,6 @@ void ExplosionEmitter::Init(const BillboardProgDataNoTexture &billboardProgDataN
 		particles[i].color = glm::vec4((float) rand() / RAND_MAX, 0.0f, 0.0f, 1.0f);
 		particles[i].lifeTime = rand() % particleLifeTime;
 	}
-
-	glUseProgram(billboardProgDataNoTexture.theProgram);
-	glUniform1f(billboardProgDataNoTexture.billboardSizeUnif, 0.1f);
-	glUseProgram(0);
 }
 
 void ExplosionEmitter::SetPosition(glm::vec3 newPosition)
@@ -279,6 +275,7 @@ void ExplosionEmitter::Render(glutil::MatrixStack &modelMatrix,
 					   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
 	glUniform3f(billboardProgDataNoTexture.cameraPositionUnif,
 				cameraPosition.x, cameraPosition.y, cameraPosition.z);
+	glUniform1f(billboardProgDataNoTexture.billboardSizeUnif, 0.1f);
 
 	for(int i = 0; i < particleCount; i++)
 	{
@@ -309,4 +306,82 @@ bool ExplosionEmitter::IsActive()
 bool ExplosionEmitter::IsDead()
 {
 	return isDead;
+}
+
+
+RayEmitter::RayEmitter(glm::vec3 newPosition, int newParticleCount,
+					   float newRayLength)
+{
+	position = newPosition;
+	particleCount = newParticleCount;
+	rayLength = newRayLength;
+	vertexBO = 0;
+	vao = 0;
+	particles.resize(particleCount);
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	glGenBuffers(1, &vertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3, glm::value_ptr(position), GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+}
+
+void RayEmitter::Init()
+{
+	for(int i = 0; i < particleCount; i++)
+	{
+		particles[i].position = position;
+		particles[i].velocity = glm::vec3(0.0f, (float)rand() / RAND_MAX, 0.0f);
+		particles[i].color = glm::vec4(0.4f, 0.6f, 0.0f, 1.0f);
+	}
+}
+
+void RayEmitter::Update()
+{
+	for(int i = 0; i < particleCount; i++)
+	{
+		particles[i].position += particles[i].velocity;
+		if(glm::length(particles[i].position - position) >= rayLength)
+		{
+			particles[i].position = position;
+		}
+	}
+}
+
+void RayEmitter::Render(glutil::MatrixStack &modelMatrix, 
+						glm::vec3 cameraPosition,
+						const BillboardProgDataNoTexture &billboardData)
+{
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+
+	glutil::PushStack push(modelMatrix);
+
+	glUseProgram(billboardData.theProgram);
+
+	glUniformMatrix4fv(billboardData.modelToCameraMatrixUnif,
+					   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+	glUniform3f(billboardData.cameraPositionUnif,
+				cameraPosition.x, cameraPosition.y, cameraPosition.z);
+	glUniform1f(billboardData.billboardSizeUnif, 0.2f);
+
+	for(int i = 0; i < particleCount; i++)
+	{
+		glUniform3f(billboardData.deltaPositionUnif,
+					particles[i].position.x, particles[i].position.y, particles[i].position.z);
+		glUniform4f(billboardData.colorUnif,
+					particles[i].color.r, particles[i].color.g, 
+					particles[i].color.b, particles[i].color.a);
+
+		glDrawArrays(GL_POINTS, 0, 1);
+
+	}
+
+	glDisableVertexAttribArray(0);
+
+	glUseProgram(0);
 }

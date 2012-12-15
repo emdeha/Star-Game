@@ -1,4 +1,4 @@
-﻿Build started 3.12.2012 г. 19:39:45 ч..
+﻿Build started 15.12.2012 г. 18:30:56 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\Mouse\Mouse.vcxproj" on node 3 (rebuild target(s)).
      1>_PrepareForClean:
          Deleting file "Debug\Mouse.lastbuildstate".
@@ -20,4 +20,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.05
+Time Elapsed 00:00:00.83

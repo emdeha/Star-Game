@@ -66,6 +66,20 @@ TextControl::TextControl(LayoutPreset newCurrentPreset,
 											 0.0f, (float)newTextSize, true);
 }
 
+TextControl::TextControl(LayoutPreset newCurrentPreset,
+						 const std::string &newName, 
+						 glm::vec2 newPosition)
+{
+	name = newName;
+	currentPreset = newCurrentPreset;
+	presets[currentPreset].position = newPosition;
+	isActive = false;
+	controlSquare = 
+		Utility::Primitives::Square(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
+									glm::vec4(newPosition, 0.0f, 1.0f),
+									0.0f, 0.0f, true);
+}
+
 void TextControl::Init(const std::string &fontName,
 					   int newWindowWidth, int newWindowHeight)
 {

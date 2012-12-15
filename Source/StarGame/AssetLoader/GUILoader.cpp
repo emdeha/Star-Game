@@ -39,6 +39,13 @@ struct ControlData
 	float textBoxWidth;
 	int textBoxCharWidth;
 
+	float imageBoxWidth;
+	float imageBoxHeight;
+
+	int imageBoxIndex; /// this is only needed for the fusion. should refactor
+
+	std::string fusionTextures[4];
+
 	LayoutType toLayout;
 };
 
@@ -56,7 +63,9 @@ GUILoader::GUILoader(const std::string &fileName,
 	ControlData controlData;
 
 	std::string fontDir = "../data/fonts/";
+	std::string texturesDir = "../data/images/";
 	char fontFile[30];
+	char textureFile[4][30];
 
 
 	if(data.is_open())
@@ -75,6 +84,25 @@ GUILoader::GUILoader(const std::string &fileName,
 				sscanf(line.c_str(), "%s ", &fontFile);
 
 				fontDir += fontFile;
+			}
+			if(strcmp(tag, "fusiontextures") == 0)
+			{
+				for(int i = 0; i < 4; i++)
+				{
+					controlData.fusionTextures[i] = texturesDir;
+				}
+
+				line.erase(0, 14);
+				line[0] = ' ';
+				sscanf(line.c_str(), "%s %s %s %s ", &textureFile[0],
+													 &textureFile[1],
+													 &textureFile[2],
+													 &textureFile[3]);
+
+				for(int i = 0; i < 4; i++)
+				{
+					controlData.fusionTextures[i] += textureFile[i];
+				}
 			}
 			if(strcmp(tag, "layout") == 0)
 			{
@@ -97,6 +125,37 @@ GUILoader::GUILoader(const std::string &fileName,
 				layouts.insert(std::make_pair(layoutData.layoutType, layout));
 
 				layouts[layoutData.layoutType]->Set(layoutData.layoutIsSet);
+			}
+			if(strcmp(tag, "imagebox") == 0)
+			{
+				line.erase(0, 8);
+				line[0] = ' ';
+				sscanf(line.c_str(), "%s %i %f %f %f %f %f %f %f %f %i",
+					&controlData.controlName,
+					&controlData.toLayout,
+					&controlData.controlPresets[SMALL].position.x,
+					&controlData.controlPresets[SMALL].position.y,
+					&controlData.controlPresets[MEDIUM].position.x,
+					&controlData.controlPresets[MEDIUM].position.y,
+					&controlData.controlPresets[BIG].position.x,
+					&controlData.controlPresets[BIG].position.y,
+					&controlData.imageBoxWidth,
+					&controlData.imageBoxHeight,
+					&controlData.imageBoxIndex);
+
+				std::shared_ptr<ImageBox> imageBox =
+					std::shared_ptr<ImageBox>(new ImageBox(LayoutPreset(SMALL),
+														   controlData.controlName, 
+														   controlData.controlPresets[SMALL].position,
+														   controlData.imageBoxWidth, 
+														   controlData.imageBoxHeight,
+														   controlData.imageBoxIndex));
+
+				imageBox->SetTextures(controlData.fusionTextures);
+				imageBox->Init();
+				imageBox->AddPreset(MEDIUM, controlData.controlPresets[MEDIUM].position);
+				imageBox->AddPreset(BIG, controlData.controlPresets[BIG].position);
+				layouts[controlData.toLayout]->AddControl(imageBox);
 			}
 			if(strcmp(tag, "button") == 0)
 			{

@@ -18,14 +18,10 @@
 #include "stdafx.h"
 #include "GUISystem.h"
 
-
+/*
 ImageBox::ImageBox()
 {
-	name = "";
-
-	isActive = false;
-
-	index = 0;
+	
 }
 ImageBox::ImageBox(LayoutPreset newCurrentPreset,
 			       const std::string &newName, 
@@ -33,8 +29,6 @@ ImageBox::ImageBox(LayoutPreset newCurrentPreset,
 				   float newWidth, float newHeight,
 				   int newIndex)
 {
-	currentPreset = newCurrentPreset;
-	presetPosition[currentPreset] = newPosition;
 	width = newWidth;
 	height = newHeight;
 	name = newName;
@@ -47,10 +41,11 @@ ImageBox::ImageBox(LayoutPreset newCurrentPreset,
 									glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
 									newWidth, newHeight, false);
 }
+*/
 
 void ImageBox::Init()
 {
-	boxSprite.Init("../data/images/fusion-empty.png");
+	boxSprite.Init(fusionTextures[0]);
 }
 
 
@@ -67,24 +62,30 @@ void ImageBox::OnEvent(Event &_event)
 			{
 				if(strcmp(button.c_str(), "q") == 0)
 				{
-					boxSprite.ChangeTexture("../data/images/fusion-q-.png");
+					boxSprite.ChangeTexture(fusionTextures[1]);
 				}
 				if(strcmp(button.c_str(), "w") == 0)
 				{
-					boxSprite.ChangeTexture("../data/images/fusion-w.png");
+					boxSprite.ChangeTexture(fusionTextures[2]);
 				}
 				if(strcmp(button.c_str(), "e") == 0)
 				{
-					boxSprite.ChangeTexture("../data/images/fusion-e.png");
+					boxSprite.ChangeTexture(fusionTextures[3]);
 				}
 			}
 		}
 		if(strcmp(_event.GetArgument("what_event").varString, "fusion_seq") == 0)
 		{
-			boxSprite.ChangeTexture("../data/images/fusion-empty.png");
+			boxSprite.ChangeTexture(fusionTextures[0]);
 		}
 		break;
 	}
+}
+
+
+void ImageBox::AddPreset(LayoutPreset newPreset, glm::vec2 newPosition)
+{
+	presets[newPreset].position = newPosition;
 }
 
 
@@ -99,4 +100,13 @@ void ImageBox::Draw(const TextureProgData &textureData)
 	boxSprite.Draw(identityMat, textureData);
 
 	glDisable(GL_BLEND);
+}
+
+
+void ImageBox::SetTextures(std::string textures[])
+{
+	for(int i = 0; i < 4; i++)
+	{
+		fusionTextures[i] = textures[i];
+	}
 }

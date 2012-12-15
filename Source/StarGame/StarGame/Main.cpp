@@ -35,20 +35,13 @@
 #include "../AssetLoader/GUILoader.h"
 #include "../AssetLoader/MeshLoader.h"
 #include "../ParticleEngine/Engine.h"
+#include "../Entities/Skills.h"
 
 
 ShaderManager shaderManager;
 DisplayData displayData;
 
 Scene *scene = new Scene();
-
-ImageBox box(SMALL, "sample", glm::vec2(375.0f, 570.0f), 50.0f, 50.0f, 3);
-ImageBox boxTwo(SMALL, "sampleTwo", glm::vec2(430.0f, 570.0f), 50.0f, 50.0f, 2);
-ImageBox boxThree(SMALL, "sampleThree", glm::vec2(485.0f, 570.0f), 50.0f, 50.0f, 1);
-
-FastSuicideBomber testBomber;
-
-ExplosionEmitter testExplosion;
 
 
 long long GetCurrentTimeMillis()
@@ -418,18 +411,16 @@ void InitializeScene()
 	scene->AddFusionSequence("waterSatellite", 'w', 'w', 'w');
 
 
-	testExplosion = ExplosionEmitter(glm::vec3(0.0f, 2.0f, 0.0f), 300, 30, 0.1f);
-	testExplosion.Init(shaderManager.GetBillboardProgDataNoTexture());
-	scene->AddExplosionEmitter(testExplosion);
+	ExplosionEmitter sceneExplosion =
+		ExplosionEmitter(glm::vec3(0.0f, 2.0f, 0.0f), 300, 30, 0.1f);
+	sceneExplosion.Init();
+	scene->AddExplosionEmitter(sceneExplosion);
 
 
 	glUseProgram(shaderManager.GetTextureProgData().theProgram);
 	glUniform1i(shaderManager.GetTextureProgData().colorTextureUnif, 0);
 	glUseProgram(0);
 
-	box.Init();
-	boxTwo.Init();
-	boxThree.Init();
 
 	InitializeGUI();
 }
@@ -475,7 +466,6 @@ void Init()
 
 	InitializePrograms();
 	InitializeScene();
-
 
 	
 	glEnable(GL_CULL_FACE);
@@ -524,11 +514,6 @@ void Init()
 
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-	/*
-	testExplosion = ExplosionEmitter(glm::vec3(0.0f, 2.0f, 0.0f), 1000, 100);
-	testExplosion.Init(shaderManager.GetBillboardProgDataNoTexture());
-	*/
-
 	nextGameTick = GetTickCount();
 }
 
@@ -571,22 +556,14 @@ void Display()
 		
 		
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
-								   shaderManager.GetSimpleNoUBProgData());
-
-		//testExplosion.Update();
-		//testExplosion.Render(modelMatrix, scene->GetTopDownCamera().ResolveCamPosition(),
-		//					 shaderManager.GetBillboardProgDataNoTexture());
-		
-
-		// BUGGY: A strange problem appears when trying to draw these before drawing the satellites
-		box.Draw(shaderManager.GetTextureProgData());
-		boxTwo.Draw(shaderManager.GetTextureProgData());
-		boxThree.Draw(shaderManager.GetTextureProgData());
+								   shaderManager.GetSimpleNoUBProgData(),
+								   shaderManager.GetTextureProgData());
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{
 		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
-								   shaderManager.GetSimpleNoUBProgData());
+								   shaderManager.GetSimpleNoUBProgData(),
+								   shaderManager.GetTextureProgData());
 	}
 
 	HandleMouse();
@@ -684,9 +661,9 @@ void Keyboard(unsigned char key, int x, int y)
 	{
 		Event returnedFusionEvent = StockEvents::EmptyEvent();
 		scene->UpdateFusion(key, returnedFusionEvent);
-		box.OnEvent(returnedFusionEvent);
-		boxTwo.OnEvent(returnedFusionEvent);
-		boxThree.OnEvent(returnedFusionEvent);
+		scene->GetLayout(LAYOUT_IN_GAME)->GetControl("fusionOne")->OnEvent(returnedFusionEvent);
+		scene->GetLayout(LAYOUT_IN_GAME)->GetControl("fusionTwo")->OnEvent(returnedFusionEvent);
+		scene->GetLayout(LAYOUT_IN_GAME)->GetControl("fusionThree")->OnEvent(returnedFusionEvent);
 	}
 
 	glutPostRedisplay();

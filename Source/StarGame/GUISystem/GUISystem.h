@@ -33,6 +33,8 @@
 #include "../framework/EventSystem.h"
 
 #include "../ProgramData/ProgramData.h"
+#include "../AssetLoader/Texture.h"
+
 
 
 enum LayoutType
@@ -46,10 +48,6 @@ enum LayoutType
 	LAYOUT_OPTIONS,
 
 	LAYOUT_OTHER,
-	/*LAYOUT_SUB_NEW_GAME,
-	LAYOUT_SUB_SAVE_GAME,
-	LAYOUT_SUB_LOAD_GAME,
-	LAYOUT_SUB_OPTIONS,*/
 };
 
 enum LayoutPreset
@@ -65,12 +63,6 @@ struct LayoutInfo
 {
 	glm::vec4 backgroundColor;
 };
-
-/*
-class Button;
-class Label;
-class TextBox;
-*/
 
 class TextControl;
 
@@ -99,7 +91,8 @@ public:
 
 	std::shared_ptr<TextControl> GetControl(const std::string &controlName);
 
-	void Draw(const FontProgData &fontData, const SimpleProgData &simpleData);
+	void Draw(const FontProgData &fontData, const SimpleProgData &simpleData,
+			  const TextureProgData &textureData);
 	void Update(int windowWidth, int windowHeight);
 
 	LayoutType GetLayoutType();
@@ -134,40 +127,6 @@ struct PresetAttributes
 	int textSize;
 };
 
-#include "../AssetLoader/Texture.h"
-
-class ImageBox
-{
-private:
-	LayoutPreset currentPreset;
-	glm::vec2 presetPosition[3];
-
-	float width; 
-	float height;
-	
-	int index; // TODO: Only for the fusion box. Should refactor.
-
-	std::string name;
-
-	bool isActive;
-
-	Utility::Primitives::Sprite boxSprite;
-
-public:
-	ImageBox();
-	ImageBox(LayoutPreset newCurrentPreset,
-			 const std::string &newName, 
-			 glm::vec2 newPosition,
-			 float newWidth, float newHeight,
-			 int newIndex);
-
-	void Init();
-
-	void OnEvent(Event &_event);
-
-public:
-	void Draw(const TextureProgData &textureData);
-};
 
 
 class TextControl
@@ -199,10 +158,16 @@ public:
 				glm::vec2 newPosition, int newTextSize,
 				bool newHasBackground);
 
+	TextControl(LayoutPreset newCurrentPreset,
+				const std::string &newName, 
+				glm::vec2 newPosition);
+
 	void Init(const std::string &fontName, 
 			  int newWindowWidth, int newWindowHeight);
-		
+	virtual void Init() {};
+
 	virtual void Draw(const FontProgData &fontData, const SimpleProgData &simpleData);
+	virtual void Draw(const TextureProgData &textureData) {}; 
 
 	virtual void ComputeNewAttributes();
 	virtual void Update(int newWindowWidth, int newWindowHeight);
@@ -215,7 +180,8 @@ public:
 	virtual void Clear() {}
 	virtual std::string GetContent() { return ""; }
 
-	bool IsActive();
+	virtual bool IsImageBox() { return false; };
+	bool IsActive();	
 
 public:
 	std::string GetName();
@@ -229,6 +195,72 @@ public:
 				   float newLeftTextMargin_percent = 0.0f);
 	void SetPreset(LayoutPreset newCurrentPreset);
 };
+
+
+class ImageBox : public TextControl
+{
+private:
+	LayoutPreset currentPreset;
+	glm::vec2 presetPosition[3];
+
+	float width; 
+	float height;
+	
+	int index; // TODO: Only for the fusion box. Should refactor.
+
+	std::string name;
+
+	std::string fusionTextures[4]; // TODO: Only for fusion. Should refactor.
+
+	bool isActive;
+
+	Utility::Primitives::Sprite boxSprite;
+
+public:
+	ImageBox() : TextControl() 
+	{
+		name = "";
+
+		isActive = false;
+
+		index = 0;
+	}
+	ImageBox(LayoutPreset newCurrentPreset,
+			 const std::string &newName, 
+			 glm::vec2 newPosition,
+			 float newWidth, float newHeight,
+			 int newIndex) 
+			 : TextControl(newCurrentPreset, newName, newPosition) 
+	{
+		width = newWidth;
+		height = newHeight;
+		name = newName;
+		isActive = false;
+
+		index = newIndex;
+
+		boxSprite = 
+			Utility::Primitives::Sprite(glm::vec4(newPosition, 0.0f, 1.0f), 
+										glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
+										newWidth, newHeight, false);
+	}
+
+	void SetTextures(std::string textures[]);
+
+	void Init();
+
+	void OnEvent(Event &_event);
+
+	void AddPreset(LayoutPreset newPreset, glm::vec2 newPosition);
+
+	void Draw(const TextureProgData &textureData);
+
+	bool IsImageBox()
+	{
+		return true;
+	}
+};
+
 
 
 class Button : public TextControl

@@ -43,6 +43,14 @@ struct ExplosionParticle
 	float lifeTime;
 };
 
+struct RayParticle
+{
+	glm::vec4 color;
+
+	glm::vec3 position;
+	glm::vec3 velocity;
+};
+
 
 class ParticleEmitter
 {
@@ -120,7 +128,7 @@ public:
 					 int newParticleLifeTime,
 					 float newVelocityMultiplier);
 
-	void Init(const BillboardProgDataNoTexture &billboardProgDataNoTexture);
+	void Init();
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix,
@@ -133,6 +141,32 @@ public:
 	bool IsActive();
 
 	bool IsDead();
+};
+
+
+class RayEmitter
+{
+private:
+	std::vector<RayParticle> particles;
+	float rayLength;
+
+	glm::vec3 position;
+	int particleCount;
+
+	GLuint vertexBO;
+	GLuint vao;
+
+public:
+	RayEmitter() {}
+	RayEmitter(glm::vec3 newPosition, int newParticleCount,
+			   float newRayLength);
+
+	void Init();
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix, 
+				glm::vec3 cameraPosition,
+				const BillboardProgDataNoTexture &billboardData);
 };
 
 

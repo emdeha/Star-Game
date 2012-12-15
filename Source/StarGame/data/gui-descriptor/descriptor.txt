@@ -1,6 +1,10 @@
 mainfont AGENCYR.TTF
+fusiontextures fusion-empty.png fusion-q.png fusion-w.png fusion-e.png
 layout 1 0.0 0.0 0.0 1.0 0
 button exit Exit 0 1 0.5 0.5 28 0.5 0.5 48 0.5 0.5 68
+imagebox fusionOne 1 375.0 570.0 375.0 570.0 375.0 570.0 50.0 50.0 3
+imagebox fusionTwo 1 430.0 570.0 430.0 570.0 430.0 570.0 50.0 50.0 2
+imagebox fusionThree 1 485.0 570.0 485.0 570.0 485.0 570.0 50.0 50.0 1  
 layout 0 0.0 0.5 0.6 1.0 1
 button newGame New 0 0 10 100 28 10 100 48 10 100 68
 button saveGame Save 0 0 10 70 28 10 70 48 10 70 68 

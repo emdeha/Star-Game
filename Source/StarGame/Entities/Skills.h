@@ -19,10 +19,21 @@
 #define SKILLS_H
 
 
+#include <vector>
+
 #include <glm/glm.hpp>
 
+#include "../framework/EventSystem.h"
+#include "../ParticleEngine/Engine.h"
 
-class BasicSkill
+
+class ISkill
+{
+public:
+	virtual void Update() = 0;
+};
+
+class RaySkill : public ISkill
 {
 private:
 	int damage;
@@ -32,13 +43,19 @@ private:
 
 	char fusionCombination[4];
 
+	RayEmitter ray;
+	std::vector<Event> generatedEvents;
+
 public:
-	BasicSkill() {}
-	BasicSkill(int newDamage, int newDefense,
-			   float newRange,
-			   char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
+	RaySkill() {}
+	RaySkill(int newDamage, int newDefense,
+			 float newRange,
+			 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
 
 	void Update();
+	void Render(glutil::MatrixStack &modelMatrix,
+				glm::vec3 cameraPosition,
+				const BillboardProgDataNoTexture &progData);
 };
 
 

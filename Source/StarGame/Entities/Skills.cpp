@@ -31,18 +31,68 @@ RaySkill::RaySkill(int newDamage, int newDefense,
 	fusionCombination[2] = fusionCombC;
 	fusionCombination[3] = '\0';
 
+	isStarted = false;
+
 	ray = RayEmitter(glm::vec3(), 100, range);
 	ray.Init();
 }
 
 void RaySkill::Update()
 {
-	ray.Update();
+	if(isStarted)
+	{
+		EventArg skillDeployedEventArgs[3];
+		skillDeployedEventArgs[0].argType = "skillrange";
+		skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+		skillDeployedEventArgs[0].argument.varFloat = range;
+		skillDeployedEventArgs[1].argType = "skilldamage";
+		skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+		skillDeployedEventArgs[1].argument.varInteger = damage;
+		skillDeployedEventArgs[2].argType = "what_event";
+		skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+		strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+		Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+		generatedEvents.push_back(skillDeployedEvent);
+
+		ray.Update();
+	}
 }
 
 void RaySkill::Render(glutil::MatrixStack &modelMatrix,
 					  glm::vec3 cameraPosition,
 					  const BillboardProgDataNoTexture &progData)
 {
-	ray.Render(modelMatrix, cameraPosition, progData);
+	if(isStarted)
+	{
+		ray.Render(modelMatrix, cameraPosition, progData);
+	}
+}
+
+void RaySkill::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
+	case EVENT_TYPE_OTHER:
+		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+		{
+			isStarted = true;
+		}
+	}
+}
+
+std::vector<Event> RaySkill::GetGeneratedEvents()
+{
+	std::vector<Event> eventsToReturn;
+
+	if(generatedEvents.size() > 0)
+	{
+		eventsToReturn = generatedEvents;
+		generatedEvents.resize(0);
+	}
+	else 
+	{
+		eventsToReturn.push_back(StockEvents::EmptyEvent());
+	}
+
+	return eventsToReturn;
 }

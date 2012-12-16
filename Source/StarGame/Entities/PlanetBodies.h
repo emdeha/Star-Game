@@ -55,7 +55,6 @@ struct SatelliteSkill
 {
 	SatelliteType satelliteTypeForSkill;
 	float satelliteOffsetFromSun;
-
 	// Add skill characteristics
 };
 

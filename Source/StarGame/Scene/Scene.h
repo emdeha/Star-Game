@@ -32,6 +32,7 @@
 #include "../Entities/Lights.h"
 #include "../Entities/PlanetBodies.h"
 #include "../Entities/Enemy.h"
+#include "../Entities/Skills.h"
 #include "../Fusion/FusionInput.h"
 #include "../Mouse/Mouse.h"
 #include "../Camera/TopDownCamera.h"
@@ -51,6 +52,7 @@ private:
 	std::vector<std::shared_ptr<Spaceship>> spaceships; ///< Holds the world's enemies.
 	std::vector<std::shared_ptr<FastSuicideBomber>> fastSuicideBombers;
 	std::vector<ExplosionEmitter> explosionEmitters;
+	std::vector<std::shared_ptr<Skill>> skills;
 
 	std::map<LayoutType, std::shared_ptr<Layout>> sceneLayouts;
 
@@ -62,7 +64,8 @@ private:
 	float sceneGamma;
 
 public:
-	Scene();
+	Scene() {};
+	Scene(float newSceneGamma);
 
 	/// \fn UpdateScene
 	/// \brief Goes through the game objects and calls their update functions.
@@ -121,6 +124,9 @@ public:
 	void SetGamma(float newSceneGamma);
 
 	void SetFusion(const FusionInput &newFusionInput);
+
+	
+	void AddSkill(const std::shared_ptr<Skill> newSkill);
 
 
 	TopDownCamera &GetTopDownCamera();

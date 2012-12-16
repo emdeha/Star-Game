@@ -663,5 +663,15 @@ void FastSuicideBomber::OnEvent(Event &_event)
 		break;
 	case EVENT_TYPE_ATTACKED:
 		break;
+	case EVENT_TYPE_OTHER:
+		if(strcmp(_event.GetArgument("what_event").varString, "skilldeployed") == 0)
+		{
+			// TODO: the position must be relative to the object emitting the skill!!!
+			if(glm::length(position - glm::vec3()) < _event.GetArgument("skillrange").varFloat)
+			{
+				health -= _event.GetArgument("skilldamage").varInteger;
+			}
+		}
+		break;
 	}
 }

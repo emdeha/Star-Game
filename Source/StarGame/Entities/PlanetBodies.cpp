@@ -591,6 +591,7 @@ bool Sun::IsClicked(glm::mat4 projMat, glm::mat4 modelMat,
 
 	if(Utility::Intersections::RayIntersectsSphere(mouseRay, position, diameter / 2.0f))
 	{
+		// event
 		//isClicked = true;
 		return true;
 	}

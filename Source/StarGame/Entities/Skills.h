@@ -27,13 +27,22 @@
 #include "../ParticleEngine/Engine.h"
 
 
-class ISkill
+class Skill
 {
 public:
-	virtual void Update() = 0;
+	virtual void Update() {};
+	virtual void Render(glutil::MatrixStack &modelMatrix,
+						glm::vec3 cameraPosition,
+						const BillboardProgDataNoTexture &progData) {};
+	virtual void OnEvent(Event &_event) {};
+	virtual std::vector<Event> GetGeneratedEvents()
+	{
+		std::vector<Event> eventsToReturn;
+		return eventsToReturn;
+	}
 };
 
-class RaySkill : public ISkill
+class RaySkill : public Skill
 {
 private:
 	int damage;
@@ -46,6 +55,8 @@ private:
 	RayEmitter ray;
 	std::vector<Event> generatedEvents;
 
+	bool isStarted;
+
 public:
 	RaySkill() {}
 	RaySkill(int newDamage, int newDefense,
@@ -56,6 +67,11 @@ public:
 	void Render(glutil::MatrixStack &modelMatrix,
 				glm::vec3 cameraPosition,
 				const BillboardProgDataNoTexture &progData);
+
+	void OnEvent(Event &_event);
+
+	// Event GetGeneratedEvent(std::string eventName);
+	std::vector<Event> GetGeneratedEvents();
 };
 
 

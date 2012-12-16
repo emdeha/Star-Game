@@ -18,20 +18,21 @@
 #include "stdafx.h"
 #include "Scene.h"
 
-Scene::Scene()
+Scene::Scene(float newSceneGamma)
 {
 	lights.resize(0);
 	suns.resize(0);
 	spaceships.resize(0);
 	fastSuicideBombers.resize(0);
 	explosionEmitters.resize(0);
+	skills.resize(0);
 
 	sceneLayouts.clear();
 
 	//universeMusic.AddFileForPlay("../data/music/onclick.wav", SOUND_NAMES_ONSUNCLICK);
 	//universeMusic.AddFileForPlay("../data/music/background.mp3", SOUND_NAMES_BACKGROUND);
 
-	sceneGamma = 2.2f;
+	sceneGamma = newSceneGamma;
 }
 
 
@@ -79,6 +80,13 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix,
 			explosionEmitters[i].Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), 
 										billboardNoTextureData);
 		}
+	}
+
+	int sizeSkills = skills.size();
+	for(int i = 0; i < sizeSkills; i++)
+	{
+		skills[i]->Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(),
+						  billboardNoTextureData);
 	}
 }
 void Scene::RenderCurrentLayout(const FontProgData &fontData,
@@ -161,6 +169,15 @@ void Scene::UpdateScene()
 				explosionEmitters.begin() + i;
 			explosionEmitters.erase(currentEmitter);
 		}
+	}
+
+	int sizeSkills = skills.size();
+	for(int i = 0; i < sizeSkills; i++)
+	{
+		skills[i]->Update();
+		Event skillEvent = skills[i]->GetGeneratedEvents()[0];
+		suns[0]->OnEvent(skillEvent);
+		fastSuicideBombers[0]->OnEvent(skillEvent);
 	}
 }
 void Scene::UpdateFusion(char key, Event &returnedFusionEvent)
@@ -277,6 +294,11 @@ void Scene::OnEvent(Event &_event)
 										  SatelliteType(SATELLITE_EARTH), 
 										  5);
 				}
+			}
+
+			for(int i = 0; i < skills.size(); i++)
+			{
+				skills[i]->OnEvent(_event);
 			}
 		}
 		if(strcmp(_event.GetArgument("what_event").varString, "explStarted") == 0)
@@ -428,6 +450,12 @@ void Scene::SetLayoutPreset(LayoutPreset layoutPreset)
 			break;
 		}
 	}
+}
+
+
+void Scene::AddSkill(const std::shared_ptr<Skill> newSkill)
+{
+	skills.push_back(newSkill);
 }
 
 

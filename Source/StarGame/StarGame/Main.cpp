@@ -41,7 +41,7 @@
 ShaderManager shaderManager;
 DisplayData displayData;
 
-Scene *scene = new Scene();
+Scene scene = Scene(2.2f);
 
 
 long long GetCurrentTimeMillis()
@@ -52,198 +52,198 @@ long long GetCurrentTimeMillis()
 
 void HandleMouse()
 {
-	glm::vec3 cameraPosition = scene->GetTopDownCamera().ResolveCamPosition();
+	glm::vec3 cameraPosition = scene.GetTopDownCamera().ResolveCamPosition();
 
 	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
 	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
 
-	if(scene->GetMouse().IsRightButtonDown())
+	if(scene.GetMouse().IsRightButtonDown())
 	{
-		if(scene->HasSuns())
+		if(scene.HasSuns())
 		{
-			if(scene->GetSun()->IsClicked
-				(displayData.projectionMatrix, displayData.modelMatrix, scene->GetMouse(), 
+			if(scene.GetSun()->IsClicked
+				(displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
 				 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 			{
 				Event rightClickSunEvent = StockEvents::EventOnRightClick("sun");
 
-				scene->GetSun()->OnEvent(rightClickSunEvent);
-				scene->OnEvent(rightClickSunEvent);
+				scene.GetSun()->OnEvent(rightClickSunEvent);
+				scene.OnEvent(rightClickSunEvent);
 			}
 		}
 	}
 
-	if(scene->GetMouse().IsLeftButtonDown())
+	if(scene.GetMouse().IsLeftButtonDown())
 	{
-		if(scene->IsLayoutOn(LAYOUT_IN_GAME))
+		if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 		{
 			if(
-			   scene->GetLayout(LAYOUT_IN_GAME)->
+			   scene.GetLayout(LAYOUT_IN_GAME)->
 			   GetControl("exit")->
-			   IsMouseOn(glm::vec2(scene->GetMouse().GetCurrentPosition()))
+			   IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("exitButton");
 
-				scene->GetLayout(LAYOUT_IN_GAME)->GetControl("exit")->OnEvent(leftClickButtonEvent);
+				scene.GetLayout(LAYOUT_IN_GAME)->GetControl("exit")->OnEvent(leftClickButtonEvent);
 
-				scene->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
 
-				scene->GetMouse().ReleaseLeftButton();
+				scene.GetMouse().ReleaseLeftButton();
 				return;
 			}
 		}
 
-		if(scene->IsLayoutOn(LAYOUT_MENU))
+		if(scene.IsLayoutOn(LAYOUT_MENU))
 		{
 			if(
-				scene->GetLayout(LAYOUT_MENU)->
+				scene.GetLayout(LAYOUT_MENU)->
 				GetControl("newGame")->
-				IsMouseOn(glm::vec2(scene->GetMouse().GetCurrentPosition()))
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("newGameButton");
 
-				scene->GetLayout(LAYOUT_MENU)->GetControl("newGame")->OnEvent(leftClickButtonEvent);
+				scene.GetLayout(LAYOUT_MENU)->GetControl("newGame")->OnEvent(leftClickButtonEvent);
 
-				scene->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
 			}
 
 			if(
-				scene->GetLayout(LAYOUT_MENU)->
+				scene.GetLayout(LAYOUT_MENU)->
 				GetControl("saveGame")->
-				IsMouseOn(glm::vec2(scene->GetMouse().GetCurrentPosition()))
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("saveGameButton");
 
-				scene->GetLayout(LAYOUT_MENU)->GetControl("saveGame")->OnEvent(leftClickButtonEvent);
+				scene.GetLayout(LAYOUT_MENU)->GetControl("saveGame")->OnEvent(leftClickButtonEvent);
 
-				scene->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
 			}
 
 			if(
-				scene->GetLayout(LAYOUT_MENU)->
+				scene.GetLayout(LAYOUT_MENU)->
 				GetControl("quitGame")->
-				IsMouseOn(glm::vec2(scene->GetMouse().GetCurrentPosition()))
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("quitGameButton");
 
-				scene->GetLayout(LAYOUT_MENU)->GetControl("quitGame")->OnEvent(leftClickButtonEvent);
+				scene.GetLayout(LAYOUT_MENU)->GetControl("quitGame")->OnEvent(leftClickButtonEvent);
 
-				scene->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
 			}
 
 			if(
-				scene->GetLayout(LAYOUT_MENU)->
+				scene.GetLayout(LAYOUT_MENU)->
 				GetControl("printCmd")->
-				IsMouseOn(glm::vec2(scene->GetMouse().GetCurrentPosition()))
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
 			  )
 			{
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("printCmd");
 
-				scene->GetLayout(LAYOUT_MENU)->GetControl("printCmd")->OnEvent(leftClickButtonEvent);
+				scene.GetLayout(LAYOUT_MENU)->GetControl("printCmd")->OnEvent(leftClickButtonEvent);
 
-				scene->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
 			}
 			
 			if(
-				scene->GetLayout(LAYOUT_MENU)->
+				scene.GetLayout(LAYOUT_MENU)->
 				GetControl("sample")->
-				IsMouseOn(glm::vec2(scene->GetMouse().GetCurrentPosition()))
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
 			  )
 			{
 				Event leftClickTextBoxEvent = StockEvents::EventOnLeftClick("sample");
 
-				scene->GetLayout(LAYOUT_MENU)->GetControl("sample")->OnEvent(leftClickTextBoxEvent);
+				scene.GetLayout(LAYOUT_MENU)->GetControl("sample")->OnEvent(leftClickTextBoxEvent);
 
 				
-				if(scene->GetLayout(LAYOUT_MENU)->GetControl("sample") != 
-				   scene->GetLayout(LAYOUT_MENU)->GetActiveControl())
+				if(scene.GetLayout(LAYOUT_MENU)->GetControl("sample") != 
+				   scene.GetLayout(LAYOUT_MENU)->GetActiveControl())
 				{
 					Event unclickEvent = Event(EVENT_TYPE_UNCLICK);
 
-					scene->GetLayout(LAYOUT_MENU)->GetActiveControl()->OnEvent(unclickEvent);
+					scene.GetLayout(LAYOUT_MENU)->GetActiveControl()->OnEvent(unclickEvent);
 				}
 			}
 			
 			if(
-				scene->GetLayout(LAYOUT_MENU)->
+				scene.GetLayout(LAYOUT_MENU)->
 				GetControl("sampleTwo")->
-				IsMouseOn(glm::vec2(scene->GetMouse().GetCurrentPosition()))
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
 			  )
 			{
 				Event leftClickTextBoxEvent = StockEvents::EventOnLeftClick("sampleTwo");
 
-				scene->GetLayout(LAYOUT_MENU)->GetControl("sampleTwo")->OnEvent(leftClickTextBoxEvent);
+				scene.GetLayout(LAYOUT_MENU)->GetControl("sampleTwo")->OnEvent(leftClickTextBoxEvent);
 
 				
-				if(scene->GetLayout(LAYOUT_MENU)->GetControl("sampleTwo") != 
-				   scene->GetLayout(LAYOUT_MENU)->GetActiveControl())
+				if(scene.GetLayout(LAYOUT_MENU)->GetControl("sampleTwo") != 
+				   scene.GetLayout(LAYOUT_MENU)->GetActiveControl())
 				{
 					Event unclickEvent = Event(EVENT_TYPE_UNCLICK);
 
-					scene->GetLayout(LAYOUT_MENU)->GetActiveControl()->OnEvent(unclickEvent);
+					scene.GetLayout(LAYOUT_MENU)->GetActiveControl()->OnEvent(unclickEvent);
 				}
 			}
 		}
 
-		if(scene->IsLayoutOn(LAYOUT_IN_GAME))
+		if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 		{
-			if(scene->HasSuns())
+			if(scene.HasSuns())
 			{
-				if(scene->GetSun()->IsClicked
-					(displayData.projectionMatrix, displayData.modelMatrix, scene->GetMouse(), 
+				if(scene.GetSun()->IsClicked
+					(displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
 					 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 				{
 					Event leftClickSunEvent = StockEvents::EventOnLeftClick("sun");
 
-					scene->GetSun()->OnEvent(leftClickSunEvent);
-					scene->OnEvent(leftClickSunEvent);
+					scene.GetSun()->OnEvent(leftClickSunEvent);
+					scene.OnEvent(leftClickSunEvent);
 				}
 
-				std::vector<std::shared_ptr<Satellite>> sunSatellites = scene->GetSun()->GetSatellites();
+				std::vector<std::shared_ptr<Satellite>> sunSatellites = scene.GetSun()->GetSatellites();
 				for(std::vector<std::shared_ptr<Satellite>>::iterator iter = sunSatellites.begin(); 
 					iter != sunSatellites.end(); ++iter)
 				{
 					if((*iter)->IsClicked
-						(displayData.projectionMatrix, displayData.modelMatrix, scene->GetMouse(), 
+						(displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
 							glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 					{
 						Event leftClickSatelliteEvent = StockEvents::EventOnLeftClick("satellite");
 
 						(*iter)->OnEvent(leftClickSatelliteEvent);
-						scene->OnEvent(leftClickSatelliteEvent);
+						scene.OnEvent(leftClickSatelliteEvent);
 					}
 				}
 			}
 		}
 	}
 
-	if(scene->IsLayoutOn(LAYOUT_IN_GAME))
+	if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 	{
-		if(scene->HasSuns())
+		if(scene.HasSuns())
 		{
-			std::vector<std::shared_ptr<Satellite>> sunSatellites = scene->GetSun()->GetSatellites();
+			std::vector<std::shared_ptr<Satellite>> sunSatellites = scene.GetSun()->GetSatellites();
 			for(std::vector<std::shared_ptr<Satellite>>::iterator iter = sunSatellites.begin(); 
 				iter != sunSatellites.end(); ++iter)
 			{
 				if((*iter)->IsClicked
-					(displayData.projectionMatrix, displayData.modelMatrix, scene->GetMouse(), 
+					(displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
 						glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
 				{
 					Event satelliteHoveredEvent = StockEvents::EventOnHover();
 
 					(*iter)->OnEvent(satelliteHoveredEvent);
-					scene->OnEvent(satelliteHoveredEvent);
+					scene.OnEvent(satelliteHoveredEvent);
 				}
 			}
 		}
 	}
 
 
-	if(scene->IsLayoutOn(LAYOUT_MENU))
+	if(scene.IsLayoutOn(LAYOUT_MENU))
 	{
 		/*if(
 			universe->GetLayout(LAYOUT_MENU).
@@ -288,36 +288,36 @@ void HandleMouse()
 	}
 
 
-	scene->GetMouse().ReleaseRightButton();
-	scene->GetMouse().ReleaseLeftButton();
+	scene.GetMouse().ReleaseRightButton();
+	scene.GetMouse().ReleaseLeftButton();
 }
 void HandleMouseButtons(int button, int state, int x, int y)
 {
 	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 	{
-		scene->GetMouse().PressLeftButton();
+		scene.GetMouse().PressLeftButton();
 	}
 	if(button == GLUT_LEFT_BUTTON && state == GLUT_UP)
 	{
-		scene->GetMouse().ReleaseLeftButton();
+		scene.GetMouse().ReleaseLeftButton();
 	}
 
 	if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
 	{
-		scene->GetMouse().PressRightButton();
+		scene.GetMouse().PressRightButton();
 	}
 	if(button == GLUT_RIGHT_BUTTON && state == GLUT_UP)
 	{
-		scene->GetMouse().ReleaseRightButton();
+		scene.GetMouse().ReleaseRightButton();
 	}
 }
 void HandleActiveMovement(int x, int y)
 {
-	scene->GetMouse().SetCurrentPosition(glm::ivec2(x, y));
+	scene.GetMouse().SetCurrentPosition(glm::ivec2(x, y));
 }
 void HandlePassiveMovement(int x, int y)
 {
-	scene->GetMouse().SetCurrentPosition(glm::ivec2(x, y));
+	scene.GetMouse().SetCurrentPosition(glm::ivec2(x, y));
 }
 
 void InitializePrograms()
@@ -340,7 +340,7 @@ void InitializeGUI()
 	GUILoader guiLoader("../data/gui-descriptor/descriptor.txt", 
 						glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
-	scene->AddLayouts(guiLoader.GetAllLoadedLayouts());
+	scene.AddLayouts(guiLoader.GetAllLoadedLayouts());
 }
 
 void InitializeScene()
@@ -373,7 +373,7 @@ void InitializeScene()
 	std::shared_ptr<FastSuicideBomber>
 		sampleFastSuicideBomber(new FastSuicideBomber(glm::vec3(0.0f, 4.5f, 0.0f),
 													  glm::vec3(0.0f, -0.05f, 0.0f), 
-													  100, 
+													  50, 
 													  50, 
 													  3.0f, 
 													  0.5f));
@@ -387,34 +387,40 @@ void InitializeScene()
 	sampleSpaceship2->LoadMesh("mesh-files/Ship.xml");
 	sampleSpaceship2->LoadProjectileMesh("mesh-files/UnitSphere.xml");
 
-	scene->SetMouse(userMouse);
-	scene->SetTopDownCamera(userCamera);
+	scene.SetMouse(userMouse);
+	scene.SetTopDownCamera(userCamera);
 
-	scene->AddSun(mainSun);
-	scene->AddSunLight(mainSunLight);
-	scene->AddFastSuicideBomber(sampleFastSuicideBomber);
-	//scene->AddSpaceship(sampleSpaceship);
-	//scene->AddSpaceship(sampleSpaceship2);
+	scene.AddSun(mainSun);
+	scene.AddSunLight(mainSunLight);
+	scene.AddFastSuicideBomber(sampleFastSuicideBomber);
+	//scene.AddSpaceship(sampleSpaceship);
+	//scene.AddSpaceship(sampleSpaceship2);
 
-	scene->SetMusic("../data/music/background.mp3", MUSIC_BACKGROUND);
-	scene->SetMusic("../data/music/onclick.wav", MUSIC_ON_SUN_CLICK);
+	scene.SetMusic("../data/music/background.mp3", MUSIC_BACKGROUND);
+	scene.SetMusic("../data/music/onclick.wav", MUSIC_ON_SUN_CLICK);
 
 	const float musicVolumeInteraction = 0.1f;
 	const float musicVolumeMaster = 0.1f;
 
-	scene->SetMusicVolume(musicVolumeInteraction, CHANNEL_INTERACTION);
-	scene->SetMusicVolume(musicVolumeMaster, CHANNEL_MASTER);	
+	scene.SetMusicVolume(musicVolumeInteraction, CHANNEL_INTERACTION);
+	scene.SetMusicVolume(musicVolumeMaster, CHANNEL_MASTER);	
 
-	scene->SetFusion(FusionInput('f'));
-	scene->AddFusionSequence("fireSatellite", 'q', 'q', 'q');
-	scene->AddFusionSequence("earthSatellite", 'e', 'e', 'e');
-	scene->AddFusionSequence("waterSatellite", 'w', 'w', 'w');
+	scene.SetFusion(FusionInput('f'));
+	scene.AddFusionSequence("fireSatellite", 'q', 'q', 'q');
+	scene.AddFusionSequence("earthSatellite", 'e', 'e', 'e');
+	scene.AddFusionSequence("waterSatellite", 'w', 'w', 'w');
+	scene.AddFusionSequence("raySkill", 'q', 'w', 'e');
 
 
 	ExplosionEmitter sceneExplosion =
 		ExplosionEmitter(glm::vec3(0.0f, 2.0f, 0.0f), 300, 30, 0.1f);
 	sceneExplosion.Init();
-	scene->AddExplosionEmitter(sceneExplosion);
+	scene.AddExplosionEmitter(sceneExplosion);
+
+
+	std::shared_ptr<RaySkill> testSkill = 
+		std::shared_ptr<RaySkill>(new RaySkill(100, 100, 3.0f, 'q', 'w', 'e'));
+	scene.AddSkill(testSkill);
 
 
 	glUseProgram(shaderManager.GetTextureProgData().theProgram);
@@ -459,6 +465,8 @@ long long currentTime_milliseconds;
 
 void Init()
 {
+	//scene = Scene(2.2f);
+
 	currentTime_milliseconds = GetCurrentTimeMillis();
 
 	glutTimerFunc(0, TimerFunction, 0);
@@ -526,18 +534,18 @@ void Display()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 
-	if(scene->IsLayoutOn(LAYOUT_IN_GAME))
+	if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 	{		
 		glutil::MatrixStack modelMatrix;
 
-		modelMatrix.SetMatrix(scene->GetTopDownCamera().CalcMatrix());
+		modelMatrix.SetMatrix(scene.GetTopDownCamera().CalcMatrix());
 		displayData.modelMatrix = modelMatrix.Top();
 
 		
 		int loops = 0;
 		while(GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
 		{
-			scene->UpdateScene();
+			scene.UpdateScene();
 
 			nextGameTick += SKIP_TICKS;
 			loops++;
@@ -545,7 +553,7 @@ void Display()
 
 
 		float interpolation = float(GetTickCount() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
-		scene->RenderScene(modelMatrix, 
+		scene.RenderScene(modelMatrix, 
 						   shaderManager.GetBlockIndex(BT_MATERIAL),
 						   shaderManager.GetUniformBuffer(UBT_LIGHT),
 						   shaderManager.GetLitProgData(),
@@ -555,19 +563,19 @@ void Display()
 						   interpolation);
 		
 		
-		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
+		scene.RenderCurrentLayout(shaderManager.GetFontProgData(),
 								   shaderManager.GetSimpleNoUBProgData(),
 								   shaderManager.GetTextureProgData());
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{
-		scene->RenderCurrentLayout(shaderManager.GetFontProgData(),
+		scene.RenderCurrentLayout(shaderManager.GetFontProgData(),
 								   shaderManager.GetSimpleNoUBProgData(),
 								   shaderManager.GetTextureProgData());
 	}
 
 	HandleMouse();
-	scene->GetMouse().OverrideLastPosition(scene->GetMouse().GetCurrentPosition());
+	scene.GetMouse().OverrideLastPosition(scene.GetMouse().GetCurrentPosition());
 	
 	glutSwapBuffers();
 	glutPostRedisplay();
@@ -608,7 +616,7 @@ void Reshape(int width, int height)
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	
-	scene->UpdateCurrentLayout(width, height);
+	scene.UpdateCurrentLayout(width, height);
 	// TODO: Isolate in a separate function.
 	/*if(width <= 800 || height <= 600)
 	{
@@ -635,15 +643,17 @@ void Reshape(int width, int height)
 void Keyboard(unsigned char key, int x, int y)
 {
 	// This needs to be passed as an event.
-	if(scene->IsLayoutOn(LAYOUT_MENU) && 
-	   scene->GetLayout(LAYOUT_MENU)->HasActiveControl())
+	if(scene.IsLayoutOn(LAYOUT_MENU) && 
+	   scene.GetLayout(LAYOUT_MENU)->HasActiveControl())
 	{
-		scene->GetLayout(LAYOUT_MENU)->GetActiveControl()->InputChar(key);
+		scene.GetLayout(LAYOUT_MENU)->GetActiveControl()->InputChar(key);
 	}
 
 	switch (key)
 	{
 	case 27:
+		// TODO: When exiting that way, if the scene is not a pointer, 
+		//	     the application crashes.
 		glutLeaveMainLoop();
 		return;
 	case 32:
@@ -657,13 +667,13 @@ void Keyboard(unsigned char key, int x, int y)
 		break;
 	}
 
-	if(scene->IsLayoutOn(LAYOUT_IN_GAME))
+	if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 	{
 		Event returnedFusionEvent = StockEvents::EmptyEvent();
-		scene->UpdateFusion(key, returnedFusionEvent);
-		scene->GetLayout(LAYOUT_IN_GAME)->GetControl("fusionOne")->OnEvent(returnedFusionEvent);
-		scene->GetLayout(LAYOUT_IN_GAME)->GetControl("fusionTwo")->OnEvent(returnedFusionEvent);
-		scene->GetLayout(LAYOUT_IN_GAME)->GetControl("fusionThree")->OnEvent(returnedFusionEvent);
+		scene.UpdateFusion(key, returnedFusionEvent);
+		scene.GetLayout(LAYOUT_IN_GAME)->GetControl("fusionOne")->OnEvent(returnedFusionEvent);
+		scene.GetLayout(LAYOUT_IN_GAME)->GetControl("fusionTwo")->OnEvent(returnedFusionEvent);
+		scene.GetLayout(LAYOUT_IN_GAME)->GetControl("fusionThree")->OnEvent(returnedFusionEvent);
 	}
 
 	glutPostRedisplay();

@@ -25,6 +25,7 @@
 
 #include "../framework/EventSystem.h"
 #include "../ParticleEngine/Engine.h"
+#include "PlanetBodies.h"
 
 
 class Skill
@@ -35,16 +36,27 @@ public:
 						glm::vec3 cameraPosition,
 						const BillboardProgDataNoTexture &progData) {};
 	virtual void OnEvent(Event &_event) {};
+	virtual Event GetGeneratedEvent(const std::string &	eventName)
+	{
+		Event eventToReturn = StockEvents::EmptyEvent();
+		return eventToReturn;
+	}
 	virtual std::vector<Event> GetGeneratedEvents()
 	{
 		std::vector<Event> eventsToReturn;
 		return eventsToReturn;
+	}
+	virtual std::shared_ptr<Sun> GetOwner()
+	{
+		return std::shared_ptr<Sun>();
 	}
 };
 
 class RaySkill : public Skill
 {
 private:
+	std::shared_ptr<Sun> skillOwner;
+
 	int damage;
 	int defense;
 	
@@ -59,7 +71,8 @@ private:
 
 public:
 	RaySkill() {}
-	RaySkill(int newDamage, int newDefense,
+	RaySkill(std::shared_ptr<Sun> newSkillOwner,
+			 int newDamage, int newDefense,
 			 float newRange,
 			 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
 
@@ -69,8 +82,10 @@ public:
 				const BillboardProgDataNoTexture &progData);
 
 	void OnEvent(Event &_event);
+	std::shared_ptr<Sun> GetOwner();
 
-	// Event GetGeneratedEvent(std::string eventName);
+	// Only for EVENT_TYPE_OTHER
+	Event GetGeneratedEvent(const std::string &	eventName);
 	std::vector<Event> GetGeneratedEvents();
 };
 

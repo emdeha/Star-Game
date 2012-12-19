@@ -175,9 +175,9 @@ void Scene::UpdateScene()
 	for(int i = 0; i < sizeSkills; i++)
 	{
 		skills[i]->Update();
-		Event skillEvent = skills[i]->GetGeneratedEvents()[0];
+		Event skillEvent = skills[i]->GetGeneratedEvent("skilldeployed");
 		suns[0]->OnEvent(skillEvent);
-		fastSuicideBombers[0]->OnEvent(skillEvent);
+		fastSuicideBombers[0]->OnEvent(skills[i], skillEvent);
 	}
 }
 void Scene::UpdateFusion(char key, Event &returnedFusionEvent)

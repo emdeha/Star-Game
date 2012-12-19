@@ -37,6 +37,7 @@
 #include "../ProgramData/ProgramData.h"
 #include "../Entities/PlanetBodies.h"
 #include "MaterialBlock.h"
+#include "Skills.h"
 
 #include "../ParticleEngine/Engine.h"
 
@@ -256,7 +257,9 @@ public:
 		return position;
 	}
 
-	void OnEvent(Event &_event);
+	// Skill sender is the sender of the events. Later I should do sth more general to
+	// all the event handling functions.
+	void OnEvent(std::shared_ptr<Skill> sender, Event &_event);
 };
 
 

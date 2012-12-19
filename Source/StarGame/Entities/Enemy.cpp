@@ -655,7 +655,7 @@ std::vector<Event> FastSuicideBomber::GetGeneratedEvents()
 	return eventsToReturn;
 }
 
-void FastSuicideBomber::OnEvent(Event &_event)
+void FastSuicideBomber::OnEvent(std::shared_ptr<Skill> sender, Event &_event)
 {
 	switch(_event.GetType())
 	{
@@ -667,7 +667,9 @@ void FastSuicideBomber::OnEvent(Event &_event)
 		if(strcmp(_event.GetArgument("what_event").varString, "skilldeployed") == 0)
 		{
 			// TODO: the position must be relative to the object emitting the skill!!!
-			if(glm::length(position - glm::vec3()) < _event.GetArgument("skillrange").varFloat)
+			if(glm::length(position - glm::vec3(sender->GetOwner()->GetPosition())) 
+			   < 
+			   _event.GetArgument("skillrange").varFloat)
 			{
 				health -= _event.GetArgument("skilldamage").varInteger;
 			}

@@ -1,0 +1,20 @@
+﻿Build started 19.12.2012 г. 20:31:44 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Fusion_Scene\Fusion_Scene.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\Fusion_Scene.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\Fusion_Scene.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Scene.cpp
+         Scene.cpp
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\Fusion_Scene.lib" /NOLOGO Debug\Scene.obj
+         Debug\stdafx.obj
+         Fusion_Scene.vcxproj -> E:\CECI\TheGame\Source\StarGame\Debug\Fusion_Scene.lib
+       FinalizeBuildStatus:
+         Deleting file "Debug\Fusion_Scene.unsuccessfulbuild".
+         Touching "Debug\Fusion_Scene.lastbuildstate".
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Fusion_Scene\Fusion_Scene.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.35

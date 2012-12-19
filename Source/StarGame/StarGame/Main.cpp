@@ -37,11 +37,125 @@
 #include "../ParticleEngine/Engine.h"
 #include "../Entities/Skills.h"
 
+#include "../Fusion_Scene/Scene.h"
+
+
+
+
+
+
+
+namespace FusionEngine
+{
+	class Render : public Component
+	{
+	public:
+		glm::vec3 position;
+		glm::vec4 color;
+		float width;
+		float height;
+
+		GLuint program;
+		GLuint vao;
+		GLuint vbo;
+		GLuint ibo;
+
+		
+		Render() : Component(CT_RENDERABLE) {}
+		virtual ~Render() {}
+
+		void Init()
+		{
+			std::vector<float> vertexData;
+			std::vector<unsigned short> indexData;
+
+			vertexData.push_back(position.x);
+			vertexData.push_back(position.y - height);
+			vertexData.push_back(position.z); vertexData.push_back(1.0f);
+
+			vertexData.push_back(position.x - width);
+			vertexData.push_back(position.y - height);
+			vertexData.push_back(position.z); vertexData.push_back(1.0f);
+
+			vertexData.push_back(position.x - width);
+			vertexData.push_back(position.y);
+			vertexData.push_back(position.z); vertexData.push_back(1.0f);
+
+			vertexData.push_back(position.x);
+			vertexData.push_back(position.y);
+			vertexData.push_back(position.z); vertexData.push_back(1.0f);
+
+			
+			indexData.push_back(0); indexData.push_back(1); indexData.push_back(2);
+			indexData.push_back(2); indexData.push_back(3); indexData.push_back(0);
+
+
+			glGenVertexArrays(1, &vao);
+			glBindVertexArray(vao);
+
+
+			glGenBuffers(1, &vbo);
+			glBindBuffer(GL_ARRAY_BUFFER, vbo);
+			glBufferData(GL_ARRAY_BUFFER, 
+						 sizeof(float) * vertexData.size(), &vertexData[0], GL_STATIC_DRAW);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+			glGenBuffers(1, &ibo);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
+						 sizeof(unsigned short) * indexData.size(), &indexData[0], GL_STATIC_DRAW);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		}
+	};
+
+
+	class RenderSystem : public EntityProcessingSystem
+	{
+	protected:
+		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
+		{
+			ComponentMapper<Render> tmap = manager->GetComponentList(entity, CT_RENDERABLE);
+
+			glUseProgram(tmap[0]->program);
+			glBindVertexArray(tmap[0]->vao);
+			{
+				glUniform4f(
+					glGetUniformLocation(tmap[0]->program, "color"),
+					tmap[0]->color.r, tmap[0]->color.g, tmap[0]->color.b, tmap[0]->color.a);
+
+				glEnableVertexAttribArray(0);
+				glBindBuffer(GL_ARRAY_BUFFER, tmap[0]->vbo);
+				glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, tmap[0]->ibo);
+				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+
+				glDisableVertexAttribArray(0);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			}
+			glBindVertexArray(0);
+			glUseProgram(0);
+		}
+
+	public:
+		RenderSystem(EventManager *eventManager, EntityManager *entityManager)
+			: EntityProcessingSystem(eventManager, entityManager, CT_RENDERABLE_BIT) {}
+		virtual ~RenderSystem() {}
+	};
+}
+
+
+
+
+
+
 
 ShaderManager shaderManager;
 DisplayData displayData;
 
 Scene scene = Scene(2.2f);
+FusionEngine::Scene testScene;
 
 
 long long GetCurrentTimeMillis()
@@ -419,7 +533,8 @@ void InitializeScene()
 
 
 	std::shared_ptr<RaySkill> testSkill = 
-		std::shared_ptr<RaySkill>(new RaySkill(100, 100, 3.0f, 'q', 'w', 'e'));
+		std::shared_ptr<RaySkill>(new RaySkill(scene.GetSun(),
+											   100, 100, 3.0f, 'q', 'w', 'e'));
 	scene.AddSkill(testSkill);
 
 
@@ -461,7 +576,7 @@ void TimerFunction(int value)
 }
 
 long long currentTime_milliseconds;
-
+FusionEngine::RenderSystem *renderSystem;
 
 void Init()
 {
@@ -523,6 +638,28 @@ void Init()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	nextGameTick = GetTickCount();
+
+
+
+	//////////////////////////////////////
+	FusionEngine::EventManager *eventManager = new FusionEngine::EventManager();
+	FusionEngine::EntityManager *entityManager = new FusionEngine::EntityManager(eventManager);
+	//testScene = FusionEngine::Scene(entityManager);
+	renderSystem = 
+		new FusionEngine::RenderSystem(eventManager, entityManager);
+	//testScene.InsertSystem(renderSystem);
+
+	FusionEngine::Entity *entity = entityManager->CreateEntity();//testScene.GetEntityManager()->CreateEntity();
+	FusionEngine::Render *render = new FusionEngine::Render();
+	render->color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	render->height = 10.0f;
+	render->width = 10.0f;
+	render->position = glm::vec3();
+	render->program = shaderManager.GetSimpleProgData().theProgram;
+	render->Init();
+	entityManager->InsertComponent(entity, render);
+	//testScene.InsertComponent(entity, render);
+	/////////////////////////////////////
 }
 
 void Display()
@@ -566,6 +703,13 @@ void Display()
 		scene.RenderCurrentLayout(shaderManager.GetFontProgData(),
 								   shaderManager.GetSimpleNoUBProgData(),
 								   shaderManager.GetTextureProgData());
+
+
+		
+		glUniformMatrix4fv(
+			shaderManager.GetSimpleProgData().modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+		//testScene.ProcessSystems();
+		renderSystem->Process();
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{

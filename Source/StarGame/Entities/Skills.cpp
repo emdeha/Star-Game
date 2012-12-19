@@ -19,10 +19,12 @@
 #include "Skills.h"
 
 
-RaySkill::RaySkill(int newDamage, int newDefense,
+RaySkill::RaySkill(std::shared_ptr<Sun> newSkillOwner,
+				   int newDamage, int newDefense,
 				   float newRange,
 				   char fusionCombA, char fusionCombB, char fusionCombC)
 {
+	skillOwner = newSkillOwner;
 	damage = newDamage;
 	defense = newDefense;
 	range = newRange;
@@ -33,7 +35,7 @@ RaySkill::RaySkill(int newDamage, int newDefense,
 
 	isStarted = false;
 
-	ray = RayEmitter(glm::vec3(), 100, range);
+	ray = RayEmitter(glm::vec3(skillOwner->GetPosition()), 100, range);
 	ray.Init();
 }
 
@@ -80,6 +82,29 @@ void RaySkill::OnEvent(Event &_event)
 	}
 }
 
+std::shared_ptr<Sun> RaySkill::GetOwner()
+{
+	return skillOwner;
+}
+
+Event RaySkill::GetGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(int i = 0; i < generatedEvents.size(); i++)
+		{
+			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
+			   strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				return generatedEvents[i];
+			}
+		}
+	}
+	else
+	{
+		return StockEvents::EmptyEvent();
+	}
+}
 std::vector<Event> RaySkill::GetGeneratedEvents()
 {
 	std::vector<Event> eventsToReturn;

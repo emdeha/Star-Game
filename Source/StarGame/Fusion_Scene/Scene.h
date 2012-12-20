@@ -32,16 +32,26 @@ namespace FusionEngine
 	class Scene
 	{
 	private:
+		EventManager *eventManager;
 		EntityManager *entityManager;
 		std::vector<Entity*> entities;
+		std::vector<Component*> components;
 		std::vector<EntityProcessingSystem*> systems;
 
 	public:
 		Scene() {}
-		Scene(EntityManager *newEntityManager);
+		//Scene(EntityManager *newEntityManager);
 		~Scene();
 
+		void Init();
 
+		void AddSystem(EntityProcessingSystem *system);
+		void AddComponent(Entity *entity, Component *component);
+		
+
+		EntityManager *GetEntityManager();
+		EventManager *GetEventManager();
+		/*
 		void InsertSystem(EntityProcessingSystem *system);
 		void InsertComponent(Entity *entity, Component *component);
 
@@ -49,6 +59,7 @@ namespace FusionEngine
 
 
 		EntityManager *GetEntityManager();
+		const ComponentList &GetComponentList(Entity *entity, ComponentType type);*/
 	};
 };
 

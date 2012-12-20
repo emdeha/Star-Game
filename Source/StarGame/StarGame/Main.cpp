@@ -47,6 +47,50 @@
 
 namespace FusionEngine
 {
+	class Transform : public Component
+	{
+	public:
+		glutil::MatrixStack modelMatrix;
+		glm::vec3 position;
+		glm::vec3 scale;
+		glm::vec3 rotation;
+		GLuint shaderProgram;
+
+		Transform() : Component(CT_TRANSFORM) {}
+		virtual ~Transform() {}
+	};
+
+
+	class TransformSystem : public EntityProcessingSystem
+	{
+	protected:
+		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
+		{
+			ComponentMapper<Transform> tmap = manager->GetComponentList(entity, CT_TRANSFORM);
+
+
+			glutil::PushStack push(tmap[0]->modelMatrix);
+			tmap[0]->modelMatrix.Translate(tmap[0]->position);
+			tmap[0]->modelMatrix.RotateX(tmap[0]->rotation.x);
+			tmap[0]->modelMatrix.RotateY(tmap[0]->rotation.y);
+			tmap[0]->modelMatrix.RotateZ(tmap[0]->rotation.z);
+			tmap[0]->modelMatrix.Scale(tmap[0]->scale);
+
+
+			glUseProgram(tmap[0]->shaderProgram);
+			glUniformMatrix4fv(
+				glGetUniformLocation(tmap[0]->shaderProgram, "modelToCameraMatrix"),
+				1, GL_FALSE, glm::value_ptr(tmap[0]->modelMatrix.Top()));
+			glUseProgram(0);
+		}
+
+	public:
+		TransformSystem(EventManager *eventManager, EntityManager *entityManager)
+			: EntityProcessingSystem(eventManager, entityManager, CT_RENDERABLE_BIT) {}
+		virtual ~TransformSystem() {}
+	};
+
+
 	class Render : public Component
 	{
 	public:
@@ -575,9 +619,13 @@ void TimerFunction(int value)
 	glutTimerFunc(250, TimerFunction, 1);
 }
 
-long long currentTime_milliseconds;
+long long currentTime_milliseconds;/*
 FusionEngine::RenderSystem *renderSystem;
+FusionEngine::TransformSystem *transformSystem;
 
+FusionEngine::EntityManager *entityManager;
+FusionEngine::Entity *entity;
+*/
 void Init()
 {
 	//scene = Scene(2.2f);
@@ -642,23 +690,40 @@ void Init()
 
 
 	//////////////////////////////////////
-	FusionEngine::EventManager *eventManager = new FusionEngine::EventManager();
-	FusionEngine::EntityManager *entityManager = new FusionEngine::EntityManager(eventManager);
-	//testScene = FusionEngine::Scene(entityManager);
+	/*FusionEngine::EventManager *eventManager = new FusionEngine::EventManager();
+	entityManager = new FusionEngine::EntityManager(eventManager);
 	renderSystem = 
 		new FusionEngine::RenderSystem(eventManager, entityManager);
-	//testScene.InsertSystem(renderSystem);
+	transformSystem =
+		new FusionEngine::TransformSystem(eventManager, entityManager);
 
-	FusionEngine::Entity *entity = entityManager->CreateEntity();//testScene.GetEntityManager()->CreateEntity();
+	entity = entityManager->CreateEntity();//testScene.GetEntityManager()->CreateEntity();
 	FusionEngine::Render *render = new FusionEngine::Render();
 	render->color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	render->height = 10.0f;
-	render->width = 10.0f;
+	render->height = 1.0f;
+	render->width = 1.0f;
 	render->position = glm::vec3();
 	render->program = shaderManager.GetSimpleProgData().theProgram;
 	render->Init();
 	entityManager->InsertComponent(entity, render);
-	//testScene.InsertComponent(entity, render);
+	FusionEngine::Transform *transform = new FusionEngine::Transform();
+	transform->position = glm::vec3();
+	transform->rotation = glm::vec3();
+	transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	transform->shaderProgram = shaderManager.GetSimpleProgData().theProgram;
+	entityManager->InsertComponent(entity, transform);
+
+	testScene = FusionEngine::Scene(entityManager);
+	testScene.InsertSystem(transformSystem);
+	testScene.InsertSystem(renderSystem);	*/
+	testScene.Init();
+	testScene.AddEntity();
+	FusionEngine::RenderSystem *renderSystem = 
+		new FusionEngine::RenderSystem(testScene.GetEventManager(), testScene.GetEntityManager());
+	FusionEngine::TransformSystem *transformSystem =
+		new FusionEngine::TransformSystem(testScene.GetEventManager(), testScene.GetEntityManager());
+	testScene.AddSystem(renderSystem);
+	testScene.AddSystem(transformSystem);
 	/////////////////////////////////////
 }
 
@@ -705,11 +770,26 @@ void Display()
 								   shaderManager.GetTextureProgData());
 
 
-		
+		/*
+		glUseProgram(shaderManager.GetSimpleProgData().theProgram);
 		glUniformMatrix4fv(
 			shaderManager.GetSimpleProgData().modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+		glUseProgram(0);
+		*/
 		//testScene.ProcessSystems();
-		renderSystem->Process();
+		/*
+		FusionEngine::ComponentMapper<FusionEngine::Transform> tmap = 
+			testScene.GetComponentList(entity, FusionEngine::CT_TRANSFORM);
+		tmap[0]->modelMatrix = modelMatrix;
+
+		testScene.ProcessSystems();*/
+		/*
+		FusionEngine::ComponentMapper<FusionEngine::Transform> tmap = 
+			entityManager->GetComponentList(entity, FusionEngine::CT_TRANSFORM);
+		tmap[0]->modelMatrix = modelMatrix;
+
+		transformSystem->Process();
+		renderSystem->Process();*/
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{

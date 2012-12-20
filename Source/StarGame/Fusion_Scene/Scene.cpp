@@ -5,10 +5,10 @@
 
 using namespace FusionEngine;
 
-Scene::Scene(EntityManager *newEntityManager)
+/*Scene::Scene(EntityManager *newEntityManager)
 {
 	entityManager = newEntityManager;
-}
+}*/
 Scene::~Scene()
 {
 	for(std::vector<Entity*>::iterator iter = entities.begin(); 
@@ -34,6 +34,34 @@ Scene::~Scene()
 	}
 }
 
+void Scene::Init()
+{
+	eventManager = new EventManager();
+	entityManager = new EntityManager(eventManager);
+}
+
+void Scene::AddSystem(EntityProcessingSystem *system)
+{
+	systems.push_back(system);
+}
+void Scene::AddComponent(Component *component)
+{
+	components.push_back(component);
+	entityManager->InsertComponent(entities[0], component);
+}
+
+
+
+EntityManager *Scene::GetEntityManager()
+{
+	return entityManager;
+}
+EventManager *Scene::GetEventManager()
+{
+	return eventManager;
+}
+
+/*
 void Scene::InsertSystem(EntityProcessingSystem *system)
 {
 	systems.push_back(system);
@@ -57,3 +85,7 @@ EntityManager *Scene::GetEntityManager()
 {
 	return entityManager;
 }
+const ComponentList &Scene::GetComponentList(Entity *entity, ComponentType type)
+{
+	return entityManager->GetComponentList(entity, type);
+}*/

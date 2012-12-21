@@ -32,11 +32,16 @@ namespace FusionEngine
 	class Scene
 	{
 	private:
-		EventManager *eventManager;
-		EntityManager *entityManager;
-		std::vector<Entity*> entities;
-		std::vector<Component*> components;
-		std::vector<EntityProcessingSystem*> systems;
+		typedef std::vector<std::pair<std::string, std::shared_ptr<Entity>>> EntitiesMap;
+		typedef std::vector<std::shared_ptr<Component>> ComponentsVector;
+		typedef std::vector<std::shared_ptr<EntityProcessingSystem>> SystemsVector;
+
+
+		std::unique_ptr<EventManager> eventManager;
+		std::unique_ptr<EntityManager> entityManager;
+		EntitiesMap entities;
+		ComponentsVector components;
+		SystemsVector systems;
 
 	public:
 		Scene() {}
@@ -45,12 +50,16 @@ namespace FusionEngine
 
 		void Init();
 
+		void AddEntity(const std::string &entityTag);
 		void AddSystem(EntityProcessingSystem *system);
-		void AddComponent(Entity *entity, Component *component);
+		void AddComponent(const std::string &entityTag, Component *component);
 		
 
 		EntityManager *GetEntityManager();
 		EventManager *GetEventManager();
+
+		
+		void ProcessSystems();
 		/*
 		void InsertSystem(EntityProcessingSystem *system);
 		void InsertComponent(Entity *entity, Component *component);

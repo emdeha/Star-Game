@@ -717,13 +717,27 @@ void Init()
 	testScene.InsertSystem(transformSystem);
 	testScene.InsertSystem(renderSystem);	*/
 	testScene.Init();
-	testScene.AddEntity();
+	testScene.AddEntity("test");
 	FusionEngine::RenderSystem *renderSystem = 
 		new FusionEngine::RenderSystem(testScene.GetEventManager(), testScene.GetEntityManager());
 	FusionEngine::TransformSystem *transformSystem =
 		new FusionEngine::TransformSystem(testScene.GetEventManager(), testScene.GetEntityManager());
 	testScene.AddSystem(renderSystem);
 	testScene.AddSystem(transformSystem);
+	FusionEngine::Render *render = new FusionEngine::Render();
+	render->color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	render->height = 1.0f;
+	render->width = 1.0f;
+	render->position = glm::vec3();
+	render->program = shaderManager.GetSimpleProgData().theProgram;
+	render->Init();
+	FusionEngine::Transform *transform = new FusionEngine::Transform();
+	transform->position = glm::vec3();
+	transform->rotation = glm::vec3();
+	transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	transform->shaderProgram = shaderManager.GetSimpleProgData().theProgram;
+	testScene.AddComponent("test", render);
+	testScene.AddComponent("test", transform);
 	/////////////////////////////////////
 }
 
@@ -790,6 +804,7 @@ void Display()
 
 		transformSystem->Process();
 		renderSystem->Process();*/
+		testScene.ProcessSystems();
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{

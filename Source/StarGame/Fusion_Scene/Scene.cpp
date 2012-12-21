@@ -11,7 +11,10 @@ using namespace FusionEngine;
 }*/
 Scene::~Scene()
 {
-	for(std::vector<Entity*>::iterator iter = entities.begin(); 
+	entities.clear();
+	components.clear();
+	systems.clear();
+	/*for(std::vector<Entity*>::iterator iter = entities.begin(); 
 		iter != entities.end(); ++iter)
 	{
 		entityManager->DestroyAllComponents((*iter));
@@ -31,34 +34,72 @@ Scene::~Scene()
 	if(entityManager)
 	{
 		delete entityManager;
-	}
+	}*/
 }
 
 void Scene::Init()
 {
-	eventManager = new EventManager();
-	entityManager = new EntityManager(eventManager);
+	eventManager = std::unique_ptr<EventManager>(new EventManager());
+	entityManager = std::unique_ptr<EntityManager>(new EntityManager(eventManager.get()));
 }
 
+void Scene::AddEntity(const std::string &entityTag)
+{
+	std::shared_ptr<Entity> newEntity = std::shared_ptr<Entity>(entityManager->CreateEntity());
+	entities.push_back(std::pair<std::string, std::shared_ptr<Entity>>
+							(entityTag, newEntity));
+}
 void Scene::AddSystem(EntityProcessingSystem *system)
 {
-	systems.push_back(system);
+	systems.push_back(std::unique_ptr<EntityProcessingSystem>(system));
 }
-void Scene::AddComponent(Component *component)
+void Scene::AddComponent(const std::string &entityTag, Component *component)
 {
-	components.push_back(component);
-	entityManager->InsertComponent(entities[0], component);
+#ifdef _DEBUG
+	if(entities.empty())
+	{
+		throw std::exception("Entity not found!!!").what();
+	}
+#endif
+	bool isFound = false;
+
+	components.push_back(std::unique_ptr<Component>(component));
+	Entity *foundEntity = entities[0].second.get();
+	for(EntitiesMap::iterator iter = entities.begin(); iter != entities.end(); ++iter)
+	{
+		if(iter->first.compare(entityTag) == 0)
+		{
+			foundEntity = iter->second.get();
+			isFound = true;
+		}
+	}
+#ifdef _DEBUG
+	if(!isFound)
+	{
+		throw std::exception("Entity not found!!!").what();
+	}
+#endif
+	entityManager->InsertComponent(foundEntity, component);
 }
 
 
 
 EntityManager *Scene::GetEntityManager()
 {
-	return entityManager;
+	return entityManager.get();
 }
 EventManager *Scene::GetEventManager()
 {
-	return eventManager;
+	return eventManager.get();
+}
+
+
+void Scene::ProcessSystems()
+{
+	for(SystemsVector::iterator iter = systems.begin(); iter != systems.end(); ++iter)
+	{
+		(*iter)->Process();
+	}
 }
 
 /*

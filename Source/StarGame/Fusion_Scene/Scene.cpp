@@ -43,6 +43,27 @@ void Scene::Init()
 	entityManager = std::unique_ptr<EntityManager>(new EntityManager(eventManager.get()));
 }
 
+bool Scene::HasEntity(const std::string &entityTag)
+{
+#ifdef _DEBUG
+	if(entities.empty())
+	{
+		throw std::exception("There aren't any entities.");
+	}
+#endif
+	bool isFound = false;
+
+	for(EntitiesMap::iterator iter = entities.begin(); iter != entities.end(); ++iter)
+	{
+		if(iter->first.compare(entityTag) == 0)
+		{
+			isFound = true;
+		}
+	}
+
+	return isFound;
+}
+
 void Scene::AddEntity(const std::string &entityTag)
 {
 	std::shared_ptr<Entity> newEntity = std::shared_ptr<Entity>(entityManager->CreateEntity());
@@ -58,7 +79,7 @@ void Scene::AddComponent(const std::string &entityTag, Component *component)
 #ifdef _DEBUG
 	if(entities.empty())
 	{
-		throw std::exception("Entity not found!!!").what();
+		throw std::exception("There aren't any entities.");
 	}
 #endif
 	bool isFound = false;
@@ -76,12 +97,41 @@ void Scene::AddComponent(const std::string &entityTag, Component *component)
 #ifdef _DEBUG
 	if(!isFound)
 	{
-		throw std::exception("Entity not found!!!").what();
+		throw std::exception("Entity not found.");
 	}
 #endif
+
 	entityManager->InsertComponent(foundEntity, component);
 }
 
+
+void Scene::RemoveEntity(const std::string &entityTag)
+{
+#ifdef _DEBUG
+	if(entities.empty())
+	{
+		throw std::exception("There aren't any entities.");
+	}
+#endif
+	bool isFound = false;
+
+	for(EntitiesMap::iterator iter = entities.begin(); iter != entities.end(); ++iter)
+	{
+		if(iter->first.compare(entityTag) == 0)
+		{
+			//entityManager->DestroyAllComponents(iter->second.get());
+			entityManager->DestroyEntity(iter->second.get());
+			isFound = true;
+		}
+	}
+
+#ifdef _DEBUG
+	if(!isFound)
+	{
+		throw std::exception("Entity not found.");
+	}
+#endif
+}
 
 
 EntityManager *Scene::GetEntityManager()
@@ -91,6 +141,28 @@ EntityManager *Scene::GetEntityManager()
 EventManager *Scene::GetEventManager()
 {
 	return eventManager.get();
+}
+Entity *Scene::GetEntity(const std::string &entityTag)
+{
+	bool isFound = false;
+
+	Entity *foundEntity = entities[0].second.get();
+	for(EntitiesMap::iterator iter = entities.begin(); iter != entities.end(); ++iter)
+	{
+		if(iter->first.compare(entityTag) == 0)
+		{
+			foundEntity = iter->second.get();
+			isFound = true;
+		}
+	}
+#ifdef _DEBUG
+	if(!isFound)
+	{
+		throw std::exception("Entity not found!!!").what();
+	}
+#endif
+
+	return foundEntity;
 }
 
 

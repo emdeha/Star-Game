@@ -38,159 +38,8 @@
 #include "../Entities/Skills.h"
 
 #include "../Fusion_Scene/Scene.h"
-
-
-
-
-
-
-
-namespace FusionEngine
-{
-	class Transform : public Component
-	{
-	public:
-		glutil::MatrixStack modelMatrix;
-		glm::vec3 position;
-		glm::vec3 scale;
-		glm::vec3 rotation;
-		GLuint shaderProgram;
-
-		Transform() : Component(CT_TRANSFORM) {}
-		virtual ~Transform() {}
-	};
-
-
-	class TransformSystem : public EntityProcessingSystem
-	{
-	protected:
-		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
-		{
-			ComponentMapper<Transform> tmap = manager->GetComponentList(entity, CT_TRANSFORM);
-
-
-			glutil::PushStack push(tmap[0]->modelMatrix);
-			tmap[0]->modelMatrix.Translate(tmap[0]->position);
-			tmap[0]->modelMatrix.RotateX(tmap[0]->rotation.x);
-			tmap[0]->modelMatrix.RotateY(tmap[0]->rotation.y);
-			tmap[0]->modelMatrix.RotateZ(tmap[0]->rotation.z);
-			tmap[0]->modelMatrix.Scale(tmap[0]->scale);
-
-
-			glUseProgram(tmap[0]->shaderProgram);
-			glUniformMatrix4fv(
-				glGetUniformLocation(tmap[0]->shaderProgram, "modelToCameraMatrix"),
-				1, GL_FALSE, glm::value_ptr(tmap[0]->modelMatrix.Top()));
-			glUseProgram(0);
-		}
-
-	public:
-		TransformSystem(EventManager *eventManager, EntityManager *entityManager)
-			: EntityProcessingSystem(eventManager, entityManager, CT_RENDERABLE_BIT) {}
-		virtual ~TransformSystem() {}
-	};
-
-
-	class Render : public Component
-	{
-	public:
-		glm::vec3 position;
-		glm::vec4 color;
-		float width;
-		float height;
-
-		GLuint program;
-		GLuint vao;
-		GLuint vbo;
-		GLuint ibo;
-
-		
-		Render() : Component(CT_RENDERABLE) {}
-		virtual ~Render() {}
-
-		void Init()
-		{
-			std::vector<float> vertexData;
-			std::vector<unsigned short> indexData;
-
-			vertexData.push_back(position.x);
-			vertexData.push_back(position.y - height);
-			vertexData.push_back(position.z); vertexData.push_back(1.0f);
-
-			vertexData.push_back(position.x - width);
-			vertexData.push_back(position.y - height);
-			vertexData.push_back(position.z); vertexData.push_back(1.0f);
-
-			vertexData.push_back(position.x - width);
-			vertexData.push_back(position.y);
-			vertexData.push_back(position.z); vertexData.push_back(1.0f);
-
-			vertexData.push_back(position.x);
-			vertexData.push_back(position.y);
-			vertexData.push_back(position.z); vertexData.push_back(1.0f);
-
-			
-			indexData.push_back(0); indexData.push_back(1); indexData.push_back(2);
-			indexData.push_back(2); indexData.push_back(3); indexData.push_back(0);
-
-
-			glGenVertexArrays(1, &vao);
-			glBindVertexArray(vao);
-
-
-			glGenBuffers(1, &vbo);
-			glBindBuffer(GL_ARRAY_BUFFER, vbo);
-			glBufferData(GL_ARRAY_BUFFER, 
-						 sizeof(float) * vertexData.size(), &vertexData[0], GL_STATIC_DRAW);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-			glGenBuffers(1, &ibo);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
-						 sizeof(unsigned short) * indexData.size(), &indexData[0], GL_STATIC_DRAW);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		}
-	};
-
-
-	class RenderSystem : public EntityProcessingSystem
-	{
-	protected:
-		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
-		{
-			ComponentMapper<Render> tmap = manager->GetComponentList(entity, CT_RENDERABLE);
-
-			glUseProgram(tmap[0]->program);
-			glBindVertexArray(tmap[0]->vao);
-			{
-				glUniform4f(
-					glGetUniformLocation(tmap[0]->program, "color"),
-					tmap[0]->color.r, tmap[0]->color.g, tmap[0]->color.b, tmap[0]->color.a);
-
-				glEnableVertexAttribArray(0);
-				glBindBuffer(GL_ARRAY_BUFFER, tmap[0]->vbo);
-				glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, tmap[0]->ibo);
-				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
-
-				glDisableVertexAttribArray(0);
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-			}
-			glBindVertexArray(0);
-			glUseProgram(0);
-		}
-
-	public:
-		RenderSystem(EventManager *eventManager, EntityManager *entityManager)
-			: EntityProcessingSystem(eventManager, entityManager, CT_RENDERABLE_BIT) {}
-		virtual ~RenderSystem() {}
-	};
-}
-
-
-
+#include "../Fusion_EntitySystem/FusionComponents.h"
+#include "../Fusion_EntitySystem/FusionSystems.h"
 
 
 
@@ -216,7 +65,23 @@ void HandleMouse()
 	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
 
 	if(scene.GetMouse().IsRightButtonDown())
-	{
+	{		
+		FusionEngine::ComponentMapper<FusionEngine::Click> click =
+			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_CLICKABLE);
+		if(click[0]->isClicked)
+		{
+			try 
+			{
+				testScene.RemoveEntity("sampleSatellite");
+			}
+			catch(std::exception &except)
+			{
+				printf("\n %s", except.what());
+			}
+			//std::printf("CLICKED!!!");
+		}
+
+
 		if(scene.HasSuns())
 		{
 			if(scene.GetSun()->IsClicked
@@ -233,6 +98,33 @@ void HandleMouse()
 
 	if(scene.GetMouse().IsLeftButtonDown())
 	{
+		FusionEngine::ComponentMapper<FusionEngine::Click> click =
+			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_CLICKABLE);
+		if(click[0]->isClicked)
+		{
+			testScene.AddEntity("sampleSatellite");
+			FusionEngine::RotationOriginSystem *rotationOriginSystem =
+				new FusionEngine::RotationOriginSystem(testScene.GetEventManager(), testScene.GetEntityManager());
+			testScene.AddSystem(rotationOriginSystem);
+			FusionEngine::RotationOrigin *rotationOrigin =
+				new FusionEngine::RotationOrigin();
+			rotationOrigin->origin = glm::vec3(1.0f, 0.0f, 0.0f);
+			rotationOrigin->offsetFromOrigin = 2.0f;
+			rotationOrigin->revolutionDuration = Framework::Timer(Framework::Timer::TT_LOOP, 10.0f);
+			testScene.AddComponent("sampleSatellite", rotationOrigin);
+			FusionEngine::RenderMesh *renderMeshTwo = 
+				new FusionEngine::RenderMesh();
+			renderMeshTwo->color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+			renderMeshTwo->program = shaderManager.GetSimpleProgData().theProgram;
+			renderMeshTwo->Init("mesh-files/UnitSphere.xml");
+			testScene.AddComponent("sampleSatellite", renderMeshTwo);
+			FusionEngine::Transform *transformTwo =
+				new FusionEngine::Transform();
+			transformTwo->scale = glm::vec3(0.5f, 0.5f, 0.5f);
+			testScene.AddComponent("sampleSatellite", transformTwo);
+		}
+
+
 		if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 		{
 			if(
@@ -690,34 +582,10 @@ void Init()
 
 
 	//////////////////////////////////////
-	/*FusionEngine::EventManager *eventManager = new FusionEngine::EventManager();
-	entityManager = new FusionEngine::EntityManager(eventManager);
-	renderSystem = 
-		new FusionEngine::RenderSystem(eventManager, entityManager);
-	transformSystem =
-		new FusionEngine::TransformSystem(eventManager, entityManager);
-
-	entity = entityManager->CreateEntity();//testScene.GetEntityManager()->CreateEntity();
-	FusionEngine::Render *render = new FusionEngine::Render();
-	render->color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	render->height = 1.0f;
-	render->width = 1.0f;
-	render->position = glm::vec3();
-	render->program = shaderManager.GetSimpleProgData().theProgram;
-	render->Init();
-	entityManager->InsertComponent(entity, render);
-	FusionEngine::Transform *transform = new FusionEngine::Transform();
-	transform->position = glm::vec3();
-	transform->rotation = glm::vec3();
-	transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
-	transform->shaderProgram = shaderManager.GetSimpleProgData().theProgram;
-	entityManager->InsertComponent(entity, transform);
-
-	testScene = FusionEngine::Scene(entityManager);
-	testScene.InsertSystem(transformSystem);
-	testScene.InsertSystem(renderSystem);	*/
+	/*
 	testScene.Init();
 	testScene.AddEntity("test");
+	testScene.AddEntity("testTwo");
 	FusionEngine::RenderSystem *renderSystem = 
 		new FusionEngine::RenderSystem(testScene.GetEventManager(), testScene.GetEntityManager());
 	FusionEngine::TransformSystem *transformSystem =
@@ -737,8 +605,42 @@ void Init()
 	transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	transform->shaderProgram = shaderManager.GetSimpleProgData().theProgram;
 	testScene.AddComponent("test", render);
+	testScene.AddComponent("testTwo", render);
 	testScene.AddComponent("test", transform);
-	/////////////////////////////////////
+	FusionEngine::Transform *transformTwo = new FusionEngine::Transform();
+	transformTwo->position = glm::vec3(3.0f, 0.0f, 0.0f);
+	transformTwo->rotation = glm::vec3();
+	transformTwo->scale = glm::vec3(1.0f, 2.0f, 1.0f);
+	transformTwo->shaderProgram = shaderManager.GetSimpleProgData().theProgram;
+	testScene.AddComponent("testTwo", transformTwo);
+	*/
+
+	testScene.Init();
+	testScene.AddEntity("sampleSun");
+	FusionEngine::RenderSystem *renderSystem =
+		new FusionEngine::RenderSystem(testScene.GetEventManager(), testScene.GetEntityManager());
+	FusionEngine::ClickSystem *clickSystem =
+		new FusionEngine::ClickSystem(testScene.GetEventManager(), testScene.GetEntityManager());
+	testScene.AddSystem(clickSystem);
+	testScene.AddSystem(renderSystem);
+	FusionEngine::RenderMesh *renderMesh = 
+		new FusionEngine::RenderMesh();
+	renderMesh->color = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+	renderMesh->program = shaderManager.GetSimpleProgData().theProgram;
+	renderMesh->Init("mesh-files/UnitSphere.xml");
+	FusionEngine::Transform *transform = 
+		new FusionEngine::Transform();
+	transform->position = glm::vec3(1.0f, 0.0f, 0.0f);
+	transform->rotation = glm::vec3();
+	transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	FusionEngine::Click *click =
+		new FusionEngine::Click();
+	click->isClicked = false;
+	testScene.AddComponent("sampleSun", renderMesh);
+	testScene.AddComponent("sampleSun", click);
+	testScene.AddComponent("sampleSun", transform);
+
+	///////////////////////////////////////////
 }
 
 void Display()
@@ -767,7 +669,7 @@ void Display()
 			loops++;
 		}
 
-
+		
 		float interpolation = float(GetTickCount() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
 		scene.RenderScene(modelMatrix, 
 						   shaderManager.GetBlockIndex(BT_MATERIAL),
@@ -777,33 +679,39 @@ void Display()
 						   shaderManager.GetSimpleProgData(),
 						   shaderManager.GetBillboardProgDataNoTexture(),
 						   interpolation);
-		
+	
 		
 		scene.RenderCurrentLayout(shaderManager.GetFontProgData(),
 								   shaderManager.GetSimpleNoUBProgData(),
 								   shaderManager.GetTextureProgData());
+		
 
-
-		/*
-		glUseProgram(shaderManager.GetSimpleProgData().theProgram);
-		glUniformMatrix4fv(
-			shaderManager.GetSimpleProgData().modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-		glUseProgram(0);
-		*/
-		//testScene.ProcessSystems();
-		/*
-		FusionEngine::ComponentMapper<FusionEngine::Transform> tmap = 
-			testScene.GetComponentList(entity, FusionEngine::CT_TRANSFORM);
+		/*FusionEngine::ComponentMapper<FusionEngine::Transform> tmap = 
+			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("test"), FusionEngine::CT_TRANSFORM);
 		tmap[0]->modelMatrix = modelMatrix;
+		FusionEngine::ComponentMapper<FusionEngine::Transform> tmap2 = 
+			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("testTwo"), FusionEngine::CT_TRANSFORM);
+		tmap2[0]->modelMatrix = modelMatrix;*/
+		FusionEngine::ComponentMapper<FusionEngine::RenderMesh> tmap =
+			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_RENDERABLE);
+		tmap[0]->transformStack = modelMatrix;
+		if(testScene.HasEntity("sampleSatellite"))
+		{
+			FusionEngine::ComponentMapper<FusionEngine::RenderMesh> tmap2 = 
+				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSatellite"), FusionEngine::CT_RENDERABLE);
+			tmap2[0]->transformStack = modelMatrix;
+		}
 
-		testScene.ProcessSystems();*/
-		/*
-		FusionEngine::ComponentMapper<FusionEngine::Transform> tmap = 
-			entityManager->GetComponentList(entity, FusionEngine::CT_TRANSFORM);
-		tmap[0]->modelMatrix = modelMatrix;
+		FusionEngine::ComponentMapper<FusionEngine::Click> click =
+			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_CLICKABLE);
+		click[0]->cameraPosition = glm::vec4(scene.GetTopDownCamera().ResolveCamPosition(), 1.0f);
+		click[0]->isClicked = false;
+		click[0]->modelMatrix = displayData.modelMatrix;
+		click[0]->projMatrix = displayData.projectionMatrix;
+		click[0]->userMouse = scene.GetMouse();
+		click[0]->windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+		click[0]->windowWidth = glutGet(GLUT_WINDOW_WIDTH);
 
-		transformSystem->Process();
-		renderSystem->Process();*/
 		testScene.ProcessSystems();
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
@@ -886,6 +794,13 @@ void Keyboard(unsigned char key, int x, int y)
 	   scene.GetLayout(LAYOUT_MENU)->HasActiveControl())
 	{
 		scene.GetLayout(LAYOUT_MENU)->GetActiveControl()->InputChar(key);
+	}
+
+	if(key == 'd')
+	{
+		FusionEngine::ComponentMapper<FusionEngine::Transform> tmap = 
+			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_TRANSFORM);
+		tmap[0]->position.x += 0.1f;
 	}
 
 	switch (key)

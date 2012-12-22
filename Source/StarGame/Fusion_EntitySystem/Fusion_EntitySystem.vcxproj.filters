@@ -54,6 +54,12 @@
     <ClInclude Include="ComponentMapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FusionComponents.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FusionSystems.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

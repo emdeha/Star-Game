@@ -80,6 +80,8 @@
     <ClInclude Include="EntitySystem.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventManager.h" />
+    <ClInclude Include="FusionComponents.h" />
+    <ClInclude Include="FusionSystems.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

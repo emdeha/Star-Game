@@ -1,7 +1,7 @@
-﻿Build started 21.12.2012 г. 18:23:37 ч..
+﻿Build started 22.12.2012 г. 17:58:18 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\Fusion_Scene\Fusion_Scene.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
-         Touching "Debug\Fusion_Scene.unsuccessfulbuild".
+         Creating "Debug\Fusion_Scene.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          All outputs are up-to-date.
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\Fusion_Scene.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Scene.cpp
@@ -17,4 +17,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.42
+Time Elapsed 00:00:00.41

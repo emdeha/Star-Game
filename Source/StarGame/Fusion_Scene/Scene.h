@@ -50,13 +50,18 @@ namespace FusionEngine
 
 		void Init();
 
+
+		bool HasEntity(const std::string &entityTag);
+
 		void AddEntity(const std::string &entityTag);
 		void AddSystem(EntityProcessingSystem *system);
 		void AddComponent(const std::string &entityTag, Component *component);
 		
+		void RemoveEntity(const std::string &entityTag);
 
 		EntityManager *GetEntityManager();
 		EventManager *GetEventManager();
+		Entity *GetEntity(const std::string &entityTag);
 
 		
 		void ProcessSystems();

@@ -45,35 +45,37 @@ namespace FusionEngine
 
 	public:
 		Scene() {}
-		//Scene(EntityManager *newEntityManager);
 		~Scene();
 
 		void Init();
 
 
+		/*
+		Checks if there is AT LEAST ONE entity with this tag.
+		*/
 		bool HasEntity(const std::string &entityTag);
 
 		void AddEntity(const std::string &entityTag);
 		void AddSystem(EntityProcessingSystem *system);
+		/*
+		Adds the component to EVERY entity with the given tag.
+		*/
 		void AddComponent(const std::string &entityTag, Component *component);
 		
+		/*
+		Removes the FIRST entity found with the current tag.
+		*/
 		void RemoveEntity(const std::string &entityTag);
 
 		EntityManager *GetEntityManager();
 		EventManager *GetEventManager();
+		/*
+		Gets the LAST ADDED entity found with the given tag.
+		*/
 		Entity *GetEntity(const std::string &entityTag);
 
 		
 		void ProcessSystems();
-		/*
-		void InsertSystem(EntityProcessingSystem *system);
-		void InsertComponent(Entity *entity, Component *component);
-
-		void ProcessSystems();
-
-
-		EntityManager *GetEntityManager();
-		const ComponentList &GetComponentList(Entity *entity, ComponentType type);*/
 	};
 };
 

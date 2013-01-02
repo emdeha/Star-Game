@@ -1,12 +1,17 @@
-﻿Build started 22.12.2012 г. 17:26:42 ч..
+﻿Build started 2.1.2013 г. 21:00:24 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\Fusion_EntitySystem\Fusion_EntitySystem.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Fusion_EntitySystem.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          All outputs are up-to-date.
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\Fusion_EntitySystem.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt EntityManager.cpp
+         EntityManager.cpp
        Lib:
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\Fusion_EntitySystem.lib" /NOLOGO Debug\EntityManager.obj
+         Debug\EntityProcessingSystem.obj
+         Debug\EntitySystem.obj
+         Debug\EventManager.obj
+         Debug\stdafx.obj
          Fusion_EntitySystem.vcxproj -> E:\CECI\TheGame\Source\StarGame\Debug\Fusion_EntitySystem.lib
        FinalizeBuildStatus:
          Deleting file "Debug\Fusion_EntitySystem.unsuccessfulbuild".
@@ -15,4 +20,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.02
+Time Elapsed 00:00:00.39

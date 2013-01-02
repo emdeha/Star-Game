@@ -25,6 +25,7 @@ namespace FusionEngine
 		~Entity() {}
 
 		EntityID GetID() const { return id; }
+		unsigned int GetIndex() const { return index; }
 	};
 }
 

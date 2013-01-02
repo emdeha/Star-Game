@@ -66,19 +66,14 @@ void HandleMouse()
 
 	if(scene.GetMouse().IsRightButtonDown())
 	{		
-		FusionEngine::ComponentMapper<FusionEngine::Click> click =
-			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_CLICKABLE);
-		if(click[0]->isClicked)
+		if(testScene.HasEntity("sampleSun"))
 		{
-			try 
+			FusionEngine::ComponentMapper<FusionEngine::Click> click =
+				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_CLICKABLE);
+			if(click[0]->isClicked)
 			{
 				testScene.RemoveEntity("sampleSatellite");
 			}
-			catch(std::exception &except)
-			{
-				printf("\n %s", except.what());
-			}
-			//std::printf("CLICKED!!!");
 		}
 
 
@@ -98,30 +93,33 @@ void HandleMouse()
 
 	if(scene.GetMouse().IsLeftButtonDown())
 	{
-		FusionEngine::ComponentMapper<FusionEngine::Click> click =
-			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_CLICKABLE);
-		if(click[0]->isClicked)
+		if(testScene.HasEntity("sampleSun"))
 		{
-			testScene.AddEntity("sampleSatellite");
-			FusionEngine::RotationOriginSystem *rotationOriginSystem =
-				new FusionEngine::RotationOriginSystem(testScene.GetEventManager(), testScene.GetEntityManager());
-			testScene.AddSystem(rotationOriginSystem);
-			FusionEngine::RotationOrigin *rotationOrigin =
-				new FusionEngine::RotationOrigin();
-			rotationOrigin->origin = glm::vec3(1.0f, 0.0f, 0.0f);
-			rotationOrigin->offsetFromOrigin = 2.0f;
-			rotationOrigin->revolutionDuration = Framework::Timer(Framework::Timer::TT_LOOP, 10.0f);
-			testScene.AddComponent("sampleSatellite", rotationOrigin);
-			FusionEngine::RenderMesh *renderMeshTwo = 
-				new FusionEngine::RenderMesh();
-			renderMeshTwo->color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-			renderMeshTwo->program = shaderManager.GetSimpleProgData().theProgram;
-			renderMeshTwo->Init("mesh-files/UnitSphere.xml");
-			testScene.AddComponent("sampleSatellite", renderMeshTwo);
-			FusionEngine::Transform *transformTwo =
-				new FusionEngine::Transform();
-			transformTwo->scale = glm::vec3(0.5f, 0.5f, 0.5f);
-			testScene.AddComponent("sampleSatellite", transformTwo);
+			FusionEngine::ComponentMapper<FusionEngine::Click> click =
+				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_CLICKABLE);
+			if(click[0]->isClicked)
+			{
+				testScene.AddEntity("sampleSatellite");
+				FusionEngine::RotationOriginSystem *rotationOriginSystem =
+					new FusionEngine::RotationOriginSystem(testScene.GetEventManager(), testScene.GetEntityManager());
+				testScene.AddSystem(rotationOriginSystem);
+				FusionEngine::RotationOrigin *rotationOrigin =
+					new FusionEngine::RotationOrigin();
+				rotationOrigin->origin = glm::vec3(1.0f, 0.0f, 0.0f);
+				rotationOrigin->offsetFromOrigin = 2.0f;
+				rotationOrigin->revolutionDuration = Framework::Timer(Framework::Timer::TT_LOOP, 10.0f);
+				testScene.AddComponent("sampleSatellite", rotationOrigin);
+				FusionEngine::RenderMesh *renderMeshTwo = 
+					new FusionEngine::RenderMesh();
+				renderMeshTwo->color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+				renderMeshTwo->program = shaderManager.GetSimpleProgData().theProgram;
+				renderMeshTwo->Init("mesh-files/UnitSphere.xml");
+				testScene.AddComponent("sampleSatellite", renderMeshTwo);
+				FusionEngine::Transform *transformTwo =
+					new FusionEngine::Transform();
+				transformTwo->scale = glm::vec3(0.5f, 0.5f, 0.5f);
+				testScene.AddComponent("sampleSatellite", transformTwo);
+			}
 		}
 
 
@@ -430,7 +428,6 @@ void InitializeScene()
 	sampleFastSuicideBomber->LoadMesh("mesh-files/UnitSphere.xml");
 
 
-
 	mainSun->LoadMesh("mesh-files/UnitSphere.xml");
 	sampleSpaceship->LoadMesh("mesh-files/Ship.xml");
 	sampleSpaceship->LoadProjectileMesh("mesh-files/UnitSphere.xml");
@@ -442,6 +439,7 @@ void InitializeScene()
 
 	scene.AddSun(mainSun);
 	scene.AddSunLight(mainSunLight);
+	
 	scene.AddFastSuicideBomber(sampleFastSuicideBomber);
 	//scene.AddSpaceship(sampleSpaceship);
 	//scene.AddSpaceship(sampleSpaceship2);
@@ -518,6 +516,7 @@ FusionEngine::TransformSystem *transformSystem;
 FusionEngine::EntityManager *entityManager;
 FusionEngine::Entity *entity;
 */
+std::shared_ptr<Swarm> sampleSwarm;
 void Init()
 {
 	//scene = Scene(2.2f);
@@ -580,6 +579,12 @@ void Init()
 	nextGameTick = GetTickCount();
 
 
+	sampleSwarm = std::shared_ptr<Swarm>(new Swarm(glm::vec3(0.0f, 4.0f, 0.0f), 
+												   glm::vec3(0.2f, 0.0f, 0.0f), 
+												   100, 50, 50, 1000, 2.0f, 
+												   shaderManager.GetBillboardProgDataNoTexture()));
+
+
 
 	//////////////////////////////////////
 	/*
@@ -614,7 +619,7 @@ void Init()
 	transformTwo->shaderProgram = shaderManager.GetSimpleProgData().theProgram;
 	testScene.AddComponent("testTwo", transformTwo);
 	*/
-
+	
 	testScene.Init();
 	testScene.AddEntity("sampleSun");
 	FusionEngine::RenderSystem *renderSystem =
@@ -639,7 +644,7 @@ void Init()
 	testScene.AddComponent("sampleSun", renderMesh);
 	testScene.AddComponent("sampleSun", click);
 	testScene.AddComponent("sampleSun", transform);
-
+	
 	///////////////////////////////////////////
 }
 
@@ -684,7 +689,6 @@ void Display()
 		scene.RenderCurrentLayout(shaderManager.GetFontProgData(),
 								   shaderManager.GetSimpleNoUBProgData(),
 								   shaderManager.GetTextureProgData());
-		
 
 		/*FusionEngine::ComponentMapper<FusionEngine::Transform> tmap = 
 			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("test"), FusionEngine::CT_TRANSFORM);
@@ -692,26 +696,31 @@ void Display()
 		FusionEngine::ComponentMapper<FusionEngine::Transform> tmap2 = 
 			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("testTwo"), FusionEngine::CT_TRANSFORM);
 		tmap2[0]->modelMatrix = modelMatrix;*/
-		FusionEngine::ComponentMapper<FusionEngine::RenderMesh> tmap =
-			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_RENDERABLE);
-		tmap[0]->transformStack = modelMatrix;
-		if(testScene.HasEntity("sampleSatellite"))
+		
+		if(testScene.HasEntity("sampleSun"))
 		{
-			FusionEngine::ComponentMapper<FusionEngine::RenderMesh> tmap2 = 
-				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSatellite"), FusionEngine::CT_RENDERABLE);
-			tmap2[0]->transformStack = modelMatrix;
+			FusionEngine::ComponentMapper<FusionEngine::RenderMesh> tmap =
+				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_RENDERABLE);
+		
+			tmap[0]->transformStack = modelMatrix;
+			if(testScene.HasEntity("sampleSatellite"))
+			{
+				FusionEngine::ComponentMapper<FusionEngine::RenderMesh> tmap2 = 
+					testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSatellite"), FusionEngine::CT_RENDERABLE);
+				tmap2[0]->transformStack = modelMatrix;
+			}
+		
+			FusionEngine::ComponentMapper<FusionEngine::Click> click =
+				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_CLICKABLE);
+			click[0]->cameraPosition = glm::vec4(scene.GetTopDownCamera().ResolveCamPosition(), 1.0f);
+			click[0]->isClicked = false;
+			click[0]->modelMatrix = displayData.modelMatrix;
+			click[0]->projMatrix = displayData.projectionMatrix;
+			click[0]->userMouse = scene.GetMouse();
+			click[0]->windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+			click[0]->windowWidth = glutGet(GLUT_WINDOW_WIDTH);
 		}
-
-		FusionEngine::ComponentMapper<FusionEngine::Click> click =
-			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_CLICKABLE);
-		click[0]->cameraPosition = glm::vec4(scene.GetTopDownCamera().ResolveCamPosition(), 1.0f);
-		click[0]->isClicked = false;
-		click[0]->modelMatrix = displayData.modelMatrix;
-		click[0]->projMatrix = displayData.projectionMatrix;
-		click[0]->userMouse = scene.GetMouse();
-		click[0]->windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
-		click[0]->windowWidth = glutGet(GLUT_WINDOW_WIDTH);
-
+		
 		testScene.ProcessSystems();
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))

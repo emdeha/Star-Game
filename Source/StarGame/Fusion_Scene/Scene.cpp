@@ -1,40 +1,18 @@
 #include "stdafx.h"
 #include "Scene.h"
+
 #include <algorithm>
+#include <assert.h>
 
 
 using namespace FusionEngine;
 
-/*Scene::Scene(EntityManager *newEntityManager)
-{
-	entityManager = newEntityManager;
-}*/
+
 Scene::~Scene()
 {
 	entities.clear();
 	components.clear();
 	systems.clear();
-	/*for(std::vector<Entity*>::iterator iter = entities.begin(); 
-		iter != entities.end(); ++iter)
-	{
-		entityManager->DestroyAllComponents((*iter));
-		entityManager->DestroyEntity((*iter));
-	}
-	std::remove_if(entities.begin(), entities.end(), 
-				   [](Entity *theElement)
-				   {
-					   return delete theElement;
-				   });
-	std::remove_if(systems.begin(), systems.end(),
-				   [](EntityProcessingSystem *theElement)
-				   {
-					   return delete theElement;
-				   });
-
-	if(entityManager)
-	{
-		delete entityManager;
-	}*/
 }
 
 void Scene::Init()
@@ -46,27 +24,28 @@ void Scene::Init()
 bool Scene::HasEntity(const std::string &entityTag)
 {
 #ifdef _DEBUG
-	if(entities.empty())
-	{
-		throw std::exception("There aren't any entities.");
-	}
+	assert(!entities.empty());
 #endif
 	bool isFound = false;
 
 	for(EntitiesMap::iterator iter = entities.begin(); iter != entities.end(); ++iter)
 	{
-		if(iter->first.compare(entityTag) == 0)
+		if(entityManager->CheckIfRemoved(iter->second->GetIndex()) == false)
 		{
-			isFound = true;
+			if(iter->first.compare(entityTag) == 0)
+			{
+				return true;
+			}
 		}
 	}
 
-	return isFound;
+	return false;
 }
 
 void Scene::AddEntity(const std::string &entityTag)
 {
-	std::shared_ptr<Entity> newEntity = std::shared_ptr<Entity>(entityManager->CreateEntity());
+	std::shared_ptr<Entity> newEntity = 
+		std::shared_ptr<Entity>(entityManager->CreateEntity());
 	entities.push_back(std::pair<std::string, std::shared_ptr<Entity>>
 							(entityTag, newEntity));
 }
@@ -77,10 +56,7 @@ void Scene::AddSystem(EntityProcessingSystem *system)
 void Scene::AddComponent(const std::string &entityTag, Component *component)
 {
 #ifdef _DEBUG
-	if(entities.empty())
-	{
-		throw std::exception("There aren't any entities.");
-	}
+	assert(!entities.empty());
 #endif
 	bool isFound = false;
 
@@ -95,10 +71,7 @@ void Scene::AddComponent(const std::string &entityTag, Component *component)
 		}
 	}
 #ifdef _DEBUG
-	if(!isFound)
-	{
-		throw std::exception("Entity not found.");
-	}
+	assert(isFound);
 #endif
 
 	entityManager->InsertComponent(foundEntity, component);
@@ -106,30 +79,48 @@ void Scene::AddComponent(const std::string &entityTag, Component *component)
 
 
 void Scene::RemoveEntity(const std::string &entityTag)
-{
+{	
 #ifdef _DEBUG
-	if(entities.empty())
-	{
-		throw std::exception("There aren't any entities.");
-	}
+	assert(entities.empty() == false);
 #endif
-	bool isFound = false;
 
-	for(EntitiesMap::iterator iter = entities.begin(); iter != entities.end(); ++iter)
+	bool isFound = false;
+	EntitiesMap::iterator iter = entities.begin();
+	for(iter = entities.begin(); iter != entities.end(); ++iter)
 	{
-		if(iter->first.compare(entityTag) == 0)
+		if(entityManager->CheckIfRemoved(iter->second->GetIndex()) == false)
 		{
-			//entityManager->DestroyAllComponents(iter->second.get());
-			entityManager->DestroyEntity(iter->second.get());
-			isFound = true;
+			if(iter->first.compare(entityTag) == 0)
+			{
+				entityManager->DestroyEntity(iter->second.get());
+				isFound = true;
+				return;
+			}	
 		}
 	}
+	/*while(iter != entities.end())
+	{
+		if(entityManager->CheckIfRemoved(iter->second->GetIndex()) == false)
+		{
+			if(iter->first.compare(entityTag) == 0)
+			{
+				entityManager->DestroyEntity(iter->second.get());
+				isFound = true;
+				return;
+			}	
+			else
+			{
+				++iter;
+			}
+		}
+		else
+		{
+			isFound = false;
+		}
+	}*/
 
 #ifdef _DEBUG
-	if(!isFound)
-	{
-		throw std::exception("Entity not found.");
-	}
+	assert(isFound == true);
 #endif
 }
 
@@ -143,25 +134,34 @@ EventManager *Scene::GetEventManager()
 	return eventManager.get();
 }
 Entity *Scene::GetEntity(const std::string &entityTag)
-{
+{	
+#ifdef _DEBUG
+	assert(!entities.empty());
+#endif
+	
 	bool isFound = false;
-
+	
 	Entity *foundEntity = entities[0].second.get();
 	for(EntitiesMap::iterator iter = entities.begin(); iter != entities.end(); ++iter)
 	{
-		if(iter->first.compare(entityTag) == 0)
+		if(entityManager->CheckIfRemoved(iter->second->GetIndex()) == false)
+		{		
+			if(iter->first.compare(entityTag) == 0)
+			{
+				foundEntity = iter->second.get();			
+				isFound = true;
+			}
+		}
+		else
 		{
-			foundEntity = iter->second.get();
-			isFound = true;
+			isFound = false;
 		}
 	}
+	
 #ifdef _DEBUG
-	if(!isFound)
-	{
-		throw std::exception("Entity not found!!!").what();
-	}
+	assert(isFound);
 #endif
-
+	
 	return foundEntity;
 }
 
@@ -173,32 +173,3 @@ void Scene::ProcessSystems()
 		(*iter)->Process();
 	}
 }
-
-/*
-void Scene::InsertSystem(EntityProcessingSystem *system)
-{
-	systems.push_back(system);
-}
-
-void Scene::InsertComponent(Entity *entity, Component *component)
-{
-	entityManager->InsertComponent(entity, component);
-}
-
-void Scene::ProcessSystems()
-{
-	for(std::vector<EntityProcessingSystem*>::iterator iter = systems.begin();
-		iter != systems.end(); ++iter)
-	{
-		(*iter)->Process();
-	}
-}
-
-EntityManager *Scene::GetEntityManager()
-{
-	return entityManager;
-}
-const ComponentList &Scene::GetComponentList(Entity *entity, ComponentType type)
-{
-	return entityManager->GetComponentList(entity, type);
-}*/

@@ -170,3 +170,17 @@ const ComponentList &EntityManager::GetComponentList(const Entity *entity, Compo
 	// Grab the component list for this entity and remove the component.
 	return entities[entity->index];
 }
+
+bool EntityManager::CheckIfRemoved(unsigned int entityIndex)
+{
+	for(std::vector<unsigned int>::iterator iter = removedIndices.begin();
+		iter != removedIndices.end(); ++iter)
+	{
+		if((*iter) == entityIndex)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}

@@ -1,4 +1,4 @@
-﻿Build started 22.12.2012 г. 17:58:18 ч..
+﻿Build started 2.1.2013 г. 21:06:51 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\Fusion_Scene\Fusion_Scene.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Fusion_Scene.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -17,4 +17,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.41
+Time Elapsed 00:00:00.44

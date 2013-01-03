@@ -1,5 +1,5 @@
-﻿Build started 2.1.2013 г. 21:00:24 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Fusion_EntitySystem\Fusion_EntitySystem.vcxproj" on node 2 (build target(s)).
+﻿Build started 3.1.2013 г. 16:36:00 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Fusion_EntitySystem\Fusion_EntitySystem.vcxproj" on node 3 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Fusion_EntitySystem.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
@@ -20,4 +20,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.39
+Time Elapsed 00:00:00.38

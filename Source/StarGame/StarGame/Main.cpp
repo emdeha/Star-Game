@@ -66,13 +66,16 @@ void HandleMouse()
 
 	if(scene.GetMouse().IsRightButtonDown())
 	{		
-		if(testScene.HasEntity("sampleSun"))
+		if(testScene.HasEntity("sampleSun") && testScene.HasEntity("sampleSatellite"))
 		{
 			FusionEngine::ComponentMapper<FusionEngine::Click> click =
 				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_CLICKABLE);
 			if(click[0]->isClicked)
 			{
-				testScene.RemoveEntity("sampleSatellite");
+				if(testScene.RemoveEntity("sampleSatellite") == false)
+				{
+					std::printf("The entity doesn't exist\n");
+				}
 			}
 		}
 

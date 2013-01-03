@@ -67,7 +67,7 @@ Entity *EntityManager::CreateEntity()
 
 void EntityManager::DestroyEntity(Entity *entity)
 {
-	entities[entity->index] = NULL;
+	entities[entity->index] = nullptr;
 	removedIndices.push_back(entity->index);
 	DestroyAllComponents(entity);
 
@@ -178,6 +178,7 @@ bool EntityManager::CheckIfRemoved(unsigned int entityIndex)
 	{
 		if((*iter) == entityIndex)
 		{
+			std::printf("Index removed: %ui", *iter);
 			return true;
 		}
 	}

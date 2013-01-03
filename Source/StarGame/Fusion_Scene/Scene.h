@@ -27,12 +27,21 @@
 #include <vector>
 
 
+struct EntityProperties
+{
+	std::string entityName;
+	bool isActive;
+
+	EntityProperties() {}
+};
+
+
 namespace FusionEngine
 {
 	class Scene
 	{
 	private:
-		typedef std::vector<std::pair<std::string, std::shared_ptr<Entity>>> EntitiesMap;
+		typedef std::vector<std::pair<EntityProperties, std::shared_ptr<Entity>>> EntitiesMap;
 		typedef std::vector<std::shared_ptr<Component>> ComponentsVector;
 		typedef std::vector<std::shared_ptr<EntityProcessingSystem>> SystemsVector;
 
@@ -42,6 +51,7 @@ namespace FusionEngine
 		EntitiesMap entities;
 		ComponentsVector components;
 		SystemsVector systems;
+		std::vector<unsigned int> removedEntitiesIDs;
 
 	public:
 		Scene() {}
@@ -65,7 +75,7 @@ namespace FusionEngine
 		/*
 		Removes the FIRST entity found with the current tag.
 		*/
-		void RemoveEntity(const std::string &entityTag);
+		bool RemoveEntity(const std::string &entityTag);
 
 		EntityManager *GetEntityManager();
 		EventManager *GetEventManager();
@@ -73,6 +83,8 @@ namespace FusionEngine
 		Gets the LAST ADDED entity found with the given tag.
 		*/
 		Entity *GetEntity(const std::string &entityTag);
+
+		bool CheckIfRemoved(unsigned int entityId);
 
 		
 		void ProcessSystems();

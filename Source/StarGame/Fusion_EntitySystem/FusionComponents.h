@@ -33,6 +33,7 @@
 #include "../Mouse/Mouse.h"
 
 
+
 struct Material
 {
 	glm::vec4 diffuseColor; 
@@ -40,6 +41,16 @@ struct Material
 	float shininessFactor;
 
 	float padding[3]; ///< Padding for compatibility with GLSL
+};
+
+struct LightBlockData
+{
+	glm::vec4 ambientIntensiy;
+	float lightAttenuation;
+	float maxIntensity;
+	float gamma;
+
+	float padding; ///< Padding for compatibility with GLSL.
 };
 
 
@@ -96,7 +107,7 @@ namespace FusionEngine
 	};
 
 
-	class RenderMesh : public Component
+	class RenderUnlit : public Component
 	{	
 	public:
 		std::unique_ptr<Framework::Mesh> mesh;
@@ -120,8 +131,66 @@ namespace FusionEngine
 		}
 
 
-		RenderMesh() : Component(CT_RENDERABLE) {}
-		virtual ~RenderMesh() {} 
+		RenderUnlit() : Component(CT_RENDERABLE_UNLIT) {}
+		virtual ~RenderUnlit() {} 
+	};
+
+
+	class RenderLit : public Component
+	{
+	public:
+		std::unique_ptr<Framework::Mesh> mesh;
+		glutil::MatrixStack transformStack;
+		Material material;
+		int materialBlockIndex;
+		int materialBlockSize;
+		GLuint materialUniformBuffer;
+		GLuint program;
+
+		void Init(const std::string &meshFileName)
+		{
+			try
+			{
+				mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFileName));
+			}
+			catch(std::exception &except)
+			{
+				printf("%s\n", except.what());
+				throw;
+			}
+
+			int uniformBufferAlignSize = 0;
+			glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignSize);
+
+			materialBlockSize = sizeof(Material);
+			materialBlockSize += uniformBufferAlignSize -
+				(materialBlockSize % uniformBufferAlignSize);
+
+			glGenBuffers(1, &materialUniformBuffer);
+			glBindBuffer(GL_UNIFORM_BUFFER, materialUniformBuffer);
+			glBufferData(GL_UNIFORM_BUFFER, materialBlockSize, &material, GL_STATIC_DRAW);
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+			transformStack.SetIdentity();
+		}
+
+		RenderLit() : Component(CT_RENDERABLE_LIT) {}
+		virtual ~RenderLit() {}
+	};
+
+
+	class Light : public Component
+	{
+	public:
+		glm::mat4 modelMatrix;
+		glm::vec3 position;
+		glm::vec4 intensity;
+		LightBlockData lightProperties;
+		GLuint shaderProgram;
+		GLuint lightUniformBuffer;
+
+		Light() : Component(CT_LIGHT) {}
+		virtual ~Light() {}
 	};
 }
 

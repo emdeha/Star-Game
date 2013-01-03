@@ -103,6 +103,7 @@ void HandleMouse()
 			if(click[0]->isClicked)
 			{
 				testScene.AddEntity("sampleSatellite");
+
 				FusionEngine::RotationOriginSystem *rotationOriginSystem =
 					new FusionEngine::RotationOriginSystem(testScene.GetEventManager(), testScene.GetEntityManager());
 				testScene.AddSystem(rotationOriginSystem);
@@ -112,12 +113,29 @@ void HandleMouse()
 				rotationOrigin->offsetFromOrigin = 2.0f;
 				rotationOrigin->revolutionDuration = Framework::Timer(Framework::Timer::TT_LOOP, 10.0f);
 				testScene.AddComponent("sampleSatellite", rotationOrigin);
-				FusionEngine::RenderMesh *renderMeshTwo = 
-					new FusionEngine::RenderMesh();
+								
+				FusionEngine::RenderLitSystem *renderLitSystem =
+					new FusionEngine::RenderLitSystem(testScene.GetEventManager(), testScene.GetEntityManager());
+				testScene.AddSystem(renderLitSystem);
+				FusionEngine::RenderLit *renderMeshLit =
+					new FusionEngine::RenderLit();
+				renderMeshLit->material.diffuseColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+				renderMeshLit->material.shininessFactor = 0.3f;
+				renderMeshLit->material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
+				renderMeshLit->program = shaderManager.GetLitProgData().theProgram;
+				renderMeshLit->Init("mesh-files/UnitSphere.xml");
+				testScene.AddComponent("sampleSatellite", renderMeshLit);
+
+				/*FusionEngine::RenderUnlitSystem *renderUnlitSystem = 
+					new FusionEngine::RenderUnlitSystem(testScene.GetEventManager(), testScene.GetEntityManager());
+				testScene.AddSystem(renderUnlitSystem);
+				FusionEngine::RenderUnlit *renderMeshTwo = 
+					new FusionEngine::RenderUnlit();
 				renderMeshTwo->color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 				renderMeshTwo->program = shaderManager.GetSimpleProgData().theProgram;
 				renderMeshTwo->Init("mesh-files/UnitSphere.xml");
-				testScene.AddComponent("sampleSatellite", renderMeshTwo);
+				testScene.AddComponent("sampleSatellite", renderMeshTwo);*/
+
 				FusionEngine::Transform *transformTwo =
 					new FusionEngine::Transform();
 				transformTwo->scale = glm::vec3(0.5f, 0.5f, 0.5f);
@@ -512,14 +530,8 @@ void TimerFunction(int value)
 	glutTimerFunc(250, TimerFunction, 1);
 }
 
-long long currentTime_milliseconds;/*
-FusionEngine::RenderSystem *renderSystem;
-FusionEngine::TransformSystem *transformSystem;
+long long currentTime_milliseconds;
 
-FusionEngine::EntityManager *entityManager;
-FusionEngine::Entity *entity;
-*/
-std::shared_ptr<Swarm> sampleSwarm;
 void Init()
 {
 	//scene = Scene(2.2f);
@@ -582,57 +594,18 @@ void Init()
 	nextGameTick = GetTickCount();
 
 
-	sampleSwarm = std::shared_ptr<Swarm>(new Swarm(glm::vec3(0.0f, 4.0f, 0.0f), 
-												   glm::vec3(0.2f, 0.0f, 0.0f), 
-												   100, 50, 50, 1000, 2.0f, 
-												   shaderManager.GetBillboardProgDataNoTexture()));
-
-
-
 	//////////////////////////////////////
-	/*
-	testScene.Init();
-	testScene.AddEntity("test");
-	testScene.AddEntity("testTwo");
-	FusionEngine::RenderSystem *renderSystem = 
-		new FusionEngine::RenderSystem(testScene.GetEventManager(), testScene.GetEntityManager());
-	FusionEngine::TransformSystem *transformSystem =
-		new FusionEngine::TransformSystem(testScene.GetEventManager(), testScene.GetEntityManager());
-	testScene.AddSystem(renderSystem);
-	testScene.AddSystem(transformSystem);
-	FusionEngine::Render *render = new FusionEngine::Render();
-	render->color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	render->height = 1.0f;
-	render->width = 1.0f;
-	render->position = glm::vec3();
-	render->program = shaderManager.GetSimpleProgData().theProgram;
-	render->Init();
-	FusionEngine::Transform *transform = new FusionEngine::Transform();
-	transform->position = glm::vec3();
-	transform->rotation = glm::vec3();
-	transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
-	transform->shaderProgram = shaderManager.GetSimpleProgData().theProgram;
-	testScene.AddComponent("test", render);
-	testScene.AddComponent("testTwo", render);
-	testScene.AddComponent("test", transform);
-	FusionEngine::Transform *transformTwo = new FusionEngine::Transform();
-	transformTwo->position = glm::vec3(3.0f, 0.0f, 0.0f);
-	transformTwo->rotation = glm::vec3();
-	transformTwo->scale = glm::vec3(1.0f, 2.0f, 1.0f);
-	transformTwo->shaderProgram = shaderManager.GetSimpleProgData().theProgram;
-	testScene.AddComponent("testTwo", transformTwo);
-	*/
 	
 	testScene.Init();
 	testScene.AddEntity("sampleSun");
-	FusionEngine::RenderSystem *renderSystem =
-		new FusionEngine::RenderSystem(testScene.GetEventManager(), testScene.GetEntityManager());
+	FusionEngine::RenderUnlitSystem *renderSystem =
+		new FusionEngine::RenderUnlitSystem(testScene.GetEventManager(), testScene.GetEntityManager());
 	FusionEngine::ClickSystem *clickSystem =
 		new FusionEngine::ClickSystem(testScene.GetEventManager(), testScene.GetEntityManager());
 	testScene.AddSystem(clickSystem);
 	testScene.AddSystem(renderSystem);
-	FusionEngine::RenderMesh *renderMesh = 
-		new FusionEngine::RenderMesh();
+	FusionEngine::RenderUnlit *renderMesh = 
+		new FusionEngine::RenderUnlit();
 	renderMesh->color = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 	renderMesh->program = shaderManager.GetSimpleProgData().theProgram;
 	renderMesh->Init("mesh-files/UnitSphere.xml");
@@ -647,6 +620,21 @@ void Init()
 	testScene.AddComponent("sampleSun", renderMesh);
 	testScene.AddComponent("sampleSun", click);
 	testScene.AddComponent("sampleSun", transform);
+
+	testScene.AddEntity("sunLight");
+	FusionEngine::LightSystem *lightSystem =
+		new FusionEngine::LightSystem(testScene.GetEventManager(), testScene.GetEntityManager());
+	testScene.AddSystem(lightSystem);
+	FusionEngine::Light *light =
+		new FusionEngine::Light();
+	light->position = glm::vec3(1.0f, 0.0f, 0.0f);
+	light->intensity = glm::vec4(3.5f);
+	light->lightProperties.ambientIntensiy = glm::vec4(0.4f);
+	light->lightProperties.lightAttenuation = 1.2f;
+	light->lightProperties.maxIntensity = 5.0f;
+	light->lightProperties.gamma = displayData.gamma;
+	light->shaderProgram = shaderManager.GetLitProgData().theProgram;
+	testScene.AddComponent("sunLight", light);
 	
 	///////////////////////////////////////////
 }
@@ -690,8 +678,8 @@ void Display()
 	
 		
 		scene.RenderCurrentLayout(shaderManager.GetFontProgData(),
-								   shaderManager.GetSimpleNoUBProgData(),
-								   shaderManager.GetTextureProgData());
+								  shaderManager.GetSimpleNoUBProgData(),
+								  shaderManager.GetTextureProgData());
 
 		/*FusionEngine::ComponentMapper<FusionEngine::Transform> tmap = 
 			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("test"), FusionEngine::CT_TRANSFORM);
@@ -702,15 +690,16 @@ void Display()
 		
 		if(testScene.HasEntity("sampleSun"))
 		{
-			FusionEngine::ComponentMapper<FusionEngine::RenderMesh> tmap =
-				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_RENDERABLE);
+			FusionEngine::ComponentMapper<FusionEngine::RenderUnlit> tmap =
+				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_RENDERABLE_UNLIT);
 		
 			tmap[0]->transformStack = modelMatrix;
 			if(testScene.HasEntity("sampleSatellite"))
 			{
-				FusionEngine::ComponentMapper<FusionEngine::RenderMesh> tmap2 = 
-					testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSatellite"), FusionEngine::CT_RENDERABLE);
-				tmap2[0]->transformStack = modelMatrix;
+				FusionEngine::ComponentMapper<FusionEngine::RenderLit> satMap = 
+					testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSatellite"), FusionEngine::CT_RENDERABLE_LIT);
+				satMap[0]->transformStack = modelMatrix;
+				satMap[0]->materialBlockIndex = shaderManager.GetBlockIndex(BT_MATERIAL);
 			}
 		
 			FusionEngine::ComponentMapper<FusionEngine::Click> click =
@@ -724,13 +713,17 @@ void Display()
 			click[0]->windowWidth = glutGet(GLUT_WINDOW_WIDTH);
 		}
 		
+		FusionEngine::ComponentMapper<FusionEngine::Light> lightMap =
+			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sunLight"), FusionEngine::CT_LIGHT);
+		lightMap[0]->modelMatrix = modelMatrix.Top();
+		lightMap[0]->lightUniformBuffer = shaderManager.GetUniformBuffer(UBT_LIGHT);
 		testScene.ProcessSystems();
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{
 		scene.RenderCurrentLayout(shaderManager.GetFontProgData(),
-								   shaderManager.GetSimpleNoUBProgData(),
-								   shaderManager.GetTextureProgData());
+								  shaderManager.GetSimpleNoUBProgData(),
+								  shaderManager.GetTextureProgData());
 	}
 
 	HandleMouse();

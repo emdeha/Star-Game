@@ -98,12 +98,12 @@ namespace FusionEngine
 		virtual ~RotationOriginSystem() {}
 	};
 
-	class RenderSystem : public EntityProcessingSystem
+	class RenderUnlitSystem : public EntityProcessingSystem
 	{
 	protected:
 		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
 		{
-			ComponentMapper<RenderMesh> render = manager->GetComponentList(entity, CT_RENDERABLE);
+			ComponentMapper<RenderUnlit> render = manager->GetComponentList(entity, CT_RENDERABLE_UNLIT);
 			ComponentMapper<Transform> transform = manager->GetComponentList(entity, CT_TRANSFORM);
 
 
@@ -128,9 +128,80 @@ namespace FusionEngine
 		}
 
 	public:
-		RenderSystem(EventManager *eventManager, EntityManager *entityManager)
-			: EntityProcessingSystem(eventManager, entityManager, CT_RENDERABLE_BIT) {}
-		virtual ~RenderSystem() {}
+		RenderUnlitSystem(EventManager *eventManager, EntityManager *entityManager)
+			: EntityProcessingSystem(eventManager, entityManager, CT_RENDERABLE_UNLIT_BIT) {}
+		virtual ~RenderUnlitSystem() {}
+	};
+
+	class RenderLitSystem : public EntityProcessingSystem
+	{
+	protected:
+		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
+		{
+			ComponentMapper<RenderLit> renderLit = manager->GetComponentList(entity, CT_RENDERABLE_LIT); 
+			ComponentMapper<Transform> transform = manager->GetComponentList(entity, CT_TRANSFORM);
+
+
+			{
+				glutil::PushStack push(renderLit[0]->transformStack);
+				renderLit[0]->transformStack.Translate(transform[0]->position);
+				renderLit[0]->transformStack.RotateX(transform[0]->rotation.x);
+				renderLit[0]->transformStack.RotateY(transform[0]->rotation.y);
+				renderLit[0]->transformStack.RotateZ(transform[0]->rotation.z);
+				renderLit[0]->transformStack.Scale(transform[0]->scale);
+
+
+				glBindBufferRange(GL_UNIFORM_BUFFER, renderLit[0]->materialBlockIndex, renderLit[0]->materialUniformBuffer,
+								  0, sizeof(Material));
+				glm::mat3 normalMatrix(renderLit[0]->transformStack.Top());
+				normalMatrix = glm::transpose(glm::inverse(normalMatrix));
+
+				glUseProgram(renderLit[0]->program);
+				glUniformMatrix4fv(glGetUniformLocation(renderLit[0]->program, "modelToCameraMatrix"),
+								   1, GL_FALSE, glm::value_ptr(renderLit[0]->transformStack.Top()));
+				glUniformMatrix3fv(glGetUniformLocation(renderLit[0]->program, "normalModelToCameraMatrix"),
+								   1, GL_FALSE, glm::value_ptr(normalMatrix));
+
+				renderLit[0]->mesh->Render("lit");
+				
+				glUseProgram(0);
+				glBindBufferBase(GL_UNIFORM_BUFFER, renderLit[0]->materialBlockIndex, 0);
+			}
+		}
+
+	public:
+		RenderLitSystem(EventManager *eventManager, EntityManager *entityManager)
+			: EntityProcessingSystem(eventManager, entityManager, CT_RENDERABLE_LIT_BIT) {}
+		virtual ~RenderLitSystem() {}
+	};
+
+	class LightSystem : public EntityProcessingSystem
+	{
+	protected:
+		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
+		{
+			ComponentMapper<Light> light = manager->GetComponentList(entity, CT_LIGHT);
+
+
+			glm::vec4 lightPosition_cameraSpace = light[0]->modelMatrix * glm::vec4(light[0]->position, 1.0f);
+			glUseProgram(light[0]->shaderProgram);
+
+			glUniform4fv(glGetUniformLocation(light[0]->shaderProgram, "lightIntensity"),
+						 1, glm::value_ptr(light[0]->intensity));
+			glUniform3fv(glGetUniformLocation(light[0]->shaderProgram, "cameraSpaceLightPos"),
+						 1, glm::value_ptr(lightPosition_cameraSpace));
+
+			glBindBuffer(GL_UNIFORM_BUFFER, light[0]->lightUniformBuffer);
+			glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(light[0]->lightProperties), &light[0]->lightProperties);
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+			glUseProgram(0);
+		}
+
+	public:
+		LightSystem(EventManager *eventManager, EntityManager *entityManager)
+			: EntityProcessingSystem(eventManager, entityManager, CT_LIGHT_BIT) {}
+		virtual ~LightSystem() {}
 	};
 }
 

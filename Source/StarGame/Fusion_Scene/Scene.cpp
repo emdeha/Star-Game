@@ -74,7 +74,7 @@ bool Scene::HasEntity(const std::string &entityTag)
 
 	for(EntitiesMap::iterator iter = entities.begin(); iter != entities.end(); ++iter)
 	{
-		if(iter->first.isActive)//entityManager->CheckIfRemoved(iter->second->GetIndex()) == false)
+		if(iter->first.isActive)
 		{
 			if(iter->first.entityName.compare(entityTag) == 0)
 			{
@@ -95,51 +95,16 @@ bool Scene::RemoveEntity(const std::string &entityTag)
 	EntitiesMap::iterator iter = entities.begin();
 	for(iter = entities.begin(); iter != entities.end(); ++iter)
 	{
-		if(iter->first.isActive)//entityManager->CheckIfRemoved(iter->second->GetIndex()) == false)
+		if(iter->first.isActive)
 		{
 			if(iter->first.entityName.compare(entityTag) == 0)
 			{
 				entityManager->DestroyEntity(iter->second.get());		
 				iter->first.isActive = false;
-				//removedEntitiesIDs.push_back(iter->second->GetID());
 				return true;
 			}	
 		}
 	}
-	/*while(iter != entities.end())
-	{
-		/*if(entityManager->CheckIfRemoved(iter->second->GetIndex()) == false)
-		{*/
-			/*if(iter->first.compare(entityTag) == 0)
-			{
-				entityManager->DestroyEntity(iter->second.get());
-				iter = entities.erase(std::remove(entities.begin(), entities.end(), iter->second), entities.end());
-				return true;
-			}	
-			else
-			{
-				++iter;
-			}*/
-		/*}
-		else
-		{
-			isFound = false;
-		}*//*
-	}*/
-
-	/*while(iter != entities.end())
-	{
-		if(iter->first.compare(entityTag) == 0)
-		{
-			entityManager->DestroyEntity(iter->second.get());
-			iter = entities.erase(iter);
-			return true;
-		}
-		else
-		{
-			++iter;
-		}
-	}*/
 
 	return false;
 }
@@ -155,7 +120,7 @@ Entity *Scene::GetEntity(const std::string &entityTag)
 	Entity *foundEntity = entities[0].second.get();
 	for(EntitiesMap::iterator iter = entities.begin(); iter != entities.end(); ++iter)
 	{
-		if(iter->first.isActive)//entityManager->CheckIfRemoved(iter->second->GetIndex()) == false)
+		if(iter->first.isActive)
 		{		
 			if(iter->first.entityName.compare(entityTag) == 0)
 			{

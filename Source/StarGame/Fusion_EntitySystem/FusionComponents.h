@@ -107,6 +107,46 @@ namespace FusionEngine
 	};
 
 
+	class RenderGenData : public Component
+	{
+	public:
+		glutil::MatrixStack transformStack;
+		glm::vec4 color;
+		int indicesCount;
+		GLuint vao;
+		GLuint vertexBO;
+		GLuint indexBO;
+		GLuint shaderProgram;
+		bool isVisible;
+
+		void Init(const std::vector<float> &vertexData, 
+				  const std::vector<unsigned short> &indexData)
+		{
+			glGenBuffers(1, &vertexBO);
+			glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+			glBufferData(GL_ARRAY_BUFFER, 
+						 sizeof(float) * vertexData.size(), &vertexData[0], GL_STREAM_DRAW);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+			glGenBuffers(1, &indexBO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
+						 sizeof(unsigned short) * indexData.size(), &indexData[0], GL_STREAM_DRAW);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+			glGenVertexArrays(1, &vao);
+			glBindVertexArray(vao);
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+
+			glBindVertexArray(0);
+		}
+
+		RenderGenData() : Component(CT_RENDERABLE_GEN_DATA) {}
+		virtual ~RenderGenData() {}
+	};
+	
+
 	class RenderUnlit : public Component
 	{	
 	public:
@@ -223,9 +263,32 @@ namespace FusionEngine
 		glm::vec3 rotationOrigin;
 		SatelliteType type;
 		float offsetFromSun;
+		float rotationTime;
 
 		Satellite() : Component(CT_SATELLITE) {}
 		virtual ~Satellite() {}
+	};
+
+
+	class SatelliteOrbit : public Component
+	{
+	public:
+		glutil::MatrixStack transformStack;
+		glm::vec4 mainColor;
+		glm::vec4 outlineColor;
+		glm::vec4 center;
+		float outerRadius;
+		float innerRadius;
+		GLuint shaderProgram;
+		bool isVisible;
+
+		Utility::Primitives::Torus2D mainOrbit;
+		Utility::Primitives::Torus2D orbitOutlineOne;
+		Utility::Primitives::Torus2D orbitOutilineTwo;
+
+
+		SatelliteOrbit() : Component(CT_SATELLITE_ORBIT) {}
+		virtual ~SatelliteOrbit() {}
 	};
 }
 

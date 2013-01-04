@@ -104,6 +104,59 @@ namespace FusionEngine
 		virtual ~RotationOriginSystem() {}
 	};
 
+	class RenderFromGeneratedDataSystem : public EntityProcessingSystem
+	{
+	protected:
+		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
+		{
+			ComponentMapper<RenderGenData> renderGenData = manager->GetComponentList(entity, CT_RENDERABLE_GEN_DATA);
+			ComponentMapper<Transform> transformData = manager->GetComponentList(entity, CT_TRANSFORM);
+
+			if(renderGenData[0]->isVisible)
+			{
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+				glUseProgram(renderGenData[0]->shaderProgram);
+				glBindVertexArray(renderGenData[0]->vao);
+				{
+					glutil::PushStack push(renderGenData[0]->transformStack);
+
+					renderGenData[0]->transformStack.Translate(transformData[0]->position);
+					renderGenData[0]->transformStack.RotateX(transformData[0]->rotation.x);
+					renderGenData[0]->transformStack.RotateY(transformData[0]->rotation.y);
+					renderGenData[0]->transformStack.RotateZ(transformData[0]->rotation.z);
+					renderGenData[0]->transformStack.Scale(transformData[0]->scale);
+
+					glUniformMatrix4fv(
+						glGetUniformLocation(renderGenData[0]->shaderProgram, "modelToCameraMatrix"),
+						1, GL_FALSE, glm::value_ptr(renderGenData[0]->transformStack.Top()));
+					glUniform4f(
+						glGetUniformLocation(renderGenData[0]->shaderProgram, "color"),
+						renderGenData[0]->color.r, renderGenData[0]->color.g, 
+						renderGenData[0]->color.b, renderGenData[0]->color.a);
+
+					glBindBuffer(GL_ARRAY_BUFFER, renderGenData[0]->vertexBO);
+					glEnableVertexAttribArray(
+						glGetAttribLocation(renderGenData[0]->shaderProgram, "position"));
+					glVertexAttribPointer(
+						glGetAttribLocation(renderGenData[0]->shaderProgram, "position"), 
+						4, GL_FLOAT, GL_FALSE, 0, 0);
+
+					glDrawElements(GL_TRIANGLE_STRIP, renderGenData[0]->indicesCount, GL_UNSIGNED_SHORT, 0);
+				}
+				glUseProgram(0);
+
+				glDisable(GL_BLEND);
+			}
+		}
+
+	public:
+		RenderFromGeneratedDataSystem(EventManager *eventManager, EntityManager *entityManager)
+			: EntityProcessingSystem(eventManager, entityManager, CT_RENDERABLE_GEN_DATA_BIT) {}
+		virtual ~RenderFromGeneratedDataSystem() {}
+	};
+
 	class RenderUnlitSystem : public EntityProcessingSystem
 	{
 	protected:
@@ -251,6 +304,27 @@ namespace FusionEngine
 		SunUpdateSystem(EventManager *eventManager, EntityManager *entityManager)
 			: EntityProcessingSystem(eventManager, entityManager, CT_SUN_BIT) {}
 		virtual ~SunUpdateSystem() {}
+	};*/
+
+	
+	/*class SatelliteOrbitRenderSystem : public EntityProcessingSystem
+	{
+	protected:
+		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
+		{
+			ComponentMapper<SatelliteOrbit> satelliteOrbitData = manager->GetComponentList(entity, CT_SATELLITE_ORBIT);
+
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+			satelliteOrbitData[0]->mainOrbit.Draw(satelliteOrbitData[0]->transformStack, 
+												  
+		}
+
+	public:
+		SatelliteOrbitRenderSystem(EventManager *eventManager, EntityManager *entityManager)
+			: EntityProcessingSystem(eventManager, entityManager, CT_SATELLITE_ORBIT_BIT) {}
+		virtual ~SatelliteOrbitRenderSystem() {}
 	};*/
 }
 

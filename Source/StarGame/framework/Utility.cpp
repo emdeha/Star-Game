@@ -50,6 +50,27 @@ Utility::Ray::Ray(glm::vec4 newOrigin, glm::vec4 newDirection)
 }
 
 
+bool Utility::ClickDetection::IsTorusClicked(float outerRadius, float innerRadius, 
+											 glm::vec3 position,/* glm::vec4 cameraPosition,
+											 glm::mat4 projectionMatrix, glm::mat4 modelMatrix,
+											 int windowWidth, int windowHeight,*/
+											 Utility::Ray mouseRay)
+{/*
+	Utility::Ray mouseRay = userMouse.GetPickRay(projectionMatrix, modelMatrix, cameraPosition,
+												 windowWidth, windowHeight);
+	*/
+	glutil::MatrixStack distortedMatrix;
+	distortedMatrix.Scale(1.0f, 1.0f, 5.0f);
+
+	if(Utility::Intersections::RayIntersectsEllipsoid(mouseRay, position, outerRadius, distortedMatrix.Top()) &&
+       !Utility::Intersections::RayIntersectsEllipsoid(mouseRay, position, innerRadius, distortedMatrix.Top()))
+	{
+		return true;
+	}
+	return false;
+}
+
+
 bool Utility::Intersections::RayIntersectsSphere(Ray mouseRay, glm::vec3 bodyPosition, 
 												 float sphereRadius)
 {
@@ -75,6 +96,39 @@ bool Utility::Intersections::RayIntersectsEllipsoid(Ray mouseRay, glm::vec3 body
 	return Utility::Intersections::RayIntersectsSphere(distortedRay, bodyPosition, sphereRadius);
 }
 
+
+void Utility::Primitives::InitTorus2DData(std::vector<float> &vertexData, 
+										  std::vector<unsigned short> &indexData,
+										  int resolution, 
+										  float outerRadius, float innerRadius,
+										  glm::vec3 position)
+{
+	unsigned short currentIndex = 0;
+	int currentIndexPos = 0;
+
+	for(int i = 0; i <= 360; i += 360 / resolution)
+	{		
+		vertexData.push_back(cosf(i * (PI / 180.0f)) * outerRadius);
+		vertexData.push_back(position.y);
+		vertexData.push_back(sinf(i * (PI / 180.0f)) * outerRadius);
+		vertexData.push_back(1.0f);
+		
+		vertexData.push_back(cosf(i * (PI / 180.0f)) * innerRadius);
+		vertexData.push_back(position.y);
+		vertexData.push_back(sinf(i * (PI / 180.0f)) * innerRadius);
+		vertexData.push_back(1.0f);
+
+		indexData.push_back(currentIndex + 1);
+		indexData.push_back(currentIndex + 2);		
+
+		currentIndexPos += 2;
+		currentIndex += 2;
+	}
+
+	indexData[currentIndexPos - 1] = 1;
+	indexData.push_back(2);
+	indexData.push_back(currentIndex - 2);
+}
 
 
 Utility::Primitives::Torus2D::Torus2D()

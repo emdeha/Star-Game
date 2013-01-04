@@ -101,10 +101,25 @@ namespace Utility
 								    float sphereRadius, glm::mat4 deformationMat);
 	}
 
+	namespace ClickDetection
+	{
+		bool IsTorusClicked(float outerRadius, float innerRadius, 
+							glm::vec3 position, /*glm::vec4 cameraPosition,
+							glm::mat4 projectionMatrix, glm::mat4 modelMatrix,
+							int windowWidth, int windowHeight, */
+							Utility::Ray mouseRay);
+	}
+
 	/// \namespace Utility::Primitives
 	/// \brief Has functions for generating basic figures like circles, toruses and others.
 	namespace Primitives
 	{
+		void InitTorus2DData(std::vector<float> &vertexData, std::vector<unsigned short> &indexData,
+							 int resolution, 
+							 float outerRadius, float innerRadius,
+							 glm::vec3 position);
+
+
 		/// \class Torus2D
 		/// \brief Generates and renders a 2D torus.
 		class Torus2D

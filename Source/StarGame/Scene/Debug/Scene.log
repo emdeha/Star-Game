@@ -1,7 +1,7 @@
-﻿Build started 22.12.2012 г. 16:13:10 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Scene\Scene.vcxproj" on node 5 (build target(s)).
+﻿Build started 4.1.2013 г. 17:33:55 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Scene\Scene.vcxproj" on node 4 (build target(s)).
      1>InitializeBuildStatus:
-         Creating "Debug\Scene.unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "Debug\Scene.unsuccessfulbuild".
        ClCompile:
          All outputs are up-to-date.
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../freetype/include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\Scene.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Scene.cpp
@@ -19,4 +19,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.24
+Time Elapsed 00:00:01.27

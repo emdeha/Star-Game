@@ -81,6 +81,7 @@ void HandleMouse()
 				}
 				else
 				{
+					testScene.RemoveEntityLast("satelliteOrbit");
 					sunData[0]->lastSatelliteOffset -= sunData[0]->satelliteOffsetIncrement;
 					sunData[0]->currentSatelliteCount -= 1;
 				}
@@ -123,16 +124,6 @@ void HandleMouse()
 			{
 				testScene.AddEntity("sampleSatellite");
 
-				/*FusionEngine::RotationOriginSystem *rotationOriginSystem =
-					new FusionEngine::RotationOriginSystem(testScene.GetEventManager(), testScene.GetEntityManager());
-				testScene.AddSystem(rotationOriginSystem);
-				FusionEngine::RotationOrigin *rotationOrigin =
-					new FusionEngine::RotationOrigin();
-				rotationOrigin->origin = transformData[0]->position;
-				rotationOrigin->offsetFromOrigin = sunData[0]->lastSatelliteOffset;
-				sunData[0]->lastSatelliteOffset += sunData[0]->satelliteOffsetIncrement;
-				rotationOrigin->revolutionDuration = Framework::Timer(Framework::Timer::TT_LOOP, 10.0f);
-				testScene.AddComponent("sampleSatellite", rotationOrigin);*/
 				FusionEngine::SatelliteUpdateSystem *satelliteUpdateSystem =
 					new FusionEngine::SatelliteUpdateSystem(testScene.GetEventManager(), testScene.GetEntityManager());
 				testScene.AddSystem(satelliteUpdateSystem);
@@ -140,8 +131,10 @@ void HandleMouse()
 					new FusionEngine::Satellite();
 				satellite->rotationOrigin = transformData[0]->position;
 				satellite->offsetFromSun = sunData[0]->lastSatelliteOffset;
+				satellite->rotationTime = 10.0f;
 				sunData[0]->lastSatelliteOffset += sunData[0]->satelliteOffsetIncrement;
-				satellite->rotationDuration = Framework::Timer(Framework::Timer::TT_LOOP, 10.0f);
+				satellite->rotationDuration = 
+					Framework::Timer(Framework::Timer::TT_LOOP, satellite->rotationTime);
 				testScene.AddComponent("sampleSatellite", satellite);
 								
 				FusionEngine::RenderLitSystem *renderLitSystem =
@@ -156,16 +149,6 @@ void HandleMouse()
 				renderMeshLit->Init("mesh-files/UnitSphere.xml");
 				testScene.AddComponent("sampleSatellite", renderMeshLit);
 
-				/*FusionEngine::RenderUnlitSystem *renderUnlitSystem = 
-					new FusionEngine::RenderUnlitSystem(testScene.GetEventManager(), testScene.GetEntityManager());
-				testScene.AddSystem(renderUnlitSystem);
-				FusionEngine::RenderUnlit *renderMeshTwo = 
-					new FusionEngine::RenderUnlit();
-				renderMeshTwo->color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-				renderMeshTwo->program = shaderManager.GetSimpleProgData().theProgram;
-				renderMeshTwo->Init("mesh-files/UnitSphere.xml");
-				testScene.AddComponent("sampleSatellite", renderMeshTwo);*/
-
 				FusionEngine::Transform *transformTwo =
 					new FusionEngine::Transform();
 				transformTwo->scale = glm::vec3(0.5f, 0.5f, 0.5f);
@@ -173,6 +156,34 @@ void HandleMouse()
 
 
 				sunData[0]->currentSatelliteCount += 1;
+
+
+
+				testScene.AddEntity("satelliteOrbit");
+
+				FusionEngine::Transform *transformOrbit = 
+					new FusionEngine::Transform();
+				transformOrbit->position = satellite->rotationOrigin;
+				transformOrbit->scale = glm::vec3(1.0f);
+				transformOrbit->rotation = glm::vec3(90.0f, 0.0f, 0.0f);
+				testScene.AddComponent("satelliteOrbit", transformOrbit);
+				
+				FusionEngine::RenderFromGeneratedDataSystem *renderGenDataSystem =
+					new	FusionEngine::RenderFromGeneratedDataSystem(testScene.GetEventManager(), testScene.GetEntityManager());
+				testScene.AddSystem(renderGenDataSystem);
+				FusionEngine::RenderGenData *renderGenData =
+					new FusionEngine::RenderGenData();
+				renderGenData->color = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
+				renderGenData->indicesCount = 360;
+				renderGenData->shaderProgram = shaderManager.GetSimpleProgData().theProgram;
+				std::vector<float> vertexData;
+				std::vector<unsigned short> indexData;
+				Utility::Primitives::InitTorus2DData(vertexData, indexData, 
+													 90, 
+													 satellite->offsetFromSun + 0.25f, satellite->offsetFromSun - 0.25f,
+													 transformOrbit->position);
+				renderGenData->Init(vertexData, indexData);
+				testScene.AddComponent("satelliteOrbit", renderGenData);
 			}
 		}
 
@@ -341,6 +352,31 @@ void HandleMouse()
 					scene.OnEvent(satelliteHoveredEvent);
 				}
 			}
+		}
+
+		if(testScene.HasEntity("sampleSatellite"))
+		{
+			FusionEngine::ComponentMapper<FusionEngine::Satellite> satelliteData = 
+				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSatellite"), FusionEngine::CT_SATELLITE);
+
+			Utility::Ray mouseRay = 
+				scene.GetMouse().GetPickRay(displayData.projectionMatrix, displayData.modelMatrix, 
+											glm::vec4(scene.GetTopDownCamera().ResolveCamPosition(), 1.0f), 
+											glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+				
+			FusionEngine::ComponentMapper<FusionEngine::RenderGenData> renderGenData =
+				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("satelliteOrbit"), FusionEngine::CT_RENDERABLE_GEN_DATA);
+
+			if(Utility::ClickDetection::IsTorusClicked(satelliteData[0]->offsetFromSun + 0.25f, 
+													   satelliteData[0]->offsetFromSun - 0.25f, 
+													   satelliteData[0]->rotationOrigin, mouseRay))
+			{
+				renderGenData[0]->isVisible = true;
+			}
+			else
+			{
+				renderGenData[0]->isVisible = false;
+			}			
 		}
 	}
 
@@ -653,7 +689,7 @@ void Init()
 	FusionEngine::Sun *sun =
 		new FusionEngine::Sun();
 	sun->maxSatelliteCount = 4;
-	sun->satelliteOffsetIncrement = 2.0f;
+	sun->satelliteOffsetIncrement = 1.0f;
 	sun->lastSatelliteOffset = sun->satelliteOffsetIncrement;
 	sun->currentSatelliteCount = 0;
 	testScene.AddComponent("sampleSun", sun);
@@ -733,6 +769,13 @@ void Display()
 					testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSatellite"), FusionEngine::CT_RENDERABLE_LIT);
 				satMap[0]->transformStack = modelMatrix;
 				satMap[0]->materialBlockIndex = shaderManager.GetBlockIndex(BT_MATERIAL);
+
+				if(testScene.HasEntity("satelliteOrbit"))
+				{
+					FusionEngine::ComponentMapper<FusionEngine::RenderGenData> renderGenData =
+						testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("satelliteOrbit"), FusionEngine::CT_RENDERABLE_GEN_DATA);
+					renderGenData[0]->transformStack = modelMatrix;
+				}
 			}
 		
 			FusionEngine::ComponentMapper<FusionEngine::Click> click =

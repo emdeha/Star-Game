@@ -1,4 +1,4 @@
-﻿Build started 4.1.2013 г. 16:03:45 ч..
+﻿Build started 4.1.2013 г. 17:53:44 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\StarGame.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -36,4 +36,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.45
+Time Elapsed 00:00:03.16

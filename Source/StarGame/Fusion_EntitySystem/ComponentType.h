@@ -9,6 +9,7 @@ namespace FusionEngine
 		CT_TRANSFORM = 0,
 		CT_HEALTH,
 		CT_RENDERABLE,
+		CT_RENDERABLE_GEN_DATA,
 		CT_RENDERABLE_UNLIT,
 		CT_RENDERABLE_LIT,
 		CT_RIGID_BODY, 
@@ -20,6 +21,7 @@ namespace FusionEngine
 		CT_LIGHT,
 		CT_SUN,
 		CT_SATELLITE, 
+		CT_SATELLITE_ORBIT,
 
 		CT_LAST,
 	};
@@ -39,6 +41,8 @@ namespace FusionEngine
 	const unsigned int CT_LIGHT_BIT = 1 << CT_LIGHT;
 	const unsigned int CT_SUN_BIT = 1 << CT_SUN;
 	const unsigned int CT_SATELLITE_BIT = 1 << CT_SATELLITE;
+	const unsigned int CT_SATELLITE_ORBIT_BIT = 1 << CT_SATELLITE_ORBIT;
+	const unsigned int CT_RENDERABLE_GEN_DATA_BIT = 1 << CT_RENDERABLE_GEN_DATA;
 }
 
 

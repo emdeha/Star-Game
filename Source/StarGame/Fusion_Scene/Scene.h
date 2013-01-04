@@ -73,9 +73,13 @@ namespace FusionEngine
 		void AddComponent(const std::string &entityTag, Component *component);
 		
 		/*
-		Removes the FIRST entity found with the current tag.
+		Removes the FIRST entity found with the given tag.
 		*/
-		bool RemoveEntity(const std::string &entityTag);
+		bool RemoveEntityFirst(const std::string &entityTag);
+		/*
+		Removes the LAST entity found with the given tag.
+		*/
+		bool RemoveEntityLast(const std::string &entityTag);
 
 		EntityManager *GetEntityManager();
 		EventManager *GetEventManager();

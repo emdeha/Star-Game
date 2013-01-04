@@ -41,16 +41,16 @@ namespace FusionEngine
 	protected:
 		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
 		{
-			ComponentMapper<Click> clickInfo = manager->GetComponentList(entity, CT_CLICKABLE);
-			ComponentMapper<Transform> transform = manager->GetComponentList(entity, CT_TRANSFORM);
+			ComponentMapper<Click> clickData = manager->GetComponentList(entity, CT_CLICKABLE);
+			ComponentMapper<Transform> transformData = manager->GetComponentList(entity, CT_TRANSFORM);
 
 			Utility::Ray mouseRay =
-				clickInfo[0]->userMouse.GetPickRay(clickInfo[0]->projMatrix, clickInfo[0]->modelMatrix, 
-												   clickInfo[0]->cameraPosition, 
-												   clickInfo[0]->windowWidth, clickInfo[0]->windowHeight);
+				clickData[0]->userMouse.GetPickRay(clickData[0]->projMatrix, clickData[0]->modelMatrix, 
+												   clickData[0]->cameraPosition, 
+												   clickData[0]->windowWidth, clickData[0]->windowHeight);
 
-			clickInfo[0]->isClicked = 
-				Utility::Intersections::RayIntersectsSphere(mouseRay, transform[0]->position, transform[0]->scale.x);			
+			clickData[0]->isClicked = 
+				Utility::Intersections::RayIntersectsSphere(mouseRay, transformData[0]->position, transformData[0]->scale.x);			
 		}
 
 	public:
@@ -65,8 +65,8 @@ namespace FusionEngine
 	protected:
 		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
 		{
-			ComponentMapper<Click> clickInfo = manager->GetComponentList(entity, CT_CLICKABLE);
-			if(clickInfo[0]->isClicked)
+			ComponentMapper<Click> clickData = manager->GetComponentList(entity, CT_CLICKABLE);
+			if(clickData[0]->isClicked)
 			{
 				std::printf("CLICKED!!!");
 			}
@@ -83,13 +83,19 @@ namespace FusionEngine
 	protected:
 		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
 		{
-			ComponentMapper<Transform> transform = manager->GetComponentList(entity, CT_TRANSFORM);
-			ComponentMapper<RotationOrigin> rotationOrigin = manager->GetComponentList(entity, CT_ROTATE_ORIGIN);
+			ComponentMapper<Transform> transformData = 
+				manager->GetComponentList(entity, CT_TRANSFORM);
+			ComponentMapper<RotationOrigin> rotationOriginData = 
+				manager->GetComponentList(entity, CT_ROTATE_ORIGIN);
 
-			rotationOrigin[0]->revolutionDuration.Update();
-			float currentTimeThroughLoop = rotationOrigin[0]->revolutionDuration.GetAlpha();
-			transform[0]->position.x = cosf(currentTimeThroughLoop * (2.0f * PI)) * rotationOrigin[0]->offsetFromOrigin + rotationOrigin[0]->origin.x;
-			transform[0]->position.y = sinf(currentTimeThroughLoop * (2.0f * PI)) * rotationOrigin[0]->offsetFromOrigin + rotationOrigin[0]->origin.y;
+			rotationOriginData[0]->revolutionDuration.Update();
+			float currentTimeThroughLoop = rotationOriginData[0]->revolutionDuration.GetAlpha();
+			transformData[0]->position.x = 
+				cosf(currentTimeThroughLoop * (2.0f * PI)) * 
+				rotationOriginData[0]->offsetFromOrigin + rotationOriginData[0]->origin.x;
+			transformData[0]->position.y = 
+				sinf(currentTimeThroughLoop * (2.0f * PI)) * 
+				rotationOriginData[0]->offsetFromOrigin + rotationOriginData[0]->origin.y;
 		}
 
 	public:
@@ -103,27 +109,28 @@ namespace FusionEngine
 	protected:
 		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
 		{
-			ComponentMapper<RenderUnlit> render = manager->GetComponentList(entity, CT_RENDERABLE_UNLIT);
-			ComponentMapper<Transform> transform = manager->GetComponentList(entity, CT_TRANSFORM);
+			ComponentMapper<RenderUnlit> renderUnlitData = manager->GetComponentList(entity, CT_RENDERABLE_UNLIT);
+			ComponentMapper<Transform> transformData = manager->GetComponentList(entity, CT_TRANSFORM);
 
 
-			glutil::PushStack push(render[0]->transformStack);
-			render[0]->transformStack.Translate(transform[0]->position);
-			render[0]->transformStack.RotateX(transform[0]->rotation.x);
-			render[0]->transformStack.RotateY(transform[0]->rotation.y);
-			render[0]->transformStack.RotateZ(transform[0]->rotation.z);
-			render[0]->transformStack.Scale(transform[0]->scale);
+			glutil::PushStack push(renderUnlitData[0]->transformStack);
+			renderUnlitData[0]->transformStack.Translate(transformData[0]->position);
+			renderUnlitData[0]->transformStack.RotateX(transformData[0]->rotation.x);
+			renderUnlitData[0]->transformStack.RotateY(transformData[0]->rotation.y);
+			renderUnlitData[0]->transformStack.RotateZ(transformData[0]->rotation.z);
+			renderUnlitData[0]->transformStack.Scale(transformData[0]->scale);
 
 			
-			glUseProgram(render[0]->program);
+			glUseProgram(renderUnlitData[0]->program);
 			glUniformMatrix4fv(
-				glGetUniformLocation(render[0]->program, "modelToCameraMatrix"),
-				1, GL_FALSE, glm::value_ptr(render[0]->transformStack.Top()));
+				glGetUniformLocation(renderUnlitData[0]->program, "modelToCameraMatrix"),
+				1, GL_FALSE, glm::value_ptr(renderUnlitData[0]->transformStack.Top()));
 			glUniform4f(
-				glGetUniformLocation(render[0]->program, "color"),
-				render[0]->color.r, render[0]->color.g, render[0]->color.b, render[0]->color.a);
+				glGetUniformLocation(renderUnlitData[0]->program, "color"),
+				renderUnlitData[0]->color.r, renderUnlitData[0]->color.g, 
+				renderUnlitData[0]->color.b, renderUnlitData[0]->color.a);
 
-			render[0]->mesh->Render("flat");
+			renderUnlitData[0]->mesh->Render("flat");
 			glUseProgram(0);
 		}
 
@@ -138,34 +145,35 @@ namespace FusionEngine
 	protected:
 		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
 		{
-			ComponentMapper<RenderLit> renderLit = manager->GetComponentList(entity, CT_RENDERABLE_LIT); 
-			ComponentMapper<Transform> transform = manager->GetComponentList(entity, CT_TRANSFORM);
+			ComponentMapper<RenderLit> renderLitData = manager->GetComponentList(entity, CT_RENDERABLE_LIT); 
+			ComponentMapper<Transform> transformData = manager->GetComponentList(entity, CT_TRANSFORM);
 
 
 			{
-				glutil::PushStack push(renderLit[0]->transformStack);
-				renderLit[0]->transformStack.Translate(transform[0]->position);
-				renderLit[0]->transformStack.RotateX(transform[0]->rotation.x);
-				renderLit[0]->transformStack.RotateY(transform[0]->rotation.y);
-				renderLit[0]->transformStack.RotateZ(transform[0]->rotation.z);
-				renderLit[0]->transformStack.Scale(transform[0]->scale);
+				glutil::PushStack push(renderLitData[0]->transformStack);
+				renderLitData[0]->transformStack.Translate(transformData[0]->position);
+				renderLitData[0]->transformStack.RotateX(transformData[0]->rotation.x);
+				renderLitData[0]->transformStack.RotateY(transformData[0]->rotation.y);
+				renderLitData[0]->transformStack.RotateZ(transformData[0]->rotation.z);
+				renderLitData[0]->transformStack.Scale(transformData[0]->scale);
 
 
-				glBindBufferRange(GL_UNIFORM_BUFFER, renderLit[0]->materialBlockIndex, renderLit[0]->materialUniformBuffer,
+				glBindBufferRange(GL_UNIFORM_BUFFER, renderLitData[0]->materialBlockIndex,
+								  renderLitData[0]->materialUniformBuffer,
 								  0, sizeof(Material));
-				glm::mat3 normalMatrix(renderLit[0]->transformStack.Top());
+				glm::mat3 normalMatrix(renderLitData[0]->transformStack.Top());
 				normalMatrix = glm::transpose(glm::inverse(normalMatrix));
 
-				glUseProgram(renderLit[0]->program);
-				glUniformMatrix4fv(glGetUniformLocation(renderLit[0]->program, "modelToCameraMatrix"),
-								   1, GL_FALSE, glm::value_ptr(renderLit[0]->transformStack.Top()));
-				glUniformMatrix3fv(glGetUniformLocation(renderLit[0]->program, "normalModelToCameraMatrix"),
+				glUseProgram(renderLitData[0]->program);
+				glUniformMatrix4fv(glGetUniformLocation(renderLitData[0]->program, "modelToCameraMatrix"),
+								   1, GL_FALSE, glm::value_ptr(renderLitData[0]->transformStack.Top()));
+				glUniformMatrix3fv(glGetUniformLocation(renderLitData[0]->program, "normalModelToCameraMatrix"),
 								   1, GL_FALSE, glm::value_ptr(normalMatrix));
 
-				renderLit[0]->mesh->Render("lit");
+				renderLitData[0]->mesh->Render("lit");
 				
 				glUseProgram(0);
-				glBindBufferBase(GL_UNIFORM_BUFFER, renderLit[0]->materialBlockIndex, 0);
+				glBindBufferBase(GL_UNIFORM_BUFFER, renderLitData[0]->materialBlockIndex, 0);
 			}
 		}
 
@@ -180,19 +188,21 @@ namespace FusionEngine
 	protected:
 		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
 		{
-			ComponentMapper<Light> light = manager->GetComponentList(entity, CT_LIGHT);
+			ComponentMapper<Light> lightData = manager->GetComponentList(entity, CT_LIGHT);
 
 
-			glm::vec4 lightPosition_cameraSpace = light[0]->modelMatrix * glm::vec4(light[0]->position, 1.0f);
-			glUseProgram(light[0]->shaderProgram);
+			glm::vec4 lightPosition_cameraSpace = 
+				lightData[0]->modelMatrix * glm::vec4(lightData[0]->position, 1.0f);
+			glUseProgram(lightData[0]->shaderProgram);
 
-			glUniform4fv(glGetUniformLocation(light[0]->shaderProgram, "lightIntensity"),
-						 1, glm::value_ptr(light[0]->intensity));
-			glUniform3fv(glGetUniformLocation(light[0]->shaderProgram, "cameraSpaceLightPos"),
+			glUniform4fv(glGetUniformLocation(lightData[0]->shaderProgram, "lightIntensity"),
+						 1, glm::value_ptr(lightData[0]->intensity));
+			glUniform3fv(glGetUniformLocation(lightData[0]->shaderProgram, "cameraSpaceLightPos"),
 						 1, glm::value_ptr(lightPosition_cameraSpace));
 
-			glBindBuffer(GL_UNIFORM_BUFFER, light[0]->lightUniformBuffer);
-			glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(light[0]->lightProperties), &light[0]->lightProperties);
+			glBindBuffer(GL_UNIFORM_BUFFER, lightData[0]->lightUniformBuffer);
+			glBufferSubData(GL_UNIFORM_BUFFER, 0, 
+							sizeof(lightData[0]->lightProperties), &lightData[0]->lightProperties);
 			glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 			glUseProgram(0);
@@ -203,6 +213,45 @@ namespace FusionEngine
 			: EntityProcessingSystem(eventManager, entityManager, CT_LIGHT_BIT) {}
 		virtual ~LightSystem() {}
 	};
+
+
+	class SatelliteUpdateSystem : public EntityProcessingSystem
+	{
+	protected:
+		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
+		{
+			ComponentMapper<Satellite> satelliteData = manager->GetComponentList(entity, CT_SATELLITE);
+			ComponentMapper<Transform> transformData = manager->GetComponentList(entity, CT_TRANSFORM);
+
+
+			satelliteData[0]->rotationDuration.Update();
+			float currentTimeThroughLoop = satelliteData[0]->rotationDuration.GetAlpha();
+			transformData[0]->position.x = 
+				cosf(currentTimeThroughLoop * (2.0f * PI)) * 
+				satelliteData[0]->offsetFromSun + satelliteData[0]->rotationOrigin.x;
+			transformData[0]->position.y = 
+				sinf(currentTimeThroughLoop * (2.0f * PI)) * 
+				satelliteData[0]->offsetFromSun + satelliteData[0]->rotationOrigin.y;
+		}
+
+	public:
+		SatelliteUpdateSystem(EventManager *eventManager, EntityManager *entityManager)
+			: EntityProcessingSystem(eventManager, entityManager, CT_SATELLITE_BIT) {}
+		virtual ~SatelliteUpdateSystem() {}
+	};
+	/*class SunUpdateSystem : public EntityProcessingSystem
+	{
+	protected:
+		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
+		{
+			ComponentMapper<Sun> sun = manager->GetComponentList(entity, CT_SUN);			
+		}
+
+	public:
+		SunUpdateSystem(EventManager *eventManager, EntityManager *entityManager)
+			: EntityProcessingSystem(eventManager, entityManager, CT_SUN_BIT) {}
+		virtual ~SunUpdateSystem() {}
+	};*/
 }
 
 

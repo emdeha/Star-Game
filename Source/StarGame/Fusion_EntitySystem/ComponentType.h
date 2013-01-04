@@ -18,6 +18,8 @@ namespace FusionEngine
 		CT_ROTATE_ORIGIN,
 		CT_CLICKABLE,
 		CT_LIGHT,
+		CT_SUN,
+		CT_SATELLITE, 
 
 		CT_LAST,
 	};
@@ -35,6 +37,8 @@ namespace FusionEngine
 	const unsigned int CT_ROTATE_ORIGIN_BIT = 1 << CT_ROTATE_ORIGIN;
 	const unsigned int CT_CLICKABLE_BIT = 1 << CT_CLICKABLE;
 	const unsigned int CT_LIGHT_BIT = 1 << CT_LIGHT;
+	const unsigned int CT_SUN_BIT = 1 << CT_SUN;
+	const unsigned int CT_SATELLITE_BIT = 1 << CT_SATELLITE;
 }
 
 

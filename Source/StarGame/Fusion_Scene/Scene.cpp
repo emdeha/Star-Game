@@ -86,14 +86,14 @@ bool Scene::HasEntity(const std::string &entityTag)
 	return false;
 }
 
-bool Scene::RemoveEntity(const std::string &entityTag)
+bool Scene::RemoveEntityFirst(const std::string &entityTag)
 {	
 #ifdef _DEBUG
 	assert(entities.empty() == false);
 #endif
 
 	EntitiesMap::iterator iter = entities.begin();
-	for(iter = entities.begin(); iter != entities.end(); ++iter)
+	for(iter; iter != entities.end(); ++iter)
 	{
 		if(iter->first.isActive)
 		{
@@ -103,6 +103,29 @@ bool Scene::RemoveEntity(const std::string &entityTag)
 				iter->first.isActive = false;
 				return true;
 			}	
+		}
+	}
+
+	return false;
+}
+
+bool Scene::RemoveEntityLast(const std::string &entityTag)
+{
+#ifdef _DEBUG
+	assert(entities.empty() == false);
+#endif
+
+	EntitiesMap::iterator iter = entities.end() - 1;
+	for(iter; iter >= entities.begin(); --iter)
+	{
+		if(iter->first.isActive)
+		{
+			if(iter->first.entityName.compare(entityTag) == 0)
+			{
+				entityManager->DestroyEntity(iter->second.get());
+				iter->first.isActive = false;
+				return true;
+			}
 		}
 	}
 

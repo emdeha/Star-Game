@@ -192,6 +192,41 @@ namespace FusionEngine
 		Light() : Component(CT_LIGHT) {}
 		virtual ~Light() {}
 	};
+
+	
+	class Sun : public Component
+	{
+	public:
+		int maxSatelliteCount;
+		int currentSatelliteCount;
+		float satelliteOffsetIncrement;
+		float lastSatelliteOffset;
+
+		Sun() : Component(CT_SUN) {}
+		virtual ~Sun() {}
+	};
+
+
+	class Satellite : public Component
+	{
+	private:
+		enum SatelliteType
+		{
+			FIRE, 
+			WATER, 
+			AIR,
+			EARTH,
+		};
+
+	public:
+		Framework::Timer rotationDuration;
+		glm::vec3 rotationOrigin;
+		SatelliteType type;
+		float offsetFromSun;
+
+		Satellite() : Component(CT_SATELLITE) {}
+		virtual ~Satellite() {}
+	};
 }
 
 #endif

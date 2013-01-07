@@ -37,18 +37,11 @@
 #include "../ParticleEngine/Engine.h"
 #include "../Entities/Skills.h"
 
-#include "../Fusion_Scene/Scene.h"
-#include "../Fusion_EntitySystem/FusionComponents.h"
-#include "../Fusion_EntitySystem/FusionSystems.h"
-
-
-
 
 ShaderManager shaderManager;
 DisplayData displayData;
 
 Scene scene = Scene(2.2f);
-FusionEngine::Scene testScene;
 
 
 long long GetCurrentTimeMillis()
@@ -66,34 +59,6 @@ void HandleMouse()
 
 	if(scene.GetMouse().IsRightButtonDown())
 	{		
-		if(testScene.HasEntity("sampleSun") && testScene.HasEntity("sampleSatellite"))
-		{
-			FusionEngine::ComponentMapper<FusionEngine::Click> clickData =
-				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_CLICKABLE);
-			FusionEngine::ComponentMapper<FusionEngine::Sun> sunData =
-				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sameplSun"), FusionEngine::CT_SUN);
-			
-			if(clickData[0]->isClicked)
-			{
-				if(testScene.RemoveEntityLast("sampleSatellite") == false)
-				{
-					std::printf("The entity doesn't exist\n");
-				}
-				else
-				{
-					testScene.RemoveEntityLast("satelliteOrbit");
-					sunData[0]->lastSatelliteOffset -= sunData[0]->satelliteOffsetIncrement;
-					sunData[0]->currentSatelliteCount -= 1;
-				}
-
-#ifdef _DEBUG
-				assert(sunData[0]->lastSatelliteOffset >= 0.0f);
-				assert(sunData[0]->currentSatelliteCount >= 0);
-#endif
-			}
-		}
-
-
 		if(scene.HasSuns())
 		{
 			if(scene.GetSun()->IsClicked
@@ -110,84 +75,6 @@ void HandleMouse()
 
 	if(scene.GetMouse().IsLeftButtonDown())
 	{
-		if(testScene.HasEntity("sampleSun"))
-		{
-			FusionEngine::ComponentMapper<FusionEngine::Click> clickData =
-				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_CLICKABLE);
-			FusionEngine::ComponentMapper<FusionEngine::Sun> sunData =
-				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_SUN);
-			FusionEngine::ComponentMapper<FusionEngine::Transform> transformData =
-				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_TRANSFORM);
-
-			if(clickData[0]->isClicked && 
-			   sunData[0]->currentSatelliteCount < sunData[0]->maxSatelliteCount)
-			{
-				testScene.AddEntity("sampleSatellite");
-
-				FusionEngine::SatelliteUpdateSystem *satelliteUpdateSystem =
-					new FusionEngine::SatelliteUpdateSystem(testScene.GetEventManager(), testScene.GetEntityManager());
-				testScene.AddSystem(satelliteUpdateSystem);
-				FusionEngine::Satellite *satellite =
-					new FusionEngine::Satellite();
-				satellite->rotationOrigin = transformData[0]->position;
-				satellite->offsetFromSun = sunData[0]->lastSatelliteOffset;
-				satellite->rotationTime = 10.0f;
-				sunData[0]->lastSatelliteOffset += sunData[0]->satelliteOffsetIncrement;
-				satellite->rotationDuration = 
-					Framework::Timer(Framework::Timer::TT_LOOP, satellite->rotationTime);
-				testScene.AddComponent("sampleSatellite", satellite);
-								
-				FusionEngine::RenderLitSystem *renderLitSystem =
-					new FusionEngine::RenderLitSystem(testScene.GetEventManager(), testScene.GetEntityManager());
-				testScene.AddSystem(renderLitSystem);
-				FusionEngine::RenderLit *renderMeshLit =
-					new FusionEngine::RenderLit();
-				renderMeshLit->material.diffuseColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-				renderMeshLit->material.shininessFactor = 0.3f;
-				renderMeshLit->material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
-				renderMeshLit->program = shaderManager.GetLitProgData().theProgram;
-				renderMeshLit->Init("mesh-files/UnitSphere.xml");
-				testScene.AddComponent("sampleSatellite", renderMeshLit);
-
-				FusionEngine::Transform *transformTwo =
-					new FusionEngine::Transform();
-				transformTwo->scale = glm::vec3(0.5f, 0.5f, 0.5f);
-				testScene.AddComponent("sampleSatellite", transformTwo);
-
-
-				sunData[0]->currentSatelliteCount += 1;
-
-
-
-				testScene.AddEntity("satelliteOrbit");
-
-				FusionEngine::Transform *transformOrbit = 
-					new FusionEngine::Transform();
-				transformOrbit->position = satellite->rotationOrigin;
-				transformOrbit->scale = glm::vec3(1.0f);
-				transformOrbit->rotation = glm::vec3(90.0f, 0.0f, 0.0f);
-				testScene.AddComponent("satelliteOrbit", transformOrbit);
-				
-				FusionEngine::RenderFromGeneratedDataSystem *renderGenDataSystem =
-					new	FusionEngine::RenderFromGeneratedDataSystem(testScene.GetEventManager(), testScene.GetEntityManager());
-				testScene.AddSystem(renderGenDataSystem);
-				FusionEngine::RenderGenData *renderGenData =
-					new FusionEngine::RenderGenData();
-				renderGenData->color = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
-				renderGenData->indicesCount = 360;
-				renderGenData->shaderProgram = shaderManager.GetSimpleProgData().theProgram;
-				std::vector<float> vertexData;
-				std::vector<unsigned short> indexData;
-				Utility::Primitives::InitTorus2DData(vertexData, indexData, 
-													 90, 
-													 satellite->offsetFromSun + 0.25f, satellite->offsetFromSun - 0.25f,
-													 transformOrbit->position);
-				renderGenData->Init(vertexData, indexData);
-				testScene.AddComponent("satelliteOrbit", renderGenData);
-			}
-		}
-
-
 		if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 		{
 			if(
@@ -352,31 +239,6 @@ void HandleMouse()
 					scene.OnEvent(satelliteHoveredEvent);
 				}
 			}
-		}
-
-		if(testScene.HasEntity("sampleSatellite"))
-		{
-			FusionEngine::ComponentMapper<FusionEngine::Satellite> satelliteData = 
-				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSatellite"), FusionEngine::CT_SATELLITE);
-
-			Utility::Ray mouseRay = 
-				scene.GetMouse().GetPickRay(displayData.projectionMatrix, displayData.modelMatrix, 
-											glm::vec4(scene.GetTopDownCamera().ResolveCamPosition(), 1.0f), 
-											glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-				
-			FusionEngine::ComponentMapper<FusionEngine::RenderGenData> renderGenData =
-				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("satelliteOrbit"), FusionEngine::CT_RENDERABLE_GEN_DATA);
-
-			if(Utility::ClickDetection::IsTorusClicked(satelliteData[0]->offsetFromSun + 0.25f, 
-													   satelliteData[0]->offsetFromSun - 0.25f, 
-													   satelliteData[0]->rotationOrigin, mouseRay))
-			{
-				renderGenData[0]->isVisible = true;
-			}
-			else
-			{
-				renderGenData[0]->isVisible = false;
-			}			
 		}
 	}
 
@@ -661,58 +523,6 @@ void Init()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	nextGameTick = GetTickCount();
-
-
-	//////////////////////////////////////
-	
-	testScene.Init();
-	testScene.AddEntity("sampleSun");
-	FusionEngine::RenderUnlitSystem *renderSystem =
-		new FusionEngine::RenderUnlitSystem(testScene.GetEventManager(), testScene.GetEntityManager());
-	FusionEngine::ClickSystem *clickSystem =
-		new FusionEngine::ClickSystem(testScene.GetEventManager(), testScene.GetEntityManager());
-	testScene.AddSystem(clickSystem);
-	testScene.AddSystem(renderSystem);
-	FusionEngine::RenderUnlit *renderMesh = 
-		new FusionEngine::RenderUnlit();
-	renderMesh->color = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
-	renderMesh->program = shaderManager.GetSimpleProgData().theProgram;
-	renderMesh->Init("mesh-files/UnitSphere.xml");
-	FusionEngine::Transform *transform = 
-		new FusionEngine::Transform();
-	transform->position = glm::vec3(1.0f, 0.0f, 0.0f);
-	transform->rotation = glm::vec3();
-	transform->scale = glm::vec3(1.0f, 1.0f, 1.0f);
-	FusionEngine::Click *click =
-		new FusionEngine::Click();
-	click->isClicked = false;
-	FusionEngine::Sun *sun =
-		new FusionEngine::Sun();
-	sun->maxSatelliteCount = 4;
-	sun->satelliteOffsetIncrement = 1.0f;
-	sun->lastSatelliteOffset = sun->satelliteOffsetIncrement;
-	sun->currentSatelliteCount = 0;
-	testScene.AddComponent("sampleSun", sun);
-	testScene.AddComponent("sampleSun", renderMesh);
-	testScene.AddComponent("sampleSun", click);
-	testScene.AddComponent("sampleSun", transform);
-
-	testScene.AddEntity("sunLight");
-	FusionEngine::LightSystem *lightSystem =
-		new FusionEngine::LightSystem(testScene.GetEventManager(), testScene.GetEntityManager());
-	testScene.AddSystem(lightSystem);
-	FusionEngine::Light *light =
-		new FusionEngine::Light();
-	light->position = glm::vec3(1.0f, 0.0f, 0.0f);
-	light->intensity = glm::vec4(3.5f);
-	light->lightProperties.ambientIntensiy = glm::vec4(0.4f);
-	light->lightProperties.lightAttenuation = 1.2f;
-	light->lightProperties.maxIntensity = 5.0f;
-	light->lightProperties.gamma = displayData.gamma;
-	light->shaderProgram = shaderManager.GetLitProgData().theProgram;
-	testScene.AddComponent("sunLight", light);
-	
-	///////////////////////////////////////////
 }
 
 void Display()
@@ -756,44 +566,6 @@ void Display()
 		scene.RenderCurrentLayout(shaderManager.GetFontProgData(),
 								  shaderManager.GetSimpleNoUBProgData(),
 								  shaderManager.GetTextureProgData());
-
-		if(testScene.HasEntity("sampleSun"))
-		{
-			FusionEngine::ComponentMapper<FusionEngine::RenderUnlit> tmap =
-				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_RENDERABLE_UNLIT);
-		
-			tmap[0]->transformStack = modelMatrix;
-			if(testScene.HasEntity("sampleSatellite"))
-			{
-				FusionEngine::ComponentMapper<FusionEngine::RenderLit> satMap = 
-					testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSatellite"), FusionEngine::CT_RENDERABLE_LIT);
-				satMap[0]->transformStack = modelMatrix;
-				satMap[0]->materialBlockIndex = shaderManager.GetBlockIndex(BT_MATERIAL);
-
-				if(testScene.HasEntity("satelliteOrbit"))
-				{
-					FusionEngine::ComponentMapper<FusionEngine::RenderGenData> renderGenData =
-						testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("satelliteOrbit"), FusionEngine::CT_RENDERABLE_GEN_DATA);
-					renderGenData[0]->transformStack = modelMatrix;
-				}
-			}
-		
-			FusionEngine::ComponentMapper<FusionEngine::Click> click =
-				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_CLICKABLE);
-			click[0]->cameraPosition = glm::vec4(scene.GetTopDownCamera().ResolveCamPosition(), 1.0f);
-			click[0]->isClicked = false;
-			click[0]->modelMatrix = displayData.modelMatrix;
-			click[0]->projMatrix = displayData.projectionMatrix;
-			click[0]->userMouse = scene.GetMouse();
-			click[0]->windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
-			click[0]->windowWidth = glutGet(GLUT_WINDOW_WIDTH);
-		}
-		
-		FusionEngine::ComponentMapper<FusionEngine::Light> lightMap =
-			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sunLight"), FusionEngine::CT_LIGHT);
-		lightMap[0]->modelMatrix = modelMatrix.Top();
-		lightMap[0]->lightUniformBuffer = shaderManager.GetUniformBuffer(UBT_LIGHT);
-		testScene.ProcessSystems();
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{
@@ -875,13 +647,6 @@ void Keyboard(unsigned char key, int x, int y)
 	   scene.GetLayout(LAYOUT_MENU)->HasActiveControl())
 	{
 		scene.GetLayout(LAYOUT_MENU)->GetActiveControl()->InputChar(key);
-	}
-
-	if(key == 'd')
-	{
-		FusionEngine::ComponentMapper<FusionEngine::Transform> tmap = 
-			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("sampleSun"), FusionEngine::CT_TRANSFORM);
-		tmap[0]->position.x += 0.1f;
 	}
 
 	switch (key)

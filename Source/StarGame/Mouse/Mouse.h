@@ -76,10 +76,13 @@ public:
 	///		  (we need to normalize the resulting vector).
 	///		- Its origin is the camera position.
 	Utility::Ray GetPickRay(glm::mat4 projMat, glm::mat4 modelMat, 
-				   glm::vec4 cameraPos,
-				   int windowWidth, int windowHeight);
+						    glm::vec4 cameraPos,
+						    int windowWidth, int windowHeight);
 
 	glm::vec2 GetClipSpacePosition(int windowWidth, int windowHeight);
+
+	glm::vec4 GetWorldSpacePosition(int windowWidth, int windowHeight,
+									glm::mat4 projMat, glm::mat4 modelMat);
 
 
 	bool IsLeftButtonDown();

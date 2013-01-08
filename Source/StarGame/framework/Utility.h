@@ -178,6 +178,7 @@ namespace Utility
 			short resolution; ///< The resolution with which the circle will be rendered.
 
 		public:
+			Circle() {}
 			Circle(glm::vec4 newColor, glm::vec4 newPosition, 
 				   float newRadius, short newResolution);
 

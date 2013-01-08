@@ -72,6 +72,13 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix,
 									  sceneGamma);
 	}
 
+	int sizeSwarms = swarms.size();
+	for(int i = 0; i < sizeSwarms; i++)
+	{
+		swarms[i]->Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), 
+						  billboardNoTextureData);
+	}
+
 	int sizeExplosionEmitters = explosionEmitters.size();
 	for(int i = 0; i < sizeExplosionEmitters; i++)
 	{
@@ -154,6 +161,19 @@ void Scene::UpdateScene()
 
 		Event returnedEvent = fastSuicideBombers[i]->GetGeneratedEvents()[0];
 		this->OnEvent(returnedEvent);
+	}
+
+	int sizeSwarms = swarms.size();
+	for(int i = 0; i < sizeSwarms; i++)
+	{
+		if(!suns.empty())
+		{
+			swarms[i]->Update(false, *suns.front().get());
+		}
+		else
+		{
+			swarms[i]->Update(true);
+		}
 	}
 
 	int sizeExplosionEmitters = explosionEmitters.size();
@@ -361,6 +381,10 @@ void Scene::AddSpaceship(const std::shared_ptr<Spaceship> newSpaceship)
 void Scene::AddFastSuicideBomber(const std::shared_ptr<FastSuicideBomber> newFastSuicideBomber)
 {
 	fastSuicideBombers.push_back(newFastSuicideBomber);
+}
+void Scene::AddSwarm(const std::shared_ptr<Swarm> newSwarm)
+{
+	swarms.push_back(newSwarm);
 }
 
 

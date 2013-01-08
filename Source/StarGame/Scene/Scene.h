@@ -51,6 +51,7 @@ private:
 	std::vector<std::shared_ptr<Sun>> suns; ///< Holds the world's suns.
 	std::vector<std::shared_ptr<Spaceship>> spaceships; ///< Holds the world's enemies.
 	std::vector<std::shared_ptr<FastSuicideBomber>> fastSuicideBombers;
+	std::vector<std::shared_ptr<Swarm>> swarms;
 	std::vector<ExplosionEmitter> explosionEmitters;
 	std::vector<std::shared_ptr<Skill>> skills;
 
@@ -101,6 +102,7 @@ public:
 	void AddSun(const std::shared_ptr<Sun> newSun);
 	void AddSpaceship(const std::shared_ptr<Spaceship> newSpaceship);
 	void AddFastSuicideBomber(const std::shared_ptr<FastSuicideBomber> newFastSuicideBomber);
+	void AddSwarm(const std::shared_ptr<Swarm> newSwarm);
 
 	void AddExplosionEmitter(const ExplosionEmitter &newExplosionEmitter);
 

@@ -158,7 +158,7 @@ void SwarmEmitter::Render(glutil::MatrixStack &modelMatrix,
 	glutil::PushStack push(modelMatrix);
 
 	glUseProgram(billboardProgDataNoTexture.theProgram);
-
+	glBindVertexArray(vao);
 	
 	glUniformMatrix4fv(billboardProgDataNoTexture.modelToCameraMatrixUnif,
 					   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));

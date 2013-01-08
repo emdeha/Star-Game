@@ -110,22 +110,9 @@ Utility::Ray Mouse::GetPickRay(glm::mat4 projMat, glm::mat4 modelMat,
 							   glm::vec4 cameraPos, 
 							   int windowWidth, int windowHeight)
 {
-	float mouseX = float(this->currentPosition.x);
-	float mouseY = float(this->currentPosition.y);
+	glm::vec4 mousePos_worldSpace = this->GetWorldSpacePosition(windowWidth, windowHeight,
+																projMat, modelMat);
 
-	glm::vec4 mousePos_clipSpace = glm::vec4(
-											 ((mouseX * 2.0f) / windowWidth) - 1.0f,
-											 (1.0f - (2.0f * mouseY) / windowHeight),
-											 0.0f,
-											 1.0f
-											 );
-
-	glm::vec4 mousePos_viewSpace = glm::inverse(projMat) * mousePos_clipSpace;
-
-	mousePos_viewSpace = mousePos_viewSpace / mousePos_viewSpace.w;
-
-	glm::vec4 mousePos_worldSpace = glm::inverse(modelMat) * mousePos_viewSpace;
-	
 	glm::vec4 rayDirection = glm::normalize(mousePos_worldSpace - cameraPos);
 	glm::vec4 rayOrigin = cameraPos;
 
@@ -144,4 +131,27 @@ glm::vec2 Mouse::GetClipSpacePosition(int windowWidth, int windowHeight)
 											);
 
 	return mousePos_clipSpace;
+}
+
+
+glm::vec4 Mouse::GetWorldSpacePosition(int windowWidth, int windowHeight,
+									   glm::mat4 projMat, glm::mat4 modelMat)
+{
+	float mouseX = float(this->currentPosition.x);
+	float mouseY = float(this->currentPosition.y);
+
+	glm::vec4 mousePos_clipSpace = glm::vec4(
+											 ((mouseX * 2.0f) / windowWidth) - 1.0f,
+											 (1.0f - (2.0f * mouseY) / windowHeight),
+											 0.0f,
+											 1.0f
+											 );
+
+	glm::vec4 mousePos_viewSpace = glm::inverse(projMat) * mousePos_clipSpace;
+
+	mousePos_viewSpace = mousePos_viewSpace / mousePos_viewSpace.w;
+
+	glm::vec4 mousePos_worldSpace = glm::inverse(modelMat) * mousePos_viewSpace;
+
+	return mousePos_worldSpace;
 }

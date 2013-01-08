@@ -244,7 +244,7 @@ void Utility::Primitives::Torus2D::Draw(glutil::MatrixStack &modelMatrix, const 
 
 
 Utility::Primitives::Circle::Circle(glm::vec4 newColor, glm::vec4 newPosition,
-											 float newRadius, short newResolution)
+									float newRadius, short newResolution)
 {
 	assert(newResolution < 360 && newResolution > 3.0);
 

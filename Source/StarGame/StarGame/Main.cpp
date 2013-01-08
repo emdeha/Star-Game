@@ -36,12 +36,17 @@
 #include "../AssetLoader/MeshLoader.h"
 #include "../ParticleEngine/Engine.h"
 #include "../Entities/Skills.h"
+#include "../GUISystem/GameSpecificGUI.h"
 
 
 ShaderManager shaderManager;
 DisplayData displayData;
 
 Scene scene = Scene(2.2f);
+
+
+AOESelector testSelector;
+glm::vec3 selectorPos;
 
 
 long long GetCurrentTimeMillis()
@@ -52,7 +57,21 @@ long long GetCurrentTimeMillis()
 
 void HandleMouse()
 {
-	glm::vec3 cameraPosition = scene.GetTopDownCamera().ResolveCamPosition();
+	glm::vec4 cameraPosition = glm::vec4(scene.GetTopDownCamera().ResolveCamPosition(), 1.0f);
+
+
+	glm::vec4 mousePos_worldSpace = 
+		scene.GetMouse().GetWorldSpacePosition(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+											   displayData.projectionMatrix, displayData.modelMatrix);
+	glm::vec4 rayDir = glm::normalize(mousePos_worldSpace - cameraPosition);
+
+	float distance = -cameraPosition.z / rayDir.z;
+
+	glm::vec4 position = cameraPosition + rayDir * distance;
+
+	testSelector.Update(glm::vec3(position.x, position.y, position.z));
+
+
 
 	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
 	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
@@ -63,7 +82,7 @@ void HandleMouse()
 		{
 			if(scene.GetSun()->IsClicked
 				(displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
-				 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
+				 cameraPosition, windowWidth, windowHeight))
 			{
 				Event rightClickSunEvent = StockEvents::EventOnRightClick("sun");
 
@@ -195,7 +214,7 @@ void HandleMouse()
 			{
 				if(scene.GetSun()->IsClicked
 					(displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
-					 glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
+					 cameraPosition, windowWidth, windowHeight))
 				{
 					Event leftClickSunEvent = StockEvents::EventOnLeftClick("sun");
 
@@ -209,7 +228,7 @@ void HandleMouse()
 				{
 					if((*iter)->IsClicked
 						(displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
-							glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
+							cameraPosition, windowWidth, windowHeight))
 					{
 						Event leftClickSatelliteEvent = StockEvents::EventOnLeftClick("satellite");
 
@@ -231,7 +250,7 @@ void HandleMouse()
 			{
 				if((*iter)->IsClicked
 					(displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
-						glm::vec4(cameraPosition, 1.0f), windowWidth, windowHeight))
+						cameraPosition, windowWidth, windowHeight))
 				{
 					Event satelliteHoveredEvent = StockEvents::EventOnHover();
 
@@ -341,6 +360,15 @@ void InitializeGUI()
 						glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	scene.AddLayouts(guiLoader.GetAllLoadedLayouts());
+
+	
+	glm::vec4 mousePos_worldSpace = 
+		scene.GetMouse().GetWorldSpacePosition(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+											   displayData.projectionMatrix, displayData.modelMatrix);
+	testSelector = 
+		AOESelector(glm::vec3(mousePos_worldSpace.x, mousePos_worldSpace.y, 0.0f), 
+					2.0f, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
+	testSelector.Init();
 }
 
 void InitializeScene()
@@ -355,46 +383,22 @@ void InitializeScene()
 	SunLight 
 		mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, displayData.gamma));
 
-	std::shared_ptr<Spaceship> 
-		sampleSpaceship(new Spaceship(glm::vec3(4.5f, 0.0f, 0.0f),  
-									  glm::vec3(-0.1f, 0.0f, 0.0f),
-									  90.0f, 
-									  0.0f, 
-									  0.15f,
-									  0.3f, 20, 1));
-	std::shared_ptr<Spaceship>
-		sampleSpaceship2(new Spaceship(glm::vec3(0.0f, 4.5f, 0.0f), 
-									   glm::vec3(),
-									   90.0f, 
-									   0.0f, 
-									   0.15f,
-									   0.3f, 20, 1));
 
-	std::shared_ptr<FastSuicideBomber>
-		sampleFastSuicideBomber(new FastSuicideBomber(glm::vec3(0.0f, 4.5f, 0.0f),
-													  glm::vec3(0.0f, -0.05f, 0.0f), 
-													  50, 
-													  50, 
-													  3.0f, 
-													  0.5f));
-	sampleFastSuicideBomber->LoadMesh("mesh-files/UnitSphere.xml");
+	std::shared_ptr<Swarm> sampleSwarm =
+		std::shared_ptr<Swarm>(new Swarm(glm::vec3(4.0f, 0.0f, 0.0f), glm::vec3(-0.01f, 0.0f, 0.0f), 
+										 100, 50, 5, 1, 3.0f, 
+										 shaderManager.GetBillboardProgDataNoTexture()));
 
 
 	mainSun->LoadMesh("mesh-files/UnitSphere.xml");
-	sampleSpaceship->LoadMesh("mesh-files/Ship.xml");
-	sampleSpaceship->LoadProjectileMesh("mesh-files/UnitSphere.xml");
-	sampleSpaceship2->LoadMesh("mesh-files/Ship.xml");
-	sampleSpaceship2->LoadProjectileMesh("mesh-files/UnitSphere.xml");
+	scene.AddSwarm(sampleSwarm);
+
 
 	scene.SetMouse(userMouse);
 	scene.SetTopDownCamera(userCamera);
 
 	scene.AddSun(mainSun);
 	scene.AddSunLight(mainSunLight);
-	
-	scene.AddFastSuicideBomber(sampleFastSuicideBomber);
-	//scene.AddSpaceship(sampleSpaceship);
-	//scene.AddSpaceship(sampleSpaceship2);
 
 	scene.SetMusic("../data/music/background.mp3", MUSIC_BACKGROUND);
 	scene.SetMusic("../data/music/onclick.wav", MUSIC_ON_SUN_CLICK);
@@ -566,6 +570,8 @@ void Display()
 		scene.RenderCurrentLayout(shaderManager.GetFontProgData(),
 								  shaderManager.GetSimpleNoUBProgData(),
 								  shaderManager.GetTextureProgData());
+
+		testSelector.Draw(modelMatrix, shaderManager.GetSimpleProgData());
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{
@@ -638,7 +644,6 @@ void Reshape(int width, int height)
 	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 	glutPostRedisplay();
 }
-
 
 void Keyboard(unsigned char key, int x, int y)
 {

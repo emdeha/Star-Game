@@ -340,7 +340,7 @@ void Swarm::UpdateAI(Sun &sun)
 				glm::vec3 vectorToSatellite = 
 					sun.GetOuterSatellite()->GetPosition() - position;
 
-				velocity = glm::normalize(vectorToSatellite) * 0.003f; // TODO: Magick
+				velocity = glm::normalize(vectorToSatellite) * 0.03f; // TODO: Magick
 			}
 		}
 		else
@@ -372,7 +372,7 @@ void Swarm::UpdateAI(Sun &sun)
 				if(!isCommanded)
 				{
 					direction = glm::normalize(direction);
-					velocity = direction * 0.01f;
+					velocity = direction * 0.1f;
 				}
 
 				if(health <= 20.0f)

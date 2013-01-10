@@ -25,32 +25,58 @@
 
 #include "../framework/EventSystem.h"
 #include "../ParticleEngine/Engine.h"
+#include "../GUISystem/GameSpecificGUI.h"
 #include "PlanetBodies.h"
+
+
+enum ParameterType
+{
+	PARAM_POSITION,
+	PARAM_RANGE,
+	PARAM_DAMAGE,
+};
 
 
 class Skill
 {
+protected:
+	char fusionCombination[4];
+	std::vector<Event> generatedEvents;
+
 public:
+	Skill() { generatedEvents.resize(0); }
+	Skill(char fusionCombA, char fusionCombB, char fusionCombC)
+	{
+		fusionCombination[0] = fusionCombA;
+		fusionCombination[1] = fusionCombB;
+		fusionCombination[2] = fusionCombC;
+		fusionCombination[3] = '\0';
+		
+		generatedEvents.resize(0);
+	}
+
 	virtual void Update() {};
 	virtual void Render(glutil::MatrixStack &modelMatrix,
 						glm::vec3 cameraPosition,
 						const BillboardProgDataNoTexture &progData) {};
+
 	virtual void OnEvent(Event &_event) {};
-	virtual Event GetGeneratedEvent(const std::string &	eventName)
-	{
-		Event eventToReturn = StockEvents::EmptyEvent();
-		return eventToReturn;
-	}
-	virtual std::vector<Event> GetGeneratedEvents()
-	{
-		std::vector<Event> eventsToReturn;
-		return eventsToReturn;
-	}
+	// Only for EVENT_TYPE_OTHER
+	Event GetGeneratedEvent(const std::string &	eventName);
+	// Gets the generated events and empties the event list.
+	// (!)It is an one little dangerous method. You can lose a lot of events that way.
+	std::vector<Event> GetGeneratedEvents();
+
 	virtual std::shared_ptr<Sun> GetOwner()
 	{
 		return std::shared_ptr<Sun>();
 	}
+
+	virtual void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3) {}
+	virtual void SetParameter(ParameterType paramType, int newParam_int) {}
+	virtual void SetParameter(ParameterType paramType, float newParam_float) {}
 };
+
 
 class RaySkill : public Skill
 {
@@ -62,15 +88,12 @@ private:
 	
 	float range;
 
-	char fusionCombination[4];
-
 	RayEmitter ray;
-	std::vector<Event> generatedEvents;
 
 	bool isStarted;
 
 public:
-	RaySkill() {}
+	RaySkill() : Skill() {}
 	RaySkill(std::shared_ptr<Sun> newSkillOwner,
 			 int newDamage, int newDefense,
 			 float newRange,
@@ -83,10 +106,38 @@ public:
 
 	void OnEvent(Event &_event);
 	std::shared_ptr<Sun> GetOwner();
+};
 
-	// Only for EVENT_TYPE_OTHER
-	Event GetGeneratedEvent(const std::string &	eventName);
-	std::vector<Event> GetGeneratedEvents();
+
+class AOESkill : public Skill
+{
+private:
+	std::shared_ptr<Sun> skillOwner;
+
+	int damage;
+	float range;
+	glm::vec3 position;
+	
+	AOESelector skillSelector;
+	std::vector<Event> generatedEvents;
+	bool isStarted;
+
+public:
+	AOESkill() : Skill() {}
+	AOESkill(std::shared_ptr<Sun> newSkillOwner,
+			 int newDamage, float newRange,
+			 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
+
+	void Update();
+	void Render(glutil::MatrixStack	&modelMatrix, 
+				const SimpleProgData &progData);
+
+	void OnEvent(Event &_event);
+	std::shared_ptr<Sun> GetOwner();
+
+	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
+	//void SetParameter(ParameterType paramType, int newParam_int);
+	//void SetParameter(ParameterType paramType, float newParam_float);
 };
 
 

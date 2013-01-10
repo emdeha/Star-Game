@@ -165,7 +165,7 @@ void SwarmEmitter::Render(glutil::MatrixStack &modelMatrix,
 	glUniform3f(billboardProgDataNoTexture.cameraPositionUnif, 
 				cameraPosition.x, cameraPosition.y, cameraPosition.z);
 	glUniform4f(billboardProgDataNoTexture.colorUnif,
-				1.0f, 0.0f, 0.0f, 1.0f);
+				1.0f, 1.0f, 0.0f, 1.0f);
 
 
 	for(int i = 0; i < particleCount; i++)
@@ -359,26 +359,28 @@ void RayEmitter::Render(glutil::MatrixStack &modelMatrix,
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
 
-	glutil::PushStack push(modelMatrix);
-
-	glUseProgram(billboardData.theProgram);
-
-	glUniformMatrix4fv(billboardData.modelToCameraMatrixUnif,
-					   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-	glUniform3f(billboardData.cameraPositionUnif,
-				cameraPosition.x, cameraPosition.y, cameraPosition.z);
-	glUniform1f(billboardData.billboardSizeUnif, 0.2f);
-
-	for(int i = 0; i < particleCount; i++)
 	{
-		glUniform3f(billboardData.deltaPositionUnif,
-					particles[i].position.x, particles[i].position.y, particles[i].position.z);
-		glUniform4f(billboardData.colorUnif,
-					particles[i].color.r, particles[i].color.g, 
-					particles[i].color.b, particles[i].color.a);
+		glutil::PushStack push(modelMatrix);
 
-		glDrawArrays(GL_POINTS, 0, 1);
+		glUseProgram(billboardData.theProgram);
 
+		glUniformMatrix4fv(billboardData.modelToCameraMatrixUnif,
+						   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+		glUniform3f(billboardData.cameraPositionUnif,
+					cameraPosition.x, cameraPosition.y, cameraPosition.z);
+		glUniform1f(billboardData.billboardSizeUnif, 0.2f);
+
+		for(int i = 0; i < particleCount; i++)
+		{
+			glUniform3f(billboardData.deltaPositionUnif,
+						particles[i].position.x, particles[i].position.y, particles[i].position.z);
+			glUniform4f(billboardData.colorUnif,
+						particles[i].color.r, particles[i].color.g, 
+						particles[i].color.b, particles[i].color.a);
+
+			glDrawArrays(GL_POINTS, 0, 1);
+
+		}
 	}
 
 	glDisableVertexAttribArray(0);

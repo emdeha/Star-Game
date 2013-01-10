@@ -45,7 +45,7 @@ DisplayData displayData;
 Scene scene = Scene(2.2f);
 
 
-AOESelector testSelector;
+//AOESelector testSelector;
 glm::vec3 selectorPos;
 
 
@@ -69,7 +69,7 @@ void HandleMouse()
 
 	glm::vec4 position = cameraPosition + rayDir * distance;
 
-	testSelector.Update(glm::vec3(position.x, position.y, position.z));
+	//testSelector.Update(glm::vec3(position.x, position.y, position.z));
 
 
 
@@ -365,10 +365,10 @@ void InitializeGUI()
 	glm::vec4 mousePos_worldSpace = 
 		scene.GetMouse().GetWorldSpacePosition(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
 											   displayData.projectionMatrix, displayData.modelMatrix);
-	testSelector = 
-		AOESelector(glm::vec3(mousePos_worldSpace.x, mousePos_worldSpace.y, 0.0f), 
-					2.0f, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
-	testSelector.Init();
+	//testSelector = 
+	//	AOESelector(glm::vec3(mousePos_worldSpace.x, mousePos_worldSpace.y, 0.0f), 
+	//				2.0f, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
+	//testSelector.Init();
 }
 
 void InitializeScene()
@@ -414,6 +414,7 @@ void InitializeScene()
 	scene.AddFusionSequence("earthSatellite", 'e', 'e', 'e');
 	scene.AddFusionSequence("waterSatellite", 'w', 'w', 'w');
 	scene.AddFusionSequence("raySkill", 'q', 'w', 'e');
+	scene.AddFusionSequence("aoeSkill", 'q', 'q', 'w');
 
 
 	ExplosionEmitter sceneExplosion =
@@ -426,6 +427,12 @@ void InitializeScene()
 		std::shared_ptr<RaySkill>(new RaySkill(scene.GetSun(),
 											   100, 100, 3.0f, 'q', 'w', 'e'));
 	scene.AddSkill(testSkill);
+
+	std::shared_ptr<AOESkill> testAOESkill =
+		std::shared_ptr<AOESkill>(new AOESkill(scene.GetSun(),
+											   50, 2.0f, 
+											   'q', 'q', 'w'));
+	scene.AddSkill(testAOESkill);
 
 
 	glUseProgram(shaderManager.GetTextureProgData().theProgram);
@@ -571,7 +578,7 @@ void Display()
 								  shaderManager.GetSimpleNoUBProgData(),
 								  shaderManager.GetTextureProgData());
 
-		testSelector.Draw(modelMatrix, shaderManager.GetSimpleProgData());
+		//testSelector.Draw(modelMatrix, shaderManager.GetSimpleProgData());
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{

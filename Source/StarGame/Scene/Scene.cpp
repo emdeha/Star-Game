@@ -191,7 +191,7 @@ void Scene::UpdateScene()
 		}
 	}
 
-	if(!suns.empty() && !fastSuicideBombers.empty())
+	if(!suns.empty() && !swarms.empty())
 	{
 		int sizeSkills = skills.size();
 		for(int i = 0; i < sizeSkills; i++)
@@ -199,7 +199,9 @@ void Scene::UpdateScene()
 			skills[i]->Update();
 			Event skillEvent = skills[i]->GetGeneratedEvent("skilldeployed");
 			suns[0]->OnEvent(skillEvent);
-			fastSuicideBombers[0]->OnEvent(skills[i], skillEvent);
+
+			//skills[i]->SetParameter(PARAM_POSITION, 
+			//fastSuicideBombers[0]->OnEvent(skills[i], skillEvent);
 		}
 	}
 }
@@ -294,7 +296,6 @@ void Scene::OnEvent(Event &_event)
 				}
 			}
 			if(strcmp(_event.GetArgument("buttons").varString, 
-					  //"www"
 					  sceneFusionInput.GetSequenceButtons("waterSatellite").c_str()) == 0)
 			{
 				if(HasSuns())

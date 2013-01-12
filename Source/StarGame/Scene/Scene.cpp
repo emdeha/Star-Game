@@ -18,6 +18,8 @@
 #include "stdafx.h"
 #include "Scene.h"
 
+#include <algorithm>
+
 Scene::Scene(float newSceneGamma)
 {
 	lights.resize(0);
@@ -165,15 +167,27 @@ void Scene::UpdateScene()
 	}
 
 	int sizeSwarms = swarms.size();
-	for(int i = 0; i < sizeSwarms; i++)
+	for(/*int i = 0; i < sizeSwarms; i++*/
+		std::vector<std::shared_ptr<Swarm>>::iterator iter = swarms.begin();
+		iter != swarms.end(); )
 	{
 		if(!suns.empty())
 		{
-			swarms[i]->Update(false, *suns.front().get());
+			/*swarms[i]*/(*iter)->Update(false, *suns.front().get());
 		}
 		else
 		{
-			swarms[i]->Update(true);
+			/*swarms[i]*/(*iter)->Update(true);
+		}
+
+		if(/*swarms[i]*/(*iter)->IsDestroyed())
+		{
+			swarms.erase(iter);//std::remove(swarms.begin(), swarms.end(), swarms[i]), swarms.end());
+			break;
+		}
+		else
+		{
+			++iter;
 		}
 	}
 
@@ -198,8 +212,6 @@ void Scene::UpdateScene()
 		for(int i = 0; i < sizeSkills; i++)
 		{
 			skills[i]->Update();
-			//Event skillEvent = skills[i]->GetGeneratedEvent("skilldeployed");
-			//suns[0]->OnEvent(skillEvent);
 			
 			glm::vec4 mousePos_atZ = 
 				sceneMouse.GetPositionAtZ(currentDisplayData.windowWidth, currentDisplayData.windowHeight,
@@ -208,23 +220,9 @@ void Scene::UpdateScene()
 
 			skills[i]->SetParameter(PARAM_POSITION, 
 									mousePos_atZ.swizzle(glm::comp::X, glm::comp::Y, glm::comp::Z));
-			
-			/*if(sceneMouse.IsLeftButtonDown())
-			{
-				if(skills[i]->IsIntersectingObject(swarms[i]->GetPosition()))
-				{
-					swarms[i]->OnEvent(skillEvent);
-				}
-			}*/
-			//fastSuicideBombers[0]->OnEvent(skills[i], skillEvent);
 		}
-
-		/*if(swarms[0]->IsDestroyed())
-		{
-			swarms.pop_back();
-		}*/
 	}
-	else
+	else if(suns.empty())
 	{
 		skills.resize(0);
 	}
@@ -301,15 +299,18 @@ void Scene::OnEvent(Event &_event)
 		{
 			if(!swarms.empty())
 			{
-				for(int i = 0; i < skills.size(); i++)
+				//for(int i = 0; i < skills.size(); i++)
+				//{
+				for(int i = 0; i < swarms.size(); i++)
 				{
-					if(skills[i]->IsIntersectingObject(swarms[0]->GetPosition()))
+					if(skills[0]->IsIntersectingObject(swarms[i]->GetPosition()))
 					{
-						Event skillEvent = skills[i]->GetGeneratedEvent("skilldeployed");
+						Event skillEvent = skills[0]->GetGeneratedEvent("skilldeployed");
 
-						swarms[0]->OnEvent(skillEvent);
+						swarms[i]->OnEvent(skillEvent);
 					}
 				}
+				//}
 			}
 		}
 		break;
@@ -585,4 +586,32 @@ bool Scene::HasSuns()
 	if(!suns.empty())
 		return true;
 	return false;
+}
+
+#include <ctime>
+
+void Scene::GenerateRandomSwarms(int count,
+								 const BillboardProgDataNoTexture &progData)
+{
+	if(swarms.size() <= 0)
+	{
+		srand(time(0));
+
+		for(int i = 0; i < count; i++)
+		{
+			float range = ((float)rand() / (float)RAND_MAX) * 4.0f + 2.0f;
+			float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
+
+			float posX = cosf(posOnCircle * (2.0f * PI)) * range;
+			float posY = sinf(posOnCircle * (2.0f * PI)) * range;
+
+			glm::vec3 position = glm::vec3(posX, posY, 0.0f);
+			glm::vec3 velocity = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position)) * 0.01f;
+		
+			std::shared_ptr<Swarm> randSwarm = 
+				std::shared_ptr<Swarm>(new Swarm(position, velocity, 100, 50, 5, 1, 2.0f, progData));
+
+			swarms.push_back(randSwarm);
+		}
+	}
 }

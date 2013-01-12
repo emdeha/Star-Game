@@ -397,15 +397,20 @@ void InitializeScene()
 		mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, displayData.gamma));
 
 
-	std::shared_ptr<Swarm> sampleSwarm =
+	/*std::shared_ptr<Swarm> sampleSwarm =
 		std::shared_ptr<Swarm>(new Swarm(glm::vec3(4.0f, 0.0f, 0.0f), glm::vec3(-0.01f, 0.0f, 0.0f), 
 										 100, 50, 5, 1, 3.0f, 
 										 shaderManager.GetBillboardProgDataNoTexture()));
+	std::shared_ptr<Swarm> sampleSwarmTwo =
+		std::shared_ptr<Swarm>(new Swarm(glm::vec3(0.0f, 4.0f, 0.0f), glm::vec3(0.0f, -0.01f, 0.0f),
+										100, 50, 5, 1, 3.0f,
+										shaderManager.GetBillboardProgDataNoTexture()));
 
+	
+	scene.AddSwarm(sampleSwarm);
+	scene.AddSwarm(sampleSwarmTwo);*/
 
 	mainSun->LoadMesh("mesh-files/UnitSphere.xml");
-	scene.AddSwarm(sampleSwarm);
-
 
 	scene.SetMouse(userMouse);
 	scene.SetTopDownCamera(userCamera);
@@ -426,7 +431,7 @@ void InitializeScene()
 	scene.AddFusionSequence("fireSatellite", 'q', 'q', 'q');
 	scene.AddFusionSequence("earthSatellite", 'e', 'e', 'e');
 	scene.AddFusionSequence("waterSatellite", 'w', 'w', 'w');
-	scene.AddFusionSequence("raySkill", 'q', 'w', 'e');
+	//scene.AddFusionSequence("raySkill", 'q', 'w', 'e');
 	scene.AddFusionSequence("aoeSkill", 'q', 'q', 'w');
 
 
@@ -436,10 +441,10 @@ void InitializeScene()
 	scene.AddExplosionEmitter(sceneExplosion);
 
 
-	std::shared_ptr<RaySkill> testSkill = 
+	/*std::shared_ptr<RaySkill> testSkill = 
 		std::shared_ptr<RaySkill>(new RaySkill(scene.GetSun(),
 											   100, 100, 3.0f, 'q', 'w', 'e'));
-	scene.AddSkill(testSkill);
+	scene.AddSkill(testSkill);*/
 
 	std::shared_ptr<AOESkill> testAOESkill =
 		std::shared_ptr<AOESkill>(new AOESkill(scene.GetSun(),
@@ -559,6 +564,7 @@ void Display()
 	if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 	{		
 		scene.SetDisplayData(displayData);
+		scene.GenerateRandomSwarms(5, shaderManager.GetBillboardProgDataNoTexture());
 
 		glutil::MatrixStack modelMatrix;
 

@@ -151,6 +151,10 @@ public:
 	bool HasSuns();
 
 	// TODO: Add Load function
+
+	// !!! Only for testing purposes !!!
+	void GenerateRandomSwarms(int count,
+							  const BillboardProgDataNoTexture &progData);
 };
 
 #endif

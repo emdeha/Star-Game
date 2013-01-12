@@ -69,9 +69,18 @@ void HandleMouse()
 
 	glm::vec4 position = cameraPosition + rayDir * distance;
 
-	//testSelector.Update(glm::vec3(position.x, position.y, position.z));
+	/*testSelector.Update(glm::vec3(position.x, position.y, position.z));
 
-
+	
+	if(scene.GetMouse().IsLeftButtonDown() && scene.HasSwarms())
+	{
+		float distanceBetweenBodies = 
+			glm::length(testSelector.GetPosition() - scene.GetSwarm()->GetPosition());
+		if(distanceBetweenBodies <= testSelector.GetRadius())
+		{
+			scene.DeleteSwarm();
+		}
+	}*/
 
 	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
 	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
@@ -261,7 +270,6 @@ void HandleMouse()
 		}
 	}
 
-
 	if(scene.IsLayoutOn(LAYOUT_MENU))
 	{
 		/*if(
@@ -305,6 +313,9 @@ void HandleMouse()
 			universe->GetLayout(LAYOUT_MENU).GetButtonControl("saveGame").OnEvent(hoverButtonEvent);
 		}*/
 	}
+
+
+	displayData.mousePosition = scene.GetMouse().GetCurrentPosition();
 
 
 	scene.GetMouse().ReleaseRightButton();
@@ -365,10 +376,10 @@ void InitializeGUI()
 	glm::vec4 mousePos_worldSpace = 
 		scene.GetMouse().GetWorldSpacePosition(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
 											   displayData.projectionMatrix, displayData.modelMatrix);
-	//testSelector = 
-	//	AOESelector(glm::vec3(mousePos_worldSpace.x, mousePos_worldSpace.y, 0.0f), 
-	//				2.0f, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
-	//testSelector.Init();
+	/*testSelector = 
+		AOESelector(glm::vec3(mousePos_worldSpace.x, mousePos_worldSpace.y, 0.0f), 
+					2.0f, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
+	testSelector.Init();*/
 }
 
 void InitializeScene()
@@ -540,13 +551,13 @@ void Display()
 {
 	frameCount++;
 
-
 	glClearDepth(1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
 
 	if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 	{		
+		scene.SetDisplayData(displayData);
+
 		glutil::MatrixStack modelMatrix;
 
 		modelMatrix.SetMatrix(scene.GetTopDownCamera().CalcMatrix());
@@ -650,6 +661,9 @@ void Reshape(int width, int height)
 
 	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 	glutPostRedisplay();
+
+	displayData.windowHeight = height;
+	displayData.windowWidth = width;
 }
 
 void Keyboard(unsigned char key, int x, int y)

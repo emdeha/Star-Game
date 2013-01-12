@@ -55,12 +55,14 @@ public:
 		generatedEvents.resize(0);
 	}
 
-	virtual void Update() {};
+	virtual void Update() {}
 	virtual void Render(glutil::MatrixStack &modelMatrix,
 						glm::vec3 cameraPosition,
-						const BillboardProgDataNoTexture &progData) {};
+						const BillboardProgDataNoTexture &progData) {}
+	virtual void Render(glutil::MatrixStack &modelMatrix,
+						const SimpleProgData &simpleData) {}
 
-	virtual void OnEvent(Event &_event) {};
+	virtual void OnEvent(Event &_event) {}
 	// Only for EVENT_TYPE_OTHER
 	Event GetGeneratedEvent(const std::string &	eventName);
 	// Gets the generated events and empties the event list.
@@ -75,6 +77,8 @@ public:
 	virtual void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3) {}
 	virtual void SetParameter(ParameterType paramType, int newParam_int) {}
 	virtual void SetParameter(ParameterType paramType, float newParam_float) {}
+
+	virtual bool IsIntersectingObject(glm::vec3 objectPosition) { return false; }
 };
 
 
@@ -138,6 +142,8 @@ public:
 	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 	//void SetParameter(ParameterType paramType, int newParam_int);
 	//void SetParameter(ParameterType paramType, float newParam_float);
+
+	bool IsIntersectingObject(glm::vec3 objectPosition);
 };
 
 

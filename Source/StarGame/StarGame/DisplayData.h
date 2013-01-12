@@ -30,6 +30,11 @@ struct DisplayData
 	glm::mat4 projectionMatrix;
 	glm::mat4 modelMatrix;
 
+	int windowWidth;
+	int windowHeight;
+
+	glm::ivec2 mousePosition;
+
 	DisplayData()
 	{
 		gamma = 2.2f;

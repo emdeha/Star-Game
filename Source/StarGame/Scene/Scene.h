@@ -38,6 +38,7 @@
 #include "../Camera/TopDownCamera.h"
 #include "../Audio/Audio.h"
 #include "../GUISystem/GUISystem.h"
+#include "../StarGame/DisplayData.h"
 
 #include "../framework/EventSystem.h"
 
@@ -61,6 +62,8 @@ private:
 	Mouse sceneMouse;
 	TopDownCamera sceneTopDownCamera;
 	Audio sceneMusic;
+
+	DisplayData currentDisplayData;
 
 	float sceneGamma;
 
@@ -118,11 +121,14 @@ public:
 
 	void SetMusic(const std::string &fileName, SoundTypes soundType);
 	void SetMusicVolume(float volume, ChannelType chType);
+
+	void SetDisplayData(const DisplayData &newDisplayData);
+
 	void PlayMusic(SoundTypes soundType);
 
 	void SetTopDownCamera(const TopDownCamera &newCamera);
 	void SetMouse(const Mouse &newMouse);
-	
+
 	void SetGamma(float newSceneGamma);
 
 	void SetFusion(const FusionInput &newFusionInput);
@@ -137,6 +143,9 @@ public:
 
 	std::shared_ptr<Sun> GetSun();
 	std::shared_ptr<Spaceship> GetSpaceship();
+	std::shared_ptr<Swarm> GetSwarm();
+	void DeleteSwarm();
+	bool HasSwarms();
 	SunLight GetSunLight();
 
 	bool HasSuns();

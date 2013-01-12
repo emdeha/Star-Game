@@ -94,6 +94,7 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix,
 	{
 		skills[i]->Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(),
 						  billboardNoTextureData);
+		skills[i]->Render(modelMatrix, interpData);
 	}
 }
 void Scene::RenderCurrentLayout(const FontProgData &fontData,
@@ -199,10 +200,28 @@ void Scene::UpdateScene()
 			skills[i]->Update();
 			Event skillEvent = skills[i]->GetGeneratedEvent("skilldeployed");
 			suns[0]->OnEvent(skillEvent);
+			
+			glm::vec4 mousePos_atZ = 
+				sceneMouse.GetPositionAtZ(currentDisplayData.windowWidth, currentDisplayData.windowHeight,
+										  currentDisplayData.projectionMatrix, currentDisplayData.modelMatrix, 
+										  glm::vec4(sceneTopDownCamera.ResolveCamPosition(), 1.0f));
 
-			//skills[i]->SetParameter(PARAM_POSITION, 
+			skills[i]->SetParameter(PARAM_POSITION, 
+									mousePos_atZ.swizzle(glm::comp::X, glm::comp::Y, glm::comp::Z));
+
+			if(sceneMouse.IsLeftButtonDown())
+			{
+				if(skills[i]->IsIntersectingObject(swarms[i]->GetPosition()))
+				{
+					swarms[i]->OnEvent(skillEvent);
+				}
+			}
 			//fastSuicideBombers[0]->OnEvent(skills[i], skillEvent);
 		}
+	}
+	else
+	{
+		skills.resize(0);
 	}
 }
 void Scene::UpdateFusion(char key, Event &returnedFusionEvent)
@@ -443,6 +462,19 @@ void Scene::SetMusicVolume(float volume, ChannelType chType)
 {
 	sceneMusic.SetVolume(volume, chType);
 }
+
+void Scene::SetDisplayData(const DisplayData &newDisplayData)
+{
+	currentDisplayData.gamma = newDisplayData.gamma;
+	currentDisplayData.modelMatrix = newDisplayData.modelMatrix;
+	currentDisplayData.projectionMatrix = newDisplayData.projectionMatrix;
+	currentDisplayData.mousePosition = newDisplayData.mousePosition;
+	currentDisplayData.windowHeight = newDisplayData.windowHeight;
+	currentDisplayData.windowWidth = newDisplayData.windowWidth;
+	currentDisplayData.zFar = newDisplayData.zFar;
+	currentDisplayData.zNear = newDisplayData.zNear;
+}
+
 void Scene::PlayMusic(SoundTypes soundType)
 {
 	sceneMusic.Play(soundType);
@@ -504,6 +536,24 @@ std::shared_ptr<Sun> Scene::GetSun()
 std::shared_ptr<Spaceship> Scene::GetSpaceship()
 {
 	return spaceships.front();
+}
+std::shared_ptr<Swarm> Scene::GetSwarm()
+{
+	if(swarms.size())
+	{
+		return swarms.front();
+	}
+}
+void Scene::DeleteSwarm()
+{
+	if(swarms.size())
+	{
+		swarms.pop_back();
+	}
+}
+bool Scene::HasSwarms()
+{
+	return !swarms.empty();
 }
 SunLight Scene::GetSunLight()
 {

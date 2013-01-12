@@ -133,7 +133,6 @@ glm::vec2 Mouse::GetClipSpacePosition(int windowWidth, int windowHeight)
 	return mousePos_clipSpace;
 }
 
-
 glm::vec4 Mouse::GetWorldSpacePosition(int windowWidth, int windowHeight,
 									   glm::mat4 projMat, glm::mat4 modelMat)
 {
@@ -154,4 +153,18 @@ glm::vec4 Mouse::GetWorldSpacePosition(int windowWidth, int windowHeight,
 	glm::vec4 mousePos_worldSpace = glm::inverse(modelMat) * mousePos_viewSpace;
 
 	return mousePos_worldSpace;
+}
+
+glm::vec4 Mouse::GetPositionAtZ(int windowWidth, int windowHeight,
+								glm::mat4 projMat, glm::mat4 modelMat, 
+								glm::vec4 cameraPos, float z)
+{
+	glm::vec4 mousePos_worldSpace = GetWorldSpacePosition(windowWidth, windowHeight, 
+														  projMat, modelMat);
+
+	glm::vec4 direction = glm::normalize(mousePos_worldSpace - cameraPos);
+
+	float distance = -cameraPos.z / direction.z;
+
+	return glm::vec4(cameraPos + direction * distance);
 }

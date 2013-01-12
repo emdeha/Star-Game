@@ -205,6 +205,11 @@ public:
 				const BillboardProgDataNoTexture &billboardProgramNoTexture);
 	
 	void OnEvent(Event &_event);
+
+	glm::vec3 GetPosition()
+	{
+		return position;
+	}
 };
 
 

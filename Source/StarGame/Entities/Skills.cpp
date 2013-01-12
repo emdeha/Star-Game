@@ -196,3 +196,16 @@ void AOESkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 		break;
 	}
 }
+
+bool AOESkill::IsIntersectingObject(glm::vec3 objectPosition)
+{
+	float distanceBetweenObjectAndSkill =
+		glm::length(position - objectPosition);
+
+	if(distanceBetweenObjectAndSkill < range)
+	{
+		return true;
+	}
+	
+	return false;
+}

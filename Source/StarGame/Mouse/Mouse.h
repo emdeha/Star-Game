@@ -84,6 +84,10 @@ public:
 	glm::vec4 GetWorldSpacePosition(int windowWidth, int windowHeight,
 									glm::mat4 projMat, glm::mat4 modelMat);
 
+	glm::vec4 GetPositionAtZ(int windowWidth, int windowHeight,
+							 glm::mat4 projMat, glm::mat4 modelMat, 
+							 glm::vec4 cameraPos, float z = 0.0f);
+
 
 	bool IsLeftButtonDown();
 	bool IsRightButtonDown();

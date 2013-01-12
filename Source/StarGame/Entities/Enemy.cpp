@@ -441,6 +441,12 @@ void Swarm::OnEvent(Event &_event)
 	{
 	case EVENT_TYPE_ATTACKED:
 		break;
+	case EVENT_TYPE_OTHER:
+		if(strcmp(_event.GetArgument("what_event").varString, "skillDeployed") == 0)
+		{
+			health -= _event.GetArgument("skillDamage").varFloat;
+		}
+		break;
 	}
 }
 

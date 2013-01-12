@@ -1,7 +1,7 @@
-﻿Build started 7.12.2012 г. 06:57:10 ч..
+﻿Build started 12.1.2013 г. 17:52:40 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
-         Creating "Release\StarGame.unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "Release\StarGame.unsuccessfulbuild".
        ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Program Files\Assimp\include\assimp" /I..\freetype\include /I..\framework /I..\glsdk\glload\include /I..\glsdk\glimg\include /I..\glsdk\glm /I..\glsdk\glutil\include /I..\glsdk\glmesh\include /I..\glsdk\freeglut\include /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D RELEASE /D NDEBUG /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp
          Main.cpp
@@ -11,36 +11,21 @@
          E:\CECI\TheGame\Source\StarGame\Release\AssetLoader.lib
          E:\CECI\TheGame\Source\StarGame\Release\Audio.lib
          E:\CECI\TheGame\Source\StarGame\Release\Camera.lib
+         E:\CECI\TheGame\Source\StarGame\framework\lib\framework.lib
+         E:\CECI\TheGame\Source\StarGame\Release\Scene.lib
          E:\CECI\TheGame\Source\StarGame\Release\Entities.lib
          E:\CECI\TheGame\Source\StarGame\Release\Fusion.lib
+         E:\CECI\TheGame\Source\StarGame\Release\Fusion_EntitySystem.lib
+         E:\CECI\TheGame\Source\StarGame\Release\Fusion_Scene.lib
          E:\CECI\TheGame\Source\StarGame\Release\GUISystem.lib
          E:\CECI\TheGame\Source\StarGame\Release\Mouse.lib
          E:\CECI\TheGame\Source\StarGame\Release\ParticleEngine.lib
          E:\CECI\TheGame\Source\StarGame\Release\ProgramData.lib
-         E:\CECI\TheGame\Source\StarGame\Release\Scene.lib
-         Generating code
-     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(403): warning C4715: 'FindEmptySatelliteType' : not all control paths return a value
-     1>e:\ceci\programming\myprograms\opengl\opengl tasks\mckesson\tutorial 0.3.8\glsdk\freeglut\src\freeglut_structure.c(579): warning C4706: assignment within conditional expression
-     1>e:\ceci\programming\myprograms\opengl\opengl tasks\mckesson\tutorial 0.3.8\glsdk\freeglut\src\freeglut_structure.c(590): warning C4706: assignment within conditional expression
-     1>e:\ceci\thegame\source\stargame\guisystem\layout.cpp(159): warning C4715: 'Layout::GetActiveControl' : not all control paths return a value
-     1>e:\ceci\thegame\source\stargame\framework\eventsystem.cpp(80): warning C4715: 'Event::GetArgument' : not all control paths return a value
-     1>e:\ceci\thegame\source\stargame\guisystem\layout.cpp(105): warning C4715: 'Layout::GetControl' : not all control paths return a value
-     1>e:\ceci\programming\myprograms\opengl\opengl tasks\mckesson\tutorial 0.3.8\glsdk\freeglut\src\freeglut_init.c(404): warning C4706: assignment within conditional expression
-     1>e:\ceci\programming\myprograms\opengl\opengl tasks\mckesson\tutorial 0.3.8\glsdk\freeglut\src\freeglut_init.c(410): warning C4706: assignment within conditional expression
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(327): warning C4715: 'Scene::GetLayout' : not all control paths return a value
-     1>e:\ceci\programming\myprograms\opengl\opengl tasks\mckesson\tutorial 0.3.8\glsdk\freeglut\src\freeglut_callbacks.c(103): warning C4706: assignment within conditional expression
-     1>e:\ceci\programming\myprograms\opengl\opengl tasks\mckesson\tutorial 0.3.8\glsdk\freeglut\src\freeglut_callbacks.c(109): warning C4706: assignment within conditional expression
-     1>e:\ceci\programming\myprograms\opengl\opengl tasks\mckesson\tutorial 0.3.8\glsdk\freeglut\src\freeglut_font.c(155): warning C4706: assignment within conditional expression
-     1>e:\ceci\programming\myprograms\opengl\opengl tasks\mckesson\tutorial 0.3.8\glsdk\freeglut\src\freeglut_input_devices.c(169): warning C4706: assignment within conditional expression
-         Finished generating code
-         StarGame.vcxproj -> E:\CECI\TheGame\Source\StarGame\Release\StarGame.exe
-       Manifest:
-         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"E:\CECI\TheGame\Source\StarGame\Release\StarGame.exe;#1" /manifest Release\StarGame.exe.intermediate.manifest
-       FinalizeBuildStatus:
-         Deleting file "Release\StarGame.unsuccessfulbuild".
-         Touching "Release\StarGame.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" (build target(s)).
+     1>Scene.lib(Scene.obj) : error LNK2001: unresolved external symbol "public: void __thiscall FusionInput::AddSequence(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,char,char,char)" (?AddSequence@FusionInput@@QAEXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@DDD@Z)
+     1>Scene.lib(Scene.obj) : error LNK2001: unresolved external symbol "public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __thiscall FusionInput::GetSequenceButtons(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?GetSequenceButtons@FusionInput@@QAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V23@@Z)
+     1>E:\CECI\TheGame\Source\StarGame\Release\StarGame.exe : fatal error LNK1120: 2 unresolved externals
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" (build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:08.16
+Time Elapsed 00:00:01.34

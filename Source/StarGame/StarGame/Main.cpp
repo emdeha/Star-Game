@@ -120,6 +120,8 @@ void HandleMouse()
 				scene.GetMouse().ReleaseLeftButton();
 				return;
 			}
+
+			scene.OnEvent(StockEvents::EventOnLeftClick("deploySkill"));
 		}
 
 		if(scene.IsLayoutOn(LAYOUT_MENU))

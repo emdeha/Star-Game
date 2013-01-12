@@ -160,8 +160,8 @@ void Scene::UpdateScene()
 			fastSuicideBombers[i]->Update(true);
 		}
 
-		Event returnedEvent = fastSuicideBombers[i]->GetGeneratedEvents()[0];
-		this->OnEvent(returnedEvent);
+		//Event returnedEvent = fastSuicideBombers[i]->GetGeneratedEvents()[0];
+		//this->OnEvent(returnedEvent);
 	}
 
 	int sizeSwarms = swarms.size();
@@ -198,8 +198,8 @@ void Scene::UpdateScene()
 		for(int i = 0; i < sizeSkills; i++)
 		{
 			skills[i]->Update();
-			Event skillEvent = skills[i]->GetGeneratedEvent("skilldeployed");
-			suns[0]->OnEvent(skillEvent);
+			//Event skillEvent = skills[i]->GetGeneratedEvent("skilldeployed");
+			//suns[0]->OnEvent(skillEvent);
 			
 			glm::vec4 mousePos_atZ = 
 				sceneMouse.GetPositionAtZ(currentDisplayData.windowWidth, currentDisplayData.windowHeight,
@@ -208,16 +208,21 @@ void Scene::UpdateScene()
 
 			skills[i]->SetParameter(PARAM_POSITION, 
 									mousePos_atZ.swizzle(glm::comp::X, glm::comp::Y, glm::comp::Z));
-
-			if(sceneMouse.IsLeftButtonDown())
+			
+			/*if(sceneMouse.IsLeftButtonDown())
 			{
 				if(skills[i]->IsIntersectingObject(swarms[i]->GetPosition()))
 				{
 					swarms[i]->OnEvent(skillEvent);
 				}
-			}
+			}*/
 			//fastSuicideBombers[0]->OnEvent(skills[i], skillEvent);
 		}
+
+		/*if(swarms[0]->IsDestroyed())
+		{
+			swarms.pop_back();
+		}*/
 	}
 	else
 	{
@@ -291,6 +296,21 @@ void Scene::OnEvent(Event &_event)
 		{
 			// Add clean-up if necessary.
 			exit(EXIT_SUCCESS);
+		}
+		if(strcmp(_event.GetArgument("object").varString, "deploySkill") == 0)
+		{
+			if(!swarms.empty())
+			{
+				for(int i = 0; i < skills.size(); i++)
+				{
+					if(skills[i]->IsIntersectingObject(swarms[0]->GetPosition()))
+					{
+						Event skillEvent = skills[i]->GetGeneratedEvent("skilldeployed");
+
+						swarms[0]->OnEvent(skillEvent);
+					}
+				}
+			}
 		}
 		break;
 	case EVENT_TYPE_SPACE_BTN_CLICK:

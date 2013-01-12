@@ -408,22 +408,25 @@ void Swarm::UpdateAI(Sun &sun)
 
 void Swarm::Update(bool isSunKilled, Sun &sun)
 {
-	attackTimer.Update();
-
-	if(!isSunKilled)
+	if(!isDestroyed)
 	{
-		position += velocity;
-		this->UpdateAI(sun);
-		swarmBody.Update(velocity);
+		attackTimer.Update();
 
-		if(health <= 0)
+		if(!isSunKilled)
 		{
-			isDestroyed = true;
+			position += velocity;
+			this->UpdateAI(sun);
+			swarmBody.Update(velocity);
+
+			if(health <= 0)
+			{
+				isDestroyed = true;
+			}
 		}
-	}
-	else
-	{
-		currentState = IDLE_STATE;
+		else
+		{
+			currentState = IDLE_STATE;
+		}
 	}
 	//position += direction * speed;
 }
@@ -432,7 +435,10 @@ void Swarm::Render(glutil::MatrixStack &modelMatrix,
 				   glm::vec3 cameraPosition,
 				   const BillboardProgDataNoTexture &billboardProgramNoTexture)
 {
-	swarmBody.Render(modelMatrix, cameraPosition, billboardProgramNoTexture);
+	if(!isDestroyed)
+	{
+		swarmBody.Render(modelMatrix, cameraPosition, billboardProgramNoTexture);
+	}
 }
 
 void Swarm::OnEvent(Event &_event)
@@ -442,9 +448,9 @@ void Swarm::OnEvent(Event &_event)
 	case EVENT_TYPE_ATTACKED:
 		break;
 	case EVENT_TYPE_OTHER:
-		if(strcmp(_event.GetArgument("what_event").varString, "skillDeployed") == 0)
+		if(strcmp(_event.GetArgument("what_event").varString, "skilldeployed") == 0)
 		{
-			health -= _event.GetArgument("skillDamage").varFloat;
+			health -= _event.GetArgument("skillDamage").varInteger;
 		}
 		break;
 	}

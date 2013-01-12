@@ -210,6 +210,10 @@ public:
 	{
 		return position;
 	}
+	bool IsDestroyed()
+	{
+		return isDestroyed;
+	}
 };
 
 

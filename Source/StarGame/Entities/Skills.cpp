@@ -19,7 +19,7 @@
 #include "Skills.h"
 
 
-Event Skill::GetGeneratedEvent(const std::string &	eventName)
+/*Event Skill::GetGeneratedEvent(const std::string &eventName)
 {
 	if(generatedEvents.size() > 0)
 	{
@@ -52,7 +52,7 @@ std::vector<Event> Skill::GetGeneratedEvents()
 	}
 
 	return eventsToReturn;
-}
+}*/
 
 
 RaySkill::RaySkill(std::shared_ptr<Sun> newSkillOwner,
@@ -120,6 +120,41 @@ std::shared_ptr<Sun> RaySkill::GetOwner()
 	return skillOwner;
 }
 
+Event RaySkill::GetGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(int i = 0; i < generatedEvents.size(); i++)
+		{
+			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
+				strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				return generatedEvents[i];
+			}
+		}
+	}
+	else
+	{
+		return StockEvents::EmptyEvent();
+	}
+}
+std::vector<Event> RaySkill::GetGeneratedEvents()
+{
+	std::vector<Event> eventsToReturn;
+
+	if(generatedEvents.size() > 0)
+	{
+		eventsToReturn = generatedEvents;
+		generatedEvents.resize(0);
+	}
+	else 
+	{
+		eventsToReturn.push_back(StockEvents::EmptyEvent());
+	}
+
+	return eventsToReturn;
+}
+
 
 
 AOESkill::AOESkill(std::shared_ptr<Sun> newSkillOwner,
@@ -142,19 +177,6 @@ void AOESkill::Update()
 {
 	if(isStarted)
 	{
-		EventArg skillDeployedEventArgs[3];
-		skillDeployedEventArgs[0].argType = "skillRange";
-		skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
-		skillDeployedEventArgs[0].argument.varFloat = range;
-		skillDeployedEventArgs[1].argType = "skillDamage";
-		skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-		skillDeployedEventArgs[1].argument.varInteger = damage;
-		skillDeployedEventArgs[2].argType = "what_event";
-		skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
-		strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-		Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-		generatedEvents.push_back(skillDeployedEvent);
-
 		skillSelector.Update(position);
 	}
 }
@@ -174,6 +196,19 @@ void AOESkill::OnEvent(Event &_event)
 	case EVENT_TYPE_OTHER:
 		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
 		{
+			EventArg skillDeployedEventArgs[3];
+			skillDeployedEventArgs[0].argType = "skillRange";
+			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+			skillDeployedEventArgs[0].argument.varFloat = range;
+			skillDeployedEventArgs[1].argType = "skillDamage";
+			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+			skillDeployedEventArgs[1].argument.varInteger = damage;
+			skillDeployedEventArgs[2].argType = "what_event";
+			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			generatedEvents.push_back(skillDeployedEvent);
+
 			isStarted = true;
 		}
 	}
@@ -199,8 +234,7 @@ void AOESkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 
 bool AOESkill::IsIntersectingObject(glm::vec3 objectPosition)
 {
-	float distanceBetweenObjectAndSkill =
-		glm::length(position - objectPosition);
+	float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
 
 	if(distanceBetweenObjectAndSkill < range)
 	{
@@ -208,4 +242,39 @@ bool AOESkill::IsIntersectingObject(glm::vec3 objectPosition)
 	}
 	
 	return false;
+}
+
+Event AOESkill::GetGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(int i = 0; i < generatedEvents.size(); i++)
+		{
+			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
+			   strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				return generatedEvents[i];
+			}
+		}
+	}
+	else
+	{
+		return StockEvents::EmptyEvent();
+	}
+}
+std::vector<Event> AOESkill::GetGeneratedEvents()
+{
+	std::vector<Event> eventsToReturn;
+
+	if(generatedEvents.size() > 0)
+	{
+		eventsToReturn = generatedEvents;
+		generatedEvents.resize(0);
+	}
+	else 
+	{
+		eventsToReturn.push_back(StockEvents::EmptyEvent());
+	}
+
+	return eventsToReturn;
 }

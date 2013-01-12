@@ -41,18 +41,16 @@ class Skill
 {
 protected:
 	char fusionCombination[4];
-	std::vector<Event> generatedEvents;
+	//std::vector<Event> generatedEvents;
 
 public:
-	Skill() { generatedEvents.resize(0); }
+	Skill() { }
 	Skill(char fusionCombA, char fusionCombB, char fusionCombC)
 	{
 		fusionCombination[0] = fusionCombA;
 		fusionCombination[1] = fusionCombB;
 		fusionCombination[2] = fusionCombC;
 		fusionCombination[3] = '\0';
-		
-		generatedEvents.resize(0);
 	}
 
 	virtual void Update() {}
@@ -64,10 +62,18 @@ public:
 
 	virtual void OnEvent(Event &_event) {}
 	// Only for EVENT_TYPE_OTHER
-	Event GetGeneratedEvent(const std::string &	eventName);
+	virtual Event GetGeneratedEvent(const std::string &	eventName) 
+	{ 
+		Event eventToReturn = StockEvents::EmptyEvent();
+		return eventToReturn; 
+	}
 	// Gets the generated events and empties the event list.
 	// (!)It is an one little dangerous method. You can lose a lot of events that way.
-	std::vector<Event> GetGeneratedEvents();
+	virtual std::vector<Event> GetGeneratedEvents() 
+	{ 
+		std::vector<Event> eventsToReturn;
+		return eventsToReturn;
+	}
 
 	virtual std::shared_ptr<Sun> GetOwner()
 	{
@@ -96,6 +102,8 @@ private:
 
 	bool isStarted;
 
+	std::vector<Event> generatedEvents;
+
 public:
 	RaySkill() : Skill() {}
 	RaySkill(std::shared_ptr<Sun> newSkillOwner,
@@ -110,6 +118,12 @@ public:
 
 	void OnEvent(Event &_event);
 	std::shared_ptr<Sun> GetOwner();
+
+	// Only for EVENT_TYPE_OTHER
+	Event GetGeneratedEvent(const std::string &	eventName);
+	// Gets the generated events and empties the event list.
+	// (!)It is an one little dangerous method. You can lose a lot of events that way.
+	std::vector<Event> GetGeneratedEvents();
 };
 
 
@@ -144,6 +158,12 @@ public:
 	//void SetParameter(ParameterType paramType, float newParam_float);
 
 	bool IsIntersectingObject(glm::vec3 objectPosition);
+
+	// Only for EVENT_TYPE_OTHER
+	Event GetGeneratedEvent(const std::string &	eventName);
+	// Gets the generated events and empties the event list.
+	// (!)It is an one little dangerous method. You can lose a lot of events that way.
+	std::vector<Event> GetGeneratedEvents();
 };
 
 

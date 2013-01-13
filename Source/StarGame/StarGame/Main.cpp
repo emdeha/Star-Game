@@ -44,8 +44,6 @@ DisplayData displayData;
 
 Scene scene = Scene(2.2f);
 
-
-//AOESelector testSelector;
 glm::vec3 selectorPos;
 
 
@@ -58,29 +56,6 @@ long long GetCurrentTimeMillis()
 void HandleMouse()
 {
 	glm::vec4 cameraPosition = glm::vec4(scene.GetTopDownCamera().ResolveCamPosition(), 1.0f);
-
-
-	glm::vec4 mousePos_worldSpace = 
-		scene.GetMouse().GetWorldSpacePosition(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
-											   displayData.projectionMatrix, displayData.modelMatrix);
-	glm::vec4 rayDir = glm::normalize(mousePos_worldSpace - cameraPosition);
-
-	float distance = -cameraPosition.z / rayDir.z;
-
-	glm::vec4 position = cameraPosition + rayDir * distance;
-
-	/*testSelector.Update(glm::vec3(position.x, position.y, position.z));
-
-	
-	if(scene.GetMouse().IsLeftButtonDown() && scene.HasSwarms())
-	{
-		float distanceBetweenBodies = 
-			glm::length(testSelector.GetPosition() - scene.GetSwarm()->GetPosition());
-		if(distanceBetweenBodies <= testSelector.GetRadius())
-		{
-			scene.DeleteSwarm();
-		}
-	}*/
 
 	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
 	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
@@ -378,10 +353,6 @@ void InitializeGUI()
 	glm::vec4 mousePos_worldSpace = 
 		scene.GetMouse().GetWorldSpacePosition(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
 											   displayData.projectionMatrix, displayData.modelMatrix);
-	/*testSelector = 
-		AOESelector(glm::vec3(mousePos_worldSpace.x, mousePos_worldSpace.y, 0.0f), 
-					2.0f, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
-	testSelector.Init();*/
 }
 
 void InitializeScene()
@@ -431,8 +402,8 @@ void InitializeScene()
 	scene.AddFusionSequence("fireSatellite", 'q', 'q', 'q');
 	scene.AddFusionSequence("earthSatellite", 'e', 'e', 'e');
 	scene.AddFusionSequence("waterSatellite", 'w', 'w', 'w');
-	//scene.AddFusionSequence("raySkill", 'q', 'w', 'e');
 	scene.AddFusionSequence("aoeSkill", 'q', 'q', 'w');
+	scene.AddFusionSequence("passiveAoeSkill", 'q', 'q', 'e');
 
 
 	ExplosionEmitter sceneExplosion =
@@ -440,17 +411,20 @@ void InitializeScene()
 	sceneExplosion.Init();
 	scene.AddExplosionEmitter(sceneExplosion);
 
-
-	/*std::shared_ptr<RaySkill> testSkill = 
-		std::shared_ptr<RaySkill>(new RaySkill(scene.GetSun(),
-											   100, 100, 3.0f, 'q', 'w', 'e'));
-	scene.AddSkill(testSkill);*/
-
 	std::shared_ptr<AOESkill> testAOESkill =
 		std::shared_ptr<AOESkill>(new AOESkill(scene.GetSun(),
-											   50, 2.0f, 
+											   20, 2.0f, 
+											   "aoeSkill",
 											   'q', 'q', 'w'));
 	scene.AddSkill(testAOESkill);
+
+	std::shared_ptr<PassiveAOESkill> testPassiveAOESkill =
+		std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(scene.GetSun(),
+															 20, // Damage over second. 
+															 1, 2.0f, 
+															 "passiveAOESkill",
+															 'q', 'q', 'e'));
+	scene.AddSkill(testPassiveAOESkill);
 
 
 	glUseProgram(shaderManager.GetTextureProgData().theProgram);
@@ -564,14 +538,13 @@ void Display()
 	if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 	{		
 		scene.SetDisplayData(displayData);
-		scene.GenerateRandomSwarms(5, shaderManager.GetBillboardProgDataNoTexture());
+		scene.GenerateRandomSwarms(1, shaderManager.GetBillboardProgDataNoTexture());
 
 		glutil::MatrixStack modelMatrix;
 
 		modelMatrix.SetMatrix(scene.GetTopDownCamera().CalcMatrix());
 		displayData.modelMatrix = modelMatrix.Top();
 
-		
 		int loops = 0;
 		while(GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
 		{
@@ -596,8 +569,6 @@ void Display()
 		scene.RenderCurrentLayout(shaderManager.GetFontProgData(),
 								  shaderManager.GetSimpleNoUBProgData(),
 								  shaderManager.GetTextureProgData());
-
-		//testSelector.Draw(modelMatrix, shaderManager.GetSimpleProgData());
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{
@@ -667,11 +638,11 @@ void Reshape(int width, int height)
 		scene->UpdateCurrentLayout(1920, 1080);
 	}*/
 
-	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
-	glutPostRedisplay();
-
 	displayData.windowHeight = height;
 	displayData.windowWidth = width;
+
+	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
+	glutPostRedisplay();
 }
 
 void Keyboard(unsigned char key, int x, int y)

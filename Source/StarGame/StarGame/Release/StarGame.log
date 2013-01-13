@@ -1,4 +1,4 @@
-﻿Build started 12.1.2013 г. 17:52:40 ч..
+﻿Build started 13.1.2013 г. 10:34:11 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Touching "Release\StarGame.unsuccessfulbuild".
@@ -28,4 +28,4 @@
 
 Build FAILED.
 
-Time Elapsed 00:00:01.34
+Time Elapsed 00:00:03.36

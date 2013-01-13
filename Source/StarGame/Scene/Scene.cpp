@@ -167,22 +167,21 @@ void Scene::UpdateScene()
 	}
 
 	int sizeSwarms = swarms.size();
-	for(/*int i = 0; i < sizeSwarms; i++*/
-		std::vector<std::shared_ptr<Swarm>>::iterator iter = swarms.begin();
+	for(std::vector<std::shared_ptr<Swarm>>::iterator iter = swarms.begin();
 		iter != swarms.end(); )
 	{
 		if(!suns.empty())
 		{
-			/*swarms[i]*/(*iter)->Update(false, *suns.front().get());
+			(*iter)->Update(false, *suns.front().get());
 		}
 		else
 		{
-			/*swarms[i]*/(*iter)->Update(true);
+			(*iter)->Update(true);
 		}
 
-		if(/*swarms[i]*/(*iter)->IsDestroyed())
+		if((*iter)->IsDestroyed())
 		{
-			swarms.erase(iter);//std::remove(swarms.begin(), swarms.end(), swarms[i]), swarms.end());
+			swarms.erase(iter);
 			break;
 		}
 		else
@@ -213,17 +212,38 @@ void Scene::UpdateScene()
 		{
 			skills[i]->Update();
 			
-			glm::vec4 mousePos_atZ = 
-				sceneMouse.GetPositionAtZ(currentDisplayData.windowWidth, currentDisplayData.windowHeight,
-										  currentDisplayData.projectionMatrix, currentDisplayData.modelMatrix, 
-										  glm::vec4(sceneTopDownCamera.ResolveCamPosition(), 1.0f));
+			if(skills[i]->GetSkillType() == "aoeSkill")
+			{
+				glm::vec4 mousePos_atZ = 
+					sceneMouse.GetPositionAtZ(currentDisplayData.windowWidth, currentDisplayData.windowHeight,
+											  currentDisplayData.projectionMatrix, currentDisplayData.modelMatrix, 
+											  glm::vec4(sceneTopDownCamera.ResolveCamPosition(), 1.0f));
 
-			skills[i]->SetParameter(PARAM_POSITION, 
-									mousePos_atZ.swizzle(glm::comp::X, glm::comp::Y, glm::comp::Z));
+				skills[i]->SetParameter(PARAM_POSITION, 
+										mousePos_atZ.swizzle(glm::comp::X, glm::comp::Y, glm::comp::Z));
+			}
+			// TODO:
+			// Maybe a design flaw - http://stackoverflow.com/a/307793/628873
+			if(skills[i]->GetSkillType() == "passiveAOESkill")
+			{
+				for(int j = 0; j < swarms.size(); j++)
+				{
+					if(skills[i]->IsIntersectingObject(swarms[j]->GetPosition()))
+					{
+						Event skillEvent = skills[i]->GetGeneratedEvent("timeended");
+						if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
+						{
+							swarms[j]->OnEvent(skillEvent);
+							skills[i]->RemoveGeneratedEvent("timeended");
+						}
+					}
+				}
+			}
 		}
 	}
 	else if(suns.empty())
 	{
+		sceneFusionInput.Clear();	
 		skills.resize(0);
 	}
 }
@@ -297,7 +317,7 @@ void Scene::OnEvent(Event &_event)
 		}
 		if(strcmp(_event.GetArgument("object").varString, "deploySkill") == 0)
 		{
-			if(!swarms.empty())
+			if(!swarms.empty() && !skills.empty())
 			{
 				//for(int i = 0; i < skills.size(); i++)
 				//{
@@ -599,7 +619,7 @@ void Scene::GenerateRandomSwarms(int count,
 
 		for(int i = 0; i < count; i++)
 		{
-			float range = ((float)rand() / (float)RAND_MAX) * 4.0f + 2.0f;
+			float range = ((float)rand() / (float)RAND_MAX) * 4.0f + 4.0f;
 			float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
 
 			float posX = cosf(posOnCircle * (2.0f * PI)) * range;

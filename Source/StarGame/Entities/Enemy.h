@@ -163,7 +163,7 @@ public:
 struct DamageOverTime
 {
 	int damage;
-	unsigned int time_milliseconds;
+	unsigned int time_seconds;
 };
 
 
@@ -193,7 +193,7 @@ private:
 public:
 	Swarm() {}
 	Swarm(glm::vec3 newPosition, glm::vec3 newVelocity,
-		  int newSwarmEntitiesCount, int newHealth, int newDamage, int newTime_milliseconds,
+		  int newSwarmEntitiesCount, int newHealth, int newDamage, int newTime_seconds,
 		  float newLineOfSight,
 		  const BillboardProgDataNoTexture &billboardProgramNoTexture);
 

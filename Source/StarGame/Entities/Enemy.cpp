@@ -264,7 +264,7 @@ void Spaceship::OnEvent(Event &_event)
 
 
 Swarm::Swarm(glm::vec3 newPosition, glm::vec3 newVelocity,
-			 int newSwarmEntitiesCount, int newHealth, int newDamage, int newTime_milliseconds,
+			 int newSwarmEntitiesCount, int newHealth, int newDamage, int newTime_seconds,
 			 float newLineOfSight,
 			 const BillboardProgDataNoTexture &billboardProgramNoTexture)
 {
@@ -273,7 +273,7 @@ Swarm::Swarm(glm::vec3 newPosition, glm::vec3 newVelocity,
 	swarmEntitiesCount = newSwarmEntitiesCount;
 	health = newHealth;
 	damageOverTime.damage = newDamage;
-	damageOverTime.time_milliseconds = newTime_milliseconds;
+	damageOverTime.time_seconds = newTime_seconds;
 	currentState = IDLE_STATE;
 	lineOfSight = newLineOfSight;
 	swarmBody = SwarmEmitter(position, swarmEntitiesCount);
@@ -329,7 +329,7 @@ void Swarm::UpdateAI(Sun &sun)
 			{
 				//velocity = sun.GetOuterSatellite()->GetVelocity();
 
-				if(attackTimer.GetTimeSinceStart() * 1000.0f >= damageOverTime.time_milliseconds)
+				if(attackTimer.GetTimeSinceStart() >= damageOverTime.time_seconds)
 				{
 					AttackSolarSystem(sun, true, sun.GetOuterSatellite()->GetOffsetFromSun());
 					attackTimer.Reset();
@@ -351,7 +351,7 @@ void Swarm::UpdateAI(Sun &sun)
 
 				velocity = glm::vec3();
 
-				if(attackTimer.GetTimeSinceStart() * 1000.0f >= damageOverTime.time_milliseconds)
+				if(attackTimer.GetTimeSinceStart() >= damageOverTime.time_seconds)
 				{
 					AttackSolarSystem(sun);
 					attackTimer.Reset();
@@ -386,7 +386,15 @@ void Swarm::UpdateAI(Sun &sun)
 	}
 	else if(currentState == EVADE_STATE)
 	{
-		position -= velocity;
+		glm::vec3 vectorFromPlanetToSwarm = glm::vec3(sun.GetPosition()) - position;
+
+		vectorFromPlanetToSwarm = glm::normalize(vectorFromPlanetToSwarm);
+		glm::vec3 checkVelocity = glm::normalize(velocity);
+
+		if(fabs(glm::length(vectorFromPlanetToSwarm - checkVelocity)) <= 0.0001f)
+		{
+			velocity *= -1.0f;
+		}
 	}
 	else if(currentState == IDLE_STATE)
 	{
@@ -415,8 +423,14 @@ void Swarm::Update(bool isSunKilled, Sun &sun)
 		if(!isSunKilled)
 		{
 			position += velocity;
+
 			this->UpdateAI(sun);
 			swarmBody.Update(velocity);
+
+			if(health <= 20)
+			{
+				currentState = EVADE_STATE;
+			}
 
 			if(health <= 0)
 			{
@@ -451,6 +465,10 @@ void Swarm::OnEvent(Event &_event)
 		if(strcmp(_event.GetArgument("what_event").varString, "skilldeployed") == 0)
 		{
 			health -= _event.GetArgument("skillDamage").varInteger;
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "timeended") == 0)
+		{
+			health -= _event.GetArgument("damage").varInteger;
 		}
 		break;
 	}

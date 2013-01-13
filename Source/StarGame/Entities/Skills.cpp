@@ -58,8 +58,10 @@ std::vector<Event> Skill::GetGeneratedEvents()
 RaySkill::RaySkill(std::shared_ptr<Sun> newSkillOwner,
 				   int newDamage, int newDefense,
 				   float newRange,
+				   const std::string &newSkillType,
 				   char fusionCombA, char fusionCombB, char fusionCombC)
-				   : Skill(fusionCombA, fusionCombB, fusionCombC)
+				   : Skill(newSkillType,
+						   fusionCombA, fusionCombB, fusionCombC)
 {
 	skillOwner = newSkillOwner;
 	damage = newDamage;
@@ -138,6 +140,25 @@ Event RaySkill::GetGeneratedEvent(const std::string &eventName)
 		return StockEvents::EmptyEvent();
 	}
 }
+void RaySkill::RemoveGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(std::vector<Event>::iterator iter = generatedEvents.begin();
+			iter != generatedEvents.end();)
+		{
+			if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				generatedEvents.erase(iter);
+				break;
+			}
+			else 
+			{
+				++iter;
+			}
+		}
+	}
+}
 std::vector<Event> RaySkill::GetGeneratedEvents()
 {
 	std::vector<Event> eventsToReturn;
@@ -159,8 +180,10 @@ std::vector<Event> RaySkill::GetGeneratedEvents()
 
 AOESkill::AOESkill(std::shared_ptr<Sun> newSkillOwner,
 				   int newDamage, float newRange,
+				   const std::string &newSkillType,
 				   char fusionCombA, char fusionCombB, char fusionCombC)
-				   : Skill(fusionCombA, fusionCombB, fusionCombC)
+				   : Skill(newSkillType,
+						   fusionCombA, fusionCombB, fusionCombC)
 {
 	skillOwner = newSkillOwner;
 	damage = newDamage;
@@ -211,6 +234,7 @@ void AOESkill::OnEvent(Event &_event)
 
 			isStarted = true;
 		}
+		break;
 	}
 }
 
@@ -218,7 +242,6 @@ std::shared_ptr<Sun> AOESkill::GetOwner()
 {
 	return skillOwner;
 }
-
 
 void AOESkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 {
@@ -262,7 +285,186 @@ Event AOESkill::GetGeneratedEvent(const std::string &eventName)
 		return StockEvents::EmptyEvent();
 	}
 }
+void AOESkill::RemoveGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(std::vector<Event>::iterator iter = generatedEvents.begin();
+			iter != generatedEvents.end();)
+		{
+			if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				generatedEvents.erase(iter);
+				break;
+			}
+			else 
+			{
+				++iter;
+			}
+		}
+	}
+}
 std::vector<Event> AOESkill::GetGeneratedEvents()
+{
+	std::vector<Event> eventsToReturn;
+
+	if(generatedEvents.size() > 0)
+	{
+		eventsToReturn = generatedEvents;
+		generatedEvents.resize(0);
+	}
+	else 
+	{
+		eventsToReturn.push_back(StockEvents::EmptyEvent());
+	}
+
+	return eventsToReturn;
+}
+
+
+PassiveAOESkill::PassiveAOESkill(std::shared_ptr<Sun> newSkillOwner,
+								 int newDamage, int newDamageApplyTime_seconds,
+								 float newRange,
+								 const std::string &newSkillType,
+								 char fusionCombA, char fusionCombB, char fusionCombC)
+								 : Skill(newSkillType,
+										 fusionCombA, fusionCombB, fusionCombC)
+{
+	skillOwner = newSkillOwner;
+	damage = newDamage;
+	damageApplyTime_seconds = newDamageApplyTime_seconds;
+	attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE, damageApplyTime_seconds);
+	range = newRange;
+
+	position = glm::vec3(skillOwner->GetPosition());
+
+	isStarted = false;
+
+	skillVisibleRadius = 
+		Utility::Primitives::Circle(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), skillOwner->GetPosition(),
+									range, 90);
+	skillVisibleRadius.Init();
+}
+
+void PassiveAOESkill::Update()
+{
+	if(isStarted)
+	{
+		attackTimer.Update();
+		if(attackTimer.GetTimeSinceStart() >= damageApplyTime_seconds)
+		{
+			EventArg enemyDamage_perTime[2];
+			enemyDamage_perTime[0].argType = "what_event";
+			enemyDamage_perTime[0].argument.varType = TYPE_STRING;
+			strcpy(enemyDamage_perTime[0].argument.varString, "timeended");
+			enemyDamage_perTime[1].argType = "damage";
+			enemyDamage_perTime[1].argument.varType = TYPE_INTEGER;
+			enemyDamage_perTime[1].argument.varInteger = damage;
+
+			Event enemyDamageEvent(2, EVENT_TYPE_OTHER, enemyDamage_perTime);
+			// Make sure there aren't any duplicated events.
+			RemoveGeneratedEvent("timeended");
+			generatedEvents.push_back(enemyDamageEvent);
+
+			attackTimer.Reset();
+		}
+
+		position = glm::vec3(skillOwner->GetPosition());		
+	}
+}
+
+void PassiveAOESkill::Render(glutil::MatrixStack &modelMatrix,
+							 const SimpleProgData &progData)
+{
+	if(isStarted)
+	{
+		modelMatrix.Translate(position);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		skillVisibleRadius.Draw(modelMatrix, progData);
+		glDisable(GL_BLEND);
+	}
+}
+
+void PassiveAOESkill::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
+	case EVENT_TYPE_OTHER:
+		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+		{
+			EventArg skillDeployedEventArgs[3];
+			skillDeployedEventArgs[0].argType = "skillRange";
+			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+			skillDeployedEventArgs[0].argument.varFloat = range;
+			skillDeployedEventArgs[1].argType = "skillDamage";
+			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+			skillDeployedEventArgs[1].argument.varInteger = damage;
+			skillDeployedEventArgs[2].argType = "what_event";
+			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			generatedEvents.push_back(skillDeployedEvent);
+
+			isStarted = true;
+		}
+		break;
+	}
+}
+
+std::shared_ptr<Sun> PassiveAOESkill::GetOwner()
+{
+	return skillOwner;
+}
+
+bool PassiveAOESkill::IsIntersectingObject(glm::vec3 objectPosition)
+{
+	float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
+
+	if(distanceBetweenObjectAndSkill < range)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+Event PassiveAOESkill::GetGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(int i = 0; i < generatedEvents.size(); i++)
+		{
+			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
+			   strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				return generatedEvents[i];
+			}
+		}
+	}
+
+	return StockEvents::EmptyEvent();
+}
+void PassiveAOESkill::RemoveGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(std::vector<Event>::iterator iter = generatedEvents.begin();
+			iter != generatedEvents.end();)
+		{
+			if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				generatedEvents.erase(iter);
+				break;
+			}
+			else 
+			{
+				++iter;
+			}
+		}
+	}
+}
+std::vector<Event> PassiveAOESkill::GetGeneratedEvents()
 {
 	std::vector<Event> eventsToReturn;
 

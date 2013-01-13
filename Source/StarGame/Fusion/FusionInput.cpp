@@ -147,3 +147,8 @@ Event FusionInput::Update(char newButton)
 
 	return currentInputButtonEvent;
 }
+
+void FusionInput::Clear()
+{
+	sequences.clear();
+}

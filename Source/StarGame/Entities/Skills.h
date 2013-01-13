@@ -36,21 +36,26 @@ enum ParameterType
 	PARAM_DAMAGE,
 };
 
-
+// TODO: Considering the small amount of different skills (~20-30), for the 
+// sake of performance and less bugs, the skillType should be an enum.
 class Skill
 {
 protected:
 	char fusionCombination[4];
+	std::string skillType;
 	//std::vector<Event> generatedEvents;
 
 public:
 	Skill() { }
-	Skill(char fusionCombA, char fusionCombB, char fusionCombC)
+	Skill(const std::string &newSkillType,
+		  char fusionCombA, char fusionCombB, char fusionCombC)
 	{
 		fusionCombination[0] = fusionCombA;
 		fusionCombination[1] = fusionCombB;
 		fusionCombination[2] = fusionCombC;
 		fusionCombination[3] = '\0';
+
+		skillType = newSkillType;
 	}
 
 	virtual void Update() {}
@@ -62,11 +67,12 @@ public:
 
 	virtual void OnEvent(Event &_event) {}
 	// Only for EVENT_TYPE_OTHER
-	virtual Event GetGeneratedEvent(const std::string &	eventName) 
+	virtual Event GetGeneratedEvent(const std::string &eventName) 
 	{ 
 		Event eventToReturn = StockEvents::EmptyEvent();
 		return eventToReturn; 
 	}
+	virtual void RemoveGeneratedEvent(const std::string &eventName) {}
 	// Gets the generated events and empties the event list.
 	// (!)It is an one little dangerous method. You can lose a lot of events that way.
 	virtual std::vector<Event> GetGeneratedEvents() 
@@ -79,12 +85,22 @@ public:
 	{
 		return std::shared_ptr<Sun>();
 	}
+	// TODO:
+	// The 'dummy' parameter is just to make valid function overriding.
+	// There should be a CelestialBody class and not two separate Sun and
+	// Satellite classes.
+	virtual std::shared_ptr<Satellite> GetOwner(char dummy)
+	{
+		return std::shared_ptr<Satellite>();
+	}
 
 	virtual void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3) {}
 	virtual void SetParameter(ParameterType paramType, int newParam_int) {}
 	virtual void SetParameter(ParameterType paramType, float newParam_float) {}
 
 	virtual bool IsIntersectingObject(glm::vec3 objectPosition) { return false; }
+
+	virtual std::string GetSkillType() { return skillType; }
 };
 
 
@@ -109,6 +125,7 @@ public:
 	RaySkill(std::shared_ptr<Sun> newSkillOwner,
 			 int newDamage, int newDefense,
 			 float newRange,
+			 const std::string &newSkillType,
 			 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
 
 	void Update();
@@ -120,7 +137,8 @@ public:
 	std::shared_ptr<Sun> GetOwner();
 
 	// Only for EVENT_TYPE_OTHER
-	Event GetGeneratedEvent(const std::string &	eventName);
+	Event GetGeneratedEvent(const std::string &eventName);
+	void RemoveGeneratedEvent(const std::string &eventName);
 	// Gets the generated events and empties the event list.
 	// (!)It is an one little dangerous method. You can lose a lot of events that way.
 	std::vector<Event> GetGeneratedEvents();
@@ -144,6 +162,7 @@ public:
 	AOESkill() : Skill() {}
 	AOESkill(std::shared_ptr<Sun> newSkillOwner,
 			 int newDamage, float newRange,
+			 const std::string &newSkillType,
 			 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
 
 	void Update();
@@ -161,6 +180,50 @@ public:
 
 	// Only for EVENT_TYPE_OTHER
 	Event GetGeneratedEvent(const std::string &	eventName);
+	void RemoveGeneratedEvent(const std::string &eventName);
+	// Gets the generated events and empties the event list.
+	// (!)It is an one little dangerous method. You can lose a lot of events that way.
+	std::vector<Event> GetGeneratedEvents();
+};
+
+
+// Represents a passive defense AOE around a planet. When an enemy enters it, it gets
+// damage over second.
+class PassiveAOESkill : public Skill
+{
+private:
+	std::shared_ptr<Sun> skillOwner;
+
+	int damage;
+	int damageApplyTime_seconds;
+	Framework::Timer attackTimer;
+	float range;
+	glm::vec3 position;
+
+	Utility::Primitives::Circle skillVisibleRadius;
+	std::vector<Event> generatedEvents;
+	bool isStarted;
+
+public:
+	PassiveAOESkill() : Skill() {}
+	PassiveAOESkill(std::shared_ptr<Sun> newSkillOwner,
+					int newDamage, int newDamageApplyTime_seconds,
+					float newRange,
+					const std::string &newSkillType,
+					char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix,
+				const SimpleProgData &progData);
+
+	void OnEvent(Event &_event);
+	std::shared_ptr<Sun> GetOwner();
+
+	bool IsIntersectingObject(glm::vec3 objectPosition);
+
+	// Only for EVENT_TYPE_OTHER
+	Event GetGeneratedEvent(const std::string &	eventName);
+	void RemoveGeneratedEvent(const std::string &eventName);
 	// Gets the generated events and empties the event list.
 	// (!)It is an one little dangerous method. You can lose a lot of events that way.
 	std::vector<Event> GetGeneratedEvents();

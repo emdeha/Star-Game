@@ -58,6 +58,8 @@ public:
 	std::string GetSequenceButtons(std::string sequenceName);
 
 	Event Update(char newButton);
+
+	void Clear();
 };
 
 

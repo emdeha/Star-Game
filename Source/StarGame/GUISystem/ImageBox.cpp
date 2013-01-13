@@ -89,6 +89,11 @@ void ImageBox::AddPreset(LayoutPreset newPreset, glm::vec2 newPosition)
 }
 
 
+void ImageBox::Update(int newWindowWidth, int newWindowHeight)
+{
+	windowWidth = newWindowWidth;
+	windowHeight = newWindowHeight;
+}
 void ImageBox::Draw(const TextureProgData &textureData)
 {
 	glutil::MatrixStack identityMat;

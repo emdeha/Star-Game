@@ -1,12 +1,31 @@
-﻿Build started 11.1.2013 г. 15:09:48 ч..
+﻿Build started 13.1.2013 г. 15:12:10 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\AssetLoader\AssetLoader.vcxproj" on node 3 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\AssetLoader.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          All outputs are up-to-date.
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Program Files\Assimp\include\assimp" /I../freetype/include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\AssetLoader.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt GUILoader.cpp
-         Skipping... (no relevant changes detected)
          GUILoader.cpp
+     1>e:\ceci\thegame\source\stargame\assetloader\guiloader.cpp(78): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>e:\ceci\thegame\source\stargame\assetloader\guiloader.cpp(84): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>e:\ceci\thegame\source\stargame\assetloader\guiloader.cpp(100): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>e:\ceci\thegame\source\stargame\assetloader\guiloader.cpp(117): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>e:\ceci\thegame\source\stargame\assetloader\guiloader.cpp(127): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+     1>e:\ceci\thegame\source\stargame\assetloader\guiloader.cpp(144): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>e:\ceci\thegame\source\stargame\assetloader\guiloader.cpp(177): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>e:\ceci\thegame\source\stargame\assetloader\guiloader.cpp(184): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+     1>e:\ceci\thegame\source\stargame\assetloader\guiloader.cpp(217): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>e:\ceci\thegame\source\stargame\assetloader\guiloader.cpp(226): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+     1>e:\ceci\thegame\source\stargame\assetloader\guiloader.cpp(258): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>e:\ceci\thegame\source\stargame\assetloader\guiloader.cpp(267): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\AssetLoader.lib" /LIBPATH:"E:\CECI\Programming\Libraries\assimp--3.0.1270-full\assimp--3.0.1270-sdk\lib" /NOLOGO Debug\GUILoader.obj
          Debug\MeshLoader.obj
@@ -20,4 +39,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.69
+Time Elapsed 00:00:00.83

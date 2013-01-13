@@ -253,6 +253,7 @@ public:
 
 	void AddPreset(LayoutPreset newPreset, glm::vec2 newPosition);
 
+	void Update(int newWindowWidth, int newWindowHeight);
 	void Draw(const TextureProgData &textureData);
 
 	bool IsImageBox()

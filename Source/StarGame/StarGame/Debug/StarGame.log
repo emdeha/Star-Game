@@ -1,4 +1,4 @@
-﻿Build started 15.1.2013 г. 08:50:25 ч..
+﻿Build started 15.1.2013 г. 16:00:29 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" on node 3 (build target(s)).
      1>InitializeBuildStatus:
          Touching "Debug\StarGame.unsuccessfulbuild".
@@ -23,16 +23,17 @@
          E:\CECI\TheGame\Source\StarGame\Debug\Mouse.lib
          E:\CECI\TheGame\Source\StarGame\Debug\ParticleEngine.lib
          E:\CECI\TheGame\Source\StarGame\Debug\ProgramData.lib
-     1>Entities.lib(PlanetBodies.obj) : error LNK2019: unresolved external symbol "public: bool __thiscall CelestialBody::RemoveSatellite(class std::_Vector_iterator<class std::_Vector_val<class std::tr1::shared_ptr<class CelestialBody>,class std::allocator<class std::tr1::shared_ptr<class CelestialBody> > > >)" (?RemoveSatellite@CelestialBody@@QAE_NV?$_Vector_iterator@V?$_Vector_val@V?$shared_ptr@VCelestialBody@@@tr1@std@@V?$allocator@V?$shared_ptr@VCelestialBody@@@tr1@std@@@3@@std@@@std@@@Z) referenced in function "public: void __thiscall CelestialBody::Update(void)" (?Update@CelestialBody@@QAEXXZ)
-     1>Entities.lib(PlanetBodies.obj) : error LNK2019: unresolved external symbol "public: enum SatelliteType __thiscall CelestialBody::GetSatelliteType(void)" (?GetSatelliteType@CelestialBody@@QAE?AW4SatelliteType@@XZ) referenced in function "public: void __thiscall CelestialBody::Update(void)" (?Update@CelestialBody@@QAEXXZ)
-     1>Entities.lib(PlanetBodies.obj) : error LNK2019: unresolved external symbol "public: int const __thiscall CelestialBody::GetHealth(void)const " (?GetHealth@CelestialBody@@QBE?BHXZ) referenced in function "public: void __thiscall CelestialBody::Update(void)" (?Update@CelestialBody@@QAEXXZ)
-     1>Entities.lib(PlanetBodies.obj) : error LNK2019: unresolved external symbol "public: void __thiscall CelestialBody::LoadClickedAnimation(class glutil::MatrixStack &,struct SimpleProgData const &,float)" (?LoadClickedAnimation@CelestialBody@@QAEXAAVMatrixStack@glutil@@ABUSimpleProgData@@M@Z) referenced in function "public: void __thiscall CelestialBody::Render(class glutil::MatrixStack &,unsigned int,float,struct LitProgData const &,struct UnlitProgData const &,struct SimpleProgData const &,float)" (?Render@CelestialBody@@QAEXAAVMatrixStack@glutil@@IMABULitProgData@@ABUUnlitProgData@@ABUSimpleProgData@@M@Z)
-     1>Entities.lib(PlanetBodies.obj) : error LNK2019: unresolved external symbol "public: float __thiscall CelestialBody::GetOffsetFromSun(void)" (?GetOffsetFromSun@CelestialBody@@QAEMXZ) referenced in function "public: void __thiscall CelestialBody::OnEvent(class Event &)" (?OnEvent@CelestialBody@@QAEXAAVEvent@@@Z)
-     1>Entities.lib(PlanetBodies.obj) : error LNK2019: unresolved external symbol "public: bool __thiscall CelestialBody::AddSatellite(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,struct glm::detail::tvec4<float>,float,float,enum SatelliteType,int)" (?AddSatellite@CelestialBody@@QAE_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@U?$tvec4@M@detail@glm@@MMW4SatelliteType@@H@Z) referenced in function "public: void __thiscall CelestialBody::OnEvent(class Event &)" (?OnEvent@CelestialBody@@QAEXAAVEvent@@@Z)
-     1>Entities.lib(PlanetBodies.obj) : error LNK2019: unresolved external symbol "public: bool __thiscall CelestialBody::RemoveSatellite(void)" (?RemoveSatellite@CelestialBody@@QAE_NXZ) referenced in function "public: void __thiscall CelestialBody::OnEvent(class Event &)" (?OnEvent@CelestialBody@@QAEXAAVEvent@@@Z)
-     1>E:\CECI\TheGame\Source\StarGame\Debug\StarGame.exe : fatal error LNK1120: 7 unresolved externals
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" (build target(s)) -- FAILED.
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\StarGame.exe.embed.manifest" /manifest Debug\StarGame.exe.intermediate.manifest
+         All outputs are up-to-date.
+       LinkEmbedManifest:
+         All outputs are up-to-date.
+         StarGame.vcxproj -> E:\CECI\TheGame\Source\StarGame\Debug\StarGame.exe
+       FinalizeBuildStatus:
+         Deleting file "Debug\StarGame.unsuccessfulbuild".
+         Touching "Debug\StarGame.lastbuildstate".
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\StarGame\StarGame.vcxproj" (build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:02.12
+Time Elapsed 00:00:02.35

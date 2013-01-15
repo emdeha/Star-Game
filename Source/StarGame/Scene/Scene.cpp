@@ -168,7 +168,8 @@ void Scene::UpdateScene()
 
 	int sizeSwarms = swarms.size();
 	for(std::vector<std::shared_ptr<Swarm>>::iterator iter = swarms.begin();
-		iter != swarms.end(); )
+		iter != swarms.end(); 
+		)
 	{
 		if(!suns.empty())
 		{

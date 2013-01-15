@@ -450,7 +450,6 @@ private:
 	float diameter;
 
 	bool isClicked;
-	bool isSatelliteClicked;
 	bool isSun;
 
 	int health;
@@ -462,6 +461,7 @@ private:
 
 public:
 	CelestialBody() {}
+	CelestialBody(const CelestialBody &other);
 	CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float newDiameter,
 				  int newSatelliteCap, int newHealth, bool _isSun = true);			// isSun = true means that a
 																				    // sun will be created
@@ -489,15 +489,16 @@ public:
 
 	bool RemoveSatellite();
 	bool RemoveSatellite(std::vector<std::shared_ptr<CelestialBody>>::iterator index_iterator);
+	bool RemoveSatellite(SatelliteType type);
 	void RemoveSatellites();	
 
 	bool IsClicked(glm::mat4 projMat, glm::mat4 modelMat,	
 				   Mouse userMouse, glm::vec4 cameraPos,
-				   int windowWidth, int windowHealth);
+				   int windowWidth, int windowHeight);
 
 	bool IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat,	
 						    Mouse userMouse, glm::vec4 cameraPos,
-							int windowWidth, int windowHealth);
+							int windowWidth, int windowHeight);
 
 	bool HasSatellites();
 
@@ -505,25 +506,25 @@ public:
 	std::vector<Event> GetGeneratedEvents();
 
 	const bool GetIsClicked() const;
-	const bool GetIsSatelliteClicked() const;
+	const bool GetIsSatelliteClicked(SatelliteType type) const;
 
 	const float GetRadius() const;
 
 	const int GetHealth() const;
 	
+	std::shared_ptr<CelestialBody> GetSatellite(SatelliteType type);
+	std::shared_ptr<CelestialBody> GetOuterSatellite();
 	std::vector<std::shared_ptr<CelestialBody>> GetSatellites();
 
 	const glm::vec3 GetPosition() const;
-	std::shared_ptr<CelestialBody> GetOuterSatellite();
 
 
 	// Satellite-specific methods
 	float GetOffsetFromSun();
 	SatelliteType GetSatelliteType();
 
-	glm::vec3 GetVelocity();
-
-	void SetParent(const Sun &newParent);
+	void SetParent(const CelestialBody &newParent);
+	void SetIsClicked(bool newIsClicked);
 
 	void Stop();
 	void Start();

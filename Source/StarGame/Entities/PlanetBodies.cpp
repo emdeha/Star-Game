@@ -680,6 +680,10 @@ Sun::Sun(const Sun &other)
 
 
 
+CelestialBody::CelestialBody(const CelestialBody &other)
+{
+	bodyMesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(*other.bodyMesh));
+}
 CelestialBody::CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float newDiameter,
 							 int newSatelliteCap, int newHealth, bool _isSun)
 {
@@ -690,7 +694,6 @@ CelestialBody::CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float ne
 	health = newHealth;
 	isSun = true; // no matter what the value of _isSun is, the body would be created as a sun
 	isClicked = false;
-	isSatelliteClicked = false;
 	generatedEvents.resize(0);
 	parent = nullptr;
 	satellites.resize(0);
@@ -909,5 +912,326 @@ void CelestialBody::OnEvent(Event &_event)
 		default:
 			break;
 		}
+	}
+}
+
+bool CelestialBody::AddSatellite(const std::string &fileName,
+								 glm::vec4 satelliteColor,
+								 float speed, float diameter,
+								 SatelliteType type, int satelliteHealth)
+{
+	if(satellites.size() >= satelliteCap)
+	{
+		return false;
+	}
+
+	float satelliteOffset = 0.0f;
+	switch(type)
+	{
+	case SATELLITE_FIRE:
+		satelliteOffset = 1.75f;
+		break;
+	case SATELLITE_WATER:
+		satelliteOffset = 2.75f;
+		break;
+	case SATELLITE_AIR:
+		satelliteOffset = 3.75f;
+		break;
+	case SATELLITE_EARTH:
+		satelliteOffset = 4.75f;
+		break;
+	default:
+		break;
+	}
+
+	std::shared_ptr<CelestialBody>
+		newSat(new CelestialBody(Framework::Timer(Framework::Timer::TT_LOOP, speed),
+								 satelliteColor, satelliteOffset, diameter,
+								 type, satelliteHealth));
+	satellites.push_back(newSat);
+	newSat->LoadMesh(fileName);
+	newSat->SetParent(*this);
+
+	return true;
+}
+
+bool CelestialBody::RemoveSatellite()
+{
+	if(satellites.empty())
+	{
+		return false;
+	}
+
+	satellites.pop_back();
+
+	return true;
+}
+bool CelestialBody::RemoveSatellite(std::vector<std::shared_ptr<CelestialBody>>::iterator index_iterator)
+{
+	if(satellites.empty())
+	{
+		return false;
+	}
+	if(std::find(satellites.begin(), satellites.end(), (*index_iterator)) == satellites.end())
+	{
+		return false;
+	}
+
+	satellites.erase(index_iterator);
+
+	return true;
+}
+bool CelestialBody::RemoveSatellite(SatelliteType type)
+{
+	if(satellites.empty())
+	{
+		return false;
+	}
+
+	for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
+		iter != satellites.end(); 
+		)
+	{
+		if((*iter)->GetSatelliteType() == type)
+		{
+			satellites.erase(iter);
+			break;
+		}
+		else
+		{
+			++iter;
+		}
+	}
+}
+void CelestialBody::RemoveSatellites()
+{
+	if(!satellites.empty())
+	{
+		satellites.erase(satellites.begin(), satellites.end());
+	}
+}
+
+bool CelestialBody::IsClicked(glm::mat4 projMat, glm::mat4 modelMat,	
+							  Mouse userMouse, glm::vec4 cameraPos,
+							  int windowWidth, int windowHeight)
+{
+	Utility::Ray mouseRay = 
+		userMouse.GetPickRay(projMat, modelMat, cameraPos,
+							 windowWidth, windowHeight);
+
+	if(Utility::Intersections::RayIntersectsSphere(mouseRay, position, diameter / 2.0f))
+	{
+		// event!
+		//isClicked = true;
+		return true;
+	}
+	//isClicked = false;
+	return false;
+}
+bool CelestialBody::IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat,	
+									   Mouse userMouse, glm::vec4 cameraPos,
+									   int windowWidth, int windowHeight)
+{
+	for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
+		iter != satellites.end();
+		++iter)
+	{
+		Utility::Ray mouseRay = 
+			userMouse.GetPickRay(projMat, modelMat, cameraPos, 
+								 windowWidth, windowHeight);
+
+		float outerRadius = (*iter)->GetOffsetFromSun() + 2 * (*iter)->GetRadius();
+		float innerRadius = (*iter)->GetOffsetFromSun() - 2 * (*iter)->GetRadius();
+
+
+
+		//*** HACKS HACKS HACKS ***\\
+
+		// TODO: hack. Should look for a better solution. 
+		//	     If not found, this suits the game's needs.
+		// float precisionGain = 1.0f + i / 100.0f;
+		// Solved. Will be left for further investigation
+		
+		glutil::MatrixStack distMat;
+		distMat.Scale(1.0f, 1.0f, 5.0f);
+		//*** HACKS HACKS HACKS ***\\
+
+
+
+		if(Utility::Intersections::RayIntersectsEllipsoid(mouseRay, position, outerRadius, distMat.Top()) &&
+		   !Utility::Intersections::RayIntersectsEllipsoid(mouseRay, position, innerRadius, distMat.Top()))
+		{
+			(*iter)->SetIsClicked(true);
+			return true;
+		}
+		else
+		{
+			(*iter)->SetIsClicked(false);
+			return false;
+		}
+	}
+}
+
+std::vector<Event> CelestialBody::GetGeneratedEvents()
+{
+	std::vector<Event> eventsToReturn;
+
+	if(generatedEvents.size() > 0)
+	{
+		eventsToReturn = generatedEvents;
+		generatedEvents.resize(0);
+	}
+	else
+	{
+		eventsToReturn.push_back(StockEvents::EmptyEvent());
+	}
+
+	return eventsToReturn;
+}
+
+bool CelestialBody::HasSatellites()
+{
+	return !satellites.empty();
+}
+
+const bool CelestialBody::GetIsClicked() const
+{
+	return isClicked;
+}
+const bool CelestialBody::GetIsSatelliteClicked(SatelliteType type) const
+{
+	for(std::vector<std::shared_ptr<CelestialBody>>::const_iterator iter = satellites.begin();
+		iter != satellites.end();
+		++iter)
+	{
+		if((*iter)->GetSatelliteType() == type)
+		{
+			return (*iter)->GetIsClicked();
+		}
+	}
+
+	std::printf("No such satellite. (PlanetBodies.cpp/CelestialBody::GetIsSatelliteClicked)\n");
+	return false;
+}
+const float CelestialBody::GetRadius() const
+{
+	return diameter / 2.0f;
+}
+const int CelestialBody::GetHealth() const
+{
+	return health;
+}
+std::vector<std::shared_ptr<CelestialBody>> CelestialBody::GetSatellites()
+{
+	return satellites;
+}
+std::shared_ptr<CelestialBody> CelestialBody::GetSatellite(SatelliteType type)
+{
+	for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
+		iter != satellites.end();
+		++iter)
+	{
+		if((*iter)->GetSatelliteType() == type)
+		{
+			return (*iter);
+		}
+	}
+
+	std::printf("No such satellite. (PlanetBodies.cpp/CelestialBody::GetSatellite)\n");
+	return nullptr;
+}
+std::shared_ptr<CelestialBody> CelestialBody::GetOuterSatellite()
+{
+	if(!satellites.empty())
+	{
+		float maxOffset = 0.0f;
+		std::shared_ptr<CelestialBody> outerSatellite;
+
+		for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
+			iter != satellites.end();
+			++iter)
+		{
+			if((*iter)->GetOffsetFromSun() > maxOffset)
+			{
+				maxOffset = (*iter)->GetOffsetFromSun();
+				outerSatellite = (*iter);
+			}
+		}
+
+		return outerSatellite;
+	}
+
+	return nullptr;
+}
+
+const glm::vec3 CelestialBody::GetPosition() const
+{
+	return position;
+}
+
+// Satellite-specific methods
+float CelestialBody::GetOffsetFromSun()
+{
+	if(!isSun)
+	{
+		return skillType.satelliteOffsetFromSun;
+	}
+}
+SatelliteType CelestialBody::GetSatelliteType()
+{
+	if(!isSun)
+	{
+		return skillType.satelliteTypeForSkill;
+	}
+}
+
+void CelestialBody::SetParent(const CelestialBody &newParent)
+{
+	if(!isSun)
+	{
+		parent = std::unique_ptr<CelestialBody>(new CelestialBody(newParent));
+	}
+}
+void CelestialBody::SetIsClicked(bool newIsClicked)
+{
+	if(!isSun)
+	{
+		isClicked = newIsClicked;
+	}
+}
+
+void CelestialBody::Stop()
+{
+	if(!isSun)
+	{
+		revolutionDuration.SetPause(true);
+	}
+}
+void CelestialBody::Start()
+{
+	if(!isSun)
+	{
+		revolutionDuration.SetPause(false);
+	}
+}
+
+void CelestialBody::LoadClickedAnimation(glutil::MatrixStack &modelMatrix,
+										 const SimpleProgData &simpleData,
+										 float gamma)
+{
+	if(!isSun)
+	{
+		float offsetFromSun = skillType.satelliteOffsetFromSun;
+	
+		SatelliteOrbit orbit(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
+							 glm::vec4(parent->GetPosition(), 0.0f), 
+							 offsetFromSun + diameter, offsetFromSun - diameter,
+							 gamma);
+
+	
+		glutil::PushStack push(modelMatrix);
+		modelMatrix.RotateX(90.0f);
+
+		orbit.Draw(modelMatrix, simpleData);
 	}
 }

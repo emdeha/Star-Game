@@ -1,21 +1,21 @@
-﻿Build started 15.1.2013 г. 08:11:48 ч..
+﻿Build started 15.1.2013 г. 16:00:08 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\Scene\Scene.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
-         Creating "Debug\Scene.unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "Debug\Scene.unsuccessfulbuild".
        ClCompile:
          All outputs are up-to-date.
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../freetype/include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\Scene.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Scene.cpp
          Scene.cpp
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(223): warning C4482: nonstandard extension used: enum 'glm::comp' used in qualified name
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(223): warning C4482: nonstandard extension used: enum 'glm::comp' used in qualified name
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(223): warning C4482: nonstandard extension used: enum 'glm::comp' used in qualified name
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(229): warning C4018: '<' : signed/unsigned mismatch
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(234): warning C4482: nonstandard extension used: enum 'EventType' used in qualified name
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(324): warning C4018: '<' : signed/unsigned mismatch
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(383): warning C4018: '<' : signed/unsigned mismatch
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(618): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(473): warning C4715: 'Scene::GetLayout' : not all control paths return a value
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(587): warning C4715: 'Scene::GetSwarm' : not all control paths return a value
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(224): warning C4482: nonstandard extension used: enum 'glm::comp' used in qualified name
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(224): warning C4482: nonstandard extension used: enum 'glm::comp' used in qualified name
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(224): warning C4482: nonstandard extension used: enum 'glm::comp' used in qualified name
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(230): warning C4018: '<' : signed/unsigned mismatch
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(235): warning C4482: nonstandard extension used: enum 'EventType' used in qualified name
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(325): warning C4018: '<' : signed/unsigned mismatch
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(384): warning C4018: '<' : signed/unsigned mismatch
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(619): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(474): warning C4715: 'Scene::GetLayout' : not all control paths return a value
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(588): warning C4715: 'Scene::GetSwarm' : not all control paths return a value
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\Scene.lib" /NOLOGO Debug\Scene.obj
          Debug\stdafx.obj
@@ -27,4 +27,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.29
+Time Elapsed 00:00:01.23

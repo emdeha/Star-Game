@@ -430,4 +430,109 @@ inline bool Sun::HasSatellites()
 
 
 
+class CelestialBody
+{
+private:
+	std::unique_ptr<Framework::Mesh> bodyMesh;
+	
+	std::unique_ptr<CelestialBody> parent;
+	std::vector<std::shared_ptr<CelestialBody>> satellites;
+
+	std::vector<Event> generatedEvents;
+
+	SatelliteSkill skillType;
+
+	Framework::Timer revolutionDuration;
+
+	glm::vec4 color;
+	glm::vec3 position;
+
+	float diameter;
+
+	bool isClicked;
+	bool isSatelliteClicked;
+	bool isSun;
+
+	int health;
+	int satelliteCap;
+
+
+	int materialBlockSize;
+	GLuint materialUniformBuffer;
+
+public:
+	CelestialBody() {}
+	CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float newDiameter,
+				  int newSatelliteCap, int newHealth, bool _isSun = true);			// isSun = true means that a
+																				    // sun will be created
+	CelestialBody(Framework::Timer newRevolutionDuration, glm::vec4 newColor,
+				  float newOffsetFromParent, float newDiameter,
+				  SatelliteType newSkillType, int newHealth, bool _isSun = false); // isSun = false means that a 
+																				   // satellite will be created
+
+	void LoadMesh(const std::string &fileName);
+	
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix, GLuint materialBlockIndex,
+				float gamma, 
+				const LitProgData &litData,
+				const UnlitProgData &unlitData,
+				const SimpleProgData &simpleData,
+				float interpolation);
+
+	void OnEvent(Event &_event);
+
+	bool AddSatellite(const std::string &fileName,
+					  glm::vec4 satelliteColor,
+					  float speed, float diameter,
+					  SatelliteType type, int satelliteHealth);
+
+	bool RemoveSatellite();
+	bool RemoveSatellite(std::vector<std::shared_ptr<CelestialBody>>::iterator index_iterator);
+	void RemoveSatellites();	
+
+	bool IsClicked(glm::mat4 projMat, glm::mat4 modelMat,	
+				   Mouse userMouse, glm::vec4 cameraPos,
+				   int windowWidth, int windowHealth);
+
+	bool IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat,	
+						    Mouse userMouse, glm::vec4 cameraPos,
+							int windowWidth, int windowHealth);
+
+	bool HasSatellites();
+
+	// Gets the generated events and DESTROYS them.
+	std::vector<Event> GetGeneratedEvents();
+
+	const bool GetIsClicked() const;
+	const bool GetIsSatelliteClicked() const;
+
+	const float GetRadius() const;
+
+	const int GetHealth() const;
+	
+	std::vector<std::shared_ptr<CelestialBody>> GetSatellites();
+
+	const glm::vec3 GetPosition() const;
+	std::shared_ptr<CelestialBody> GetOuterSatellite();
+
+
+	// Satellite-specific methods
+	float GetOffsetFromSun();
+	SatelliteType GetSatelliteType();
+
+	glm::vec3 GetVelocity();
+
+	void SetParent(const Sun &newParent);
+
+	void Stop();
+	void Start();
+
+	// Should be a GUI control which only appears on satellite hover. Like the AOE.
+	void LoadClickedAnimation(glutil::MatrixStack &modelMatrix,
+							  const SimpleProgData &simpleData,
+							  float gamma);
+};
+
+
 #endif

@@ -1,11 +1,18 @@
-﻿Build started 13.1.2013 г. 15:03:47 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\framework\framework.vcxproj" on node 3 (build target(s)).
+﻿Build started 15.1.2013 г. 08:29:13 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\framework\framework.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "lib\Debug\framework.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /I..\glsdk\glload\include /I..\glsdk\glimg\include /I..\glsdk\glm /I..\glsdk\glutil\include /I..\glsdk\glmesh\include /I..\glsdk\freeglut\include /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D DEBUG /D _DEBUG /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"lib\Debug\\" /Fd"lib\Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Utility.cpp
+         Utility.cpp
        Lib:
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"lib\frameworkD.lib" /NOLOGO lib\Debug\EventSystem.obj
+         lib\Debug\framework.obj
+         lib\Debug\Mesh.obj
+         lib\Debug\Scene.obj
+         lib\Debug\Text.obj
+         lib\Debug\Timer.obj
+         lib\Debug\Utility.obj
          framework.vcxproj -> E:\CECI\TheGame\Source\StarGame\framework\lib\frameworkD.lib
        FinalizeBuildStatus:
          Deleting file "lib\Debug\framework.unsuccessfulbuild".
@@ -14,4 +21,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.06
+Time Elapsed 00:00:00.78

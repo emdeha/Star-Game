@@ -224,10 +224,6 @@ void Utility::Primitives::Torus2D::Draw(glutil::MatrixStack &modelMatrix, const 
 	glUseProgram(data.theProgram);
 	glBindVertexArray(vao);
 	{
-		glutil::PushStack push(modelMatrix);
-
-		modelMatrix.RotateX(90.0f);
-
 		glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
 		glUniform4f(data.colorUnif, color.r, color.g, color.b, color.a);
 

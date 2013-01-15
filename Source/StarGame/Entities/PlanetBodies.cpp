@@ -214,6 +214,7 @@ void Satellite::OnEvent(Event &_event)
 		break;
 	case EVENT_TYPE_ATTACKED:
 		health -= _event.GetArgument("damage").varInteger;
+		break;
 	default:
 		break;
 	};
@@ -266,6 +267,10 @@ void Satellite::LoadClickedAnimation(glutil::MatrixStack &modelMatrix, const Sim
 						 parent->GetPosition(), 
 						 offsetFromSun + diameter, offsetFromSun - diameter,
 						 gamma);
+
+	
+	glutil::PushStack push(modelMatrix);
+	modelMatrix.RotateX(90.0f);
 
 	orbit.Draw(modelMatrix, simpleData);
 }
@@ -670,4 +675,239 @@ Sun::Sun(const Sun &other)
 	position = other.position;
 	diameter = other.diameter;
 	isClicked = other.isClicked;
+}
+
+
+
+
+CelestialBody::CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float newDiameter,
+							 int newSatelliteCap, int newHealth, bool _isSun)
+{
+	position = newPosition;
+	color = newColor;
+	diameter = newDiameter;
+	satelliteCap = newSatelliteCap;
+	health = newHealth;
+	isSun = true; // no matter what the value of _isSun is, the body would be created as a sun
+	isClicked = false;
+	isSatelliteClicked = false;
+	generatedEvents.resize(0);
+	parent = nullptr;
+	satellites.resize(0);
+	bodyMesh.reset();
+}
+CelestialBody::CelestialBody(Framework::Timer newRevolutionDuration, glm::vec4 newColor,
+							 float newOffsetFromParent, float newDiameter,
+							 SatelliteType newSkillType, int newHealth, bool _isSun)
+{
+	revolutionDuration = newRevolutionDuration;
+	color = newColor;
+	diameter = newDiameter;
+	skillType.satelliteOffsetFromSun = newOffsetFromParent;
+	skillType.satelliteTypeForSkill = newSkillType;
+	health = newHealth;
+	isSun = false; // no matter what the value of _isSun is, the body would be created as a sun
+	bodyMesh.reset();
+	parent = nullptr;
+	satellites.resize(0);
+	generatedEvents.resize(0);
+	isClicked = false;
+
+	GenerateUniformBuffers(materialBlockSize, color, materialUniformBuffer);
+}
+
+void CelestialBody::LoadMesh(const std::string &fileName)
+{
+	try
+	{
+		bodyMesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(fileName));
+	}
+	catch(std::exception &except)
+	{
+		printf("%s\n", except.what());
+		throw;
+	}
+}
+
+void CelestialBody::Update()
+{
+	for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
+		iter != satellites.end(); ++iter)
+	{
+		if((*iter)->GetHealth() <= 0)
+		{
+			typesTable[(*iter)->GetSatelliteType()] = false;
+			RemoveSatellite(iter);
+			break;
+		}
+		else
+		{
+			(*iter)->Update();
+		}
+	}
+
+	if(!isSun)
+	{
+		revolutionDuration.Update();
+
+		float currentTimeThroughLoop = revolutionDuration.GetAlpha();
+		float offsetFromSun = skillType.satelliteOffsetFromSun;
+
+		position.x = cosf(currentTimeThroughLoop * (2.0f * PI)) * offsetFromSun;
+		position.y = sinf(currentTimeThroughLoop * (2.0f * PI)) * offsetFromSun;
+	}
+}
+
+void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBlockIndex,
+						   float gamma, 
+						   const LitProgData &litData,
+						   const UnlitProgData &unlitData,
+						   const SimpleProgData &simpleData,
+						   float interpolation)
+{
+	{
+		glutil::PushStack push(modelMatrix);
+		
+		modelMatrix.Translate(position);
+
+		for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
+			iter != satellites.end(); ++iter)
+		{
+			(*iter)->Render(modelMatrix, materialBlockIndex,
+							gamma, litData, unlitData, simpleData, interpolation);
+		}
+
+		if(isSun)
+		{
+			modelMatrix.Scale(diameter);
+
+			glm::vec4 sunColor = Utility::CorrectGamma(color, gamma);
+
+			glUseProgram(unlitData.theProgram);
+			glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+			glUniform4f(unlitData.objectColorUnif, sunColor.r, sunColor.g, sunColor.b, sunColor.a);
+
+			bodyMesh->Render("flat");
+		}
+		else
+		{
+			modelMatrix.Scale(diameter);
+
+			glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
+							  0, sizeof(MaterialBlock));
+
+			glm::mat3 normMatrix(modelMatrix.Top());
+			normMatrix = glm::transpose(glm::inverse(normMatrix));
+
+			glUseProgram(litData.theProgram);
+			glUniformMatrix4fv(litData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+			glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+
+			bodyMesh->Render("lit");
+
+			glUseProgram(0);
+
+			glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
+		}
+	}
+
+	if(isClicked)
+	{
+		LoadClickedAnimation(modelMatrix, simpleData, gamma);
+	}
+}
+
+void CelestialBody::OnEvent(Event &_event)
+{
+	if(!isSun)
+	{
+		switch(_event.GetType())
+		{
+		case EVENT_TYPE_ON_CLICK:
+			std::printf("Satellite clicked!\n");
+			isClicked = true;
+			break;
+		case EVENT_TYPE_ON_HOVER:
+			std::printf("Satellite hovered!\n");
+			isClicked = false;
+			break;
+		case EVENT_TYPE_ATTACKED:
+			health -= _event.GetArgument("damage").varInteger;
+			break;
+		default:
+			break;
+		}
+	}
+	else
+	{
+		switch(_event.GetType())
+		{
+		case EVENT_TYPE_ON_CLICK:
+			if(_event.GetArgument("rightClick").varBool == true)
+			{
+				if(!this->RemoveSatellite())
+				{
+					std::printf("No satellites left.\n");
+				}
+				else
+				{
+					typesTable[satellites.size()] = false;
+				}
+			}
+			else if(_event.GetArgument("rightClick").varBool == false)
+			{
+				if(this->AddSatellite("mesh-files/UnitSphere.xml",
+									  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
+									  10.0f, 0.5f, 
+									  SatelliteType(FindEmptySatelliteType()),
+									  5))
+				{
+					// currentSatelliteType = FindEmptySatelliteType();
+				}
+				else
+				{
+					std::printf("Satellite cap reached!\n");
+				}
+			}
+			break;
+		case EVENT_TYPE_ATTACKED:
+			if(_event.GetArgument("bodyIndex").varInteger == -1)
+			{
+				if(satellites.empty())
+				{
+					health -= _event.GetArgument("damage").varInteger;
+				}
+
+				// Is this a good way to send events to the Scene?
+				if(health <= 0)
+				{
+					EventArg sunKilledEventArg[2];
+					sunKilledEventArg[0].argType = "what";
+					sunKilledEventArg[0].argument.varType = TYPE_STRING;
+					strcpy(sunKilledEventArg[0].argument.varString, "sun"); 
+					sunKilledEventArg[1].argType = "index";
+					sunKilledEventArg[1].argument.varType = TYPE_INTEGER;
+					sunKilledEventArg[1].argument.varInteger = 0; // Should be some unique index.
+					Event sunKilledEvent(2, EVENT_TYPE_KILLED, sunKilledEventArg);
+
+					generatedEvents.push_back(sunKilledEvent);
+				}
+			}
+			else
+			{
+				for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
+					iter != satellites.end(); ++iter)
+				{
+					if((*iter)->GetOffsetFromSun() == _event.GetArgument("bodyIndex").varFloat)
+					{
+						(*iter)->OnEvent(_event);
+						break;
+					}
+				}
+			}
+			break;
+		default:
+			break;
+		}
+	}
 }

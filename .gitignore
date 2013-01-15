@@ -1,1 +1,11 @@
 Dropbox/
+Docs/
+Source/html/
+Source/latex/
+Source/Star Game Profiling/
+Source/Documentation
+*.log
+*.tlog
+*.ipch
+*.idb
+*.pdb

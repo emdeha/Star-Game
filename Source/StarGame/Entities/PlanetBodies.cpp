@@ -424,7 +424,7 @@ void Sun::OnEvent(Event &_event)
 		{
 			if(this->AddSatellite("mesh-files/UnitSphere.xml", 
 								  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-								  10.0f, 0.25f,
+								  10.0f, 0.5f,
 								  SatelliteType(FindEmptySatelliteType()), 
 								  5))
 			{
@@ -491,16 +491,16 @@ bool Sun::AddSatellite(const std::string &fileName,
 	switch(type)
 	{
 	case SATELLITE_FIRE:
-		satelliteOffset = 1.0f;
-		break;
-	case SATELLITE_WATER:
 		satelliteOffset = 1.75f;
 		break;
+	case SATELLITE_WATER:
+		satelliteOffset = 2.75;
+		break;
 	case SATELLITE_AIR:
-		satelliteOffset = 2.5f;
+		satelliteOffset = 3.75;
 		break;
 	case SATELLITE_EARTH:
-		satelliteOffset = 3.25f;
+		satelliteOffset = 4.75f;
 		break;
 	}
 

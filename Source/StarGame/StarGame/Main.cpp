@@ -358,7 +358,7 @@ void InitializeGUI()
 void InitializeScene()
 {
 	Mouse userMouse;
-	TopDownCamera userCamera = TopDownCamera(glm::vec3(), 12.5f, 90.0f, 135.0f);
+	TopDownCamera userCamera = TopDownCamera(glm::vec3(), 13.5f, 90.0f, 135.0f);
 
 
 	std::shared_ptr<Sun> 

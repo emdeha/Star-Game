@@ -1,14 +1,12 @@
-﻿Build started 13.1.2013 г. 15:03:47 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Audio\Audio.vcxproj" on node 5 (build target(s)).
+﻿Build started 13.1.2013 г. 15:51:43 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Audio\Audio.vcxproj" on node 4 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Audio.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          All outputs are up-to-date.
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\Audio.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Audio.cpp
-         Audio.cpp
+         All outputs are up-to-date.
        Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\Audio.lib" /NOLOGO Debug\Audio.obj
-         Debug\stdafx.obj
+         All outputs are up-to-date.
          Audio.vcxproj -> E:\CECI\TheGame\Source\StarGame\Debug\Audio.lib
        FinalizeBuildStatus:
          Deleting file "Debug\Audio.unsuccessfulbuild".
@@ -17,4 +15,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.70
+Time Elapsed 00:00:00.19

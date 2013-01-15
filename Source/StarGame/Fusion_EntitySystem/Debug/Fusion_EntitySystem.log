@@ -1,10 +1,9 @@
-﻿Build started 13.1.2013 г. 15:03:48 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Fusion_EntitySystem\Fusion_EntitySystem.vcxproj" on node 3 (build target(s)).
+﻿Build started 13.1.2013 г. 15:51:43 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Fusion_EntitySystem\Fusion_EntitySystem.vcxproj" on node 4 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Fusion_EntitySystem.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Debug\Fusion_EntitySystem.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
-         stdafx.cpp
+         All outputs are up-to-date.
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\Fusion_EntitySystem.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt EntityManager.cpp EntityProcessingSystem.cpp EntitySystem.cpp EventManager.cpp
          EventManager.cpp
          EntitySystem.cpp
@@ -25,4 +24,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.04
+Time Elapsed 00:00:01.23

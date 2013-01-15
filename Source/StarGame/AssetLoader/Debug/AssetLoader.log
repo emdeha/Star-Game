@@ -1,4 +1,4 @@
-﻿Build started 13.1.2013 г. 15:12:10 ч..
+﻿Build started 13.1.2013 г. 15:51:47 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\AssetLoader\AssetLoader.vcxproj" on node 3 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\AssetLoader.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -39,4 +39,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.83
+Time Elapsed 00:00:00.90

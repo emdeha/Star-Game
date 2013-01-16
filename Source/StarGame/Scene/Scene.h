@@ -49,9 +49,8 @@ class Scene
 {
 private:
 	std::vector<SunLight> lights; ///< Holds the world's lights.
-	//std::vector<std::shared_ptr<Sun>> suns; ///< Holds the world's suns.
 
-	std::vector<std::shared_ptr<CelestialBody>> suns; 
+	std::vector<std::shared_ptr<CelestialBody>> suns;
 
 	std::vector<std::shared_ptr<Spaceship>> spaceships; ///< Holds the world's enemies.
 	std::vector<std::shared_ptr<FastSuicideBomber>> fastSuicideBombers;
@@ -106,7 +105,6 @@ public:
 
 	void AddSunLight(const SunLight &newSunLight);
 	
-	//void AddSun(const std::shared_ptr<Sun> newSun);
 	void AddSun(const std::shared_ptr<CelestialBody> newSun);
 	
 	void AddSpaceship(const std::shared_ptr<Spaceship> newSpaceship);
@@ -147,7 +145,6 @@ public:
 	Mouse &GetMouse();
 
 
-	//std::shared_ptr<Sun> GetSun();
 	std::shared_ptr<CelestialBody> GetSun();
 
 	std::shared_ptr<Spaceship> GetSpaceship();

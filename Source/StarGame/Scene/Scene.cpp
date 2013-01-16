@@ -131,10 +131,6 @@ void Scene::UpdateScene()
 	for(int i = 0; i < sizeSuns; i++)
 	{
 		suns[i]->Update();
-		//if(suns[i]->GetIsClicked())
-		//{
-		//	universeMusic.Play(MUSIC_ON_SUN_CLICK);
-		//}
 	}
 
 	int sizeSpaceships = spaceships.size();
@@ -216,9 +212,12 @@ void Scene::UpdateScene()
 			if(skills[i]->GetSkillType() == "aoeSkill")
 			{
 				glm::vec4 mousePos_atZ = 
-					sceneMouse.GetPositionAtZ(currentDisplayData.windowWidth, currentDisplayData.windowHeight,
-											  currentDisplayData.projectionMatrix, currentDisplayData.modelMatrix, 
-											  glm::vec4(sceneTopDownCamera.ResolveCamPosition(), 1.0f));
+					sceneMouse.GetPositionAtDimension(currentDisplayData.windowWidth, 
+													  currentDisplayData.windowHeight,
+													  currentDisplayData.projectionMatrix, 
+													  currentDisplayData.modelMatrix, 
+													  glm::vec4(sceneTopDownCamera.ResolveCamPosition(), 1.0f), 
+													  glm::comp::Y);
 
 				skills[i]->SetParameter(PARAM_POSITION, 
 										mousePos_atZ.swizzle(glm::comp::X, glm::comp::Y, glm::comp::Z));
@@ -288,6 +287,13 @@ void Scene::OnEvent(Event &_event)
 		if(strcmp(_event.GetArgument("object").varString, "sun") == 0)
 		{
 			sceneMusic.Play(MUSIC_ON_SUN_CLICK);
+
+			std::shared_ptr<PassiveAOESkill> satSkill =
+				std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(suns[0]->GetSatellites().back(), 
+																	 20, 1, 1.0f, 
+																	 "passiveAOESkill",
+																	 'q', 'q', 'e'));
+			AddSkill(satSkill);
 		}
 		if(strcmp(_event.GetArgument("object").varString, "exitButton") == 0)
 		{
@@ -320,8 +326,6 @@ void Scene::OnEvent(Event &_event)
 		{
 			if(!swarms.empty() && !skills.empty())
 			{
-				//for(int i = 0; i < skills.size(); i++)
-				//{
 				for(int i = 0; i < swarms.size(); i++)
 				{
 					if(skills[0]->IsIntersectingObject(swarms[i]->GetPosition()))
@@ -331,7 +335,6 @@ void Scene::OnEvent(Event &_event)
 						swarms[i]->OnEvent(skillEvent);
 					}
 				}
-				//}
 			}
 		}
 		break;
@@ -636,9 +639,9 @@ void Scene::GenerateRandomSwarms(int count,
 			float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
 
 			float posX = cosf(posOnCircle * (2.0f * PI)) * range;
-			float posY = sinf(posOnCircle * (2.0f * PI)) * range;
+			float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
 
-			glm::vec3 position = glm::vec3(posX, posY, 0.0f);
+			glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
 			glm::vec3 velocity = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position)) * 0.05f;
 		
 			std::shared_ptr<Swarm> randSwarm = 

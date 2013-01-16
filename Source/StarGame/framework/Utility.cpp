@@ -147,8 +147,8 @@ Utility::Primitives::Torus2D::Torus2D()
 }
 
 Utility::Primitives::Torus2D::Torus2D(glm::vec4 newColor, glm::vec4 newPosition,
-											   float newInnerRadius, float newOuterRadius, 
-											   int newResolution)
+									  float newInnerRadius, float newOuterRadius, 
+									  int newResolution)
 {
 	assert(newResolution < 360 && newResolution > 3);
 
@@ -302,10 +302,6 @@ void Utility::Primitives::Circle::Draw(glutil::MatrixStack &modelMatrix, const S
 	glUseProgram(data.theProgram);
 	glBindVertexArray(vao);
 	{
-		glutil::PushStack push(modelMatrix);
-
-		modelMatrix.RotateX(90.0f);
-
 		glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
 		glUniform4f(data.colorUnif, color.r, color.g, color.b, color.a);
 
@@ -398,8 +394,6 @@ void Utility::Primitives::Square::Draw(glutil::MatrixStack &modelMatrix, const S
 	glUseProgram(data.theProgram);
 	glBindVertexArray(vao);
 	{
-		glutil::PushStack push(modelMatrix);
-
 		glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
 		glUniform4f(data.colorUnif, color.r, color.g, color.b, color.a);
 

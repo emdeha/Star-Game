@@ -317,7 +317,7 @@ void Swarm::UpdateAI(CelestialBody &sun)
 		}
 		else
 		{
-			vectorBetweenPlanetAndSwarm = glm::vec3(sun.GetPosition()) - position;
+			vectorBetweenPlanetAndSwarm = sun.GetPosition() - position;
 		}
 		float distanceBetweenPlanetAndSwarm = glm::length(vectorBetweenPlanetAndSwarm);
 
@@ -366,7 +366,7 @@ void Swarm::UpdateAI(CelestialBody &sun)
 				}
 				else
 				{
-					direction = glm::vec3(sun.GetPosition()) - position;
+					direction = sun.GetPosition() - position;
 				}
 
 				if(!isCommanded)
@@ -403,7 +403,7 @@ void Swarm::UpdateAI(CelestialBody &sun)
 		{
 			vectorFromPlanetToSwarm = sun.GetOuterSatellite()->GetPosition() - position;
 		}
-		else vectorFromPlanetToSwarm = glm::vec3(sun.GetPosition()) - position;
+		else vectorFromPlanetToSwarm = sun.GetPosition() - position;
 
 		float distanceBetweenPlanetAndSwarm = glm::length(vectorFromPlanetToSwarm);
 

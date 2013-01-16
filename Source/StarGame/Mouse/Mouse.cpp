@@ -155,16 +155,30 @@ glm::vec4 Mouse::GetWorldSpacePosition(int windowWidth, int windowHeight,
 	return mousePos_worldSpace;
 }
 
-glm::vec4 Mouse::GetPositionAtZ(int windowWidth, int windowHeight,
-								glm::mat4 projMat, glm::mat4 modelMat, 
-								glm::vec4 cameraPos, float z)
+glm::vec4 Mouse::GetPositionAtDimension(int windowWidth, int windowHeight,
+										glm::mat4 projMat, glm::mat4 modelMat, 
+										glm::vec4 cameraPos, 
+										glm::comp dimension)
 {
 	glm::vec4 mousePos_worldSpace = GetWorldSpacePosition(windowWidth, windowHeight, 
 														  projMat, modelMat);
 
 	glm::vec4 direction = glm::normalize(mousePos_worldSpace - cameraPos);
 
-	float distance = -cameraPos.z / direction.z;
+	float distance = 0.0f;
+
+	switch(dimension)
+	{
+	case glm::comp::X:
+		distance = -cameraPos.x / direction.x;
+		break;
+	case glm::comp::Y:
+		distance = -cameraPos.y / direction.y;
+		break;
+	case glm::comp::Z:
+		distance = -cameraPos.z / direction.z;
+		break;
+	}
 
 	return glm::vec4(cameraPos + direction * distance);
 }

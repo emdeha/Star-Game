@@ -49,4 +49,35 @@ public:
 };
 
 
+class SatelliteOrbit
+{
+private:
+	glm::vec4 mainColor; 
+	glm::vec4 outlineColor;
+
+	glm::vec4 position;
+
+	float outerRadius;
+	float innerRadius;
+
+
+	Utility::Primitives::Torus2D mainOrbit;
+	Utility::Primitives::Torus2D orbitOutlineOne;
+	Utility::Primitives::Torus2D orbitOutlineTwo;
+
+public:
+	SatelliteOrbit();
+	SatelliteOrbit(glm::vec4 newMainColor, glm::vec4 newOutlineColor,
+				   glm::vec4 newPosition, 
+				   float newOuterRadius, float newInnerRadius,
+				   float gamma);
+
+	void Init();
+
+	/// \fn Draw
+	/// \brief Draws the orbit.
+	void Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &simpleData);
+};
+
+
 #endif

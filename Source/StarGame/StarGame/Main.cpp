@@ -358,7 +358,7 @@ void InitializeGUI()
 void InitializeScene()
 {
 	Mouse userMouse;
-	TopDownCamera userCamera = TopDownCamera(glm::vec3(), 13.5f, 90.0f, 135.0f);
+	TopDownCamera userCamera = TopDownCamera(glm::vec3(), 13.5f, 0.0f, 45.0f);
 
 
 	std::shared_ptr<CelestialBody> 
@@ -421,7 +421,7 @@ void InitializeScene()
 
 	std::shared_ptr<PassiveAOESkill> testPassiveAOESkill =
 		std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(scene.GetSun(),
-															 20, // Damage over second. 
+															 20, 
 															 1, 2.0f, 
 															 "passiveAOESkill",
 															 'q', 'q', 'e'));

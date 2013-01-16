@@ -208,6 +208,9 @@ void AOESkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &pr
 {
 	if(isStarted)
 	{
+		glutil::PushStack push(modelMatrix);
+		modelMatrix.Translate(position);
+
 		skillSelector.Draw(modelMatrix, progData);
 	}
 }
@@ -378,10 +381,14 @@ void PassiveAOESkill::Render(glutil::MatrixStack &modelMatrix,
 {
 	if(isStarted)
 	{
-		modelMatrix.Translate(position);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glutil::PushStack push(modelMatrix);
+		modelMatrix.Translate(position);
+
 		skillVisibleRadius.Draw(modelMatrix, progData);
+
 		glDisable(GL_BLEND);
 	}
 }

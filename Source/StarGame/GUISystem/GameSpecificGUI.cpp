@@ -36,10 +36,6 @@ void AOESelector::Init()
 
 void AOESelector::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &simpleData)
 {
-	glutil::PushStack push(modelMatrix);
-
-	modelMatrix.Translate(position);
-
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -51,4 +47,65 @@ void AOESelector::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &s
 void AOESelector::Update(glm::vec3 newPosition)
 {
 	position = newPosition;
+}
+
+
+SatelliteOrbit::SatelliteOrbit()
+{
+	mainColor = glm::vec4();
+	outlineColor = glm::vec4();
+
+	position = glm::vec4();
+
+	outerRadius = 0.0f;
+	innerRadius = 0.0f;
+}
+
+SatelliteOrbit::SatelliteOrbit(glm::vec4 newMainColor, glm::vec4 newOutlineColor,
+							   glm::vec4 newPosition, 
+							   float newOuterRadius, float newInnerRadius,
+							   float gamma)
+{
+	mainColor = Utility::CorrectGamma(newMainColor, gamma);
+	outlineColor = Utility::CorrectGamma(newOutlineColor, gamma);
+	position = newPosition;
+	outerRadius = newOuterRadius;
+	innerRadius = newInnerRadius;
+
+	mainOrbit = Utility::Primitives::Torus2D(mainColor,
+											 position,
+											 innerRadius,
+											 outerRadius,
+											 90);
+	orbitOutlineOne = Utility::Primitives::Torus2D(outlineColor,
+												   position,
+												   innerRadius - 0.05f,
+												   innerRadius,
+												   90);
+	orbitOutlineTwo = Utility::Primitives::Torus2D(outlineColor,
+												   position,
+												   outerRadius,
+												   outerRadius + 0.05f,
+												   90);
+}
+
+void SatelliteOrbit::Init()
+{
+	mainOrbit.Init();
+	orbitOutlineOne.Init();
+	orbitOutlineTwo.Init();
+}
+
+void SatelliteOrbit::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &simpleData)
+{
+	// TODO: Play with blending
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	mainOrbit.Draw(modelMatrix, simpleData);
+
+	glDisable(GL_BLEND);
+
+	orbitOutlineOne.Draw(modelMatrix, simpleData);
+	orbitOutlineTwo.Draw(modelMatrix, simpleData);
 }

@@ -21,6 +21,20 @@
 #include <algorithm>
 
 
+static int FindEmptySatelliteType()
+{
+	for(int type = 0; type < 4; type++)
+	{
+		if(typesTable[type] == false)
+		{
+			typesTable[type] = true;
+			return type;
+		}
+	}
+}
+
+
+
 SatelliteOrbit::SatelliteOrbit()
 {
 	mainColor = glm::vec4();
@@ -397,18 +411,6 @@ void Sun::Update()
 	}
 }
 
-static int FindEmptySatelliteType()
-{
-	for(int type = 0; type < 4; type++)
-	{
-		if(typesTable[type] == false)
-		{
-			typesTable[type] = true;
-			return type;
-		}
-	}
-}
-
 void Sun::OnEvent(Event &_event)
 {
 	switch(_event.GetType())
@@ -684,6 +686,11 @@ CelestialBody::CelestialBody(const CelestialBody &other)
 {
 	bodyMesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(*other.bodyMesh));
 }
+CelestialBody::~CelestialBody()
+{
+	parent.release();
+	bodyMesh.release();
+}
 CelestialBody::CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float newDiameter,
 							 int newSatelliteCap, int newHealth, bool _isSun)
 {
@@ -695,7 +702,7 @@ CelestialBody::CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float ne
 	isSun = true; // no matter what the value of _isSun is, the body would be created as a sun
 	isClicked = false;
 	generatedEvents.resize(0);
-	parent = nullptr;
+	parent.reset();
 	satellites.resize(0);
 	bodyMesh.reset();
 }
@@ -711,7 +718,7 @@ CelestialBody::CelestialBody(Framework::Timer newRevolutionDuration, glm::vec4 n
 	health = newHealth;
 	isSun = false; // no matter what the value of _isSun is, the body would be created as a sun
 	bodyMesh.reset();
-	parent = nullptr;
+	parent.reset();
 	satellites.resize(0);
 	generatedEvents.resize(0);
 	isClicked = false;
@@ -734,18 +741,21 @@ void CelestialBody::LoadMesh(const std::string &fileName)
 
 void CelestialBody::Update()
 {
-	for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
-		iter != satellites.end(); ++iter)
+	if(isSun)
 	{
-		if((*iter)->GetHealth() <= 0)
+		for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
+			iter != satellites.end(); ++iter)
 		{
-			typesTable[(*iter)->GetSatelliteType()] = false;
-			RemoveSatellite(iter);
-			break;
-		}
-		else
-		{
-			(*iter)->Update();
+			if((*iter)->GetHealth() <= 0)
+			{
+				typesTable[(*iter)->GetSatelliteType()] = false;
+				RemoveSatellite(iter);
+				break;
+			}
+			else
+			{
+				(*iter)->Update();
+			}
 		}
 	}
 
@@ -769,19 +779,19 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 						   float interpolation)
 {
 	{
-		glutil::PushStack push(modelMatrix);
-		
-		modelMatrix.Translate(position);
-
-		for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
-			iter != satellites.end(); ++iter)
-		{
-			(*iter)->Render(modelMatrix, materialBlockIndex,
-							gamma, litData, unlitData, simpleData, interpolation);
-		}
-
 		if(isSun)
 		{
+			glutil::PushStack push(modelMatrix);
+		
+			modelMatrix.Translate(position);
+			
+			for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
+				iter != satellites.end(); ++iter)
+			{
+				(*iter)->Render(modelMatrix, materialBlockIndex,
+								gamma, litData, unlitData, simpleData, interpolation);
+			}
+
 			modelMatrix.Scale(diameter);
 
 			glm::vec4 sunColor = Utility::CorrectGamma(color, gamma);
@@ -794,6 +804,9 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 		}
 		else
 		{
+			glutil::PushStack push(modelMatrix);
+			
+			modelMatrix.Translate(position);
 			modelMatrix.Scale(diameter);
 
 			glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
@@ -814,9 +827,13 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 		}
 	}
 
-	if(isClicked)
+	if(isClicked && !isSun)
 	{
 		LoadClickedAnimation(modelMatrix, simpleData, gamma);
+	}
+	else if(isClicked)
+	{
+		isClicked = false;
 	}
 }
 
@@ -832,7 +849,7 @@ void CelestialBody::OnEvent(Event &_event)
 			break;
 		case EVENT_TYPE_ON_HOVER:
 			std::printf("Satellite hovered!\n");
-			isClicked = false;
+			isClicked = true;
 			break;
 		case EVENT_TYPE_ATTACKED:
 			health -= _event.GetArgument("damage").varInteger;
@@ -899,7 +916,8 @@ void CelestialBody::OnEvent(Event &_event)
 			else
 			{
 				for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
-					iter != satellites.end(); ++iter)
+					iter != satellites.end(); 
+					++iter)
 				{
 					if((*iter)->GetOffsetFromSun() == _event.GetArgument("bodyIndex").varFloat)
 					{
@@ -957,57 +975,69 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 
 bool CelestialBody::RemoveSatellite()
 {
-	if(satellites.empty())
+	if(isSun)
 	{
-		return false;
+		if(satellites.empty())
+		{
+			return false;
+		}
+
+		satellites.pop_back();
+
+		return true;
 	}
-
-	satellites.pop_back();
-
-	return true;
 }
 bool CelestialBody::RemoveSatellite(std::vector<std::shared_ptr<CelestialBody>>::iterator index_iterator)
 {
-	if(satellites.empty())
+	if(isSun)
 	{
-		return false;
-	}
-	if(std::find(satellites.begin(), satellites.end(), (*index_iterator)) == satellites.end())
-	{
-		return false;
-	}
+		if(satellites.empty())
+		{
+			return false;
+		}
+		if(std::find(satellites.begin(), satellites.end(), (*index_iterator)) == satellites.end())
+		{
+			return false;
+		}
 
-	satellites.erase(index_iterator);
+		satellites.erase(index_iterator);
 
-	return true;
+		return true;
+	}
 }
 bool CelestialBody::RemoveSatellite(SatelliteType type)
 {
-	if(satellites.empty())
+	if(isSun)
 	{
-		return false;
-	}
-
-	for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
-		iter != satellites.end(); 
-		)
-	{
-		if((*iter)->GetSatelliteType() == type)
+		if(satellites.empty())
 		{
-			satellites.erase(iter);
-			break;
+			return false;
 		}
-		else
+
+		for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
+			iter != satellites.end(); 
+			)
 		{
-			++iter;
+			if((*iter)->GetSatelliteType() == type)
+			{
+				satellites.erase(iter);
+				break;
+			}
+			else
+			{
+				++iter;
+			}
 		}
 	}
 }
 void CelestialBody::RemoveSatellites()
 {
-	if(!satellites.empty())
+	if(isSun)
 	{
-		satellites.erase(satellites.begin(), satellites.end());
+		if(!satellites.empty())
+		{
+			satellites.erase(satellites.begin(), satellites.end());
+		}
 	}
 }
 
@@ -1015,33 +1045,29 @@ bool CelestialBody::IsClicked(glm::mat4 projMat, glm::mat4 modelMat,
 							  Mouse userMouse, glm::vec4 cameraPos,
 							  int windowWidth, int windowHeight)
 {
-	Utility::Ray mouseRay = 
-		userMouse.GetPickRay(projMat, modelMat, cameraPos,
-							 windowWidth, windowHeight);
-
-	if(Utility::Intersections::RayIntersectsSphere(mouseRay, position, diameter / 2.0f))
+	if(isSun)
 	{
-		// event!
-		//isClicked = true;
-		return true;
+		Utility::Ray mouseRay = 
+			userMouse.GetPickRay(projMat, modelMat, cameraPos,
+								 windowWidth, windowHeight);
+
+		if(Utility::Intersections::RayIntersectsSphere(mouseRay, position, diameter / 2.0f))
+		{
+			// event!
+			//isClicked = true;
+			return true;
+		}
+		isClicked = false;
+		return false;
 	}
-	//isClicked = false;
-	return false;
-}
-bool CelestialBody::IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat,	
-									   Mouse userMouse, glm::vec4 cameraPos,
-									   int windowWidth, int windowHeight)
-{
-	for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
-		iter != satellites.end();
-		++iter)
+	else
 	{
 		Utility::Ray mouseRay = 
 			userMouse.GetPickRay(projMat, modelMat, cameraPos, 
 								 windowWidth, windowHeight);
 
-		float outerRadius = (*iter)->GetOffsetFromSun() + 2 * (*iter)->GetRadius();
-		float innerRadius = (*iter)->GetOffsetFromSun() - 2 * (*iter)->GetRadius();
+		float outerRadius = skillType.satelliteOffsetFromSun + diameter;
+		float innerRadius = skillType.satelliteOffsetFromSun - diameter;
 
 
 
@@ -1058,17 +1084,25 @@ bool CelestialBody::IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat,
 
 
 
-		if(Utility::Intersections::RayIntersectsEllipsoid(mouseRay, position, outerRadius, distMat.Top()) &&
-		   !Utility::Intersections::RayIntersectsEllipsoid(mouseRay, position, innerRadius, distMat.Top()))
+		if(Utility::Intersections::RayIntersectsEllipsoid(mouseRay, parent->GetPosition(), outerRadius, distMat.Top()) &&
+		   !Utility::Intersections::RayIntersectsEllipsoid(mouseRay, parent->GetPosition(), innerRadius, distMat.Top()))
 		{
-			(*iter)->SetIsClicked(true);
+			isClicked = true;
 			return true;
 		}
-		else
-		{
-			(*iter)->SetIsClicked(false);
-			return false;
-		}
+		isClicked = false;
+		return false;
+	}
+}
+bool CelestialBody::IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat,	
+									   Mouse userMouse, glm::vec4 cameraPos,
+									   int windowWidth, int windowHeight)
+{
+	for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
+		iter != satellites.end();
+		++iter)
+	{
+		return (*iter)->IsClicked(projMat, modelMat, userMouse, cameraPos, windowWidth, windowHeight);
 	}
 }
 
@@ -1117,6 +1151,10 @@ const float CelestialBody::GetRadius() const
 {
 	return diameter / 2.0f;
 }
+const float CelestialBody::GetDiameter() const
+{
+	return diameter;
+}
 const int CelestialBody::GetHealth() const
 {
 	return health;
@@ -1161,7 +1199,7 @@ std::shared_ptr<CelestialBody> CelestialBody::GetOuterSatellite()
 		return outerSatellite;
 	}
 
-	return nullptr;
+	return NULL;//nullptr;
 }
 
 const glm::vec3 CelestialBody::GetPosition() const
@@ -1185,7 +1223,7 @@ SatelliteType CelestialBody::GetSatelliteType()
 	}
 }
 
-void CelestialBody::SetParent(const CelestialBody &newParent)
+inline void CelestialBody::SetParent(const CelestialBody &newParent)
 {
 	if(!isSun)
 	{

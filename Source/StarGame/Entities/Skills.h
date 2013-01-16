@@ -81,18 +81,18 @@ public:
 		return eventsToReturn;
 	}
 
-	virtual std::shared_ptr<Sun> GetOwner()
+	virtual std::shared_ptr<CelestialBody> GetOwner()
 	{
-		return std::shared_ptr<Sun>();
+		return std::shared_ptr<CelestialBody>();
 	}
 	// TODO:
 	// The 'dummy' parameter is just to make valid function overriding.
 	// There should be a CelestialBody class and not two separate Sun and
 	// Satellite classes.
-	virtual std::shared_ptr<Satellite> GetOwner(char dummy)
-	{
-		return std::shared_ptr<Satellite>();
-	}
+	//virtual std::shared_ptr<CelestialBody> GetOwner(char dummy)
+	//{
+	//	return std::shared_ptr<CelestialBody>();
+	//}
 
 	virtual void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3) {}
 	virtual void SetParameter(ParameterType paramType, int newParam_int) {}
@@ -107,7 +107,7 @@ public:
 class RaySkill : public Skill
 {
 private:
-	std::shared_ptr<Sun> skillOwner;
+	std::shared_ptr<CelestialBody> skillOwner;
 
 	int damage;
 	int defense;
@@ -122,7 +122,7 @@ private:
 
 public:
 	RaySkill() : Skill() {}
-	RaySkill(std::shared_ptr<Sun> newSkillOwner,
+	RaySkill(std::shared_ptr<CelestialBody> newSkillOwner,
 			 int newDamage, int newDefense,
 			 float newRange,
 			 const std::string &newSkillType,
@@ -134,7 +134,7 @@ public:
 				const BillboardProgDataNoTexture &progData);
 
 	void OnEvent(Event &_event);
-	std::shared_ptr<Sun> GetOwner();
+	std::shared_ptr<CelestialBody> GetOwner();
 
 	// Only for EVENT_TYPE_OTHER
 	Event GetGeneratedEvent(const std::string &eventName);
@@ -148,7 +148,7 @@ public:
 class AOESkill : public Skill
 {
 private:
-	std::shared_ptr<Sun> skillOwner;
+	std::shared_ptr<CelestialBody> skillOwner;
 
 	int damage;
 	float range;
@@ -160,7 +160,7 @@ private:
 
 public:
 	AOESkill() : Skill() {}
-	AOESkill(std::shared_ptr<Sun> newSkillOwner,
+	AOESkill(std::shared_ptr<CelestialBody> newSkillOwner,
 			 int newDamage, float newRange,
 			 const std::string &newSkillType,
 			 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
@@ -170,7 +170,7 @@ public:
 				const SimpleProgData &progData);
 
 	void OnEvent(Event &_event);
-	std::shared_ptr<Sun> GetOwner();
+	std::shared_ptr<CelestialBody> GetOwner();
 
 	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 	//void SetParameter(ParameterType paramType, int newParam_int);
@@ -192,7 +192,7 @@ public:
 class PassiveAOESkill : public Skill
 {
 private:
-	std::shared_ptr<Sun> skillOwner;
+	std::shared_ptr<CelestialBody> skillOwner;
 
 	int damage;
 	int damageApplyTime_seconds;
@@ -206,7 +206,7 @@ private:
 
 public:
 	PassiveAOESkill() : Skill() {}
-	PassiveAOESkill(std::shared_ptr<Sun> newSkillOwner,
+	PassiveAOESkill(std::shared_ptr<CelestialBody> newSkillOwner,
 					int newDamage, int newDamageApplyTime_seconds,
 					float newRange,
 					const std::string &newSkillType,
@@ -217,7 +217,7 @@ public:
 				const SimpleProgData &progData);
 
 	void OnEvent(Event &_event);
-	std::shared_ptr<Sun> GetOwner();
+	std::shared_ptr<CelestialBody> GetOwner();
 
 	bool IsIntersectingObject(glm::vec3 objectPosition);
 

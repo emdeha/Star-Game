@@ -75,15 +75,15 @@ public:
 	void LoadMesh(const std::string &meshFile);
 	void LoadMesh(const std::auto_ptr<Framework::Mesh> newMesh);
 
-	void Update(Sun &sun);
+	void Update(CelestialBody &sun);
 	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 				float gamma, 
 				const LitProgData &litData,
 				float interpolation);
 
-	void CheckTargetHit(Sun &sun);
+	void CheckTargetHit(CelestialBody &sun);
 
-	void OnTargetHit(Sun &sun, Event &_event); // Should be an OnEvent(Event &_event);
+	void OnTargetHit(CelestialBody &sun, Event &_event); // Should be an OnEvent(Event &_event);
 
 	
 	void Recreate(glm::vec3 newPosition, 
@@ -148,9 +148,9 @@ public:
 	void LoadMesh(const std::string &meshFile);
 	void LoadProjectileMesh(const std::string &meshFile);
 
-	void UpdateAI(Sun &sun);
+	void UpdateAI(CelestialBody &sun);
 
-	void Update(bool isSunKilled, Sun &sun = Sun());
+	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
 	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 				float gamma, 
 				const LitProgData &litData,
@@ -188,7 +188,7 @@ private:
 
 	Framework::Timer attackTimer;
 
-	void AttackSolarSystem(Sun &sun, bool isSatellite = false, float bodyIndex = -1.0f);
+	void AttackSolarSystem(CelestialBody &sun, bool isSatellite = false, float bodyIndex = -1.0f);
 
 public:
 	Swarm() {}
@@ -197,8 +197,8 @@ public:
 		  float newLineOfSight,
 		  const BillboardProgDataNoTexture &billboardProgramNoTexture);
 
-	void UpdateAI(Sun &sun);
-	void Update(bool isSunKilled, Sun &sun = Sun());
+	void UpdateAI(CelestialBody &sun);
+	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
 
 	void Render(glutil::MatrixStack &modelMatrix, 
 				glm::vec3 cameraPosition,
@@ -240,7 +240,7 @@ private:
 
 	bool isDestroyed;
 
-	void AttackSolarSystem(Sun &sun, bool isSatellite = false, float bodyIndex = -1.0f);
+	void AttackSolarSystem(CelestialBody &sun, bool isSatellite = false, float bodyIndex = -1.0f);
 
 public:
 	FastSuicideBomber() {}
@@ -250,8 +250,8 @@ public:
 
 	void LoadMesh(const std::string &meshFile);
 
-	void UpdateAI(Sun &sun);
-	void Update(bool isSunKilled, Sun &sun = Sun());
+	void UpdateAI(CelestialBody &sun);
+	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
 
 	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData, 
 				int materialBlockIndex,

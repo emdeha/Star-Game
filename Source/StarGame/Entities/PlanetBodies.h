@@ -462,6 +462,7 @@ private:
 public:
 	CelestialBody() {}
 	CelestialBody(const CelestialBody &other);
+	~CelestialBody();
 	CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float newDiameter,
 				  int newSatelliteCap, int newHealth, bool _isSun = true);			// isSun = true means that a
 																				    // sun will be created
@@ -492,7 +493,7 @@ public:
 	bool RemoveSatellite(SatelliteType type);
 	void RemoveSatellites();	
 
-	bool IsClicked(glm::mat4 projMat, glm::mat4 modelMat,	
+	bool IsClicked(glm::mat4 projMat, glm::mat4 modelMat,
 				   Mouse userMouse, glm::vec4 cameraPos,
 				   int windowWidth, int windowHeight);
 
@@ -509,6 +510,7 @@ public:
 	const bool GetIsSatelliteClicked(SatelliteType type) const;
 
 	const float GetRadius() const;
+	const float GetDiameter() const;
 
 	const int GetHealth() const;
 	

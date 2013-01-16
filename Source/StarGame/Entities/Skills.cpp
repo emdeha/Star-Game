@@ -55,7 +55,7 @@ std::vector<Event> Skill::GetGeneratedEvents()
 }*/
 
 
-RaySkill::RaySkill(std::shared_ptr<Sun> newSkillOwner,
+RaySkill::RaySkill(std::shared_ptr<CelestialBody> newSkillOwner,
 				   int newDamage, int newDefense,
 				   float newRange,
 				   const std::string &newSkillType,
@@ -117,7 +117,7 @@ void RaySkill::OnEvent(Event &_event)
 	}
 }
 
-std::shared_ptr<Sun> RaySkill::GetOwner()
+std::shared_ptr<CelestialBody> RaySkill::GetOwner()
 {
 	return skillOwner;
 }
@@ -178,7 +178,7 @@ std::vector<Event> RaySkill::GetGeneratedEvents()
 
 
 
-AOESkill::AOESkill(std::shared_ptr<Sun> newSkillOwner,
+AOESkill::AOESkill(std::shared_ptr<CelestialBody> newSkillOwner,
 				   int newDamage, float newRange,
 				   const std::string &newSkillType,
 				   char fusionCombA, char fusionCombB, char fusionCombC)
@@ -238,7 +238,7 @@ void AOESkill::OnEvent(Event &_event)
 	}
 }
 
-std::shared_ptr<Sun> AOESkill::GetOwner()
+std::shared_ptr<CelestialBody> AOESkill::GetOwner()
 {
 	return skillOwner;
 }
@@ -322,7 +322,7 @@ std::vector<Event> AOESkill::GetGeneratedEvents()
 }
 
 
-PassiveAOESkill::PassiveAOESkill(std::shared_ptr<Sun> newSkillOwner,
+PassiveAOESkill::PassiveAOESkill(std::shared_ptr<CelestialBody> newSkillOwner,
 								 int newDamage, int newDamageApplyTime_seconds,
 								 float newRange,
 								 const std::string &newSkillType,
@@ -341,7 +341,7 @@ PassiveAOESkill::PassiveAOESkill(std::shared_ptr<Sun> newSkillOwner,
 	isStarted = false;
 
 	skillVisibleRadius = 
-		Utility::Primitives::Circle(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), skillOwner->GetPosition(),
+		Utility::Primitives::Circle(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), glm::vec4(skillOwner->GetPosition(), 1.0f),
 									range, 90);
 	skillVisibleRadius.Init();
 }
@@ -412,7 +412,7 @@ void PassiveAOESkill::OnEvent(Event &_event)
 	}
 }
 
-std::shared_ptr<Sun> PassiveAOESkill::GetOwner()
+std::shared_ptr<CelestialBody> PassiveAOESkill::GetOwner()
 {
 	return skillOwner;
 }

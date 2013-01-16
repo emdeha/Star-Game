@@ -208,8 +208,8 @@ void HandleMouse()
 					scene.OnEvent(leftClickSunEvent);
 				}
 
-				std::vector<std::shared_ptr<Satellite>> sunSatellites = scene.GetSun()->GetSatellites();
-				for(std::vector<std::shared_ptr<Satellite>>::iterator iter = sunSatellites.begin(); 
+				std::vector<std::shared_ptr<CelestialBody>> sunSatellites = scene.GetSun()->GetSatellites();
+				for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = sunSatellites.begin(); 
 					iter != sunSatellites.end(); ++iter)
 				{
 					if((*iter)->IsClicked
@@ -230,8 +230,8 @@ void HandleMouse()
 	{
 		if(scene.HasSuns())
 		{
-			std::vector<std::shared_ptr<Satellite>> sunSatellites = scene.GetSun()->GetSatellites();
-			for(std::vector<std::shared_ptr<Satellite>>::iterator iter = sunSatellites.begin(); 
+			std::vector<std::shared_ptr<CelestialBody>> sunSatellites = scene.GetSun()->GetSatellites();
+			for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = sunSatellites.begin(); 
 				iter != sunSatellites.end(); ++iter)
 			{
 				if((*iter)->IsClicked
@@ -361,8 +361,8 @@ void InitializeScene()
 	TopDownCamera userCamera = TopDownCamera(glm::vec3(), 13.5f, 90.0f, 135.0f);
 
 
-	std::shared_ptr<Sun> 
-		mainSun(new Sun(glm::vec3(0.0f), glm::vec4(0.738f, 0.738f, 0.423f, 1.0f), 1.25f, 4, 50));
+	std::shared_ptr<CelestialBody> 
+		mainSun(new CelestialBody(glm::vec3(0.0f), glm::vec4(0.738f, 0.738f, 0.423f, 1.0f), 1.25f, 4, 50));
 
 	SunLight 
 		mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, displayData.gamma));
@@ -402,10 +402,11 @@ void InitializeScene()
 	scene.AddFusionSequence("fireSatellite", 'q', 'q', 'q');
 	scene.AddFusionSequence("earthSatellite", 'e', 'e', 'e');
 	scene.AddFusionSequence("waterSatellite", 'w', 'w', 'w');
+	scene.AddFusionSequence("airSatellite", 'q', 'w', 'e');
 	scene.AddFusionSequence("aoeSkill", 'q', 'q', 'w');
 	scene.AddFusionSequence("passiveAoeSkill", 'q', 'q', 'e');
 
-
+	
 	ExplosionEmitter sceneExplosion =
 		ExplosionEmitter(glm::vec3(0.0f, 2.0f, 0.0f), 300, 30, 0.1f);
 	sceneExplosion.Init();
@@ -425,7 +426,7 @@ void InitializeScene()
 															 "passiveAOESkill",
 															 'q', 'q', 'e'));
 	scene.AddSkill(testPassiveAOESkill);
-
+	
 
 	glUseProgram(shaderManager.GetTextureProgData().theProgram);
 	glUniform1i(shaderManager.GetTextureProgData().colorTextureUnif, 0);

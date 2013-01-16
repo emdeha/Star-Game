@@ -80,7 +80,7 @@ void Projectile::LoadMesh(const std::auto_ptr<Framework::Mesh> newMesh)
 	GenerateUniformBuffers(materialBlockSize, glm::vec4(0.0f), materialUniformBuffer);
 }
 
-void Projectile::Update(Sun &sun)
+void Projectile::Update(CelestialBody &sun)
 {
 	if(sun.GetHealth() <= 0)
 	{
@@ -131,15 +131,15 @@ void Projectile::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex
 	}
 }
 
-void Projectile::CheckTargetHit(Sun &sun)
+void Projectile::CheckTargetHit(CelestialBody &sun)
 {
-	std::vector<std::shared_ptr<Satellite>> sunSatellites = sun.GetSatellites();
-	for(std::vector<std::shared_ptr<Satellite>>::iterator iter = sunSatellites.begin();
+	std::vector<std::shared_ptr<CelestialBody>> sunSatellites = sun.GetSatellites();
+	for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = sunSatellites.begin();
 		iter != sunSatellites.end();
 		++iter)
 	{
 		glm::vec3 satellitePosition = glm::vec3((*iter)->GetPosition());
-		float satelliteRadius = (*iter)->GetDiameter();
+		float satelliteRadius = (*iter)->GetRadius() * 2.0f;
 
 		glm::vec3 distance = position - satellitePosition;
 		float distanceLength = glm::length(distance);
@@ -190,7 +190,7 @@ void Projectile::Recreate(glm::vec3 newPosition,
 	lifeSpan = newLifeSpan;
 	isDestroyed = false;
 }
-void Projectile::OnTargetHit(Sun &sun, Event &_event)
+void Projectile::OnTargetHit(CelestialBody &sun, Event &_event)
 {
 	isDestroyed = true;
 

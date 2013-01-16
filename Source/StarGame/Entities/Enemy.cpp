@@ -116,7 +116,7 @@ void Spaceship::LoadMesh(const std::string &meshFile)
 	projectile->LoadMesh(meshFile); // TODO: maybe this should be removed
 }
 
-void Spaceship::UpdateAI(Sun &sun)
+void Spaceship::UpdateAI(CelestialBody &sun)
 {
 	if(currentState == ATTACK_STATE)
 	{	
@@ -186,7 +186,7 @@ void Spaceship::UpdateAI(Sun &sun)
 	}
 }
 
-void Spaceship::Update(bool isSunKilled, Sun &sun)
+void Spaceship::Update(bool isSunKilled, CelestialBody &sun)
 {
 	if(health <= 20)
 	{
@@ -206,7 +206,7 @@ void Spaceship::Update(bool isSunKilled, Sun &sun)
 			velocity = patrolRoute.lastVelocity;
 		}
 		currentState = PATROL_STATE;
-		UpdateAI(Sun());
+		UpdateAI(CelestialBody());
 	}
 }
 
@@ -284,7 +284,7 @@ Swarm::Swarm(glm::vec3 newPosition, glm::vec3 newVelocity,
 	attackTimer = Framework::Timer(Framework::Timer::Type::TT_INFINITE);
 }
 
-void Swarm::AttackSolarSystem(Sun &sun, bool isSatellite, float bodyIndex)
+void Swarm::AttackSolarSystem(CelestialBody &sun, bool isSatellite, float bodyIndex)
 {
 	EventArg sunDamage_perTime[2];
 	sunDamage_perTime[0].argType = "damage";
@@ -306,7 +306,7 @@ void Swarm::AttackSolarSystem(Sun &sun, bool isSatellite, float bodyIndex)
 	sun.OnEvent(sunDamageEvent);
 }
 
-void Swarm::UpdateAI(Sun &sun)
+void Swarm::UpdateAI(CelestialBody &sun)
 {
 	if(currentState == ATTACK_STATE)
 	{
@@ -340,7 +340,7 @@ void Swarm::UpdateAI(Sun &sun)
 				glm::vec3 vectorToSatellite = 
 					sun.GetOuterSatellite()->GetPosition() - position;
 
-				velocity = glm::normalize(vectorToSatellite) * 0.03f; // TODO: Magick
+				velocity = glm::normalize(vectorToSatellite) * 0.07f; // TODO: Magick
 			}
 		}
 		else
@@ -414,7 +414,7 @@ void Swarm::UpdateAI(Sun &sun)
 	}
 }
 
-void Swarm::Update(bool isSunKilled, Sun &sun)
+void Swarm::Update(bool isSunKilled, CelestialBody &sun)
 {
 	if(!isDestroyed)
 	{
@@ -512,7 +512,7 @@ void FastSuicideBomber::LoadMesh(const std::string &meshFile)
 						   materialUniformBuffer);
 }
 
-void FastSuicideBomber::AttackSolarSystem(Sun &sun, bool isSatellite, float bodyIndex)
+void FastSuicideBomber::AttackSolarSystem(CelestialBody &sun, bool isSatellite, float bodyIndex)
 {
 	EventArg damageEventArgs[2];
 	damageEventArgs[0].argType = "damage";
@@ -549,7 +549,7 @@ void FastSuicideBomber::AttackSolarSystem(Sun &sun, bool isSatellite, float body
 	//scene.OnEvent(explodeEvent);
 }
 
-void FastSuicideBomber::UpdateAI(Sun &sun)
+void FastSuicideBomber::UpdateAI(CelestialBody &sun)
 {
 	if(currentState == ATTACK_STATE)
 	{
@@ -615,7 +615,7 @@ void FastSuicideBomber::UpdateAI(Sun &sun)
 	}
 }
 
-void FastSuicideBomber::Update(bool isSunKilled, Sun &sun)
+void FastSuicideBomber::Update(bool isSunKilled, CelestialBody &sun)
 {
 	if(!isDestroyed)
 	{

@@ -123,20 +123,16 @@ Audio::~Audio()
 	{
 		result = iter->second->release();
 		CheckForError(result);
-
-		delete(*iter).second;
 	}
 
-	result = system->close();
-	CheckForError(result);
 	result = system->release();
 	CheckForError(result);
 
-	delete system;
-	for(std::vector<FMOD::Channel *>::iterator iter = channels.begin();
+	/*for(std::vector<FMOD::Channel *>::iterator iter = channels.begin();
 		iter != channels.end(); ++iter)
 	{
-		delete *iter;
-	}
+		delete (*iter);
+	}*/
+
 	channels.clear();
 }

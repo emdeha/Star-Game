@@ -351,7 +351,7 @@ void Scene::OnEvent(Event &_event)
 				{
 					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-										  10.0f, 0.25f,
+										  10.0f, 0.5f,
 										  SatelliteType(SATELLITE_FIRE), 
 										  5);
 				}
@@ -363,7 +363,7 @@ void Scene::OnEvent(Event &_event)
 				{
 					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-										  10.0f, 0.25f,
+										  10.0f, 0.5f,
 										  SatelliteType(SATELLITE_WATER), 
 										  5);
 				}
@@ -375,8 +375,20 @@ void Scene::OnEvent(Event &_event)
 				{
 					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-										  10.0f, 0.25f,
+										  10.0f, 0.5f,
 										  SatelliteType(SATELLITE_EARTH), 
+										  5);
+				}
+			}
+			if(strcmp(_event.GetArgument("buttons").varString,
+			   sceneFusionInput.GetSequenceButtons("airSatellite").c_str()) == 0)
+			{
+				if(HasSuns())
+				{
+					suns[0]->AddSatellite("mesh-files/UnitSphere.xml",
+										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
+										  10.0f, 0.5f, 
+										  SatelliteType(SATELLITE_AIR),
 										  5);
 				}
 			}
@@ -405,8 +417,8 @@ void Scene::StartScene()
 	int sizeSuns = suns.size();
 	for(int i = 0; i < sizeSuns; i++)
 	{
-		std::vector<std::shared_ptr<Satellite>> sunSatellites = suns[i]->GetSatellites();
-		for(std::vector<std::shared_ptr<Satellite>>::iterator iter = sunSatellites.begin();
+		std::vector<std::shared_ptr<CelestialBody>> sunSatellites = suns[i]->GetSatellites();
+		for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = sunSatellites.begin();
 			iter != sunSatellites.end(); ++iter)
 		{
 			(*iter)->Start();
@@ -418,8 +430,8 @@ void Scene::StopScene()
 	int sizeSuns = suns.size();
 	for(int i = 0; i < sizeSuns; i++)
 	{
-		std::vector<std::shared_ptr<Satellite>> sunSatellites = suns[i]->GetSatellites();
-		for(std::vector<std::shared_ptr<Satellite>>::iterator iter = sunSatellites.begin();
+		std::vector<std::shared_ptr<CelestialBody>> sunSatellites = suns[i]->GetSatellites();
+		for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = sunSatellites.begin();
 			iter != sunSatellites.end(); ++iter)
 		{
 			(*iter)->Stop();
@@ -432,7 +444,7 @@ void Scene::AddSunLight(const SunLight &newSunLight)
 {
 	lights.push_back(newSunLight);
 }
-void Scene::AddSun(const std::shared_ptr<Sun> newSun)
+void Scene::AddSun(const std::shared_ptr<CelestialBody> newSun)
 {
 	suns.push_back(newSun);
 }
@@ -571,7 +583,7 @@ Mouse &Scene::GetMouse()
 }
 
 
-std::shared_ptr<Sun> Scene::GetSun()
+std::shared_ptr<CelestialBody> Scene::GetSun()
 {
 	return suns.front(); // replace 0 with an index
 }
@@ -627,7 +639,7 @@ void Scene::GenerateRandomSwarms(int count,
 			float posY = sinf(posOnCircle * (2.0f * PI)) * range;
 
 			glm::vec3 position = glm::vec3(posX, posY, 0.0f);
-			glm::vec3 velocity = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position)) * 0.01f;
+			glm::vec3 velocity = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position)) * 0.05f;
 		
 			std::shared_ptr<Swarm> randSwarm = 
 				std::shared_ptr<Swarm>(new Swarm(position, velocity, 100, 50, 5, 1, 2.0f, progData));

@@ -1,10 +1,20 @@
-﻿Build started 13.1.2013 г. 15:51:43 ч..
+﻿Build started 16.1.2013 г. 16:00:07 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\Fusion\Fusion.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Fusion.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          All outputs are up-to-date.
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\Fusion.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt FusionInput.cpp
+         FusionInput.cpp
+     1>e:\ceci\thegame\source\stargame\fusion\fusioninput.cpp(44): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(105) : see declaration of 'strcpy'
+     1>e:\ceci\thegame\source\stargame\fusion\fusioninput.cpp(47): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(105) : see declaration of 'strcpy'
+     1>e:\ceci\thegame\source\stargame\fusion\fusioninput.cpp(152): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(105) : see declaration of 'strcpy'
+     1>e:\ceci\thegame\source\stargame\fusion\fusioninput.cpp(157): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(105) : see declaration of 'strcpy'
+     1>e:\ceci\thegame\source\stargame\fusion\fusioninput.cpp(119): warning C4715: 'FusionInput::GetSequenceButtons' : not all control paths return a value
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\Fusion.lib" /NOLOGO Debug\FusionInput.obj
          Debug\stdafx.obj
@@ -16,4 +26,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.40
+Time Elapsed 00:00:00.45

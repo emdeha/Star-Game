@@ -56,22 +56,30 @@ long long GetCurrentTimeMillis()
 void HandleMouse()
 {
 	glm::vec4 cameraPosition = glm::vec4(scene.GetTopDownCamera().ResolveCamPosition(), 1.0f);
-
+	
 	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
 	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+
+	Utility::Ray mouseRay = 
+		scene.GetMouse().GetPickRay(displayData.projectionMatrix, displayData.modelMatrix,
+									cameraPosition, 
+									windowWidth, windowHeight);
+
 
 	if(scene.GetMouse().IsRightButtonDown())
 	{		
 		if(scene.HasSuns())
 		{
 			if(scene.GetSun()->IsClicked
-				(displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
-				 cameraPosition, windowWidth, windowHeight))
+				(mouseRay/*displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
+				 cameraPosition, windowWidth, windowHeight*/))
 			{
 				Event rightClickSunEvent = StockEvents::EventOnRightClick("sun");
 
 				scene.GetSun()->OnEvent(rightClickSunEvent);
 				scene.OnEvent(rightClickSunEvent);
+				scene.OnEvent(scene.GetSun()->GetGeneratedEvent("satelliteRemoved"));
+				scene.GetSun()->RemoveGeneratedEvent("satelliteRemoved");
 			}
 		}
 	}
@@ -199,8 +207,8 @@ void HandleMouse()
 			if(scene.HasSuns())
 			{
 				if(scene.GetSun()->IsClicked
-					(displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
-					 cameraPosition, windowWidth, windowHeight))
+					(mouseRay/*displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
+					 cameraPosition, windowWidth, windowHeight*/))
 				{
 					Event leftClickSunEvent = StockEvents::EventOnLeftClick("sun");
 
@@ -213,8 +221,8 @@ void HandleMouse()
 					iter != sunSatellites.end(); ++iter)
 				{
 					if((*iter)->IsClicked
-						(displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
-							cameraPosition, windowWidth, windowHeight))
+						(mouseRay/*displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
+							cameraPosition, windowWidth, windowHeight*/))
 					{
 						Event leftClickSatelliteEvent = StockEvents::EventOnLeftClick("satellite");
 
@@ -235,8 +243,8 @@ void HandleMouse()
 				iter != sunSatellites.end(); ++iter)
 			{
 				if((*iter)->IsClicked
-					(displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
-						cameraPosition, windowWidth, windowHeight))
+					(mouseRay/*displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
+						cameraPosition, windowWidth, windowHeight*/))
 				{
 					Event satelliteHoveredEvent = StockEvents::EventOnHover();
 
@@ -413,19 +421,21 @@ void InitializeScene()
 	scene.AddExplosionEmitter(sceneExplosion);
 
 	std::shared_ptr<AOESkill> testAOESkill =
-		std::shared_ptr<AOESkill>(new AOESkill(scene.GetSun(),
+		std::shared_ptr<AOESkill>(new AOESkill(glm::vec3(),//scene.GetSun(),
 											   20, 2.0f, 
 											   "aoeSkill",
 											   'q', 'q', 'w'));
-	scene.AddSkill(testAOESkill);
+	//scene.AddSkill(testAOESkill);
 
 	std::shared_ptr<PassiveAOESkill> testPassiveAOESkill =
-		std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(scene.GetSun(),
+		std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(glm::vec3(),//scene.GetSun(),
 															 20, 
 															 1, 2.0f, 
 															 "passiveAOESkill",
 															 'q', 'q', 'e'));
-	scene.AddSkill(testPassiveAOESkill);
+	scene.GetSun()->AddSkill(testPassiveAOESkill);
+	scene.GetSun()->AddSkill(testAOESkill);
+	//scene.AddSkill(testPassiveAOESkill);
 	
 
 	glUseProgram(shaderManager.GetTextureProgData().theProgram);

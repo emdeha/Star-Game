@@ -1,4 +1,4 @@
-﻿Build started 16.1.2013 г. 19:27:19 ч..
+﻿Build started 17.1.2013 г. 11:10:33 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\Scene\Scene.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Scene.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -6,17 +6,18 @@
          All outputs are up-to-date.
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../freetype/include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\Scene.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Scene.cpp
          Scene.cpp
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(220): warning C4482: nonstandard extension used: enum 'glm::comp' used in qualified name
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(223): warning C4482: nonstandard extension used: enum 'glm::comp' used in qualified name
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(223): warning C4482: nonstandard extension used: enum 'glm::comp' used in qualified name
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(223): warning C4482: nonstandard extension used: enum 'glm::comp' used in qualified name
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(229): warning C4018: '<' : signed/unsigned mismatch
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(234): warning C4482: nonstandard extension used: enum 'EventType' used in qualified name
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(329): warning C4018: '<' : signed/unsigned mismatch
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(399): warning C4018: '<' : signed/unsigned mismatch
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(634): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(489): warning C4715: 'Scene::GetLayout' : not all control paths return a value
-     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(603): warning C4715: 'Scene::GetSwarm' : not all control paths return a value
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(221): warning C4482: nonstandard extension used: enum 'glm::comp' used in qualified name
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(224): warning C4482: nonstandard extension used: enum 'glm::comp' used in qualified name
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(224): warning C4482: nonstandard extension used: enum 'glm::comp' used in qualified name
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(224): warning C4482: nonstandard extension used: enum 'glm::comp' used in qualified name
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(230): warning C4018: '<' : signed/unsigned mismatch
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(235): warning C4482: nonstandard extension used: enum 'EventType' used in qualified name
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(332): warning C4018: '<' : signed/unsigned mismatch
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(334): warning C4018: '<' : signed/unsigned mismatch
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(439): warning C4018: '<' : signed/unsigned mismatch
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(693): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(548): warning C4715: 'Scene::GetLayout' : not all control paths return a value
+     1>e:\ceci\thegame\source\stargame\scene\scene.cpp(662): warning C4715: 'Scene::GetSwarm' : not all control paths return a value
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\Scene.lib" /NOLOGO Debug\Scene.obj
          Debug\stdafx.obj
@@ -28,4 +29,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.14
+Time Elapsed 00:00:01.28

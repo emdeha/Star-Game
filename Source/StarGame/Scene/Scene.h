@@ -56,7 +56,7 @@ private:
 	std::vector<std::shared_ptr<FastSuicideBomber>> fastSuicideBombers;
 	std::vector<std::shared_ptr<Swarm>> swarms;
 	std::vector<ExplosionEmitter> explosionEmitters;
-	std::vector<std::shared_ptr<Skill>> skills;
+	//std::vector<std::shared_ptr<Skill>> skills;
 
 	std::map<LayoutType, std::shared_ptr<Layout>> sceneLayouts;
 
@@ -138,7 +138,7 @@ public:
 	void SetFusion(const FusionInput &newFusionInput);
 
 	
-	void AddSkill(const std::shared_ptr<Skill> newSkill);
+	//void AddSkill(const std::shared_ptr<Skill> newSkill);
 
 
 	TopDownCamera &GetTopDownCamera();

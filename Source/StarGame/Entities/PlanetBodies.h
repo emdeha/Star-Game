@@ -37,6 +37,7 @@
 #include "../GUISystem/GameSpecificGUI.h"
 #include "MaterialBlock.h"
 #include "../Mouse/Mouse.h"
+#include "Skills.h"
 
 
 // NOTE: Maybe the meshes of both the sun and satellites must be loaded in the constructors.
@@ -70,6 +71,8 @@ private:
 	
 	std::unique_ptr<CelestialBody> parent;
 	std::vector<std::shared_ptr<CelestialBody>> satellites;
+
+	std::vector<std::shared_ptr<Skill>> skills; // TODO: Is a pointer needed?
 
 	SatelliteOrbit hoverOrbit; // TODO: Not sure if this should be here on somewhere more
 							   //	    GUI specific.
@@ -125,24 +128,32 @@ public:
 					  glm::vec4 satelliteColor,
 					  float speed, float diameter,
 					  SatelliteType type, int satelliteHealth);
+	void AddSkill(const std::shared_ptr<Skill> newSkill);
 
 	bool RemoveSatellite();
 	bool RemoveSatellite(std::vector<std::shared_ptr<CelestialBody>>::iterator index_iterator);
 	bool RemoveSatellite(SatelliteType type);
 	void RemoveSatellites();	
 
-	bool IsClicked(glm::mat4 projMat, glm::mat4 modelMat,
+	bool IsClicked(Utility::Ray mouseRay);
+		/*glm::mat4 projMat, glm::mat4 modelMat,
 				   Mouse userMouse, glm::vec4 cameraPos,
-				   int windowWidth, int windowHeight);
+				   int windowWidth, int windowHeight);*/
 
-	bool IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat,	
+	bool IsSatelliteClicked(Utility::Ray mouseRay);
+		/*glm::mat4 projMat, glm::mat4 modelMat,	
 						    Mouse userMouse, glm::vec4 cameraPos,
-							int windowWidth, int windowHeight);
+							int windowWidth, int windowHeight);*/
+
+	bool IsSun();
 
 	bool HasSatellites();
 
 	// Gets the generated events and DESTROYS them.
 	std::vector<Event> GetGeneratedEvents();
+
+	Event GetGeneratedEvent(const std::string &eventName);
+	void RemoveGeneratedEvent(const std::string &eventName);
 
 	const bool GetIsClicked() const;
 	const bool GetIsSatelliteClicked(SatelliteType type) const;
@@ -155,6 +166,9 @@ public:
 	std::shared_ptr<CelestialBody> GetSatellite(SatelliteType type);
 	std::shared_ptr<CelestialBody> GetOuterSatellite();
 	std::vector<std::shared_ptr<CelestialBody>> GetSatellites();
+	
+	// Gets the sun's and its satellites' skills.
+	std::vector<std::shared_ptr<Skill>> GetAllSkills();
 
 	const glm::vec3 GetPosition() const;
 

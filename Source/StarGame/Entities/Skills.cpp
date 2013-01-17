@@ -54,7 +54,7 @@ std::vector<Event> Skill::GetGeneratedEvents()
 	return eventsToReturn;
 }*/
 
-
+/*
 RaySkill::RaySkill(std::shared_ptr<CelestialBody> newSkillOwner,
 				   int newDamage, int newDefense,
 				   float newRange,
@@ -175,24 +175,26 @@ std::vector<Event> RaySkill::GetGeneratedEvents()
 
 	return eventsToReturn;
 }
+*/
 
 
-
-AOESkill::AOESkill(std::shared_ptr<CelestialBody> newSkillOwner,
+AOESkill::AOESkill(//std::shared_ptr<CelestialBody> newSkillOwner,
+				   glm::vec3 newPosition,
 				   int newDamage, float newRange,
 				   const std::string &newSkillType,
 				   char fusionCombA, char fusionCombB, char fusionCombC)
 				   : Skill(newSkillType,
 						   fusionCombA, fusionCombB, fusionCombC)
 {
-	skillOwner = newSkillOwner;
+	//skillOwner = newSkillOwner;
 	damage = newDamage;
 	range = newRange;
+	position = newPosition;
 
 	isStarted = false;
 
 	skillSelector = 
-		AOESelector(glm::vec3(skillOwner->GetPosition()), range, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
+		AOESelector(position/*glm::vec3(skillOwner->GetPosition())*/, range, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
 	skillSelector.Init();
 }
 
@@ -240,10 +242,18 @@ void AOESkill::OnEvent(Event &_event)
 		break;
 	}
 }
-
+/*
 std::shared_ptr<CelestialBody> AOESkill::GetOwner()
 {
 	return skillOwner;
+}*/
+float AOESkill::GetRange()
+{
+	return range;
+}
+glm::vec3 AOESkill::GetPosition()
+{
+	return position;
 }
 
 void AOESkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
@@ -325,7 +335,8 @@ std::vector<Event> AOESkill::GetGeneratedEvents()
 }
 
 
-PassiveAOESkill::PassiveAOESkill(std::shared_ptr<CelestialBody> newSkillOwner,
+PassiveAOESkill::PassiveAOESkill(//std::shared_ptr<CelestialBody> newSkillOwner,
+								 glm::vec3 newPosition,
 								 int newDamage, int newDamageApplyTime_seconds,
 								 float newRange,
 								 const std::string &newSkillType,
@@ -333,18 +344,18 @@ PassiveAOESkill::PassiveAOESkill(std::shared_ptr<CelestialBody> newSkillOwner,
 								 : Skill(newSkillType,
 										 fusionCombA, fusionCombB, fusionCombC)
 {
-	skillOwner = newSkillOwner;
+	//skillOwner = newSkillOwner;
 	damage = newDamage;
 	damageApplyTime_seconds = newDamageApplyTime_seconds;
 	attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE, damageApplyTime_seconds);
 	range = newRange;
-
-	position = glm::vec3(skillOwner->GetPosition());
+	position = newPosition;
+	//position = glm::vec3(skillOwner->GetPosition());
 
 	isStarted = false;
 
 	skillVisibleRadius = 
-		Utility::Primitives::Circle(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), glm::vec4(skillOwner->GetPosition(), 1.0f),
+		Utility::Primitives::Circle(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), glm::vec4(position, 1.0f), //glm::vec4(skillOwner->GetPosition(), 1.0f),
 									range, 90);
 	skillVisibleRadius.Init();
 }
@@ -372,7 +383,7 @@ void PassiveAOESkill::Update()
 			attackTimer.Reset();
 		}
 
-		position = glm::vec3(skillOwner->GetPosition());		
+		//position = glm::vec3(skillOwner->GetPosition());		
 	}
 }
 
@@ -418,10 +429,30 @@ void PassiveAOESkill::OnEvent(Event &_event)
 		break;
 	}
 }
-
+/*
 std::shared_ptr<CelestialBody> PassiveAOESkill::GetOwner()
 {
 	return skillOwner;
+}*/
+float PassiveAOESkill::GetRange()
+{
+	return range;
+}
+glm::vec3 PassiveAOESkill::GetPosition()
+{
+	return position;
+}
+
+void PassiveAOESkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
+{
+	switch(paramType)
+	{
+	case PARAM_POSITION:
+		position = newParam_vec3;
+		break;
+	default:
+		break;
+	}
 }
 
 bool PassiveAOESkill::IsIntersectingObject(glm::vec3 objectPosition)

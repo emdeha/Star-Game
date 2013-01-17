@@ -697,7 +697,7 @@ void FastSuicideBomber::OnEvent(std::shared_ptr<Skill> sender, Event &_event)
 		if(strcmp(_event.GetArgument("what_event").varString, "skilldeployed") == 0)
 		{
 			// TODO: the position must be relative to the object emitting the skill!!!
-			if(glm::length(position - glm::vec3(sender->GetOwner()->GetPosition())) 
+			if(glm::length(position - glm::vec3(sender->GetPosition())) 
 			   < 
 			   _event.GetArgument("skillrange").varFloat)
 			{

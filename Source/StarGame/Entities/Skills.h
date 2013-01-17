@@ -26,8 +26,6 @@
 #include "../framework/EventSystem.h"
 #include "../ParticleEngine/Engine.h"
 #include "../GUISystem/GameSpecificGUI.h"
-#include "PlanetBodies.h"
-
 
 enum ParameterType
 {
@@ -35,6 +33,7 @@ enum ParameterType
 	PARAM_RANGE,
 	PARAM_DAMAGE,
 };
+
 
 // TODO: Considering the small amount of different skills (~20-30), for the 
 // sake of performance and less bugs, the skillType should be an enum.
@@ -81,10 +80,10 @@ public:
 		return eventsToReturn;
 	}
 
-	virtual std::shared_ptr<CelestialBody> GetOwner()
+	/*virtual std::shared_ptr<CelestialBody> GetOwner()
 	{
 		return std::shared_ptr<CelestialBody>();
-	}
+	}*/
 	// TODO:
 	// The 'dummy' parameter is just to make valid function overriding.
 	// There should be a CelestialBody class and not two separate Sun and
@@ -101,9 +100,11 @@ public:
 	virtual bool IsIntersectingObject(glm::vec3 objectPosition) { return false; }
 
 	virtual std::string GetSkillType() { return skillType; }
+	virtual float GetRange() { return 0.0f; }
+	virtual glm::vec3 GetPosition() { return glm::vec3(); }
 };
 
-
+/*
 class RaySkill : public Skill
 {
 private:
@@ -143,12 +144,12 @@ public:
 	// (!)It is an one little dangerous method. You can lose a lot of events that way.
 	std::vector<Event> GetGeneratedEvents();
 };
-
+*/
 
 class AOESkill : public Skill
 {
 private:
-	std::shared_ptr<CelestialBody> skillOwner;
+	//std::shared_ptr<CelestialBody> skillOwner;
 
 	int damage;
 	float range;
@@ -160,7 +161,8 @@ private:
 
 public:
 	AOESkill() : Skill() {}
-	AOESkill(std::shared_ptr<CelestialBody> newSkillOwner,
+	AOESkill(/*std::shared_ptr<CelestialBody> newSkillOwner,*/
+			 glm::vec3 newPosition,
 			 int newDamage, float newRange,
 			 const std::string &newSkillType,
 			 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
@@ -170,7 +172,10 @@ public:
 				const SimpleProgData &progData);
 
 	void OnEvent(Event &_event);
-	std::shared_ptr<CelestialBody> GetOwner();
+
+	//std::shared_ptr<CelestialBody> GetOwner();
+	float GetRange();
+	glm::vec3 GetPosition();
 
 	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 	//void SetParameter(ParameterType paramType, int newParam_int);
@@ -192,7 +197,7 @@ public:
 class PassiveAOESkill : public Skill
 {
 private:
-	std::shared_ptr<CelestialBody> skillOwner;
+	//std::shared_ptr<CelestialBody> skillOwner;
 
 	int damage;
 	int damageApplyTime_seconds;
@@ -206,7 +211,8 @@ private:
 
 public:
 	PassiveAOESkill() : Skill() {}
-	PassiveAOESkill(std::shared_ptr<CelestialBody> newSkillOwner,
+	PassiveAOESkill(//std::shared_ptr<CelestialBody> newSkillOwner,
+					glm::vec3 newPosition,
 					int newDamage, int newDamageApplyTime_seconds,
 					float newRange,
 					const std::string &newSkillType,
@@ -217,12 +223,17 @@ public:
 				const SimpleProgData &progData);
 
 	void OnEvent(Event &_event);
-	std::shared_ptr<CelestialBody> GetOwner();
+
+	//std::shared_ptr<CelestialBody> GetOwner();
+	float GetRange();
+	glm::vec3 GetPosition();
 
 	bool IsIntersectingObject(glm::vec3 objectPosition);
 
+	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
+
 	// Only for EVENT_TYPE_OTHER
-	Event GetGeneratedEvent(const std::string &	eventName);
+	Event GetGeneratedEvent(const std::string &eventName);
 	void RemoveGeneratedEvent(const std::string &eventName);
 	// Gets the generated events and empties the event list.
 	// (!)It is an one little dangerous method. You can lose a lot of events that way.

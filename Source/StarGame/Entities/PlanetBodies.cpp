@@ -154,6 +154,14 @@ void CelestialBody::Update()
 
 		position.x = sinf(currentTimeThroughLoop * (2.0f * PI)) * offsetFromSun;
 		position.z = cosf(currentTimeThroughLoop * (2.0f * PI)) * offsetFromSun;
+
+		for(int i = 0; i < skills.size(); i++)
+		{
+			if(skills[i]->GetSkillType() == "passiveAOESkill")
+			{
+				skills[i]->SetParameter(PARAM_POSITION, position);
+			}
+		}
 	}
 }
 
@@ -211,6 +219,11 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 
 			glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
 		}
+	}
+	
+	for(int i = 0; i < skills.size(); i++)
+	{
+		skills[i]->Render(modelMatrix, simpleData);
 	}
 
 	if(isClicked && !isSun)
@@ -320,6 +333,15 @@ void CelestialBody::OnEvent(Event &_event)
 			break;
 		}
 	}
+
+	/*switch(_event.GetType())
+	{
+	case EVENT_TYPE_OTHER:
+		if(strcmp(_event.GetArgument("object").varString, "deploySkill") == 0)
+		{
+			
+		}
+	}*/
 }
 
 bool CelestialBody::AddSatellite(const std::string &fileName,
@@ -359,17 +381,22 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 	newSat->SetParent(*this);
 	newSat->InitSatelliteOrbit();
 
-	/*std::shared_ptr<PassiveAOESkill> satSkill = 
-		std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(newSat, 
+	std::shared_ptr<PassiveAOESkill> satSkill = 
+		std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(glm::vec3(),//newSat, 
 															 20,
 															 1,
 															 2.0f,
 															 "passiveAOESkill",
-															 'q', 'q', 'e'));*/
+															 'q', 'q', 'e'));
+	newSat->AddSkill(satSkill);
 
 	satellites.push_back(newSat);
 
 	return true;
+}
+void CelestialBody::AddSkill(const std::shared_ptr<Skill> newSkill)
+{
+	skills.push_back(newSkill);
 }
 
 bool CelestialBody::RemoveSatellite()
@@ -381,7 +408,18 @@ bool CelestialBody::RemoveSatellite()
 			return false;
 		}
 
+		int satelliteType = satellites.back()->GetSatelliteType();
 		satellites.pop_back();
+
+		EventArg satelliteRemovedEventArgs[2];
+		satelliteRemovedEventArgs[0].argType = "what_event";
+		satelliteRemovedEventArgs[0].argument.varType = TYPE_STRING;
+		std::strcpy(satelliteRemovedEventArgs[0].argument.varString, "satelliteRemoved");
+		satelliteRemovedEventArgs[1].argType = "satType";
+		satelliteRemovedEventArgs[1].argument.varType = TYPE_INTEGER;
+		satelliteRemovedEventArgs[1].argument.varInteger = satelliteType;
+		Event satelliteRemovedEvent = Event(2, EVENT_TYPE_OTHER, satelliteRemovedEventArgs);
+		generatedEvents.push_back(satelliteRemovedEvent);
 
 		return true;
 	}
@@ -399,7 +437,18 @@ bool CelestialBody::RemoveSatellite(std::vector<std::shared_ptr<CelestialBody>>:
 			return false;
 		}
 
+		int satelliteType = (*index_iterator)->GetSatelliteType();
 		satellites.erase(index_iterator);
+
+		EventArg satelliteRemovedEventArgs[2];
+		satelliteRemovedEventArgs[0].argType = "what_event";
+		satelliteRemovedEventArgs[0].argument.varType = TYPE_STRING;
+		std::strcpy(satelliteRemovedEventArgs[0].argument.varString, "satelliteRemoved");
+		satelliteRemovedEventArgs[1].argType = "satType";
+		satelliteRemovedEventArgs[1].argument.varType = TYPE_INTEGER;
+		satelliteRemovedEventArgs[1].argument.varInteger = satelliteType;
+		Event satelliteRemovedEvent = Event(2, EVENT_TYPE_OTHER, satelliteRemovedEventArgs);
+		generatedEvents.push_back(satelliteRemovedEvent);
 
 		return true;
 	}
@@ -419,7 +468,19 @@ bool CelestialBody::RemoveSatellite(SatelliteType type)
 		{
 			if((*iter)->GetSatelliteType() == type)
 			{
+				int satelliteType = (*iter)->GetSatelliteType();
 				satellites.erase(iter);
+
+				EventArg satelliteRemovedEventArgs[2];
+				satelliteRemovedEventArgs[0].argType = "what_event";
+				satelliteRemovedEventArgs[0].argument.varType = TYPE_STRING;
+				std::strcpy(satelliteRemovedEventArgs[0].argument.varString, "satelliteRemoved");
+				satelliteRemovedEventArgs[1].argType = "satType";
+				satelliteRemovedEventArgs[1].argument.varType = TYPE_INTEGER;
+				satelliteRemovedEventArgs[1].argument.varInteger = satelliteType;
+				Event satelliteRemovedEvent = Event(2, EVENT_TYPE_OTHER, satelliteRemovedEventArgs);
+				generatedEvents.push_back(satelliteRemovedEvent);
+
 				break;
 			}
 			else
@@ -440,15 +501,16 @@ void CelestialBody::RemoveSatellites()
 	}
 }
 
-bool CelestialBody::IsClicked(glm::mat4 projMat, glm::mat4 modelMat,	
+bool CelestialBody::IsClicked(Utility::Ray mouseRay)
+	/*glm::mat4 projMat, glm::mat4 modelMat,	
 							  Mouse userMouse, glm::vec4 cameraPos,
-							  int windowWidth, int windowHeight)
+							  int windowWidth, int windowHeight)*/
 {
 	if(isSun)
 	{
-		Utility::Ray mouseRay = 
-			userMouse.GetPickRay(projMat, modelMat, cameraPos,
-								 windowWidth, windowHeight);
+		//Utility::Ray mouseRay = 
+		//	userMouse.GetPickRay(projMat, modelMat, cameraPos,
+		//						 windowWidth, windowHeight);
 
 		if(Utility::Intersections::RayIntersectsSphere(mouseRay, position, diameter / 2.0f))
 		{
@@ -461,9 +523,9 @@ bool CelestialBody::IsClicked(glm::mat4 projMat, glm::mat4 modelMat,
 	}
 	else
 	{
-		Utility::Ray mouseRay = 
-			userMouse.GetPickRay(projMat, modelMat, cameraPos, 
-								 windowWidth, windowHeight);
+		//Utility::Ray mouseRay = 
+		//	userMouse.GetPickRay(projMat, modelMat, cameraPos, 
+		//						 windowWidth, windowHeight);
 
 		float outerRadius = skillType.satelliteOffsetFromSun + diameter;
 		float innerRadius = skillType.satelliteOffsetFromSun - diameter;
@@ -493,16 +555,22 @@ bool CelestialBody::IsClicked(glm::mat4 projMat, glm::mat4 modelMat,
 		return false;
 	}
 }
-bool CelestialBody::IsSatelliteClicked(glm::mat4 projMat, glm::mat4 modelMat,	
+bool CelestialBody::IsSatelliteClicked(Utility::Ray mouseRay)
+	/*glm::mat4 projMat, glm::mat4 modelMat,	
 									   Mouse userMouse, glm::vec4 cameraPos,
-									   int windowWidth, int windowHeight)
+									   int windowWidth, int windowHeight)*/
 {
 	for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
 		iter != satellites.end();
 		++iter)
 	{
-		return (*iter)->IsClicked(projMat, modelMat, userMouse, cameraPos, windowWidth, windowHeight);
+		return (*iter)->IsClicked(mouseRay);//projMat, modelMat, userMouse, cameraPos, windowWidth, windowHeight);
 	}
+}
+
+bool CelestialBody::IsSun()
+{
+	return isSun;
 }
 
 std::vector<Event> CelestialBody::GetGeneratedEvents()
@@ -520,6 +588,43 @@ std::vector<Event> CelestialBody::GetGeneratedEvents()
 	}
 
 	return eventsToReturn;
+}
+Event CelestialBody::GetGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(int i = 0; i < generatedEvents.size(); i++)
+		{
+			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
+			   strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				return generatedEvents[i];
+			}
+		}
+	}
+	else
+	{
+		return StockEvents::EmptyEvent();
+	}
+}
+void CelestialBody::RemoveGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(std::vector<Event>::iterator iter = generatedEvents.begin();
+			iter != generatedEvents.end();)
+		{
+			if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				generatedEvents.erase(iter);
+				break;
+			}
+			else 
+			{
+				++iter;
+			}
+		}
+	}
 }
 
 bool CelestialBody::HasSatellites()
@@ -599,6 +704,26 @@ std::shared_ptr<CelestialBody> CelestialBody::GetOuterSatellite()
 	}
 
 	return NULL;//nullptr;
+}
+
+std::vector<std::shared_ptr<Skill>> CelestialBody::GetAllSkills()
+{
+	std::vector<std::shared_ptr<Skill>> allSkills;
+
+	for(int i = 0; i < skills.size(); i++)
+	{
+		allSkills.push_back(skills[i]);
+	}
+
+	for(int i = 0; i < satellites.size(); i++)
+	{
+		std::vector<std::shared_ptr<Skill>> allSatSkills = 
+			satellites[i]->GetAllSkills();
+
+		allSkills.insert(allSkills.end(), allSatSkills.begin(), allSatSkills.end());
+	}
+
+	return allSkills;
 }
 
 const glm::vec3 CelestialBody::GetPosition() const

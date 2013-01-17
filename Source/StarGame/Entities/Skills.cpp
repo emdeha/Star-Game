@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 #include "Skills.h"
+#include "MaterialBlock.h"
 
 
 /*Event Skill::GetGeneratedEvent(const std::string &eventName)
@@ -644,6 +645,239 @@ void SunNovaSkill::RemoveGeneratedEvent(const std::string &eventName)
 	}
 }
 std::vector<Event> SunNovaSkill::GetGeneratedEvents()
+{
+	std::vector<Event> eventsToReturn;
+
+	if(generatedEvents.size() > 0)
+	{
+		eventsToReturn = generatedEvents;
+		generatedEvents.resize(0);
+	}
+	else 
+	{
+		eventsToReturn.push_back(StockEvents::EmptyEvent());
+	}
+
+	return eventsToReturn;
+}
+
+
+// for lighting
+static void GenerateUniformBuffers(int &materialBlockSize, glm::vec4 diffuseColor, GLuint &materialUniformBuffer)
+{
+	MaterialBlock material;
+	material.diffuseColor = diffuseColor;
+	material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
+	material.shininessFactor = 0.3f;
+
+
+	int uniformBufferAlignSize = 0;
+	glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignSize);
+
+	materialBlockSize = sizeof(MaterialBlock);
+	materialBlockSize += uniformBufferAlignSize -
+		(materialBlockSize % uniformBufferAlignSize);
+
+	
+	glGenBuffers(1, &materialUniformBuffer);
+	glBindBuffer(GL_UNIFORM_BUFFER, materialUniformBuffer);
+	glBufferData(GL_UNIFORM_BUFFER, materialBlockSize, &material, GL_STATIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
+SatelliteChainingSkill::SatelliteChainingSkill(glm::vec3 newPosition,
+											   int newDamage, float newRange, 
+											   glm::vec3 newProjectileVelocity, glm::vec4 newProjectileColor,
+											   float newProjectileRadius,
+											   const std::string &meshFileName, 
+											   const std::string &skillType,
+											   char fusionCombA, char fusionCombB, char fusionCombC)
+											   : Skill(skillType, fusionCombA, fusionCombB, fusionCombC)
+{
+	currentPosition = newPosition;
+	startingPosition = newPosition;
+	damage = newDamage;
+	range = newRange;
+	projectileVelocity = newProjectileVelocity;
+	projectileColor = newProjectileColor;
+	projectileRadius = newProjectileRadius;
+	generatedEvents.resize(0);
+	materialBlockSize = 0;
+	materialUniformBuffer = 0;
+	isStarted = false;
+
+	try
+	{
+		projectileMesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFileName));
+	}
+	catch(std::exception &except)
+	{
+		printf("%s\n", except.what());
+		throw;
+	}
+
+	GenerateUniformBuffers(materialBlockSize, projectileColor, materialUniformBuffer);
+}
+
+void SatelliteChainingSkill::Update()
+{
+	if(isStarted)
+	{
+		if(glm::length(currentPosition - startingPosition) <= range)
+		{
+			currentPosition += projectileVelocity;
+		}
+		else
+		{
+			currentPosition = startingPosition;
+			isStarted = false;
+		}
+	}
+}
+
+void SatelliteChainingSkill::Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData, 
+									GLuint materialBlockIndex)
+{
+	if(isStarted)
+	{
+		glutil::PushStack push(modelMatrix);
+		modelMatrix.Translate(currentPosition);
+		modelMatrix.Scale(projectileRadius); 
+
+		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
+						  0, sizeof(MaterialBlock));
+
+		glm::mat3 normMatrix(modelMatrix.Top());
+		normMatrix = glm::transpose(glm::inverse(normMatrix));
+
+		glUseProgram(litData.theProgram);
+		glUniformMatrix4fv(litData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+		glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+
+
+		projectileMesh->Render("lit");
+
+		glUseProgram(0);
+		glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
+	}
+}
+
+void SatelliteChainingSkill::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
+	case EVENT_TYPE_OTHER:
+		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+		{
+			EventArg skillDeployedEventArgs[3];
+			skillDeployedEventArgs[0].argType = "skillRange";
+			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+			skillDeployedEventArgs[0].argument.varFloat = range;
+			skillDeployedEventArgs[1].argType = "skillDamage";
+			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+			skillDeployedEventArgs[1].argument.varInteger = damage;
+			skillDeployedEventArgs[2].argType = "what_event";
+			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			generatedEvents.push_back(skillDeployedEvent);
+
+			isStarted = true;
+		}
+		if(_event.GetArgument("isIntersected").varBool == true)
+		{
+			EventArg skillDeployedEventArgs[3];
+			skillDeployedEventArgs[0].argType = "skillRange";
+			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+			skillDeployedEventArgs[0].argument.varFloat = range;
+			skillDeployedEventArgs[1].argType = "skillDamage";
+			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+			skillDeployedEventArgs[1].argument.varInteger = damage;
+			skillDeployedEventArgs[2].argType = "what_event";
+			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			generatedEvents.push_back(skillDeployedEvent);
+
+			isStarted = true;
+		}
+		break;
+	}
+}
+
+float SatelliteChainingSkill::GetRange()
+{
+	return range;
+}
+glm::vec3 SatelliteChainingSkill::GetPosition()
+{
+	return currentPosition;
+}
+
+void SatelliteChainingSkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
+{
+	switch(paramType)
+	{
+	case PARAM_POSITION:
+		startingPosition = newParam_vec3;
+		break;
+	default:
+		break;
+	}
+}
+
+bool SatelliteChainingSkill::IsIntersectingObject(glm::vec3 objectPosition)
+{
+	if(isStarted)
+	{
+		float distanceBetweenObjectAndSkill = glm::length(currentPosition - objectPosition);
+
+		if(distanceBetweenObjectAndSkill < projectileRadius + 1.0f) // 1.0f = the object's radius. Makes the intersection easier.
+		{
+			return true;
+		}
+
+		return false;
+	}
+	else return false;
+}
+
+Event SatelliteChainingSkill::GetGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(int i = 0; i < generatedEvents.size(); i++)
+		{
+			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
+			   strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				return generatedEvents[i];
+			}
+		}
+	}
+
+	return StockEvents::EmptyEvent();
+}
+void SatelliteChainingSkill::RemoveGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(std::vector<Event>::iterator iter = generatedEvents.begin();
+			iter != generatedEvents.end();)
+		{
+			if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				generatedEvents.erase(iter);
+				break;
+			}
+			else 
+			{
+				++iter;
+			}
+		}
+	}
+}
+std::vector<Event> SatelliteChainingSkill::GetGeneratedEvents()
 {
 	std::vector<Event> eventsToReturn;
 

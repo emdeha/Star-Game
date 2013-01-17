@@ -193,14 +193,12 @@ void Scene::UpdateScene()
 		}
 	}
 	
-	if(!suns.empty() && !swarms.empty())
+	if(!suns.empty())
 	{
 		std::vector<std::shared_ptr<Skill>> skills = suns[0]->GetAllSkills();
 		int sizeSkills = skills.size();
 		for(int i = 0; i < sizeSkills; i++)
 		{
-			skills[i]->Update();
-			
 			if(skills[i]->GetSkillType() == "aoeSkill")
 			{
 				glm::vec4 mousePos_atZ = 

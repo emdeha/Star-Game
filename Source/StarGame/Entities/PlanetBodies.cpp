@@ -143,6 +143,40 @@ void CelestialBody::Update()
 				(*iter)->Update();
 			}
 		}
+
+		for(int i = 0; i < skills.size(); i++)
+		{
+			skills[i]->Update();
+		}
+
+		std::shared_ptr<Skill> sunNovaSkill;
+		for(int i = 0; i < skills.size(); i++)
+		{
+			if(skills[i]->GetSkillType() == "sunNovaSkill")
+			{
+				sunNovaSkill = skills[i];
+			}
+		}
+		for(int i = 0; i < satellites.size(); i++)
+		{
+			if(sunNovaSkill->IsIntersectingObject(satellites[i]->GetPosition()))
+			{
+				std::vector<std::shared_ptr<Skill>> satelliteSkills = satellites[i]->GetAllSkills();
+				for(int skillIndex = 0; skillIndex < satelliteSkills.size(); skillIndex++)
+				{
+					if(satelliteSkills[skillIndex]->GetSkillType() == "satChainSkill")
+					{
+						EventArg satIntersectedEventArgs[1];
+						satIntersectedEventArgs[0].argType = "isIntersected";
+						satIntersectedEventArgs[0].argument.varType = TYPE_BOOL;
+						satIntersectedEventArgs[0].argument.varBool = true;
+						Event satIntersectedEvent(1, EVENT_TYPE_OTHER, satIntersectedEventArgs);
+
+						satelliteSkills[skillIndex]->OnEvent(satIntersectedEvent);
+					}
+				}
+			}
+		}
 	}
 
 	if(!isSun)
@@ -157,7 +191,12 @@ void CelestialBody::Update()
 
 		for(int i = 0; i < skills.size(); i++)
 		{
+			skills[i]->Update();
 			if(skills[i]->GetSkillType() == "passiveAOESkill")
+			{
+				skills[i]->SetParameter(PARAM_POSITION, position);
+			}
+			if(skills[i]->GetSkillType() == "satChainSkill")
 			{
 				skills[i]->SetParameter(PARAM_POSITION, position);
 			}
@@ -224,6 +263,7 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 	for(int i = 0; i < skills.size(); i++)
 	{
 		skills[i]->Render(modelMatrix, simpleData);
+		skills[i]->Render(modelMatrix, litData, materialBlockIndex);
 	}
 
 	if(isClicked && !isSun)
@@ -379,7 +419,17 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 															 2.0f,
 															 "passiveAOESkill",
 															 'q', 'q', 'e'));
+	std::shared_ptr<SatelliteChainingSkill> satChainSkill =
+		std::shared_ptr<SatelliteChainingSkill>(new SatelliteChainingSkill(newSat->GetPosition(),
+																		   50, 
+																		   3.0f, 
+																		   glm::vec3(0.5f, 0.0f, 0.0f), 
+																		   glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
+																		   0.1f, 
+																		   "../data/mesh-files/UnitSphere.xml",
+																		   "satChainSkill"));
 	newSat->AddSkill(satSkill);
+	newSat->AddSkill(satChainSkill);
 
 	satellites.push_back(newSat);
 

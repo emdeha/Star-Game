@@ -63,6 +63,8 @@ public:
 						const BillboardProgDataNoTexture &progData) {}
 	virtual void Render(glutil::MatrixStack &modelMatrix,
 						const SimpleProgData &simpleData) {}
+	virtual void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData,
+						GLuint materialBlockIndex) {}
 
 	virtual void OnEvent(Event &_event) {}
 	// Only for EVENT_TYPE_OTHER
@@ -247,6 +249,58 @@ public:
 	float GetRange();
 	glm::vec3 GetPosition();
 
+	bool IsIntersectingObject(glm::vec3 objectPosition);
+
+	// Only for EVENT_TYPE_OTHER
+	Event GetGeneratedEvent(const std::string &eventName);
+	void RemoveGeneratedEvent(const std::string &eventName);
+	// Gets the generated events and empties the event list.
+	// (!)It is an one little dangerous method. You can lose a lot of events that way.
+	std::vector<Event> GetGeneratedEvents();
+};
+
+
+class SatelliteChainingSkill : public Skill
+{
+private:
+	int damage;
+	float range;
+	glm::vec3 startingPosition;
+	glm::vec3 currentPosition;
+
+	glm::vec3 projectileVelocity;
+	glm::vec4 projectileColor;
+	float projectileRadius;
+	std::unique_ptr<Framework::Mesh> projectileMesh;
+	// for lighting
+	int materialBlockSize;
+	GLuint materialUniformBuffer;
+
+	std::vector<Event> generatedEvents;
+	bool isStarted;
+
+public:
+	SatelliteChainingSkill() : Skill() {}
+	SatelliteChainingSkill(glm::vec3 newPosition,
+						   int newDamage, float newRange, 
+						   glm::vec3 newProjectileVelocity, glm::vec4 newProjectileColor,
+						   float newProjectileRadius,
+						   const std::string &meshFileName, 
+						   const std::string &skillType,
+						   char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData, 
+				GLuint materialBlockIndex);
+
+	void OnEvent(Event &_event);
+
+	float GetRange();
+	glm::vec3 GetPosition();
+
+	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
+
+	// WARN: Will add artificial radius for easier intersection.
 	bool IsIntersectingObject(glm::vec3 objectPosition);
 
 	// Only for EVENT_TYPE_OTHER

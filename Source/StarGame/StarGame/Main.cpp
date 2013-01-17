@@ -411,10 +411,11 @@ void InitializeScene()
 															 "passiveAOESkill",
 															 'q', 'q', 'e'));
 	std::shared_ptr<SunNovaSkill> testSunNovaSkill =
-		std::shared_ptr<SunNovaSkill>(new SunNovaSkill(glm::vec3(), 40, 5.0f, 
+		std::shared_ptr<SunNovaSkill>(new SunNovaSkill(glm::vec3(), 40, 6.0f, 
 													   0.05f, 
 													   "sunNovaSkill", 
 													   'w', 'w', 'e'));
+
 	scene.GetSun()->AddSkill(testPassiveAOESkill);
 	scene.GetSun()->AddSkill(testAOESkill);
 	scene.GetSun()->AddSkill(testSunNovaSkill);
@@ -531,7 +532,7 @@ void Display()
 	if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 	{		
 		scene.SetDisplayData(displayData);
-		scene.GenerateRandomSwarms(5, shaderManager.GetBillboardProgDataNoTexture());
+		scene.GenerateRandomSwarms(1, shaderManager.GetBillboardProgDataNoTexture());
 
 		glutil::MatrixStack modelMatrix;
 

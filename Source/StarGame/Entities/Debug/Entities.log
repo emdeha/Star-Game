@@ -1,16 +1,29 @@
-﻿Build started 17.1.2013 г. 12:23:28 ч..
+﻿Build started 17.1.2013 г. 16:22:13 ч..
      1>Project "E:\CECI\TheGame\Source\StarGame\Entities\Entities.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Entities.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          All outputs are up-to-date.
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D DEBUG /D _DEBUG /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Skills.cpp
-         Skills.cpp
-     1>e:\ceci\thegame\source\stargame\entities\skills.cpp(281): warning C4018: '<' : signed/unsigned mismatch
-     1>e:\ceci\thegame\source\stargame\entities\skills.cpp(342): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>e:\ceci\thegame\source\stargame\entities\skills.cpp(458): warning C4018: '<' : signed/unsigned mismatch
-     1>e:\ceci\thegame\source\stargame\entities\skills.cpp(615): warning C4018: '<' : signed/unsigned mismatch
-     1>e:\ceci\thegame\source\stargame\entities\skills.cpp(294): warning C4715: 'AOESkill::GetGeneratedEvent' : not all control paths return a value
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /D TIXML_USE_STL /D FREEGLUT_STATIC /D WIN32 /D _LIB /D FREEGLUT_LIB_PRAGMAS=0 /D DEBUG /D _DEBUG /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt PlanetBodies.cpp
+         PlanetBodies.cpp
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(147): warning C4018: '<' : signed/unsigned mismatch
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(153): warning C4018: '<' : signed/unsigned mismatch
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(160): warning C4018: '<' : signed/unsigned mismatch
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(165): warning C4018: '<' : signed/unsigned mismatch
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(192): warning C4018: '<' : signed/unsigned mismatch
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(263): warning C4018: '<' : signed/unsigned mismatch
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(383): warning C4018: '>=' : signed/unsigned mismatch
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(623): warning C4018: '<' : signed/unsigned mismatch
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(740): warning C4018: '<' : signed/unsigned mismatch
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(745): warning C4018: '<' : signed/unsigned mismatch
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(34): warning C4715: 'FindEmptySatelliteType' : not all control paths return a value
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(467): warning C4715: 'CelestialBody::RemoveSatellite' : not all control paths return a value
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(496): warning C4715: 'CelestialBody::RemoveSatellite' : not all control paths return a value
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(533): warning C4715: 'CelestialBody::RemoveSatellite' : not all control paths return a value
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(596): warning C4715: 'CelestialBody::IsSatelliteClicked' : not all control paths return a value
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(636): warning C4715: 'CelestialBody::GetGeneratedEvent' : not all control paths return a value
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(768): warning C4715: 'CelestialBody::GetOffsetFromSun' : not all control paths return a value
+     1>e:\ceci\thegame\source\stargame\entities\planetbodies.cpp(775): warning C4715: 'CelestialBody::GetSatelliteType' : not all control paths return a value
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\Entities.lib" /NOLOGO Debug\Enemy.obj
          Debug\Lights.obj
@@ -26,4 +39,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.81
+Time Elapsed 00:00:00.97

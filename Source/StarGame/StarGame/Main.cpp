@@ -70,9 +70,7 @@ void HandleMouse()
 	{		
 		if(scene.HasSuns())
 		{
-			if(scene.GetSun()->IsClicked
-				(mouseRay/*displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
-				 cameraPosition, windowWidth, windowHeight*/))
+			if(scene.GetSun()->IsClicked(mouseRay))
 			{
 				Event rightClickSunEvent = StockEvents::EventOnRightClick("sun");
 
@@ -206,9 +204,7 @@ void HandleMouse()
 		{
 			if(scene.HasSuns())
 			{
-				if(scene.GetSun()->IsClicked
-					(mouseRay/*displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
-					 cameraPosition, windowWidth, windowHeight*/))
+				if(scene.GetSun()->IsClicked(mouseRay))
 				{
 					Event leftClickSunEvent = StockEvents::EventOnLeftClick("sun");
 
@@ -220,9 +216,7 @@ void HandleMouse()
 				for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = sunSatellites.begin(); 
 					iter != sunSatellites.end(); ++iter)
 				{
-					if((*iter)->IsClicked
-						(mouseRay/*displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
-							cameraPosition, windowWidth, windowHeight*/))
+					if((*iter)->IsClicked(mouseRay))
 					{
 						Event leftClickSatelliteEvent = StockEvents::EventOnLeftClick("satellite");
 
@@ -242,9 +236,7 @@ void HandleMouse()
 			for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = sunSatellites.begin(); 
 				iter != sunSatellites.end(); ++iter)
 			{
-				if((*iter)->IsClicked
-					(mouseRay/*displayData.projectionMatrix, displayData.modelMatrix, scene.GetMouse(), 
-						cameraPosition, windowWidth, windowHeight*/))
+				if((*iter)->IsClicked(mouseRay))
 				{
 					Event satelliteHoveredEvent = StockEvents::EventOnHover();
 
@@ -375,20 +367,6 @@ void InitializeScene()
 	SunLight 
 		mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, displayData.gamma));
 
-
-	/*std::shared_ptr<Swarm> sampleSwarm =
-		std::shared_ptr<Swarm>(new Swarm(glm::vec3(4.0f, 0.0f, 0.0f), glm::vec3(-0.01f, 0.0f, 0.0f), 
-										 100, 50, 5, 1, 3.0f, 
-										 shaderManager.GetBillboardProgDataNoTexture()));
-	std::shared_ptr<Swarm> sampleSwarmTwo =
-		std::shared_ptr<Swarm>(new Swarm(glm::vec3(0.0f, 4.0f, 0.0f), glm::vec3(0.0f, -0.01f, 0.0f),
-										100, 50, 5, 1, 3.0f,
-										shaderManager.GetBillboardProgDataNoTexture()));
-
-	
-	scene.AddSwarm(sampleSwarm);
-	scene.AddSwarm(sampleSwarmTwo);*/
-
 	mainSun->LoadMesh("mesh-files/UnitSphere.xml");
 
 	scene.SetMouse(userMouse);
@@ -413,6 +391,7 @@ void InitializeScene()
 	scene.AddFusionSequence("airSatellite", 'q', 'w', 'e');
 	scene.AddFusionSequence("aoeSkill", 'q', 'q', 'w');
 	scene.AddFusionSequence("passiveAoeSkill", 'q', 'q', 'e');
+	scene.AddFusionSequence("sunNovaSkill", 'w', 'w', 'e');
 
 	
 	ExplosionEmitter sceneExplosion =
@@ -421,21 +400,24 @@ void InitializeScene()
 	scene.AddExplosionEmitter(sceneExplosion);
 
 	std::shared_ptr<AOESkill> testAOESkill =
-		std::shared_ptr<AOESkill>(new AOESkill(glm::vec3(),//scene.GetSun(),
+		std::shared_ptr<AOESkill>(new AOESkill(glm::vec3(),
 											   20, 2.0f, 
 											   "aoeSkill",
 											   'q', 'q', 'w'));
-	//scene.AddSkill(testAOESkill);
-
 	std::shared_ptr<PassiveAOESkill> testPassiveAOESkill =
-		std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(glm::vec3(),//scene.GetSun(),
+		std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(glm::vec3(),
 															 20, 
 															 1, 2.0f, 
 															 "passiveAOESkill",
 															 'q', 'q', 'e'));
+	std::shared_ptr<SunNovaSkill> testSunNovaSkill =
+		std::shared_ptr<SunNovaSkill>(new SunNovaSkill(glm::vec3(), 40, 5.0f, 
+													   0.05f, 
+													   "sunNovaSkill", 
+													   'w', 'w', 'e'));
 	scene.GetSun()->AddSkill(testPassiveAOESkill);
 	scene.GetSun()->AddSkill(testAOESkill);
-	//scene.AddSkill(testPassiveAOESkill);
+	scene.GetSun()->AddSkill(testSunNovaSkill);
 	
 
 	glUseProgram(shaderManager.GetTextureProgData().theProgram);
@@ -549,7 +531,7 @@ void Display()
 	if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 	{		
 		scene.SetDisplayData(displayData);
-		scene.GenerateRandomSwarms(1, shaderManager.GetBillboardProgDataNoTexture());
+		scene.GenerateRandomSwarms(5, shaderManager.GetBillboardProgDataNoTexture());
 
 		glutil::MatrixStack modelMatrix;
 

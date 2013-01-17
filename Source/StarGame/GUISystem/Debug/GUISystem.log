@@ -1,17 +1,11 @@
-﻿Build started 16.1.2013 г. 19:11:26 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\GUISystem\GUISystem.vcxproj" on node 3 (build target(s)).
+﻿Build started 17.1.2013 г. 11:54:12 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\GUISystem\GUISystem.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
-         Creating "Debug\GUISystem.unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "Debug\GUISystem.unsuccessfulbuild".
        ClCompile:
          All outputs are up-to-date.
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\GUISystem.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Button.cpp Control.cpp ImageBox.cpp Label.cpp Layout.cpp TextBox.cpp
-         Skipping... (no relevant changes detected)
-         TextBox.cpp
-         Layout.cpp
-         Label.cpp
-         ImageBox.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\GUISystem.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Control.cpp
          Control.cpp
-         Button.cpp
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"E:\CECI\TheGame\Source\StarGame\Debug\GUISystem.lib" /NOLOGO Debug\Button.obj
          Debug\Control.obj
@@ -29,4 +23,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.13
+Time Elapsed 00:00:00.83

@@ -240,7 +240,7 @@ public:
 		index = newIndex;
 
 		boxSprite = 
-			Utility::Primitives::Sprite(glm::vec4(newPosition, 0.0f, 1.0f), 
+			Utility::Primitives::Sprite(glm::vec3(newPosition, 0.0f), 
 										glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
 										newWidth, newHeight, false);
 	}

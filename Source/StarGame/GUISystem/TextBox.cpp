@@ -46,7 +46,7 @@ void TextBox::ComputeNewAttributes()
 
 	if(hasBackground)
 	{		
-		glm::vec4 position = glm::vec4(presets[currentPreset].position, 0.0f, 1.0f);
+		glm::vec3 position = glm::vec3(presets[currentPreset].position, 0.0f);
 
 		controlSquare.SetPosition(position);
 		controlSquare.SetHeight((float)presets[currentPreset].textSize);

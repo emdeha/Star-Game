@@ -22,11 +22,11 @@
 AOESelector::AOESelector(glm::vec3 newPosition, float newRadius,
 						 glm::vec4 newColor)
 {
-	selectorBody = 
-		Utility::Primitives::Circle(newColor, glm::vec4(newPosition, 0.0f), newRadius, RESOLUTION);
-
 	position = newPosition;
 	radius = newRadius;
+
+	selectorBody = 
+		Utility::Primitives::Circle(newColor, position, newRadius, RESOLUTION);
 }
 
 void AOESelector::Init()
@@ -55,14 +55,14 @@ SatelliteOrbit::SatelliteOrbit()
 	mainColor = glm::vec4();
 	outlineColor = glm::vec4();
 
-	position = glm::vec4();
+	position = glm::vec3();
 
 	outerRadius = 0.0f;
 	innerRadius = 0.0f;
 }
 
 SatelliteOrbit::SatelliteOrbit(glm::vec4 newMainColor, glm::vec4 newOutlineColor,
-							   glm::vec4 newPosition, 
+							   glm::vec3 newPosition, 
 							   float newOuterRadius, float newInnerRadius,
 							   float gamma)
 {

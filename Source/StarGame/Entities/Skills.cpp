@@ -178,15 +178,13 @@ std::vector<Event> RaySkill::GetGeneratedEvents()
 */
 
 
-AOESkill::AOESkill(//std::shared_ptr<CelestialBody> newSkillOwner,
-				   glm::vec3 newPosition,
+AOESkill::AOESkill(glm::vec3 newPosition,
 				   int newDamage, float newRange,
 				   const std::string &newSkillType,
 				   char fusionCombA, char fusionCombB, char fusionCombC)
 				   : Skill(newSkillType,
 						   fusionCombA, fusionCombB, fusionCombC)
 {
-	//skillOwner = newSkillOwner;
 	damage = newDamage;
 	range = newRange;
 	position = newPosition;
@@ -194,7 +192,7 @@ AOESkill::AOESkill(//std::shared_ptr<CelestialBody> newSkillOwner,
 	isStarted = false;
 
 	skillSelector = 
-		AOESelector(position/*glm::vec3(skillOwner->GetPosition())*/, range, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
+		AOESelector(position, range, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
 	skillSelector.Init();
 }
 
@@ -242,11 +240,7 @@ void AOESkill::OnEvent(Event &_event)
 		break;
 	}
 }
-/*
-std::shared_ptr<CelestialBody> AOESkill::GetOwner()
-{
-	return skillOwner;
-}*/
+
 float AOESkill::GetRange()
 {
 	return range;
@@ -335,8 +329,7 @@ std::vector<Event> AOESkill::GetGeneratedEvents()
 }
 
 
-PassiveAOESkill::PassiveAOESkill(//std::shared_ptr<CelestialBody> newSkillOwner,
-								 glm::vec3 newPosition,
+PassiveAOESkill::PassiveAOESkill(glm::vec3 newPosition,
 								 int newDamage, int newDamageApplyTime_seconds,
 								 float newRange,
 								 const std::string &newSkillType,
@@ -344,19 +337,16 @@ PassiveAOESkill::PassiveAOESkill(//std::shared_ptr<CelestialBody> newSkillOwner,
 								 : Skill(newSkillType,
 										 fusionCombA, fusionCombB, fusionCombC)
 {
-	//skillOwner = newSkillOwner;
 	damage = newDamage;
 	damageApplyTime_seconds = newDamageApplyTime_seconds;
 	attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE, damageApplyTime_seconds);
 	range = newRange;
 	position = newPosition;
-	//position = glm::vec3(skillOwner->GetPosition());
 
 	isStarted = false;
 
 	skillVisibleRadius = 
-		Utility::Primitives::Circle(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), glm::vec4(position, 1.0f), //glm::vec4(skillOwner->GetPosition(), 1.0f),
-									range, 90);
+		Utility::Primitives::Circle(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), position, range, 90);
 	skillVisibleRadius.Init();
 }
 
@@ -382,8 +372,6 @@ void PassiveAOESkill::Update()
 
 			attackTimer.Reset();
 		}
-
-		//position = glm::vec3(skillOwner->GetPosition());		
 	}
 }
 
@@ -429,11 +417,7 @@ void PassiveAOESkill::OnEvent(Event &_event)
 		break;
 	}
 }
-/*
-std::shared_ptr<CelestialBody> PassiveAOESkill::GetOwner()
-{
-	return skillOwner;
-}*/
+
 float PassiveAOESkill::GetRange()
 {
 	return range;
@@ -503,6 +487,163 @@ void PassiveAOESkill::RemoveGeneratedEvent(const std::string &eventName)
 	}
 }
 std::vector<Event> PassiveAOESkill::GetGeneratedEvents()
+{
+	std::vector<Event> eventsToReturn;
+
+	if(generatedEvents.size() > 0)
+	{
+		eventsToReturn = generatedEvents;
+		generatedEvents.resize(0);
+	}
+	else 
+	{
+		eventsToReturn.push_back(StockEvents::EmptyEvent());
+	}
+
+	return eventsToReturn;
+}
+
+
+SunNovaSkill::SunNovaSkill(glm::vec3 newPosition,
+						   int newDamage, 
+						   float newRange, float newScaleRate,
+						   const std::string &skillType,
+						   char fusionCombA, char fusionCombB, char fusionCombC)
+						   : Skill(skillType, fusionCombA, fusionCombB, fusionCombC)
+{
+	position = newPosition;
+	damage = newDamage;
+	range = newRange;
+	scaleRate = newScaleRate;
+	currentScale = 1.0f;
+	isStarted = false;
+	generatedEvents.resize(0);
+
+	skillExpansionRadius = Utility::Primitives::Circle(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f), position, currentScale, 90);
+	skillExpansionRadius.Init();
+}
+
+void SunNovaSkill::Update()
+{
+	if(isStarted)
+	{
+		if(currentScale <= range)
+		{
+			currentScale += scaleRate;
+		}
+		else
+		{
+			currentScale = 1.0f;
+			isStarted = false;
+		}
+	}
+}
+
+void SunNovaSkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData)
+{
+	if(isStarted)
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glutil::PushStack push(modelMatrix);
+		modelMatrix.Translate(position);
+		modelMatrix.Scale(currentScale, 0.0f, currentScale);
+
+		skillExpansionRadius.Draw(modelMatrix, progData);
+
+		glDisable(GL_BLEND);
+	}
+}
+
+void SunNovaSkill::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
+	case EVENT_TYPE_OTHER:
+		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+		{
+			EventArg skillDeployedEventArgs[3];
+			skillDeployedEventArgs[0].argType = "skillRange";
+			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+			skillDeployedEventArgs[0].argument.varFloat = range;
+			skillDeployedEventArgs[1].argType = "skillDamage";
+			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+			skillDeployedEventArgs[1].argument.varInteger = damage;
+			skillDeployedEventArgs[2].argType = "what_event";
+			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			generatedEvents.push_back(skillDeployedEvent);
+
+			isStarted = true;
+		}
+		break;
+	}
+}
+
+float SunNovaSkill::GetRange()
+{
+	return range;
+}
+glm::vec3 SunNovaSkill::GetPosition()
+{
+	return position;
+}
+
+bool SunNovaSkill::IsIntersectingObject(glm::vec3 objectPosition)
+{
+	if(isStarted)
+	{
+		float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
+
+		if(distanceBetweenObjectAndSkill < currentScale &&
+		   distanceBetweenObjectAndSkill >= currentScale - 0.1f)
+		{
+			return true;
+		}
+
+		return false;
+	}
+	else return false;
+}
+
+Event SunNovaSkill::GetGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(int i = 0; i < generatedEvents.size(); i++)
+		{
+			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
+			   strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				return generatedEvents[i];
+			}
+		}
+	}
+
+	return StockEvents::EmptyEvent();
+}
+void SunNovaSkill::RemoveGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(std::vector<Event>::iterator iter = generatedEvents.begin();
+			iter != generatedEvents.end();)
+		{
+			if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				generatedEvents.erase(iter);
+				break;
+			}
+			else 
+			{
+				++iter;
+			}
+		}
+	}
+}
+std::vector<Event> SunNovaSkill::GetGeneratedEvents()
 {
 	std::vector<Event> eventsToReturn;
 

@@ -1,5 +1,5 @@
-﻿Build started 12.1.2013 г. 17:38:39 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\ParticleEngine\ParticleEngine.vcxproj" on node 5 (build target(s)).
+﻿Build started 17.1.2013 г. 11:50:10 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\ParticleEngine\ParticleEngine.vcxproj" on node 4 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Release\ParticleEngine.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
@@ -20,4 +20,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.75
+Time Elapsed 00:00:00.81

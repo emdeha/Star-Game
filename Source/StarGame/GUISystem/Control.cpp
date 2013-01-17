@@ -62,8 +62,8 @@ TextControl::TextControl(LayoutPreset newCurrentPreset,
 
 	controlSquare =
 		Utility::Primitives::Square(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), 
-											 glm::vec4(newPosition, 0.0f, 1.0f),
-											 0.0f, (float)newTextSize, true);
+									glm::vec3(newPosition, 0.0f),
+									0.0f, (float)newTextSize, true);
 }
 
 TextControl::TextControl(LayoutPreset newCurrentPreset,
@@ -76,7 +76,7 @@ TextControl::TextControl(LayoutPreset newCurrentPreset,
 	isActive = false;
 	controlSquare = 
 		Utility::Primitives::Square(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
-									glm::vec4(newPosition, 0.0f, 1.0f),
+									glm::vec3(newPosition, 0.0f),
 									0.0f, 0.0f, true);
 }
 
@@ -112,7 +112,7 @@ void TextControl::ComputeNewAttributes()
 		boxMinCorner.x = textToDisplay.GetTextMinWidth() - presets[currentPreset].leftTextMargin;
 		boxMaxCorner.x = textToDisplay.GetTextMaxWidth() + presets[currentPreset].rightTextMargin;
 
-		controlSquare.SetPosition(glm::vec4(boxMinCorner, 0.0f, 1.0f));
+		controlSquare.SetPosition(glm::vec3(boxMinCorner, 0.0f));
 		//controlSquare.SetHeight
 		/*
 		bufferData[0] = boxMaxCorner.x; bufferData[1] = boxMaxCorner.y;
@@ -140,7 +140,7 @@ void TextControl::ComputeNewAttributes()
 		boxMinCorner.x = presets[currentPreset].position.x;
 		boxMaxCorner.x = textToDisplay.GetTextMaxWidth();
 
-		controlSquare.SetPosition(glm::vec4(boxMinCorner, 0.0f, 1.0f));
+		controlSquare.SetPosition(glm::vec3(boxMinCorner, 0.0f));
 		controlSquare.SetHeight(textToDisplay.GetTextMaxHeight());
 		controlSquare.SetWidth(textToDisplay.GetTextMaxWidth());
 	}

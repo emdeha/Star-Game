@@ -1,5 +1,5 @@
-﻿Build started 3.12.2012 г. 19:03:47 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Audio\Audio.vcxproj" on node 2 (rebuild target(s)).
+﻿Build started 17.1.2013 г. 11:32:53 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Audio\Audio.vcxproj" on node 5 (rebuild target(s)).
      1>_PrepareForClean:
          Deleting file "Release\Audio.lastbuildstate".
        InitializeBuildStatus:
@@ -20,4 +20,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.69
+Time Elapsed 00:00:00.85

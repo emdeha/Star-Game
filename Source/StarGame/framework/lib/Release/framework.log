@@ -1,5 +1,5 @@
-﻿Build started 12.1.2013 г. 17:38:38 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\framework\framework.vcxproj" on node 3 (build target(s)).
+﻿Build started 17.1.2013 г. 11:50:10 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\framework\framework.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "lib\Release\framework.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
@@ -191,10 +191,10 @@
      1>e:\ceci\thegame\source\stargame\glsdk\glm\glm\core\type_vec2.hpp(52): warning C4201: nonstandard extension used : nameless struct/union
      1>e:\ceci\thegame\source\stargame\glsdk\glm\glm\core\type_vec2.hpp(53): warning C4201: nonstandard extension used : nameless struct/union
      1>Utility.cpp(160): warning C4244: '=' : conversion from 'int' to 'short', possible loss of data
-     1>Utility.cpp(442): warning C4100: 'windowHeight' : unreferenced formal parameter
-     1>Utility.cpp(442): warning C4100: 'windowWidth' : unreferenced formal parameter
-     1>Utility.cpp(584): warning C4100: 'windowHeight' : unreferenced formal parameter
-     1>Utility.cpp(584): warning C4100: 'windowWidth' : unreferenced formal parameter
+     1>Utility.cpp(432): warning C4100: 'windowHeight' : unreferenced formal parameter
+     1>Utility.cpp(432): warning C4100: 'windowWidth' : unreferenced formal parameter
+     1>Utility.cpp(574): warning C4100: 'windowHeight' : unreferenced formal parameter
+     1>Utility.cpp(574): warning C4100: 'windowWidth' : unreferenced formal parameter
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"lib\framework.lib" /NOLOGO /LTCG lib\Release\EventSystem.obj
          lib\Release\framework.obj
@@ -211,4 +211,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.22
+Time Elapsed 00:00:01.14

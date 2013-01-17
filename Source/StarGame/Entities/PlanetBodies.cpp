@@ -104,7 +104,7 @@ CelestialBody::CelestialBody(Framework::Timer newRevolutionDuration, glm::vec4 n
 void CelestialBody::InitSatelliteOrbit()
 {	
 	hoverOrbit = SatelliteOrbit(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
-								glm::vec4(parent->GetPosition(), 0.0f),
+								parent->GetPosition(),
 								skillType.satelliteOffsetFromSun + diameter,
 								skillType.satelliteOffsetFromSun - diameter,
 								2.2f); // Change: gamma
@@ -333,15 +333,6 @@ void CelestialBody::OnEvent(Event &_event)
 			break;
 		}
 	}
-
-	/*switch(_event.GetType())
-	{
-	case EVENT_TYPE_OTHER:
-		if(strcmp(_event.GetArgument("object").varString, "deploySkill") == 0)
-		{
-			
-		}
-	}*/
 }
 
 bool CelestialBody::AddSatellite(const std::string &fileName,
@@ -502,16 +493,9 @@ void CelestialBody::RemoveSatellites()
 }
 
 bool CelestialBody::IsClicked(Utility::Ray mouseRay)
-	/*glm::mat4 projMat, glm::mat4 modelMat,	
-							  Mouse userMouse, glm::vec4 cameraPos,
-							  int windowWidth, int windowHeight)*/
 {
 	if(isSun)
 	{
-		//Utility::Ray mouseRay = 
-		//	userMouse.GetPickRay(projMat, modelMat, cameraPos,
-		//						 windowWidth, windowHeight);
-
 		if(Utility::Intersections::RayIntersectsSphere(mouseRay, position, diameter / 2.0f))
 		{
 			// event!
@@ -523,10 +507,6 @@ bool CelestialBody::IsClicked(Utility::Ray mouseRay)
 	}
 	else
 	{
-		//Utility::Ray mouseRay = 
-		//	userMouse.GetPickRay(projMat, modelMat, cameraPos, 
-		//						 windowWidth, windowHeight);
-
 		float outerRadius = skillType.satelliteOffsetFromSun + diameter;
 		float innerRadius = skillType.satelliteOffsetFromSun - diameter;
 
@@ -556,15 +536,12 @@ bool CelestialBody::IsClicked(Utility::Ray mouseRay)
 	}
 }
 bool CelestialBody::IsSatelliteClicked(Utility::Ray mouseRay)
-	/*glm::mat4 projMat, glm::mat4 modelMat,	
-									   Mouse userMouse, glm::vec4 cameraPos,
-									   int windowWidth, int windowHeight)*/
 {
 	for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = satellites.begin();
 		iter != satellites.end();
 		++iter)
 	{
-		return (*iter)->IsClicked(mouseRay);//projMat, modelMat, userMouse, cameraPos, windowWidth, windowHeight);
+		return (*iter)->IsClicked(mouseRay);
 	}
 }
 
@@ -703,7 +680,7 @@ std::shared_ptr<CelestialBody> CelestialBody::GetOuterSatellite()
 		return outerSatellite;
 	}
 
-	return NULL;//nullptr;
+	return nullptr;
 }
 
 std::vector<std::shared_ptr<Skill>> CelestialBody::GetAllSkills()

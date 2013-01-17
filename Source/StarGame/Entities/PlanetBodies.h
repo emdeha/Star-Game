@@ -136,14 +136,7 @@ public:
 	void RemoveSatellites();	
 
 	bool IsClicked(Utility::Ray mouseRay);
-		/*glm::mat4 projMat, glm::mat4 modelMat,
-				   Mouse userMouse, glm::vec4 cameraPos,
-				   int windowWidth, int windowHeight);*/
-
 	bool IsSatelliteClicked(Utility::Ray mouseRay);
-		/*glm::mat4 projMat, glm::mat4 modelMat,	
-						    Mouse userMouse, glm::vec4 cameraPos,
-							int windowWidth, int windowHeight);*/
 
 	bool IsSun();
 

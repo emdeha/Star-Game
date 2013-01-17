@@ -1,7 +1,7 @@
-﻿Build started 12.1.2013 г. 17:38:42 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\AssetLoader\AssetLoader.vcxproj" on node 4 (build target(s)).
+﻿Build started 17.1.2013 г. 12:01:23 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\AssetLoader\AssetLoader.vcxproj" on node 3 (build target(s)).
      1>InitializeBuildStatus:
-         Creating "Release\AssetLoader.unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "Release\AssetLoader.unsuccessfulbuild".
        ClCompile:
          All outputs are up-to-date.
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\freetype\include /I"C:\Program Files\Assimp\include\assimp" /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Release\AssetLoader.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt GUILoader.cpp
@@ -39,4 +39,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.37
+Time Elapsed 00:00:00.68

@@ -1,5 +1,5 @@
-﻿Build started 3.12.2012 г. 19:03:49 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\ProgramData\ProgramData.vcxproj" on node 3 (rebuild target(s)).
+﻿Build started 17.1.2013 г. 11:32:56 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\ProgramData\ProgramData.vcxproj" on node 2 (rebuild target(s)).
      1>_PrepareForClean:
          Deleting file "Release\ProgramData.lastbuildstate".
        InitializeBuildStatus:
@@ -17,4 +17,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.83
+Time Elapsed 00:00:00.27

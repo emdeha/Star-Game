@@ -27,7 +27,6 @@ Scene::Scene(float newSceneGamma)
 	spaceships.resize(0);
 	fastSuicideBombers.resize(0);
 	explosionEmitters.resize(0);
-	//skills.resize(0);
 
 	sceneLayouts.clear();
 
@@ -90,14 +89,6 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix,
 										billboardNoTextureData);
 		}
 	}
-	/*
-	int sizeSkills = skills.size();
-	for(int i = 0; i < sizeSkills; i++)
-	{
-		skills[i]->Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(),
-						  billboardNoTextureData);
-		skills[i]->Render(modelMatrix, interpData);
-	}*/
 }
 void Scene::RenderCurrentLayout(const FontProgData &fontData,
 								const SimpleProgData &simpleData,
@@ -240,13 +231,27 @@ void Scene::UpdateScene()
 					}
 				}
 			}
+
+			if(skills[i]->GetSkillType() == "sunNovaSkill")
+			{
+				for(int swarmIndex = 0; swarmIndex < swarms.size(); swarmIndex++)
+				{
+					if(skills[i]->IsIntersectingObject(swarms[swarmIndex]->GetPosition()))
+					{
+						Event skillEvent = skills[i]->GetGeneratedEvent("skilldeployed");
+						if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
+						{
+							swarms[swarmIndex]->OnEvent(skillEvent);
+						}
+					}
+				}
+			}
 		}
 	}
-	/*else if(suns.empty())
+	else if(suns.empty())
 	{
-		sceneFusionInput.Clear();	
-		skills.resize(0);
-	}*/
+		sceneFusionInput.Clear();
+	}
 }
 void Scene::UpdateFusion(char key, Event &returnedFusionEvent)
 {
@@ -288,13 +293,6 @@ void Scene::OnEvent(Event &_event)
 		if(strcmp(_event.GetArgument("object").varString, "sun") == 0)
 		{
 			sceneMusic.Play(MUSIC_ON_SUN_CLICK);
-
-			/*std::shared_ptr<PassiveAOESkill> satSkill =
-				std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(suns[0]->GetSatellites().back(), 
-																	 20, 1, 1.0f, 
-																	 "passiveAOESkill",
-																	 'q', 'q', 'e'));
-			AddSkill(satSkill);*/
 		}
 		if(strcmp(_event.GetArgument("object").varString, "exitButton") == 0)
 		{
@@ -325,19 +323,21 @@ void Scene::OnEvent(Event &_event)
 		}
 		if(strcmp(_event.GetArgument("object").varString, "deploySkill") == 0)
 		{
-			std::vector<std::shared_ptr<Skill>> skills = 
-				suns[0]->GetAllSkills();
-			if(!swarms.empty() && !skills.empty())
+			if(!suns.empty())
 			{
-				for(int i = 0; i < swarms.size(); i++)
+				std::vector<std::shared_ptr<Skill>> skills = suns[0]->GetAllSkills();
+				if(!swarms.empty() && !skills.empty())
 				{
-					for(int skillIndex = 0; skillIndex < skills.size(); skillIndex++)
+					for(int i = 0; i < swarms.size(); i++)
 					{
-						if(skills[skillIndex]->IsIntersectingObject(swarms[i]->GetPosition()))
+						for(int skillIndex = 0; skillIndex < skills.size(); skillIndex++)
 						{
-							Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
+							if(skills[skillIndex]->IsIntersectingObject(swarms[i]->GetPosition()))
+							{
+								Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
 
-							swarms[i]->OnEvent(skillEvent);
+								swarms[i]->OnEvent(skillEvent);
+							}
 						}
 					}
 				}
@@ -358,19 +358,11 @@ void Scene::OnEvent(Event &_event)
 			{
 				if(HasSuns())
 				{
-					if(suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
-										     glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-										     10.0f, 0.5f,
-										     SatelliteType(SATELLITE_FIRE), 
-										     5))
-					{
-						/*std::shared_ptr<PassiveAOESkill> satSkill =
-						std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(suns[0]->GetSatellites().back(), 
-																			 20, 1, 1.0f, 
-																			 "passiveAOESkill",
-																			 'q', 'q', 'e'));
-						AddSkill(satSkill);*/
-					}
+					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
+										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
+										  10.0f, 0.5f,
+										  SatelliteType(SATELLITE_FIRE), 
+										  5);
 				}
 			}
 			if(strcmp(_event.GetArgument("buttons").varString, 
@@ -378,19 +370,11 @@ void Scene::OnEvent(Event &_event)
 			{
 				if(HasSuns())
 				{
-					if(suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
-											 glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-											 10.0f, 0.5f,
-											 SatelliteType(SATELLITE_WATER), 
-											 5))
-					{
-						/*std::shared_ptr<PassiveAOESkill> satSkill =
-						std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(suns[0]->GetSatellites().back(), 
-																			 20, 1, 1.0f, 
-																			 "passiveAOESkill",
-																			 'q', 'q', 'e'));
-						AddSkill(satSkill);*/
-					}
+					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
+										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
+										  10.0f, 0.5f,
+										  SatelliteType(SATELLITE_WATER), 
+										  5);
 				}
 			}
 			if(strcmp(_event.GetArgument("buttons").varString, 
@@ -398,19 +382,11 @@ void Scene::OnEvent(Event &_event)
 			{
 				if(HasSuns())
 				{
-					if(suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
-											 glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-											 10.0f, 0.5f,
-											 SatelliteType(SATELLITE_EARTH), 
-											 5))
-					{
-						/*std::shared_ptr<PassiveAOESkill> satSkill =
-						std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(suns[0]->GetSatellites().back(), 
-																			 20, 1, 1.0f, 
-																			 "passiveAOESkill",
-																			 'q', 'q', 'e'));
-						AddSkill(satSkill);*/
-					}
+					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
+										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
+										  10.0f, 0.5f,
+										  SatelliteType(SATELLITE_EARTH), 
+										  5);
 				}
 			}
 			if(strcmp(_event.GetArgument("buttons").varString,
@@ -418,19 +394,11 @@ void Scene::OnEvent(Event &_event)
 			{
 				if(HasSuns())
 				{
-					if(suns[0]->AddSatellite("mesh-files/UnitSphere.xml",
-										     glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-										     10.0f, 0.5f, 
-										     SatelliteType(SATELLITE_AIR),
-										     5))
-					{						
-						/*std::shared_ptr<PassiveAOESkill> satSkill =
-						std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(suns[0]->GetSatellites().back(), 
-																			 20, 1, 1.0f, 
-																			 "passiveAOESkill",
-																			 'q', 'q', 'e'));
-						AddSkill(satSkill);*/
-					}
+					suns[0]->AddSatellite("mesh-files/UnitSphere.xml",
+										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
+										  10.0f, 0.5f, 
+										  SatelliteType(SATELLITE_AIR),
+										  5);
 				}
 			}
 
@@ -449,25 +417,6 @@ void Scene::OnEvent(Event &_event)
 				fastSuicideBombers[explosionIndex]->GetPosition());
 			explosionEmitters[explosionIndex].Activate();
 		}
-		/*if(strcmp(_event.GetArgument("what_event").varString, "satelliteRemoved") == 0)
-		{
-			for(std::vector<std::shared_ptr<Skill>>::iterator iter = skills.begin();
-				iter != skills.end(); )
-			{
-				if(!(*iter)->GetOwner()->IsSun())
-				{				
-					if((*iter)->GetOwner()->GetSatelliteType() == _event.GetArgument("satType").varInteger)
-					{
-						skills.erase(iter);
-						break;
-					}
-					else
-					{
-						++iter;
-					}
-				}
-			}
-		}*/
 		break;
 	default:
 		break;
@@ -627,13 +576,6 @@ void Scene::SetLayoutPreset(LayoutPreset layoutPreset)
 		}
 	}
 }
-
-/*
-void Scene::AddSkill(const std::shared_ptr<Skill> newSkill)
-{
-	skills.push_back(newSkill);
-}*/
-
 
 TopDownCamera &Scene::GetTopDownCamera()
 {

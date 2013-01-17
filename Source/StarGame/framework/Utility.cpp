@@ -136,7 +136,7 @@ Utility::Primitives::Torus2D::Torus2D()
 	resolution = 3;
 	
 	color = glm::vec4();
-	position = glm::vec4();
+	position = glm::vec3();
 
 	innerRadius = 0.0f;
 	outerRadius = 0.0f;
@@ -146,7 +146,7 @@ Utility::Primitives::Torus2D::Torus2D()
 	vertexBO = 0;
 }
 
-Utility::Primitives::Torus2D::Torus2D(glm::vec4 newColor, glm::vec4 newPosition,
+Utility::Primitives::Torus2D::Torus2D(glm::vec4 newColor, glm::vec3 newPosition,
 									  float newInnerRadius, float newOuterRadius, 
 									  int newResolution)
 {
@@ -239,7 +239,7 @@ void Utility::Primitives::Torus2D::Draw(glutil::MatrixStack &modelMatrix, const 
 
 
 
-Utility::Primitives::Circle::Circle(glm::vec4 newColor, glm::vec4 newPosition,
+Utility::Primitives::Circle::Circle(glm::vec4 newColor, glm::vec3 newPosition,
 									float newRadius, short newResolution)
 {
 	assert(newResolution < 360 && newResolution > 3.0);
@@ -318,9 +318,9 @@ void Utility::Primitives::Circle::Draw(glutil::MatrixStack &modelMatrix, const S
 
 
 Utility::Primitives::Square::Square(glm::vec4 newColor, 
-											 glm::vec4 newPosition,
-											 float newWidth, float newHeight,
-											 bool newIsCoordinateSytemBottomLeft)
+									glm::vec3 newPosition,
+									float newWidth, float newHeight,
+									bool newIsCoordinateSytemBottomLeft)
 {
 	color = newColor;
 	position = newPosition;
@@ -409,7 +409,7 @@ void Utility::Primitives::Square::Draw(glutil::MatrixStack &modelMatrix, const S
 
 
 
-Utility::Primitives::Sprite::Sprite(glm::vec4 newPosition, glm::vec4 newColor,
+Utility::Primitives::Sprite::Sprite(glm::vec3 newPosition, glm::vec4 newColor,
 									float newWidth, float newHeight,
 									bool newIsCoordinateSystemBottomLeft)
 {

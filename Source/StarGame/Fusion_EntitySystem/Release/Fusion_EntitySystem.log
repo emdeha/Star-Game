@@ -1,6 +1,8 @@
-﻿Build started 12.1.2013 г. 17:38:39 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Fusion_EntitySystem\Fusion_EntitySystem.vcxproj" on node 4 (build target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 17.1.2013 г. 11:32:54 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Fusion_EntitySystem\Fusion_EntitySystem.vcxproj" on node 5 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Release\Fusion_EntitySystem.lastbuildstate".
+       InitializeBuildStatus:
          Creating "Release\Fusion_EntitySystem.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Release\Fusion_EntitySystem.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
@@ -20,8 +22,8 @@
        FinalizeBuildStatus:
          Deleting file "Release\Fusion_EntitySystem.unsuccessfulbuild".
          Touching "Release\Fusion_EntitySystem.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Fusion_EntitySystem\Fusion_EntitySystem.vcxproj" (build target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Fusion_EntitySystem\Fusion_EntitySystem.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.94
+Time Elapsed 00:00:01.11

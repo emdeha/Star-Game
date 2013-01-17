@@ -1,6 +1,8 @@
-﻿Build started 12.1.2013 г. 17:38:38 ч..
-     1>Project "E:\CECI\TheGame\Source\StarGame\Fusion_Scene\Fusion_Scene.vcxproj" on node 5 (build target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 17.1.2013 г. 11:32:54 ч..
+     1>Project "E:\CECI\TheGame\Source\StarGame\Fusion_Scene\Fusion_Scene.vcxproj" on node 4 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Release\Fusion_Scene.lastbuildstate".
+       InitializeBuildStatus:
          Creating "Release\Fusion_Scene.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Release\Fusion_Scene.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
@@ -14,8 +16,8 @@
        FinalizeBuildStatus:
          Deleting file "Release\Fusion_Scene.unsuccessfulbuild".
          Touching "Release\Fusion_Scene.lastbuildstate".
-     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Fusion_Scene\Fusion_Scene.vcxproj" (build target(s)).
+     1>Done Building Project "E:\CECI\TheGame\Source\StarGame\Fusion_Scene\Fusion_Scene.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.76
+Time Elapsed 00:00:02.68

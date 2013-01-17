@@ -55,7 +55,7 @@ private:
 	glm::vec4 mainColor; 
 	glm::vec4 outlineColor;
 
-	glm::vec4 position;
+	glm::vec3 position;
 
 	float outerRadius;
 	float innerRadius;
@@ -68,7 +68,7 @@ private:
 public:
 	SatelliteOrbit();
 	SatelliteOrbit(glm::vec4 newMainColor, glm::vec4 newOutlineColor,
-				   glm::vec4 newPosition, 
+				   glm::vec3 newPosition, 
 				   float newOuterRadius, float newInnerRadius,
 				   float gamma);
 

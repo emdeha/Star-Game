@@ -80,19 +80,6 @@ public:
 		return eventsToReturn;
 	}
 
-	/*virtual std::shared_ptr<CelestialBody> GetOwner()
-	{
-		return std::shared_ptr<CelestialBody>();
-	}*/
-	// TODO:
-	// The 'dummy' parameter is just to make valid function overriding.
-	// There should be a CelestialBody class and not two separate Sun and
-	// Satellite classes.
-	//virtual std::shared_ptr<CelestialBody> GetOwner(char dummy)
-	//{
-	//	return std::shared_ptr<CelestialBody>();
-	//}
-
 	virtual void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3) {}
 	virtual void SetParameter(ParameterType paramType, int newParam_int) {}
 	virtual void SetParameter(ParameterType paramType, float newParam_float) {}
@@ -149,8 +136,6 @@ public:
 class AOESkill : public Skill
 {
 private:
-	//std::shared_ptr<CelestialBody> skillOwner;
-
 	int damage;
 	float range;
 	glm::vec3 position;
@@ -161,8 +146,7 @@ private:
 
 public:
 	AOESkill() : Skill() {}
-	AOESkill(/*std::shared_ptr<CelestialBody> newSkillOwner,*/
-			 glm::vec3 newPosition,
+	AOESkill(glm::vec3 newPosition,
 			 int newDamage, float newRange,
 			 const std::string &newSkillType,
 			 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
@@ -173,13 +157,10 @@ public:
 
 	void OnEvent(Event &_event);
 
-	//std::shared_ptr<CelestialBody> GetOwner();
 	float GetRange();
 	glm::vec3 GetPosition();
 
 	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
-	//void SetParameter(ParameterType paramType, int newParam_int);
-	//void SetParameter(ParameterType paramType, float newParam_float);
 
 	bool IsIntersectingObject(glm::vec3 objectPosition);
 
@@ -197,8 +178,6 @@ public:
 class PassiveAOESkill : public Skill
 {
 private:
-	//std::shared_ptr<CelestialBody> skillOwner;
-
 	int damage;
 	int damageApplyTime_seconds;
 	Framework::Timer attackTimer;
@@ -211,8 +190,7 @@ private:
 
 public:
 	PassiveAOESkill() : Skill() {}
-	PassiveAOESkill(//std::shared_ptr<CelestialBody> newSkillOwner,
-					glm::vec3 newPosition,
+	PassiveAOESkill(glm::vec3 newPosition,
 					int newDamage, int newDamageApplyTime_seconds,
 					float newRange,
 					const std::string &newSkillType,
@@ -224,7 +202,6 @@ public:
 
 	void OnEvent(Event &_event);
 
-	//std::shared_ptr<CelestialBody> GetOwner();
 	float GetRange();
 	glm::vec3 GetPosition();
 
@@ -240,5 +217,44 @@ public:
 	std::vector<Event> GetGeneratedEvents();
 };
 
+
+class SunNovaSkill : public Skill
+{
+private:
+	int damage;
+	float range; // The maximum skill expansion
+	float scaleRate;
+	float currentScale;
+	glm::vec3 position;
+
+	Utility::Primitives::Circle skillExpansionRadius; // Maybe a Torus2D outline would be better.
+	std::vector<Event> generatedEvents;
+	bool isStarted;
+
+public:
+	SunNovaSkill() : Skill() {}
+	SunNovaSkill(glm::vec3 newPosition,
+				 int newDamage, 
+				 float newRange, float newScaleRate,
+				 const std::string &skillType,
+				 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData);
+
+	void OnEvent(Event &_event);
+
+	float GetRange();
+	glm::vec3 GetPosition();
+
+	bool IsIntersectingObject(glm::vec3 objectPosition);
+
+	// Only for EVENT_TYPE_OTHER
+	Event GetGeneratedEvent(const std::string &eventName);
+	void RemoveGeneratedEvent(const std::string &eventName);
+	// Gets the generated events and empties the event list.
+	// (!)It is an one little dangerous method. You can lose a lot of events that way.
+	std::vector<Event> GetGeneratedEvents();
+};
 
 #endif

@@ -126,7 +126,7 @@ namespace Utility
 		{
 		private:			
 			glm::vec4 color; ///< The color of the object.
-			glm::vec4 position; ///< Its position.
+			glm::vec3 position; ///< Its position.
 
 			unsigned int vao; ///< The vertex array object.
 			unsigned int indexBO; ///< The index buffer object for the vertices' indices.
@@ -138,7 +138,7 @@ namespace Utility
 
 		public:
 			Torus2D();
-			Torus2D(glm::vec4 newColor, glm::vec4 newPosition,
+			Torus2D(glm::vec4 newColor, glm::vec3 newPosition,
 					float newInnerRadius, float newOuterRadius, 
 					int newResolution);
 
@@ -168,7 +168,7 @@ namespace Utility
 		{
 		private:
 			glm::vec4 color; ///< The color of the object.
-			glm::vec4 position; ///< Its position.
+			glm::vec3 position; ///< Its position.
 
 			unsigned int vao; ///< The vertex array object.
 			unsigned int indexBO; ///< The index buffer object for the vertices' indices.
@@ -179,7 +179,7 @@ namespace Utility
 
 		public:
 			Circle() {}
-			Circle(glm::vec4 newColor, glm::vec4 newPosition, 
+			Circle(glm::vec4 newColor, glm::vec3 newPosition, 
 				   float newRadius, short newResolution);
 
 			/// \fn Init
@@ -205,7 +205,7 @@ namespace Utility
 		{
 		private:
 			glm::vec4 color;
-			glm::vec4 position;
+			glm::vec3 position;
 
 			float width;
 			float height;
@@ -220,7 +220,7 @@ namespace Utility
 		public:
 			Square() {}
 			Square(glm::vec4 newColor, 
-				   glm::vec4 newPosition, 
+				   glm::vec3 newPosition, 
 				   float newWidth, float newHeight,
 				   bool newIsCoordinateSystemBottomLeft);
 
@@ -229,7 +229,7 @@ namespace Utility
 			void Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &data);
 
 
-			glm::vec4 GetPosition()
+			glm::vec3 GetPosition()
 			{
 				return position;
 			}
@@ -242,7 +242,7 @@ namespace Utility
 				return height;
 			}
 
-			void SetPosition(glm::vec4 newPosition)
+			void SetPosition(glm::vec3 newPosition)
 			{
 				position = newPosition;
 			}
@@ -261,7 +261,7 @@ namespace Utility
 		{
 		private:
 			glm::vec4 color;
-			glm::vec4 position;
+			glm::vec3 position;
 
 			float width;
 			float height;
@@ -277,7 +277,7 @@ namespace Utility
 
 		public:
 			Sprite() {};
-			Sprite(glm::vec4 newPosition, glm::vec4 newColor,
+			Sprite(glm::vec3 newPosition, glm::vec4 newColor,
 				   float newWidth, float newHeight,
 				   bool newIsCoordinateSystemBottomLeft);
 
@@ -294,7 +294,7 @@ namespace Utility
 		{	
 		private:
 			glm::vec4 color;
-			std::vector<glm::vec4> positions;
+			std::vector<glm::vec3> positions;
 
 			float width; 
 			float height;

@@ -24,9 +24,10 @@ Scene::Scene(float newSceneGamma)
 {
 	lights.resize(0);
 	suns.resize(0);
-	spaceships.resize(0);
-	fastSuicideBombers.resize(0);
-	explosionEmitters.resize(0);
+	//spaceships.resize(0);
+	//fastSuicideBombers.resize(0);
+	//explosionEmitters.resize(0);
+	enemies.resize(0);
 
 	sceneLayouts.clear();
 
@@ -59,7 +60,13 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix,
 						interpolation);
 	}
 
-	int sizeSpaceships = spaceships.size();
+	for(int i = 0; i < enemies.size(); i++)
+	{
+		enemies[i]->Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), billboardNoTextureData);
+		enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, interpolation);
+	}
+
+	/*int sizeSpaceships = spaceships.size();
 	for(int i = 0; i < sizeSpaceships; i++)
 	{
 		spaceships[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData,
@@ -78,8 +85,8 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix,
 	{
 		swarms[i]->Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), 
 						  billboardNoTextureData);
-	}
-
+	}*/
+	/*
 	int sizeExplosionEmitters = explosionEmitters.size();
 	for(int i = 0; i < sizeExplosionEmitters; i++)
 	{
@@ -88,7 +95,7 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix,
 			explosionEmitters[i].Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), 
 										billboardNoTextureData);
 		}
-	}
+	}*/
 }
 void Scene::RenderCurrentLayout(const FontProgData &fontData,
 								const SimpleProgData &simpleData,
@@ -124,7 +131,7 @@ void Scene::UpdateScene()
 		suns[i]->Update();
 	}
 
-	int sizeSpaceships = spaceships.size();
+	/*int sizeSpaceships = spaceships.size();
 	for(int i = 0; i < sizeSpaceships; i++)
 	{
 		if(!suns.empty())
@@ -176,8 +183,8 @@ void Scene::UpdateScene()
 		{
 			++iter;
 		}
-	}
-
+	}*/
+	/*
 	int sizeExplosionEmitters = explosionEmitters.size();
 	for(int i = 0; i < sizeExplosionEmitters; i++)
 	{
@@ -191,15 +198,38 @@ void Scene::UpdateScene()
 				explosionEmitters.begin() + i;
 			explosionEmitters.erase(currentEmitter);
 		}
+	}*/
+	for(std::vector<std::shared_ptr<Enemy>>::iterator iter = enemies.begin();
+		iter != enemies.end();
+		)
+	{
+		if(!suns.empty())
+		{
+			(*iter)->Update(false, *suns.front().get());
+		}
+		else	
+		{
+			(*iter)->Update(true);
+		}
+
+		if((*iter)->IsDestroyed())
+		{
+			enemies.erase(iter);
+			break;
+		}
+		else
+		{
+			++iter;
+		}
 	}
 	
 	if(!suns.empty())
 	{
 		std::vector<std::shared_ptr<Skill>> skills = suns[0]->GetAllSkills();
 		int sizeSkills = skills.size();
-		for(int i = 0; i < sizeSkills; i++)
+		for(int skillIndex = 0; skillIndex < sizeSkills; skillIndex++)
 		{
-			if(skills[i]->GetSkillType() == "aoeSkill")
+			if(skills[skillIndex]->GetSkillType() == "aoeSkill")
 			{
 				glm::vec4 mousePos_atZ = 
 					sceneMouse.GetPositionAtDimension(currentDisplayData.windowWidth, 
@@ -209,37 +239,37 @@ void Scene::UpdateScene()
 													  glm::vec4(sceneTopDownCamera.ResolveCamPosition(), 1.0f), 
 													  glm::comp::Y);
 
-				skills[i]->SetParameter(PARAM_POSITION, 
-										mousePos_atZ.swizzle(glm::comp::X, glm::comp::Y, glm::comp::Z));
+				skills[skillIndex]->SetParameter(PARAM_POSITION, 
+												 mousePos_atZ.swizzle(glm::comp::X, glm::comp::Y, glm::comp::Z));
 			}
 			// TODO:
 			// Maybe a design flaw - http://stackoverflow.com/a/307793/628873
-			if(skills[i]->GetSkillType() == "passiveAOESkill")
+			if(skills[skillIndex]->GetSkillType() == "passiveAOESkill")
 			{
-				for(int j = 0; j < swarms.size(); j++)
+				for(int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++)
 				{
-					if(skills[i]->IsIntersectingObject(swarms[j]->GetPosition()))
+					if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition()))
 					{
-						Event skillEvent = skills[i]->GetGeneratedEvent("timeended");
+						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("timeended");
 						if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
 						{
-							swarms[j]->OnEvent(skillEvent);
-							skills[i]->RemoveGeneratedEvent("timeended");
+							enemies[enemyIndex]->OnEvent(skillEvent);
+							skills[skillIndex]->RemoveGeneratedEvent("timeended");
 						}
 					}
 				}
 			}
 
-			if(skills[i]->GetSkillType() == "sunNovaSkill")
+			if(skills[skillIndex]->GetSkillType() == "sunNovaSkill")
 			{
-				for(int swarmIndex = 0; swarmIndex < swarms.size(); swarmIndex++)
+				for(int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++)
 				{
-					if(skills[i]->IsIntersectingObject(swarms[swarmIndex]->GetPosition()))
+					if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition()))
 					{
-						Event skillEvent = skills[i]->GetGeneratedEvent("skilldeployed");
+						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
 						if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
 						{
-							swarms[swarmIndex]->OnEvent(skillEvent);
+							enemies[enemyIndex]->OnEvent(skillEvent);
 						}
 					}
 				}
@@ -277,11 +307,11 @@ void Scene::AddFusionSequence(std::string sequenceName,
 {
 	sceneFusionInput.AddSequence(sequenceName, buttonA, buttonB, buttonC);
 }
-
+/*
 void Scene::AddExplosionEmitter(const ExplosionEmitter &newExplosionEmitter)
 {
 	explosionEmitters.push_back(newExplosionEmitter);
-}
+}*/
 
 void Scene::OnEvent(Event &_event)
 {
@@ -324,17 +354,17 @@ void Scene::OnEvent(Event &_event)
 			if(!suns.empty())
 			{
 				std::vector<std::shared_ptr<Skill>> skills = suns[0]->GetAllSkills();
-				if(!swarms.empty() && !skills.empty())
+				if(!enemies.empty() && !skills.empty())
 				{
-					for(int i = 0; i < swarms.size(); i++)
+					for(int i = 0; i < enemies.size(); i++)
 					{
 						for(int skillIndex = 0; skillIndex < skills.size(); skillIndex++)
 						{
-							if(skills[skillIndex]->IsIntersectingObject(swarms[i]->GetPosition()))
+							if(skills[skillIndex]->IsIntersectingObject(enemies[i]->GetPosition()))
 							{
 								Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
 
-								swarms[i]->OnEvent(skillEvent);
+								enemies[i]->OnEvent(skillEvent);
 							}
 						}
 					}
@@ -407,14 +437,14 @@ void Scene::OnEvent(Event &_event)
 				skills[i]->OnEvent(_event);
 			}
 		}
-		if(strcmp(_event.GetArgument("what_event").varString, "explStarted") == 0)
+		/*if(strcmp(_event.GetArgument("what_event").varString, "explStarted") == 0)
 		{
 			int explosionIndex = _event.GetArgument("expl_index").varInteger;
 			// TODO: add bounds check
 			explosionEmitters[explosionIndex].SetPosition(
 				fastSuicideBombers[explosionIndex]->GetPosition());
 			explosionEmitters[explosionIndex].Activate();
-		}
+		}*/
 		break;
 	default:
 		break;
@@ -457,6 +487,11 @@ void Scene::AddSun(const std::shared_ptr<CelestialBody> newSun)
 {
 	suns.push_back(newSun);
 }
+void Scene::AddEnemy(const std::shared_ptr<Enemy> newEnemy)
+{
+	enemies.push_back(newEnemy);
+}
+/*
 void Scene::AddSpaceship(const std::shared_ptr<Spaceship> newSpaceship)
 {
 	spaceships.push_back(newSpaceship);
@@ -468,7 +503,7 @@ void Scene::AddFastSuicideBomber(const std::shared_ptr<FastSuicideBomber> newFas
 void Scene::AddSwarm(const std::shared_ptr<Swarm> newSwarm)
 {
 	swarms.push_back(newSwarm);
-}
+}*/
 
 
 void Scene::AddLayouts(const std::map<LayoutType, std::shared_ptr<Layout>> &newLayouts)
@@ -588,7 +623,7 @@ Mouse &Scene::GetMouse()
 std::shared_ptr<CelestialBody> Scene::GetSun()
 {
 	return suns.front(); // replace 0 with an index
-}
+}/*
 std::shared_ptr<Spaceship> Scene::GetSpaceship()
 {
 	return spaceships.front();
@@ -610,7 +645,7 @@ void Scene::DeleteSwarm()
 bool Scene::HasSwarms()
 {
 	return !swarms.empty();
-}
+}*/
 SunLight Scene::GetSunLight()
 {
 	return lights.front();
@@ -628,7 +663,7 @@ bool Scene::HasSuns()
 void Scene::GenerateRandomSwarms(int count,
 								 const BillboardProgDataNoTexture &progData)
 {
-	if(swarms.size() <= 0)
+	if(enemies.size() <= 0)
 	{
 		srand(time(0));
 
@@ -641,12 +676,45 @@ void Scene::GenerateRandomSwarms(int count,
 			float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
 
 			glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
-			glm::vec3 velocity = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position)) * 0.05f;
+			glm::vec3 velocity = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
+			float speed = 0.05f;
 		
 			std::shared_ptr<Swarm> randSwarm = 
-				std::shared_ptr<Swarm>(new Swarm(position, velocity, 100, 50, 5, 1, 2.0f, progData));
+				std::shared_ptr<Swarm>(new Swarm(100, 1, 5, progData, 
+												 position, velocity, speed, 3.0f, 50));
 
-			swarms.push_back(randSwarm);
+			enemies.push_back(randSwarm);
+		}
+	}
+}
+
+void Scene::GenerateRandomSpaceships(int count)
+{
+	if(enemies.size() <= 0)
+	{
+		srand(time(0));
+
+		for(int i = 0; i < count; i++)
+		{
+			float range = ((float)rand() / (float)RAND_MAX) * 4.0f + 2.0f;
+			float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
+
+			float posX = cosf(posOnCircle * (2.0f * PI)) * range;
+			float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
+
+			glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
+			glm::vec3 velocity = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
+			float speed = 0.05f;
+
+			std::shared_ptr<Spaceship> randSpaceship =
+				std::shared_ptr<Spaceship>(new Spaceship(0.3f, 20, 1, 
+														 position, velocity, speed, 
+														 2.0f, 50));
+			randSpaceship->LoadMesh("mesh-files/Ship.xml");
+			randSpaceship->LoadProjectileMesh("mesh-files/UnitSphere.xml");
+			
+
+			enemies.push_back(randSpaceship);
 		}
 	}
 }

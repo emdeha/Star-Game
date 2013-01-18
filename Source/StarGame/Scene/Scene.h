@@ -52,10 +52,11 @@ private:
 
 	std::vector<std::shared_ptr<CelestialBody>> suns;
 
-	std::vector<std::shared_ptr<Spaceship>> spaceships; ///< Holds the world's enemies.
-	std::vector<std::shared_ptr<FastSuicideBomber>> fastSuicideBombers;
-	std::vector<std::shared_ptr<Swarm>> swarms;
-	std::vector<ExplosionEmitter> explosionEmitters;
+	std::vector<std::shared_ptr<Enemy>> enemies;
+	//std::vector<std::shared_ptr<Spaceship>> spaceships; ///< Holds the world's enemies.
+	//std::vector<std::shared_ptr<FastSuicideBomber>> fastSuicideBombers;
+	//std::vector<std::shared_ptr<Swarm>> swarms;
+	//std::vector<ExplosionEmitter> explosionEmitters;
 
 	std::map<LayoutType, std::shared_ptr<Layout>> sceneLayouts;
 
@@ -106,11 +107,12 @@ public:
 	
 	void AddSun(const std::shared_ptr<CelestialBody> newSun);
 	
-	void AddSpaceship(const std::shared_ptr<Spaceship> newSpaceship);
-	void AddFastSuicideBomber(const std::shared_ptr<FastSuicideBomber> newFastSuicideBomber);
-	void AddSwarm(const std::shared_ptr<Swarm> newSwarm);
+	void AddEnemy(const std::shared_ptr<Enemy> newEnemy);
+	//void AddSpaceship(const std::shared_ptr<Spaceship> newSpaceship);
+	//void AddFastSuicideBomber(const std::shared_ptr<FastSuicideBomber> newFastSuicideBomber);
+	//void AddSwarm(const std::shared_ptr<Swarm> newSwarm);
 
-	void AddExplosionEmitter(const ExplosionEmitter &newExplosionEmitter);
+	//void AddExplosionEmitter(const ExplosionEmitter &newExplosionEmitter);
 
 	void AddLayouts(const std::map<LayoutType, std::shared_ptr<Layout>> &newLayouts);
 	void AddLayout(const std::shared_ptr<Layout> newLayout);
@@ -143,19 +145,19 @@ public:
 
 	std::shared_ptr<CelestialBody> GetSun();
 
-	std::shared_ptr<Spaceship> GetSpaceship();
-	std::shared_ptr<Swarm> GetSwarm();
-	void DeleteSwarm();
-	bool HasSwarms();
+	//std::shared_ptr<Spaceship> GetSpaceship();
+	//std::shared_ptr<Swarm> GetSwarm();
+	//void DeleteSwarm();
+	//bool HasSwarms();
 	SunLight GetSunLight();
 
 	bool HasSuns();
 
-	// TODO: Add Load function
-
+	
 	// !!! Only for testing purposes !!!
 	void GenerateRandomSwarms(int count,
 							  const BillboardProgDataNoTexture &progData);
+	void GenerateRandomSpaceships(int count);
 };
 
 #endif

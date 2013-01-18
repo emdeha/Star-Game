@@ -44,10 +44,25 @@
 
 enum BehaviorState
 {
-	ATTACK_STATE,
-	EVADE_STATE,
-	PATROL_STATE, 
-	IDLE_STATE,
+	STATE_ATTACK,
+	STATE_IDLE,
+	STATE_EVADE,
+	STATE_PATROL,
+};
+
+struct PatrolRoute
+{
+	std::vector<glm::vec3> patrolPoints;
+	glm::vec3 lastVelocity;
+	int currentPatrolPointIndex;
+	int nextPatrolPointIndex;
+	int lastPatrolPointIndex;
+};
+
+struct DamageOverTime
+{
+	int damage;
+	unsigned int time_seconds;
 };
 
 
@@ -86,28 +101,128 @@ public:
 	void OnTargetHit(CelestialBody &sun, Event &_event); // Should be an OnEvent(Event &_event);
 
 	
-	void Recreate(glm::vec3 newPosition, 
-				  glm::vec3 newVelocity,
-				  int newLifeSpan);
-	bool IsDestroyed();
-};
-
-inline bool Projectile::IsDestroyed()
-{
-	return isDestroyed;
-}
-
-
-struct PatrolRoute
-{
-	std::vector<glm::vec3> patrolPoints;
-	glm::vec3 lastVelocity;
-	int currentPatrolPointIndex;
-	int nextPatrolPointIndex;
-	int lastPatrolPointIndex;
+	void Recreate(glm::vec3 newPosition, glm::vec3 newVelocity, int newLifeSpan);
+	bool IsDestroyed() { return isDestroyed; }
 };
 
 
+class Enemy
+{
+protected:
+	glm::vec3 position;
+	glm::vec3 frontVector;
+	float speed;
+
+	float lineOfSight;
+
+	int health;
+
+	BehaviorState currentState;
+
+	bool isDestroyed;
+
+public:
+	Enemy() {}
+	Enemy(glm::vec3 newPosition, glm::vec3 newFrontVector, float newSpeed,
+		  float newLineOfSight, int newHealth)
+	{
+		position = newPosition;
+		frontVector = newFrontVector;
+		speed = newSpeed;
+		lineOfSight = newLineOfSight;
+		health = newHealth;
+		currentState = STATE_IDLE;
+		isDestroyed = false;
+	}
+
+	virtual void UpdateAI(CelestialBody &sun) {}
+	virtual void Update(bool isSunKilled, CelestialBody &sun = CelestialBody()) {}
+	virtual void Render(glutil::MatrixStack &modelMatrix, 
+						int materialBlockIndex,	float gamma, 
+						const LitProgData &litData,
+						float interpolation) {}
+	virtual void Render(glutil::MatrixStack &modelMatrix, 
+						glm::vec3 cameraPosition,
+						const BillboardProgDataNoTexture &billboardProgDataNoTexture) {}
+
+	virtual void OnEvent(Event &_event) {}
+
+	virtual glm::vec3 GetPosition();
+	virtual bool IsDestroyed();
+};
+
+
+class Swarm : public Enemy
+{
+private:
+	int swarmersCount;
+	
+	DamageOverTime damage;
+	Framework::Timer attackTimer;
+
+	bool isCommanded;
+
+	SwarmEmitter swarmBody;
+
+private:
+	void AttackSolarSystem(CelestialBody &sun, bool isSatellite = false, float bodyIndex = -1.0f);
+
+public:
+	Swarm() {}
+	Swarm(int newSwarmersCount, 
+		  int newTime_seconds, int newDamage,
+		  const BillboardProgDataNoTexture &billboardProgDataNoTexture,
+		  glm::vec3 newPosition, glm::vec3 newFrontVector,
+		  float newSpeed, float newLineOfSight,
+		  int newHealth);
+
+	void UpdateAI(CelestialBody &sun);
+	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
+	void Render(glutil::MatrixStack &modelMatrix, 
+				glm::vec3 cameraPosition,
+				const BillboardProgDataNoTexture &billboardProgDataNoTexture);
+
+	void OnEvent(Event &_event);
+};
+
+
+class Spaceship : public Enemy
+{
+private:
+	float projectileSpeed;
+	int projectileLifeSpan;
+	int projectileDamage;
+
+	PatrolRoute patrolRoute;
+
+	std::unique_ptr<Projectile> projectile;
+	std::unique_ptr<Framework::Mesh> mesh;
+
+	int materialBlockSize;
+	GLuint materialUniformBuffer;
+
+public:
+	Spaceship() {}
+	Spaceship(float newProjectileSpeed, int newProjectileLifeSpan,
+			  int newProjectileDamage,
+			  glm::vec3 newPosition, glm::vec3 newFrontVector,
+			  float newSpeed, float newLineOfSight,
+			  int newHealth);
+
+	void UpdateAI(CelestialBody &sun);
+	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
+	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
+				float gamma, 
+				const LitProgData &litData,
+				float interpolation);
+
+	void OnEvent(Event &_event);
+
+	void LoadMesh(const std::string &meshFileName);
+	void LoadProjectileMesh(const std::string &meshFileName);
+};
+
+/*
 class Spaceship
 {
 private:
@@ -158,15 +273,10 @@ public:
 
 	void OnEvent(Event &_event);
 };
+*/
 
 
-struct DamageOverTime
-{
-	int damage;
-	unsigned int time_seconds;
-};
-
-
+/*
 class Swarm
 {
 private:
@@ -215,8 +325,9 @@ public:
 		return isDestroyed;
 	}
 };
+*/
 
-
+/*
 class FastSuicideBomber
 {
 private:
@@ -270,6 +381,6 @@ public:
 	// all the event handling functions.
 	void OnEvent(std::shared_ptr<Skill> sender, Event &_event);
 };
-
+*/
 
 #endif

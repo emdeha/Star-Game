@@ -196,3 +196,9 @@ void Projectile::OnTargetHit(CelestialBody &sun, Event &_event)
 
 	sun.OnEvent(_event);	
 }
+
+/*
+inline bool Projectile::IsDestroyed()
+{
+	return isDestroyed;
+}*/

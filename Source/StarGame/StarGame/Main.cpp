@@ -44,8 +44,6 @@ DisplayData displayData;
 
 Scene scene = Scene(2.2f);
 
-glm::vec3 selectorPos;
-
 
 long long GetCurrentTimeMillis()
 {
@@ -393,12 +391,12 @@ void InitializeScene()
 	scene.AddFusionSequence("passiveAoeSkill", 'q', 'q', 'e');
 	scene.AddFusionSequence("sunNovaSkill", 'w', 'w', 'e');
 
-	
+	/*
 	ExplosionEmitter sceneExplosion =
 		ExplosionEmitter(glm::vec3(0.0f, 2.0f, 0.0f), 300, 30, 0.1f);
 	sceneExplosion.Init();
 	scene.AddExplosionEmitter(sceneExplosion);
-
+	*/
 	std::shared_ptr<AOESkill> testAOESkill =
 		std::shared_ptr<AOESkill>(new AOESkill(glm::vec3(),
 											   20, 2.0f, 
@@ -532,7 +530,8 @@ void Display()
 	if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 	{		
 		scene.SetDisplayData(displayData);
-		scene.GenerateRandomSwarms(1, shaderManager.GetBillboardProgDataNoTexture());
+		//scene.GenerateRandomSwarms(1, shaderManager.GetBillboardProgDataNoTexture());
+		scene.GenerateRandomSpaceships(1);
 
 		glutil::MatrixStack modelMatrix;
 

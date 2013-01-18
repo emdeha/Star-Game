@@ -819,7 +819,11 @@ void SatelliteChainingSkill::SetParameter(ParameterType paramType, glm::vec3 new
 	switch(paramType)
 	{
 	case PARAM_POSITION:
-		startingPosition = newParam_vec3;
+		if(!isStarted)
+		{
+			startingPosition = newParam_vec3;
+			currentPosition = newParam_vec3;
+		}
 		break;
 	default:
 		break;

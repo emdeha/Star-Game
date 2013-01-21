@@ -93,47 +93,6 @@ public:
 	virtual glm::vec3 GetPosition() { return glm::vec3(); }
 };
 
-/*
-class RaySkill : public Skill
-{
-private:
-	std::shared_ptr<CelestialBody> skillOwner;
-
-	int damage;
-	int defense;
-	
-	float range;
-
-	RayEmitter ray;
-
-	bool isStarted;
-
-	std::vector<Event> generatedEvents;
-
-public:
-	RaySkill() : Skill() {}
-	RaySkill(std::shared_ptr<CelestialBody> newSkillOwner,
-			 int newDamage, int newDefense,
-			 float newRange,
-			 const std::string &newSkillType,
-			 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
-
-	void Update();
-	void Render(glutil::MatrixStack &modelMatrix,
-				glm::vec3 cameraPosition,
-				const BillboardProgDataNoTexture &progData);
-
-	void OnEvent(Event &_event);
-	std::shared_ptr<CelestialBody> GetOwner();
-
-	// Only for EVENT_TYPE_OTHER
-	Event GetGeneratedEvent(const std::string &eventName);
-	void RemoveGeneratedEvent(const std::string &eventName);
-	// Gets the generated events and empties the event list.
-	// (!)It is an one little dangerous method. You can lose a lot of events that way.
-	std::vector<Event> GetGeneratedEvents();
-};
-*/
 
 class AOESkill : public Skill
 {

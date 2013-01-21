@@ -64,11 +64,11 @@ bool Texture2D::Load(const std::string &fileName)
 
 	glTexImage2D(GL_TEXTURE_2D, // texture type
 				 0, 
-				 GL_RGBA, // how OpenGL will store the texture data
+				 GL_RGB, // how OpenGL will store the texture data
 			     width, // width
 				 height, // height
 				 0, // must always be 0
-				 GL_BGRA, // we are uploading four components to the texture
+				 GL_BGR, // we are uploading four components to the texture
 				 GL_UNSIGNED_BYTE, // each component is stored in a single byte
 				 bits); // the texture's data
 

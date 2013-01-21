@@ -51,11 +51,7 @@ private:
 	std::vector<SunLight> lights; ///< Holds the world's lights.
 
 	std::vector<std::shared_ptr<CelestialBody>> suns;
-
 	std::vector<std::shared_ptr<Enemy>> enemies;
-	//std::vector<std::shared_ptr<Spaceship>> spaceships; ///< Holds the world's enemies.
-	//std::vector<std::shared_ptr<FastSuicideBomber>> fastSuicideBombers;
-	//std::vector<std::shared_ptr<Swarm>> swarms;
 	//std::vector<ExplosionEmitter> explosionEmitters;
 
 	std::map<LayoutType, std::shared_ptr<Layout>> sceneLayouts;
@@ -108,9 +104,6 @@ public:
 	void AddSun(const std::shared_ptr<CelestialBody> newSun);
 	
 	void AddEnemy(const std::shared_ptr<Enemy> newEnemy);
-	//void AddSpaceship(const std::shared_ptr<Spaceship> newSpaceship);
-	//void AddFastSuicideBomber(const std::shared_ptr<FastSuicideBomber> newFastSuicideBomber);
-	//void AddSwarm(const std::shared_ptr<Swarm> newSwarm);
 
 	//void AddExplosionEmitter(const ExplosionEmitter &newExplosionEmitter);
 
@@ -145,10 +138,6 @@ public:
 
 	std::shared_ptr<CelestialBody> GetSun();
 
-	//std::shared_ptr<Spaceship> GetSpaceship();
-	//std::shared_ptr<Swarm> GetSwarm();
-	//void DeleteSwarm();
-	//bool HasSwarms();
 	SunLight GetSunLight();
 
 	bool HasSuns();

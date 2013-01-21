@@ -24,8 +24,6 @@ Scene::Scene(float newSceneGamma)
 {
 	lights.resize(0);
 	suns.resize(0);
-	//spaceships.resize(0);
-	//fastSuicideBombers.resize(0);
 	//explosionEmitters.resize(0);
 	enemies.resize(0);
 
@@ -65,37 +63,6 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix,
 		enemies[i]->Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), billboardNoTextureData);
 		enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, interpolation);
 	}
-
-	/*int sizeSpaceships = spaceships.size();
-	for(int i = 0; i < sizeSpaceships; i++)
-	{
-		spaceships[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData,
-							  interpolation);
-	}
-
-	int sizeFastSuicideBombers = fastSuicideBombers.size();
-	for(int i = 0; i < sizeFastSuicideBombers; i++)
-	{
-		fastSuicideBombers[i]->Render(modelMatrix, litData, materialBlockIndex, interpolation, 
-									  sceneGamma);
-	}
-
-	int sizeSwarms = swarms.size();
-	for(int i = 0; i < sizeSwarms; i++)
-	{
-		swarms[i]->Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), 
-						  billboardNoTextureData);
-	}*/
-	/*
-	int sizeExplosionEmitters = explosionEmitters.size();
-	for(int i = 0; i < sizeExplosionEmitters; i++)
-	{
-		if(explosionEmitters[i].IsActive())
-		{
-			explosionEmitters[i].Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), 
-										billboardNoTextureData);
-		}
-	}*/
 }
 void Scene::RenderCurrentLayout(const FontProgData &fontData,
 								const SimpleProgData &simpleData,
@@ -131,59 +98,6 @@ void Scene::UpdateScene()
 		suns[i]->Update();
 	}
 
-	/*int sizeSpaceships = spaceships.size();
-	for(int i = 0; i < sizeSpaceships; i++)
-	{
-		if(!suns.empty())
-		{
-			spaceships[i]->Update(false, *suns.front().get());
-		}
-		else 
-		{
-			spaceships[i]->Update(true);
-		}
-	}
-
-	int sizeFastSuicideBombers = fastSuicideBombers.size();
-	for(int i = 0; i < sizeFastSuicideBombers; i++)
-	{
-		if(!suns.empty())
-		{
-			fastSuicideBombers[i]->Update(false, *suns.front().get());
-		}
-		else
-		{
-			fastSuicideBombers[i]->Update(true);
-		}
-
-		//Event returnedEvent = fastSuicideBombers[i]->GetGeneratedEvents()[0];
-		//this->OnEvent(returnedEvent);
-	}
-
-	int sizeSwarms = swarms.size();
-	for(std::vector<std::shared_ptr<Swarm>>::iterator iter = swarms.begin();
-		iter != swarms.end(); 
-		)
-	{
-		if(!suns.empty())
-		{
-			(*iter)->Update(false, *suns.front().get());
-		}
-		else
-		{
-			(*iter)->Update(true);
-		}
-
-		if((*iter)->IsDestroyed())
-		{
-			swarms.erase(iter);
-			break;
-		}
-		else
-		{
-			++iter;
-		}
-	}*/
 	/*
 	int sizeExplosionEmitters = explosionEmitters.size();
 	for(int i = 0; i < sizeExplosionEmitters; i++)
@@ -199,6 +113,7 @@ void Scene::UpdateScene()
 			explosionEmitters.erase(currentEmitter);
 		}
 	}*/
+
 	for(std::vector<std::shared_ptr<Enemy>>::iterator iter = enemies.begin();
 		iter != enemies.end();
 		)
@@ -491,20 +406,6 @@ void Scene::AddEnemy(const std::shared_ptr<Enemy> newEnemy)
 {
 	enemies.push_back(newEnemy);
 }
-/*
-void Scene::AddSpaceship(const std::shared_ptr<Spaceship> newSpaceship)
-{
-	spaceships.push_back(newSpaceship);
-}
-void Scene::AddFastSuicideBomber(const std::shared_ptr<FastSuicideBomber> newFastSuicideBomber)
-{
-	fastSuicideBombers.push_back(newFastSuicideBomber);
-}
-void Scene::AddSwarm(const std::shared_ptr<Swarm> newSwarm)
-{
-	swarms.push_back(newSwarm);
-}*/
-
 
 void Scene::AddLayouts(const std::map<LayoutType, std::shared_ptr<Layout>> &newLayouts)
 {
@@ -623,29 +524,7 @@ Mouse &Scene::GetMouse()
 std::shared_ptr<CelestialBody> Scene::GetSun()
 {
 	return suns.front(); // replace 0 with an index
-}/*
-std::shared_ptr<Spaceship> Scene::GetSpaceship()
-{
-	return spaceships.front();
 }
-std::shared_ptr<Swarm> Scene::GetSwarm()
-{
-	if(swarms.size())
-	{
-		return swarms.front();
-	}
-}
-void Scene::DeleteSwarm()
-{
-	if(swarms.size())
-	{
-		swarms.pop_back();
-	}
-}
-bool Scene::HasSwarms()
-{
-	return !swarms.empty();
-}*/
 SunLight Scene::GetSunLight()
 {
 	return lights.front();

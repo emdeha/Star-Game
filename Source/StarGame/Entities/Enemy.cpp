@@ -178,7 +178,7 @@ void Swarm::UpdateAI(CelestialBody &sun)
 	}
 	else if(currentState == STATE_EVADE)
 	{
-		glm::vec3 vectorFromPlanetToSwarm = glm::vec3(sun.GetPosition()) - position;
+		glm::vec3 vectorFromPlanetToSwarm = sun.GetPosition() - position;
 
 		vectorFromPlanetToSwarm = glm::normalize(vectorFromPlanetToSwarm);
 		glm::vec3 checkVelocity = glm::normalize(frontVector * speed);
@@ -277,6 +277,7 @@ Spaceship::Spaceship(float newProjectileSpeed, int newProjectileLifeSpan,
 	projectileSpeed = newProjectileSpeed;
 	projectileLifeSpan = newProjectileLifeSpan;
 	projectileDamage = newProjectileDamage;
+	currentState = STATE_PATROL;
 
 
 	projectile = 
@@ -285,11 +286,15 @@ Spaceship::Spaceship(float newProjectileSpeed, int newProjectileLifeSpan,
 												   projectileDamage, 
 												   projectileLifeSpan));
 
+	// TODO: If there is only one patrol route point, the game crashes. Maybe
+	//		 sth connected with the vector range.
+
 	patrolRoute.patrolPoints.push_back(position);
-	patrolRoute.patrolPoints.push_back(glm::vec3(4.5f, 4.0f, 0.0f));
-	patrolRoute.patrolPoints.push_back(glm::vec3(-4.5f, 4.0f, 0.0f));
-	patrolRoute.patrolPoints.push_back(glm::vec3(-4.5f, -4.0f, 0.0f));
-	patrolRoute.patrolPoints.push_back(glm::vec3(4.5f, -4.0f, 0.0f));
+	//patrolRoute.patrolPoints.push_back(glm::vec3());
+	patrolRoute.patrolPoints.push_back(glm::vec3(4.5f, 0.0f, 4.0f));
+	patrolRoute.patrolPoints.push_back(glm::vec3(-4.5f, 0.0f, 4.0f));
+	patrolRoute.patrolPoints.push_back(glm::vec3(-4.5f, 0.0f, -4.0f));
+	patrolRoute.patrolPoints.push_back(glm::vec3(4.5f, 0.0f, -4.0f));
 	patrolRoute.currentPatrolPointIndex = 0;
 	patrolRoute.lastPatrolPointIndex = 0;
 	patrolRoute.nextPatrolPointIndex = 1;
@@ -354,7 +359,15 @@ void Spaceship::UpdateAI(CelestialBody &sun)
 	}
 	else if(currentState == STATE_EVADE)
 	{
-		position += frontVector * speed;
+		glm::vec3 vectorFromPlanetToSpaceship = sun.GetPosition() - position;
+
+		vectorFromPlanetToSpaceship = glm::normalize(vectorFromPlanetToSpaceship);
+		glm::vec3 checkVelocity = glm::normalize(frontVector * speed);
+
+		if(fabs(glm::length(vectorFromPlanetToSpaceship - checkVelocity)) <= 0.0001f)
+		{
+			speed *= -1.0f;
+		}
 	}
 	else if(currentState == STATE_PATROL)
 	{		
@@ -381,15 +394,63 @@ void Spaceship::UpdateAI(CelestialBody &sun)
 				frontVector = glm::normalize(vectorBetweenPatrolPoints);
 			}
 		}
-		position += frontVector * speed;
 		
-		glm::vec3 vectorFromSunToSpaceship = glm::vec3(sun.GetPosition()) - position;
+
+		// =========
+		// follow
+		// =========
+		/*
+		glm::vec3 target = patrolRoute.patrolPoints[patrolRoute.nextPatrolPointIndex];
+		glm::vec3 desiredVelocity = glm::normalize(target - position) * speed;
+		glm::vec3 steeringForce = desiredVelocity - (frontVector);
+
+		glm::vec3 velocity = (frontVector);
+		float mass = 1.0f;
+		velocity += steeringForce / mass;
+		
+		position += velocity;
+		*/
+
+		// =========
+		// arrival
+		// =========
+		/*
+		float slowingDistance = 0.1f;
+		glm::vec3 target = patrolRoute.patrolPoints[patrolRoute.nextPatrolPointIndex];
+		glm::vec3 desiredVelocity = glm::normalize(target - position);
+		float distance = glm::length(position - target);
+		if(distance > slowingDistance)
+		{
+			desiredVelocity *= speed;
+		}
+		else
+		{
+			desiredVelocity *= speed * (distance / slowingDistance);
+		}
+
+		glm::vec3 velocity = frontVector;
+		glm::vec3 force = desiredVelocity - velocity;
+		force = glm::clamp(force, glm::vec3(), glm::vec3(1.0f, 1.0f, 1.0f));
+
+		velocity += force;
+
+		position += velocity;
+		*/
+
+		position += frontVector * speed;
+				
+		glm::vec3 vectorFromSunToSpaceship = sun.GetPosition() - position;
 		float distanceBetweenSunAndSpaceship = glm::length(vectorFromSunToSpaceship);
 
 		if(distanceBetweenSunAndSpaceship < lineOfSight)
 		{
 			patrolRoute.lastVelocity = frontVector;
+			patrolRoute.nextPatrolPoint = sun.GetPosition();
 			currentState = STATE_ATTACK;
+		}
+		else
+		{
+			patrolRoute.nextPatrolPoint = patrolRoute.patrolPoints[patrolRoute.nextPatrolPointIndex];
 		}
 	}
 }
@@ -398,9 +459,12 @@ void Spaceship::Update(bool isSunKilled, CelestialBody &sun)
 {
 	if(health <= 20)
 	{
-		glm::vec3 newVelocity = (glm::vec3(sun.GetPosition()) - position) * 0.1f;
-		newVelocity = glm::normalize(-newVelocity);
 		currentState = STATE_EVADE;
+	}
+
+	if(health <= 0)
+	{
+		isDestroyed = true;
 	}
 
 	if(!isSunKilled)
@@ -428,7 +492,14 @@ void Spaceship::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 
 
 		glm::vec3 viewPosition = position + frontVector * speed * interpolation;
+
+		glm::vec3 target = patrolRoute.nextPatrolPoint;
+		glm::vec3 vectorToTarget = target - position;
+
+		float rotation = glm::degrees(atan2f(vectorToTarget.x, vectorToTarget.z));
+
 		modelMatrix.Translate(viewPosition);
+		modelMatrix.RotateY(rotation);
 		modelMatrix.Scale(0.2f);
 
 
@@ -463,6 +534,16 @@ void Spaceship::OnEvent(Event &_event)
 	case EVENT_TYPE_SHOT_FIRED:
 		break;
 	case EVENT_TYPE_ATTACKED:
+		break;
+	case EVENT_TYPE_OTHER:
+		if(strcmp(_event.GetArgument("what_event").varString, "skilldeployed") == 0)
+		{
+			health -= _event.GetArgument("skillDamage").varInteger;
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "timeended") == 0)
+		{
+			health -= _event.GetArgument("damage").varInteger;
+		}
 		break;
 	}
 }

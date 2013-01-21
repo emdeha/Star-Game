@@ -54,6 +54,7 @@ struct PatrolRoute
 {
 	std::vector<glm::vec3> patrolPoints;
 	glm::vec3 lastVelocity;
+	glm::vec3 nextPatrolPoint;
 	int currentPatrolPointIndex;
 	int nextPatrolPointIndex;
 	int lastPatrolPointIndex;

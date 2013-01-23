@@ -192,14 +192,7 @@ void CelestialBody::Update()
 		for(int i = 0; i < skills.size(); i++)
 		{
 			skills[i]->Update();
-			if(skills[i]->GetSkillType() == "passiveAOESkill")
-			{
-				skills[i]->SetParameter(PARAM_POSITION, position);
-			}
-			if(skills[i]->GetSkillType() == "satChainSkill")
-			{
-				skills[i]->SetParameter(PARAM_POSITION, position);
-			}
+			skills[i]->SetParameter(PARAM_POSITION, position);
 		}
 	}
 }
@@ -419,15 +412,20 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 															 2.0f,
 															 "passiveAOESkill",
 															 'q', 'q', 'e'));
-	std::shared_ptr<SatelliteChainingSkill> satChainSkill =
-		std::shared_ptr<SatelliteChainingSkill>(new SatelliteChainingSkill(newSat->GetPosition(),
-																		   50, 
-																		   3.0f, 
-																		   glm::vec3(0.5f, 0.0f, 0.0f), 
-																		   glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
-																		   0.1f, 
-																		   "../data/mesh-files/UnitSphere.xml",
-																		   "satChainSkill"));
+	std::shared_ptr<SatelliteChainingNova> satChainSkill =
+		std::shared_ptr<SatelliteChainingNova>(new SatelliteChainingNova(newSat->GetPosition(),
+																		 20, 2.0f, 0.08f, 
+																		 "satChainSkill"));
+	if(type == SATELLITE_WATER)
+	{
+		std::shared_ptr<FrostNovaSkill> satFrostNovaSkill = 
+			std::shared_ptr<FrostNovaSkill>(new FrostNovaSkill(5, 3, 2.0f, 0.1f, 
+															   newSat->GetPosition(), 
+															   "satFrostNova",
+															   'q', 'w', 'q'));
+		newSat->AddSkill(satFrostNovaSkill);
+	}
+																		 
 	newSat->AddSkill(satSkill);
 	newSat->AddSkill(satChainSkill);
 

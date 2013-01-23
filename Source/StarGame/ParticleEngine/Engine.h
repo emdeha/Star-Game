@@ -85,6 +85,7 @@ private:
 	std::vector<StandardParticle> particles;
 
 	glm::vec3 position;
+	glm::vec4 color;
 	int particleCount;
 
 	GLuint vao;
@@ -92,7 +93,7 @@ private:
 
 public:
 	SwarmEmitter() {}
-	SwarmEmitter(glm::vec3 newPosition, int newParticleCount);
+	SwarmEmitter(glm::vec3 newPosition, glm::vec4 newColor, int newParticleCount);
 
 	void Init(const BillboardProgDataNoTexture &billboardProgDataNoTexture);
 
@@ -101,6 +102,8 @@ public:
 	void Render(glutil::MatrixStack &modelMatrix,
 				glm::vec3 cameraPosition,
 				const BillboardProgDataNoTexture &billboardProgDataNoTexture);
+
+	void SetColor(glm::vec4 newColor);
 };
 
 

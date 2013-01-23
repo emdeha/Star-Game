@@ -397,7 +397,11 @@ SunNovaSkill::SunNovaSkill(glm::vec3 newPosition,
 	isStarted = false;
 	generatedEvents.resize(0);
 
-	skillExpansionRadius = Utility::Primitives::Circle(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f), position, currentScale, 90);
+#ifdef CIRCLE_SKILL
+	skillExpansionRadius = Utility::Primitives::Circle(glm::vec4(0.7f, 0.5f, 0.0f, 0.5f), position, currentScale, 90);
+#elif defined TORUS_SKILL
+	skillExpansionRadius = Utility::Primitives::Torus2D(glm::vec4(0.7f, 0.5f, 0.0f, 0.5f), position, currentScale, currentScale + 0.03f, 90);
+#endif
 	skillExpansionRadius.Init();
 }
 
@@ -644,6 +648,7 @@ void SatelliteChainingSkill::OnEvent(Event &_event)
 	switch(_event.GetType())
 	{
 	case EVENT_TYPE_OTHER:
+		// ???: Should the skill be activated on fusion?
 		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
 		{
 			EventArg skillDeployedEventArgs[3];
@@ -759,6 +764,388 @@ void SatelliteChainingSkill::RemoveGeneratedEvent(const std::string &eventName)
 	}
 }
 std::vector<Event> SatelliteChainingSkill::GetGeneratedEvents()
+{
+	std::vector<Event> eventsToReturn;
+
+	if(generatedEvents.size() > 0)
+	{
+		eventsToReturn = generatedEvents;
+		generatedEvents.resize(0);
+	}
+	else 
+	{
+		eventsToReturn.push_back(StockEvents::EmptyEvent());
+	}
+
+	return eventsToReturn;
+}
+
+
+SatelliteChainingNova::SatelliteChainingNova(glm::vec3 newPosition, 
+											 int newDamage, 
+											 float newRange, float newScaleRate,
+											 const std::string &skillType,
+											 char fusionCombA, char fusionCombB, char fusionCombC)
+											 : Skill(skillType, fusionCombA, fusionCombB, fusionCombC)
+{
+	position = newPosition;
+	damage = newDamage;
+	range = newRange;
+	scaleRate = newScaleRate;
+	currentScale = 1.0f;
+	isStarted = false;
+	generatedEvents.resize(0);
+
+#ifdef CIRCLE_SKILL
+	skillExpansionRadius = Utility::Primitives::Circle(glm::vec4(0.2f, 0.0f, 0.8f, 0.5f), position, currentScale, 90);
+#elif defined TORUS_SKILL 
+	skillExpansionRadius = Utility::Primitives::Torus2D(glm::vec4(0.2f, 0.0f, 0.8f, 0.5f), position, currentScale, currentScale + 0.03f, 90);
+#endif
+	skillExpansionRadius.Init();
+}
+
+void SatelliteChainingNova::Update()
+{
+	if(isStarted)
+	{
+		if(currentScale <= range)
+		{
+			currentScale += scaleRate;
+		}
+		else
+		{
+			currentScale = 1.0f;
+			isStarted = false;
+		}
+	}
+}
+
+void SatelliteChainingNova::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData)
+{
+	if(isStarted)
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glutil::PushStack push(modelMatrix);
+		//position.y = 0.1f; // -- layering on y
+		modelMatrix.Translate(position);
+		modelMatrix.Scale(currentScale, 0.0f, currentScale);
+
+		skillExpansionRadius.Draw(modelMatrix, progData);
+
+		glDisable(GL_BLEND);
+	}
+}
+
+void SatelliteChainingNova::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
+	case EVENT_TYPE_OTHER:
+		// ???: Should the skill be activated on fusion?
+		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+		{
+			EventArg skillDeployedEventArgs[3];
+			skillDeployedEventArgs[0].argType = "skillRange";
+			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+			skillDeployedEventArgs[0].argument.varFloat = range;
+			skillDeployedEventArgs[1].argType = "skillDamage";
+			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+			skillDeployedEventArgs[1].argument.varInteger = damage;
+			skillDeployedEventArgs[2].argType = "what_event";
+			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			generatedEvents.push_back(skillDeployedEvent);
+
+			isStarted = true;
+		}
+		if(_event.GetArgument("isIntersected").varBool == true)
+		{
+			EventArg skillDeployedEventArgs[3];
+			skillDeployedEventArgs[0].argType = "skillRange";
+			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+			skillDeployedEventArgs[0].argument.varFloat = range;
+			skillDeployedEventArgs[1].argType = "skillDamage";
+			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+			skillDeployedEventArgs[1].argument.varInteger = damage;
+			skillDeployedEventArgs[2].argType = "what_event";
+			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			generatedEvents.push_back(skillDeployedEvent);
+
+			isStarted = true;
+		}
+		break;
+	}
+}
+
+float SatelliteChainingNova::GetRange()
+{
+	return range;
+}
+glm::vec3 SatelliteChainingNova::GetPosition()
+{
+	return position;
+}
+
+void SatelliteChainingNova::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
+{
+	switch(paramType)
+	{
+	case PARAM_POSITION:
+		position = newParam_vec3;
+		break;
+	default:
+		break;
+	};
+}
+
+bool SatelliteChainingNova::IsIntersectingObject(glm::vec3 objectPosition)
+{
+	if(isStarted)
+	{
+		float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
+
+		if(distanceBetweenObjectAndSkill < currentScale &&
+		   distanceBetweenObjectAndSkill >= currentScale - 0.1f)
+		{
+			return true;
+		}
+
+		return false;
+	}
+	else return false;
+}
+
+Event SatelliteChainingNova::GetGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(int i = 0; i < generatedEvents.size(); i++)
+		{
+			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
+			   strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				return generatedEvents[i];
+			}
+		}
+	}
+
+	return StockEvents::EmptyEvent();
+}
+void SatelliteChainingNova::RemoveGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(std::vector<Event>::iterator iter = generatedEvents.begin();
+			iter != generatedEvents.end();)
+		{
+			if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				generatedEvents.erase(iter);
+				break;
+			}
+			else 
+			{
+				++iter;
+			}
+		}
+	}
+}
+std::vector<Event> SatelliteChainingNova::GetGeneratedEvents()
+{
+	std::vector<Event> eventsToReturn;
+
+	if(generatedEvents.size() > 0)
+	{
+		eventsToReturn = generatedEvents;
+		generatedEvents.resize(0);
+	}
+	else 
+	{
+		eventsToReturn.push_back(StockEvents::EmptyEvent());
+	}
+
+	return eventsToReturn;
+}
+
+
+FrostNovaSkill::FrostNovaSkill(int newDamage, int newStunTime_seconds,
+							   float newRange, float newScaleRate,
+							   glm::vec3 newPosition,
+							   const std::string &skillType,
+							   char fusionCombA, char fusionCombB, char fusionCombC)
+							   : Skill(skillType, fusionCombA, fusionCombB, fusionCombC)
+{
+	damage = newDamage;
+	stunTime_seconds = newStunTime_seconds;
+	stunTimer = Framework::Timer(Framework::Timer::TT_INFINITE, stunTime_seconds);
+	range = newRange;
+	scaleRate = newScaleRate;
+	position = newPosition;
+	currentScale = 1.0f;
+	isStarted = false;
+
+#ifdef CIRCLE_SKILL
+	skillExpansionRadius = Utility::Primitives::Circle(glm::vec4(0.2f, 0.0f, 0.8f, 0.5f), position, currentScale, 90);
+#elif defined TORUS_SKILL 
+	skillExpansionRadius = Utility::Primitives::Torus2D(glm::vec4(0.2f, 0.0f, 0.8f, 0.5f), position, currentScale, currentScale + 0.03f, 90);
+#endif
+	skillExpansionRadius.Init();
+}
+
+void FrostNovaSkill::Update()
+{
+	stunTimer.Update();
+	if(stunTimer.GetTimeSinceStart() >= stunTime_seconds && stunTimer.IsPaused() == false)
+	{
+		EventArg enemyStunFinishedEventArgs[1];
+		enemyStunFinishedEventArgs[0].argType = "what_event";
+		enemyStunFinishedEventArgs[0].argument.varType = TYPE_STRING;
+		strcpy(enemyStunFinishedEventArgs[0].argument.varString, "stuntimeended");
+
+		Event enemyStunFinishedEvent(1, EVENT_TYPE_OTHER, enemyStunFinishedEventArgs);
+		RemoveGeneratedEvent("stuntimeended");
+		generatedEvents.push_back(enemyStunFinishedEvent);
+
+		stunTimer.SetPause(true);
+	}
+
+	if(isStarted)
+	{
+		if(currentScale <= range)
+		{
+			currentScale += scaleRate;
+		}
+		else
+		{
+			currentScale = 1.0f;
+			isStarted = false;
+		}
+	}
+}
+
+void FrostNovaSkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData)
+{
+	if(isStarted)
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glutil::PushStack push(modelMatrix);
+		modelMatrix.Translate(position);
+		modelMatrix.Scale(currentScale, 0.0f, currentScale);
+		
+		skillExpansionRadius.Draw(modelMatrix, progData);
+
+		glDisable(GL_BLEND);
+	}
+}
+
+void FrostNovaSkill::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
+	case EVENT_TYPE_OTHER:
+		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+		{
+			EventArg skillDeployedEventArgs[3];
+			skillDeployedEventArgs[0].argType = "skillRange";
+			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+			skillDeployedEventArgs[0].argument.varFloat = range;
+			skillDeployedEventArgs[1].argType = "skillDamage";
+			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+			skillDeployedEventArgs[1].argument.varInteger = damage;
+			skillDeployedEventArgs[2].argType = "what_event";
+			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+			strcpy(skillDeployedEventArgs[2].argument.varString, "stunskilldeployed");
+			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			generatedEvents.push_back(skillDeployedEvent);
+
+			isStarted = true;
+		}
+	}
+}
+
+float FrostNovaSkill::GetRange()
+{
+	return range;
+}
+glm::vec3 FrostNovaSkill::GetPosition()
+{
+	return position;
+}
+
+void FrostNovaSkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
+{
+	switch(paramType)
+	{
+	case PARAM_POSITION:
+		position = newParam_vec3;
+		break;
+	default:
+		break;
+	}
+}
+
+bool FrostNovaSkill::IsIntersectingObject(glm::vec3 objectPosition)
+{
+	if(isStarted)
+	{
+		float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
+
+		if(distanceBetweenObjectAndSkill < currentScale)
+		{
+			stunTimer.SetPause(false);
+			stunTimer.Reset();			
+
+			return true;
+		}
+
+		return false;
+	}
+	else return false;
+}
+
+Event FrostNovaSkill::GetGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(int i = 0; i < generatedEvents.size(); i++)
+		{
+			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
+			   strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				return generatedEvents[i];
+			}
+		}
+	}
+
+	return StockEvents::EmptyEvent();
+}
+void FrostNovaSkill::RemoveGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(std::vector<Event>::iterator iter = generatedEvents.begin();
+			iter != generatedEvents.end();)
+		{
+			if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				generatedEvents.erase(iter);
+				break;
+			}
+			else 
+			{
+				++iter;
+			}
+		}
+	}
+}
+std::vector<Event> FrostNovaSkill::GetGeneratedEvents()
 {
 	std::vector<Event> eventsToReturn;
 

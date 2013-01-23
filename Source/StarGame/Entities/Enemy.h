@@ -48,6 +48,8 @@ enum BehaviorState
 	STATE_IDLE,
 	STATE_EVADE,
 	STATE_PATROL,
+	// should it be a stopped state or a boolean?
+	STATE_STOPPED,
 };
 
 struct PatrolRoute
@@ -119,6 +121,7 @@ protected:
 	int health;
 
 	BehaviorState currentState;
+	BehaviorState lastState;
 
 	bool isDestroyed;
 
@@ -133,6 +136,7 @@ public:
 		lineOfSight = newLineOfSight;
 		health = newHealth;
 		currentState = STATE_IDLE;
+		lastState = currentState;
 		isDestroyed = false;
 	}
 
@@ -156,6 +160,8 @@ public:
 class Swarm : public Enemy
 {
 private:
+	glm::vec4 initialColor;
+	glm::vec4 onFreezeColor;
 	int swarmersCount;
 	
 	DamageOverTime damage;
@@ -173,6 +179,7 @@ public:
 	Swarm(int newSwarmersCount, 
 		  int newTime_seconds, int newDamage,
 		  const BillboardProgDataNoTexture &billboardProgDataNoTexture,
+		  glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 		  glm::vec3 newPosition, glm::vec3 newFrontVector,
 		  float newSpeed, float newLineOfSight,
 		  int newHealth);
@@ -190,6 +197,8 @@ public:
 class Spaceship : public Enemy
 {
 private:
+	glm::vec4 initialColor;
+	glm::vec4 onFreezeColor;
 	float projectileSpeed;
 	int projectileLifeSpan;
 	int projectileDamage;
@@ -206,6 +215,7 @@ public:
 	Spaceship() {}
 	Spaceship(float newProjectileSpeed, int newProjectileLifeSpan,
 			  int newProjectileDamage,
+			  glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 			  glm::vec3 newPosition, glm::vec3 newFrontVector,
 			  float newSpeed, float newLineOfSight,
 			  int newHealth);

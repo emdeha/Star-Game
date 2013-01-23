@@ -175,16 +175,39 @@ void Scene::UpdateScene()
 				}
 			}
 
-			if(skills[skillIndex]->GetSkillType() == "sunNovaSkill")
+			if(skills[skillIndex]->GetSkillType() == "sunNovaSkill" ||
+			   skills[skillIndex]->GetSkillType() == "satChainSkill" ||
+			   skills[skillIndex]->GetSkillType() == "satFrostNova")
 			{
 				for(int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++)
 				{
 					if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition()))
 					{
-						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
+						if(skills[skillIndex]->GetSkillType() == "satFrostNova")
+						{
+							Event skillEvent = skills[skillIndex]->GetGeneratedEvent("stunskilldeployed");
+							if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
+							{
+								enemies[enemyIndex]->OnEvent(skillEvent);
+							}
+						}
+						else
+						{
+							Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
+							if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
+							{
+								enemies[enemyIndex]->OnEvent(skillEvent);
+							}
+						}
+					}
+
+					if(skills[skillIndex]->GetSkillType() == "satFrostNova")
+					{			
+						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("stuntimeended");
 						if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
 						{
 							enemies[enemyIndex]->OnEvent(skillEvent);
+							skills[skillIndex]->RemoveGeneratedEvent("stuntimeended");
 						}
 					}
 				}
@@ -560,6 +583,7 @@ void Scene::GenerateRandomSwarms(int count,
 		
 			std::shared_ptr<Swarm> randSwarm = 
 				std::shared_ptr<Swarm>(new Swarm(100, 1, 5, progData, 
+												 glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 
 												 position, velocity, speed, 3.0f, 50));
 
 			enemies.push_back(randSwarm);
@@ -587,6 +611,7 @@ void Scene::GenerateRandomSpaceships(int count)
 
 			std::shared_ptr<Spaceship> randSpaceship =
 				std::shared_ptr<Spaceship>(new Spaceship(0.3f, 20, 1, 
+														 glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
 														 position, velocity, speed, 
 														 2.0f, 50));
 			randSpaceship->LoadMesh("mesh-files/Ship.xml");

@@ -18,6 +18,8 @@
 #ifndef SKILLS_H
 #define SKILLS_H
 
+#define TORUS_SKILL
+
 
 #include <vector>
 
@@ -188,7 +190,11 @@ private:
 	float currentScale;
 	glm::vec3 position;
 
-	Utility::Primitives::Circle skillExpansionRadius; // Maybe a Torus2D outline would be better.
+#ifdef CIRCLE_SKILL
+	Utility::Primitives::Circle skillExpansionRadius;
+#elif defined TORUS_SKILL
+	Utility::Primitives::Torus2D skillExpansionRadius;
+#endif
 	std::vector<Event> generatedEvents;
 	bool isStarted;
 
@@ -269,5 +275,101 @@ public:
 	// (!)It is an one little dangerous method. You can lose a lot of events that way.
 	std::vector<Event> GetGeneratedEvents();
 };
+
+
+class SatelliteChainingNova : public Skill
+{
+private:
+	int damage;
+	float range; // The maximum skill expansion
+	float scaleRate;
+	float currentScale;
+	glm::vec3 position;
+
+#ifdef CIRCLE_SKILL
+	Utility::Primitives::Circle skillExpansionRadius;
+#elif defined TORUS_SKILL
+	Utility::Primitives::Torus2D skillExpansionRadius;
+#endif
+	std::vector<Event> generatedEvents;
+	bool isStarted;
+
+public:
+	SatelliteChainingNova() : Skill() {}
+	SatelliteChainingNova(glm::vec3 newPosition, 
+						  int newDamage, 
+						  float newRange, float newScaleRate,
+						  const std::string &skillType,
+						  char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData);
+
+	void OnEvent(Event &_event);
+
+	float GetRange();
+	glm::vec3 GetPosition();
+
+	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
+
+	bool IsIntersectingObject(glm::vec3 objectPosition);
+
+	// Only for EVENT_TYPE_OTHER
+	Event GetGeneratedEvent(const std::string &eventName);
+	void RemoveGeneratedEvent(const std::string &eventName);
+	// Gets the generated events and empties the event list.
+	// (!)It is an one little dangerous method. You can lose a lot of events that way.
+	std::vector<Event> GetGeneratedEvents();
+};
+
+
+class FrostNovaSkill : public Skill
+{
+private:
+	int damage; // Must be sth small. This is a stunning skill.
+	int stunTime_seconds;
+	Framework::Timer stunTimer;
+	float range;	
+	float scaleRate;
+	float currentScale;
+	glm::vec3 position;
+
+#ifdef CIRCLE_SKILL
+	Utility::Primitives::Circle skillExpansionRadius;
+#elif defined TORUS_SKILL
+	Utility::Primitives::Torus2D skillExpansionRadius;
+#endif
+
+	std::vector<Event> generatedEvents;
+	bool isStarted;
+
+public:
+	FrostNovaSkill() : Skill() {}
+	FrostNovaSkill(int newDamage, int newStunTime_seconds,
+				   float newRange, float newScaleRate,
+				   glm::vec3 newPosition,
+				   const std::string &skillType,
+				   char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData);
+
+	void OnEvent(Event &_event);
+
+	float GetRange();
+	glm::vec3 GetPosition();
+
+	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
+
+	bool IsIntersectingObject(glm::vec3 objectPosition);
+
+	// Only for EVENT_TYPE_OTHER
+	Event GetGeneratedEvent(const std::string &eventName);
+	void RemoveGeneratedEvent(const std::string &eventName);
+	// Gets the generated events and empties the event list.
+	// (!)It is an one little dangerous method. You can lose a lot of events that way.
+	std::vector<Event> GetGeneratedEvents();
+};
+
 
 #endif

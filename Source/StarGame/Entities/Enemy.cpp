@@ -59,6 +59,7 @@ static void GenerateUniformBuffers(int &materialBlockSize,
 Swarm::Swarm(int newSwarmersCount, 
 			 int newTime_seconds, int newDamage,
 			 const BillboardProgDataNoTexture &billboardProgDataNoTexture,
+			 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 			 glm::vec3 newPosition, glm::vec3 newFrontVector,
 			 float newSpeed, float newLineOfSight,
 			 int newHealth)
@@ -67,7 +68,9 @@ Swarm::Swarm(int newSwarmersCount,
 	swarmersCount = newSwarmersCount;
 	damage.damage = newDamage;
 	damage.time_seconds = newTime_seconds;
-	swarmBody = SwarmEmitter(position, swarmersCount);
+	initialColor = newInitialColor;
+	onFreezeColor = newOnFreezeColor;
+	swarmBody = SwarmEmitter(position, initialColor, swarmersCount);
 	swarmBody.Init(billboardProgDataNoTexture);
 	isCommanded = false;
 
@@ -179,11 +182,11 @@ void Swarm::UpdateAI(CelestialBody &sun)
 	else if(currentState == STATE_EVADE)
 	{
 		glm::vec3 vectorFromPlanetToSwarm = sun.GetPosition() - position;
-
+		
 		vectorFromPlanetToSwarm = glm::normalize(vectorFromPlanetToSwarm);
-		glm::vec3 checkVelocity = glm::normalize(frontVector * speed);
+		glm::vec3 swarmDirection = glm::normalize(frontVector * speed);
 
-		if(fabs(glm::length(vectorFromPlanetToSwarm - checkVelocity)) <= 0.0001f)
+		if(glm::dot(vectorFromPlanetToSwarm, swarmDirection) > 0)
 		{
 			speed *= -1.0f;
 		}
@@ -214,14 +217,18 @@ void Swarm::Update(bool isSunKilled, CelestialBody &sun)
 
 		if(!isSunKilled)
 		{
-			position += frontVector * speed;
-
-			this->UpdateAI(sun);
-			swarmBody.Update(frontVector * speed);
-
-			if(health <= 20)
+			if(currentState != STATE_STOPPED)
 			{
-				currentState = STATE_EVADE;
+				position += frontVector * speed;
+			
+				this->UpdateAI(sun);
+				swarmBody.Update(frontVector * speed);
+			
+
+				if(health <= 20)
+				{
+					currentState = STATE_EVADE;
+				}
 			}
 
 			if(health <= 0)
@@ -261,6 +268,18 @@ void Swarm::OnEvent(Event &_event)
 		{
 			health -= _event.GetArgument("damage").varInteger;
 		}
+		if(strcmp(_event.GetArgument("what_event").varString, "stunskilldeployed") == 0)
+		{
+			// WARN: It should be 'currentState'.
+			lastState = STATE_ATTACK;
+			currentState = STATE_STOPPED;
+			swarmBody.SetColor(onFreezeColor);
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "stuntimeended") == 0)
+		{
+			currentState = lastState;
+			swarmBody.SetColor(initialColor);
+		}
 		break;
 	}
 }
@@ -269,6 +288,7 @@ void Swarm::OnEvent(Event &_event)
 
 Spaceship::Spaceship(float newProjectileSpeed, int newProjectileLifeSpan,
 					 int newProjectileDamage,
+					 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 					 glm::vec3 newPosition, glm::vec3 newFrontVector,
 					 float newSpeed, float newLineOfSight,
 					 int newHealth)
@@ -279,6 +299,8 @@ Spaceship::Spaceship(float newProjectileSpeed, int newProjectileLifeSpan,
 	projectileDamage = newProjectileDamage;
 	currentState = STATE_PATROL;
 
+	initialColor = newInitialColor;
+	onFreezeColor = newOnFreezeColor;
 
 	projectile = 
 		std::unique_ptr<Projectile>(new Projectile(position, 
@@ -323,7 +345,7 @@ void Spaceship::LoadMesh(const std::string &meshFile)
 	}
 
 	GenerateUniformBuffers(materialBlockSize, 
-						   glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), 
+						   initialColor,//glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), 
 						   materialUniformBuffer);
 
 	projectile->LoadMesh(meshFile); // TODO: maybe this should be removed
@@ -362,15 +384,16 @@ void Spaceship::UpdateAI(CelestialBody &sun)
 		glm::vec3 vectorFromPlanetToSpaceship = sun.GetPosition() - position;
 
 		vectorFromPlanetToSpaceship = glm::normalize(vectorFromPlanetToSpaceship);
-		glm::vec3 checkVelocity = glm::normalize(frontVector * speed);
-
-		if(fabs(glm::length(vectorFromPlanetToSpaceship - checkVelocity)) <= 0.0001f)
+		glm::vec3 spaceshipDirection = glm::normalize(frontVector * speed);
+		
+		if(glm::dot(vectorFromPlanetToSpaceship, spaceshipDirection) > 0)
 		{
 			speed *= -1.0f;
 		}
 	}
 	else if(currentState == STATE_PATROL)
 	{		
+		// When the last patrol point is reached, we should return to the first.
 		if(patrolRoute.patrolPoints.size() > patrolRoute.nextPatrolPointIndex)
 		{
 			glm::vec3 vectorBetweenShipAndPatrolPoint = 
@@ -437,7 +460,7 @@ void Spaceship::UpdateAI(CelestialBody &sun)
 		position += velocity;
 		*/
 
-		position += frontVector * speed;
+		//position += frontVector * speed;
 				
 		glm::vec3 vectorFromSunToSpaceship = sun.GetPosition() - position;
 		float distanceBetweenSunAndSpaceship = glm::length(vectorFromSunToSpaceship);
@@ -457,19 +480,23 @@ void Spaceship::UpdateAI(CelestialBody &sun)
 
 void Spaceship::Update(bool isSunKilled, CelestialBody &sun)
 {
-	if(health <= 20)
-	{
-		currentState = STATE_EVADE;
-	}
-
-	if(health <= 0)
-	{
-		isDestroyed = true;
-	}
-
 	if(!isSunKilled)
 	{
-		UpdateAI(sun);
+		if(currentState != STATE_STOPPED)
+		{
+			position += frontVector * speed;
+			UpdateAI(sun);
+		}
+				
+		if(health <= 20)
+		{
+			currentState = STATE_EVADE;
+		}
+
+		if(health <= 0)
+		{
+			isDestroyed = true;
+		}
 	}
 	else
 	{
@@ -491,14 +518,14 @@ void Spaceship::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 		glutil::PushStack push(modelMatrix);
 
 
-		glm::vec3 viewPosition = position + frontVector * speed * interpolation;
+		//glm::vec3 viewPosition = position + frontVector * speed * interpolation;
 
 		glm::vec3 target = patrolRoute.nextPatrolPoint;
 		glm::vec3 vectorToTarget = target - position;
 
 		float rotation = glm::degrees(atan2f(vectorToTarget.x, vectorToTarget.z));
 
-		modelMatrix.Translate(viewPosition);
+		modelMatrix.Translate(position);
 		modelMatrix.RotateY(rotation);
 		modelMatrix.Scale(0.2f);
 
@@ -543,6 +570,18 @@ void Spaceship::OnEvent(Event &_event)
 		if(strcmp(_event.GetArgument("what_event").varString, "timeended") == 0)
 		{
 			health -= _event.GetArgument("damage").varInteger;
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "stunskilldeployed") == 0)
+		{
+			// WARN: It should be 'currentState'.
+			lastState = STATE_ATTACK;
+			currentState = STATE_STOPPED;
+			GenerateUniformBuffers(materialBlockSize, onFreezeColor, materialUniformBuffer);
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "stuntimeended") == 0)
+		{
+			currentState = lastState;
+			GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 		}
 		break;
 	}

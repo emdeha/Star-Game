@@ -100,9 +100,10 @@ void ParticleEmitter::Render(glutil::MatrixStack &modelMatrix,
 
 
 
-SwarmEmitter::SwarmEmitter(glm::vec3 newPosition, int newParticleCount)
+SwarmEmitter::SwarmEmitter(glm::vec3 newPosition, glm::vec4 newColor, int newParticleCount)
 {
 	position = newPosition;
+	color = newColor;
 	particleCount = newParticleCount;
 
 	particles.resize(particleCount);
@@ -165,7 +166,7 @@ void SwarmEmitter::Render(glutil::MatrixStack &modelMatrix,
 	glUniform3f(billboardProgDataNoTexture.cameraPositionUnif, 
 				cameraPosition.x, cameraPosition.y, cameraPosition.z);
 	glUniform4f(billboardProgDataNoTexture.colorUnif,
-				1.0f, 1.0f, 0.0f, 1.0f);
+				color.r, color.g, color.b, color.a);
 
 
 	for(int i = 0; i < particleCount; i++)
@@ -181,6 +182,10 @@ void SwarmEmitter::Render(glutil::MatrixStack &modelMatrix,
 	glUseProgram(0);
 }
 
+void SwarmEmitter::SetColor(glm::vec4 newColor)
+{
+	color = newColor;
+}
 
 
 ExplosionEmitter::ExplosionEmitter(glm::vec3 newPosition, int newParticleCount,

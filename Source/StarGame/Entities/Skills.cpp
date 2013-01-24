@@ -20,22 +20,39 @@
 #include "MaterialBlock.h"
 
 
-/*Event Skill::GetGeneratedEvent(const std::string &eventName)
+Event Skill::GetGeneratedEvent(const std::string &eventName)
 {
 	if(generatedEvents.size() > 0)
 	{
 		for(int i = 0; i < generatedEvents.size(); i++)
 		{
 			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
-				strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
+			   strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
 			{
 				return generatedEvents[i];
 			}
 		}
 	}
-	else
+
+	return StockEvents::EmptyEvent();
+}
+void Skill::RemoveGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
 	{
-		return StockEvents::EmptyEvent();
+		for(std::vector<Event>::iterator iter = generatedEvents.begin();
+			iter != generatedEvents.end();)
+		{
+			if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				generatedEvents.erase(iter);
+				break;
+			}
+			else 
+			{
+				++iter;
+			}
+		}
 	}
 }
 std::vector<Event> Skill::GetGeneratedEvents()
@@ -53,7 +70,31 @@ std::vector<Event> Skill::GetGeneratedEvents()
 	}
 
 	return eventsToReturn;
-}*/
+}
+
+
+// for lighting
+static void GenerateUniformBuffers(int &materialBlockSize, glm::vec4 diffuseColor, GLuint &materialUniformBuffer)
+{
+	MaterialBlock material;
+	material.diffuseColor = diffuseColor;
+	material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
+	material.shininessFactor = 0.3f;
+
+
+	int uniformBufferAlignSize = 0;
+	glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignSize);
+
+	materialBlockSize = sizeof(MaterialBlock);
+	materialBlockSize += uniformBufferAlignSize -
+		(materialBlockSize % uniformBufferAlignSize);
+
+	
+	glGenBuffers(1, &materialUniformBuffer);
+	glBindBuffer(GL_UNIFORM_BUFFER, materialUniformBuffer);
+	glBufferData(GL_UNIFORM_BUFFER, materialBlockSize, &material, GL_STATIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
 
 
 AOESkill::AOESkill(glm::vec3 newPosition,
@@ -151,7 +192,7 @@ bool AOESkill::IsIntersectingObject(glm::vec3 objectPosition)
 	
 	return false;
 }
-
+/*
 Event AOESkill::GetGeneratedEvent(const std::string &eventName)
 {
 	if(generatedEvents.size() > 0)
@@ -205,7 +246,7 @@ std::vector<Event> AOESkill::GetGeneratedEvents()
 
 	return eventsToReturn;
 }
-
+*/
 
 PassiveAOESkill::PassiveAOESkill(glm::vec3 newPosition,
 								 int newDamage, int newDamageApplyTime_seconds,
@@ -328,7 +369,7 @@ bool PassiveAOESkill::IsIntersectingObject(glm::vec3 objectPosition)
 
 	return false;
 }
-
+/*
 Event PassiveAOESkill::GetGeneratedEvent(const std::string &eventName)
 {
 	if(generatedEvents.size() > 0)
@@ -380,7 +421,7 @@ std::vector<Event> PassiveAOESkill::GetGeneratedEvents()
 
 	return eventsToReturn;
 }
-
+*/
 
 SunNovaSkill::SunNovaSkill(glm::vec3 newPosition,
 						   int newDamage, 
@@ -395,7 +436,7 @@ SunNovaSkill::SunNovaSkill(glm::vec3 newPosition,
 	scaleRate = newScaleRate;
 	currentScale = 1.0f;
 	isStarted = false;
-	generatedEvents.resize(0);
+	//generatedEvents.resize(0);
 
 #ifdef CIRCLE_SKILL
 	skillExpansionRadius = Utility::Primitives::Circle(glm::vec4(0.7f, 0.5f, 0.0f, 0.5f), position, currentScale, 90);
@@ -489,7 +530,7 @@ bool SunNovaSkill::IsIntersectingObject(glm::vec3 objectPosition)
 	}
 	else return false;
 }
-
+/*
 Event SunNovaSkill::GetGeneratedEvent(const std::string &eventName)
 {
 	if(generatedEvents.size() > 0)
@@ -541,30 +582,9 @@ std::vector<Event> SunNovaSkill::GetGeneratedEvents()
 
 	return eventsToReturn;
 }
+*/
 
 
-// for lighting
-static void GenerateUniformBuffers(int &materialBlockSize, glm::vec4 diffuseColor, GLuint &materialUniformBuffer)
-{
-	MaterialBlock material;
-	material.diffuseColor = diffuseColor;
-	material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
-	material.shininessFactor = 0.3f;
-
-
-	int uniformBufferAlignSize = 0;
-	glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignSize);
-
-	materialBlockSize = sizeof(MaterialBlock);
-	materialBlockSize += uniformBufferAlignSize -
-		(materialBlockSize % uniformBufferAlignSize);
-
-	
-	glGenBuffers(1, &materialUniformBuffer);
-	glBindBuffer(GL_UNIFORM_BUFFER, materialUniformBuffer);
-	glBufferData(GL_UNIFORM_BUFFER, materialBlockSize, &material, GL_STATIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-}
 
 SatelliteChainingSkill::SatelliteChainingSkill(glm::vec3 newPosition,
 											   int newDamage, float newRange, 
@@ -582,7 +602,7 @@ SatelliteChainingSkill::SatelliteChainingSkill(glm::vec3 newPosition,
 	projectileVelocity = newProjectileVelocity;
 	projectileColor = newProjectileColor;
 	projectileRadius = newProjectileRadius;
-	generatedEvents.resize(0);
+	//generatedEvents.resize(0);
 	materialBlockSize = 0;
 	materialUniformBuffer = 0;
 	isStarted = false;
@@ -727,7 +747,7 @@ bool SatelliteChainingSkill::IsIntersectingObject(glm::vec3 objectPosition)
 	}
 	else return false;
 }
-
+/*
 Event SatelliteChainingSkill::GetGeneratedEvent(const std::string &eventName)
 {
 	if(generatedEvents.size() > 0)
@@ -778,7 +798,7 @@ std::vector<Event> SatelliteChainingSkill::GetGeneratedEvents()
 	}
 
 	return eventsToReturn;
-}
+}*/
 
 
 SatelliteChainingNova::SatelliteChainingNova(glm::vec3 newPosition, 
@@ -919,7 +939,7 @@ bool SatelliteChainingNova::IsIntersectingObject(glm::vec3 objectPosition)
 	}
 	else return false;
 }
-
+/*
 Event SatelliteChainingNova::GetGeneratedEvent(const std::string &eventName)
 {
 	if(generatedEvents.size() > 0)
@@ -970,7 +990,7 @@ std::vector<Event> SatelliteChainingNova::GetGeneratedEvents()
 	}
 
 	return eventsToReturn;
-}
+}*/
 
 
 FrostNovaSkill::FrostNovaSkill(int newDamage, int newStunTime_seconds,
@@ -1109,7 +1129,7 @@ bool FrostNovaSkill::IsIntersectingObject(glm::vec3 objectPosition)
 	}
 	else return false;
 }
-
+/*
 Event FrostNovaSkill::GetGeneratedEvent(const std::string &eventName)
 {
 	if(generatedEvents.size() > 0)
@@ -1160,4 +1180,4 @@ std::vector<Event> FrostNovaSkill::GetGeneratedEvents()
 	}
 
 	return eventsToReturn;
-}
+}*/

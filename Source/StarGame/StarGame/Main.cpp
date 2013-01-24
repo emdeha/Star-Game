@@ -531,8 +531,9 @@ void Display()
 	if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 	{		
 		scene.SetDisplayData(displayData);
-		scene.GenerateRandomSwarms(5, shaderManager.GetBillboardProgDataNoTexture());
+		//scene.GenerateRandomSwarms(10, shaderManager.GetBillboardProgDataNoTexture());
 		//scene.GenerateRandomSpaceships(1);
+		scene.GenerateRandomSuicideBombers(1);
 
 		glutil::MatrixStack modelMatrix;
 

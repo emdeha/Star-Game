@@ -622,3 +622,35 @@ void Scene::GenerateRandomSpaceships(int count)
 		}
 	}
 }
+
+void Scene::GenerateRandomSuicideBombers(int count)
+{
+	if(enemies.size() <= 0)
+	{
+		srand(time(0));
+
+		for(int i = 0; i < count; i++)
+		{
+			float range = ((float)rand() / (float)RAND_MAX) * 4.0f + 2.0f;
+			float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
+
+			float posX = cosf(posOnCircle * (2.0f * PI)) * range;
+			float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
+
+			glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
+			glm::vec3 velocity = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
+			float speed = 0.02f;
+			float chargeSpeed = 0.1f;
+
+			
+			std::shared_ptr<FastSuicideBomber> randBomber = 
+				std::shared_ptr<FastSuicideBomber>(new FastSuicideBomber(50, chargeSpeed,
+																		 glm::vec4(0.5f, 0.5f, 0.7f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+																		 position, velocity, speed,
+																		 2.0f, 50));
+			randBomber->LoadMesh("mesh-files/UnitSphere.xml");
+
+			enemies.push_back(randBomber);
+		}
+	}
+}

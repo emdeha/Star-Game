@@ -30,6 +30,58 @@ inline bool Enemy::IsDestroyed()
 	return isDestroyed;
 }
 
+Event Enemy::GetGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(int i = 0; i < generatedEvents.size(); i++)
+		{
+			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
+			   strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				return generatedEvents[i];
+			}
+		}
+	}
+
+	return StockEvents::EmptyEvent();
+}
+void Enemy::RemoveGeneratedEvent(const std::string &eventName)
+{
+	if(generatedEvents.size() > 0)
+	{
+		for(std::vector<Event>::iterator iter = generatedEvents.begin();
+			iter != generatedEvents.end();)
+		{
+			if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
+			{
+				generatedEvents.erase(iter);
+				break;
+			}
+			else 
+			{
+				++iter;
+			}
+		}
+	}
+}
+std::vector<Event> Enemy::GetGeneratedEvents()
+{
+	std::vector<Event> eventsToReturn;
+
+	if(generatedEvents.size() > 0)
+	{
+		eventsToReturn = generatedEvents;
+		generatedEvents.resize(0);
+	}
+	else 
+	{
+		eventsToReturn.push_back(StockEvents::EmptyEvent());
+	}
+
+	return eventsToReturn;
+}
+
 
 static void GenerateUniformBuffers(int &materialBlockSize, 
 								   glm::vec4 diffuseColor,
@@ -107,77 +159,115 @@ void Swarm::UpdateAI(CelestialBody &sun)
 		if(sun.HasSatellites())
 		{
 			vectorBetweenPlanetAndSwarm = sun.GetOuterSatellite()->GetPosition() - position;
-		}
-		else
-		{
-			vectorBetweenPlanetAndSwarm = sun.GetPosition() - position;
-		}
-		float distanceBetweenPlanetAndSwarm = glm::length(vectorBetweenPlanetAndSwarm);
+			frontVector = glm::normalize(vectorBetweenPlanetAndSwarm);
 
+			float satelliteRadius = sun.GetOuterSatellite()->GetRadius();
 
-		if(sun.HasSatellites())
-		{
-			if(distanceBetweenPlanetAndSwarm <= 
-				sun.GetOuterSatellite()->GetDiameter() * sun.GetOuterSatellite()->GetDiameter())
+			float distanceBetweenPlanetAndSwarm = glm::length(vectorBetweenPlanetAndSwarm);
+			if(distanceBetweenPlanetAndSwarm <= satelliteRadius * satelliteRadius)
 			{
-				//velocity = sun.GetOuterSatellite()->GetVelocity();
-
 				if(attackTimer.GetTimeSinceStart() >= damage.time_seconds)
 				{
 					AttackSolarSystem(sun, true, sun.GetOuterSatellite()->GetOffsetFromSun());
 					attackTimer.Reset();
 				}
-			}
-			else
-			{				
-				glm::vec3 vectorToSatellite = 
-					sun.GetOuterSatellite()->GetPosition() - position;
-
-				frontVector = glm::normalize(vectorToSatellite); // TODO: Magic
-				speed = 0.07f;
-			}
+			}   
 		}
 		else
 		{
-			if(distanceBetweenPlanetAndSwarm <= sun.GetRadius() * sun.GetRadius())
+			vectorBetweenPlanetAndSwarm = sun.GetPosition() - position;
+			frontVector = glm::normalize(vectorBetweenPlanetAndSwarm);
+
+			float sunRadius = sun.GetRadius();
+
+			float distanceBetweenPlanetAndSwarm = glm::length(vectorBetweenPlanetAndSwarm);
+			if(distanceBetweenPlanetAndSwarm <= sunRadius * sunRadius)
 			{
-				isCommanded = false;
-
-				frontVector = glm::vec3();
-
 				if(attackTimer.GetTimeSinceStart() >= damage.time_seconds)
 				{
 					AttackSolarSystem(sun);
 					attackTimer.Reset();
 				}
 			}
-			else
-			{
-				glm::vec3 direction = glm::vec3();
-				if(sun.HasSatellites())
-				{
-					direction = sun.GetOuterSatellite()->GetPosition() - position;
-				}
-				else
-				{
-					direction = sun.GetPosition() - position;
-				}
-
-				if(!isCommanded)
-				{
-					direction = glm::normalize(direction);
-					frontVector = direction;
-					speed = 0.1f;
-				}
-
-				if(health <= 20.0f)
-				{
-					currentState = STATE_EVADE;
-				}
-		
-				isCommanded = true;
-			}
 		}
+
+
+		//glm::vec3 vectorBetweenPlanetAndSwarm = glm::vec3();
+		//if(sun.HasSatellites())
+		//{
+		//	vectorBetweenPlanetAndSwarm = sun.GetOuterSatellite()->GetPosition() - position;
+		//}
+		//else
+		//{
+		//	vectorBetweenPlanetAndSwarm = sun.GetPosition() - position;
+		//}
+		//float distanceBetweenPlanetAndSwarm = glm::length(vectorBetweenPlanetAndSwarm);
+
+		//frontVector = glm::normalize(vectorBetweenPlanetAndSwarm);
+
+		//if(sun.HasSatellites())
+		//{
+		//	if(distanceBetweenPlanetAndSwarm <= 
+		//		sun.GetOuterSatellite()->GetDiameter() * sun.GetOuterSatellite()->GetDiameter())
+		//	{
+		//		//velocity = sun.GetOuterSatellite()->GetVelocity();
+
+		//		if(attackTimer.GetTimeSinceStart() >= damage.time_seconds)
+		//		{
+		//			AttackSolarSystem(sun, true, sun.GetOuterSatellite()->GetOffsetFromSun());
+		//			attackTimer.Reset();
+		//		}
+		//	}
+		//	/*else
+		//	{				
+		//		glm::vec3 vectorToSatellite = sun.GetOuterSatellite()->GetPosition() - position;
+
+		//		frontVector = glm::normalize(vectorToSatellite); // TODO: Magic
+		//		//speed = 0.07f;
+		//	}*/
+		//}
+		//else
+		//{
+		//	if(distanceBetweenPlanetAndSwarm <= sun.GetRadius() * sun.GetRadius())
+		//	{
+		//		isCommanded = false;
+
+		//		frontVector = glm::vec3();
+
+		//		if(attackTimer.GetTimeSinceStart() >= damage.time_seconds)
+		//		{
+		//			AttackSolarSystem(sun);
+		//			attackTimer.Reset();
+		//		}
+		//	}
+		//	else
+		//	{
+		//		glm::vec3 direction = glm::vec3();
+		//		/*if(sun.HasSatellites()) // Why? We have already passed the situation where the sun hasn't got any sats.
+		//		{
+		//			direction = sun.GetOuterSatellite()->GetPosition() - position;
+		//		}
+		//		else
+		//		{*/
+		//			direction = sun.GetPosition() - position;
+		//		//}
+
+		//		frontVector = glm::normalize(direction);
+		//		/*if(!isCommanded)
+		//		{
+		//			direction = glm::normalize(direction);
+		//			frontVector = direction;
+		//			speed = 0.1f;
+		//		}
+
+		//		if(health <= 20.0f)
+		//		{
+		//			currentState = STATE_EVADE;
+		//		}
+		//
+		//		isCommanded = true;*/
+		//	}
+		//}
 	}
 	else if(currentState == STATE_EVADE)
 	{
@@ -193,12 +283,7 @@ void Swarm::UpdateAI(CelestialBody &sun)
 	}
 	else if(currentState == STATE_IDLE)
 	{
-		glm::vec3 vectorFromPlanetToSwarm = glm::vec3();
-		if(sun.HasSatellites())
-		{
-			vectorFromPlanetToSwarm = sun.GetOuterSatellite()->GetPosition() - position;
-		}
-		else vectorFromPlanetToSwarm = sun.GetPosition() - position;
+		glm::vec3 vectorFromPlanetToSwarm = sun.GetPosition() - position;
 
 		float distanceBetweenPlanetAndSwarm = glm::length(vectorFromPlanetToSwarm);
 
@@ -344,9 +429,7 @@ void Spaceship::LoadMesh(const std::string &meshFile)
 		throw;
 	}
 
-	GenerateUniformBuffers(materialBlockSize, 
-						   initialColor,//glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), 
-						   materialUniformBuffer);
+	GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 
 	projectile->LoadMesh(meshFile); // TODO: maybe this should be removed
 }
@@ -393,7 +476,7 @@ void Spaceship::UpdateAI(CelestialBody &sun)
 	}
 	else if(currentState == STATE_PATROL)
 	{		
-		// When the last patrol point is reached, we should return to the first.
+		// Updates the patrol points.
 		if(patrolRoute.patrolPoints.size() > patrolRoute.nextPatrolPointIndex)
 		{
 			glm::vec3 vectorBetweenShipAndPatrolPoint = 
@@ -405,6 +488,7 @@ void Spaceship::UpdateAI(CelestialBody &sun)
 			{		
 				patrolRoute.currentPatrolPointIndex = patrolRoute.nextPatrolPointIndex;
 				patrolRoute.nextPatrolPointIndex++;
+				// If the end of the patrol is reached, we should restart.
 				if(patrolRoute.nextPatrolPointIndex >= patrolRoute.patrolPoints.size())
 				{
 					patrolRoute.nextPatrolPointIndex = 0;
@@ -510,8 +594,7 @@ void Spaceship::Update(bool isSunKilled, CelestialBody &sun)
 }
 
 void Spaceship::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
-					   float gamma, 
-					   const LitProgData &litData,
+					   float gamma, const LitProgData &litData,
 					   float interpolation)
 {
 	{
@@ -584,14 +667,227 @@ void Spaceship::OnEvent(Event &_event)
 			GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 		}
 		break;
+	default:
+		break;
 	}
 }
 
 
+FastSuicideBomber::FastSuicideBomber(int newDamage, float newChargeSpeed,
+									 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+									 glm::vec3 newPosition, glm::vec3 newFrontVector,
+									 float newSpeed, float newLineOfSight,
+									 int newHealth)
+									 : Enemy(newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
+{
+	damage = newDamage;
+	initialColor = newInitialColor;
+	onFreezeColor = newOnFreezeColor;
+	chargeSpeed = newChargeSpeed;
+}
+
+void FastSuicideBomber::LoadMesh(const std::string &meshFile)
+{
+	try
+	{
+		mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFile));
+	}
+	catch(std::exception &except)
+	{
+		printf("%s\n", except.what());
+		throw;
+	}
+
+	GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
+}
+
+void FastSuicideBomber::AttackSolarSystem(CelestialBody &sun, bool isSatellite, float bodyIndex)
+{
+	EventArg damageEventArgs[2];
+	damageEventArgs[0].argType = "damage";
+	damageEventArgs[0].argument.varType = TYPE_INTEGER;
+	damageEventArgs[0].argument.varInteger = damage;
+	damageEventArgs[1].argType = "bodyIndex";
+	if(isSatellite)
+	{
+		damageEventArgs[1].argument.varType = TYPE_FLOAT;
+		damageEventArgs[1].argument.varFloat = bodyIndex;
+	}
+	else
+	{
+		damageEventArgs[1].argument.varType = TYPE_INTEGER;
+		damageEventArgs[1].argument.varInteger = -1;
+	}
+	Event damageEvent(2, EVENT_TYPE_ATTACKED, damageEventArgs);
+
+	sun.OnEvent(damageEvent);
 
 
+	isDestroyed = true;
+	/*
+	EventArg explodeEventArgs[2];
+	explodeEventArgs[0].argType = "what_event";
+	explodeEventArgs[0].argument.varType = TYPE_STRING;
+	strcpy(explodeEventArgs[0].argument.varString, "explStarted");
+	explodeEventArgs[1].argType = "expl_index";
+	explodeEventArgs[1].argument.varType = TYPE_INTEGER;
+	explodeEventArgs[1].argument.varInteger = 0;
 
+	Event explodeEvent(2, EVENT_TYPE_OTHER, explodeEventArgs);
 
+	generatedEvents.push_back(explodeEvent);
+	//scene.OnEvent(explodeEvent);
+	*/
+}
+
+void FastSuicideBomber::UpdateAI(CelestialBody &sun)
+{
+	// TODO: Strange problem with AI. Sometimes, when the bomber destroys a satellite and I regenerate it, the bomber
+	//		 continues to move in a direction opposite to the sun. He evades, but he is not in an evasive state.
+
+	if(currentState == STATE_ATTACK)
+	{
+		glm::vec3 vectorBetweenPlanetAndBomber = glm::vec3();
+		if(sun.HasSatellites())
+		{
+			vectorBetweenPlanetAndBomber = sun.GetOuterSatellite()->GetPosition() - position;
+
+			float satelliteRadius = sun.GetOuterSatellite()->GetRadius();
+
+			float distanceBetweenPlanetAndBomber = glm::length(vectorBetweenPlanetAndBomber);
+			if(distanceBetweenPlanetAndBomber <= satelliteRadius * satelliteRadius)
+			{
+				AttackSolarSystem(sun, true, sun.GetOuterSatellite()->GetOffsetFromSun());
+			}
+		}
+		else
+		{
+			vectorBetweenPlanetAndBomber = sun.GetPosition() - position;
+
+			float sunRadius = sun.GetRadius();
+
+			float distanceBetweenPlanetAndBomber = glm::length(vectorBetweenPlanetAndBomber);
+			if(distanceBetweenPlanetAndBomber <= sunRadius * sunRadius)
+			{
+				AttackSolarSystem(sun);
+			}
+		}
+
+		frontVector = glm::normalize(vectorBetweenPlanetAndBomber);
+		speed = chargeSpeed;
+	}
+	else if(currentState == STATE_EVADE)
+	{
+		glm::vec3 vectorFromPlanetToBomber = sun.GetPosition() - position;
+
+		vectorFromPlanetToBomber = glm::normalize(vectorFromPlanetToBomber);
+		glm::vec3 bomberDirection = glm::normalize(frontVector * speed);
+
+		if(glm::dot(vectorFromPlanetToBomber, bomberDirection) > 0)
+		{
+			speed *= -1.0f;
+		}
+	}
+	else if(currentState == STATE_IDLE)
+	{
+		glm::vec3 vectorFromPlanetToBomber = sun.GetPosition() - position;
+
+		float distanceBetweenPlanetAndBomber = glm::length(vectorFromPlanetToBomber);
+
+		if(distanceBetweenPlanetAndBomber < lineOfSight)
+		{
+			currentState = STATE_ATTACK;
+		}
+	}
+}
+
+void FastSuicideBomber::Update(bool isSunKilled, CelestialBody &sun)
+{
+	if(!isSunKilled)
+	{
+		if(currentState != STATE_STOPPED)
+		{
+			position += frontVector * speed;
+			UpdateAI(sun);
+		}
+
+		if(health <= 20)
+		{
+			currentState = STATE_EVADE;
+		}
+
+		if(health <= 0)
+		{
+			isDestroyed = true;
+		}
+	}
+	else
+	{
+		currentState = STATE_IDLE;
+	}
+}
+
+void FastSuicideBomber::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
+							   float gamma, const LitProgData &litData,
+							   float interpolation)
+{
+	glutil::PushStack push(modelMatrix);
+
+	// glm::vec3 viewPosition = position + frontVector * speed * interpolation;
+
+	modelMatrix.Translate(position);
+	
+	glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
+					  0, sizeof(MaterialBlock));
+
+	glm::mat3 normMatrix(modelMatrix.Top());
+	normMatrix = glm::transpose(glm::inverse(normMatrix));
+
+	glUseProgram(litData.theProgram);
+	glUniformMatrix4fv(litData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+	glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+
+	mesh->Render("lit");
+
+	glUseProgram(0);
+
+	glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
+}
+
+void FastSuicideBomber::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
+	case EVENT_TYPE_SHOT_FIRED:
+		break;
+	case EVENT_TYPE_ATTACKED:
+		break;
+	case EVENT_TYPE_OTHER:
+		if(strcmp(_event.GetArgument("what_event").varString, "skilldeployed") == 0)
+		{
+			health -= _event.GetArgument("skillDamage").varInteger;
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "timeended") == 0)
+		{
+			health -= _event.GetArgument("damage").varInteger;
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "stunskilldeployed") == 0)
+		{
+			// WARN: It should be 'currentState'.
+			lastState = STATE_ATTACK;
+			currentState = STATE_STOPPED;
+			GenerateUniformBuffers(materialBlockSize, onFreezeColor, materialUniformBuffer);
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "stuntimeended") == 0)
+		{
+			currentState = lastState;
+			GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
+		}
+		break;
+	default:
+		break;
+	}
+}
 /*
 FastSuicideBomber::FastSuicideBomber(glm::vec3 newPosition, glm::vec3 newVelocity,
 									 int newHealth, int newDamage, float newLineOfSight,

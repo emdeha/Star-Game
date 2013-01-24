@@ -125,6 +125,9 @@ protected:
 
 	bool isDestroyed;
 
+
+	std::vector<Event> generatedEvents;
+
 public:
 	Enemy() {}
 	Enemy(glm::vec3 newPosition, glm::vec3 newFrontVector, float newSpeed,
@@ -138,6 +141,7 @@ public:
 		currentState = STATE_IDLE;
 		lastState = currentState;
 		isDestroyed = false;
+		generatedEvents.resize(0);
 	}
 
 	virtual void UpdateAI(CelestialBody &sun) {}
@@ -154,6 +158,17 @@ public:
 
 	virtual glm::vec3 GetPosition();
 	virtual bool IsDestroyed();
+
+
+
+	// WARN: Not sure if I should keep this.
+
+	// Only for EVENT_TYPE_OTHER
+	Event GetGeneratedEvent(const std::string &eventName);
+	void RemoveGeneratedEvent(const std::string &eventName);
+	// Gets the generated events and empties the event list.
+	// (!)It is an one little dangerous method. You can lose a lot of events that way.
+	std::vector<Event> GetGeneratedEvents();
 };
 
 
@@ -223,8 +238,7 @@ public:
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
 	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
-				float gamma, 
-				const LitProgData &litData,
+				float gamma, const LitProgData &litData,
 				float interpolation);
 
 	void OnEvent(Event &_event);
@@ -234,6 +248,40 @@ public:
 };
 
 
+class FastSuicideBomber : public Enemy
+{
+private:
+	glm::vec4 initialColor;
+	glm::vec4 onFreezeColor;
+	int damage;
+	float chargeSpeed;
+	
+	std::unique_ptr<Framework::Mesh> mesh;
+
+	int materialBlockSize;
+	GLuint materialUniformBuffer;
+
+private:
+	void AttackSolarSystem(CelestialBody &sun, bool isSatellite = false, float bodyIndex = -1.0f);
+
+public:
+	FastSuicideBomber() {}
+	FastSuicideBomber(int newDamage, float newChargeSpeed,
+					  glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+					  glm::vec3 newPosition, glm::vec3 newFrontVector,
+					  float newSpeed, float newLineOfSight,
+					  int newHealth);
+
+	void UpdateAI(CelestialBody &sun);
+	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
+	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
+				float gamma, const LitProgData &litData,
+				float interpolation);
+
+	void OnEvent(Event &_event);
+
+	void LoadMesh(const std::string &meshFile);
+};
 /*
 class FastSuicideBomber
 {

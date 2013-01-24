@@ -144,9 +144,9 @@ public:
 
 	
 	// !!! Only for testing purposes !!!
-	void GenerateRandomSwarms(int count,
-							  const BillboardProgDataNoTexture &progData);
+	void GenerateRandomSwarms(int count, const BillboardProgDataNoTexture &progData);
 	void GenerateRandomSpaceships(int count);
+	void GenerateRandomSuicideBombers(int count);
 };
 
 #endif

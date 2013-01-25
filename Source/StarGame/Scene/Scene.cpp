@@ -562,8 +562,7 @@ bool Scene::HasSuns()
 
 #include <ctime>
 
-void Scene::GenerateRandomSwarms(int count,
-								 const BillboardProgDataNoTexture &progData)
+void Scene::GenerateRandomSwarms(int count, const BillboardProgDataNoTexture &progData)
 {
 	if(enemies.size() <= 0)
 	{
@@ -578,13 +577,13 @@ void Scene::GenerateRandomSwarms(int count,
 			float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
 
 			glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
-			glm::vec3 velocity = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
+			glm::vec3 frontVector = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
 			float speed = 0.05f;
 		
 			std::shared_ptr<Swarm> randSwarm = 
 				std::shared_ptr<Swarm>(new Swarm(100, 1, 5, progData, 
 												 glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 
-												 position, velocity, speed, 3.0f, 50));
+												 position, frontVector, speed, 3.0f, 50));
 
 			enemies.push_back(randSwarm);
 		}
@@ -606,13 +605,13 @@ void Scene::GenerateRandomSpaceships(int count)
 			float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
 
 			glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
-			glm::vec3 velocity = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
+			glm::vec3 frontVector = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
 			float speed = 0.05f;
 
 			std::shared_ptr<Spaceship> randSpaceship =
 				std::shared_ptr<Spaceship>(new Spaceship(0.3f, 20, 1, 
 														 glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-														 position, velocity, speed, 
+														 position, frontVector, speed, 
 														 2.0f, 50));
 			randSpaceship->LoadMesh("mesh-files/Ship.xml");
 			randSpaceship->LoadProjectileMesh("mesh-files/UnitSphere.xml");
@@ -638,7 +637,7 @@ void Scene::GenerateRandomSuicideBombers(int count)
 			float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
 
 			glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
-			glm::vec3 velocity = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
+			glm::vec3 frontVector = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
 			float speed = 0.02f;
 			float chargeSpeed = 0.1f;
 
@@ -646,11 +645,45 @@ void Scene::GenerateRandomSuicideBombers(int count)
 			std::shared_ptr<FastSuicideBomber> randBomber = 
 				std::shared_ptr<FastSuicideBomber>(new FastSuicideBomber(50, chargeSpeed,
 																		 glm::vec4(0.5f, 0.5f, 0.7f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-																		 position, velocity, speed,
+																		 position, frontVector, speed,
 																		 2.0f, 50));
 			randBomber->LoadMesh("mesh-files/UnitSphere.xml");
 
 			enemies.push_back(randBomber);
 		}
+	}
+}
+
+void Scene::GenerateRandomMothership()
+{
+	if(enemies.size() <= 0)
+	{
+		srand(time(0));
+
+		float range = ((float)rand() / (float)RAND_MAX) * 6.0f + 4.0f;
+		float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
+
+		float posX = cosf(posOnCircle * (2.0f * PI)) * range;
+		float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
+
+		glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
+		glm::vec3 frontVector = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
+		float speed = 0.03f;
+
+		std::shared_ptr<Mothership> randMothership =
+			std::shared_ptr<Mothership>(new Mothership(glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+													   position, frontVector, speed, 5.0f, 300));
+		randMothership->LoadMesh("mesh-files/Ship.xml");
+
+		int deployUnitsCount = 4;
+		/*for(int i = 0; i < deployUnitsCount; i++)
+		{*/
+			randMothership->InitDeployUnits("mesh-files/Ship.xml", deployUnitsCount, 
+											0.3f, 20, 1, 
+											glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+											0.05f, 2.0f, 50);
+		//}
+
+		enemies.push_back(randMothership);
 	}
 }

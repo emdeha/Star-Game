@@ -246,6 +246,7 @@ void Swarm::Update(bool isSunKilled, CelestialBody &sun)
 		else
 		{
 			currentState = STATE_IDLE;
+			UpdateAI(CelestialBody());
 		}
 	}
 }
@@ -292,7 +293,6 @@ void Swarm::OnEvent(Event &_event)
 }
 
 
-
 Spaceship::Spaceship(float newProjectileSpeed, int newProjectileLifeSpan,
 					 int newProjectileDamage,
 					 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
@@ -319,11 +319,16 @@ Spaceship::Spaceship(float newProjectileSpeed, int newProjectileLifeSpan,
 	//		 sth connected with the vector range.
 
 	patrolRoute.patrolPoints.push_back(position);
+	srand(time(0));
+	float posZ = (float)rand() / (float)RAND_MAX;
+	glm::vec3 newPatrolPoint = glm::vec3(0.0f, 0.0f, posZ);
+	patrolRoute.patrolPoints.push_back(newPatrolPoint);	
+
 	//patrolRoute.patrolPoints.push_back(glm::vec3());
-	patrolRoute.patrolPoints.push_back(glm::vec3(4.5f, 0.0f, 4.0f));
-	patrolRoute.patrolPoints.push_back(glm::vec3(-4.5f, 0.0f, 4.0f));
-	patrolRoute.patrolPoints.push_back(glm::vec3(-4.5f, 0.0f, -4.0f));
-	patrolRoute.patrolPoints.push_back(glm::vec3(4.5f, 0.0f, -4.0f));
+	//patrolRoute.patrolPoints.push_back(glm::vec3(-4.5f, 0.0f, 4.0f));
+	//patrolRoute.patrolPoints.push_back(glm::vec3(-4.5f, 0.0f, -4.0f));
+	//patrolRoute.patrolPoints.push_back(glm::vec3(4.5f, 0.0f, -4.0f));
+
 	patrolRoute.currentPatrolPointIndex = 0;
 	patrolRoute.lastPatrolPointIndex = 0;
 	patrolRoute.nextPatrolPointIndex = 1;
@@ -354,6 +359,9 @@ void Spaceship::LoadMesh(const std::string &meshFile)
 	GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 
 	projectile->LoadMesh(meshFile); // TODO: maybe this should be removed
+
+	
+	
 }
 
 void Spaceship::UpdateAI(CelestialBody &sun)
@@ -481,14 +489,11 @@ void Spaceship::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 
 		//glm::vec3 viewPosition = position + frontVector * speed * interpolation;
 
-		glm::vec3 target = patrolRoute.nextPatrolPoint;
-		glm::vec3 vectorToTarget = target - position;
-
-		float rotation = glm::degrees(atan2f(vectorToTarget.x, vectorToTarget.z));
+		float rotation = glm::degrees(atan2f(frontVector.x, frontVector.z));
 
 		modelMatrix.Translate(position);
 		modelMatrix.RotateY(rotation);
-		modelMatrix.Scale(0.2f);
+		modelMatrix.Scale(0.05f);
 
 
 		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
@@ -549,6 +554,218 @@ void Spaceship::OnEvent(Event &_event)
 		break;
 	}
 }
+
+
+Mothership::Mothership(glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+					   glm::vec3 newPosition, glm::vec3 newFrontVector,
+					   float newSpeed, float newLineOfSight,
+					   int newHealth)
+					   : Enemy(newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
+{
+	initialColor = newInitialColor;
+	onFreezeColor = newOnFreezeColor;
+	isDeploying = false;
+}
+
+void Mothership::LoadMesh(const std::string &meshFileName)
+{
+	try
+	{
+		mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFileName));
+	}
+	catch(std::exception &except)
+	{
+		printf("%s\n", except.what());
+		throw;
+	}
+
+	GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
+}
+
+void Mothership::InitDeployUnits(const std::string &meshFileName, int deployUnitsCount,
+								 float projectileSpeed, int projectileLifeSpan, int projectileDamage,
+								 glm::vec4 initialColor, glm::vec4 onFreezeColor,
+								 float speed, float lineOfSight, int health)
+{
+	deployUnitsInfo.deployUnitsCount = deployUnitsCount;
+	deployUnitsInfo.health = health;
+	deployUnitsInfo.initialColor = initialColor;
+	deployUnitsInfo.lineOfSight = lineOfSight;
+	deployUnitsInfo.meshFileName = meshFileName;
+	deployUnitsInfo.onFreezeColor = onFreezeColor;
+	deployUnitsInfo.projectileDamage = projectileDamage;
+	deployUnitsInfo.projectileLifeSpan = projectileLifeSpan;
+	deployUnitsInfo.projectileSpeed = projectileSpeed;
+	deployUnitsInfo.speed = speed;
+	/*for(int i = 0; i < deployUnitsCount; i++)
+	{
+		std::shared_ptr<Spaceship> newDeployUnit = 
+			std::shared_ptr<Spaceship>(new Spaceship(projectileSpeed, projectileLifeSpan, projectileDamage, 
+													 initialColor, onFreezeColor, position,
+													 glm::vec3(), speed, lineOfSight, health));
+		newDeployUnit->LoadMesh(meshFileName);
+		newDeployUnit->LoadProjectileMesh("mesh-files/UnitSphere.xml"); // WARN: Not data driven
+
+		deployUnits.push_back(newDeployUnit);
+	}*/
+}
+
+void Mothership::UpdateAI(CelestialBody &sun)
+{
+	if(currentState == STATE_ATTACK && isDeploying == false)
+	{
+		for(int i = 0; i < deployUnitsInfo.deployUnitsCount; i++)
+		{
+			std::shared_ptr<Spaceship> newDeployUnit = 
+				std::shared_ptr<Spaceship>(new Spaceship(deployUnitsInfo.projectileSpeed, deployUnitsInfo.projectileLifeSpan, 
+														 deployUnitsInfo.projectileDamage, 
+														 deployUnitsInfo.initialColor, deployUnitsInfo.onFreezeColor, position,
+														 glm::vec3(), deployUnitsInfo.speed, deployUnitsInfo.lineOfSight, 
+														 deployUnitsInfo.health));
+			newDeployUnit->LoadMesh(deployUnitsInfo.meshFileName);
+			newDeployUnit->LoadProjectileMesh("mesh-files/UnitSphere.xml"); // WARN: Not data driven
+
+			deployUnits.push_back(newDeployUnit);
+		}
+
+		isDeploying = true;
+		speed = 0.0f;
+	}
+	else if(currentState == STATE_EVADE)
+	{
+		glm::vec3 vectorFromPlanetToSpaceship = sun.GetPosition() - position;
+
+		vectorFromPlanetToSpaceship = glm::normalize(vectorFromPlanetToSpaceship);
+		glm::vec3 spaceshipDirection = glm::normalize(frontVector * speed);
+		
+		if(glm::dot(vectorFromPlanetToSpaceship, spaceshipDirection) > 0)
+		{
+			speed *= -1.0f;
+		}
+	}
+	else if(currentState == STATE_IDLE)
+	{
+		glm::vec3 vectorFromPlanetToMothership = sun.GetPosition() - position;
+
+		float distanceBetweenPlanetAndMothership = glm::length(vectorFromPlanetToMothership);
+
+		if(distanceBetweenPlanetAndMothership < lineOfSight)
+		{
+			currentState = STATE_ATTACK;
+		}
+	}
+}
+
+void Mothership::Update(bool isSunKilled, CelestialBody &sun)
+{
+	if(!isSunKilled)
+	{
+		if(currentState != STATE_STOPPED)
+		{
+			position += frontVector * speed;
+			UpdateAI(sun);
+			if(isDeploying)
+			{
+				for(int i = 0; i < deployUnits.size(); i++)
+				{
+					deployUnits[i]->Update(isSunKilled, sun);
+				}
+			}
+		}
+
+		if(health <= 20)
+		{
+			currentState = STATE_EVADE;
+		}
+
+		if(health <= 0)
+		{
+			isDestroyed = true;
+		}
+	}
+	else
+	{
+		currentState = STATE_IDLE;
+		UpdateAI(CelestialBody());
+	}
+}
+
+void Mothership::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
+						float gamma, const LitProgData &litData,
+						float interpolation)
+{
+	{
+		glutil::PushStack push(modelMatrix);
+
+	
+		// glm::vec3 viewPosition = position + frontVector * speed * interpolation;
+
+		float rotation = glm::degrees(atan2f(frontVector.x, frontVector.z));
+
+		modelMatrix.Translate(position);
+		modelMatrix.RotateY(rotation);
+		modelMatrix.Scale(0.5f);
+
+
+		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
+						  0, sizeof(MaterialBlock));
+
+		glm::mat3 normMatrix(modelMatrix.Top());
+		normMatrix = glm::transpose(glm::inverse(normMatrix));
+
+		glUseProgram(litData.theProgram);
+		glUniformMatrix4fv(litData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+		glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+
+		mesh->Render("lit");
+
+		glUseProgram(0);
+
+		glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
+	}
+
+	if(isDeploying)
+	{
+		for(int i = 0; i < deployUnits.size(); i++)
+		{
+			deployUnits[i]->Render(modelMatrix, materialBlockIndex, gamma, litData, interpolation);
+		}
+	}
+}
+
+void Mothership::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
+	case EVENT_TYPE_SHOT_FIRED:
+		break;
+	case EVENT_TYPE_ATTACKED:
+		break;
+	case EVENT_TYPE_OTHER:
+		if(strcmp(_event.GetArgument("what_event").varString, "skilldeployed") == 0)
+		{
+			health -= _event.GetArgument("skillDamage").varInteger;
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "timeended") == 0)
+		{
+			health -= _event.GetArgument("damage").varInteger;
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "stunskilldeployed") == 0)
+		{
+			// WARN: It should be 'currentState'.
+			lastState = STATE_ATTACK;
+			currentState = STATE_STOPPED;
+			GenerateUniformBuffers(materialBlockSize, onFreezeColor, materialUniformBuffer);
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "stuntimeended") == 0)
+		{
+			currentState = lastState;
+			GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
+		}
+		break;
+	}
+}
+								 
 
 
 FastSuicideBomber::FastSuicideBomber(int newDamage, float newChargeSpeed,

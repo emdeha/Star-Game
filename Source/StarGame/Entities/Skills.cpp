@@ -192,61 +192,7 @@ bool AOESkill::IsIntersectingObject(glm::vec3 objectPosition)
 	
 	return false;
 }
-/*
-Event AOESkill::GetGeneratedEvent(const std::string &eventName)
-{
-	if(generatedEvents.size() > 0)
-	{
-		for(int i = 0; i < generatedEvents.size(); i++)
-		{
-			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
-			   strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
-			{
-				return generatedEvents[i];
-			}
-		}
-	}
-	else
-	{
-		return StockEvents::EmptyEvent();
-	}
-}
-void AOESkill::RemoveGeneratedEvent(const std::string &eventName)
-{
-	if(generatedEvents.size() > 0)
-	{
-		for(std::vector<Event>::iterator iter = generatedEvents.begin();
-			iter != generatedEvents.end();)
-		{
-			if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
-			{
-				generatedEvents.erase(iter);
-				break;
-			}
-			else 
-			{
-				++iter;
-			}
-		}
-	}
-}
-std::vector<Event> AOESkill::GetGeneratedEvents()
-{
-	std::vector<Event> eventsToReturn;
 
-	if(generatedEvents.size() > 0)
-	{
-		eventsToReturn = generatedEvents;
-		generatedEvents.resize(0);
-	}
-	else 
-	{
-		eventsToReturn.push_back(StockEvents::EmptyEvent());
-	}
-
-	return eventsToReturn;
-}
-*/
 
 PassiveAOESkill::PassiveAOESkill(glm::vec3 newPosition,
 								 int newDamage, int newDamageApplyTime_seconds,
@@ -369,59 +315,7 @@ bool PassiveAOESkill::IsIntersectingObject(glm::vec3 objectPosition)
 
 	return false;
 }
-/*
-Event PassiveAOESkill::GetGeneratedEvent(const std::string &eventName)
-{
-	if(generatedEvents.size() > 0)
-	{
-		for(int i = 0; i < generatedEvents.size(); i++)
-		{
-			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
-			   strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
-			{
-				return generatedEvents[i];
-			}
-		}
-	}
 
-	return StockEvents::EmptyEvent();
-}
-void PassiveAOESkill::RemoveGeneratedEvent(const std::string &eventName)
-{
-	if(generatedEvents.size() > 0)
-	{
-		for(std::vector<Event>::iterator iter = generatedEvents.begin();
-			iter != generatedEvents.end();)
-		{
-			if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
-			{
-				generatedEvents.erase(iter);
-				break;
-			}
-			else 
-			{
-				++iter;
-			}
-		}
-	}
-}
-std::vector<Event> PassiveAOESkill::GetGeneratedEvents()
-{
-	std::vector<Event> eventsToReturn;
-
-	if(generatedEvents.size() > 0)
-	{
-		eventsToReturn = generatedEvents;
-		generatedEvents.resize(0);
-	}
-	else 
-	{
-		eventsToReturn.push_back(StockEvents::EmptyEvent());
-	}
-
-	return eventsToReturn;
-}
-*/
 
 SunNovaSkill::SunNovaSkill(glm::vec3 newPosition,
 						   int newDamage, 
@@ -436,7 +330,6 @@ SunNovaSkill::SunNovaSkill(glm::vec3 newPosition,
 	scaleRate = newScaleRate;
 	currentScale = 1.0f;
 	isStarted = false;
-	//generatedEvents.resize(0);
 
 #ifdef CIRCLE_SKILL
 	skillExpansionRadius = Utility::Primitives::Circle(glm::vec4(0.7f, 0.5f, 0.0f, 0.5f), position, currentScale, 90);
@@ -530,60 +423,6 @@ bool SunNovaSkill::IsIntersectingObject(glm::vec3 objectPosition)
 	}
 	else return false;
 }
-/*
-Event SunNovaSkill::GetGeneratedEvent(const std::string &eventName)
-{
-	if(generatedEvents.size() > 0)
-	{
-		for(int i = 0; i < generatedEvents.size(); i++)
-		{
-			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
-			   strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
-			{
-				return generatedEvents[i];
-			}
-		}
-	}
-
-	return StockEvents::EmptyEvent();
-}
-void SunNovaSkill::RemoveGeneratedEvent(const std::string &eventName)
-{
-	if(generatedEvents.size() > 0)
-	{
-		for(std::vector<Event>::iterator iter = generatedEvents.begin();
-			iter != generatedEvents.end();)
-		{
-			if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
-			{
-				generatedEvents.erase(iter);
-				break;
-			}
-			else 
-			{
-				++iter;
-			}
-		}
-	}
-}
-std::vector<Event> SunNovaSkill::GetGeneratedEvents()
-{
-	std::vector<Event> eventsToReturn;
-
-	if(generatedEvents.size() > 0)
-	{
-		eventsToReturn = generatedEvents;
-		generatedEvents.resize(0);
-	}
-	else 
-	{
-		eventsToReturn.push_back(StockEvents::EmptyEvent());
-	}
-
-	return eventsToReturn;
-}
-*/
-
 
 
 SatelliteChainingSkill::SatelliteChainingSkill(glm::vec3 newPosition,
@@ -602,7 +441,6 @@ SatelliteChainingSkill::SatelliteChainingSkill(glm::vec3 newPosition,
 	projectileVelocity = newProjectileVelocity;
 	projectileColor = newProjectileColor;
 	projectileRadius = newProjectileRadius;
-	//generatedEvents.resize(0);
 	materialBlockSize = 0;
 	materialUniformBuffer = 0;
 	isStarted = false;
@@ -747,58 +585,7 @@ bool SatelliteChainingSkill::IsIntersectingObject(glm::vec3 objectPosition)
 	}
 	else return false;
 }
-/*
-Event SatelliteChainingSkill::GetGeneratedEvent(const std::string &eventName)
-{
-	if(generatedEvents.size() > 0)
-	{
-		for(int i = 0; i < generatedEvents.size(); i++)
-		{
-			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
-			   strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
-			{
-				return generatedEvents[i];
-			}
-		}
-	}
 
-	return StockEvents::EmptyEvent();
-}
-void SatelliteChainingSkill::RemoveGeneratedEvent(const std::string &eventName)
-{
-	if(generatedEvents.size() > 0)
-	{
-		for(std::vector<Event>::iterator iter = generatedEvents.begin();
-			iter != generatedEvents.end();)
-		{
-			if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
-			{
-				generatedEvents.erase(iter);
-				break;
-			}
-			else 
-			{
-				++iter;
-			}
-		}
-	}
-}
-std::vector<Event> SatelliteChainingSkill::GetGeneratedEvents()
-{
-	std::vector<Event> eventsToReturn;
-
-	if(generatedEvents.size() > 0)
-	{
-		eventsToReturn = generatedEvents;
-		generatedEvents.resize(0);
-	}
-	else 
-	{
-		eventsToReturn.push_back(StockEvents::EmptyEvent());
-	}
-
-	return eventsToReturn;
-}*/
 
 
 SatelliteChainingNova::SatelliteChainingNova(glm::vec3 newPosition, 
@@ -939,58 +726,6 @@ bool SatelliteChainingNova::IsIntersectingObject(glm::vec3 objectPosition)
 	}
 	else return false;
 }
-/*
-Event SatelliteChainingNova::GetGeneratedEvent(const std::string &eventName)
-{
-	if(generatedEvents.size() > 0)
-	{
-		for(int i = 0; i < generatedEvents.size(); i++)
-		{
-			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
-			   strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
-			{
-				return generatedEvents[i];
-			}
-		}
-	}
-
-	return StockEvents::EmptyEvent();
-}
-void SatelliteChainingNova::RemoveGeneratedEvent(const std::string &eventName)
-{
-	if(generatedEvents.size() > 0)
-	{
-		for(std::vector<Event>::iterator iter = generatedEvents.begin();
-			iter != generatedEvents.end();)
-		{
-			if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
-			{
-				generatedEvents.erase(iter);
-				break;
-			}
-			else 
-			{
-				++iter;
-			}
-		}
-	}
-}
-std::vector<Event> SatelliteChainingNova::GetGeneratedEvents()
-{
-	std::vector<Event> eventsToReturn;
-
-	if(generatedEvents.size() > 0)
-	{
-		eventsToReturn = generatedEvents;
-		generatedEvents.resize(0);
-	}
-	else 
-	{
-		eventsToReturn.push_back(StockEvents::EmptyEvent());
-	}
-
-	return eventsToReturn;
-}*/
 
 
 FrostNovaSkill::FrostNovaSkill(int newDamage, int newStunTime_seconds,
@@ -1129,55 +864,3 @@ bool FrostNovaSkill::IsIntersectingObject(glm::vec3 objectPosition)
 	}
 	else return false;
 }
-/*
-Event FrostNovaSkill::GetGeneratedEvent(const std::string &eventName)
-{
-	if(generatedEvents.size() > 0)
-	{
-		for(int i = 0; i < generatedEvents.size(); i++)
-		{
-			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
-			   strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
-			{
-				return generatedEvents[i];
-			}
-		}
-	}
-
-	return StockEvents::EmptyEvent();
-}
-void FrostNovaSkill::RemoveGeneratedEvent(const std::string &eventName)
-{
-	if(generatedEvents.size() > 0)
-	{
-		for(std::vector<Event>::iterator iter = generatedEvents.begin();
-			iter != generatedEvents.end();)
-		{
-			if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
-			{
-				generatedEvents.erase(iter);
-				break;
-			}
-			else 
-			{
-				++iter;
-			}
-		}
-	}
-}
-std::vector<Event> FrostNovaSkill::GetGeneratedEvents()
-{
-	std::vector<Event> eventsToReturn;
-
-	if(generatedEvents.size() > 0)
-	{
-		eventsToReturn = generatedEvents;
-		generatedEvents.resize(0);
-	}
-	else 
-	{
-		eventsToReturn.push_back(StockEvents::EmptyEvent());
-	}
-
-	return eventsToReturn;
-}*/

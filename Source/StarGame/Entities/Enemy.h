@@ -248,6 +248,66 @@ public:
 };
 
 
+class Mothership : public Enemy
+{
+private:
+	struct DeployUnitsInfo
+	{
+		std::string meshFileName;
+		int deployUnitsCount;
+		float projectileSpeed;
+		int projectileLifeSpan;
+		int projectileDamage;
+		glm::vec4 initialColor;
+		glm::vec4 onFreezeColor;
+		float speed;
+		float lineOfSight;
+		int health;
+	};
+
+private:
+	glm::vec4 initialColor;
+	glm::vec4 onFreezeColor;
+	
+	DeployUnitsInfo deployUnitsInfo;
+	std::vector<std::shared_ptr<Spaceship>> deployUnits;
+
+	bool isDeploying;
+	// TODO: Fast deploying on evade. Sth like HL2 helly.
+	// TODO: Make the deploy units hidden if not deployed.
+	// TODO: Make the spaceships part of the scene.
+	// TODO: Make the spaceships spread on creation.
+	// TODO: Make the spaceships react on skills.
+	// TODO: 
+
+	std::unique_ptr<Framework::Mesh> mesh;
+
+	int materialBlockSize;
+	GLuint materialUniformBuffer;
+
+public:
+	Mothership() {}
+	Mothership(glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+			   glm::vec3 newPosition, glm::vec3 newFrontVector,
+			   float newSpeed, float newLineOfSight,
+			   int newHealth);
+
+	void UpdateAI(CelestialBody &sun);
+	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
+	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
+				float gamma, const LitProgData &litData,
+				float interpolation);
+
+	void OnEvent(Event &_event);
+
+	void LoadMesh(const std::string &meshFileName);
+	void InitDeployUnits(const std::string &meshFileName, int deployUnitsCount,
+						 float projectileSpeed, int projectileLifeSpan, int projectileDamage,
+						 glm::vec4 initialColor, glm::vec4 onFreezeColor,
+						 float speed, float lineOfSight, int health);
+};
+
+
 class FastSuicideBomber : public Enemy
 {
 private:
@@ -282,60 +342,6 @@ public:
 
 	void LoadMesh(const std::string &meshFile);
 };
-/*
-class FastSuicideBomber
-{
-private:
-	glm::vec3 position;
-	glm::vec3 velocity;
 
-	int health;
-	int damage;
-
-	float lineOfSight;
-
-	float scaleFactor;
-
-	BehaviorState currentState;
-
-	std::auto_ptr<Framework::Mesh> mesh;
-	std::vector<Event> generatedEvents;
-
-	int materialBlockSize;
-	GLuint materialUniformBuffer;
-
-	bool isDestroyed;
-
-	void AttackSolarSystem(CelestialBody &sun, bool isSatellite = false, float bodyIndex = -1.0f);
-
-public:
-	FastSuicideBomber() {}
-	FastSuicideBomber(glm::vec3 newPosition, glm::vec3 newVelocity,
-					  int newHealth, int newDamage, float newLineOfSight, 
-					  float newScaleFactor);
-
-	void LoadMesh(const std::string &meshFile);
-
-	void UpdateAI(CelestialBody &sun);
-	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
-
-	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData, 
-				int materialBlockIndex,
-				float interpolation, float gamma);
-
-	// Gets the generated events and destroys them
-	std::vector<Event> GetGeneratedEvents();
-	//void CleanupGeneratedEvent(const Event &_event);
-
-	glm::vec3 GetPosition()
-	{
-		return position;
-	}
-
-	// Skill sender is the sender of the events. Later I should do sth more general to
-	// all the event handling functions.
-	void OnEvent(std::shared_ptr<Skill> sender, Event &_event);
-};
-*/
 
 #endif

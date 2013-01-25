@@ -69,20 +69,6 @@ public:
 						GLuint materialBlockIndex) {}
 
 	virtual void OnEvent(Event &_event) {}
-	/*// Only for EVENT_TYPE_OTHER
-	virtual Event GetGeneratedEvent(const std::string &eventName) 
-	{ 
-		Event eventToReturn = StockEvents::EmptyEvent();
-		return eventToReturn; 
-	}
-	virtual void RemoveGeneratedEvent(const std::string &eventName) {}
-	// Gets the generated events and empties the event list.
-	// (!)It is an one little dangerous method. You can lose a lot of events that way.
-	virtual std::vector<Event> GetGeneratedEvents() 
-	{ 
-		std::vector<Event> eventsToReturn;
-		return eventsToReturn;
-	}*/
 
 	virtual void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3) {}
 	virtual void SetParameter(ParameterType paramType, int newParam_int) {}
@@ -134,14 +120,6 @@ public:
 	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 
 	bool IsIntersectingObject(glm::vec3 objectPosition);
-
-	/*
-	// Only for EVENT_TYPE_OTHER
-	Event GetGeneratedEvent(const std::string &	eventName);
-	void RemoveGeneratedEvent(const std::string &eventName);
-	// Gets the generated events and empties the event list.
-	// (!)It is an one little dangerous method. You can lose a lot of events that way.
-	std::vector<Event> GetGeneratedEvents();*/
 };
 
 
@@ -157,7 +135,7 @@ private:
 	glm::vec3 position;
 
 	Utility::Primitives::Circle skillVisibleRadius;
-	//std::vector<Event> generatedEvents;
+
 	bool isStarted;
 
 public:
@@ -180,13 +158,6 @@ public:
 	bool IsIntersectingObject(glm::vec3 objectPosition);
 
 	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
-
-	/*// Only for EVENT_TYPE_OTHER
-	Event GetGeneratedEvent(const std::string &eventName);
-	void RemoveGeneratedEvent(const std::string &eventName);
-	// Gets the generated events and empties the event list.
-	// (!)It is an one little dangerous method. You can lose a lot of events that way.
-	std::vector<Event> GetGeneratedEvents();*/
 };
 
 
@@ -198,14 +169,14 @@ private:
 	float scaleRate;
 	float currentScale;
 	glm::vec3 position;
+	bool isStarted;
+
 
 #ifdef CIRCLE_SKILL
 	Utility::Primitives::Circle skillExpansionRadius;
 #elif defined TORUS_SKILL
 	Utility::Primitives::Torus2D skillExpansionRadius;
 #endif
-	//std::vector<Event> generatedEvents;
-	bool isStarted;
 
 public:
 	SunNovaSkill() : Skill() {}
@@ -224,13 +195,6 @@ public:
 	glm::vec3 GetPosition();
 
 	bool IsIntersectingObject(glm::vec3 objectPosition);
-
-	/*// Only for EVENT_TYPE_OTHER
-	Event GetGeneratedEvent(const std::string &eventName);
-	void RemoveGeneratedEvent(const std::string &eventName);
-	// Gets the generated events and empties the event list.
-	// (!)It is an one little dangerous method. You can lose a lot of events that way.
-	std::vector<Event> GetGeneratedEvents();*/
 };
 
 
@@ -250,7 +214,6 @@ private:
 	int materialBlockSize;
 	GLuint materialUniformBuffer;
 
-	//std::vector<Event> generatedEvents;
 	bool isStarted;
 
 public:
@@ -276,13 +239,6 @@ public:
 
 	// WARN: Will add artificial radius for easier intersection.
 	bool IsIntersectingObject(glm::vec3 objectPosition);
-
-	/*// Only for EVENT_TYPE_OTHER
-	Event GetGeneratedEvent(const std::string &eventName);
-	void RemoveGeneratedEvent(const std::string &eventName);
-	// Gets the generated events and empties the event list.
-	// (!)It is an one little dangerous method. You can lose a lot of events that way.
-	std::vector<Event> GetGeneratedEvents();*/
 };
 
 
@@ -294,14 +250,14 @@ private:
 	float scaleRate;
 	float currentScale;
 	glm::vec3 position;
+	bool isStarted;
+
 
 #ifdef CIRCLE_SKILL
 	Utility::Primitives::Circle skillExpansionRadius;
 #elif defined TORUS_SKILL
 	Utility::Primitives::Torus2D skillExpansionRadius;
 #endif
-	//std::vector<Event> generatedEvents;
-	bool isStarted;
 
 public:
 	SatelliteChainingNova() : Skill() {}
@@ -322,13 +278,6 @@ public:
 	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 
 	bool IsIntersectingObject(glm::vec3 objectPosition);
-
-	/*// Only for EVENT_TYPE_OTHER
-	Event GetGeneratedEvent(const std::string &eventName);
-	void RemoveGeneratedEvent(const std::string &eventName);
-	// Gets the generated events and empties the event list.
-	// (!)It is an one little dangerous method. You can lose a lot of events that way.
-	std::vector<Event> GetGeneratedEvents();*/
 };
 
 
@@ -342,15 +291,14 @@ private:
 	float scaleRate;
 	float currentScale;
 	glm::vec3 position;
+	bool isStarted;
+
 
 #ifdef CIRCLE_SKILL
 	Utility::Primitives::Circle skillExpansionRadius;
 #elif defined TORUS_SKILL
 	Utility::Primitives::Torus2D skillExpansionRadius;
 #endif
-
-	//std::vector<Event> generatedEvents;
-	bool isStarted;
 
 public:
 	FrostNovaSkill() : Skill() {}
@@ -371,13 +319,6 @@ public:
 	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 
 	bool IsIntersectingObject(glm::vec3 objectPosition);
-
-	/*// Only for EVENT_TYPE_OTHER
-	Event GetGeneratedEvent(const std::string &eventName);
-	void RemoveGeneratedEvent(const std::string &eventName);
-	// Gets the generated events and empties the event list.
-	// (!)It is an one little dangerous method. You can lose a lot of events that way.
-	std::vector<Event> GetGeneratedEvents();*/
 };
 
 

@@ -147,6 +147,7 @@ public:
 	void GenerateRandomSwarms(int count, const BillboardProgDataNoTexture &progData);
 	void GenerateRandomSpaceships(int count);
 	void GenerateRandomSuicideBombers(int count);
+	void GenerateRandomMothership();
 };
 
 #endif

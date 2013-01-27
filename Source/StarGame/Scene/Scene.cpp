@@ -20,6 +20,9 @@
 
 #include <algorithm>
 
+#define DEPLOY_UNITS_COUNT 4
+static int countedUnits = 0;
+
 Scene::Scene(float newSceneGamma)
 {
 	lights.resize(0);
@@ -60,8 +63,11 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix,
 
 	for(int i = 0; i < enemies.size(); i++)
 	{
-		enemies[i]->Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), billboardNoTextureData);
-		enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, interpolation);
+		if(enemies[i]->IsSceneUpdated())
+		{
+			enemies[i]->Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), billboardNoTextureData);
+			enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, interpolation);
+		}
 	}
 }
 void Scene::RenderCurrentLayout(const FontProgData &fontData,
@@ -118,25 +124,72 @@ void Scene::UpdateScene()
 		iter != enemies.end();
 		)
 	{
-		if(!suns.empty())
+		if((*iter)->IsSceneUpdated())
 		{
-			(*iter)->Update(false, *suns.front().get());
-		}
-		else	
-		{
-			(*iter)->Update(true);
-		}
+			if(!suns.empty())
+			{
+				(*iter)->Update(false, *suns.front().get());
+			}
+			else
+			{
+				(*iter)->Update(true);
+			}
+			/*
+			Event enemyEvent = (*iter)->GetGeneratedEvent("unitsSpawned");
+			(*iter)->RemoveGeneratedEvent("unitsSpawned");
+			if(enemyEvent.GetType() != EVENT_TYPE_EMPTY)
+			{
+				OnEvent(enemyEvent);
+				break;
+			}*/
 
+			/*
+			else
+			{
+				++iter;
+			}*/
+			/*
+			Event enemyEvent = (*iter)->GetGeneratedEvent("unitsSpawned");
+			(*iter)->RemoveGeneratedEvent("unitsSpawned");
+			if(enemyEvent.GetType() != EVENT_TYPE_EMPTY)
+			{
+				OnEvent(enemyEvent);
+				break;
+			}
+
+			if((*iter)->IsDestroyed())
+			{
+				if((*iter)->IsWithParent())
+				{
+					countedUnits++;
+				}
+				if(countedUnits >= DEPLOY_UNITS_COUNT)
+				{
+					countedUnits = 0;
+				}
+				enemies.erase(iter);
+				break;
+			}
+			else
+			{
+				++iter;
+			}*/
+		}/*
+		if(!(*iter)->IsSceneUpdated() && (*iter)->IsParentKilled())
+		{
+			enemies.erase(iter);
+			break;
+		}
+		++iter;*/
 		if((*iter)->IsDestroyed())
 		{
 			enemies.erase(iter);
 			break;
 		}
-		else
-		{
-			++iter;
-		}
+		++iter;
 	}
+			
+	std::printf("count: %i", enemies.size());
 	
 	if(!suns.empty())
 	{
@@ -375,6 +428,51 @@ void Scene::OnEvent(Event &_event)
 				skills[i]->OnEvent(_event);
 			}
 		}
+		/*if(strcmp(_event.GetArgument("what_event").varString, "unitsSpawned") == 0)
+		{
+			int deployUnitsCount = _event.GetArgument("count").varInteger;
+			glm::vec3 frontVector = glm::vec3(_event.GetArgument("frontX").varFloat,
+											  0.0f, 
+											  _event.GetArgument("frontY").varFloat);
+			glm::vec3 position = glm::vec3(_event.GetArgument("posX").varFloat,
+										   0.0f, 
+										   _event.GetArgument("posY").varFloat);
+			
+			float rotationDegs = 30.0f;
+			float decrement = (2 * rotationDegs) / (float)deployUnitsCount;
+
+			for(int i = 0; i < deployUnitsCount; i++)
+			{
+				glutil::MatrixStack rotMatrix;
+				rotMatrix.SetIdentity();
+				rotMatrix.RotateY(rotationDegs);
+			
+				glm::vec4 shipFrontVector = glm::vec4(frontVector, 0.0f);
+				shipFrontVector = shipFrontVector * rotMatrix.Top();
+				rotationDegs -= decrement;
+
+				std::shared_ptr<DeployUnit> newDeployUnit = 
+					std::shared_ptr<DeployUnit>(new DeployUnit(0.3f, 20, 1,
+															   glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+															   position,
+															   glm::vec3(shipFrontVector), 
+															   0.05f, 2.0f, 50));
+				newDeployUnit->LoadMesh("mesh-files/Ship.xml");
+				newDeployUnit->LoadProjectileMesh("mesh-files/UnitSphere.xml"); // WARN: Not data driven
+
+
+				// BAD! BAD! BAD!
+				for(int i = 0; i < enemies.size(); i++)
+				{
+					if(dynamic_cast<Mothership*>(enemies[i].get()))
+					{
+						newDeployUnit->SetParent(dynamic_cast<Mothership*>(enemies[i].get()));
+					}
+				}
+
+				enemies.push_back(newDeployUnit);
+			}
+		}*/
 		/*if(strcmp(_event.GetArgument("what_event").varString, "explStarted") == 0)
 		{
 			int explosionIndex = _event.GetArgument("expl_index").varInteger;
@@ -678,12 +776,20 @@ void Scene::GenerateRandomMothership()
 		int deployUnitsCount = 4;
 		/*for(int i = 0; i < deployUnitsCount; i++)
 		{*/
-			randMothership->InitDeployUnits("mesh-files/Ship.xml", deployUnitsCount, 
-											0.3f, 20, 1, 
-											glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-											0.05f, 2.0f, 50);
+		randMothership->InitDeployUnits("mesh-files/Ship.xml", deployUnitsCount, 
+										0.3f, 20, 1, 
+										glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+										0.05f, 2.0f, 50);
+		
+
 		//}
 
 		enemies.push_back(randMothership);
+		
+		std::vector<std::shared_ptr<DeployUnit>> deployUnits = randMothership->GetDeployUnits();
+		for(int i = 0; i < deployUnits.size(); i++)
+		{
+			enemies.push_back(deployUnits[i]);
+		}
 	}
 }

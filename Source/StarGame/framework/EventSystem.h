@@ -74,7 +74,7 @@ struct EventArg
 class Event
 {
 private:
-	static const short MAX_ARGS = 8;
+	static const short MAX_ARGS = 20;
 
 	EventType type;
 	EventArg args[MAX_ARGS];

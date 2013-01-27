@@ -114,6 +114,7 @@ class Enemy
 protected:
 	glm::vec3 position;
 	glm::vec3 frontVector;
+	glm::vec3 lastFrontVector;
 	float speed;
 
 	float lineOfSight;
@@ -124,6 +125,10 @@ protected:
 	BehaviorState lastState;
 
 	bool isDestroyed;
+	// Only for child objects which are being updated by their parents
+	bool isParentKilled;
+	bool isSceneUpdated; 
+	bool isWithParent;
 
 
 	std::vector<Event> generatedEvents;
@@ -135,14 +140,20 @@ public:
 	{
 		position = newPosition;
 		frontVector = newFrontVector;
+		lastFrontVector = frontVector;
 		speed = newSpeed;
 		lineOfSight = newLineOfSight;
 		health = newHealth;
 		currentState = STATE_IDLE;
 		lastState = currentState;
 		isDestroyed = false;
+		isSceneUpdated = true;
+		isParentKilled = false;
+		isWithParent = false;
 		generatedEvents.resize(0);
 	}
+
+	virtual ~Enemy() {}
 
 	virtual void UpdateAI(CelestialBody &sun) {}
 	virtual void Update(bool isSunKilled, CelestialBody &sun = CelestialBody()) {}
@@ -158,6 +169,10 @@ public:
 
 	virtual glm::vec3 GetPosition();
 	virtual bool IsDestroyed();
+	virtual bool IsSceneUpdated();
+	virtual bool IsParentKilled();
+	virtual bool IsWithParent();
+	virtual bool IsMothership() { return false; }
 
 
 
@@ -248,6 +263,56 @@ public:
 };
 
 
+// WARN: Should I generalize this for all enemies?
+class DeployUnit : public Enemy
+{
+private:
+	glm::vec4 initialColor;
+	glm::vec4 onFreezeColor;
+	float projectileSpeed;
+	int projectileLifeSpan;
+	int projectileDamage;
+
+	bool isForRejuvenation;
+
+	std::unique_ptr<Projectile> projectile;
+	std::unique_ptr<Framework::Mesh> mesh;
+	//std::unique_ptr<Mothership> parent;
+
+	int materialBlockSize;
+	GLuint materialUniformBuffer;
+
+public:
+	DeployUnit() {}
+	DeployUnit(float newProjectileSpeed, int newProjectileLifeSpan,
+			   int newProjectileDamage,
+			   glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+			   glm::vec3 newPosition, glm::vec3 newFrontVector,
+			   float newSpeed, float newLineOfSight,
+			   int newHealth);
+
+	void UpdateAI(CelestialBody &sun);
+	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
+	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
+				float gamma, const LitProgData &litData,
+				float interpolation);
+
+	void OnEvent(Event &_event);
+
+	void LoadMesh(const std::string &meshFileName);
+	void LoadProjectileMesh(const std::string &meshFileName);
+
+	//void SetParent(Mothership *newParent);
+
+	//
+	void SetPosition(const glm::vec3 &newPosition);
+	void Rejuvenate(const glm::vec3 &newPosition, int newHealth, glm::vec3 newFrontVector, float newSpeed);
+	void Destroy();
+	bool IsForRejuvenation();
+	//void KillParent();
+};
+
+
 class Mothership : public Enemy
 {
 private:
@@ -264,19 +329,20 @@ private:
 		float lineOfSight;
 		int health;
 	};
-
+	
 private:
 	glm::vec4 initialColor;
 	glm::vec4 onFreezeColor;
 	
+	//int deployedUnits;
+	//int maxDeployedUnits;
+
 	DeployUnitsInfo deployUnitsInfo;
-	std::vector<std::shared_ptr<Spaceship>> deployUnits;
+	std::vector<std::shared_ptr<DeployUnit>> deployUnits;
 
 	bool isDeploying;
 	// TODO: Fast deploying on evade. Sth like HL2 helly.
 	// TODO: Make the deploy units hidden if not deployed.
-	// TODO: Make the spaceships part of the scene.
-	// TODO: Make the spaceships spread on creation.
 	// TODO: Make the spaceships react on skills.
 	// TODO: 
 
@@ -301,10 +367,21 @@ public:
 	void OnEvent(Event &_event);
 
 	void LoadMesh(const std::string &meshFileName);
+
+	bool IsMothership() { return true; }
 	void InitDeployUnits(const std::string &meshFileName, int deployUnitsCount,
 						 float projectileSpeed, int projectileLifeSpan, int projectileDamage,
 						 glm::vec4 initialColor, glm::vec4 onFreezeColor,
 						 float speed, float lineOfSight, int health);
+	void RejuvenateDeployUnits();
+
+	// First way of getting the deployUnits for skill intersection tests.
+	// We get the deploy units, push them to all units and make intersection tests against them.
+	// Or we make that in the beginning.
+	// WARN: Leads to adding an isUpdated boolean
+	std::vector<std::shared_ptr<DeployUnit>> GetDeployUnits() const; 
+
+	// bool AreDeployUnitsAttackedBySkill(glm::vec3 skillPosition, float skillRadius); // ...- second way
 };
 
 

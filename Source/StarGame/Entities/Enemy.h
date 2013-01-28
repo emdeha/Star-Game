@@ -126,10 +126,7 @@ protected:
 
 	bool isDestroyed;
 	// Only for child objects which are being updated by their parents
-	bool isParentKilled;
 	bool isSceneUpdated; 
-	bool isWithParent;
-
 
 	std::vector<Event> generatedEvents;
 
@@ -148,8 +145,6 @@ public:
 		lastState = currentState;
 		isDestroyed = false;
 		isSceneUpdated = true;
-		isParentKilled = false;
-		isWithParent = false;
 		generatedEvents.resize(0);
 	}
 
@@ -170,10 +165,6 @@ public:
 	virtual glm::vec3 GetPosition();
 	virtual bool IsDestroyed();
 	virtual bool IsSceneUpdated();
-	virtual bool IsParentKilled();
-	virtual bool IsWithParent();
-	virtual bool IsMothership() { return false; }
-
 
 
 	// WARN: Not sure if I should keep this.
@@ -277,7 +268,6 @@ private:
 
 	std::unique_ptr<Projectile> projectile;
 	std::unique_ptr<Framework::Mesh> mesh;
-	//std::unique_ptr<Mothership> parent;
 
 	int materialBlockSize;
 	GLuint materialUniformBuffer;
@@ -302,14 +292,11 @@ public:
 	void LoadMesh(const std::string &meshFileName);
 	void LoadProjectileMesh(const std::string &meshFileName);
 
-	//void SetParent(Mothership *newParent);
-
-	//
-	void SetPosition(const glm::vec3 &newPosition);
+	
 	void Rejuvenate(const glm::vec3 &newPosition, int newHealth, glm::vec3 newFrontVector, float newSpeed);
 	void Destroy();
 	bool IsForRejuvenation();
-	//void KillParent();
+	void SetPosition(glm::vec3 newPosition);
 };
 
 
@@ -334,17 +321,11 @@ private:
 	glm::vec4 initialColor;
 	glm::vec4 onFreezeColor;
 	
-	//int deployedUnits;
-	//int maxDeployedUnits;
-
 	DeployUnitsInfo deployUnitsInfo;
 	std::vector<std::shared_ptr<DeployUnit>> deployUnits;
 
 	bool isDeploying;
 	// TODO: Fast deploying on evade. Sth like HL2 helly.
-	// TODO: Make the deploy units hidden if not deployed.
-	// TODO: Make the spaceships react on skills.
-	// TODO: 
 
 	std::unique_ptr<Framework::Mesh> mesh;
 
@@ -380,8 +361,6 @@ public:
 	// Or we make that in the beginning.
 	// WARN: Leads to adding an isUpdated boolean
 	std::vector<std::shared_ptr<DeployUnit>> GetDeployUnits() const; 
-
-	// bool AreDeployUnitsAttackedBySkill(glm::vec3 skillPosition, float skillRadius); // ...- second way
 };
 
 

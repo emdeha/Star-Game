@@ -738,6 +738,7 @@ FrostNovaSkill::FrostNovaSkill(int newDamage, int newStunTime_seconds,
 	damage = newDamage;
 	stunTime_seconds = newStunTime_seconds;
 	stunTimer = Framework::Timer(Framework::Timer::TT_INFINITE, stunTime_seconds);
+	stunTimer.SetPause(true);
 	range = newRange;
 	scaleRate = newScaleRate;
 	position = newPosition;
@@ -805,7 +806,7 @@ void FrostNovaSkill::OnEvent(Event &_event)
 	switch(_event.GetType())
 	{
 	case EVENT_TYPE_OTHER:
-		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0 && !isStarted)
 		{
 			EventArg skillDeployedEventArgs[3];
 			skillDeployedEventArgs[0].argType = "skillRange";
@@ -821,6 +822,7 @@ void FrostNovaSkill::OnEvent(Event &_event)
 			generatedEvents.push_back(skillDeployedEvent);
 
 			isStarted = true;
+			stunTimer.SetPause(false);
 		}
 	}
 }

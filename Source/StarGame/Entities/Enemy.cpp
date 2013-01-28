@@ -33,14 +33,6 @@ inline bool Enemy::IsSceneUpdated()
 {
 	return isSceneUpdated;
 }
-inline bool Enemy::IsParentKilled()
-{
-	return isParentKilled;
-}
-inline bool Enemy::IsWithParent()
-{
-	return isWithParent;
-}
 
 Event Enemy::GetGeneratedEvent(const std::string &eventName)
 {
@@ -581,7 +573,6 @@ DeployUnit::DeployUnit(float newProjectileSpeed, int newProjectileLifeSpan,
 															projectileLifeSpan));
 
 	isSceneUpdated = false;
-	isWithParent = true;
 	isForRejuvenation = false;
 }
 
@@ -679,15 +670,7 @@ void DeployUnit::Update(bool isSunKilled, CelestialBody &sun)
 			}
 
 			if(health <= 0)
-			{/*
-				EventArg killedEventArgs[1];
-				killedEventArgs[0].argType = "what_event";
-				killedEventArgs[0].argument.varType = TYPE_STRING;
-				strcpy(killedEventArgs[0].argument.varString, "deployKilled");
-				Event killedEvent = Event(1, EVENT_TYPE_OTHER, killedEventArgs);
-
-				parent->OnEvent(killedEvent);
-				*/
+			{
 				isForRejuvenation = true;
 			}
 		}
@@ -778,16 +761,7 @@ void DeployUnit::OnEvent(Event &_event)
 		break;
 	}
 }
-/*
-void DeployUnit::SetParent(Mothership *newParent)
-{
-	parent(newParent);
-}
-*/
-void DeployUnit::SetPosition(const glm::vec3 &newPosition)
-{
-	position = newPosition;
-}
+
 void DeployUnit::Destroy()
 {
 	isDestroyed = true;
@@ -796,11 +770,10 @@ bool DeployUnit::IsForRejuvenation()
 {
 	return isForRejuvenation;
 }
-/*
-void DeployUnit::KillParent()
+void DeployUnit::SetPosition(glm::vec3 newPosition)
 {
-	isParentKilled = true;
-}*/
+	position = newPosition;
+}
 void DeployUnit::Rejuvenate(const glm::vec3 &newPosition, int newHealth,
 						    glm::vec3 newFrontVector, float newSpeed)
 {
@@ -822,8 +795,6 @@ Mothership::Mothership(glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 	initialColor = newInitialColor;
 	onFreezeColor = newOnFreezeColor;
 	isDeploying = false;
-	//maxDeployedUnits = newMaxDeployedUnits;
-	//deployedUnits = 0;
 }
 
 void Mothership::LoadMesh(const std::string &meshFileName)
@@ -908,39 +879,14 @@ void Mothership::RejuvenateDeployUnits()
 void Mothership::UpdateAI(CelestialBody &sun)
 {
 	if(currentState == STATE_ATTACK && isDeploying == false)
-	{/*
+	{
 		for(int i = 0; i < deployUnits.size(); i++)
 		{
 			deployUnits[i]->SetPosition(position);
 		}
-		*/
+
 		isDeploying = true;
 		speed = 0.0f;
-		/*
-		EventArg deployedEventArgs[6];
-		deployedEventArgs[0].argType = "what_event";
-		deployedEventArgs[0].argument.varType = TYPE_STRING;
-		strcpy(deployedEventArgs[0].argument.varString, "unitsSpawned");
-		deployedEventArgs[1].argType = "count";
-		deployedEventArgs[1].argument.varType = TYPE_INTEGER;
-		deployedEventArgs[1].argument.varInteger = 4;
-		deployedEventArgs[2].argType = "frontX";
-		deployedEventArgs[2].argument.varType = TYPE_FLOAT;
-		deployedEventArgs[2].argument.varFloat = frontVector.x;
-		deployedEventArgs[3].argType = "frontY";
-		deployedEventArgs[3].argument.varType = TYPE_FLOAT;
-		deployedEventArgs[3].argument.varFloat = frontVector.y;
-		deployedEventArgs[4].argType = "posX";
-		deployedEventArgs[4].argument.varType = TYPE_FLOAT;
-		deployedEventArgs[4].argument.varFloat = position.x;
-		deployedEventArgs[5].argType = "posY";
-		deployedEventArgs[5].argument.varType = TYPE_FLOAT;
-		deployedEventArgs[5].argument.varFloat = position.y;
-
-		Event deployedEvent(6, EVENT_TYPE_OTHER, deployedEventArgs);
-		generatedEvents.push_back(deployedEvent);
-
-		deployedUnits = maxDeployedUnits;*/
 	}
 	else if(currentState == STATE_EVADE)
 	{
@@ -975,11 +921,7 @@ void Mothership::Update(bool isSunKilled, CelestialBody &sun)
 		{
 			position += frontVector * speed;
 			UpdateAI(sun);
-/*
-			if(deployedUnits <= 0)
-			{
-				isDeploying = false;
-			}*/
+
 			if(isDeploying)
 			{
 				bool areAllForRejuvenation = true;
@@ -1005,12 +947,6 @@ void Mothership::Update(bool isSunKilled, CelestialBody &sun)
 
 		if(health <= 0)
 		{
-			/*for(int i = 0; i < deployUnits.size(); i++)
-			{
-				deployUnits[i]->Destroy();
-				deployUnits[i]->KillParent();
-			}
-			*/
 			for(int i = 0; i < deployUnits.size(); i++)
 			{
 				deployUnits[i]->Destroy();
@@ -1101,11 +1037,7 @@ void Mothership::OnEvent(Event &_event)
 		{
 			currentState = lastState;
 			GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
-		}/*
-		if(strcmp(_event.GetArgument("what_event").varString, "deployKilled") == 0)
-		{
-			deployedUnits--;
-		}*/
+		}
 		break;
 	}
 }
@@ -1114,11 +1046,6 @@ std::vector<std::shared_ptr<DeployUnit>> Mothership::GetDeployUnits() const
 {
 	return deployUnits;
 }
-/*
-bool Mothership::AreDeployUnitsAttackedBySkill(glm::vec3 skillPosition, float skillRadius)
-{
-
-}*/
 
 
 FastSuicideBomber::FastSuicideBomber(int newDamage, float newChargeSpeed,
@@ -1226,6 +1153,8 @@ void FastSuicideBomber::UpdateAI(CelestialBody &sun)
 	}
 	else if(currentState == STATE_EVADE)
 	{
+		std::printf("evades");
+
 		glm::vec3 vectorFromPlanetToBomber = sun.GetPosition() - position;
 
 		vectorFromPlanetToBomber = glm::normalize(vectorFromPlanetToBomber);
@@ -1238,6 +1167,8 @@ void FastSuicideBomber::UpdateAI(CelestialBody &sun)
 	}
 	else if(currentState == STATE_IDLE)
 	{
+		std::printf("idles");
+
 		glm::vec3 vectorFromPlanetToBomber = sun.GetPosition() - position;
 
 		float distanceBetweenPlanetAndBomber = glm::length(vectorFromPlanetToBomber);

@@ -134,53 +134,7 @@ void Scene::UpdateScene()
 			{
 				(*iter)->Update(true);
 			}
-			/*
-			Event enemyEvent = (*iter)->GetGeneratedEvent("unitsSpawned");
-			(*iter)->RemoveGeneratedEvent("unitsSpawned");
-			if(enemyEvent.GetType() != EVENT_TYPE_EMPTY)
-			{
-				OnEvent(enemyEvent);
-				break;
-			}*/
-
-			/*
-			else
-			{
-				++iter;
-			}*/
-			/*
-			Event enemyEvent = (*iter)->GetGeneratedEvent("unitsSpawned");
-			(*iter)->RemoveGeneratedEvent("unitsSpawned");
-			if(enemyEvent.GetType() != EVENT_TYPE_EMPTY)
-			{
-				OnEvent(enemyEvent);
-				break;
-			}
-
-			if((*iter)->IsDestroyed())
-			{
-				if((*iter)->IsWithParent())
-				{
-					countedUnits++;
-				}
-				if(countedUnits >= DEPLOY_UNITS_COUNT)
-				{
-					countedUnits = 0;
-				}
-				enemies.erase(iter);
-				break;
-			}
-			else
-			{
-				++iter;
-			}*/
-		}/*
-		if(!(*iter)->IsSceneUpdated() && (*iter)->IsParentKilled())
-		{
-			enemies.erase(iter);
-			break;
 		}
-		++iter;*/
 		if((*iter)->IsDestroyed())
 		{
 			enemies.erase(iter);
@@ -188,8 +142,6 @@ void Scene::UpdateScene()
 		}
 		++iter;
 	}
-			
-	std::printf("count: %i", enemies.size());
 	
 	if(!suns.empty())
 	{
@@ -428,59 +380,6 @@ void Scene::OnEvent(Event &_event)
 				skills[i]->OnEvent(_event);
 			}
 		}
-		/*if(strcmp(_event.GetArgument("what_event").varString, "unitsSpawned") == 0)
-		{
-			int deployUnitsCount = _event.GetArgument("count").varInteger;
-			glm::vec3 frontVector = glm::vec3(_event.GetArgument("frontX").varFloat,
-											  0.0f, 
-											  _event.GetArgument("frontY").varFloat);
-			glm::vec3 position = glm::vec3(_event.GetArgument("posX").varFloat,
-										   0.0f, 
-										   _event.GetArgument("posY").varFloat);
-			
-			float rotationDegs = 30.0f;
-			float decrement = (2 * rotationDegs) / (float)deployUnitsCount;
-
-			for(int i = 0; i < deployUnitsCount; i++)
-			{
-				glutil::MatrixStack rotMatrix;
-				rotMatrix.SetIdentity();
-				rotMatrix.RotateY(rotationDegs);
-			
-				glm::vec4 shipFrontVector = glm::vec4(frontVector, 0.0f);
-				shipFrontVector = shipFrontVector * rotMatrix.Top();
-				rotationDegs -= decrement;
-
-				std::shared_ptr<DeployUnit> newDeployUnit = 
-					std::shared_ptr<DeployUnit>(new DeployUnit(0.3f, 20, 1,
-															   glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-															   position,
-															   glm::vec3(shipFrontVector), 
-															   0.05f, 2.0f, 50));
-				newDeployUnit->LoadMesh("mesh-files/Ship.xml");
-				newDeployUnit->LoadProjectileMesh("mesh-files/UnitSphere.xml"); // WARN: Not data driven
-
-
-				// BAD! BAD! BAD!
-				for(int i = 0; i < enemies.size(); i++)
-				{
-					if(dynamic_cast<Mothership*>(enemies[i].get()))
-					{
-						newDeployUnit->SetParent(dynamic_cast<Mothership*>(enemies[i].get()));
-					}
-				}
-
-				enemies.push_back(newDeployUnit);
-			}
-		}*/
-		/*if(strcmp(_event.GetArgument("what_event").varString, "explStarted") == 0)
-		{
-			int explosionIndex = _event.GetArgument("expl_index").varInteger;
-			// TODO: add bounds check
-			explosionEmitters[explosionIndex].SetPosition(
-				fastSuicideBombers[explosionIndex]->GetPosition());
-			explosionEmitters[explosionIndex].Activate();
-		}*/
 		break;
 	default:
 		break;
@@ -758,7 +657,7 @@ void Scene::GenerateRandomMothership()
 	{
 		srand(time(0));
 
-		float range = ((float)rand() / (float)RAND_MAX) * 6.0f + 4.0f;
+		float range = ((float)rand() / (float)RAND_MAX) * 8.0f + 6.0f;
 		float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
 
 		float posX = cosf(posOnCircle * (2.0f * PI)) * range;
@@ -774,16 +673,10 @@ void Scene::GenerateRandomMothership()
 		randMothership->LoadMesh("mesh-files/Ship.xml");
 
 		int deployUnitsCount = 4;
-		/*for(int i = 0; i < deployUnitsCount; i++)
-		{*/
 		randMothership->InitDeployUnits("mesh-files/Ship.xml", deployUnitsCount, 
 										0.3f, 20, 1, 
 										glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
 										0.05f, 2.0f, 50);
-		
-
-		//}
-
 		enemies.push_back(randMothership);
 		
 		std::vector<std::shared_ptr<DeployUnit>> deployUnits = randMothership->GetDeployUnits();

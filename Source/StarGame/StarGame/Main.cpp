@@ -541,7 +541,7 @@ void Display()
 	{		
 		scene.SetDisplayData(displayData);
 		//scene.GenerateRandomSwarms(3, shaderManager.GetBillboardProgDataNoTexture());
-		scene.GenerateRandomSpaceships(3);
+		//scene.GenerateRandomSpaceships(3);
 		//scene.GenerateRandomSuicideBombers(1);
 		//scene.GenerateRandomMothership();
 		//scene.GenerateRandomAsteroids(10);

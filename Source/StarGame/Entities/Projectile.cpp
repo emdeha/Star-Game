@@ -68,9 +68,7 @@ void Projectile::LoadMesh(const std::string &meshFile)
 		throw;
 	}
 
-	GenerateUniformBuffers(materialBlockSize, 
-						   glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
-						   materialUniformBuffer);
+	GenerateUniformBuffers(materialBlockSize, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), materialUniformBuffer);
 }
 
 void Projectile::LoadMesh(const std::auto_ptr<Framework::Mesh> newMesh)

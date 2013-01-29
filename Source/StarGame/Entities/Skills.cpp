@@ -879,8 +879,17 @@ ShieldSkill::ShieldSkill(glm::vec3 newPosition,
 	startingDefensePoints = defensePoints;
 	range = newRange;
 	isStarted = false;
-	skillRadius = Utility::Primitives::Circle(glm::vec4(0.7f, 0.5f, 0.0f, 1.0f), position, range, 90);
-	skillRadius.Init();
+
+	std::shared_ptr<OrbitingAnimationBody> bodyOne =
+		std::shared_ptr<OrbitingAnimationBody>(new OrbitingAnimationBody(position, range, 1.0f, "../data/mesh-files/UnitSphere.xml"));
+	std::shared_ptr<OrbitingAnimationBody> bodyTwo =
+		std::shared_ptr<OrbitingAnimationBody>(new OrbitingAnimationBody(position, range - 0.2f, 2.5f, "../data/mesh-files/UnitSphere.xml"));
+	
+	skillAnimation.AddAnimationBody(bodyTwo);
+	skillAnimation.AddAnimationBody(bodyOne);
+
+	//skillRadius = Utility::Primitives::Circle(glm::vec4(0.7f, 0.5f, 0.0f, 1.0f), position, range, 90);
+	//skillRadius.Init();
 }
 
 void ShieldSkill::Update()
@@ -892,17 +901,21 @@ void ShieldSkill::Update()
 			isStarted = false;
 			defensePoints = startingDefensePoints;
 		}
+
+		skillAnimation.Update();
 	}
 }
 
-void ShieldSkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &simpleData)
+void ShieldSkill::Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData,
+						 GLuint materialBlockIndex)
 {
 	if(isStarted)
 	{
 		glutil::PushStack push(modelMatrix);
 		modelMatrix.Translate(position);
 
-		skillRadius.Draw(modelMatrix, simpleData);
+		skillAnimation.Render(modelMatrix, materialBlockIndex, litData);
+		//skillRadius.Draw(modelMatrix, simpleData);
 	}
 }
 

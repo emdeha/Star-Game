@@ -28,6 +28,7 @@
 #include "../framework/EventSystem.h"
 #include "../ParticleEngine/Engine.h"
 #include "../GUISystem/GameSpecificGUI.h"
+#include "BasicAnimation.h"
 
 enum ParameterType
 {
@@ -332,7 +333,8 @@ private:
 	
 	bool isStarted;
 
-	Utility::Primitives::Circle skillRadius;
+	Animation skillAnimation;
+	//Utility::Primitives::Circle skillRadius;
 
 public:
 	ShieldSkill() : Skill() {}
@@ -342,7 +344,8 @@ public:
 				char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
 
 	void Update();
-	void Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData);
+	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData,
+				GLuint materialBlockIndex);
 
 	void OnEvent(Event &_event);
 

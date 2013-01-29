@@ -460,6 +460,8 @@ void TimerFunction(int value)
 
 long long currentTime_milliseconds;
 
+//Mesh sampleMesh;
+
 void Init()
 {
 	//scene = Scene(2.2f);
@@ -520,6 +522,12 @@ void Init()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	nextGameTick = GetTickCount();
+
+	/*
+	if(!sampleMesh.LoadMesh("../data/mesh-files/phoenix_ugv.md2"))
+	{
+		std::printf("Problem loading texture\n");
+	}*/
 }
 
 void Display()
@@ -537,7 +545,7 @@ void Display()
 		//scene.GenerateRandomSuicideBombers(1);
 		//scene.GenerateRandomMothership();
 		//scene.GenerateRandomAsteroids(10);
-
+		
 		glutil::MatrixStack modelMatrix;
 
 		modelMatrix.SetMatrix(scene.GetTopDownCamera().CalcMatrix());
@@ -552,7 +560,7 @@ void Display()
 			loops++;
 		}
 
-		
+
 		float interpolation = float(GetTickCount() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
 		scene.RenderScene(modelMatrix, 
 						   shaderManager.GetBlockIndex(BT_MATERIAL),
@@ -567,6 +575,9 @@ void Display()
 		scene.RenderCurrentLayout(shaderManager.GetFontProgData(),
 								  shaderManager.GetSimpleNoUBProgData(),
 								  shaderManager.GetTextureProgData());
+		
+
+		//sampleMesh.Render(modelMatrix, shaderManager.GetSimpleTextureProgData());		
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{

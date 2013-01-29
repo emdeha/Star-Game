@@ -19,6 +19,9 @@
 #include "MeshLoader.h"
 
 
+#define DIR "../data/mesh-files/"
+
+
 const std::string ExtractDirectory(const std::string &fileName)
 {
 	std::string::size_type slashIndex = fileName.find_last_of("/");
@@ -86,7 +89,9 @@ bool Mesh::LoadMesh(const std::string &fileName)
 		aiImportFile(fileName.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals);
 
 	if(scene)
-	{
+	{		
+		glGenVertexArrays(1, &vao);
+		glBindVertexArray(vao);
 		return InitFromScene(scene, fileName);
 	}
 	else
@@ -149,7 +154,7 @@ void Mesh::InitMesh(unsigned int index, const aiMesh *mesh)
 
 bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
 {
-	/*std::string directory = ExtractDirectory(fileName);
+	std::string directory = ExtractDirectory(fileName);
 
 	// Initialize the materials.
 	for(unsigned int i = 0; i < scene->mNumMaterials; i++)
@@ -164,14 +169,15 @@ bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
 
 			if(material->GetTexture(aiTextureType_DIFFUSE, 0, &path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS)
 			{
-				std::string fullPath = directory + "/" + path.data;
-				textures[i] = std::shared_ptr<Texture>(new Texture());
+				// std::string fullPath = directory + '/' + path.data;
+				std::string fullPath = DIR;
+				fullPath.append(path.data);
+				textures[i] = std::shared_ptr<Texture2D>(new Texture2D());
 
 				if(!textures[i]->Load(fullPath, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE))
 				{
 					std::printf("Error loading texture '%s'\n", fullPath.c_str());
-					return textures[i]->Load("../data/mesh-files/white.png",
-											 GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+					return textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 				}
 				else
 				{
@@ -184,12 +190,11 @@ bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
 		// Load a white texture in case the model does not include its own texture
 		if(!textures[i])
 		{
-			textures[i] = std::shared_ptr<Texture>(new Texture());
+			textures[i] = std::shared_ptr<Texture2D>(new Texture2D());
 
-			return textures[i]->Load("../data/mesh-files/white.png", 
-									 GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+			return textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 		}
-	}*/
+	}
 	return false;
 }
 
@@ -197,21 +202,22 @@ void Mesh::Render(glutil::MatrixStack &modelMatrix,
 				  SimpleTextureProgData progData)
 {
 	glFrontFace(GL_CCW); // Fixes face culling issues with rendering
+	
+	glBindVertexArray(vao);
 
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
-
+	
 	for(unsigned int i = 0; i < entries.size(); i++)
 	{
 		glUseProgram(progData.theProgram);
-
+		
 		modelMatrix.Translate(0.0f, 0.0f, 0.0f);
-		modelMatrix.RotateX(90.0f);
-		modelMatrix.RotateZ(-45.0f);
 		modelMatrix.Scale(0.05f);
 
 		glUniformMatrix4fv(progData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+		
 
 		glBindBuffer(GL_ARRAY_BUFFER, entries[i].vertexBufferObject);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
@@ -235,6 +241,8 @@ void Mesh::Render(glutil::MatrixStack &modelMatrix,
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
+
+	glBindVertexArray(0);
 
 	glFrontFace(GL_CW);
 }

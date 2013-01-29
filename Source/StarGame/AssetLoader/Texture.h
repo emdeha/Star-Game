@@ -38,7 +38,8 @@ public:
 		
 	// Maybe the texture loading characteristics must be kept away from the user.
 	// Later, I will develop a single format which will have default characteristics.
-	bool Load(const std::string &fileName);
+	bool Load(const std::string &fileName, 
+			  GLuint store = GL_RGB, GLuint uploadFormat = GL_BGR, GLuint componentType = GL_UNSIGNED_BYTE);
 
 	void Bind(GLenum textureUnit);
 };

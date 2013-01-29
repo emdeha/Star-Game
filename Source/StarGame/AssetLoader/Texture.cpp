@@ -29,7 +29,8 @@ Texture2D::Texture2D()
 #endif
 }
 
-bool Texture2D::Load(const std::string &fileName)
+bool Texture2D::Load(const std::string &fileName, 
+					 GLuint storeFormat, GLuint uploadFormat, GLuint componentType)
 {
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 	FIBITMAP *dib(0);
@@ -64,12 +65,12 @@ bool Texture2D::Load(const std::string &fileName)
 
 	glTexImage2D(GL_TEXTURE_2D, // texture type
 				 0, 
-				 GL_RGB, // how OpenGL will store the texture data
+				 storeFormat, // how OpenGL will store the texture data
 			     width, // width
 				 height, // height
 				 0, // must always be 0
-				 GL_BGR, // we are uploading four components to the texture
-				 GL_UNSIGNED_BYTE, // each component is stored in a single byte
+				 uploadFormat, // we are uploading four components to the texture
+				 componentType, // each component is stored in a single byte
 				 bits); // the texture's data
 
 

@@ -75,9 +75,12 @@ private:
 
 		GLuint vertexBufferObject;
 		GLuint indexBufferObject;
+		//GLuint vao;
 		unsigned int indicesCount;
 		unsigned int materialIndex;
 	};
+
+	GLuint vao;
 
 	std::vector<MeshEntry> entries;
 	std::vector<std::shared_ptr<Texture2D>> textures;

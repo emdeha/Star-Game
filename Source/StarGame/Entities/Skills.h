@@ -322,4 +322,36 @@ public:
 };
 
 
+class ShieldSkill : public Skill
+{
+private:
+	glm::vec3 position;
+	int defensePoints; // if below zero, skill deactivates
+	int startingDefensePoints;
+	float range;
+	
+	bool isStarted;
+
+	Utility::Primitives::Circle skillRadius;
+
+public:
+	ShieldSkill() : Skill() {}
+	ShieldSkill(glm::vec3 newPosition, 
+				int newDefensePoints, float newRange, 
+				const std::string &skillType, 
+				char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData);
+
+	void OnEvent(Event &_event);
+
+	float GetRange();
+	glm::vec3 GetPosition();
+
+	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
+
+	bool IsIntersectingObject(glm::vec3 objectPosition);
+};
+
 #endif

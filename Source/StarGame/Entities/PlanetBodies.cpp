@@ -425,6 +425,13 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 															   'q', 'w', 'q'));
 		newSat->AddSkill(satFrostNovaSkill);
 	}
+	if(type == SATELLITE_EARTH)
+	{
+		std::shared_ptr<ShieldSkill> satShieldSkill =
+			std::shared_ptr<ShieldSkill>(new ShieldSkill(newSat->GetPosition(), 
+														 3, 0.5f, "satShieldSkill", 'w', 'e', 'w'));
+		newSat->AddSkill(satShieldSkill);
+	}
 																		 
 	newSat->AddSkill(satSkill);
 	newSat->AddSkill(satChainSkill);

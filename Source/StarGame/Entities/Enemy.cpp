@@ -119,13 +119,11 @@ Swarm::Swarm(int newSwarmersCount,
 			 glm::vec3 newPosition, glm::vec3 newFrontVector,
 			 float newSpeed, float newLineOfSight,
 			 int newHealth)
-			 : Enemy(newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
+			 : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
 {
 	swarmersCount = newSwarmersCount;
 	damage.damage = newDamage;
 	damage.time_seconds = newTime_seconds;
-	initialColor = newInitialColor;
-	onFreezeColor = newOnFreezeColor;
 	swarmBody = SwarmEmitter(position, initialColor, swarmersCount);
 	swarmBody.Init(billboardProgDataNoTexture);
 	isCommanded = false;
@@ -292,6 +290,10 @@ void Swarm::OnEvent(Event &_event)
 			currentState = lastState;
 			swarmBody.SetColor(initialColor);
 		}
+		if(strcmp(_event.GetArgument("what_event").varString, "shieldskilldeployed") == 0)
+		{
+			isDestroyed = true;
+		}
 		break;
 	}
 }
@@ -303,15 +305,12 @@ Spaceship::Spaceship(float newProjectileSpeed, int newProjectileLifeSpan,
 					 glm::vec3 newPosition, glm::vec3 newFrontVector,
 					 float newSpeed, float newLineOfSight,
 					 int newHealth)
-					 : Enemy(newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
+					 : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
 {
 	projectileSpeed = newProjectileSpeed;
 	projectileLifeSpan = newProjectileLifeSpan;
 	projectileDamage = newProjectileDamage;
 	currentState = STATE_PATROL;
-
-	initialColor = newInitialColor;
-	onFreezeColor = newOnFreezeColor;
 
 	projectile = std::unique_ptr<Projectile>(new Projectile(position, 
 															frontVector * projectileSpeed, 
@@ -545,6 +544,10 @@ void Spaceship::OnEvent(Event &_event)
 			currentState = lastState;
 			GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 		}
+		if(strcmp(_event.GetArgument("what_event").varString, "shieldskilldeployed") == 0)
+		{
+			isDestroyed = true;
+		}
 		break;
 	default:
 		break;
@@ -558,14 +561,11 @@ DeployUnit::DeployUnit(float newProjectileSpeed, int newProjectileLifeSpan,
 					   glm::vec3 newPosition, glm::vec3 newFrontVector,
 					   float newSpeed, float newLineOfSight,
 					   int newHealth)
-					   : Enemy(newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
+					   : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
 {
 	projectileSpeed = newProjectileSpeed;
 	projectileLifeSpan = newProjectileLifeSpan;
 	projectileDamage = newProjectileDamage;
-
-	initialColor = newInitialColor;
-	onFreezeColor = newOnFreezeColor;
 
 	projectile = std::unique_ptr<Projectile>(new Projectile(position,
 															frontVector * projectileSpeed,
@@ -756,6 +756,10 @@ void DeployUnit::OnEvent(Event &_event)
 			currentState = lastState;
 			GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 		}
+		if(strcmp(_event.GetArgument("what_event").varString, "shieldskilldeployed") == 0)
+		{
+			isDestroyed = true;
+		}
 		break;
 	default:
 		break;
@@ -790,10 +794,8 @@ Mothership::Mothership(glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 					   glm::vec3 newPosition, glm::vec3 newFrontVector,
 					   float newSpeed, float newLineOfSight,
 					   int newHealth)
-					   : Enemy(newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
+					   : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
 {
-	initialColor = newInitialColor;
-	onFreezeColor = newOnFreezeColor;
 	isDeploying = false;
 }
 
@@ -1038,6 +1040,10 @@ void Mothership::OnEvent(Event &_event)
 			currentState = lastState;
 			GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 		}
+		if(strcmp(_event.GetArgument("what_event").varString, "shieldskilldeployed") == 0)
+		{
+			isDestroyed = true;
+		}
 		break;
 	}
 }
@@ -1053,11 +1059,10 @@ FastSuicideBomber::FastSuicideBomber(int newDamage, float newChargeSpeed,
 									 glm::vec3 newPosition, glm::vec3 newFrontVector,
 									 float newSpeed, float newLineOfSight,
 									 int newHealth)
-									 : Enemy(newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
+									 : Enemy(newInitialColor, newOnFreezeColor, 
+											 newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
 {
 	damage = newDamage;
-	initialColor = newInitialColor;
-	onFreezeColor = newOnFreezeColor;
 	chargeSpeed = newChargeSpeed;
 }
 
@@ -1117,9 +1122,6 @@ void FastSuicideBomber::AttackSolarSystem(CelestialBody &sun, bool isSatellite, 
 
 void FastSuicideBomber::UpdateAI(CelestialBody &sun)
 {
-	// TODO: Strange problem with AI. Sometimes, when the bomber destroys a satellite and I regenerate it, the bomber
-	//		 continues to move in a direction opposite to the sun. He evades, but he is not in an evasive state.
-
 	if(currentState == STATE_ATTACK)
 	{
 		glm::vec3 vectorBetweenPlanetAndBomber = glm::vec3();
@@ -1153,8 +1155,6 @@ void FastSuicideBomber::UpdateAI(CelestialBody &sun)
 	}
 	else if(currentState == STATE_EVADE)
 	{
-		std::printf("evades");
-
 		glm::vec3 vectorFromPlanetToBomber = sun.GetPosition() - position;
 
 		vectorFromPlanetToBomber = glm::normalize(vectorFromPlanetToBomber);
@@ -1167,8 +1167,6 @@ void FastSuicideBomber::UpdateAI(CelestialBody &sun)
 	}
 	else if(currentState == STATE_IDLE)
 	{
-		std::printf("idles");
-
 		glm::vec3 vectorFromPlanetToBomber = sun.GetPosition() - position;
 
 		float distanceBetweenPlanetAndBomber = glm::length(vectorFromPlanetToBomber);
@@ -1261,6 +1259,177 @@ void FastSuicideBomber::OnEvent(Event &_event)
 		{
 			currentState = lastState;
 			GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "shieldskilldeployed") == 0)
+		{
+			isDestroyed = true;
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+
+Asteroid::Asteroid(int newDamage, 
+				   glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+				   glm::vec3 newPosition, glm::vec3 newFrontVector,
+				   float newSpeed, float newLineOfSight,
+				   int newHealth)
+				   : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
+{
+	damage = newDamage;
+}
+
+void Asteroid::LoadMesh(const std::string &meshFile)
+{
+	try
+	{
+		mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFile));
+	}
+	catch(std::exception &except)
+	{
+		printf("%s\n", except.what());
+		throw;
+	}
+
+	GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
+}
+
+void Asteroid::AttackSolarSystem(CelestialBody &sun, bool isSatellite, float bodyIndex)
+{
+	EventArg damageEventArgs[2];
+	damageEventArgs[0].argType = "damage";
+	damageEventArgs[0].argument.varType = TYPE_INTEGER;
+	damageEventArgs[0].argument.varInteger = damage;
+	damageEventArgs[1].argType = "bodyIndex";
+	if(isSatellite)
+	{
+		damageEventArgs[1].argument.varType = TYPE_FLOAT;
+		damageEventArgs[1].argument.varFloat = bodyIndex;
+	}
+	else
+	{
+		damageEventArgs[1].argument.varType = TYPE_INTEGER;
+		damageEventArgs[1].argument.varInteger = -1;
+	}
+	Event damageEvent(2, EVENT_TYPE_ATTACKED, damageEventArgs);
+
+	sun.OnEvent(damageEvent);
+
+	isDestroyed = true;
+}
+
+void Asteroid::UpdateAI(CelestialBody &sun)
+{
+	glm::vec3 vectorBetweenPlanetAndAsteroid = glm::vec3();
+	if(sun.HasSatellites())
+	{
+		vectorBetweenPlanetAndAsteroid = sun.GetOuterSatellite()->GetPosition() - position;
+
+		float satelliteRadius = sun.GetOuterSatellite()->GetRadius();
+
+		float distanceBetweenPlanetAndAsteroid = glm::length(vectorBetweenPlanetAndAsteroid);
+		if(distanceBetweenPlanetAndAsteroid <= satelliteRadius * satelliteRadius)
+		{
+			AttackSolarSystem(sun, true, sun.GetOuterSatellite()->GetOffsetFromSun());
+		}
+	}
+	else
+	{
+		vectorBetweenPlanetAndAsteroid = sun.GetPosition() - position;
+
+		float sunRadius = sun.GetRadius();
+
+		float distanceBetweenPlanetAndAsteroid = glm::length(vectorBetweenPlanetAndAsteroid);
+		if(distanceBetweenPlanetAndAsteroid <= sunRadius * sunRadius)
+		{
+			AttackSolarSystem(sun);
+		}
+	}
+}
+
+void Asteroid::Update(bool isSunKilled, CelestialBody &sun)
+{
+	if(!isSunKilled)
+	{
+		if(currentState != STATE_STOPPED)
+		{
+			position += frontVector * speed;
+			UpdateAI(sun);
+		}
+
+		if(health <= 0)
+		{
+			isDestroyed = true;
+		}
+	}
+	else
+	{
+		currentState = STATE_IDLE;
+	}
+}
+
+void Asteroid::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
+					  float gamma, const LitProgData &litData,
+					  float interpolation)
+{
+	glutil::PushStack push(modelMatrix);
+
+	// glm::vec3 viewPosition = position + frontVector * speed * interpolation;
+
+	modelMatrix.Translate(position);
+	modelMatrix.Scale(0.2f);
+	
+	glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
+					  0, sizeof(MaterialBlock));
+
+	glm::mat3 normMatrix(modelMatrix.Top());
+	normMatrix = glm::transpose(glm::inverse(normMatrix));
+
+	glUseProgram(litData.theProgram);
+	glUniformMatrix4fv(litData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+	glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+
+	mesh->Render("lit");
+
+	glUseProgram(0);
+
+	glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
+}
+
+void Asteroid::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
+	case EVENT_TYPE_SHOT_FIRED:
+		break;
+	case EVENT_TYPE_ATTACKED:
+		break;
+	case EVENT_TYPE_OTHER:
+		if(strcmp(_event.GetArgument("what_event").varString, "skilldeployed") == 0)
+		{
+			health -= _event.GetArgument("skillDamage").varInteger;
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "timeended") == 0)
+		{
+			health -= _event.GetArgument("damage").varInteger;
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "stunskilldeployed") == 0)
+		{
+			// WARN: It should be 'currentState'.
+			lastState = STATE_ATTACK;
+			currentState = STATE_STOPPED;
+			GenerateUniformBuffers(materialBlockSize, onFreezeColor, materialUniformBuffer);
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "stuntimeended") == 0)
+		{
+			currentState = lastState;
+			GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "shieldskilldeployed") == 0)
+		{
+			isDestroyed = true;
 		}
 		break;
 	default:

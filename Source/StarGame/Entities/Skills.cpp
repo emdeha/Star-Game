@@ -866,3 +866,100 @@ bool FrostNovaSkill::IsIntersectingObject(glm::vec3 objectPosition)
 	}
 	else return false;
 }
+
+
+ShieldSkill::ShieldSkill(glm::vec3 newPosition, 
+						 int newDefensePoints, float newRange, 
+						 const std::string &skillType, 
+						 char fusionCombA, char fusionCombB, char fusionCombC)
+						 : Skill(skillType, fusionCombA, fusionCombB, fusionCombC)
+{
+	position = newPosition;
+	defensePoints = newDefensePoints;
+	startingDefensePoints = defensePoints;
+	range = newRange;
+	isStarted = false;
+	skillRadius = Utility::Primitives::Circle(glm::vec4(0.7f, 0.5f, 0.0f, 1.0f), position, range, 90);
+	skillRadius.Init();
+}
+
+void ShieldSkill::Update()
+{
+	if(isStarted)
+	{
+		if(defensePoints == 0)
+		{
+			isStarted = false;
+			defensePoints = startingDefensePoints;
+		}
+	}
+}
+
+void ShieldSkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &simpleData)
+{
+	if(isStarted)
+	{
+		glutil::PushStack push(modelMatrix);
+		modelMatrix.Translate(position);
+
+		skillRadius.Draw(modelMatrix, simpleData);
+	}
+}
+
+void ShieldSkill::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
+	case EVENT_TYPE_ATTACKED:
+		defensePoints--;
+		break;
+	case EVENT_TYPE_OTHER:
+		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+		{
+			EventArg skillDeployedEventArgs[1];
+			skillDeployedEventArgs[0].argType = "what_event";
+			skillDeployedEventArgs[0].argument.varType = TYPE_STRING;
+			strcpy(skillDeployedEventArgs[0].argument.varString, "shieldskilldeployed");
+			Event skillDeployedEvent = Event(1, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			generatedEvents.push_back(skillDeployedEvent);
+
+			isStarted = true;
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+float ShieldSkill::GetRange()
+{
+	return range;
+}
+glm::vec3 ShieldSkill::GetPosition()
+{
+	return position;
+}
+
+void ShieldSkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
+{
+	switch(paramType)
+	{
+	case PARAM_POSITION:
+		position = newParam_vec3;
+		break;
+	default:
+		break;
+	}
+}
+
+bool ShieldSkill::IsIntersectingObject(glm::vec3 objectPosition)
+{
+	float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
+
+	if(distanceBetweenObjectAndSkill < range)
+	{
+		return true;
+	}
+
+	return false;
+}

@@ -148,6 +148,7 @@ public:
 	void GenerateRandomSpaceships(int count);
 	void GenerateRandomSuicideBombers(int count);
 	void GenerateRandomMothership();
+	void GenerateRandomAsteroids(int count);
 };
 
 #endif

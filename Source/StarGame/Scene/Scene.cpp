@@ -217,6 +217,22 @@ void Scene::UpdateScene()
 					}
 				}
 			}
+
+			if(skills[skillIndex]->GetSkillType() == "satShieldSkill")
+			{
+				for(int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++)
+				{
+					if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition()))
+					{
+						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("shieldskilldeployed");
+						if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
+						{
+							enemies[enemyIndex]->OnEvent(skillEvent);
+							skills[skillIndex]->OnEvent(Event(EVENT_TYPE_ATTACKED));
+						}
+					}
+				}
+			}
 		}
 	}
 	else if(suns.empty())
@@ -373,8 +389,7 @@ void Scene::OnEvent(Event &_event)
 				}
 			}
 
-			std::vector<std::shared_ptr<Skill>> skills = 
-				suns[0]->GetAllSkills();
+			std::vector<std::shared_ptr<Skill>> skills = suns[0]->GetAllSkills();
 			for(int i = 0; i < skills.size(); i++)
 			{
 				skills[i]->OnEvent(_event);
@@ -683,6 +698,39 @@ void Scene::GenerateRandomMothership()
 		for(int i = 0; i < deployUnits.size(); i++)
 		{
 			enemies.push_back(deployUnits[i]);
+		}
+	}
+}
+
+void Scene::GenerateRandomAsteroids(int count)
+{
+	if(enemies.size() <= 0)
+	{
+		srand(time(0));
+
+		for(int i = 0; i < count; i++)
+		{
+			float range = ((float)rand() / (float)RAND_MAX) * 8.0f + 6.0f;
+			float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
+
+			float posX = cosf(posOnCircle * (2.0f * PI)) * range;
+			float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
+
+			posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
+			float dirX = cosf(posOnCircle * (2.0f * PI)) * range;
+			float dirZ = sinf(posOnCircle * (2.0f * PI)) * range;
+
+			glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
+			glm::vec3 frontVector = glm::normalize(glm::vec3(dirX, 0.0f, dirZ));
+			float speed = 0.03f;
+
+			std::shared_ptr<Asteroid> randAsteroid = 
+				std::shared_ptr<Asteroid>(new Asteroid(20, 
+													   glm::vec4(0.57, 0.37, 0.26, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+													   position, frontVector, speed, 0.0f, 50));
+			randAsteroid->LoadMesh("mesh-files/UnitTetrahedron.xml");
+
+			enemies.push_back(randAsteroid);
 		}
 	}
 }

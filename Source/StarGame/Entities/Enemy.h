@@ -102,7 +102,6 @@ public:
 	void CheckTargetHit(CelestialBody &sun);
 
 	void OnTargetHit(CelestialBody &sun, Event &_event); // Should be an OnEvent(Event &_event);
-
 	
 	void Recreate(glm::vec3 newPosition, glm::vec3 newVelocity, int newLifeSpan);
 	bool IsDestroyed() { return isDestroyed; }
@@ -112,6 +111,9 @@ public:
 class Enemy
 {
 protected:
+	glm::vec4 initialColor;
+	glm::vec4 onFreezeColor;
+
 	glm::vec3 position;
 	glm::vec3 frontVector;
 	glm::vec3 lastFrontVector;
@@ -132,9 +134,12 @@ protected:
 
 public:
 	Enemy() {}
-	Enemy(glm::vec3 newPosition, glm::vec3 newFrontVector, float newSpeed,
+	Enemy(glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+		  glm::vec3 newPosition, glm::vec3 newFrontVector, float newSpeed,
 		  float newLineOfSight, int newHealth)
 	{
+		initialColor = newInitialColor;
+		onFreezeColor = newOnFreezeColor;
 		position = newPosition;
 		frontVector = newFrontVector;
 		lastFrontVector = frontVector;
@@ -181,8 +186,6 @@ public:
 class Swarm : public Enemy
 {
 private:
-	glm::vec4 initialColor;
-	glm::vec4 onFreezeColor;
 	int swarmersCount;
 	
 	DamageOverTime damage;
@@ -218,8 +221,6 @@ public:
 class Spaceship : public Enemy
 {
 private:
-	glm::vec4 initialColor;
-	glm::vec4 onFreezeColor;
 	float projectileSpeed;
 	int projectileLifeSpan;
 	int projectileDamage;
@@ -254,12 +255,9 @@ public:
 };
 
 
-// WARN: Should I generalize this for all enemies?
 class DeployUnit : public Enemy
 {
 private:
-	glm::vec4 initialColor;
-	glm::vec4 onFreezeColor;
 	float projectileSpeed;
 	int projectileLifeSpan;
 	int projectileDamage;
@@ -317,10 +315,7 @@ private:
 		int health;
 	};
 	
-private:
-	glm::vec4 initialColor;
-	glm::vec4 onFreezeColor;
-	
+private:	
 	DeployUnitsInfo deployUnitsInfo;
 	std::vector<std::shared_ptr<DeployUnit>> deployUnits;
 
@@ -367,8 +362,6 @@ public:
 class FastSuicideBomber : public Enemy
 {
 private:
-	glm::vec4 initialColor;
-	glm::vec4 onFreezeColor;
 	int damage;
 	float chargeSpeed;
 	
@@ -387,6 +380,39 @@ public:
 					  glm::vec3 newPosition, glm::vec3 newFrontVector,
 					  float newSpeed, float newLineOfSight,
 					  int newHealth);
+
+	void UpdateAI(CelestialBody &sun);
+	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
+	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
+				float gamma, const LitProgData &litData,
+				float interpolation);
+
+	void OnEvent(Event &_event);
+
+	void LoadMesh(const std::string &meshFile);
+};
+
+
+class Asteroid : public Enemy
+{
+private:
+	int damage;
+
+	std::unique_ptr<Framework::Mesh> mesh;
+
+	int materialBlockSize;
+	GLuint materialUniformBuffer;
+
+private:
+	void AttackSolarSystem(CelestialBody &sun, bool isSatellite = false, float bodyIndex = -1.0f);
+
+public:
+	Asteroid() {}
+	Asteroid(int newDamage, 
+			 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+			 glm::vec3 newPosition, glm::vec3 newFrontVector,
+			 float newSpeed, float newLineOfSight,
+			 int newHealth);
 
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());

@@ -391,6 +391,7 @@ void InitializeScene()
 	scene.AddFusionSequence("passiveAoeSkill", 'q', 'q', 'e');
 	scene.AddFusionSequence("sunNovaSkill", 'w', 'w', 'e');
 	scene.AddFusionSequence("satFrostNova", 'q', 'w', 'q');
+	scene.AddFusionSequence("satShieldSkill", 'w', 'e', 'w');
 
 	/*
 	ExplosionEmitter sceneExplosion =
@@ -531,10 +532,11 @@ void Display()
 	if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 	{		
 		scene.SetDisplayData(displayData);
-		//scene.GenerateRandomSwarms(10, shaderManager.GetBillboardProgDataNoTexture());
-		//scene.GenerateRandomSpaceships(5);
-		scene.GenerateRandomSuicideBombers(1);
+		//scene.GenerateRandomSwarms(3, shaderManager.GetBillboardProgDataNoTexture());
+		scene.GenerateRandomSpaceships(3);
+		//scene.GenerateRandomSuicideBombers(1);
 		//scene.GenerateRandomMothership();
+		//scene.GenerateRandomAsteroids(10);
 
 		glutil::MatrixStack modelMatrix;
 

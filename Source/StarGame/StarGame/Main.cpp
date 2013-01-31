@@ -392,6 +392,7 @@ void InitializeScene()
 	scene.AddFusionSequence("sunNovaSkill", 'w', 'w', 'e');
 	scene.AddFusionSequence("satFrostNova", 'q', 'w', 'q');
 	scene.AddFusionSequence("satShieldSkill", 'w', 'e', 'w');
+	scene.AddFusionSequence("burnSkill", 'w', 'e', 'q');
 
 	/*
 	ExplosionEmitter sceneExplosion =
@@ -415,11 +416,18 @@ void InitializeScene()
 													   0.05f, 
 													   "sunNovaSkill", 
 													   'w', 'w', 'e'));
+	std::shared_ptr<BurnSkill> testBurnSkill =
+		std::shared_ptr<BurnSkill>(new BurnSkill(glm::vec3(), 
+												 30, 1, 3,
+												 2.0f, 
+												 "burnSkill",
+												 'w', 'e', 'q'));
 
 	scene.GetSun()->AddSkill(testPassiveAOESkill);
 	scene.GetSun()->AddSkill(testAOESkill);
 	scene.GetSun()->AddSkill(testSunNovaSkill);
-	
+	scene.GetSun()->AddSkill(testBurnSkill);
+
 
 	glUseProgram(shaderManager.GetTextureProgData().theProgram);
 	glUniform1i(shaderManager.GetTextureProgData().colorTextureUnif, 0);
@@ -524,7 +532,7 @@ void Init()
 	nextGameTick = GetTickCount();
 
 	/*
-	if(!sampleMesh.LoadMesh("../data/mesh-files/phoenix_ugv.md2"))
+	if(!sampleMesh.LoadMesh("../data/mesh-files/spaceship.obj"))
 	{
 		std::printf("Problem loading texture\n");
 	}*/
@@ -540,7 +548,7 @@ void Display()
 	if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 	{		
 		scene.SetDisplayData(displayData);
-		//scene.GenerateRandomSwarms(3, shaderManager.GetBillboardProgDataNoTexture());
+		scene.GenerateRandomSwarms(1, shaderManager.GetBillboardProgDataNoTexture());
 		//scene.GenerateRandomSpaceships(3);
 		//scene.GenerateRandomSuicideBombers(1);
 		//scene.GenerateRandomMothership();

@@ -976,3 +976,156 @@ bool ShieldSkill::IsIntersectingObject(glm::vec3 objectPosition)
 
 	return false;
 }
+
+
+BurnSkill::BurnSkill(glm::vec3 newPosition, 
+					 int newDamage, int newDamageApplyTime_seconds, int newDuration_seconds,
+					 float newRange,
+					 const std::string &skillType,
+					 char fusionCombA, char fusionCombB, char fusionCombC)
+					 : Skill(skillType, fusionCombA, fusionCombB, fusionCombC)
+{
+	position = newPosition;
+	damage = newDamage;
+	damageApplyTime_seconds = newDamageApplyTime_seconds;
+	damageApplyTimeDuration_seconds = damageApplyTime_seconds;
+	duration_seconds = newDuration_seconds;
+	range = newRange;
+	isStarted = false;
+	isDeployed = false;
+
+	attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE);
+	attackTimer.SetPause(true);
+
+	skillRadius = Utility::Primitives::Circle(glm::vec4(0.4f, 0.9f, 0.1f, 0.5f), position, range, 90);
+	skillRadius.Init();
+}
+
+void BurnSkill::Update()
+{
+	if(isStarted)
+	{
+		attackTimer.Update();
+		if(attackTimer.GetTimeSinceStart() > duration_seconds)
+		{
+			attackTimer.Reset();
+			attackTimer.SetPause(true);
+			isStarted = false;
+			isDeployed = false;
+		}
+		if(attackTimer.GetTimeSinceStart() > damageApplyTime_seconds)
+		{
+			EventArg enemyDamage_perTime[2];
+			enemyDamage_perTime[0].argType = "what_event";
+			enemyDamage_perTime[0].argument.varType = TYPE_STRING;
+			strcpy(enemyDamage_perTime[0].argument.varString, "timeended");
+			enemyDamage_perTime[1].argType = "damage";
+			enemyDamage_perTime[1].argument.varType = TYPE_INTEGER;
+			enemyDamage_perTime[1].argument.varInteger = damage;
+
+			Event enemyDamageEvent(2, EVENT_TYPE_OTHER, enemyDamage_perTime);
+			// Make sure there aren't any duplicated events.
+			RemoveGeneratedEvent("timeended");
+			generatedEvents.push_back(enemyDamageEvent);
+
+			damageApplyTime_seconds += damageApplyTimeDuration_seconds;
+			//attackTimer.Reset();
+		}
+	}
+}
+
+void BurnSkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &simpleData)
+{
+	if(isStarted)
+	{
+		glutil::PushStack push(modelMatrix);
+		modelMatrix.Translate(position);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		skillRadius.Draw(modelMatrix, simpleData);
+
+		glDisable(GL_BLEND);
+	}
+}
+
+void BurnSkill::OnEvent(Event &_event)
+{
+	switch(_event.GetType())
+	{
+	case EVENT_TYPE_OTHER:
+		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+		{
+			EventArg skillDeployedEventArgs[3];
+			skillDeployedEventArgs[0].argType = "skillRange";
+			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+			skillDeployedEventArgs[0].argument.varFloat = range;
+			skillDeployedEventArgs[1].argType = "skillDamage";
+			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+			skillDeployedEventArgs[1].argument.varInteger = damage;
+			skillDeployedEventArgs[2].argType = "what_event";
+			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			generatedEvents.push_back(skillDeployedEvent);
+
+			isStarted = true;
+			damageApplyTime_seconds = damageApplyTimeDuration_seconds;
+			isDeployed = false;
+			attackTimer.SetPause(true);
+		}
+		break;
+	}
+}
+
+float BurnSkill::GetRange()
+{
+	return range;
+}
+glm::vec3 BurnSkill::GetPosition()
+{
+	return position;
+}
+bool BurnSkill::IsDeployed()
+{
+	return isDeployed;
+}
+
+void BurnSkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
+{
+	if(!isDeployed)
+	{
+		switch(paramType)
+		{
+		case PARAM_POSITION:
+			position = newParam_vec3;
+			break;
+		default:
+			break;
+		}
+	}
+}
+
+bool BurnSkill::IsIntersectingObject(glm::vec3 objectPosition)
+{
+	if(isStarted)
+	{
+		float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
+
+		if(distanceBetweenObjectAndSkill < range)
+		{
+			if(!isDeployed)
+			{
+				attackTimer.SetPause(false);
+				attackTimer.Reset();
+				isDeployed = true;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+	else return false;
+}

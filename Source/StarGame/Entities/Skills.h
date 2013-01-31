@@ -80,6 +80,7 @@ public:
 	virtual std::string GetSkillType() { return skillType; }
 	virtual float GetRange() { return 0.0f; }
 	virtual glm::vec3 GetPosition() { return glm::vec3(); }
+	virtual bool IsDeployed() { return false; }
 
 	
 	// Only for EVENT_TYPE_OTHER
@@ -356,5 +357,50 @@ public:
 
 	bool IsIntersectingObject(glm::vec3 objectPosition);
 };
+
+
+class BurnSkill : public Skill
+{
+private:
+	glm::vec3 position;
+	float range;
+	int damage;
+	int duration_seconds;
+	//
+	int damageApplyTime_seconds;
+	int damageApplyTimeDuration_seconds;
+	//
+	Framework::Timer attackTimer;
+
+	bool isStarted;
+	bool isDeployed;
+
+	Utility::Primitives::Circle skillRadius;
+
+public:
+	BurnSkill() : Skill() {}
+	BurnSkill(glm::vec3 newPosition, 
+			  int newDamage, int newDamageApplyTime_seconds, int newDuration_seconds,
+			  float newRange,
+			  const std::string &skillType,
+			  char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
+
+	void Update();/*
+	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData,
+				GLuint materialBlockIndex);
+	*/
+	void Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &simpleData);
+
+	void OnEvent(Event &_event);
+
+	float GetRange();
+	glm::vec3 GetPosition();
+	bool IsDeployed();
+
+	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
+
+	bool IsIntersectingObject(glm::vec3 objectPosition);
+};
+
 
 #endif

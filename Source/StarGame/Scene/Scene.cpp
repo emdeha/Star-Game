@@ -149,7 +149,8 @@ void Scene::UpdateScene()
 		int sizeSkills = skills.size();
 		for(int skillIndex = 0; skillIndex < sizeSkills; skillIndex++)
 		{
-			if(skills[skillIndex]->GetSkillType() == "aoeSkill")
+			if(skills[skillIndex]->GetSkillType() == "aoeSkill" || 
+			   skills[skillIndex]->GetSkillType() == "burnSkill")
 			{
 				glm::vec4 mousePos_atZ = 
 					sceneMouse.GetPositionAtDimension(currentDisplayData.windowWidth, 
@@ -165,6 +166,23 @@ void Scene::UpdateScene()
 			// TODO:
 			// Maybe a design flaw - http://stackoverflow.com/a/307793/628873
 			if(skills[skillIndex]->GetSkillType() == "passiveAOESkill")
+			{
+				for(int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++)
+				{
+					if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition()))
+					{
+						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("timeended");
+						if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
+						{
+							enemies[enemyIndex]->OnEvent(skillEvent);
+							skills[skillIndex]->RemoveGeneratedEvent("timeended");
+						}
+					}
+				}
+			}
+
+			if(skills[skillIndex]->GetSkillType() == "burnSkill" && 
+			   skills[skillIndex]->IsDeployed() == true)
 			{
 				for(int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++)
 				{
@@ -319,7 +337,8 @@ void Scene::OnEvent(Event &_event)
 					{
 						for(int skillIndex = 0; skillIndex < skills.size(); skillIndex++)
 						{
-							if(skills[skillIndex]->IsIntersectingObject(enemies[i]->GetPosition()))
+							if(skills[skillIndex]->IsIntersectingObject(enemies[i]->GetPosition()) &&
+							   skills[skillIndex]->GetSkillType() != "burnSkill")
 							{
 								Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
 
@@ -590,7 +609,7 @@ void Scene::GenerateRandomSwarms(int count, const BillboardProgDataNoTexture &pr
 
 			glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
 			glm::vec3 frontVector = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
-			float speed = 0.05f;
+			float speed = 0.02f;
 		
 			std::shared_ptr<Swarm> randSwarm = 
 				std::shared_ptr<Swarm>(new Swarm(100, 1, 5, progData, 

@@ -67,7 +67,8 @@ CelestialBody::~CelestialBody()
 	bodyMesh.release();
 }
 CelestialBody::CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float newDiameter,
-							 int newSatelliteCap, int newHealth, int newCurrentResource,
+							 int newSatelliteCap, int newHealth, 
+							 int newCurrentResource, int newSatelliteConstructionCost,
 							 bool _isSun)
 {
 	position = newPosition;
@@ -75,6 +76,7 @@ CelestialBody::CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float ne
 	diameter = newDiameter;
 	satelliteCap = newSatelliteCap;
 	health = newHealth;
+	satelliteConstructionCost = newSatelliteConstructionCost;
 	isSun = true; // no matter what the value of _isSun is, the body would be created as a sun
 	isClicked = false;
 	currentResource = newCurrentResource;
@@ -409,6 +411,11 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 	{
 		return false;
 	}
+	if(currentResource < satelliteConstructionCost)
+	{
+		std::printf("Not enough resource.\n");
+		return false;
+	}
 
 	float satelliteOffset = 0.0f;
 	switch(type)
@@ -428,6 +435,8 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 	default:
 		break;
 	}
+	
+	currentResource -= satelliteConstructionCost; // Maybe an event should be sent.
 
 	ResourceData satResourceData;
 	satResourceData.resourceGainTime = 3.0f;

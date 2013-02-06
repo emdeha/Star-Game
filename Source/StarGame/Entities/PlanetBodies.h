@@ -101,6 +101,7 @@ private:
 
 	int health;
 	int satelliteCap;
+	int satelliteConstructionCost; // WARN: Can't tell if this is the right approach.
 
 	int currentResource;
 
@@ -113,7 +114,8 @@ public:
 	CelestialBody(const CelestialBody &other);
 	~CelestialBody();
 	CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float newDiameter,
-				  int newSatelliteCap, int newHealth, int newCurrentResource,
+				  int newSatelliteCap, int newHealth, 
+				  int newCurrentResource, int newSatelliteConstructionCost,
 				  bool _isSun = true);												// isSun = true means that a
 																				    // sun will be created
 	CelestialBody(Framework::Timer newRevolutionDuration, glm::vec4 newColor,

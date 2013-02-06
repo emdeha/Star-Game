@@ -122,6 +122,7 @@ protected:
 	float lineOfSight;
 
 	int health;
+	int resourceGivenOnKill;
 
 	BehaviorState currentState;
 	BehaviorState lastState;
@@ -136,7 +137,7 @@ public:
 	Enemy() {}
 	Enemy(glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 		  glm::vec3 newPosition, glm::vec3 newFrontVector, float newSpeed,
-		  float newLineOfSight, int newHealth)
+		  float newLineOfSight, int newHealth, int newResourceGivenOnKill)
 	{
 		initialColor = newInitialColor;
 		onFreezeColor = newOnFreezeColor;
@@ -146,6 +147,7 @@ public:
 		speed = newSpeed;
 		lineOfSight = newLineOfSight;
 		health = newHealth;
+		resourceGivenOnKill = newResourceGivenOnKill;
 		currentState = STATE_IDLE;
 		lastState = currentState;
 		isDestroyed = false;
@@ -168,6 +170,7 @@ public:
 	virtual void OnEvent(Event &_event) {}
 
 	virtual glm::vec3 GetPosition();
+	virtual int GetResourceGivenOnKill();
 	virtual bool IsDestroyed();
 	virtual bool IsSceneUpdated();
 
@@ -206,7 +209,7 @@ public:
 		  glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 		  glm::vec3 newPosition, glm::vec3 newFrontVector,
 		  float newSpeed, float newLineOfSight,
-		  int newHealth);
+		  int newHealth, int newResourceGivenOnKill);
 
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
@@ -240,7 +243,7 @@ public:
 			  glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 			  glm::vec3 newPosition, glm::vec3 newFrontVector,
 			  float newSpeed, float newLineOfSight,
-			  int newHealth);
+			  int newHealth, int newResourceGivenOnKill);
 
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
@@ -277,7 +280,7 @@ public:
 			   glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 			   glm::vec3 newPosition, glm::vec3 newFrontVector,
 			   float newSpeed, float newLineOfSight,
-			   int newHealth);
+			   int newHealth, int newResourceGivenOnKill);
 
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
@@ -313,6 +316,7 @@ private:
 		float speed;
 		float lineOfSight;
 		int health;
+		int resourceGivenOnKill;
 	};
 	
 private:	
@@ -332,7 +336,7 @@ public:
 	Mothership(glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 			   glm::vec3 newPosition, glm::vec3 newFrontVector,
 			   float newSpeed, float newLineOfSight,
-			   int newHealth);
+			   int newHealth, int newResourceGivenOnKill);
 
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
@@ -348,7 +352,7 @@ public:
 	void InitDeployUnits(const std::string &meshFileName, int deployUnitsCount,
 						 float projectileSpeed, int projectileLifeSpan, int projectileDamage,
 						 glm::vec4 initialColor, glm::vec4 onFreezeColor,
-						 float speed, float lineOfSight, int health);
+						 float speed, float lineOfSight, int health, int resourceGivenOnKill);
 	void RejuvenateDeployUnits();
 
 	// First way of getting the deployUnits for skill intersection tests.
@@ -379,7 +383,7 @@ public:
 					  glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 					  glm::vec3 newPosition, glm::vec3 newFrontVector,
 					  float newSpeed, float newLineOfSight,
-					  int newHealth);
+					  int newHealth, int newResourceGivenOnKill);
 
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
@@ -412,7 +416,7 @@ public:
 			 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 			 glm::vec3 newPosition, glm::vec3 newFrontVector,
 			 float newSpeed, float newLineOfSight,
-			 int newHealth);
+			 int newHealth, int newResourceGivenOnKill);
 
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());

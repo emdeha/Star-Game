@@ -144,11 +144,11 @@ public:
 
 	
 	// !!! Only for testing purposes !!!
-	void GenerateRandomSwarms(int count, const BillboardProgDataNoTexture &progData);
-	void GenerateRandomSpaceships(int count);
-	void GenerateRandomSuicideBombers(int count);
-	void GenerateRandomMothership();
-	void GenerateRandomAsteroids(int count);
+	void GenerateRandomSwarms(int count, const BillboardProgDataNoTexture &progData, int resourceOnKill);
+	void GenerateRandomSpaceships(int count, int resourceOnKill);
+	void GenerateRandomSuicideBombers(int count, int resourceOnKill);
+	void GenerateRandomMothership(int resourceOnKill);
+	void GenerateRandomAsteroids(int count, int resourceOnKill);
 };
 
 #endif

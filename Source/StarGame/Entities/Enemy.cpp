@@ -25,6 +25,10 @@ inline glm::vec3 Enemy::GetPosition()
 {
 	return position;
 }
+inline int Enemy::GetResourceGivenOnKill()
+{
+	return resourceGivenOnKill;
+}
 inline bool Enemy::IsDestroyed()
 {
 	return isDestroyed;
@@ -118,8 +122,9 @@ Swarm::Swarm(int newSwarmersCount,
 			 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 			 glm::vec3 newPosition, glm::vec3 newFrontVector,
 			 float newSpeed, float newLineOfSight,
-			 int newHealth)
-			 : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
+			 int newHealth, int newResourceGivenOnKill)
+			 : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight,
+					 newHealth, newResourceGivenOnKill)
 {
 	swarmersCount = newSwarmersCount;
 	damage.damage = newDamage;
@@ -304,8 +309,9 @@ Spaceship::Spaceship(float newProjectileSpeed, int newProjectileLifeSpan,
 					 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 					 glm::vec3 newPosition, glm::vec3 newFrontVector,
 					 float newSpeed, float newLineOfSight,
-					 int newHealth)
-					 : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
+					 int newHealth, int newResourceGivenOnKill)
+					 : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight,
+							 newHealth, newResourceGivenOnKill)
 {
 	projectileSpeed = newProjectileSpeed;
 	projectileLifeSpan = newProjectileLifeSpan;
@@ -560,8 +566,9 @@ DeployUnit::DeployUnit(float newProjectileSpeed, int newProjectileLifeSpan,
 					   glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 					   glm::vec3 newPosition, glm::vec3 newFrontVector,
 					   float newSpeed, float newLineOfSight,
-					   int newHealth)
-					   : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
+					   int newHealth, int newResourceGivenOnKill)
+					   : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight,
+							   newHealth, newResourceGivenOnKill)
 {
 	projectileSpeed = newProjectileSpeed;
 	projectileLifeSpan = newProjectileLifeSpan;
@@ -793,8 +800,9 @@ void DeployUnit::Rejuvenate(const glm::vec3 &newPosition, int newHealth,
 Mothership::Mothership(glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 					   glm::vec3 newPosition, glm::vec3 newFrontVector,
 					   float newSpeed, float newLineOfSight,
-					   int newHealth)
-					   : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
+					   int newHealth, int newResourceGivenOnKill)
+					   : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight,
+							   newHealth, newResourceGivenOnKill)
 {
 	isDeploying = false;
 }
@@ -817,7 +825,7 @@ void Mothership::LoadMesh(const std::string &meshFileName)
 void Mothership::InitDeployUnits(const std::string &meshFileName, int deployUnitsCount,
 								 float projectileSpeed, int projectileLifeSpan, int projectileDamage,
 								 glm::vec4 initialColor, glm::vec4 onFreezeColor,
-								 float speed, float lineOfSight, int health)
+								 float speed, float lineOfSight, int health, int resourceGivenOnKill)
 {
 	deployUnitsInfo.deployUnitsCount = deployUnitsCount;
 	deployUnitsInfo.health = health;
@@ -829,6 +837,7 @@ void Mothership::InitDeployUnits(const std::string &meshFileName, int deployUnit
 	deployUnitsInfo.projectileLifeSpan = projectileLifeSpan;
 	deployUnitsInfo.projectileSpeed = projectileSpeed;
 	deployUnitsInfo.speed = speed;
+	deployUnitsInfo.resourceGivenOnKill = resourceGivenOnKill;
 
 	float rotationDegs = 30.0f;
 	float decrement = (2 * rotationDegs) / (float)deployUnitsInfo.deployUnitsCount;
@@ -848,7 +857,7 @@ void Mothership::InitDeployUnits(const std::string &meshFileName, int deployUnit
 													   deployUnitsInfo.projectileDamage, 
 													   deployUnitsInfo.initialColor, deployUnitsInfo.onFreezeColor, position,
 													   glm::vec3(shipFrontVector), deployUnitsInfo.speed, deployUnitsInfo.lineOfSight, 
-													   deployUnitsInfo.health));
+													   deployUnitsInfo.health, deployUnitsInfo.resourceGivenOnKill));
 		newDeployUnit->LoadMesh(deployUnitsInfo.meshFileName);
 		newDeployUnit->LoadProjectileMesh("mesh-files/UnitSphere.xml"); // WARN: Not data driven
 
@@ -1058,9 +1067,9 @@ FastSuicideBomber::FastSuicideBomber(int newDamage, float newChargeSpeed,
 									 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 									 glm::vec3 newPosition, glm::vec3 newFrontVector,
 									 float newSpeed, float newLineOfSight,
-									 int newHealth)
-									 : Enemy(newInitialColor, newOnFreezeColor, 
-											 newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
+									 int newHealth, int newResourceGivenOnKill)
+									 : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, 
+											 newLineOfSight, newHealth, newResourceGivenOnKill)
 {
 	damage = newDamage;
 	chargeSpeed = newChargeSpeed;
@@ -1275,8 +1284,9 @@ Asteroid::Asteroid(int newDamage,
 				   glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 				   glm::vec3 newPosition, glm::vec3 newFrontVector,
 				   float newSpeed, float newLineOfSight,
-				   int newHealth)
-				   : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight, newHealth)
+				   int newHealth, int newResourceGivenOnKill)
+				   : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight,
+						   newHealth, newResourceGivenOnKill)
 {
 	damage = newDamage;
 }

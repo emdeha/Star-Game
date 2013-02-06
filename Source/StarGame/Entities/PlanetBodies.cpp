@@ -389,6 +389,10 @@ void CelestialBody::OnEvent(Event &_event)
 			{
 				currentResource += _event.GetArgument("how_much").varInteger;
 			}
+			if(strcmp(_event.GetArgument("what_event").varString, "enemyGainedResource") == 0)
+			{
+				currentResource += _event.GetArgument("how_much").varInteger;
+			}
 			break;
 		default:
 			break;

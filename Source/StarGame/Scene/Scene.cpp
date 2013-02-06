@@ -143,6 +143,17 @@ void Scene::UpdateScene()
 		}
 		if((*iter)->IsDestroyed())
 		{
+			EventArg enemyKilledEventArg[2];
+			enemyKilledEventArg[0].argType = "what_event";
+			enemyKilledEventArg[0].argument.varType = TYPE_STRING;
+			strcpy(enemyKilledEventArg[0].argument.varString, "enemyGainedResource");
+			enemyKilledEventArg[1].argType = "how_much";
+			enemyKilledEventArg[1].argument.varType = TYPE_INTEGER;
+			enemyKilledEventArg[1].argument.varInteger = (*iter)->GetResourceGivenOnKill();
+			Event enemyKilledEvent = Event(2, EVENT_TYPE_OTHER, enemyKilledEventArg);
+
+			suns[0]->OnEvent(enemyKilledEvent);
+
 			enemies.erase(iter);
 			break;
 		}
@@ -599,7 +610,7 @@ bool Scene::HasSuns()
 
 #include <ctime>
 
-void Scene::GenerateRandomSwarms(int count, const BillboardProgDataNoTexture &progData)
+void Scene::GenerateRandomSwarms(int count, const BillboardProgDataNoTexture &progData, int resourceOnKill)
 {
 	if(enemies.size() <= 0)
 	{
@@ -620,14 +631,14 @@ void Scene::GenerateRandomSwarms(int count, const BillboardProgDataNoTexture &pr
 			std::shared_ptr<Swarm> randSwarm = 
 				std::shared_ptr<Swarm>(new Swarm(100, 1, 5, progData, 
 												 glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 
-												 position, frontVector, speed, 3.0f, 50));
+												 position, frontVector, speed, 3.0f, 50, resourceOnKill));
 
 			enemies.push_back(randSwarm);
 		}
 	}
 }
 
-void Scene::GenerateRandomSpaceships(int count)
+void Scene::GenerateRandomSpaceships(int count, int resourceOnKill)
 {
 	if(enemies.size() <= 0)
 	{
@@ -649,7 +660,7 @@ void Scene::GenerateRandomSpaceships(int count)
 				std::shared_ptr<Spaceship>(new Spaceship(0.3f, 20, 1, 
 														 glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
 														 position, frontVector, speed, 
-														 2.0f, 50));
+														 2.0f, 50, resourceOnKill));
 			randSpaceship->LoadMesh("mesh-files/Ship.xml");
 			randSpaceship->LoadProjectileMesh("mesh-files/UnitSphere.xml");
 			
@@ -659,7 +670,7 @@ void Scene::GenerateRandomSpaceships(int count)
 	}
 }
 
-void Scene::GenerateRandomSuicideBombers(int count)
+void Scene::GenerateRandomSuicideBombers(int count, int resourceOnKill)
 {
 	if(enemies.size() <= 0)
 	{
@@ -683,7 +694,7 @@ void Scene::GenerateRandomSuicideBombers(int count)
 				std::shared_ptr<FastSuicideBomber>(new FastSuicideBomber(50, chargeSpeed,
 																		 glm::vec4(0.5f, 0.5f, 0.7f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
 																		 position, frontVector, speed,
-																		 2.0f, 50));
+																		 2.0f, 50, resourceOnKill));
 			randBomber->LoadMesh("mesh-files/UnitSphere.xml");
 
 			enemies.push_back(randBomber);
@@ -691,7 +702,7 @@ void Scene::GenerateRandomSuicideBombers(int count)
 	}
 }
 
-void Scene::GenerateRandomMothership()
+void Scene::GenerateRandomMothership(int resourceOnKill)
 {
 	if(enemies.size() <= 0)
 	{
@@ -709,14 +720,14 @@ void Scene::GenerateRandomMothership()
 
 		std::shared_ptr<Mothership> randMothership =
 			std::shared_ptr<Mothership>(new Mothership(glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-													   position, frontVector, speed, 5.0f, 300));
+													   position, frontVector, speed, 5.0f, 300, resourceOnKill));
 		randMothership->LoadMesh("mesh-files/Ship.xml");
 
 		int deployUnitsCount = 4;
 		randMothership->InitDeployUnits("mesh-files/Ship.xml", deployUnitsCount, 
 										0.3f, 20, 1, 
 										glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-										0.05f, 2.0f, 50);
+										0.05f, 2.0f, 50, resourceOnKill / 100);
 		enemies.push_back(randMothership);
 		
 		std::vector<std::shared_ptr<DeployUnit>> deployUnits = randMothership->GetDeployUnits();
@@ -727,7 +738,7 @@ void Scene::GenerateRandomMothership()
 	}
 }
 
-void Scene::GenerateRandomAsteroids(int count)
+void Scene::GenerateRandomAsteroids(int count, int resourceOnKill)
 {
 	if(enemies.size() <= 0)
 	{
@@ -752,7 +763,7 @@ void Scene::GenerateRandomAsteroids(int count)
 			std::shared_ptr<Asteroid> randAsteroid = 
 				std::shared_ptr<Asteroid>(new Asteroid(20, 
 													   glm::vec4(0.57, 0.37, 0.26, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-													   position, frontVector, speed, 0.0f, 50));
+													   position, frontVector, speed, 0.0f, 50, resourceOnKill));
 			randAsteroid->LoadMesh("mesh-files/UnitTetrahedron.xml");
 
 			enemies.push_back(randAsteroid);

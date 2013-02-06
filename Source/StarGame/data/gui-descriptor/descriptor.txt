@@ -1,7 +1,7 @@
 mainfont AGENCYR.TTF
 fusiontextures fusion-empty.jpg fusion-catalyst.jpg fusion-ectoplasm.jpg fusion-matter.jpg
 layout 1 0.0 0.0 0.0 1.0 0
-button exit Exit 0 1 0.5 0.5 28 0.5 0.5 48 0.5 0.5 68
+label labelMatter Matter: 0 1 10 570 28 10 570 48 10 570 68
 imagebox fusionOne 1 375.0 570.0 375.0 570.0 375.0 570.0 50.0 50.0 3
 imagebox fusionTwo 1 430.0 570.0 430.0 570.0 430.0 570.0 50.0 50.0 2
 imagebox fusionThree 1 485.0 570.0 485.0 570.0 485.0 570.0 50.0 50.0 1  
@@ -9,9 +9,8 @@ layout 0 0.0 0.5 0.6 1.0 1
 button newGame New 0 0 10 100 28 10 100 48 10 100 68
 button saveGame Save 0 0 10 70 28 10 70 48 10 70 68 
 button quitGame Quit 0 0 10 40 28 10 40 48 10 40 68
-button printCmd Print 0 0 560 300 28 560 300 48 560 300 68
-textbox sample 100.0 5 1 0 350 300 28 350 300 48 350 300 68
-textbox sampleTwo 200.0 15 1 0 350 250 28 350 250 48 350 250 68
+**button printCmd Print 0 0 560 300 28 560 300 48 560 300 68
+**textbox sample 100.0 5 1 0 350 300 28 350 300 48 350 300 68
+**textbox sampleTwo 200.0 15 1 0 350 250 28 350 250 48 350 250 68
 layout 2 0.0 0.5 0.6 1.0 0
-label saveGameHeader SAVE 0 2 -0.5 0.8 28 -0.5 0.8 48 -0.5 0.8 68
 endfile

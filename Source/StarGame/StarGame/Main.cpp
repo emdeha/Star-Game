@@ -83,7 +83,7 @@ void HandleMouse()
 	if(scene.GetMouse().IsLeftButtonDown())
 	{
 		if(scene.IsLayoutOn(LAYOUT_IN_GAME))
-		{
+		{/*
 			if(
 			   scene.GetLayout(LAYOUT_IN_GAME)->
 			   GetControl("exit")->
@@ -98,7 +98,7 @@ void HandleMouse()
 
 				scene.GetMouse().ReleaseLeftButton();
 				return;
-			}
+			}*/
 
 			scene.OnEvent(StockEvents::EventOnLeftClick("deploySkill"));
 		}
@@ -143,7 +143,7 @@ void HandleMouse()
 
 				scene.OnEvent(leftClickButtonEvent);
 			}
-
+			/*
 			if(
 				scene.GetLayout(LAYOUT_MENU)->
 				GetControl("printCmd")->
@@ -195,7 +195,7 @@ void HandleMouse()
 
 					scene.GetLayout(LAYOUT_MENU)->GetActiveControl()->OnEvent(unclickEvent);
 				}
-			}
+			}*/
 		}
 
 		if(scene.IsLayoutOn(LAYOUT_IN_GAME))
@@ -346,7 +346,6 @@ void InitializeGUI()
 						glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	scene.AddLayouts(guiLoader.GetAllLoadedLayouts());
-
 	
 	glm::vec4 mousePos_worldSpace = 
 		scene.GetMouse().GetWorldSpacePosition(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
@@ -360,7 +359,7 @@ void InitializeScene()
 
 
 	std::shared_ptr<CelestialBody> 
-		mainSun(new CelestialBody(glm::vec3(0.0f), glm::vec4(0.738f, 0.738f, 0.423f, 1.0f), 1.25f, 4, 50));
+		mainSun(new CelestialBody(glm::vec3(0.0f), glm::vec4(0.738f, 0.738f, 0.423f, 1.0f), 1.25f, 4, 50, 200));
 
 	SunLight 
 		mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, displayData.gamma));

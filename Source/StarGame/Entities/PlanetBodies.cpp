@@ -67,7 +67,8 @@ CelestialBody::~CelestialBody()
 	bodyMesh.release();
 }
 CelestialBody::CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float newDiameter,
-							 int newSatelliteCap, int newHealth, bool _isSun)
+							 int newSatelliteCap, int newHealth, int newCurrentResource,
+							 bool _isSun)
 {
 	position = newPosition;
 	color = newColor;
@@ -76,6 +77,7 @@ CelestialBody::CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float ne
 	health = newHealth;
 	isSun = true; // no matter what the value of _isSun is, the body would be created as a sun
 	isClicked = false;
+	currentResource = newCurrentResource;
 	generatedEvents.resize(0);
 	parent.reset();
 	satellites.resize(0);
@@ -83,7 +85,8 @@ CelestialBody::CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float ne
 }
 CelestialBody::CelestialBody(Framework::Timer newRevolutionDuration, glm::vec4 newColor,
 							 float newOffsetFromParent, float newDiameter,
-							 SatelliteType newSkillType, int newHealth, bool _isSun)
+							 SatelliteType newSkillType, int newHealth, ResourceData newResource,
+							 bool _isSun)
 {
 	revolutionDuration = newRevolutionDuration;
 	color = newColor;
@@ -97,6 +100,10 @@ CelestialBody::CelestialBody(Framework::Timer newRevolutionDuration, glm::vec4 n
 	satellites.resize(0);
 	generatedEvents.resize(0);
 	isClicked = false;
+
+	resource.resourceGainTime = newResource.resourceGainTime;
+	resource.resourceGain_perTime = newResource.resourceGain_perTime;
+	resource.resourceTimer = Framework::Timer(Framework::Timer::TT_SINGLE, resource.resourceGainTime);
 
 	GenerateUniformBuffers(materialBlockSize, color, materialUniformBuffer);
 }
@@ -193,6 +200,21 @@ void CelestialBody::Update()
 		{
 			skills[i]->Update();
 			skills[i]->SetParameter(PARAM_POSITION, position);
+		}
+
+		if(resource.resourceTimer.Update())
+		{
+			EventArg matterGeneratedEventArg[2];
+			matterGeneratedEventArg[0].argType = "what_event";
+			matterGeneratedEventArg[0].argument.varType = TYPE_STRING;
+			strcpy(matterGeneratedEventArg[0].argument.varString, "satGainedResource");
+			matterGeneratedEventArg[1].argType = "how_much";
+			matterGeneratedEventArg[1].argument.varType = TYPE_INTEGER;
+			matterGeneratedEventArg[1].argument.varInteger = resource.resourceGain_perTime;
+			Event matterGeneratedEvent = Event(2, EVENT_TYPE_OTHER, matterGeneratedEventArg); 
+			
+			parent->OnEvent(matterGeneratedEvent);
+			resource.resourceTimer.Reset();
 		}
 	}
 }
@@ -362,6 +384,12 @@ void CelestialBody::OnEvent(Event &_event)
 				}
 			}
 			break;
+		case EVENT_TYPE_OTHER:
+			if(strcmp(_event.GetArgument("what_event").varString, "satGainedResource") == 0)
+			{
+				currentResource += _event.GetArgument("how_much").varInteger;
+			}
+			break;
 		default:
 			break;
 		}
@@ -397,12 +425,16 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 		break;
 	}
 
+	ResourceData satResourceData;
+	satResourceData.resourceGainTime = 3.0f;
+	satResourceData.resourceGain_perTime = 5;
+
 	std::shared_ptr<CelestialBody>
 		newSat(new CelestialBody(Framework::Timer(Framework::Timer::TT_LOOP, speed),
 								 satelliteColor, satelliteOffset, diameter,
-								 type, satelliteHealth));
+								 type, satelliteHealth, satResourceData));
 	newSat->LoadMesh(fileName);
-	newSat->SetParent(*this);
+	newSat->SetParent(this);
 	newSat->InitSatelliteOrbit();
 
 	std::shared_ptr<PassiveAOESkill> satSkill = 
@@ -762,6 +794,10 @@ const glm::vec3 CelestialBody::GetPosition() const
 {
 	return position;
 }
+const int CelestialBody::GetCurrentResource() const
+{
+	return currentResource;
+}
 
 // Satellite-specific methods
 float CelestialBody::GetOffsetFromSun()
@@ -779,11 +815,11 @@ SatelliteType CelestialBody::GetSatelliteType()
 	}
 }
 
-inline void CelestialBody::SetParent(const CelestialBody &newParent)
+inline void CelestialBody::SetParent(CelestialBody *newParent)
 {
 	if(!isSun)
 	{
-		parent = std::unique_ptr<CelestialBody>(new CelestialBody(newParent));
+		parent = std::unique_ptr<CelestialBody>(newParent);
 	}
 }
 void CelestialBody::SetIsClicked(bool newIsClicked)

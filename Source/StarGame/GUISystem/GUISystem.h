@@ -179,6 +179,7 @@ public:
 	virtual void InputChar(char ch) {}
 	virtual void Clear() {}
 	virtual std::string GetContent() { return ""; }
+	virtual void ChangeText(const std::string &newText) { text = newText; }
 
 	virtual bool IsImageBox() { return false; };
 	bool IsActive();	

@@ -60,6 +60,13 @@ struct SatelliteSkill
 	// Add skill characteristics
 };
 
+struct ResourceData
+{
+	int resourceGain_perTime;
+	float resourceGainTime;
+	Framework::Timer resourceTimer;
+};
+
 
 static bool typesTable[] = { false, false, false, false };
 
@@ -80,6 +87,7 @@ private:
 	std::vector<Event> generatedEvents;
 
 	SatelliteSkill skillType;
+	ResourceData resource;
 
 	Framework::Timer revolutionDuration;
 
@@ -94,6 +102,8 @@ private:
 	int health;
 	int satelliteCap;
 
+	int currentResource;
+
 
 	int materialBlockSize;
 	GLuint materialUniformBuffer;
@@ -103,11 +113,13 @@ public:
 	CelestialBody(const CelestialBody &other);
 	~CelestialBody();
 	CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float newDiameter,
-				  int newSatelliteCap, int newHealth, bool _isSun = true);			// isSun = true means that a
+				  int newSatelliteCap, int newHealth, int newCurrentResource,
+				  bool _isSun = true);												// isSun = true means that a
 																				    // sun will be created
 	CelestialBody(Framework::Timer newRevolutionDuration, glm::vec4 newColor,
 				  float newOffsetFromParent, float newDiameter,
-				  SatelliteType newSkillType, int newHealth, bool _isSun = false); // isSun = false means that a 
+				  SatelliteType newSkillType, int newHealth, ResourceData newResource,
+				  bool _isSun = false);											   // isSun = false means that a 
 																				   // satellite will be created
 
 	void InitSatelliteOrbit();
@@ -164,13 +176,14 @@ public:
 	std::vector<std::shared_ptr<Skill>> GetAllSkills();
 
 	const glm::vec3 GetPosition() const;
+	const int GetCurrentResource() const;
 
 
 	// Satellite-specific methods
 	float GetOffsetFromSun();
 	SatelliteType GetSatelliteType();
 
-	void SetParent(const CelestialBody &newParent);
+	void SetParent(CelestialBody *newParent);
 	void SetIsClicked(bool newIsClicked);
 
 	void Stop();

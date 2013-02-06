@@ -102,6 +102,12 @@ void Scene::UpdateScene()
 	for(int i = 0; i < sizeSuns; i++)
 	{
 		suns[i]->Update();
+
+		char matter[10];
+		itoa(suns[i]->GetCurrentResource(), matter, 10);
+		std::string labelText = "Matter: ";
+		labelText.append(matter);
+		GetLayout(LAYOUT_IN_GAME)->GetControl("labelMatter")->ChangeText(labelText);
 	}
 
 	/*

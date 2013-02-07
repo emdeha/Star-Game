@@ -100,9 +100,11 @@ static void GenerateUniformBuffers(int &materialBlockSize, glm::vec4 diffuseColo
 AOESkill::AOESkill(glm::vec3 newPosition,
 				   int newDamage, float newRange,
 				   const std::string &newSkillType,
-				   char fusionCombA, char fusionCombB, char fusionCombC)
+				   char fusionCombA, char fusionCombB, char fusionCombC, 
+				   int skillApplyCost, int skillResearchCost)
 				   : Skill(newSkillType,
-						   fusionCombA, fusionCombB, fusionCombC)
+						   fusionCombA, fusionCombB, fusionCombC,
+						   skillApplyCost, skillResearchCost)
 {
 	damage = newDamage;
 	range = newRange;
@@ -141,7 +143,7 @@ void AOESkill::OnEvent(Event &_event)
 	case EVENT_TYPE_OTHER:
 		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
 		{
-			EventArg skillDeployedEventArgs[3];
+			EventArg skillDeployedEventArgs[4];
 			skillDeployedEventArgs[0].argType = "skillRange";
 			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
 			skillDeployedEventArgs[0].argument.varFloat = range;
@@ -151,7 +153,10 @@ void AOESkill::OnEvent(Event &_event)
 			skillDeployedEventArgs[2].argType = "what_event";
 			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
 			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			skillDeployedEventArgs[3].argType = "skillCost";
+			skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+			skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+			Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
 			generatedEvents.push_back(skillDeployedEvent);
 
 			isStarted = true;
@@ -187,6 +192,7 @@ bool AOESkill::IsIntersectingObject(glm::vec3 objectPosition)
 
 	if(distanceBetweenObjectAndSkill < range)
 	{
+		isStarted = false;
 		return true;
 	}
 	
@@ -195,16 +201,19 @@ bool AOESkill::IsIntersectingObject(glm::vec3 objectPosition)
 
 
 PassiveAOESkill::PassiveAOESkill(glm::vec3 newPosition,
-								 int newDamage, int newDamageApplyTime_seconds,
+								 int newDamage, int newDamageApplyTime_seconds, int newSkillLife,
 								 float newRange,
 								 const std::string &newSkillType,
-								 char fusionCombA, char fusionCombB, char fusionCombC)
+								 char fusionCombA, char fusionCombB, char fusionCombC, 
+								 int skillApplyCost, int skillResearchCost)
 								 : Skill(newSkillType,
-										 fusionCombA, fusionCombB, fusionCombC)
+								   		 fusionCombA, fusionCombB, fusionCombC,
+										 skillApplyCost, skillResearchCost)
 {
 	damage = newDamage;
 	damageApplyTime_seconds = newDamageApplyTime_seconds;
 	attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE, damageApplyTime_seconds);
+	skillLife = Framework::Timer(Framework::Timer::TT_SINGLE, newSkillLife);
 	range = newRange;
 	position = newPosition;
 
@@ -219,23 +228,32 @@ void PassiveAOESkill::Update()
 {
 	if(isStarted)
 	{
-		attackTimer.Update();
-		if(attackTimer.GetTimeSinceStart() >= damageApplyTime_seconds)
+		if(skillLife.Update() == false)
 		{
-			EventArg enemyDamage_perTime[2];
-			enemyDamage_perTime[0].argType = "what_event";
-			enemyDamage_perTime[0].argument.varType = TYPE_STRING;
-			strcpy(enemyDamage_perTime[0].argument.varString, "timeended");
-			enemyDamage_perTime[1].argType = "damage";
-			enemyDamage_perTime[1].argument.varType = TYPE_INTEGER;
-			enemyDamage_perTime[1].argument.varInteger = damage;
+			attackTimer.Update();
+			if(attackTimer.GetTimeSinceStart() >= damageApplyTime_seconds)
+			{
+				EventArg enemyDamage_perTime[2];
+				enemyDamage_perTime[0].argType = "what_event";
+				enemyDamage_perTime[0].argument.varType = TYPE_STRING;
+				strcpy(enemyDamage_perTime[0].argument.varString, "timeended");
+				enemyDamage_perTime[1].argType = "damage";
+				enemyDamage_perTime[1].argument.varType = TYPE_INTEGER;
+				enemyDamage_perTime[1].argument.varInteger = damage;
 
-			Event enemyDamageEvent(2, EVENT_TYPE_OTHER, enemyDamage_perTime);
-			// Make sure there aren't any duplicated events.
-			RemoveGeneratedEvent("timeended");
-			generatedEvents.push_back(enemyDamageEvent);
+				Event enemyDamageEvent(2, EVENT_TYPE_OTHER, enemyDamage_perTime);
+				// Make sure there aren't any duplicated events.
+				RemoveGeneratedEvent("timeended");
+				generatedEvents.push_back(enemyDamageEvent);
 
-			attackTimer.Reset();
+				attackTimer.Reset();
+			}
+		}
+		else
+		{
+			isStarted = false;
+			skillLife.Reset();
+			skillLife.SetPause(true);
 		}
 	}
 }
@@ -264,7 +282,7 @@ void PassiveAOESkill::OnEvent(Event &_event)
 	case EVENT_TYPE_OTHER:
 		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
 		{
-			EventArg skillDeployedEventArgs[3];
+			EventArg skillDeployedEventArgs[4];
 			skillDeployedEventArgs[0].argType = "skillRange";
 			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
 			skillDeployedEventArgs[0].argument.varFloat = range;
@@ -274,10 +292,14 @@ void PassiveAOESkill::OnEvent(Event &_event)
 			skillDeployedEventArgs[2].argType = "what_event";
 			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
 			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			skillDeployedEventArgs[3].argType = "skillCost";
+			skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+			skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+			Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
 			generatedEvents.push_back(skillDeployedEvent);
 
 			isStarted = true;
+			skillLife.SetPause(false);
 		}
 		break;
 	}
@@ -321,8 +343,11 @@ SunNovaSkill::SunNovaSkill(glm::vec3 newPosition,
 						   int newDamage, 
 						   float newRange, float newScaleRate,
 						   const std::string &skillType,
-						   char fusionCombA, char fusionCombB, char fusionCombC)
-						   : Skill(skillType, fusionCombA, fusionCombB, fusionCombC)
+						   char fusionCombA, char fusionCombB, char fusionCombC, 
+						   int skillApplyCost, int skillResearchCost)
+						   : Skill(skillType,
+								   fusionCombA, fusionCombB, fusionCombC,
+								   skillApplyCost, skillResearchCost)
 {
 	position = newPosition;
 	damage = newDamage;
@@ -379,7 +404,7 @@ void SunNovaSkill::OnEvent(Event &_event)
 	case EVENT_TYPE_OTHER:
 		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
 		{
-			EventArg skillDeployedEventArgs[3];
+			EventArg skillDeployedEventArgs[4];
 			skillDeployedEventArgs[0].argType = "skillRange";
 			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
 			skillDeployedEventArgs[0].argument.varFloat = range;
@@ -389,7 +414,10 @@ void SunNovaSkill::OnEvent(Event &_event)
 			skillDeployedEventArgs[2].argType = "what_event";
 			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
 			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			skillDeployedEventArgs[3].argType = "skillCost";
+			skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+			skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+			Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
 			generatedEvents.push_back(skillDeployedEvent);
 
 			isStarted = true;
@@ -431,8 +459,11 @@ SatelliteChainingSkill::SatelliteChainingSkill(glm::vec3 newPosition,
 											   float newProjectileRadius,
 											   const std::string &meshFileName, 
 											   const std::string &skillType,
-											   char fusionCombA, char fusionCombB, char fusionCombC)
-											   : Skill(skillType, fusionCombA, fusionCombB, fusionCombC)
+											   char fusionCombA, char fusionCombB, char fusionCombC,
+											   int skillApplyCost, int skillResearchCost)
+											   : Skill(skillType,
+													   fusionCombA, fusionCombB, fusionCombC,
+													   skillApplyCost, skillResearchCost)
 {
 	currentPosition = newPosition;
 	startingPosition = newPosition;
@@ -509,7 +540,7 @@ void SatelliteChainingSkill::OnEvent(Event &_event)
 		// ???: Should the skill be activated on fusion?
 		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
 		{
-			EventArg skillDeployedEventArgs[3];
+			EventArg skillDeployedEventArgs[4];
 			skillDeployedEventArgs[0].argType = "skillRange";
 			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
 			skillDeployedEventArgs[0].argument.varFloat = range;
@@ -519,7 +550,10 @@ void SatelliteChainingSkill::OnEvent(Event &_event)
 			skillDeployedEventArgs[2].argType = "what_event";
 			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
 			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			skillDeployedEventArgs[3].argType = "skillCost";
+			skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+			skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+			Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
 			generatedEvents.push_back(skillDeployedEvent);
 
 			isStarted = true;
@@ -592,8 +626,11 @@ SatelliteChainingNova::SatelliteChainingNova(glm::vec3 newPosition,
 											 int newDamage, 
 											 float newRange, float newScaleRate,
 											 const std::string &skillType,
-											 char fusionCombA, char fusionCombB, char fusionCombC)
-											 : Skill(skillType, fusionCombA, fusionCombB, fusionCombC)
+											 char fusionCombA, char fusionCombB, char fusionCombC,
+											 int skillApplyCost, int skillResearchCost)
+											 : Skill(skillType,
+											   	     fusionCombA, fusionCombB, fusionCombC,
+													 skillApplyCost, skillResearchCost)
 {
 	position = newPosition;
 	damage = newDamage;
@@ -653,7 +690,7 @@ void SatelliteChainingNova::OnEvent(Event &_event)
 		// ???: Should the skill be activated on fusion?
 		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
 		{
-			EventArg skillDeployedEventArgs[3];
+			EventArg skillDeployedEventArgs[4];
 			skillDeployedEventArgs[0].argType = "skillRange";
 			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
 			skillDeployedEventArgs[0].argument.varFloat = range;
@@ -663,7 +700,10 @@ void SatelliteChainingNova::OnEvent(Event &_event)
 			skillDeployedEventArgs[2].argType = "what_event";
 			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
 			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			skillDeployedEventArgs[3].argType = "skillCost";
+			skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+			skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+			Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
 			generatedEvents.push_back(skillDeployedEvent);
 
 			isStarted = true;
@@ -732,8 +772,11 @@ FrostNovaSkill::FrostNovaSkill(int newDamage, int newStunTime_seconds,
 							   float newRange, float newScaleRate,
 							   glm::vec3 newPosition,
 							   const std::string &skillType,
-							   char fusionCombA, char fusionCombB, char fusionCombC)
-							   : Skill(skillType, fusionCombA, fusionCombB, fusionCombC)
+							   char fusionCombA, char fusionCombB, char fusionCombC,
+							   int skillApplyCost, int skillResearchCost)
+							   : Skill(skillType,
+									   fusionCombA, fusionCombB, fusionCombC,
+									   skillApplyCost, skillResearchCost)
 {
 	damage = newDamage;
 	stunTime_seconds = newStunTime_seconds;
@@ -808,7 +851,7 @@ void FrostNovaSkill::OnEvent(Event &_event)
 	case EVENT_TYPE_OTHER:
 		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0 && !isStarted)
 		{
-			EventArg skillDeployedEventArgs[3];
+			EventArg skillDeployedEventArgs[4];
 			skillDeployedEventArgs[0].argType = "skillRange";
 			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
 			skillDeployedEventArgs[0].argument.varFloat = range;
@@ -818,7 +861,10 @@ void FrostNovaSkill::OnEvent(Event &_event)
 			skillDeployedEventArgs[2].argType = "what_event";
 			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
 			strcpy(skillDeployedEventArgs[2].argument.varString, "stunskilldeployed");
-			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			skillDeployedEventArgs[3].argType = "skillCost";
+			skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+			skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+			Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
 			generatedEvents.push_back(skillDeployedEvent);
 
 			isStarted = true;
@@ -871,8 +917,11 @@ bool FrostNovaSkill::IsIntersectingObject(glm::vec3 objectPosition)
 ShieldSkill::ShieldSkill(glm::vec3 newPosition, 
 						 int newDefensePoints, float newRange, 
 						 const std::string &skillType, 
-						 char fusionCombA, char fusionCombB, char fusionCombC)
-						 : Skill(skillType, fusionCombA, fusionCombB, fusionCombC)
+						 char fusionCombA, char fusionCombB, char fusionCombC,
+						 int skillApplyCost, int skillResearchCost)
+						 : Skill(skillType,
+								 fusionCombA, fusionCombB, fusionCombC,
+								 skillApplyCost, skillResearchCost)
 {
 	position = newPosition;
 	defensePoints = newDefensePoints;
@@ -929,11 +978,14 @@ void ShieldSkill::OnEvent(Event &_event)
 	case EVENT_TYPE_OTHER:
 		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
 		{
-			EventArg skillDeployedEventArgs[1];
+			EventArg skillDeployedEventArgs[2];
 			skillDeployedEventArgs[0].argType = "what_event";
 			skillDeployedEventArgs[0].argument.varType = TYPE_STRING;
 			strcpy(skillDeployedEventArgs[0].argument.varString, "shieldskilldeployed");
-			Event skillDeployedEvent = Event(1, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			skillDeployedEventArgs[1].argType = "skillCost";
+			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+			skillDeployedEventArgs[1].argument.varInteger = skillApplyCost;
+			Event skillDeployedEvent = Event(2, EVENT_TYPE_OTHER, skillDeployedEventArgs);
 			generatedEvents.push_back(skillDeployedEvent);
 
 			isStarted = true;
@@ -982,8 +1034,11 @@ BurnSkill::BurnSkill(glm::vec3 newPosition,
 					 int newDamage, int newDamageApplyTime_seconds, int newDuration_seconds,
 					 float newRange,
 					 const std::string &skillType,
-					 char fusionCombA, char fusionCombB, char fusionCombC)
-					 : Skill(skillType, fusionCombA, fusionCombB, fusionCombC)
+					 char fusionCombA, char fusionCombB, char fusionCombC,
+					 int skillApplyCost, int skillResearchCost)
+					 : Skill(skillType,
+						 	 fusionCombA, fusionCombB, fusionCombC,
+							 skillApplyCost, skillResearchCost)
 {
 	position = newPosition;
 	damage = newDamage;
@@ -1057,7 +1112,7 @@ void BurnSkill::OnEvent(Event &_event)
 	case EVENT_TYPE_OTHER:
 		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
 		{
-			EventArg skillDeployedEventArgs[3];
+			EventArg skillDeployedEventArgs[4];
 			skillDeployedEventArgs[0].argType = "skillRange";
 			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
 			skillDeployedEventArgs[0].argument.varFloat = range;
@@ -1067,7 +1122,10 @@ void BurnSkill::OnEvent(Event &_event)
 			skillDeployedEventArgs[2].argType = "what_event";
 			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
 			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			skillDeployedEventArgs[3].argType = "skillCost";
+			skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+			skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+			Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
 			generatedEvents.push_back(skillDeployedEvent);
 
 			isStarted = true;

@@ -47,10 +47,16 @@ protected:
 	std::string skillType;
 	std::vector<Event> generatedEvents;
 
+	int skillApplyCost;
+	int skillResearchCost;
+
+	bool isStarted;
+
 public:
 	Skill() { }
 	Skill(const std::string &newSkillType,
-		  char fusionCombA, char fusionCombB, char fusionCombC)
+		  char fusionCombA, char fusionCombB, char fusionCombC,
+		  int newSkillApplyCost, int newSkillResearchCost)
 	{
 		fusionCombination[0] = fusionCombA;
 		fusionCombination[1] = fusionCombB;
@@ -58,6 +64,9 @@ public:
 		fusionCombination[3] = '\0';
 
 		skillType = newSkillType;
+
+		skillApplyCost = newSkillApplyCost;
+		skillResearchCost = newSkillResearchCost;
 	}
 
 	virtual void Update() {}
@@ -79,8 +88,11 @@ public:
 
 	virtual std::string GetSkillType() { return skillType; }
 	virtual float GetRange() { return 0.0f; }
+	virtual int GetApplyCost() { return skillApplyCost; }
+	virtual int GetResearchCost() { return skillResearchCost; }
 	virtual glm::vec3 GetPosition() { return glm::vec3(); }
 	virtual bool IsDeployed() { return false; }
+	virtual bool IsStarted() { return isStarted; }
 
 	
 	// Only for EVENT_TYPE_OTHER
@@ -101,14 +113,14 @@ private:
 	
 	AOESelector skillSelector;
 	//std::vector<Event> generatedEvents;
-	bool isStarted;
 
 public:
 	AOESkill() : Skill() {}
 	AOESkill(glm::vec3 newPosition,
 			 int newDamage, float newRange,
 			 const std::string &newSkillType,
-			 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
+			 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
+			 int skillApplyCost = 0, int skillResearchCost = 0);
 
 	void Update();
 	void Render(glutil::MatrixStack	&modelMatrix, 
@@ -133,20 +145,20 @@ private:
 	int damage;
 	int damageApplyTime_seconds;
 	Framework::Timer attackTimer;
+	Framework::Timer skillLife;
 	float range;
 	glm::vec3 position;
 
 	Utility::Primitives::Circle skillVisibleRadius;
 
-	bool isStarted;
-
 public:
 	PassiveAOESkill() : Skill() {}
 	PassiveAOESkill(glm::vec3 newPosition,
-					int newDamage, int newDamageApplyTime_seconds,
+					int newDamage, int newDamageApplyTime_seconds, int newSkillLife,
 					float newRange,
 					const std::string &newSkillType,
-					char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
+					char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
+					int skillApplyCost = 0, int skillResearchCost = 0);
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix,
@@ -171,7 +183,6 @@ private:
 	float scaleRate;
 	float currentScale;
 	glm::vec3 position;
-	bool isStarted;
 
 
 #ifdef CIRCLE_SKILL
@@ -186,7 +197,8 @@ public:
 				 int newDamage, 
 				 float newRange, float newScaleRate,
 				 const std::string &skillType,
-				 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
+				 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
+				 int skillApplyCost = 0, int skillResearchCost = 0);
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData);
@@ -216,8 +228,6 @@ private:
 	int materialBlockSize;
 	GLuint materialUniformBuffer;
 
-	bool isStarted;
-
 public:
 	SatelliteChainingSkill() : Skill() {}
 	SatelliteChainingSkill(glm::vec3 newPosition,
@@ -226,7 +236,8 @@ public:
 						   float newProjectileRadius,
 						   const std::string &meshFileName, 
 						   const std::string &skillType,
-						   char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
+						   char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
+						   int skillApplyCost = 0, int skillResearchCost = 0);
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData, 
@@ -252,7 +263,6 @@ private:
 	float scaleRate;
 	float currentScale;
 	glm::vec3 position;
-	bool isStarted;
 
 
 #ifdef CIRCLE_SKILL
@@ -267,7 +277,8 @@ public:
 						  int newDamage, 
 						  float newRange, float newScaleRate,
 						  const std::string &skillType,
-						  char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
+						  char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
+						  int skillApplyCost = 0, int skillResearchCost = 0);
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData);
@@ -293,7 +304,6 @@ private:
 	float scaleRate;
 	float currentScale;
 	glm::vec3 position;
-	bool isStarted;
 
 
 #ifdef CIRCLE_SKILL
@@ -308,7 +318,8 @@ public:
 				   float newRange, float newScaleRate,
 				   glm::vec3 newPosition,
 				   const std::string &skillType,
-				   char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
+				   char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
+				   int skillApplyCost = 0, int skillResearchCost = 0);
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData);
@@ -342,7 +353,8 @@ public:
 	ShieldSkill(glm::vec3 newPosition, 
 				int newDefensePoints, float newRange, 
 				const std::string &skillType, 
-				char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
+				char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
+				int skillApplyCost = 0, int skillResearchCost = 0);
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData,
@@ -372,7 +384,6 @@ private:
 	//
 	Framework::Timer attackTimer;
 
-	bool isStarted;
 	bool isDeployed;
 
 	Utility::Primitives::Circle skillRadius;
@@ -383,7 +394,8 @@ public:
 			  int newDamage, int newDamageApplyTime_seconds, int newDuration_seconds,
 			  float newRange,
 			  const std::string &skillType,
-			  char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0');
+			  char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
+			  int skillApplyCost = 0, int skillResearchCost = 0);
 
 	void Update();/*
 	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData,

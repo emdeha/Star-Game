@@ -404,24 +404,28 @@ void InitializeScene()
 		std::shared_ptr<AOESkill>(new AOESkill(glm::vec3(),
 											   20, 2.0f, 
 											   "aoeSkill",
-											   'q', 'q', 'w'));
+											   'q', 'q', 'w',
+											   10));
 	std::shared_ptr<PassiveAOESkill> testPassiveAOESkill =
 		std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(glm::vec3(),
-															 20, 
-															 1, 2.0f, 
+															 20, 1, 4,
+															 2.0f,
 															 "passiveAOESkill",
-															 'q', 'q', 'e'));
+															 'q', 'q', 'e', 
+															 10));
 	std::shared_ptr<SunNovaSkill> testSunNovaSkill =
 		std::shared_ptr<SunNovaSkill>(new SunNovaSkill(glm::vec3(), 40, 6.0f, 
 													   0.05f, 
 													   "sunNovaSkill", 
-													   'w', 'w', 'e'));
+													   'w', 'w', 'e', 
+													   50));
 	std::shared_ptr<BurnSkill> testBurnSkill =
 		std::shared_ptr<BurnSkill>(new BurnSkill(glm::vec3(), 
 												 30, 1, 3,
 												 2.0f, 
 												 "burnSkill",
-												 'w', 'e', 'q'));
+												 'w', 'e', 'q',
+												 20));
 
 	scene.GetSun()->AddSkill(testPassiveAOESkill);
 	scene.GetSun()->AddSkill(testAOESkill);

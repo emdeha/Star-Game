@@ -395,6 +395,23 @@ void CelestialBody::OnEvent(Event &_event)
 			{
 				currentResource += _event.GetArgument("how_much").varInteger;
 			}
+			if(strcmp(_event.GetArgument("what_event").varString, "skillDeployed") == 0)
+			{
+				if(currentResource > _event.GetArgument("how_much").varInteger)
+				{
+					currentResource -= _event.GetArgument("how_much").varInteger;
+				}
+				else
+				{
+					EventArg insufficientResourcesEventArg[1];
+					insufficientResourcesEventArg[0].argType = "what_event";
+					insufficientResourcesEventArg[0].argument.varType = TYPE_STRING;
+					strcpy(insufficientResourcesEventArg[0].argument.varString, "insufRes");
+					Event insufficientResourcesEvent = Event(1, EVENT_TYPE_OTHER, insufficientResourcesEventArg);
+
+					generatedEvents.push_back(insufficientResourcesEvent);
+				}
+			}
 			break;
 		default:
 			break;
@@ -452,11 +469,11 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 
 	std::shared_ptr<PassiveAOESkill> satSkill = 
 		std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(glm::vec3(),//newSat, 
-															 20,
-															 1,
-															 2.0f,
+															 20, 1, 2,
+															 1.0f,
 															 "passiveAOESkill",
-															 'q', 'q', 'e'));
+															 'q', 'q', 'e',
+															 10));
 	std::shared_ptr<SatelliteChainingNova> satChainSkill =
 		std::shared_ptr<SatelliteChainingNova>(new SatelliteChainingNova(newSat->GetPosition(),
 																		 20, 2.0f, 0.08f, 
@@ -467,14 +484,16 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 			std::shared_ptr<FrostNovaSkill>(new FrostNovaSkill(5, 3, 2.0f, 0.1f, 
 															   newSat->GetPosition(), 
 															   "satFrostNova",
-															   'q', 'w', 'q'));
+															   'q', 'w', 'q',
+															   20));
 		newSat->AddSkill(satFrostNovaSkill);
 	}
 	if(type == SATELLITE_EARTH)
 	{
 		std::shared_ptr<ShieldSkill> satShieldSkill =
 			std::shared_ptr<ShieldSkill>(new ShieldSkill(newSat->GetPosition(), 
-														 3, 0.5f, "satShieldSkill", 'w', 'e', 'w'));
+														 3, 0.5f, "satShieldSkill", 'w', 'e', 'w',
+														 10));
 		newSat->AddSkill(satShieldSkill);
 	}
 																		 

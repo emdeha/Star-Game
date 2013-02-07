@@ -244,6 +244,9 @@ void Scene::UpdateScene()
 					if(skills[skillIndex]->GetSkillType() == "satFrostNova")
 					{			
 						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("stuntimeended");
+
+
+
 						if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
 						{
 							enemies[enemyIndex]->OnEvent(skillEvent);
@@ -354,13 +357,24 @@ void Scene::OnEvent(Event &_event)
 					{
 						for(int skillIndex = 0; skillIndex < skills.size(); skillIndex++)
 						{
+							Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
+
+							//suns[0]->OnEvent(skillEvent);
+							//if(suns[0]->GetGeneratedEvent("insufRes").GetType() != EVENT_TYPE_EMPTY)
+							//{
+							//	printf("Not enough resources to apply skill\n");
+							//}
+
 							if(skills[skillIndex]->IsIntersectingObject(enemies[i]->GetPosition()) &&
 							   skills[skillIndex]->GetSkillType() != "burnSkill")
 							{
-								Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
-
-								enemies[i]->OnEvent(skillEvent);
+								//if(suns[0]->GetGeneratedEvent("insufRes").GetType() == EVENT_TYPE_EMPTY)
+								//{
+									enemies[i]->OnEvent(skillEvent);
+								//}
 							}
+
+							//suns[0]->RemoveGeneratedEvent("insufRes");
 						}
 					}
 				}
@@ -429,6 +443,18 @@ void Scene::OnEvent(Event &_event)
 			for(int i = 0; i < skills.size(); i++)
 			{
 				skills[i]->OnEvent(_event);
+				if(skills[i]->IsStarted())
+				{
+					EventArg skillDeployedEventArg[2];
+					skillDeployedEventArg[0].argType = "what_event";
+					skillDeployedEventArg[0].argument.varType = TYPE_STRING;
+					strcpy(skillDeployedEventArg[0].argument.varString, "skillDeployed");
+					skillDeployedEventArg[1].argType = "how_much";
+					skillDeployedEventArg[1].argument.varType = TYPE_INTEGER;
+					skillDeployedEventArg[1].argument.varInteger = skills[i]->GetApplyCost();
+					Event skillDeployedEvent = Event(2, EVENT_TYPE_OTHER, skillDeployedEventArg);
+					suns[0]->OnEvent(skillDeployedEvent);
+				}
 			}
 		}
 		break;

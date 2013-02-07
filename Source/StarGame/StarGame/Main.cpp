@@ -39,10 +39,10 @@
 #include "../GUISystem/GameSpecificGUI.h"
 
 
-ShaderManager shaderManager;
+// ShaderManager shaderManager;
 DisplayData displayData;
 
-Scene scene = Scene(2.2f);
+Scene scene = Scene(2.2f, 8.0f, 3.0f, 0.5f);
 
 
 long long GetCurrentTimeMillis()
@@ -327,6 +327,18 @@ void HandlePassiveMovement(int x, int y)
 
 void InitializePrograms()
 {
+	scene.GetShaderManager().LoadLitProgram("shaders/PN.vert", "shaders/GaussianLighting.frag");
+	scene.GetShaderManager().LoadUnlitProgram("shaders/PosTransform.vert", "shaders/UniformColor.frag");
+	scene.GetShaderManager().LoadSimpleProgram("shaders/PosColorLocalTransform.vert", "shaders/ColorPassThrough.frag");
+	scene.GetShaderManager().LoadSimpleNoUBProgram("shaders/PosTransformNoUB.vert", "shaders/ColorPassThrough.frag");
+	scene.GetShaderManager().LoadFontProgram("shaders/Font.vert", "shaders/Font.frag");
+	scene.GetShaderManager().LoadSimpleTextureProgData("shaders/SimpleTexture.vert", "shaders/SimpleTexture.frag");
+	scene.GetShaderManager().LoadTextureProgData("shaders/Texture.vert", "shaders/Texture.frag");
+	scene.GetShaderManager().LoadPerspectiveTextureProgData("shaders/TexturePerspective.vert", "shaders/Texture.frag");
+	scene.GetShaderManager().LoadBillboardProgData("shaders/BillboardShader.vert", "shaders/BillboardShader.geom", "shaders/BillboardShader.frag");
+	scene.GetShaderManager().LoadParticleProgData("shaders/ParticleShader.vert", "shaders/ParticleShader.geom");
+	scene.GetShaderManager().LoadBillboardProgDataNoTexture("shaders/BillboardShader.vert", "shaders/BillboardShaderNoTexture.geom", "shaders/BillboardShaderNoTexture.frag");
+	/*
 	shaderManager.LoadLitProgram("shaders/PN.vert", "shaders/GaussianLighting.frag");
 	shaderManager.LoadUnlitProgram("shaders/PosTransform.vert", "shaders/UniformColor.frag");
 	shaderManager.LoadSimpleProgram("shaders/PosColorLocalTransform.vert", "shaders/ColorPassThrough.frag");
@@ -338,6 +350,7 @@ void InitializePrograms()
 	shaderManager.LoadBillboardProgData("shaders/BillboardShader.vert", "shaders/BillboardShader.geom", "shaders/BillboardShader.frag");
 	shaderManager.LoadParticleProgData("shaders/ParticleShader.vert", "shaders/ParticleShader.geom");
 	shaderManager.LoadBillboardProgDataNoTexture("shaders/BillboardShader.vert", "shaders/BillboardShaderNoTexture.geom", "shaders/BillboardShaderNoTexture.frag");
+	*/
 }
 
 void InitializeGUI()
@@ -433,8 +446,8 @@ void InitializeScene()
 	scene.GetSun()->AddSkill(testBurnSkill);
 
 
-	glUseProgram(shaderManager.GetTextureProgData().theProgram);
-	glUniform1i(shaderManager.GetTextureProgData().colorTextureUnif, 0);
+	glUseProgram(scene.GetShaderManager().GetTextureProgData().theProgram);
+	glUniform1i(scene.GetShaderManager().GetTextureProgData().colorTextureUnif, 0);
 	glUseProgram(0);
 
 
@@ -502,32 +515,32 @@ void Init()
 
 	GLuint lightUniformBuffer = 0;
 	glGenBuffers(1, &lightUniformBuffer);
-	shaderManager.SetUniformBuffer(UBT_LIGHT, lightUniformBuffer);
+	scene.GetShaderManager().SetUniformBuffer(UBT_LIGHT, lightUniformBuffer);
 	glBindBuffer(GL_UNIFORM_BUFFER, lightUniformBuffer);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(LightBlockGamma), NULL, GL_DYNAMIC_DRAW);
 
 	GLuint projectionUniformBuffer = 0;
 	glGenBuffers(1, &projectionUniformBuffer);
-	shaderManager.SetUniformBuffer(UBT_PROJECTION, projectionUniformBuffer);
+	scene.GetShaderManager().SetUniformBuffer(UBT_PROJECTION, projectionUniformBuffer);
 	glBindBuffer(GL_UNIFORM_BUFFER, projectionUniformBuffer);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 
 	GLuint orthographicUniformBuffer = 0;
 	glGenBuffers(1, &orthographicUniformBuffer);
-	shaderManager.SetUniformBuffer(UBT_ORTHOGRAPHIC, orthographicUniformBuffer);
+	scene.GetShaderManager().SetUniformBuffer(UBT_ORTHOGRAPHIC, orthographicUniformBuffer);
 	glBindBuffer(GL_UNIFORM_BUFFER, orthographicUniformBuffer);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 
 	// Bind the static buffers.
-	glBindBufferRange(GL_UNIFORM_BUFFER, shaderManager.GetBlockIndex(BT_LIGHT), 
+	glBindBufferRange(GL_UNIFORM_BUFFER, scene.GetShaderManager().GetBlockIndex(BT_LIGHT), 
 		lightUniformBuffer, 
 		0, sizeof(LightBlockGamma));
 
-	glBindBufferRange(GL_UNIFORM_BUFFER, shaderManager.GetBlockIndex(BT_PROJECTION), 
+	glBindBufferRange(GL_UNIFORM_BUFFER, scene.GetShaderManager().GetBlockIndex(BT_PROJECTION), 
 		projectionUniformBuffer,
 		0, sizeof(glm::mat4));
 
-	glBindBufferRange(GL_UNIFORM_BUFFER, shaderManager.GetBlockIndex(BT_ORTHOGRAPHIC),
+	glBindBufferRange(GL_UNIFORM_BUFFER, scene.GetShaderManager().GetBlockIndex(BT_ORTHOGRAPHIC),
 		orthographicUniformBuffer,
 		0, sizeof(glm::mat4));
 
@@ -552,7 +565,7 @@ void Display()
 	if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 	{		
 		scene.SetDisplayData(displayData);
-		scene.GenerateRandomSwarms(1, shaderManager.GetBillboardProgDataNoTexture(), 10);
+		//scene.GenerateRandomSwarms(1, scene.GetShaderManager().GetBillboardProgDataNoTexture(), 10);
 		//scene.GenerateRandomSpaceships(3, 20);
 		//scene.GenerateRandomSuicideBombers(1, 40);
 		//scene.GenerateRandomMothership(100);
@@ -575,27 +588,27 @@ void Display()
 
 		float interpolation = float(GetTickCount() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
 		scene.RenderScene(modelMatrix, 
-						   shaderManager.GetBlockIndex(BT_MATERIAL),
-						   shaderManager.GetUniformBuffer(UBT_LIGHT),
-						   shaderManager.GetLitProgData(),
-						   shaderManager.GetUnlitProgData(),
-						   shaderManager.GetSimpleProgData(),
-						   shaderManager.GetBillboardProgDataNoTexture(),
+						   scene.GetShaderManager().GetBlockIndex(BT_MATERIAL),
+						   scene.GetShaderManager().GetUniformBuffer(UBT_LIGHT),
+						   scene.GetShaderManager().GetLitProgData(),
+						   scene.GetShaderManager().GetUnlitProgData(),
+						   scene.GetShaderManager().GetSimpleProgData(),
+						   scene.GetShaderManager().GetBillboardProgDataNoTexture(),
 						   interpolation);
 	
 		
-		scene.RenderCurrentLayout(shaderManager.GetFontProgData(),
-								  shaderManager.GetSimpleNoUBProgData(),
-								  shaderManager.GetTextureProgData());
+		scene.RenderCurrentLayout(scene.GetShaderManager().GetFontProgData(),
+								  scene.GetShaderManager().GetSimpleNoUBProgData(),
+								  scene.GetShaderManager().GetTextureProgData());
 		
 
 		//sampleMesh.Render(modelMatrix, shaderManager.GetSimpleTextureProgData());		
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{
-		scene.RenderCurrentLayout(shaderManager.GetFontProgData(),
-								  shaderManager.GetSimpleNoUBProgData(),
-								  shaderManager.GetTextureProgData());
+		scene.RenderCurrentLayout(scene.GetShaderManager().GetFontProgData(),
+								  scene.GetShaderManager().GetSimpleNoUBProgData(),
+								  scene.GetShaderManager().GetTextureProgData());
 	}
 
 	HandleMouse();
@@ -614,17 +627,17 @@ void Reshape(int width, int height)
 
 	displayData.projectionMatrix = projMatrix.Top();
 	
-	glUseProgram(shaderManager.GetBillboardProgData().theProgram);
-	glUniformMatrix4fv(shaderManager.GetBillboardProgData().cameraToClipMatrixUnif, 
+	glUseProgram(scene.GetShaderManager().GetBillboardProgData().theProgram);
+	glUniformMatrix4fv(scene.GetShaderManager().GetBillboardProgData().cameraToClipMatrixUnif, 
 					   1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
 	glUseProgram(0);
 
-	glUseProgram(shaderManager.GetBillboardProgDataNoTexture().theProgram);
-	glUniformMatrix4fv(shaderManager.GetBillboardProgDataNoTexture().cameraToClipMatrixUnif,		
+	glUseProgram(scene.GetShaderManager().GetBillboardProgDataNoTexture().theProgram);
+	glUniformMatrix4fv(scene.GetShaderManager().GetBillboardProgDataNoTexture().cameraToClipMatrixUnif,		
 					   1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
 	glUseProgram(0);
 	
-	glBindBuffer(GL_UNIFORM_BUFFER, shaderManager.GetUniformBuffer(UBT_PROJECTION));
+	glBindBuffer(GL_UNIFORM_BUFFER, scene.GetShaderManager().GetUniformBuffer(UBT_PROJECTION));
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(displayData.projectionMatrix), &displayData.projectionMatrix);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
@@ -635,7 +648,7 @@ void Reshape(int width, int height)
 	//displayData.projectionMatrix = projMatrix.Top(); <- bugs the clicking mechanism
 
 
-	glBindBuffer(GL_UNIFORM_BUFFER, shaderManager.GetUniformBuffer(UBT_ORTHOGRAPHIC));
+	glBindBuffer(GL_UNIFORM_BUFFER, scene.GetShaderManager().GetUniformBuffer(UBT_ORTHOGRAPHIC));
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(displayData.projectionMatrix), &projMatrix.Top());
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 

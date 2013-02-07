@@ -19,23 +19,29 @@
 #include "Scene.h"
 
 #include <algorithm>
+#include <ctime>
 
 #define DEPLOY_UNITS_COUNT 4
 static int countedUnits = 0;
 
-Scene::Scene(float newSceneGamma)
+Scene::Scene(float newSceneGamma,
+			 float newInitialSpawnTime_secs, float newEndSpawnTime_secs, float newTimeDecrement_secs)
 {
-	lights.resize(0);
-	suns.resize(0);
 	//explosionEmitters.resize(0);
-	enemies.resize(0);
-
-	sceneLayouts.clear();
 
 	//universeMusic.AddFileForPlay("../data/music/onclick.wav", SOUND_NAMES_ONSUNCLICK);
 	//universeMusic.AddFileForPlay("../data/music/background.mp3", SOUND_NAMES_BACKGROUND);
+	
+	lights.resize(0);
+	suns.resize(0);
+	enemies.resize(0);
+	sceneLayouts.clear();
 
 	sceneGamma = newSceneGamma;
+	spawnData.initialSpawnTime_secs = newInitialSpawnTime_secs;
+	spawnData.endSpawnTime_secs = newEndSpawnTime_secs;
+	spawnData.timeDecrement_secs = newTimeDecrement_secs;
+	spawnData.waveSpawnTimer = Framework::Timer(Framework::Timer::TT_SINGLE, spawnData.initialSpawnTime_secs);
 }
 
 
@@ -84,8 +90,74 @@ void Scene::RenderCurrentLayout(const FontProgData &fontData,
 		}
 	}
 }
+
+void Scene::SpawnEnemies()
+{
+	if(spawnData.waveSpawnTimer.Update() == true)
+	{
+		srand(time(0));
+
+		EnemyType chosenType = EnemyType(rand() % ENEMY_TYPE_COUNT);
+		switch(ENEMY_TYPE_SWARM)
+		{
+		case ENEMY_TYPE_SWARM:
+			for(int i = 0; i < 5; i++) // 5 - the enemy count; later it will be generated somehow
+			{
+				float range = ((float)rand() / (float)RAND_MAX) * 4.0f + 4.0f;
+				float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
+
+				float posX = cosf(posOnCircle * (2.0f * PI)) * range;
+				float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
+
+				glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
+				glm::vec3 frontVector = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
+				float speed = 0.02f;
+		
+				std::shared_ptr<Swarm> randSwarm = 
+					std::shared_ptr<Swarm>(new Swarm(100, 1, 5, shaderManager.GetBillboardProgDataNoTexture(), 
+													 glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 
+													 position, frontVector, speed, 3.0f, 50, 10));
+
+				enemies.push_back(randSwarm);
+			}
+			break;
+		case ENEMY_TYPE_SPACESHIP:
+
+			break;
+		case ENEMY_TYPE_MOTHERSHIP:
+
+			break;
+		case ENEMY_TYPE_FAST_SUICIDE_BOMBER:
+
+			break;
+		case ENEMY_TYPE_ASTEROID:
+
+			break;
+		default:
+			break;
+		}
+
+		if(spawnData.initialSpawnTime_secs >= spawnData.endSpawnTime_secs)
+		{
+			spawnData.initialSpawnTime_secs -= spawnData.timeDecrement_secs;
+			spawnData.waveSpawnTimer = Framework::Timer(Framework::Timer::TT_SINGLE, spawnData.initialSpawnTime_secs);
+		}
+		else
+		{
+			spawnData.waveSpawnTimer.Reset();
+		}
+	}
+}
+
+ShaderManager &Scene::GetShaderManager()
+{
+	return shaderManager;
+}
+
 void Scene::UpdateScene()
 {
+	SpawnEnemies();
+
 	// Should be in the OnEvent function.
 	if(!suns.empty())
 	{
@@ -103,6 +175,7 @@ void Scene::UpdateScene()
 	{
 		suns[i]->Update();
 
+		// TODO: should send an event from the sun instead.
 		char matter[10];
 		itoa(suns[i]->GetCurrentResource(), matter, 10);
 		std::string labelText = "Matter: ";
@@ -634,6 +707,7 @@ bool Scene::HasSuns()
 	return false;
 }
 
+/*
 #include <ctime>
 
 void Scene::GenerateRandomSwarms(int count, const BillboardProgDataNoTexture &progData, int resourceOnKill)
@@ -796,3 +870,4 @@ void Scene::GenerateRandomAsteroids(int count, int resourceOnKill)
 		}
 	}
 }
+*/

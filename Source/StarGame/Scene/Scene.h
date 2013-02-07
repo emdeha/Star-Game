@@ -39,8 +39,31 @@
 #include "../Audio/Audio.h"
 #include "../GUISystem/GUISystem.h"
 #include "../StarGame/DisplayData.h"
+#include "../StarGame/ShaderManager.h"
 
 #include "../framework/EventSystem.h"
+
+
+enum EnemyType
+{
+	ENEMY_TYPE_SWARM,
+	ENEMY_TYPE_SPACESHIP,
+	ENEMY_TYPE_MOTHERSHIP,
+	ENEMY_TYPE_FAST_SUICIDE_BOMBER,
+	ENEMY_TYPE_ASTEROID, // Should the asteroids be randomly spawned on waves, 
+						 // or should they act like background?
+
+	ENEMY_TYPE_COUNT,
+};
+
+
+struct SpawnData
+{
+	Framework::Timer waveSpawnTimer;
+	float timeDecrement_secs;
+	float initialSpawnTime_secs;
+	float endSpawnTime_secs;
+};
 
 
 /// \class Scene
@@ -56,18 +79,26 @@ private:
 
 	std::map<LayoutType, std::shared_ptr<Layout>> sceneLayouts;
 
+	SpawnData spawnData;
 	FusionInput sceneFusionInput;
 	Mouse sceneMouse;
 	TopDownCamera sceneTopDownCamera;
 	Audio sceneMusic;
 
+	ShaderManager shaderManager;
 	DisplayData currentDisplayData;
 
 	float sceneGamma;
 
+private:
+	void SpawnEnemies();
+
 public:
 	Scene() {};
-	Scene(float newSceneGamma);
+	Scene(float newSceneGamma,
+		  float newInitialSpawnTime_secs, float newEndSpawnTime_secs, float newTimeDecrement_secs);
+
+	ShaderManager &GetShaderManager();
 
 	/// \fn UpdateScene
 	/// \brief Goes through the game objects and calls their update functions.
@@ -144,11 +175,13 @@ public:
 
 	
 	// !!! Only for testing purposes !!!
+	/*
 	void GenerateRandomSwarms(int count, const BillboardProgDataNoTexture &progData, int resourceOnKill);
 	void GenerateRandomSpaceships(int count, int resourceOnKill);
 	void GenerateRandomSuicideBombers(int count, int resourceOnKill);
 	void GenerateRandomMothership(int resourceOnKill);
 	void GenerateRandomAsteroids(int count, int resourceOnKill);
+	*/
 };
 
 #endif

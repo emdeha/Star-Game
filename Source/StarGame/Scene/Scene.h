@@ -75,7 +75,6 @@ private:
 
 	std::vector<std::shared_ptr<CelestialBody>> suns;
 	std::vector<std::shared_ptr<Enemy>> enemies;
-	//std::vector<ExplosionEmitter> explosionEmitters;
 
 	std::map<LayoutType, std::shared_ptr<Layout>> sceneLayouts;
 
@@ -110,17 +109,9 @@ public:
 
 	/// \fn RenderScene
 	/// \brief Goes through the game objects and calls their render functions.
-	void RenderScene(glutil::MatrixStack &modelMatrix, 
-					 GLuint materialBlockIndex, GLuint lightUniformBuffer,
-					 const LitProgData &litData, 
-					 const UnlitProgData &unLitData, 
-					 const SimpleProgData &interpData,
-					 const BillboardProgDataNoTexture &billboardNoTextureData,
-					 float interpolation);
+	void RenderScene(glutil::MatrixStack &modelMatrix, float interpolation);
 
-	void RenderCurrentLayout(const FontProgData &fontData,
-							 const SimpleProgData &simpleData,
-							 const TextureProgData &textureData);
+	void RenderCurrentLayout();
 	void UpdateCurrentLayout(int windowWidth, int windowHeight);
 
 
@@ -135,8 +126,6 @@ public:
 	void AddSun(const std::shared_ptr<CelestialBody> newSun);
 	
 	void AddEnemy(const std::shared_ptr<Enemy> newEnemy);
-
-	//void AddExplosionEmitter(const ExplosionEmitter &newExplosionEmitter);
 
 	void AddLayouts(const std::map<LayoutType, std::shared_ptr<Layout>> &newLayouts);
 	void AddLayout(const std::shared_ptr<Layout> newLayout);

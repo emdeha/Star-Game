@@ -39,7 +39,6 @@
 #include "../GUISystem/GameSpecificGUI.h"
 
 
-// ShaderManager shaderManager;
 DisplayData displayData;
 
 Scene scene = Scene(2.2f, 8.0f, 3.0f, 0.5f);
@@ -338,19 +337,6 @@ void InitializePrograms()
 	scene.GetShaderManager().LoadBillboardProgData("shaders/BillboardShader.vert", "shaders/BillboardShader.geom", "shaders/BillboardShader.frag");
 	scene.GetShaderManager().LoadParticleProgData("shaders/ParticleShader.vert", "shaders/ParticleShader.geom");
 	scene.GetShaderManager().LoadBillboardProgDataNoTexture("shaders/BillboardShader.vert", "shaders/BillboardShaderNoTexture.geom", "shaders/BillboardShaderNoTexture.frag");
-	/*
-	shaderManager.LoadLitProgram("shaders/PN.vert", "shaders/GaussianLighting.frag");
-	shaderManager.LoadUnlitProgram("shaders/PosTransform.vert", "shaders/UniformColor.frag");
-	shaderManager.LoadSimpleProgram("shaders/PosColorLocalTransform.vert", "shaders/ColorPassThrough.frag");
-	shaderManager.LoadSimpleNoUBProgram("shaders/PosTransformNoUB.vert", "shaders/ColorPassThrough.frag");
-	shaderManager.LoadFontProgram("shaders/Font.vert", "shaders/Font.frag");
-	shaderManager.LoadSimpleTextureProgData("shaders/SimpleTexture.vert", "shaders/SimpleTexture.frag");
-	shaderManager.LoadTextureProgData("shaders/Texture.vert", "shaders/Texture.frag");
-	shaderManager.LoadPerspectiveTextureProgData("shaders/TexturePerspective.vert", "shaders/Texture.frag");
-	shaderManager.LoadBillboardProgData("shaders/BillboardShader.vert", "shaders/BillboardShader.geom", "shaders/BillboardShader.frag");
-	shaderManager.LoadParticleProgData("shaders/ParticleShader.vert", "shaders/ParticleShader.geom");
-	shaderManager.LoadBillboardProgDataNoTexture("shaders/BillboardShader.vert", "shaders/BillboardShaderNoTexture.geom", "shaders/BillboardShaderNoTexture.frag");
-	*/
 }
 
 void InitializeGUI()
@@ -407,12 +393,7 @@ void InitializeScene()
 	scene.AddFusionSequence("satShieldSkill", 'w', 'e', 'w');
 	scene.AddFusionSequence("burnSkill", 'w', 'e', 'q');
 
-	/*
-	ExplosionEmitter sceneExplosion =
-		ExplosionEmitter(glm::vec3(0.0f, 2.0f, 0.0f), 300, 30, 0.1f);
-	sceneExplosion.Init();
-	scene.AddExplosionEmitter(sceneExplosion);
-	*/
+
 	std::shared_ptr<AOESkill> testAOESkill =
 		std::shared_ptr<AOESkill>(new AOESkill(glm::vec3(),
 											   20, 2.0f, 
@@ -489,8 +470,6 @@ long long currentTime_milliseconds;
 
 void Init()
 {
-	//scene = Scene(2.2f);
-
 	currentTime_milliseconds = GetCurrentTimeMillis();
 
 	glutTimerFunc(0, TimerFunction, 0);
@@ -565,11 +544,6 @@ void Display()
 	if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 	{		
 		scene.SetDisplayData(displayData);
-		//scene.GenerateRandomSwarms(1, scene.GetShaderManager().GetBillboardProgDataNoTexture(), 10);
-		//scene.GenerateRandomSpaceships(3, 20);
-		//scene.GenerateRandomSuicideBombers(1, 40);
-		//scene.GenerateRandomMothership(100);
-		//scene.GenerateRandomAsteroids(10, 5);
 		
 		glutil::MatrixStack modelMatrix;
 
@@ -587,28 +561,16 @@ void Display()
 
 
 		float interpolation = float(GetTickCount() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
-		scene.RenderScene(modelMatrix, 
-						   scene.GetShaderManager().GetBlockIndex(BT_MATERIAL),
-						   scene.GetShaderManager().GetUniformBuffer(UBT_LIGHT),
-						   scene.GetShaderManager().GetLitProgData(),
-						   scene.GetShaderManager().GetUnlitProgData(),
-						   scene.GetShaderManager().GetSimpleProgData(),
-						   scene.GetShaderManager().GetBillboardProgDataNoTexture(),
-						   interpolation);
-	
+		scene.RenderScene(modelMatrix, interpolation);	
 		
-		scene.RenderCurrentLayout(scene.GetShaderManager().GetFontProgData(),
-								  scene.GetShaderManager().GetSimpleNoUBProgData(),
-								  scene.GetShaderManager().GetTextureProgData());
+		scene.RenderCurrentLayout();
 		
 
 		//sampleMesh.Render(modelMatrix, shaderManager.GetSimpleTextureProgData());		
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{
-		scene.RenderCurrentLayout(scene.GetShaderManager().GetFontProgData(),
-								  scene.GetShaderManager().GetSimpleNoUBProgData(),
-								  scene.GetShaderManager().GetTextureProgData());
+		scene.RenderCurrentLayout();
 	}
 
 	HandleMouse();

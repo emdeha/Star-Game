@@ -45,14 +45,15 @@ Scene::Scene(float newSceneGamma,
 }
 
 
-void Scene::RenderScene(glutil::MatrixStack &modelMatrix, 
-						GLuint materialBlockIndex, GLuint lightUniformBuffer,
-						const LitProgData &litData, 
-						const UnlitProgData &unLitData, 
-						const SimpleProgData &interpData,
-						const BillboardProgDataNoTexture &billboardNoTextureData,
-						float interpolation)
+void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
 {
+	GLuint materialBlockIndex = shaderManager.GetBlockIndex(BT_MATERIAL);
+	GLuint lightUniformBuffer = shaderManager.GetUniformBuffer(UBT_LIGHT);
+	LitProgData litData = shaderManager.GetLitProgData();
+	UnlitProgData unLitData = shaderManager.GetUnlitProgData();
+	SimpleProgData simpleData = shaderManager.GetSimpleProgData();
+	BillboardProgDataNoTexture billboardNoTextureData = shaderManager.GetBillboardProgDataNoTexture();
+
 	int sizeLights = lights.size();
 	for(int i = 0; i < sizeLights; i++)
 	{
@@ -63,7 +64,7 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix,
 	for(int i = 0; i < sizeSuns; i++)
 	{
 		suns[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, 
-						litData, unLitData, interpData,
+						litData, unLitData, simpleData,
 						interpolation);
 	}
 
@@ -76,10 +77,12 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix,
 		}
 	}
 }
-void Scene::RenderCurrentLayout(const FontProgData &fontData,
-								const SimpleProgData &simpleData,
-								const TextureProgData &textureData)
+void Scene::RenderCurrentLayout()
 {
+	FontProgData fontData = shaderManager.GetFontProgData();
+	SimpleProgData simpleData = shaderManager.GetSimpleNoUBProgData();
+	TextureProgData textureData = shaderManager.GetTextureProgData();
+
 	for(std::map<LayoutType, std::shared_ptr<Layout>>::iterator iter = sceneLayouts.begin();
 		iter != sceneLayouts.end(); ++iter)
 	{
@@ -98,7 +101,9 @@ void Scene::SpawnEnemies()
 		srand(time(0));
 
 		EnemyType chosenType = EnemyType(rand() % ENEMY_TYPE_COUNT);
-		switch(ENEMY_TYPE_SWARM)
+		BillboardProgDataNoTexture billboardNoTextureProgData = shaderManager.GetBillboardProgDataNoTexture();
+
+		switch(chosenType)
 		{
 		case ENEMY_TYPE_SWARM:
 			for(int i = 0; i < 5; i++) // 5 - the enemy count; later it will be generated somehow
@@ -114,7 +119,7 @@ void Scene::SpawnEnemies()
 				float speed = 0.02f;
 		
 				std::shared_ptr<Swarm> randSwarm = 
-					std::shared_ptr<Swarm>(new Swarm(100, 1, 5, shaderManager.GetBillboardProgDataNoTexture(), 
+					std::shared_ptr<Swarm>(new Swarm(100, 1, 5, billboardNoTextureProgData, 
 													 glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 
 													 position, frontVector, speed, 3.0f, 50, 10));
 
@@ -182,23 +187,7 @@ void Scene::UpdateScene()
 		labelText.append(matter);
 		GetLayout(LAYOUT_IN_GAME)->GetControl("labelMatter")->ChangeText(labelText);
 	}
-
-	/*
-	int sizeExplosionEmitters = explosionEmitters.size();
-	for(int i = 0; i < sizeExplosionEmitters; i++)
-	{
-		if(explosionEmitters[i].IsActive())
-		{
-			explosionEmitters[i].Update();
-		}
-		if(explosionEmitters[i].IsDead())
-		{
-			std::vector<ExplosionEmitter>::iterator currentEmitter = 
-				explosionEmitters.begin() + i;
-			explosionEmitters.erase(currentEmitter);
-		}
-	}*/
-
+	
 	for(std::vector<std::shared_ptr<Enemy>>::iterator iter = enemies.begin();
 		iter != enemies.end();
 		)
@@ -377,11 +366,6 @@ void Scene::AddFusionSequence(std::string sequenceName,
 {
 	sceneFusionInput.AddSequence(sequenceName, buttonA, buttonB, buttonC);
 }
-/*
-void Scene::AddExplosionEmitter(const ExplosionEmitter &newExplosionEmitter)
-{
-	explosionEmitters.push_back(newExplosionEmitter);
-}*/
 
 void Scene::OnEvent(Event &_event)
 {
@@ -432,22 +416,11 @@ void Scene::OnEvent(Event &_event)
 						{
 							Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
 
-							//suns[0]->OnEvent(skillEvent);
-							//if(suns[0]->GetGeneratedEvent("insufRes").GetType() != EVENT_TYPE_EMPTY)
-							//{
-							//	printf("Not enough resources to apply skill\n");
-							//}
-
 							if(skills[skillIndex]->IsIntersectingObject(enemies[i]->GetPosition()) &&
 							   skills[skillIndex]->GetSkillType() != "burnSkill")
 							{
-								//if(suns[0]->GetGeneratedEvent("insufRes").GetType() == EVENT_TYPE_EMPTY)
-								//{
-									enemies[i]->OnEvent(skillEvent);
-								//}
+								enemies[i]->OnEvent(skillEvent);
 							}
-
-							//suns[0]->RemoveGeneratedEvent("insufRes");
 						}
 					}
 				}

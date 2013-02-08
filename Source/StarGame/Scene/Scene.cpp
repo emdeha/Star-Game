@@ -25,7 +25,8 @@
 static int countedUnits = 0;
 
 Scene::Scene(float newSceneGamma,
-			 float newInitialSpawnTime_secs, float newEndSpawnTime_secs, float newTimeDecrement_secs)
+			 float newInitialSpawnTime_secs, float newEndSpawnTime_secs, float newTimeDecrement_secs,
+			 int newCurrentEnemyCount, int newMaxEnemyCount)
 {
 	//explosionEmitters.resize(0);
 
@@ -38,6 +39,8 @@ Scene::Scene(float newSceneGamma,
 	sceneLayouts.clear();
 
 	sceneGamma = newSceneGamma;
+	spawnData.currentEnemyCount = newCurrentEnemyCount;
+	spawnData.maxEnemyCount = newMaxEnemyCount;
 	spawnData.initialSpawnTime_secs = newInitialSpawnTime_secs;
 	spawnData.endSpawnTime_secs = newEndSpawnTime_secs;
 	spawnData.timeDecrement_secs = newTimeDecrement_secs;
@@ -94,49 +97,178 @@ void Scene::RenderCurrentLayout()
 	}
 }
 
+void Scene::SpawnSwarm()
+{
+	BillboardProgDataNoTexture billboardNoTextureProgData = shaderManager.GetBillboardProgDataNoTexture();
+	
+	float range = ((float)rand() / (float)RAND_MAX) * 4.0f + 4.0f;
+	float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
+
+	float posX = cosf(posOnCircle * (2.0f * PI)) * range;
+	float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
+
+	glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
+	glm::vec3 frontVector = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
+	float speed = 0.02f;
+		
+	std::shared_ptr<Swarm> randSwarm = 
+		std::shared_ptr<Swarm>(new Swarm(100, 1, 5, billboardNoTextureProgData, 
+											glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 
+											position, frontVector, speed, 3.0f, 50, 10));
+
+	enemies.push_back(randSwarm);
+}
+void Scene::SpawnSpaceship()
+{
+	float range = ((float)rand() / (float)RAND_MAX) * 4.0f + 2.0f;
+	float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
+
+	float posX = cosf(posOnCircle * (2.0f * PI)) * range;
+	float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
+
+	glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
+	glm::vec3 frontVector = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
+	float speed = 0.05f;
+
+	std::shared_ptr<Spaceship> randSpaceship =
+		std::shared_ptr<Spaceship>(new Spaceship(0.3f, 20, 1, 
+													glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+													position, frontVector, speed, 
+													2.0f, 50, 10));
+
+	randSpaceship->LoadMesh("mesh-files/Ship.xml");
+	randSpaceship->LoadProjectileMesh("mesh-files/UnitSphere.xml");
+			
+	enemies.push_back(randSpaceship);
+}
+void Scene::SpawnFastSuicideBomber()
+{
+	float range = ((float)rand() / (float)RAND_MAX) * 4.0f + 2.0f;
+	float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
+
+	float posX = cosf(posOnCircle * (2.0f * PI)) * range;
+	float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
+
+	glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
+	glm::vec3 frontVector = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
+	float speed = 0.02f;
+	float chargeSpeed = 0.1f;
+			
+	std::shared_ptr<FastSuicideBomber> randBomber = 
+		std::shared_ptr<FastSuicideBomber>(new FastSuicideBomber(50, chargeSpeed,
+																	glm::vec4(0.5f, 0.5f, 0.7f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+																	position, frontVector, speed,
+																	2.0f, 50, 10));
+	randBomber->LoadMesh("mesh-files/UnitSphere.xml");
+
+	enemies.push_back(randBomber);
+}
+void Scene::SpawnAsteroid()
+{
+	float range = ((float)rand() / (float)RAND_MAX) * 8.0f + 6.0f;
+	float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
+
+	float posX = cosf(posOnCircle * (2.0f * PI)) * range;
+	float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
+
+	posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
+	float dirX = cosf(posOnCircle * (2.0f * PI)) * range;
+	float dirZ = sinf(posOnCircle * (2.0f * PI)) * range;
+
+	glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
+	glm::vec3 frontVector = glm::normalize(glm::vec3(dirX, 0.0f, dirZ));
+	float speed = 0.03f;
+
+	std::shared_ptr<Asteroid> randAsteroid = 
+		std::shared_ptr<Asteroid>(new Asteroid(20, 
+												glm::vec4(0.57, 0.37, 0.26, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+												position, frontVector, speed, 0.0f, 50, 10));
+	randAsteroid->LoadMesh("mesh-files/UnitTetrahedron.xml");
+
+	enemies.push_back(randAsteroid);
+}
+void Scene::SpawnMothership()
+{
+	float range = ((float)rand() / (float)RAND_MAX) * 8.0f + 6.0f;
+	float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
+
+	float posX = cosf(posOnCircle * (2.0f * PI)) * range;
+	float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
+
+	glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
+	glm::vec3 frontVector = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
+	float speed = 0.03f;
+
+	std::shared_ptr<Mothership> randMothership =
+		std::shared_ptr<Mothership>(new Mothership(glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+													position, frontVector, speed, 5.0f, 300, 100));
+	randMothership->LoadMesh("mesh-files/Ship.xml");
+
+	int deployUnitsCount = 4;
+	randMothership->InitDeployUnits("mesh-files/Ship.xml", deployUnitsCount, 
+									0.3f, 20, 1, 
+									glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+									0.05f, 2.0f, 50, 10);
+	enemies.push_back(randMothership);
+		
+	std::vector<std::shared_ptr<DeployUnit>> deployUnits = randMothership->GetDeployUnits();
+	for(int i = 0; i < deployUnits.size(); i++)
+	{
+		enemies.push_back(deployUnits[i]);
+	}
+}
 void Scene::SpawnEnemies()
 {
 	if(spawnData.waveSpawnTimer.Update() == true)
 	{
 		srand(time(0));
 
+		int enemyCount = 0;
+		if(spawnData.currentEnemyCount <= spawnData.maxEnemyCount)
+		{
+			spawnData.currentEnemyCount++;
+		}		
+		enemyCount = Utility::GetFibonacciNumber(spawnData.currentEnemyCount);
+
 		EnemyType chosenType = EnemyType(rand() % ENEMY_TYPE_COUNT);
-		BillboardProgDataNoTexture billboardNoTextureProgData = shaderManager.GetBillboardProgDataNoTexture();
+		if(spawnData.initialSpawnTime_secs < spawnData.endSpawnTime_secs)
+		{
+			while(chosenType != ENEMY_TYPE_MOTHERSHIP)
+			{
+				chosenType = EnemyType(rand() % ENEMY_TYPE_COUNT);
+			}
+		}
 
 		switch(chosenType)
 		{
 		case ENEMY_TYPE_SWARM:
-			for(int i = 0; i < 5; i++) // 5 - the enemy count; later it will be generated somehow
+			for(int i = 0; i < enemyCount; i++) 
 			{
-				float range = ((float)rand() / (float)RAND_MAX) * 4.0f + 4.0f;
-				float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
-
-				float posX = cosf(posOnCircle * (2.0f * PI)) * range;
-				float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
-
-				glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
-				glm::vec3 frontVector = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
-				float speed = 0.02f;
-		
-				std::shared_ptr<Swarm> randSwarm = 
-					std::shared_ptr<Swarm>(new Swarm(100, 1, 5, billboardNoTextureProgData, 
-													 glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 
-													 position, frontVector, speed, 3.0f, 50, 10));
-
-				enemies.push_back(randSwarm);
+				SpawnSwarm();
 			}
 			break;
 		case ENEMY_TYPE_SPACESHIP:
-
-			break;
-		case ENEMY_TYPE_MOTHERSHIP:
-
+			for(int i = 0; i < enemyCount; i++)
+			{
+				SpawnSpaceship();
+			}
 			break;
 		case ENEMY_TYPE_FAST_SUICIDE_BOMBER:
-
+			for(int i = 0; i < enemyCount; i++)
+			{
+				SpawnFastSuicideBomber();
+			}
 			break;
 		case ENEMY_TYPE_ASTEROID:
-
+			for(int i = 0; i < enemyCount; i++)
+			{
+				SpawnAsteroid();
+			}
+			break;
+		case ENEMY_TYPE_MOTHERSHIP:			
+			{
+				SpawnMothership();
+			}
 			break;
 		default:
 			break;

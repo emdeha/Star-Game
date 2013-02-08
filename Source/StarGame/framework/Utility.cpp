@@ -37,6 +37,19 @@ void Utility::CalculateFPS()
 
 }
 
+// iterative would make performance gain
+int Utility::GetFibonacciNumber(int whichNumber)
+{
+	if(whichNumber < 2)
+	{
+		return 1;
+	}
+	else
+	{
+		return GetFibonacciNumber(whichNumber - 1) + GetFibonacciNumber(whichNumber - 2);
+	}
+}
+
 
 Utility::Ray::Ray()
 {

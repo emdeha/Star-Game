@@ -52,6 +52,8 @@ namespace Utility
 	// TODO: Implement.
 	void CalculateFPS();
 
+	int GetFibonacciNumber(int whichNumber);
+
 	/// \class Ray
 	/// \brief Implements a very simple ray.
 	class Ray

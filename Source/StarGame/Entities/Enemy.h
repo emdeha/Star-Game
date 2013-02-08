@@ -52,6 +52,14 @@ enum BehaviorState
 	STATE_STOPPED,
 };
 
+enum EnemyRank
+{
+	RANK_ONE,
+	RANK_TWO,
+
+	RANK_COUNT,
+};
+
 struct PatrolRoute
 {
 	std::vector<glm::vec3> patrolPoints;
@@ -111,6 +119,8 @@ public:
 class Enemy
 {
 protected:
+	EnemyRank rank;
+
 	glm::vec4 initialColor;
 	glm::vec4 onFreezeColor;
 
@@ -174,6 +184,7 @@ public:
 	virtual bool IsDestroyed();
 	virtual bool IsSceneUpdated();
 
+	EnemyRank GetRank();
 
 	// WARN: Not sure if I should keep this.
 

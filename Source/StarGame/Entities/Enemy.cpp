@@ -90,6 +90,11 @@ std::vector<Event> Enemy::GetGeneratedEvents()
 	return eventsToReturn;
 }
 
+EnemyRank Enemy::GetRank()
+{
+	return rank;
+}
+
 
 static void GenerateUniformBuffers(int &materialBlockSize, 
 								   glm::vec4 diffuseColor,
@@ -134,6 +139,8 @@ Swarm::Swarm(int newSwarmersCount,
 	isCommanded = false;
 
 	attackTimer = Framework::Timer(Framework::Timer::Type::TT_INFINITE);
+
+	rank = RANK_ONE;
 }
 
 void Swarm::AttackSolarSystem(CelestialBody &sun, bool isSatellite, float bodyIndex)
@@ -341,6 +348,8 @@ Spaceship::Spaceship(float newProjectileSpeed, int newProjectileLifeSpan,
 		glm::normalize(patrolRoute.patrolPoints[patrolRoute.nextPatrolPointIndex] - 
 					   patrolRoute.patrolPoints[patrolRoute.currentPatrolPointIndex]); // 0.1f - speed
 	patrolRoute.lastVelocity = frontVector;
+
+	rank = RANK_ONE;
 }
 
 void Spaceship::LoadProjectileMesh(const std::string &meshFile)
@@ -805,6 +814,7 @@ Mothership::Mothership(glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 							   newHealth, newResourceGivenOnKill)
 {
 	isDeploying = false;
+	rank = RANK_TWO;
 }
 
 void Mothership::LoadMesh(const std::string &meshFileName)
@@ -1073,6 +1083,7 @@ FastSuicideBomber::FastSuicideBomber(int newDamage, float newChargeSpeed,
 {
 	damage = newDamage;
 	chargeSpeed = newChargeSpeed;
+	rank = RANK_ONE;
 }
 
 void FastSuicideBomber::LoadMesh(const std::string &meshFile)
@@ -1289,6 +1300,7 @@ Asteroid::Asteroid(int newDamage,
 						   newHealth, newResourceGivenOnKill)
 {
 	damage = newDamage;
+	rank = RANK_ONE;
 }
 
 void Asteroid::LoadMesh(const std::string &meshFile)

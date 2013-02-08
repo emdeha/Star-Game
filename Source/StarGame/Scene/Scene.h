@@ -63,6 +63,8 @@ struct SpawnData
 	float timeDecrement_secs;
 	float initialSpawnTime_secs;
 	float endSpawnTime_secs;
+	int currentEnemyCount; // used as an index which fibonacci number to find
+	int maxEnemyCount;
 };
 
 
@@ -90,12 +92,18 @@ private:
 	float sceneGamma;
 
 private:
+	void SpawnSwarm();
+	void SpawnSpaceship();
+	void SpawnFastSuicideBomber();
+	void SpawnAsteroid();
+	void SpawnMothership();
 	void SpawnEnemies();
 
 public:
 	Scene() {};
 	Scene(float newSceneGamma,
-		  float newInitialSpawnTime_secs, float newEndSpawnTime_secs, float newTimeDecrement_secs);
+		  float newInitialSpawnTime_secs, float newEndSpawnTime_secs, float newTimeDecrement_secs,
+		  int newCurrentEnemyCount, int newMaxEnemyCount);
 
 	ShaderManager &GetShaderManager();
 

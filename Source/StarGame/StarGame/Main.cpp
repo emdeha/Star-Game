@@ -41,7 +41,7 @@
 
 DisplayData displayData;
 
-Scene scene = Scene(2.2f, 8.0f, 3.0f, 0.5f, 1, 5);
+Scene scene = Scene(2.2f, 8.0f, 3.0f, 0.5f, 0, 4, 20.0f);
 
 
 long long GetCurrentTimeMillis()

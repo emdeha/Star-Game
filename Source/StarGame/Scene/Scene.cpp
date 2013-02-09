@@ -26,7 +26,7 @@ static int countedUnits = 0;
 
 Scene::Scene(float newSceneGamma,
 			 float newInitialSpawnTime_secs, float newEndSpawnTime_secs, float newTimeDecrement_secs,
-			 int newCurrentEnemyCount, int newMaxEnemyCount)
+			 int newCurrentEnemyCount, int newMaxEnemyCount, float newEnemyDestructionRadius)
 {
 	//explosionEmitters.resize(0);
 
@@ -38,6 +38,7 @@ Scene::Scene(float newSceneGamma,
 	enemies.resize(0);
 	sceneLayouts.clear();
 
+	enemyDestructionRadius = newEnemyDestructionRadius;
 	sceneGamma = newSceneGamma;
 	spawnData.currentEnemyCount = newCurrentEnemyCount;
 	spawnData.maxEnemyCount = newMaxEnemyCount;
@@ -224,16 +225,16 @@ void Scene::SpawnEnemies()
 		srand(time(0));
 
 		int enemyCount = 0;
+		enemyCount = Utility::GetFibonacciNumber(spawnData.currentEnemyCount);
 		if(spawnData.currentEnemyCount <= spawnData.maxEnemyCount)
 		{
 			spawnData.currentEnemyCount++;
-		}		
-		enemyCount = Utility::GetFibonacciNumber(spawnData.currentEnemyCount);
+		}
 
 		EnemyType chosenType = EnemyType(rand() % ENEMY_TYPE_COUNT);
-		if(spawnData.initialSpawnTime_secs < spawnData.endSpawnTime_secs)
+		if(spawnData.initialSpawnTime_secs > spawnData.endSpawnTime_secs)
 		{
-			while(chosenType != ENEMY_TYPE_MOTHERSHIP)
+			while(chosenType == ENEMY_TYPE_MOTHERSHIP)
 			{
 				chosenType = EnemyType(rand() % ENEMY_TYPE_COUNT);
 			}
@@ -333,6 +334,23 @@ void Scene::UpdateScene()
 			else
 			{
 				(*iter)->Update(true);
+			}
+			
+			// Should be done by a collision system
+			float distanceBetweenEnemyAndSceneOrigin = glm::length(glm::vec3() - (*iter)->GetPosition());
+			if(distanceBetweenEnemyAndSceneOrigin > enemyDestructionRadius)
+			{
+				/*
+				EventArg enemyOutOfBoundsEventArg[1];
+				enemyOutOfBoundsEventArg[0].argType = "what_event";
+				enemyOutOfBoundsEventArg[0].argument.varType = TYPE_STRING;
+				strcpy(enemyOutOfBoundsEventArg[0].argument.varString, "destroy");
+				Event enemyOutOfBoundsEvent = Event(1, EVENT_TYPE_OTHER, enemyOutOfBoundsEventArg);
+
+				(*iter)->OnEvent(enemyOutOfBoundsEvent);
+				*/
+				enemies.erase(iter);
+				break;
 			}
 		}
 		if((*iter)->IsDestroyed())

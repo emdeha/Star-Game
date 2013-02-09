@@ -90,6 +90,7 @@ private:
 	DisplayData currentDisplayData;
 
 	float sceneGamma;
+	float enemyDestructionRadius;
 
 private:
 	void SpawnSwarm();
@@ -103,7 +104,7 @@ public:
 	Scene() {};
 	Scene(float newSceneGamma,
 		  float newInitialSpawnTime_secs, float newEndSpawnTime_secs, float newTimeDecrement_secs,
-		  int newCurrentEnemyCount, int newMaxEnemyCount);
+		  int newCurrentEnemyCount, int newMaxEnemyCount, float newEnemyDestructionRadius);
 
 	ShaderManager &GetShaderManager();
 

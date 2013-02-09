@@ -177,7 +177,10 @@ public:
 						glm::vec3 cameraPosition,
 						const BillboardProgDataNoTexture &billboardProgDataNoTexture) {}
 
-	virtual void OnEvent(Event &_event) {}
+	virtual void OnEvent(Event &_event) 
+	{
+		switch(_event.GetType()) {}
+	}
 
 	virtual glm::vec3 GetPosition();
 	virtual int GetResourceGivenOnKill();

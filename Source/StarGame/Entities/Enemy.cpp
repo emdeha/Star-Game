@@ -306,6 +306,12 @@ void Swarm::OnEvent(Event &_event)
 		{
 			isDestroyed = true;
 		}
+		if(strcmp(_event.GetArgument("what_event").varString, "destroy") == 0)
+		{
+			isDestroyed = true;
+		}
+		break;
+	default:
 		break;
 	}
 }
@@ -563,6 +569,10 @@ void Spaceship::OnEvent(Event &_event)
 		{
 			isDestroyed = true;
 		}
+		if(strcmp(_event.GetArgument("what_event").varString, "destroy") == 0)
+		{
+			isDestroyed = true;
+		}
 		break;
 	default:
 		break;
@@ -773,6 +783,10 @@ void DeployUnit::OnEvent(Event &_event)
 			GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 		}
 		if(strcmp(_event.GetArgument("what_event").varString, "shieldskilldeployed") == 0)
+		{
+			isDestroyed = true;
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "destroy") == 0)
 		{
 			isDestroyed = true;
 		}
@@ -1063,6 +1077,12 @@ void Mothership::OnEvent(Event &_event)
 		{
 			isDestroyed = true;
 		}
+		if(strcmp(_event.GetArgument("what_event").varString, "destroy") == 0)
+		{
+			isDestroyed = true;
+		}
+		break;
+	default:
 		break;
 	}
 }
@@ -1284,6 +1304,10 @@ void FastSuicideBomber::OnEvent(Event &_event)
 		{
 			isDestroyed = true;
 		}
+		if(strcmp(_event.GetArgument("what_event").varString, "destroy") == 0)
+		{
+			isDestroyed = true;
+		}
 		break;
 	default:
 		break;
@@ -1450,6 +1474,10 @@ void Asteroid::OnEvent(Event &_event)
 			GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 		}
 		if(strcmp(_event.GetArgument("what_event").varString, "shieldskilldeployed") == 0)
+		{
+			isDestroyed = true;
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "destroy") == 0)
 		{
 			isDestroyed = true;
 		}

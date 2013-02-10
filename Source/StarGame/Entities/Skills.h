@@ -37,12 +37,24 @@ enum ParameterType
 	PARAM_DAMAGE,
 };
 
+enum SkillTypes
+{
+	SKILL_TYPE_PASSIVE_AOE,
+	SKILL_TYPE_SAT_CHAIN,
+	SKILL_TYPE_SAT_FROSTNOVA,
+	SKILL_TYPE_SAT_SHIELD,
+	
+	SKILL_TYPE_COUNT,
+};
+
 
 // TODO: Considering the small amount of different skills (~20-30), for the 
 // sake of performance and less bugs, the skillType should be an enum.
 class Skill
 {
 protected:
+	friend class Scene;
+
 	char fusionCombination[4];
 	std::string skillType;
 	std::vector<Event> generatedEvents;
@@ -143,7 +155,7 @@ class PassiveAOESkill : public Skill
 {
 private:
 	int damage;
-	int damageApplyTime_seconds;
+	float damageApplyTime_seconds;
 	Framework::Timer attackTimer;
 	Framework::Timer skillLife;
 	float range;
@@ -154,7 +166,7 @@ private:
 public:
 	PassiveAOESkill() : Skill() {}
 	PassiveAOESkill(glm::vec3 newPosition,
-					int newDamage, int newDamageApplyTime_seconds, int newSkillLife,
+					int newDamage, float newDamageApplyTime_seconds, int newSkillLife,
 					float newRange,
 					const std::string &newSkillType,
 					char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
@@ -298,7 +310,7 @@ class FrostNovaSkill : public Skill
 {
 private:
 	int damage; // Must be sth small. This is a stunning skill.
-	int stunTime_seconds;
+	float stunTime_seconds;
 	Framework::Timer stunTimer;
 	float range;	
 	float scaleRate;
@@ -314,7 +326,7 @@ private:
 
 public:
 	FrostNovaSkill() : Skill() {}
-	FrostNovaSkill(int newDamage, int newStunTime_seconds,
+	FrostNovaSkill(int newDamage, float newStunTime_seconds,
 				   float newRange, float newScaleRate,
 				   glm::vec3 newPosition,
 				   const std::string &skillType,
@@ -377,10 +389,10 @@ private:
 	glm::vec3 position;
 	float range;
 	int damage;
-	int duration_seconds;
+	float duration_seconds;
 	//
-	int damageApplyTime_seconds;
-	int damageApplyTimeDuration_seconds;
+	float damageApplyTime_seconds;
+	float damageApplyTimeDuration_seconds;
 	//
 	Framework::Timer attackTimer;
 
@@ -391,7 +403,7 @@ private:
 public:
 	BurnSkill() : Skill() {}
 	BurnSkill(glm::vec3 newPosition, 
-			  int newDamage, int newDamageApplyTime_seconds, int newDuration_seconds,
+			  int newDamage, float newDamageApplyTime_seconds, float newDuration_seconds,
 			  float newRange,
 			  const std::string &skillType,
 			  char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 

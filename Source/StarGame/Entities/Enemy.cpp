@@ -122,7 +122,7 @@ static void GenerateUniformBuffers(int &materialBlockSize,
 
 
 Swarm::Swarm(int newSwarmersCount, 
-			 int newTime_seconds, int newDamage,
+			 float newTime_seconds, int newDamage,
 			 const BillboardProgDataNoTexture &billboardProgDataNoTexture,
 			 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 			 glm::vec3 newPosition, glm::vec3 newFrontVector,

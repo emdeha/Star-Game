@@ -152,6 +152,28 @@ void Scene::InitEnemyStats()
 	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsSpeed = 0.05f;
 	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLineOfSight = 2.0f;
 }
+void Scene::InitSatSkillStats()
+{
+	suns[0]->satSkillStats[SKILL_TYPE_PASSIVE_AOE].damage = 20;
+	suns[0]->satSkillStats[SKILL_TYPE_PASSIVE_AOE].damageApplyTime_secs = 1.0f;
+	suns[0]->satSkillStats[SKILL_TYPE_PASSIVE_AOE].duration_secs = 2.0f;
+	suns[0]->satSkillStats[SKILL_TYPE_PASSIVE_AOE].range = 1.0f;
+	suns[0]->satSkillStats[SKILL_TYPE_PASSIVE_AOE].skillApplyCost = 10;
+
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].damage = 20;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].range = 2.0f;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].scaleRate = 0.08f;
+	
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].damage = 5;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].stunTime_secs = 3.0f;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].range = 2.0f;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].scaleRate = 0.1f;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].skillApplyCost = 20;
+
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].defensePoints = 3;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].range = 0.5f;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].skillApplyCost = 10;
+}
 
 void Scene::SpawnSwarm()
 {
@@ -454,27 +476,138 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 	{
 		int health = atoi(splittedCommand[1].c_str());
 		suns[0]->health = health;
-	}
-	/*
+	}	
 	if(strcmp(cmd.c_str(), "enemyDamage") == 0)
 	{
 		EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
 		int enemyDamage = atoi(splittedCommand[2].c_str());
-
-		for(int i = 0; i < enemies.size(); i++)
-		{
-			enemies[i]->SetDamage(enemyDamage, enemyType);
-		}
+		enemyStats[enemyType].damage = enemyDamage;
 	}
 	if(strcmp(cmd.c_str(), "enemyChargeSpeed") == 0)
 	{
 		float enemyChargeSpeed = atof(splittedCommand[1].c_str());
-		for(int i = 0; i < enemies.size(); i++)
-		{
-			enemies[i]->SetChargeSpeed(enemyChargeSpeed);
-		}
+		enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].fastSuicideBomberChargeSpeed = enemyChargeSpeed;
+	}	
+	if(strcmp(cmd.c_str(), "enemySpawnInnerRad") == 0)
+	{
+		EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
+		float enemySpawnInnerRad = atof(splittedCommand[2].c_str());
+		enemyStats[enemyType].spawnRangeInnerRad = enemySpawnInnerRad;
 	}
-	*/
+	if(strcmp(cmd.c_str(), "enemySpawnOuterRad") == 0)
+	{
+		EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
+		float enemySpawnOuterRad = atof(splittedCommand[2].c_str());
+		enemyStats[enemyType].spawnRangeOuterRad = enemySpawnOuterRad;
+	}
+	if(strcmp(cmd.c_str(), "enemySpeed") == 0)
+	{
+		EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
+		float enemySpeed = atof(splittedCommand[2].c_str());
+		enemyStats[enemyType].speed = enemySpeed;
+	}
+	if(strcmp(cmd.c_str(), "enemyLOS") == 0)
+	{
+		EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
+		float enemyLOS = atof(splittedCommand[2].c_str());
+		enemyStats[enemyType].lineOfSight = enemyLOS;
+	}
+	if(strcmp(cmd.c_str(), "enemyHealth") == 0)
+	{
+		EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
+		int enemyHealth = atoi(splittedCommand[2].c_str());
+		enemyStats[enemyType].health = enemyHealth;
+	}
+	if(strcmp(cmd.c_str(), "enemyResource") == 0)
+	{
+		EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
+		int enemyResource = atoi(splittedCommand[2].c_str());
+		enemyStats[enemyType].resourceGivenOnKill = enemyResource;
+	}
+	if(strcmp(cmd.c_str(), "swarmersCount") == 0)
+	{
+		int swarmersCount = atoi(splittedCommand[1].c_str());
+		enemyStats[ENEMY_TYPE_SWARM].swarmersCount = swarmersCount;
+	}
+	if(strcmp(cmd.c_str(), "swarmersAttackTime") == 0)
+	{
+		float swarmersAttackTime = atof(splittedCommand[1].c_str());
+		enemyStats[ENEMY_TYPE_SWARM].swarmersAttackTime_secs = swarmersAttackTime;
+	}
+	if(strcmp(cmd.c_str(), "enemyProjectileSpeed") == 0)
+	{
+		float projectileSpeed = atof(splittedCommand[1].c_str());
+		enemyStats[ENEMY_TYPE_SPACESHIP].projectileSpeed = projectileSpeed;
+	}
+	if(strcmp(cmd.c_str(), "deployUnitsCount") == 0)
+	{
+		int deployUnitsCount = atoi(splittedCommand[1].c_str());
+		enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsCount = deployUnitsCount;
+	}
+	if(strcmp(cmd.c_str(), "deployUnitsLife") == 0)
+	{
+		int deployUnitsLife = atoi(splittedCommand[1].c_str());
+		enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLife = deployUnitsLife;
+	}
+	if(strcmp(cmd.c_str(), "deployUnitsResourceGivenOnKill") == 0)
+	{
+		int deployUnitsResourceGivenOnKill = atoi(splittedCommand[1].c_str());
+		enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsResourceGivenOnKill = deployUnitsResourceGivenOnKill;
+	}
+	if(strcmp(cmd.c_str(), "deployUnitsSpeed") == 0)
+	{
+		float deployUnitsSpeed = atof(splittedCommand[1].c_str());
+		enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsSpeed = deployUnitsSpeed;
+	}
+	if(strcmp(cmd.c_str(), "deployUnitsLineOfSight") == 0)
+	{
+		float deployUnitsLineOfSight = atof(splittedCommand[1].c_str());
+		enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLineOfSight = deployUnitsLineOfSight;
+	}
+	if(strcmp(cmd.c_str(), "skillDamage") == 0)
+	{
+		SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+		int damage = atoi(splittedCommand[2].c_str());
+		suns[0]->satSkillStats[skillType].damage = damage;
+	}
+	if(strcmp(cmd.c_str(), "skillRange") == 0)
+	{
+		SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+		float range = atof(splittedCommand[2].c_str());
+		suns[0]->satSkillStats[skillType].range = range;
+	}
+	if(strcmp(cmd.c_str(), "skillApplyCost") == 0)
+	{
+		SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+		int skillApplyCost = atoi(splittedCommand[2].c_str());
+		suns[0]->satSkillStats[skillType].skillApplyCost = skillApplyCost;
+	}
+	if(strcmp(cmd.c_str(), "skillScaleRate") == 0)
+	{
+		SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+		float skillScaleRate = atof(splittedCommand[2].c_str());
+		suns[0]->satSkillStats[skillType].scaleRate = skillScaleRate;
+	}
+	if(strcmp(cmd.c_str(), "skillDamageApplyTime") == 0)
+	{
+		float damageApplyTime = atof(splittedCommand[1].c_str());
+		suns[0]->satSkillStats[SKILL_TYPE_PASSIVE_AOE].damageApplyTime_secs = damageApplyTime;
+	}
+	if(strcmp(cmd.c_str(), "skillDuration") == 0)
+	{
+		float duration = atof(splittedCommand[1].c_str());
+		suns[0]->satSkillStats[SKILL_TYPE_PASSIVE_AOE].duration_secs = duration;
+	}
+	if(strcmp(cmd.c_str(), "skillDefensePoints") == 0)
+	{
+		int defensePoints = atoi(splittedCommand[1].c_str());
+		suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].defensePoints = defensePoints;
+	}
+	if(strcmp(cmd.c_str(), "skillStunTime") == 0)
+	{
+		float stunTime = atof(splittedCommand[1].c_str());
+		suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].stunTime_secs = stunTime;
+	}
 }
 
 ShaderManager &Scene::GetShaderManager()
@@ -894,6 +1027,7 @@ void Scene::AddSunLight(const SunLight &newSunLight)
 void Scene::AddSun(const std::shared_ptr<CelestialBody> newSun)
 {
 	suns.push_back(newSun);
+	InitSatSkillStats();
 }
 void Scene::AddEnemy(const std::shared_ptr<Enemy> newEnemy)
 {

@@ -201,7 +201,7 @@ bool AOESkill::IsIntersectingObject(glm::vec3 objectPosition)
 
 
 PassiveAOESkill::PassiveAOESkill(glm::vec3 newPosition,
-								 int newDamage, int newDamageApplyTime_seconds, int newSkillLife,
+								 int newDamage, float newDamageApplyTime_seconds, int newSkillLife,
 								 float newRange,
 								 const std::string &newSkillType,
 								 char fusionCombA, char fusionCombB, char fusionCombC, 
@@ -768,7 +768,7 @@ bool SatelliteChainingNova::IsIntersectingObject(glm::vec3 objectPosition)
 }
 
 
-FrostNovaSkill::FrostNovaSkill(int newDamage, int newStunTime_seconds,
+FrostNovaSkill::FrostNovaSkill(int newDamage, float newStunTime_seconds,
 							   float newRange, float newScaleRate,
 							   glm::vec3 newPosition,
 							   const std::string &skillType,
@@ -1031,7 +1031,7 @@ bool ShieldSkill::IsIntersectingObject(glm::vec3 objectPosition)
 
 
 BurnSkill::BurnSkill(glm::vec3 newPosition, 
-					 int newDamage, int newDamageApplyTime_seconds, int newDuration_seconds,
+					 int newDamage, float newDamageApplyTime_seconds, float newDuration_seconds,
 					 float newRange,
 					 const std::string &skillType,
 					 char fusionCombA, char fusionCombB, char fusionCombC,

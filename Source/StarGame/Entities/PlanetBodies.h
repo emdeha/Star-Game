@@ -67,6 +67,20 @@ struct ResourceData
 	Framework::Timer resourceTimer;
 };
 
+struct SatelliteSkillsStats
+{
+	int skillApplyCost;
+	int skillResearchCost;
+	int damage;
+	int defensePoints;
+	float stunTime_secs;
+	float duration_secs;	
+	float damageApplyTime_secs;
+	float range;
+	float scaleRate;	
+};
+
+
 
 static bool typesTable[] = { false, false, false, false };
 
@@ -107,6 +121,8 @@ private:
 	int satelliteConstructionCost; // WARN: Can't tell if this is the right approach.
 
 	int currentResource;
+
+	SatelliteSkillsStats satSkillStats[SKILL_TYPE_COUNT];
 
 
 	int materialBlockSize;

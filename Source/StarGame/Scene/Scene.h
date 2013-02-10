@@ -81,7 +81,7 @@ struct EnemyStats
 	int health;
 	int resourceGivenOnKill;
 	int swarmersCount;
-	int swarmersAttackTime_secs;
+	float swarmersAttackTime_secs;
 	float projectileSpeed;
 	float fastSuicideBomberChargeSpeed;
 	int deployUnitsCount;
@@ -139,6 +139,7 @@ private:
 	void ProcessVariablesTweak(const std::string &command);
 
 	void InitEnemyStats();
+	void InitSatSkillStats();
 
 public:
 	Scene() {};

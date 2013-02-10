@@ -468,32 +468,41 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 	newSat->InitSatelliteOrbit();
 
 	std::shared_ptr<PassiveAOESkill> satSkill = 
-		std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(glm::vec3(),//newSat, 
-															 20, 1, 2,
-															 1.0f,
+		std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(glm::vec3(), 
+															 satSkillStats[SKILL_TYPE_PASSIVE_AOE].damage,
+															 satSkillStats[SKILL_TYPE_PASSIVE_AOE].damageApplyTime_secs, 
+															 satSkillStats[SKILL_TYPE_PASSIVE_AOE].duration_secs,
+															 satSkillStats[SKILL_TYPE_PASSIVE_AOE].range,
 															 "passiveAOESkill",
 															 'q', 'q', 'e',
-															 10));
+															 satSkillStats[SKILL_TYPE_PASSIVE_AOE].skillApplyCost));
 	std::shared_ptr<SatelliteChainingNova> satChainSkill =
 		std::shared_ptr<SatelliteChainingNova>(new SatelliteChainingNova(newSat->GetPosition(),
-																		 20, 2.0f, 0.08f, 
+																		 satSkillStats[SKILL_TYPE_SAT_CHAIN].damage, 
+																		 satSkillStats[SKILL_TYPE_SAT_CHAIN].range, 
+																		 satSkillStats[SKILL_TYPE_SAT_CHAIN].scaleRate, 
 																		 "satChainSkill"));
 	if(type == SATELLITE_WATER)
 	{
 		std::shared_ptr<FrostNovaSkill> satFrostNovaSkill = 
-			std::shared_ptr<FrostNovaSkill>(new FrostNovaSkill(5, 3, 2.0f, 0.1f, 
+			std::shared_ptr<FrostNovaSkill>(new FrostNovaSkill(satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].damage, 
+															   satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].stunTime_secs,
+															   satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].range,
+															   satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].scaleRate, 
 															   newSat->GetPosition(), 
 															   "satFrostNova",
 															   'q', 'w', 'q',
-															   20));
+															   satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].skillApplyCost));
 		newSat->AddSkill(satFrostNovaSkill);
 	}
 	if(type == SATELLITE_EARTH)
 	{
 		std::shared_ptr<ShieldSkill> satShieldSkill =
 			std::shared_ptr<ShieldSkill>(new ShieldSkill(newSat->GetPosition(), 
-														 3, 0.5f, "satShieldSkill", 'w', 'e', 'w',
-														 10));
+														 satSkillStats[SKILL_TYPE_SAT_SHIELD].defensePoints, 
+														 satSkillStats[SKILL_TYPE_SAT_SHIELD].range, 
+														 "satShieldSkill", 'w', 'e', 'w',
+														 satSkillStats[SKILL_TYPE_SAT_SHIELD].skillApplyCost));
 		newSat->AddSkill(satShieldSkill);
 	}
 																		 

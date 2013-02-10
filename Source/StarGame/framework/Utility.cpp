@@ -16,6 +16,7 @@
 
 
 #include "Utility.h"
+#include <sstream>
 
 #define PI 3.14159f
 
@@ -48,6 +49,18 @@ int Utility::GetFibonacciNumber(int whichNumber)
 	{
 		return GetFibonacciNumber(whichNumber - 1) + GetFibonacciNumber(whichNumber - 2);
 	}
+}
+
+std::vector<std::string> Utility::SplitString(const std::string &str, char delim)
+{
+	std::vector<std::string> splittedElems;
+	std::stringstream ss(str);
+	std::string item;
+	while(std::getline(ss, item, delim))
+	{
+		splittedElems.push_back(item);
+	}
+	return splittedElems;
 }
 
 

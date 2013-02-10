@@ -74,6 +74,9 @@ static bool typesTable[] = { false, false, false, false };
 class CelestialBody
 {
 private:
+	// WARN: Is it a good practice?
+	friend class Scene;
+
 	std::unique_ptr<Framework::Mesh> bodyMesh;
 	
 	std::unique_ptr<CelestialBody> parent;

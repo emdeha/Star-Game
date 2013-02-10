@@ -46,6 +46,8 @@ Scene::Scene(float newSceneGamma,
 	spawnData.endSpawnTime_secs = newEndSpawnTime_secs;
 	spawnData.timeDecrement_secs = newTimeDecrement_secs;
 	spawnData.waveSpawnTimer = Framework::Timer(Framework::Timer::TT_SINGLE, spawnData.initialSpawnTime_secs);
+
+	InitEnemyStats();
 }
 
 
@@ -98,44 +100,110 @@ void Scene::RenderCurrentLayout()
 	}
 }
 
+void Scene::InitEnemyStats()
+{
+	enemyStats[ENEMY_TYPE_SWARM].damage = 5;
+	enemyStats[ENEMY_TYPE_SWARM].health = 50;
+	enemyStats[ENEMY_TYPE_SWARM].lineOfSight = 3.0f;
+	enemyStats[ENEMY_TYPE_SWARM].resourceGivenOnKill = 10;
+	enemyStats[ENEMY_TYPE_SWARM].speed = 0.02f;
+	enemyStats[ENEMY_TYPE_SWARM].spawnRangeInnerRad = 4.0f;
+	enemyStats[ENEMY_TYPE_SWARM].spawnRangeOuterRad = 4.0f;
+	enemyStats[ENEMY_TYPE_SWARM].swarmersAttackTime_secs = 1;
+	enemyStats[ENEMY_TYPE_SWARM].swarmersCount = 100;
+
+	enemyStats[ENEMY_TYPE_ASTEROID].damage = 20;
+	enemyStats[ENEMY_TYPE_ASTEROID].health = 50;
+	enemyStats[ENEMY_TYPE_ASTEROID].lineOfSight = 0.0f;
+	enemyStats[ENEMY_TYPE_ASTEROID].resourceGivenOnKill = 10;
+	enemyStats[ENEMY_TYPE_ASTEROID].speed = 0.03f;
+	enemyStats[ENEMY_TYPE_ASTEROID].spawnRangeInnerRad = 8.0f;
+	enemyStats[ENEMY_TYPE_ASTEROID].spawnRangeOuterRad = 6.0f;
+
+	enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].damage = 50;
+	enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].health = 50;
+	enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].lineOfSight = 2.0f;
+	enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].resourceGivenOnKill = 10;
+	enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].speed = 0.02f;
+	enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].fastSuicideBomberChargeSpeed = 0.1f;
+	enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].spawnRangeInnerRad = 4.0f;
+	enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].spawnRangeOuterRad = 2.0f;
+
+	enemyStats[ENEMY_TYPE_SPACESHIP].damage = 1;
+	enemyStats[ENEMY_TYPE_SPACESHIP].projectileSpeed = 0.3f;
+	enemyStats[ENEMY_TYPE_SPACESHIP].health = 50;
+	enemyStats[ENEMY_TYPE_SPACESHIP].lineOfSight = 2.0f;
+	enemyStats[ENEMY_TYPE_SPACESHIP].resourceGivenOnKill = 10;
+	enemyStats[ENEMY_TYPE_SPACESHIP].speed = 0.05f;
+	enemyStats[ENEMY_TYPE_SPACESHIP].spawnRangeInnerRad = 4.0f;
+	enemyStats[ENEMY_TYPE_SPACESHIP].spawnRangeOuterRad = 2.0f;
+
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].damage = 1;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].health = 300;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].lineOfSight = 5.0f;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].resourceGivenOnKill = 100;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].speed = 0.03f;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].spawnRangeInnerRad = 8.0f;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].spawnRangeOuterRad = 6.0f;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsCount = 4;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].projectileSpeed = 0.3f;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLife = 50;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsResourceGivenOnKill = 10;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsSpeed = 0.05f;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLineOfSight = 2.0f;
+}
+
 void Scene::SpawnSwarm()
 {
 	BillboardProgDataNoTexture billboardNoTextureProgData = shaderManager.GetBillboardProgDataNoTexture();
 	
-	float range = ((float)rand() / (float)RAND_MAX) * 4.0f + 4.0f;
+	float range = ((float)rand() / (float)RAND_MAX) * 
+		enemyStats[ENEMY_TYPE_SWARM].spawnRangeInnerRad + enemyStats[ENEMY_TYPE_SWARM].spawnRangeOuterRad;
 	float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
 
 	float posX = cosf(posOnCircle * (2.0f * PI)) * range;
 	float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
 
 	glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
-	glm::vec3 frontVector = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
-	float speed = 0.02f;
+	glm::vec3 frontVector = glm::normalize(glm::vec3() - position); // WARN: should be relative to sun
 		
 	std::shared_ptr<Swarm> randSwarm = 
-		std::shared_ptr<Swarm>(new Swarm(100, 1, 5, billboardNoTextureProgData, 
-											glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 
-											position, frontVector, speed, 3.0f, 50, 10));
+		std::shared_ptr<Swarm>(new Swarm(enemyStats[ENEMY_TYPE_SWARM].swarmersCount, 
+										 enemyStats[ENEMY_TYPE_SWARM].swarmersAttackTime_secs, 
+										 enemyStats[ENEMY_TYPE_SWARM].damage, 
+										 billboardNoTextureProgData, 
+										 glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 
+										 position, frontVector, 
+										 enemyStats[ENEMY_TYPE_SWARM].speed,
+										 enemyStats[ENEMY_TYPE_SWARM].lineOfSight, 
+										 enemyStats[ENEMY_TYPE_SWARM].health, 
+										 enemyStats[ENEMY_TYPE_SWARM].resourceGivenOnKill));
 
 	enemies.push_back(randSwarm);
 }
 void Scene::SpawnSpaceship()
 {
-	float range = ((float)rand() / (float)RAND_MAX) * 4.0f + 2.0f;
+	float range = ((float)rand() / (float)RAND_MAX) * 
+		enemyStats[ENEMY_TYPE_SPACESHIP].spawnRangeInnerRad + enemyStats[ENEMY_TYPE_SPACESHIP].spawnRangeOuterRad;
 	float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
 
 	float posX = cosf(posOnCircle * (2.0f * PI)) * range;
 	float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
 
 	glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
-	glm::vec3 frontVector = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
+	glm::vec3 frontVector = glm::normalize(glm::vec3() - position); // WARN: should be relative to sun
 	float speed = 0.05f;
 
 	std::shared_ptr<Spaceship> randSpaceship =
-		std::shared_ptr<Spaceship>(new Spaceship(0.3f, 20, 1, 
-													glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-													position, frontVector, speed, 
-													2.0f, 50, 10));
+		std::shared_ptr<Spaceship>(new Spaceship(enemyStats[ENEMY_TYPE_SPACESHIP].projectileSpeed, 
+												 20,
+												 enemyStats[ENEMY_TYPE_SPACESHIP].damage, 
+												 glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+												 position, frontVector, 
+												 enemyStats[ENEMY_TYPE_SPACESHIP].speed, 
+												 enemyStats[ENEMY_TYPE_SPACESHIP].lineOfSight,
+												 enemyStats[ENEMY_TYPE_SPACESHIP].health, 
+												 enemyStats[ENEMY_TYPE_SPACESHIP].resourceGivenOnKill));
 
 	randSpaceship->LoadMesh("mesh-files/Ship.xml");
 	randSpaceship->LoadProjectileMesh("mesh-files/UnitSphere.xml");
@@ -144,29 +212,35 @@ void Scene::SpawnSpaceship()
 }
 void Scene::SpawnFastSuicideBomber()
 {
-	float range = ((float)rand() / (float)RAND_MAX) * 4.0f + 2.0f;
+	float range = ((float)rand() / (float)RAND_MAX) * 
+		enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].spawnRangeInnerRad + enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].spawnRangeOuterRad;
 	float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
 
 	float posX = cosf(posOnCircle * (2.0f * PI)) * range;
 	float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
 
 	glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
-	glm::vec3 frontVector = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
+	glm::vec3 frontVector = glm::normalize(glm::vec3() - position); // WARN: should be relative to sun
 	float speed = 0.02f;
 	float chargeSpeed = 0.1f;
 			
 	std::shared_ptr<FastSuicideBomber> randBomber = 
-		std::shared_ptr<FastSuicideBomber>(new FastSuicideBomber(50, chargeSpeed,
-																	glm::vec4(0.5f, 0.5f, 0.7f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-																	position, frontVector, speed,
-																	2.0f, 50, 10));
+		std::shared_ptr<FastSuicideBomber>(new FastSuicideBomber(enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].damage, 
+																 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].fastSuicideBomberChargeSpeed,
+																 glm::vec4(0.5f, 0.5f, 0.7f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+																 position, frontVector,
+																 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].speed,
+																 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].lineOfSight, 
+																 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].health, 
+																 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].resourceGivenOnKill));
 	randBomber->LoadMesh("mesh-files/UnitSphere.xml");
 
 	enemies.push_back(randBomber);
 }
 void Scene::SpawnAsteroid()
 {
-	float range = ((float)rand() / (float)RAND_MAX) * 8.0f + 6.0f;
+	float range = ((float)rand() / (float)RAND_MAX) * 
+		enemyStats[ENEMY_TYPE_ASTEROID].spawnRangeInnerRad + enemyStats[ENEMY_TYPE_ASTEROID].spawnRangeOuterRad;
 	float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
 
 	float posX = cosf(posOnCircle * (2.0f * PI)) * range;
@@ -178,38 +252,52 @@ void Scene::SpawnAsteroid()
 
 	glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
 	glm::vec3 frontVector = glm::normalize(glm::vec3(dirX, 0.0f, dirZ));
-	float speed = 0.03f;
 
 	std::shared_ptr<Asteroid> randAsteroid = 
-		std::shared_ptr<Asteroid>(new Asteroid(20, 
-												glm::vec4(0.57, 0.37, 0.26, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-												position, frontVector, speed, 0.0f, 50, 10));
+		std::shared_ptr<Asteroid>(new Asteroid(enemyStats[ENEMY_TYPE_ASTEROID].damage, 
+											   glm::vec4(0.57, 0.37, 0.26, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+											   position, frontVector, 
+											   enemyStats[ENEMY_TYPE_ASTEROID].speed, 
+											   enemyStats[ENEMY_TYPE_ASTEROID].lineOfSight, 
+											   enemyStats[ENEMY_TYPE_ASTEROID].health, 
+											   enemyStats[ENEMY_TYPE_ASTEROID].resourceGivenOnKill));
+
 	randAsteroid->LoadMesh("mesh-files/UnitTetrahedron.xml");
 
 	enemies.push_back(randAsteroid);
 }
 void Scene::SpawnMothership()
 {
-	float range = ((float)rand() / (float)RAND_MAX) * 8.0f + 6.0f;
+	float range = ((float)rand() / (float)RAND_MAX) * 
+		enemyStats[ENEMY_TYPE_MOTHERSHIP].spawnRangeInnerRad + enemyStats[ENEMY_TYPE_MOTHERSHIP].spawnRangeOuterRad;
 	float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
 
 	float posX = cosf(posOnCircle * (2.0f * PI)) * range;
 	float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
 
 	glm::vec3 position = glm::vec3(posX, 0.0f, posZ);
-	glm::vec3 frontVector = glm::normalize((glm::vec3(suns[0]->GetPosition()) - position));
-	float speed = 0.03f;
+	glm::vec3 frontVector = glm::normalize(glm::vec3() - position); // WARN: should be relative to sun
 
 	std::shared_ptr<Mothership> randMothership =
 		std::shared_ptr<Mothership>(new Mothership(glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-													position, frontVector, speed, 5.0f, 300, 100));
+												   position, frontVector, 
+												   enemyStats[ENEMY_TYPE_MOTHERSHIP].speed, 
+												   enemyStats[ENEMY_TYPE_MOTHERSHIP].lineOfSight, 
+												   enemyStats[ENEMY_TYPE_MOTHERSHIP].health, 
+												   enemyStats[ENEMY_TYPE_MOTHERSHIP].resourceGivenOnKill));
 	randMothership->LoadMesh("mesh-files/Ship.xml");
 
 	int deployUnitsCount = 4;
-	randMothership->InitDeployUnits("mesh-files/Ship.xml", deployUnitsCount, 
-									0.3f, 20, 1, 
+	randMothership->InitDeployUnits("mesh-files/Ship.xml", 
+									enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsCount, 
+									enemyStats[ENEMY_TYPE_MOTHERSHIP].projectileSpeed, 
+									20, 
+									enemyStats[ENEMY_TYPE_MOTHERSHIP].damage, 
 									glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-									0.05f, 2.0f, 50, 10);
+									enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsSpeed, 
+									enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLineOfSight, 
+									enemyStats[ENEMY_TYPE_MOTHERSHIP].health, 
+									enemyStats[ENEMY_TYPE_MOTHERSHIP].resourceGivenOnKill);
 	enemies.push_back(randMothership);
 		
 	std::vector<std::shared_ptr<DeployUnit>> deployUnits = randMothership->GetDeployUnits();
@@ -285,6 +373,108 @@ void Scene::SpawnEnemies()
 			spawnData.waveSpawnTimer.Reset();
 		}
 	}
+}
+
+void Scene::ProcessVariablesTweak(const std::string &command)
+{
+	// TODO: Make it safer.
+
+	std::vector<std::string> splittedCommand = Utility::SplitString(command, ' ');
+	
+	std::string cmd = splittedCommand[0];
+	if(strcmp(cmd.c_str(), "currentEnemyCount") == 0)
+	{
+		int newEnemyCount = atoi(splittedCommand[1].c_str());
+		spawnData.currentEnemyCount = newEnemyCount;
+	}
+	if(strcmp(cmd.c_str(), "maxEnemyCount") == 0)
+	{
+		int maxEnemyCount = atoi(splittedCommand[1].c_str());
+		spawnData.maxEnemyCount = maxEnemyCount;
+	}
+	if(strcmp(cmd.c_str(), "initialSpawnTime") == 0)
+	{
+		float initialSpawnTime = atof(splittedCommand[1].c_str());
+		spawnData.initialSpawnTime_secs = initialSpawnTime;
+		spawnData.waveSpawnTimer = Framework::Timer(Framework::Timer::TT_SINGLE, spawnData.initialSpawnTime_secs);
+	}
+	if(strcmp(cmd.c_str(), "endSpawnTime") == 0)
+	{
+		float endSpawnTime = atof(splittedCommand[1].c_str());
+		spawnData.endSpawnTime_secs = endSpawnTime;
+		spawnData.waveSpawnTimer = Framework::Timer(Framework::Timer::TT_SINGLE, spawnData.initialSpawnTime_secs);
+	}
+	if(strcmp(cmd.c_str(), "timeDecrement") == 0)
+	{
+		float timeDecrement = atof(splittedCommand[1].c_str());
+		spawnData.timeDecrement_secs = timeDecrement;
+		spawnData.waveSpawnTimer = Framework::Timer(Framework::Timer::TT_SINGLE, spawnData.initialSpawnTime_secs);
+	}
+	if(strcmp(cmd.c_str(), "enemyDestructionRadius") == 0)
+	{
+		float enemyDestrRad = atof(splittedCommand[1].c_str());
+		enemyDestructionRadius = enemyDestrRad;
+	}
+	if(strcmp(cmd.c_str(), "resourceCount") == 0)
+	{
+		int resource = atoi(splittedCommand[1].c_str());
+		suns[0]->currentResource = resource;
+	}
+	if(strcmp(cmd.c_str(), "resourceGainTime") == 0)
+	{
+		float resourceGainTime = atof(splittedCommand[1].c_str());
+		for(int i = 0; i < suns[0]->satellites.size(); i++)
+		{
+			suns[0]->satellites[i]->resource.resourceGainTime = resourceGainTime;
+			suns[0]->satellites[i]->resource.resourceTimer = Framework::Timer(Framework::Timer::TT_SINGLE, resourceGainTime);
+		}
+	}
+	if(strcmp(cmd.c_str(), "resourceGainPerTime") == 0)
+	{
+		float resourceGainPerTime = atof(splittedCommand[1].c_str());
+		for(int i = 0; i < suns[0]->satellites.size(); i++)
+		{
+			suns[0]->satellites[i]->resource.resourceGain_perTime = resourceGainPerTime;
+		}
+	}
+	if(strcmp(cmd.c_str(), "satConstructionCost") == 0)
+	{
+		int satConstructionCost = atoi(splittedCommand[1].c_str());
+		suns[0]->satelliteConstructionCost = satConstructionCost;
+	}
+	if(strcmp(cmd.c_str(), "satHealth") == 0)
+	{
+		int satHealth = atoi(splittedCommand[1].c_str());
+		for(int i = 0; i < suns[0]->satellites.size(); i++)
+		{
+			suns[0]->satellites[i]->health = satHealth;
+		}
+	}
+	if(strcmp(cmd.c_str(), "health") == 0)
+	{
+		int health = atoi(splittedCommand[1].c_str());
+		suns[0]->health = health;
+	}
+	/*
+	if(strcmp(cmd.c_str(), "enemyDamage") == 0)
+	{
+		EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
+		int enemyDamage = atoi(splittedCommand[2].c_str());
+
+		for(int i = 0; i < enemies.size(); i++)
+		{
+			enemies[i]->SetDamage(enemyDamage, enemyType);
+		}
+	}
+	if(strcmp(cmd.c_str(), "enemyChargeSpeed") == 0)
+	{
+		float enemyChargeSpeed = atof(splittedCommand[1].c_str());
+		for(int i = 0; i < enemies.size(); i++)
+		{
+			enemies[i]->SetChargeSpeed(enemyChargeSpeed);
+		}
+	}
+	*/
 }
 
 ShaderManager &Scene::GetShaderManager()
@@ -550,6 +740,11 @@ void Scene::OnEvent(Event &_event)
 		}
 		if(strcmp(_event.GetArgument("object").varString, "applyInput") == 0)
 		{
+			if(!suns.empty())
+			{
+				ProcessVariablesTweak(this->GetLayout(LAYOUT_IN_GAME)->GetControl("varInput")->GetContent());
+			}
+
 			this->GetLayout(LAYOUT_IN_GAME)->GetControl("varInput")->Clear();
 			this->GetLayout(LAYOUT_IN_GAME)->GetControl("varInput")->Deactivate();
 		}

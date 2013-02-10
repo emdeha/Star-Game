@@ -181,12 +181,13 @@ void Projectile::CheckTargetHit(CelestialBody &sun)
 
 void Projectile::Recreate(glm::vec3 newPosition, 
 						  glm::vec3 newVelocity, 
-						  int newLifeSpan)
+						  int newLifeSpan, int newDamage)
 {
 	position = newPosition;
 	velocity = newVelocity;
 	lifeSpan = newLifeSpan;
 	isDestroyed = false;
+	damage = newDamage;
 }
 void Projectile::OnTargetHit(CelestialBody &sun, Event &_event)
 {

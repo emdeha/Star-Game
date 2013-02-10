@@ -54,6 +54,8 @@ namespace Utility
 
 	int GetFibonacciNumber(int whichNumber);
 
+	std::vector<std::string> SplitString(const std::string &str, char delim);
+
 	/// \class Ray
 	/// \brief Implements a very simple ray.
 	class Ray

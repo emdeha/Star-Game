@@ -42,6 +42,19 @@
 #include "../ParticleEngine/Engine.h"
 
 
+// WARN: Violates DRY!
+enum EnemyType
+{
+	ENEMY_TYPE_SWARM,
+	ENEMY_TYPE_SPACESHIP,
+	ENEMY_TYPE_MOTHERSHIP,
+	ENEMY_TYPE_FAST_SUICIDE_BOMBER,
+	ENEMY_TYPE_ASTEROID, // Should the asteroids be randomly spawned on waves, 
+						 // or should they act like background?
+
+	ENEMY_TYPE_COUNT,
+};
+
 enum BehaviorState
 {
 	STATE_ATTACK,
@@ -111,7 +124,7 @@ public:
 
 	void OnTargetHit(CelestialBody &sun, Event &_event); // Should be an OnEvent(Event &_event);
 	
-	void Recreate(glm::vec3 newPosition, glm::vec3 newVelocity, int newLifeSpan);
+	void Recreate(glm::vec3 newPosition, glm::vec3 newVelocity, int newLifeSpan, int newDamage);
 	bool IsDestroyed() { return isDestroyed; }
 };
 
@@ -119,6 +132,9 @@ public:
 class Enemy
 {
 protected:
+	friend class Scene;
+
+
 	EnemyRank rank;
 
 	glm::vec4 initialColor;
@@ -187,6 +203,9 @@ public:
 	virtual bool IsDestroyed();
 	virtual bool IsSceneUpdated();
 
+	virtual void SetDamage(int newDamage, EnemyType enemyType) {}
+	virtual void SetChargeSpeed(int newChargeSpeed) {}
+
 	EnemyRank GetRank();
 
 	// WARN: Not sure if I should keep this.
@@ -232,6 +251,14 @@ public:
 				const BillboardProgDataNoTexture &billboardProgDataNoTexture);
 
 	void OnEvent(Event &_event);
+
+	void SetDamage(int newDamage, EnemyType type) 
+	{ 
+		if(type == ENEMY_TYPE_SWARM)
+		{
+			damage.damage = newDamage; 
+		}
+	}
 };
 
 
@@ -269,6 +296,14 @@ public:
 
 	void LoadMesh(const std::string &meshFileName);
 	void LoadProjectileMesh(const std::string &meshFileName);
+
+	void SetDamage(int newDamage, EnemyType type) 
+	{ 
+		if(type == ENEMY_TYPE_SPACESHIP)
+		{
+			projectileDamage = newDamage; 
+		}
+	}
 };
 
 
@@ -369,6 +404,14 @@ public:
 						 float speed, float lineOfSight, int health, int resourceGivenOnKill);
 	void RejuvenateDeployUnits();
 
+	void SetDamage(int newDamage, EnemyType type)
+	{
+		if(type == ENEMY_TYPE_MOTHERSHIP)
+		{
+			deployUnitsInfo.projectileDamage = newDamage;
+		}
+	}
+
 	// First way of getting the deployUnits for skill intersection tests.
 	// We get the deploy units, push them to all units and make intersection tests against them.
 	// Or we make that in the beginning.
@@ -408,6 +451,15 @@ public:
 	void OnEvent(Event &_event);
 
 	void LoadMesh(const std::string &meshFile);
+
+	void SetDamage(int newDamage, EnemyType type) 
+	{
+		if(type == ENEMY_TYPE_FAST_SUICIDE_BOMBER)
+		{
+			damage = newDamage; 
+		}
+	}
+	void SetChargeSpeed(int newChargeSpeed) { chargeSpeed = newChargeSpeed; }
 };
 
 
@@ -441,6 +493,14 @@ public:
 	void OnEvent(Event &_event);
 
 	void LoadMesh(const std::string &meshFile);
+
+	void SetDamage(int newDamage, EnemyType type) 
+	{
+		if(type == ENEMY_TYPE_ASTEROID)
+		{
+			damage = newDamage; 
+		}
+	}
 };
 
 

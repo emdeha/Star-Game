@@ -42,7 +42,7 @@
 #include "../StarGame/ShaderManager.h"
 
 #include "../framework/EventSystem.h"
-
+/*
 
 enum EnemyType
 {
@@ -54,6 +54,41 @@ enum EnemyType
 						 // or should they act like background?
 
 	ENEMY_TYPE_COUNT,
+};*/
+
+/*
+// Maybe later it would be useful.
+
+class CommandHandler
+{
+public:
+	CommandHandler() {}
+
+	virtual void HandleCommand(const std::string &command) {};
+
+	virtual ~CommandHandler() {}
+};
+*/
+
+
+struct EnemyStats
+{
+	float spawnRangeInnerRad;
+	float spawnRangeOuterRad;
+	float speed;
+	float lineOfSight;
+	int damage;
+	int health;
+	int resourceGivenOnKill;
+	int swarmersCount;
+	int swarmersAttackTime_secs;
+	float projectileSpeed;
+	float fastSuicideBomberChargeSpeed;
+	int deployUnitsCount;
+	int deployUnitsLife;
+	int deployUnitsResourceGivenOnKill;
+	float deployUnitsSpeed;
+	float deployUnitsLineOfSight;
 };
 
 
@@ -81,6 +116,7 @@ private:
 	std::map<LayoutType, std::shared_ptr<Layout>> sceneLayouts;
 
 	SpawnData spawnData;
+	EnemyStats enemyStats[ENEMY_TYPE_COUNT];
 	FusionInput sceneFusionInput;
 	Mouse sceneMouse;
 	TopDownCamera sceneTopDownCamera;
@@ -99,6 +135,10 @@ private:
 	void SpawnAsteroid();
 	void SpawnMothership();
 	void SpawnEnemies();
+
+	void ProcessVariablesTweak(const std::string &command);
+
+	void InitEnemyStats();
 
 public:
 	Scene() {};
@@ -181,5 +221,6 @@ public:
 	void GenerateRandomAsteroids(int count, int resourceOnKill);
 	*/
 };
+
 
 #endif

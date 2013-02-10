@@ -403,7 +403,7 @@ void Spaceship::UpdateAI(CelestialBody &sun)
 			newDirection = glm::normalize(newDirection);
 			projectile->Recreate(position, 
 								 newDirection * projectileSpeed, 
-								 projectileLifeSpan);
+								 projectileLifeSpan, projectileDamage);
 		}
 
 		projectile->Update(sun);
@@ -645,7 +645,7 @@ void DeployUnit::UpdateAI(CelestialBody &sun)
 			}
 
 			newDirection = glm::normalize(newDirection);
-			projectile->Recreate(position, newDirection * projectileSpeed, projectileLifeSpan);
+			projectile->Recreate(position, newDirection * projectileSpeed, projectileLifeSpan, projectileDamage);
 		}
 
 		projectile->Update(sun);
@@ -672,7 +672,7 @@ void DeployUnit::UpdateAI(CelestialBody &sun)
 		if(distanceBetweenPlanetAndUnit < lineOfSight)
 		{
 			lastFrontVector = frontVector;
-			projectile->Recreate(position, frontVector * projectileSpeed, projectileLifeSpan);
+			projectile->Recreate(position, frontVector * projectileSpeed, projectileLifeSpan, projectileDamage);
 			currentState = STATE_ATTACK;
 		}
 	}

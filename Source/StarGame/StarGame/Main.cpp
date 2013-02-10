@@ -222,6 +222,34 @@ void HandleMouse()
 					}
 				}
 			}
+
+			if(scene.GetLayout(LAYOUT_IN_GAME)->GetControl("varInput")->
+			   IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickTextBoxEvent = StockEvents::EventOnLeftClick("varInput");
+
+				scene.GetLayout(LAYOUT_IN_GAME)->GetControl("varInput")->OnEvent(leftClickTextBoxEvent);
+
+				if(scene.GetLayout(LAYOUT_IN_GAME)->GetControl("varInput") !=
+				   scene.GetLayout(LAYOUT_IN_GAME)->GetActiveControl())
+				{
+					Event unclickEvent = Event(EVENT_TYPE_UNCLICK);
+					scene.GetLayout(LAYOUT_MENU)->GetActiveControl()->OnEvent(unclickEvent);
+				}
+			}
+
+			if(scene.GetLayout(LAYOUT_IN_GAME)->
+			   GetControl("applyInput")->
+			   IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("applyInput");
+
+				scene.GetLayout(LAYOUT_IN_GAME)->GetControl("applyInput")->OnEvent(leftClickButtonEvent);
+
+				scene.OnEvent(leftClickButtonEvent);
+			}
 		}
 	}
 
@@ -644,10 +672,11 @@ void Reshape(int width, int height)
 void Keyboard(unsigned char key, int x, int y)
 {
 	// This needs to be passed as an event.
-	if(scene.IsLayoutOn(LAYOUT_MENU) && 
-	   scene.GetLayout(LAYOUT_MENU)->HasActiveControl())
+	if(scene.IsLayoutOn(LAYOUT_IN_GAME) && 
+	   scene.GetLayout(LAYOUT_IN_GAME)->HasActiveControl())
 	{
-		scene.GetLayout(LAYOUT_MENU)->GetActiveControl()->InputChar(key);
+		scene.GetLayout(LAYOUT_IN_GAME)->GetActiveControl()->InputChar(key);
+		return;
 	}
 
 	switch (key)

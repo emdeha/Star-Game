@@ -251,3 +251,8 @@ bool TextControl::IsActive()
 {
 	return isActive;
 }
+
+void TextControl::Deactivate()
+{
+	isActive = false;
+}

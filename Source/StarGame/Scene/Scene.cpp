@@ -548,6 +548,11 @@ void Scene::OnEvent(Event &_event)
 			
 			this->GetLayout(LAYOUT_MENU)->GetControl("sample")->Clear();
 		}
+		if(strcmp(_event.GetArgument("object").varString, "applyInput") == 0)
+		{
+			this->GetLayout(LAYOUT_IN_GAME)->GetControl("varInput")->Clear();
+			this->GetLayout(LAYOUT_IN_GAME)->GetControl("varInput")->Deactivate();
+		}
 		if(strcmp(_event.GetArgument("object").varString, "quitGameButton") == 0)
 		{
 			// Add clean-up if necessary.

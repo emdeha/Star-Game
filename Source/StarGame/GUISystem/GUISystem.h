@@ -182,7 +182,8 @@ public:
 	virtual void ChangeText(const std::string &newText) { text = newText; }
 
 	virtual bool IsImageBox() { return false; };
-	bool IsActive();	
+	bool IsActive();
+	void Deactivate();
 
 public:
 	std::string GetName();

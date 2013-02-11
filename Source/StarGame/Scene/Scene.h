@@ -117,6 +117,7 @@ private:
 
 	SpawnData spawnData;
 	EnemyStats enemyStats[ENEMY_TYPE_COUNT];
+	SkillsStats skillsStats[SKILL_TYPE_COUNT];
 	FusionInput sceneFusionInput;
 	Mouse sceneMouse;
 	TopDownCamera sceneTopDownCamera;

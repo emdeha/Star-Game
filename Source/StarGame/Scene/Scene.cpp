@@ -173,6 +173,66 @@ void Scene::InitSatSkillStats()
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].defensePoints = 3;
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].range = 0.5f;
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].skillApplyCost = 10;
+
+	skillsStats[SKILL_TYPE_AOE].damage = 20;
+	skillsStats[SKILL_TYPE_AOE].range = 2.0f;
+	skillsStats[SKILL_TYPE_AOE].skillApplyCost = 10;
+
+	skillsStats[SKILL_TYPE_SUN_NOVA].damage = 40;
+	skillsStats[SKILL_TYPE_SUN_NOVA].range = 6.0f;
+	skillsStats[SKILL_TYPE_SUN_NOVA].scaleRate = 0.05f;
+	skillsStats[SKILL_TYPE_SUN_NOVA].skillApplyCost = 50;
+
+	skillsStats[SKILL_TYPE_BURN].damage = 30;
+	skillsStats[SKILL_TYPE_BURN].damageApplyTime_secs = 1.0f;
+	skillsStats[SKILL_TYPE_BURN].duration_secs = 3.0f;
+	skillsStats[SKILL_TYPE_BURN].range = 2.0f;
+	skillsStats[SKILL_TYPE_BURN].skillApplyCost = 20;
+
+	skillsStats[SKILL_TYPE_PASSIVE_AOE].damage = 20;
+	skillsStats[SKILL_TYPE_PASSIVE_AOE].damageApplyTime_secs = 1.0f;
+	skillsStats[SKILL_TYPE_PASSIVE_AOE].duration_secs = 4.0f;
+	skillsStats[SKILL_TYPE_PASSIVE_AOE].range = 2.0f;
+	skillsStats[SKILL_TYPE_PASSIVE_AOE].skillApplyCost = 10;
+
+	std::shared_ptr<AOESkill> aoeSkill =
+		std::shared_ptr<AOESkill>(new AOESkill(glm::vec3(),
+											   skillsStats[SKILL_TYPE_AOE].damage, 
+											   skillsStats[SKILL_TYPE_AOE].range, 
+											   "aoeSkill",
+											   'q', 'q', 'w',
+											   skillsStats[SKILL_TYPE_AOE].skillApplyCost));
+	std::shared_ptr<PassiveAOESkill> passiveAOESkill =
+		std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(glm::vec3(),
+															 skillsStats[SKILL_TYPE_PASSIVE_AOE].damage, 
+															 skillsStats[SKILL_TYPE_PASSIVE_AOE].damageApplyTime_secs, 
+															 skillsStats[SKILL_TYPE_PASSIVE_AOE].duration_secs,
+															 skillsStats[SKILL_TYPE_PASSIVE_AOE].range,
+															 "passiveAOESkill",
+															 'q', 'q', 'e', 
+															 skillsStats[SKILL_TYPE_PASSIVE_AOE].skillApplyCost));
+	std::shared_ptr<SunNovaSkill> sunNovaSkill =
+		std::shared_ptr<SunNovaSkill>(new SunNovaSkill(glm::vec3(), 
+													   skillsStats[SKILL_TYPE_SUN_NOVA].damage, 
+													   skillsStats[SKILL_TYPE_SUN_NOVA].range, 
+													   skillsStats[SKILL_TYPE_SUN_NOVA].scaleRate, 
+													   "sunNovaSkill", 
+													   'w', 'w', 'e', 
+													   skillsStats[SKILL_TYPE_SUN_NOVA].skillApplyCost));
+	std::shared_ptr<BurnSkill> burnSkill =
+		std::shared_ptr<BurnSkill>(new BurnSkill(glm::vec3(), 
+												 skillsStats[SKILL_TYPE_BURN].damage, 
+												 skillsStats[SKILL_TYPE_BURN].damageApplyTime_secs, 
+												 skillsStats[SKILL_TYPE_BURN].duration_secs,
+												 skillsStats[SKILL_TYPE_BURN].range, 
+												 "burnSkill",
+												 'w', 'e', 'q',
+												 skillsStats[SKILL_TYPE_BURN].skillApplyCost));
+
+	suns[0]->AddSkill(aoeSkill);
+	suns[0]->AddSkill(passiveAOESkill);
+	suns[0]->AddSkill(sunNovaSkill);
+	suns[0]->AddSkill(burnSkill);
 }
 
 void Scene::SpawnSwarm()
@@ -590,13 +650,15 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 	}
 	if(strcmp(cmd.c_str(), "skillDamageApplyTime") == 0)
 	{
-		float damageApplyTime = atof(splittedCommand[1].c_str());
-		suns[0]->satSkillStats[SKILL_TYPE_PASSIVE_AOE].damageApplyTime_secs = damageApplyTime;
+		SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+		float damageApplyTime = atof(splittedCommand[2].c_str());
+		suns[0]->satSkillStats[skillType].damageApplyTime_secs = damageApplyTime;
 	}
 	if(strcmp(cmd.c_str(), "skillDuration") == 0)
 	{
-		float duration = atof(splittedCommand[1].c_str());
-		suns[0]->satSkillStats[SKILL_TYPE_PASSIVE_AOE].duration_secs = duration;
+		SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+		float duration = atof(splittedCommand[2].c_str());
+		suns[0]->satSkillStats[skillType].duration_secs = duration;
 	}
 	if(strcmp(cmd.c_str(), "skillDefensePoints") == 0)
 	{

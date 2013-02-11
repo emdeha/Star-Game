@@ -67,7 +67,7 @@ struct ResourceData
 	Framework::Timer resourceTimer;
 };
 
-struct SatelliteSkillsStats
+struct SkillsStats
 {
 	int skillApplyCost;
 	int skillResearchCost;
@@ -122,7 +122,7 @@ private:
 
 	int currentResource;
 
-	SatelliteSkillsStats satSkillStats[SKILL_TYPE_COUNT];
+	SkillsStats satSkillStats[SKILL_TYPE_COUNT];
 
 
 	int materialBlockSize;

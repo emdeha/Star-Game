@@ -421,10 +421,11 @@ void InitializeScene()
 	scene.AddFusionSequence("satShieldSkill", 'w', 'e', 'w');
 	scene.AddFusionSequence("burnSkill", 'w', 'e', 'q');
 
-
+	/*
 	std::shared_ptr<AOESkill> testAOESkill =
 		std::shared_ptr<AOESkill>(new AOESkill(glm::vec3(),
-											   20, 2.0f, 
+											   20, 
+											   2.0f, 
 											   "aoeSkill",
 											   'q', 'q', 'w',
 											   10));
@@ -453,7 +454,7 @@ void InitializeScene()
 	scene.GetSun()->AddSkill(testAOESkill);
 	scene.GetSun()->AddSkill(testSunNovaSkill);
 	scene.GetSun()->AddSkill(testBurnSkill);
-
+	*/
 
 	glUseProgram(scene.GetShaderManager().GetTextureProgData().theProgram);
 	glUniform1i(scene.GetShaderManager().GetTextureProgData().colorTextureUnif, 0);

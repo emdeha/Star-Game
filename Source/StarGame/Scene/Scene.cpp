@@ -48,8 +48,6 @@ Scene::Scene(float newSceneGamma,
 	spawnData.waveSpawnTimer = Framework::Timer(Framework::Timer::TT_SINGLE, spawnData.initialSpawnTime_secs);
 
 	isSpawning = true;
-
-	InitEnemyStats();
 }
 
 
@@ -154,7 +152,7 @@ void Scene::InitEnemyStats()
 	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsSpeed = 0.05f;
 	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLineOfSight = 2.0f;
 }
-void Scene::InitSatSkillStats()
+void Scene::InitSkillStats()
 {
 	suns[0]->satSkillStats[SKILL_TYPE_PASSIVE_AOE].damage = 20;
 	suns[0]->satSkillStats[SKILL_TYPE_PASSIVE_AOE].damageApplyTime_secs = 1.0f;
@@ -197,6 +195,8 @@ void Scene::InitSatSkillStats()
 	skillsStats[SKILL_TYPE_PASSIVE_AOE].range = 2.0f;
 	skillsStats[SKILL_TYPE_PASSIVE_AOE].skillApplyCost = 10;
 
+
+	// WARN: This is only for testing
 	std::shared_ptr<AOESkill> aoeSkill =
 		std::shared_ptr<AOESkill>(new AOESkill(glm::vec3(),
 											   skillsStats[SKILL_TYPE_AOE].damage, 
@@ -235,6 +235,19 @@ void Scene::InitSatSkillStats()
 	suns[0]->AddSkill(passiveAOESkill);
 	suns[0]->AddSkill(sunNovaSkill);
 	suns[0]->AddSkill(burnSkill);
+}
+
+void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &configFileName)
+{
+	if(isLoadedFromConfig)
+	{
+
+	}
+	else
+	{
+		InitEnemyStats();
+		InitSkillStats();
+	}
 }
 
 void Scene::SpawnSwarm()
@@ -1160,7 +1173,7 @@ void Scene::AddSunLight(const SunLight &newSunLight)
 void Scene::AddSun(const std::shared_ptr<CelestialBody> newSun)
 {
 	suns.push_back(newSun);
-	InitSatSkillStats();
+	//InitSkillStats();
 }
 void Scene::AddEnemy(const std::shared_ptr<Enemy> newEnemy)
 {

@@ -142,7 +142,7 @@ private:
 	void ProcessVariablesTweak(const std::string &command);
 
 	void InitEnemyStats();
-	void InitSatSkillStats();
+	void InitSkillStats();
 
 public:
 	Scene() {};
@@ -214,7 +214,9 @@ public:
 	SunLight GetSunLight();
 
 	bool HasSuns();
-
+	
+	void InitTweakableVariables(bool isLoadedFromConfig = false,
+								const std::string &configFileName = "");
 	
 	// !!! Only for testing purposes !!!
 	/*

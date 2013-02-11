@@ -428,6 +428,7 @@ void InitializeScene()
 
 
 	InitializeGUI();
+	scene.InitTweakableVariables();
 }
 
 

@@ -84,27 +84,35 @@ CelestialBody::CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float ne
 	parent.reset();
 	satellites.resize(0);
 	bodyMesh.reset();
+	
+	InitSatelliteStats();
 }
-CelestialBody::CelestialBody(Framework::Timer newRevolutionDuration, glm::vec4 newColor,
-							 float newOffsetFromParent, float newDiameter,
-							 SatelliteType newSkillType, int newHealth, ResourceData newResource,
-							 bool _isSun)
+CelestialBody::CelestialBody(float speed, float newOffsetFromParent, float newDiameter, int newHealth,
+							 float resourceGainTime, int resourceGain_perTime, SatelliteType newSatType, 
+							 glm::vec4 newColor, bool _isSun)
 {
-	revolutionDuration = newRevolutionDuration;
+	revolutionDuration = Framework::Timer(Framework::Timer::TT_LOOP, speed);
 	color = newColor;
 	diameter = newDiameter;
-	skillType.satelliteOffsetFromSun = newOffsetFromParent;
-	skillType.satelliteTypeForSkill = newSkillType;
 	health = newHealth;
+	satType = newSatType;
 	isSun = false; // no matter what the value of _isSun is, the body would be created as a sun
 	bodyMesh.reset();
 	parent.reset();
 	satellites.resize(0);
 	generatedEvents.resize(0);
 	isClicked = false;
+	
+	satelliteStats[satType].resourceGainTime = resourceGainTime;
+	satelliteStats[satType].resourceGain_perTime = resourceGain_perTime;
+	satelliteStats[satType].satelliteOffsetFromSun = newOffsetFromParent;
+	satelliteStats[satType].speed = speed;
+	satelliteStats[satType].health = health;
+	satelliteStats[satType].diameter = diameter;
 
-	resource.resourceGainTime = newResource.resourceGainTime;
-	resource.resourceGain_perTime = newResource.resourceGain_perTime;
+	// WARN: data repeats with satellite stats
+	resource.resourceGainTime = resourceGainTime;
+	resource.resourceGain_perTime = resourceGain_perTime;
 	resource.resourceTimer = Framework::Timer(Framework::Timer::TT_SINGLE, resource.resourceGainTime);
 
 	GenerateUniformBuffers(materialBlockSize, color, materialUniformBuffer);
@@ -114,10 +122,41 @@ void CelestialBody::InitSatelliteOrbit()
 {	
 	hoverOrbit = SatelliteOrbit(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
 								parent->GetPosition(),
-								skillType.satelliteOffsetFromSun + diameter,
-								skillType.satelliteOffsetFromSun - diameter,
+								satelliteStats[satType].satelliteOffsetFromSun + diameter,
+								satelliteStats[satType].satelliteOffsetFromSun - diameter,
 								2.2f); // Change: gamma
 	hoverOrbit.Init();
+}
+
+void CelestialBody::InitSatelliteStats()
+{
+	satelliteStats[SATELLITE_FIRE].diameter = 0.5f;
+	satelliteStats[SATELLITE_FIRE].health = 5;
+	satelliteStats[SATELLITE_FIRE].speed = 10.0f;	
+	satelliteStats[SATELLITE_FIRE].satelliteOffsetFromSun = 1.75f;
+	satelliteStats[SATELLITE_FIRE].resourceGainTime = 3.0f;
+	satelliteStats[SATELLITE_FIRE].resourceGain_perTime = 5;
+
+	satelliteStats[SATELLITE_EARTH].diameter = 0.5f;
+	satelliteStats[SATELLITE_EARTH].health = 5;
+	satelliteStats[SATELLITE_EARTH].speed = 10.0f;	
+	satelliteStats[SATELLITE_EARTH].satelliteOffsetFromSun = 2.75f;
+	satelliteStats[SATELLITE_EARTH].resourceGainTime = 3.0f;
+	satelliteStats[SATELLITE_EARTH].resourceGain_perTime = 5;
+
+	satelliteStats[SATELLITE_AIR].diameter = 0.5f;
+	satelliteStats[SATELLITE_AIR].health = 5;
+	satelliteStats[SATELLITE_AIR].speed = 10.0f;
+	satelliteStats[SATELLITE_AIR].satelliteOffsetFromSun = 3.75f;
+	satelliteStats[SATELLITE_AIR].resourceGainTime = 3.0f;
+	satelliteStats[SATELLITE_AIR].resourceGain_perTime = 5;
+
+	satelliteStats[SATELLITE_WATER].diameter = 0.5f;
+	satelliteStats[SATELLITE_WATER].health = 5;
+	satelliteStats[SATELLITE_WATER].speed = 10.0f;
+	satelliteStats[SATELLITE_WATER].satelliteOffsetFromSun = 4.75f;
+	satelliteStats[SATELLITE_WATER].resourceGainTime = 3.0f;
+	satelliteStats[SATELLITE_WATER].resourceGain_perTime = 5;
 }
 
 void CelestialBody::LoadMesh(const std::string &fileName)
@@ -193,7 +232,7 @@ void CelestialBody::Update()
 		revolutionDuration.Update();
 
 		float currentTimeThroughLoop = revolutionDuration.GetAlpha();
-		float offsetFromSun = skillType.satelliteOffsetFromSun;
+		float offsetFromSun = satelliteStats[satType].satelliteOffsetFromSun;
 
 		position.x = sinf(currentTimeThroughLoop * (2.0f * PI)) * offsetFromSun;
 		position.z = cosf(currentTimeThroughLoop * (2.0f * PI)) * offsetFromSun;
@@ -337,9 +376,9 @@ void CelestialBody::OnEvent(Event &_event)
 			{
 				if(this->AddSatellite("mesh-files/UnitSphere.xml",
 									  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-									  10.0f, 0.5f, 
-									  SatelliteType(FindEmptySatelliteType()),
-									  5))
+									 // 10.0f, 0.5f, 
+									  SatelliteType(FindEmptySatelliteType())//,
+									  /*5*/))
 				{
 					// currentSatelliteType = FindEmptySatelliteType();
 				}
@@ -421,8 +460,8 @@ void CelestialBody::OnEvent(Event &_event)
 
 bool CelestialBody::AddSatellite(const std::string &fileName,
 								 glm::vec4 satelliteColor,
-								 float speed, float diameter,
-								 SatelliteType type, int satelliteHealth)
+								 //float speed, float diameter,
+								 SatelliteType type/*, int satelliteHealth*/)
 {
 	if(satellites.size() >= satelliteCap)
 	{
@@ -434,6 +473,7 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 		return false;
 	}
 
+	/*
 	float satelliteOffset = 0.0f;
 	switch(type)
 	{
@@ -452,17 +492,18 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 	default:
 		break;
 	}
-	
+	*/
+
 	currentResource -= satelliteConstructionCost; // Maybe an event should be sent.
 
 	ResourceData satResourceData;
-	satResourceData.resourceGainTime = 3.0f;
-	satResourceData.resourceGain_perTime = 5;
+	satResourceData.resourceGainTime = satelliteStats[type].resourceGainTime;
+	satResourceData.resourceGain_perTime = satelliteStats[type].resourceGain_perTime;
 
 	std::shared_ptr<CelestialBody>
-		newSat(new CelestialBody(Framework::Timer(Framework::Timer::TT_LOOP, speed),
-								 satelliteColor, satelliteOffset, diameter,
-								 type, satelliteHealth, satResourceData));
+		newSat(new CelestialBody(satelliteStats[type].speed, satelliteStats[type].satelliteOffsetFromSun, satelliteStats[type].diameter,
+								 satelliteStats[type].health, satelliteStats[type].resourceGainTime, satelliteStats[type].resourceGain_perTime,
+								 type, satelliteColor));
 	newSat->LoadMesh(fileName);
 	newSat->SetParent(this);
 	newSat->InitSatelliteOrbit();
@@ -635,8 +676,8 @@ bool CelestialBody::IsClicked(Utility::Ray mouseRay)
 	}
 	else
 	{
-		float outerRadius = skillType.satelliteOffsetFromSun + diameter;
-		float innerRadius = skillType.satelliteOffsetFromSun - diameter;
+		float outerRadius = satelliteStats[satType].satelliteOffsetFromSun + diameter;
+		float innerRadius = satelliteStats[satType].satelliteOffsetFromSun - diameter;
 
 
 
@@ -845,14 +886,14 @@ float CelestialBody::GetOffsetFromSun()
 {
 	if(!isSun)
 	{
-		return skillType.satelliteOffsetFromSun;
+		return satelliteStats[satType].satelliteOffsetFromSun;
 	}
 }
 SatelliteType CelestialBody::GetSatelliteType()
 {
 	if(!isSun)
 	{
-		return skillType.satelliteTypeForSkill;
+		return satType;
 	}
 }
 

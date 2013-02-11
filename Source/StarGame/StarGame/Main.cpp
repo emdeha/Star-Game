@@ -420,41 +420,7 @@ void InitializeScene()
 	scene.AddFusionSequence("satFrostNova", 'q', 'w', 'q');
 	scene.AddFusionSequence("satShieldSkill", 'w', 'e', 'w');
 	scene.AddFusionSequence("burnSkill", 'w', 'e', 'q');
-
-	/*
-	std::shared_ptr<AOESkill> testAOESkill =
-		std::shared_ptr<AOESkill>(new AOESkill(glm::vec3(),
-											   20, 
-											   2.0f, 
-											   "aoeSkill",
-											   'q', 'q', 'w',
-											   10));
-	std::shared_ptr<PassiveAOESkill> testPassiveAOESkill =
-		std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(glm::vec3(),
-															 20, 1, 4,
-															 2.0f,
-															 "passiveAOESkill",
-															 'q', 'q', 'e', 
-															 10));
-	std::shared_ptr<SunNovaSkill> testSunNovaSkill =
-		std::shared_ptr<SunNovaSkill>(new SunNovaSkill(glm::vec3(), 40, 6.0f, 
-													   0.05f, 
-													   "sunNovaSkill", 
-													   'w', 'w', 'e', 
-													   50));
-	std::shared_ptr<BurnSkill> testBurnSkill =
-		std::shared_ptr<BurnSkill>(new BurnSkill(glm::vec3(), 
-												 30, 1, 3,
-												 2.0f, 
-												 "burnSkill",
-												 'w', 'e', 'q',
-												 20));
-
-	scene.GetSun()->AddSkill(testPassiveAOESkill);
-	scene.GetSun()->AddSkill(testAOESkill);
-	scene.GetSun()->AddSkill(testSunNovaSkill);
-	scene.GetSun()->AddSkill(testBurnSkill);
-	*/
+	
 
 	glUseProgram(scene.GetShaderManager().GetTextureProgData().theProgram);
 	glUniform1i(scene.GetShaderManager().GetTextureProgData().colorTextureUnif, 0);

@@ -504,19 +504,41 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 	}
 	if(strcmp(cmd.c_str(), "resourceGainTime") == 0)
 	{
-		float resourceGainTime = atof(splittedCommand[1].c_str());
-		for(int i = 0; i < suns[0]->satellites.size(); i++)
+		// Takes effect after new satellites are created, except for the all_satellites.
+		// 5 for all sats;
+		SatelliteType type = SatelliteType(atoi(splittedCommand[1].c_str()));
+		float resourceGainTime = atof(splittedCommand[2].c_str());
+		if(type == SATELLITE_COUNT)
 		{
-			suns[0]->satellites[i]->resource.resourceGainTime = resourceGainTime;
-			suns[0]->satellites[i]->resource.resourceTimer = Framework::Timer(Framework::Timer::TT_SINGLE, resourceGainTime);
+			for(int i = 0; i < suns[0]->satellites.size(); i++)
+			{
+				suns[0]->satelliteStats[suns[0]->satellites[i]->satType].resourceGainTime = resourceGainTime;
+				suns[0]->satellites[i]->resource.resourceGainTime = resourceGainTime;
+				suns[0]->satellites[i]->resource.resourceTimer = Framework::Timer(Framework::Timer::TT_SINGLE, resourceGainTime);
+			}
+		}
+		else
+		{
+			suns[0]->satelliteStats[type].resourceGainTime = resourceGainTime;
 		}
 	}
 	if(strcmp(cmd.c_str(), "resourceGainPerTime") == 0)
 	{
-		float resourceGainPerTime = atof(splittedCommand[1].c_str());
-		for(int i = 0; i < suns[0]->satellites.size(); i++)
+		// Takes effect after new satellites are created, except for the all_satellites.
+		// 5 for all sats;
+		SatelliteType type = SatelliteType(atoi(splittedCommand[1].c_str()));
+		float resourceGainPerTime = atof(splittedCommand[2].c_str());
+		if(type == SATELLITE_COUNT)
 		{
-			suns[0]->satellites[i]->resource.resourceGain_perTime = resourceGainPerTime;
+			for(int i = 0; i < suns[0]->satellites.size(); i++)
+			{
+				suns[0]->satelliteStats[suns[0]->satellites[i]->satType].resourceGain_perTime = resourceGainPerTime;
+				suns[0]->satellites[i]->resource.resourceGain_perTime = resourceGainPerTime;
+			}
+		}
+		else
+		{
+			suns[0]->satelliteStats[type].resourceGain_perTime = resourceGainPerTime;
 		}
 	}
 	if(strcmp(cmd.c_str(), "satConstructionCost") == 0)
@@ -526,10 +548,21 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 	}
 	if(strcmp(cmd.c_str(), "satHealth") == 0)
 	{
-		int satHealth = atoi(splittedCommand[1].c_str());
-		for(int i = 0; i < suns[0]->satellites.size(); i++)
+		// Takes effect after new satellites are created, except for the all_satellites.
+		// 5 for all sats;
+		SatelliteType type = SatelliteType(atoi(splittedCommand[1].c_str()));
+		int satHealth = atoi(splittedCommand[2].c_str());
+		if(type == SATELLITE_COUNT)
 		{
-			suns[0]->satellites[i]->health = satHealth;
+			for(int i = 0; i < suns[0]->satellites.size(); i++)
+			{
+				suns[0]->satelliteStats[suns[0]->satellites[i]->satType].health = satHealth;
+				suns[0]->satellites[i]->health = satHealth;
+			}
+		}
+		else
+		{
+			suns[0]->satelliteStats[type].health = satHealth;
 		}
 	}
 	if(strcmp(cmd.c_str(), "health") == 0)
@@ -988,9 +1021,9 @@ void Scene::OnEvent(Event &_event)
 				{
 					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-										  10.0f, 0.5f,
-										  SatelliteType(SATELLITE_FIRE), 
-										  5);
+										  ///10.0f, 0.5f,
+										  SatelliteType(SATELLITE_FIRE)//, 
+										  /*5*/);
 				}
 			}
 			if(strcmp(_event.GetArgument("buttons").varString, 
@@ -1000,9 +1033,9 @@ void Scene::OnEvent(Event &_event)
 				{
 					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-										  10.0f, 0.5f,
-										  SatelliteType(SATELLITE_WATER), 
-										  5);
+										  //10.0f, 0.5f,
+										  SatelliteType(SATELLITE_WATER)//, 
+										  /*5*/);
 				}
 			}
 			if(strcmp(_event.GetArgument("buttons").varString, 
@@ -1012,9 +1045,9 @@ void Scene::OnEvent(Event &_event)
 				{
 					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-										  10.0f, 0.5f,
-										  SatelliteType(SATELLITE_EARTH), 
-										  5);
+										  //10.0f, 0.5f,
+										  SatelliteType(SATELLITE_EARTH)//, 
+										  /*5*/);
 				}
 			}
 			if(strcmp(_event.GetArgument("buttons").varString,
@@ -1024,9 +1057,9 @@ void Scene::OnEvent(Event &_event)
 				{
 					suns[0]->AddSatellite("mesh-files/UnitSphere.xml",
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-										  10.0f, 0.5f, 
-										  SatelliteType(SATELLITE_AIR),
-										  5);
+										 // 10.0f, 0.5f, 
+										  SatelliteType(SATELLITE_AIR)//,
+										  /*5*/);
 				}
 			}
 

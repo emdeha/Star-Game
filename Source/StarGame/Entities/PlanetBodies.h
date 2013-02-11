@@ -51,13 +51,18 @@ enum SatelliteType
 	SATELLITE_WATER,
 	SATELLITE_AIR,
 	SATELLITE_EARTH,
+
+	SATELLITE_COUNT,
 };
 
-struct SatelliteSkill
+struct SatelliteStats
 {
-	SatelliteType satelliteTypeForSkill;
 	float satelliteOffsetFromSun;
-	// Add skill characteristics
+	float speed;
+	float diameter;
+	float resourceGainTime;
+	int resourceGain_perTime;
+	int health;	
 };
 
 struct ResourceData
@@ -77,7 +82,7 @@ struct SkillsStats
 	float duration_secs;	
 	float damageApplyTime_secs;
 	float range;
-	float scaleRate;	
+	float scaleRate;
 };
 
 
@@ -103,7 +108,8 @@ private:
 
 	std::vector<Event> generatedEvents;
 
-	SatelliteSkill skillType;
+	SatelliteStats satelliteStats[SATELLITE_COUNT];
+	SatelliteType satType;
 	ResourceData resource;
 
 	Framework::Timer revolutionDuration;
@@ -128,6 +134,9 @@ private:
 	int materialBlockSize;
 	GLuint materialUniformBuffer;
 
+private:
+	void InitSatelliteStats();
+
 public:
 	CelestialBody() {}
 	CelestialBody(const CelestialBody &other);
@@ -137,10 +146,9 @@ public:
 				  int newCurrentResource, int newSatelliteConstructionCost,
 				  bool _isSun = true);												// isSun = true means that a
 																				    // sun will be created
-	CelestialBody(Framework::Timer newRevolutionDuration, glm::vec4 newColor,
-				  float newOffsetFromParent, float newDiameter,
-				  SatelliteType newSkillType, int newHealth, ResourceData newResource,
-				  bool _isSun = false);											   // isSun = false means that a 
+	CelestialBody(float speed, float newOffsetFromParent, float newDiameter, int newHealth,
+				  float resourceGainTime, int resourceGain_perTime, SatelliteType newSatType, 
+				  glm::vec4 newColor, bool _isSun = false);						   // isSun = false means that a 
 																				   // satellite will be created
 
 	void InitSatelliteOrbit();
@@ -159,8 +167,8 @@ public:
 
 	bool AddSatellite(const std::string &fileName,
 					  glm::vec4 satelliteColor,
-					  float speed, float diameter,
-					  SatelliteType type, int satelliteHealth);
+					 // float speed, float diameter,
+					  SatelliteType type/*, /*int satelliteHealth*/);
 	void AddSkill(const std::shared_ptr<Skill> newSkill);
 
 	bool RemoveSatellite();

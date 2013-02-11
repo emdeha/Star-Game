@@ -376,9 +376,7 @@ void CelestialBody::OnEvent(Event &_event)
 			{
 				if(this->AddSatellite("mesh-files/UnitSphere.xml",
 									  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-									 // 10.0f, 0.5f, 
-									  SatelliteType(FindEmptySatelliteType())//,
-									  /*5*/))
+									  SatelliteType(FindEmptySatelliteType()))) // lisp.. 
 				{
 					// currentSatelliteType = FindEmptySatelliteType();
 				}
@@ -472,28 +470,7 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 		std::printf("Not enough resource.\n");
 		return false;
 	}
-
-	/*
-	float satelliteOffset = 0.0f;
-	switch(type)
-	{
-	case SATELLITE_FIRE:
-		satelliteOffset = 1.75f;
-		break;
-	case SATELLITE_WATER:
-		satelliteOffset = 2.75f;
-		break;
-	case SATELLITE_AIR:
-		satelliteOffset = 3.75f;
-		break;
-	case SATELLITE_EARTH:
-		satelliteOffset = 4.75f;
-		break;
-	default:
-		break;
-	}
-	*/
-
+	
 	currentResource -= satelliteConstructionCost; // Maybe an event should be sent.
 
 	ResourceData satResourceData;

@@ -47,6 +47,8 @@ Scene::Scene(float newSceneGamma,
 	spawnData.timeDecrement_secs = newTimeDecrement_secs;
 	spawnData.waveSpawnTimer = Framework::Timer(Framework::Timer::TT_SINGLE, spawnData.initialSpawnTime_secs);
 
+	isSpawning = true;
+
 	InitEnemyStats();
 }
 
@@ -460,248 +462,289 @@ void Scene::SpawnEnemies()
 void Scene::ProcessVariablesTweak(const std::string &command)
 {
 	// TODO: Make it safer.
-
-	std::vector<std::string> splittedCommand = Utility::SplitString(command, ' ');
+	if(!command.empty())
+	{
+		std::vector<std::string> splittedCommand = Utility::SplitString(command, ' ');
 	
-	std::string cmd = splittedCommand[0];
-	if(strcmp(cmd.c_str(), "currentEnemyCount") == 0)
-	{
-		int newEnemyCount = atoi(splittedCommand[1].c_str());
-		spawnData.currentEnemyCount = newEnemyCount;
-	}
-	if(strcmp(cmd.c_str(), "maxEnemyCount") == 0)
-	{
-		int maxEnemyCount = atoi(splittedCommand[1].c_str());
-		spawnData.maxEnemyCount = maxEnemyCount;
-	}
-	if(strcmp(cmd.c_str(), "initialSpawnTime") == 0)
-	{
-		float initialSpawnTime = atof(splittedCommand[1].c_str());
-		spawnData.initialSpawnTime_secs = initialSpawnTime;
-		spawnData.waveSpawnTimer = Framework::Timer(Framework::Timer::TT_SINGLE, spawnData.initialSpawnTime_secs);
-	}
-	if(strcmp(cmd.c_str(), "endSpawnTime") == 0)
-	{
-		float endSpawnTime = atof(splittedCommand[1].c_str());
-		spawnData.endSpawnTime_secs = endSpawnTime;
-		spawnData.waveSpawnTimer = Framework::Timer(Framework::Timer::TT_SINGLE, spawnData.initialSpawnTime_secs);
-	}
-	if(strcmp(cmd.c_str(), "timeDecrement") == 0)
-	{
-		float timeDecrement = atof(splittedCommand[1].c_str());
-		spawnData.timeDecrement_secs = timeDecrement;
-		spawnData.waveSpawnTimer = Framework::Timer(Framework::Timer::TT_SINGLE, spawnData.initialSpawnTime_secs);
-	}
-	if(strcmp(cmd.c_str(), "enemyDestructionRadius") == 0)
-	{
-		float enemyDestrRad = atof(splittedCommand[1].c_str());
-		enemyDestructionRadius = enemyDestrRad;
-	}
-	if(strcmp(cmd.c_str(), "resourceCount") == 0)
-	{
-		int resource = atoi(splittedCommand[1].c_str());
-		suns[0]->currentResource = resource;
-	}
-	if(strcmp(cmd.c_str(), "resourceGainTime") == 0)
-	{
-		// Takes effect after new satellites are created, except for the all_satellites.
-		// 5 for all sats;
-		SatelliteType type = SatelliteType(atoi(splittedCommand[1].c_str()));
-		float resourceGainTime = atof(splittedCommand[2].c_str());
-		if(type == SATELLITE_COUNT)
+		std::string cmd = splittedCommand[0];
+		if(strcmp(cmd.c_str(), "currentEnemyCount") == 0)
 		{
-			for(int i = 0; i < suns[0]->satellites.size(); i++)
+			// fibonacci!!!!
+			int newEnemyCount = atoi(splittedCommand[1].c_str());
+			spawnData.currentEnemyCount = newEnemyCount;
+		}
+		if(strcmp(cmd.c_str(), "maxEnemyCount") == 0)
+		{
+			int maxEnemyCount = atoi(splittedCommand[1].c_str());
+			spawnData.maxEnemyCount = maxEnemyCount;
+		}
+		if(strcmp(cmd.c_str(), "initialSpawnTime") == 0)
+		{
+			float initialSpawnTime = atof(splittedCommand[1].c_str());
+			spawnData.initialSpawnTime_secs = initialSpawnTime;
+			spawnData.waveSpawnTimer = Framework::Timer(Framework::Timer::TT_SINGLE, spawnData.initialSpawnTime_secs);
+		}
+		if(strcmp(cmd.c_str(), "endSpawnTime") == 0) 
+		{
+			float endSpawnTime = atof(splittedCommand[1].c_str());
+			spawnData.endSpawnTime_secs = endSpawnTime;
+			spawnData.waveSpawnTimer = Framework::Timer(Framework::Timer::TT_SINGLE, spawnData.initialSpawnTime_secs);
+		}
+		if(strcmp(cmd.c_str(), "timeDecrement") == 0) 
+		{
+			float timeDecrement = atof(splittedCommand[1].c_str());
+			spawnData.timeDecrement_secs = timeDecrement;
+			spawnData.waveSpawnTimer = Framework::Timer(Framework::Timer::TT_SINGLE, spawnData.initialSpawnTime_secs);
+		}
+		if(strcmp(cmd.c_str(), "enemyDestructionRadius") == 0) 
+		{
+			float enemyDestrRad = atof(splittedCommand[1].c_str());
+			enemyDestructionRadius = enemyDestrRad;
+		}
+		if(strcmp(cmd.c_str(), "resourceCount") == 0)
+		{
+			int resource = atoi(splittedCommand[1].c_str());
+			suns[0]->currentResource = resource;
+		}
+		if(strcmp(cmd.c_str(), "resourceGainTime") == 0) 
+		{
+			// Takes effect after new satellites are created, except for the all_satellites.
+			// 5 for all sats;
+			SatelliteType type = SatelliteType(atoi(splittedCommand[1].c_str()));
+			float resourceGainTime = atof(splittedCommand[2].c_str());
+			if(type == SATELLITE_COUNT)
 			{
-				suns[0]->satelliteStats[suns[0]->satellites[i]->satType].resourceGainTime = resourceGainTime;
-				suns[0]->satellites[i]->resource.resourceGainTime = resourceGainTime;
-				suns[0]->satellites[i]->resource.resourceTimer = Framework::Timer(Framework::Timer::TT_SINGLE, resourceGainTime);
+				for(int i = 0; i < suns[0]->satellites.size(); i++)
+				{
+					suns[0]->satelliteStats[suns[0]->satellites[i]->satType].resourceGainTime = resourceGainTime;
+					suns[0]->satellites[i]->resource.resourceGainTime = resourceGainTime;
+					suns[0]->satellites[i]->resource.resourceTimer = Framework::Timer(Framework::Timer::TT_SINGLE, resourceGainTime);
+				}
+			}
+			else
+			{
+				suns[0]->satelliteStats[type].resourceGainTime = resourceGainTime;
 			}
 		}
-		else
+		if(strcmp(cmd.c_str(), "resourceGainPerTime") == 0)
 		{
-			suns[0]->satelliteStats[type].resourceGainTime = resourceGainTime;
-		}
-	}
-	if(strcmp(cmd.c_str(), "resourceGainPerTime") == 0)
-	{
-		// Takes effect after new satellites are created, except for the all_satellites.
-		// 5 for all sats;
-		SatelliteType type = SatelliteType(atoi(splittedCommand[1].c_str()));
-		float resourceGainPerTime = atof(splittedCommand[2].c_str());
-		if(type == SATELLITE_COUNT)
-		{
-			for(int i = 0; i < suns[0]->satellites.size(); i++)
+			// Takes effect after new satellites are created, except for the all_satellites.
+			// 5 for all sats;
+			SatelliteType type = SatelliteType(atoi(splittedCommand[1].c_str()));
+			float resourceGainPerTime = atof(splittedCommand[2].c_str());
+			if(type == SATELLITE_COUNT)
 			{
-				suns[0]->satelliteStats[suns[0]->satellites[i]->satType].resourceGain_perTime = resourceGainPerTime;
-				suns[0]->satellites[i]->resource.resourceGain_perTime = resourceGainPerTime;
+				for(int i = 0; i < suns[0]->satellites.size(); i++)
+				{
+					suns[0]->satelliteStats[suns[0]->satellites[i]->satType].resourceGain_perTime = resourceGainPerTime;
+					suns[0]->satellites[i]->resource.resourceGain_perTime = resourceGainPerTime;
+				}
+			}
+			else
+			{
+				suns[0]->satelliteStats[type].resourceGain_perTime = resourceGainPerTime;
 			}
 		}
-		else
+		if(strcmp(cmd.c_str(), "satConstructionCost") == 0)
 		{
-			suns[0]->satelliteStats[type].resourceGain_perTime = resourceGainPerTime;
+			int satConstructionCost = atoi(splittedCommand[1].c_str());
+			suns[0]->satelliteConstructionCost = satConstructionCost;
 		}
-	}
-	if(strcmp(cmd.c_str(), "satConstructionCost") == 0)
-	{
-		int satConstructionCost = atoi(splittedCommand[1].c_str());
-		suns[0]->satelliteConstructionCost = satConstructionCost;
-	}
-	if(strcmp(cmd.c_str(), "satHealth") == 0)
-	{
-		// Takes effect after new satellites are created, except for the all_satellites.
-		// 5 for all sats;
-		SatelliteType type = SatelliteType(atoi(splittedCommand[1].c_str()));
-		int satHealth = atoi(splittedCommand[2].c_str());
-		if(type == SATELLITE_COUNT)
+		if(strcmp(cmd.c_str(), "satHealth") == 0)
 		{
-			for(int i = 0; i < suns[0]->satellites.size(); i++)
+			// Takes effect after new satellites are created, except for the all_satellites.
+			// 5 for all sats;
+			SatelliteType type = SatelliteType(atoi(splittedCommand[1].c_str()));
+			int satHealth = atoi(splittedCommand[2].c_str());
+			if(type == SATELLITE_COUNT)
 			{
-				suns[0]->satelliteStats[suns[0]->satellites[i]->satType].health = satHealth;
-				suns[0]->satellites[i]->health = satHealth;
+				for(int i = 0; i < suns[0]->satellites.size(); i++)
+				{
+					suns[0]->satelliteStats[suns[0]->satellites[i]->satType].health = satHealth;
+					suns[0]->satellites[i]->health = satHealth;
+				}
+			}
+			else
+			{
+				suns[0]->satelliteStats[type].health = satHealth;
 			}
 		}
-		else
+		if(strcmp(cmd.c_str(), "health") == 0)
 		{
-			suns[0]->satelliteStats[type].health = satHealth;
+			int health = atoi(splittedCommand[1].c_str());
+			suns[0]->health = health;
+		}	
+		if(strcmp(cmd.c_str(), "enemyDamage") == 0)
+		{
+			EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
+			int enemyDamage = atoi(splittedCommand[2].c_str());
+			enemyStats[enemyType].damage = enemyDamage;
 		}
-	}
-	if(strcmp(cmd.c_str(), "health") == 0)
-	{
-		int health = atoi(splittedCommand[1].c_str());
-		suns[0]->health = health;
-	}	
-	if(strcmp(cmd.c_str(), "enemyDamage") == 0)
-	{
-		EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
-		int enemyDamage = atoi(splittedCommand[2].c_str());
-		enemyStats[enemyType].damage = enemyDamage;
-	}
-	if(strcmp(cmd.c_str(), "enemyChargeSpeed") == 0)
-	{
-		float enemyChargeSpeed = atof(splittedCommand[1].c_str());
-		enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].fastSuicideBomberChargeSpeed = enemyChargeSpeed;
-	}	
-	if(strcmp(cmd.c_str(), "enemySpawnInnerRad") == 0)
-	{
-		EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
-		float enemySpawnInnerRad = atof(splittedCommand[2].c_str());
-		enemyStats[enemyType].spawnRangeInnerRad = enemySpawnInnerRad;
-	}
-	if(strcmp(cmd.c_str(), "enemySpawnOuterRad") == 0)
-	{
-		EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
-		float enemySpawnOuterRad = atof(splittedCommand[2].c_str());
-		enemyStats[enemyType].spawnRangeOuterRad = enemySpawnOuterRad;
-	}
-	if(strcmp(cmd.c_str(), "enemySpeed") == 0)
-	{
-		EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
-		float enemySpeed = atof(splittedCommand[2].c_str());
-		enemyStats[enemyType].speed = enemySpeed;
-	}
-	if(strcmp(cmd.c_str(), "enemyLOS") == 0)
-	{
-		EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
-		float enemyLOS = atof(splittedCommand[2].c_str());
-		enemyStats[enemyType].lineOfSight = enemyLOS;
-	}
-	if(strcmp(cmd.c_str(), "enemyHealth") == 0)
-	{
-		EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
-		int enemyHealth = atoi(splittedCommand[2].c_str());
-		enemyStats[enemyType].health = enemyHealth;
-	}
-	if(strcmp(cmd.c_str(), "enemyResource") == 0)
-	{
-		EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
-		int enemyResource = atoi(splittedCommand[2].c_str());
-		enemyStats[enemyType].resourceGivenOnKill = enemyResource;
-	}
-	if(strcmp(cmd.c_str(), "swarmersCount") == 0)
-	{
-		int swarmersCount = atoi(splittedCommand[1].c_str());
-		enemyStats[ENEMY_TYPE_SWARM].swarmersCount = swarmersCount;
-	}
-	if(strcmp(cmd.c_str(), "swarmersAttackTime") == 0)
-	{
-		float swarmersAttackTime = atof(splittedCommand[1].c_str());
-		enemyStats[ENEMY_TYPE_SWARM].swarmersAttackTime_secs = swarmersAttackTime;
-	}
-	if(strcmp(cmd.c_str(), "enemyProjectileSpeed") == 0)
-	{
-		float projectileSpeed = atof(splittedCommand[1].c_str());
-		enemyStats[ENEMY_TYPE_SPACESHIP].projectileSpeed = projectileSpeed;
-	}
-	if(strcmp(cmd.c_str(), "deployUnitsCount") == 0)
-	{
-		int deployUnitsCount = atoi(splittedCommand[1].c_str());
-		enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsCount = deployUnitsCount;
-	}
-	if(strcmp(cmd.c_str(), "deployUnitsLife") == 0)
-	{
-		int deployUnitsLife = atoi(splittedCommand[1].c_str());
-		enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLife = deployUnitsLife;
-	}
-	if(strcmp(cmd.c_str(), "deployUnitsResourceGivenOnKill") == 0)
-	{
-		int deployUnitsResourceGivenOnKill = atoi(splittedCommand[1].c_str());
-		enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsResourceGivenOnKill = deployUnitsResourceGivenOnKill;
-	}
-	if(strcmp(cmd.c_str(), "deployUnitsSpeed") == 0)
-	{
-		float deployUnitsSpeed = atof(splittedCommand[1].c_str());
-		enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsSpeed = deployUnitsSpeed;
-	}
-	if(strcmp(cmd.c_str(), "deployUnitsLineOfSight") == 0)
-	{
-		float deployUnitsLineOfSight = atof(splittedCommand[1].c_str());
-		enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLineOfSight = deployUnitsLineOfSight;
-	}
-	if(strcmp(cmd.c_str(), "skillDamage") == 0)
-	{
-		SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
-		int damage = atoi(splittedCommand[2].c_str());
-		suns[0]->satSkillStats[skillType].damage = damage;
-	}
-	if(strcmp(cmd.c_str(), "skillRange") == 0)
-	{
-		SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
-		float range = atof(splittedCommand[2].c_str());
-		suns[0]->satSkillStats[skillType].range = range;
-	}
-	if(strcmp(cmd.c_str(), "skillApplyCost") == 0)
-	{
-		SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
-		int skillApplyCost = atoi(splittedCommand[2].c_str());
-		suns[0]->satSkillStats[skillType].skillApplyCost = skillApplyCost;
-	}
-	if(strcmp(cmd.c_str(), "skillScaleRate") == 0)
-	{
-		SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
-		float skillScaleRate = atof(splittedCommand[2].c_str());
-		suns[0]->satSkillStats[skillType].scaleRate = skillScaleRate;
-	}
-	if(strcmp(cmd.c_str(), "skillDamageApplyTime") == 0)
-	{
-		SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
-		float damageApplyTime = atof(splittedCommand[2].c_str());
-		suns[0]->satSkillStats[skillType].damageApplyTime_secs = damageApplyTime;
-	}
-	if(strcmp(cmd.c_str(), "skillDuration") == 0)
-	{
-		SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
-		float duration = atof(splittedCommand[2].c_str());
-		suns[0]->satSkillStats[skillType].duration_secs = duration;
-	}
-	if(strcmp(cmd.c_str(), "skillDefensePoints") == 0)
-	{
-		int defensePoints = atoi(splittedCommand[1].c_str());
-		suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].defensePoints = defensePoints;
-	}
-	if(strcmp(cmd.c_str(), "skillStunTime") == 0)
-	{
-		float stunTime = atof(splittedCommand[1].c_str());
-		suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].stunTime_secs = stunTime;
+		if(strcmp(cmd.c_str(), "enemyChargeSpeed") == 0) 
+		{
+			float enemyChargeSpeed = atof(splittedCommand[1].c_str());
+			enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].fastSuicideBomberChargeSpeed = enemyChargeSpeed;
+		}	
+		if(strcmp(cmd.c_str(), "enemySpawnInnerRad") == 0)
+		{
+			EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
+			float enemySpawnInnerRad = atof(splittedCommand[2].c_str());
+			enemyStats[enemyType].spawnRangeInnerRad = enemySpawnInnerRad;
+		}
+		if(strcmp(cmd.c_str(), "enemySpawnOuterRad") == 0)
+		{
+			EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
+			float enemySpawnOuterRad = atof(splittedCommand[2].c_str());
+			enemyStats[enemyType].spawnRangeOuterRad = enemySpawnOuterRad;
+		}
+		if(strcmp(cmd.c_str(), "enemySpeed") == 0) 
+		{
+			EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
+			float enemySpeed = atof(splittedCommand[2].c_str());
+			enemyStats[enemyType].speed = enemySpeed;
+		}
+		if(strcmp(cmd.c_str(), "enemyLOS") == 0)
+		{
+			EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
+			float enemyLOS = atof(splittedCommand[2].c_str());
+			enemyStats[enemyType].lineOfSight = enemyLOS;
+		}
+		if(strcmp(cmd.c_str(), "enemyHealth") == 0)
+		{
+			EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
+			int enemyHealth = atoi(splittedCommand[2].c_str());
+			enemyStats[enemyType].health = enemyHealth;
+		}
+		if(strcmp(cmd.c_str(), "enemyResource") == 0)
+		{
+			EnemyType enemyType = EnemyType(atoi(splittedCommand[1].c_str()));
+			int enemyResource = atoi(splittedCommand[2].c_str());
+			if(enemyType == ENEMY_TYPE_COUNT)
+			{
+				for(int type = 0; type < ENEMY_TYPE_COUNT; type++)
+				{
+					enemyStats[type].resourceGivenOnKill = enemyResource;
+				}
+			}
+			else
+			{
+				enemyStats[enemyType].resourceGivenOnKill = enemyResource;
+			}
+		}
+		if(strcmp(cmd.c_str(), "swarmersCount") == 0)
+		{
+			int swarmersCount = atoi(splittedCommand[1].c_str());
+			enemyStats[ENEMY_TYPE_SWARM].swarmersCount = swarmersCount;
+		}
+		if(strcmp(cmd.c_str(), "swarmersAttackTime") == 0)
+		{
+			float swarmersAttackTime = atof(splittedCommand[1].c_str());
+			enemyStats[ENEMY_TYPE_SWARM].swarmersAttackTime_secs = swarmersAttackTime;
+		}
+		if(strcmp(cmd.c_str(), "enemyProjectileSpeed") == 0)
+		{
+			float projectileSpeed = atof(splittedCommand[1].c_str());
+			enemyStats[ENEMY_TYPE_SPACESHIP].projectileSpeed = projectileSpeed;
+		}
+		if(strcmp(cmd.c_str(), "deployUnitsCount") == 0) 
+		{
+			int deployUnitsCount = atoi(splittedCommand[1].c_str());
+			enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsCount = deployUnitsCount;
+		}
+		if(strcmp(cmd.c_str(), "deployUnitsLife") == 0)
+		{
+			int deployUnitsLife = atoi(splittedCommand[1].c_str());
+			enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLife = deployUnitsLife;
+		}
+		if(strcmp(cmd.c_str(), "deployUnitsResourceGivenOnKill") == 0)
+		{
+			int deployUnitsResourceGivenOnKill = atoi(splittedCommand[1].c_str());
+			enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsResourceGivenOnKill = deployUnitsResourceGivenOnKill;
+		}
+		if(strcmp(cmd.c_str(), "deployUnitsSpeed") == 0)
+		{
+			float deployUnitsSpeed = atof(splittedCommand[1].c_str());
+			enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsSpeed = deployUnitsSpeed;
+		}
+		if(strcmp(cmd.c_str(), "deployUnitsLOS") == 0)
+		{
+			float deployUnitsLineOfSight = atof(splittedCommand[1].c_str());
+			enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLineOfSight = deployUnitsLineOfSight;
+		}
+		if(strcmp(cmd.c_str(), "skillDamage") == 0)
+		{
+			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+			int damage = atoi(splittedCommand[2].c_str());
+			suns[0]->satSkillStats[skillType].damage = damage;
+		}
+		if(strcmp(cmd.c_str(), "skillRange") == 0)
+		{
+			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+			float range = atof(splittedCommand[2].c_str());
+			suns[0]->satSkillStats[skillType].range = range;
+		}
+		if(strcmp(cmd.c_str(), "skillApplyCost") == 0)
+		{
+			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+			int skillApplyCost = atoi(splittedCommand[2].c_str());
+			suns[0]->satSkillStats[skillType].skillApplyCost = skillApplyCost;
+		}
+		if(strcmp(cmd.c_str(), "skillScaleRate") == 0)
+		{
+			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+			float skillScaleRate = atof(splittedCommand[2].c_str());
+			suns[0]->satSkillStats[skillType].scaleRate = skillScaleRate;
+		}
+		if(strcmp(cmd.c_str(), "skillDamageApplyTime") == 0)
+		{
+			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+			float damageApplyTime = atof(splittedCommand[2].c_str());
+			suns[0]->satSkillStats[skillType].damageApplyTime_secs = damageApplyTime;
+		}
+		if(strcmp(cmd.c_str(), "skillDuration") == 0)
+		{
+			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+			float duration = atof(splittedCommand[2].c_str());
+			suns[0]->satSkillStats[skillType].duration_secs = duration;
+		}
+		if(strcmp(cmd.c_str(), "skillDefensePoints") == 0)
+		{
+			int defensePoints = atoi(splittedCommand[1].c_str());
+			suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].defensePoints = defensePoints;
+		}
+		if(strcmp(cmd.c_str(), "skillStunTime") == 0)
+		{
+			float stunTime = atof(splittedCommand[1].c_str());
+			suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].stunTime_secs = stunTime;
+		}
+		if(strcmp(cmd.c_str(), "spawnMothership") == 0)
+		{
+			SpawnMothership();
+		}
+		if(strcmp(cmd.c_str(), "spawnSwarm") == 0)
+		{
+			SpawnSwarm();
+		}
+		if(strcmp(cmd.c_str(), "spawnSpaceship") == 0)
+		{
+			SpawnSpaceship();
+		}
+		if(strcmp(cmd.c_str(), "spawnAsteroid") == 0)
+		{
+			SpawnAsteroid();
+		}
+		if(strcmp(cmd.c_str(), "spawnFastSuicideBomber") == 0)
+		{
+			SpawnFastSuicideBomber();
+		}
+		if(strcmp(cmd.c_str(), "controlledMode") == 0)
+		{
+			isSpawning = false;
+		}
+		if(strcmp(cmd.c_str(), "gameMode") == 0)
+		{
+			isSpawning = true;
+		}
 	}
 }
 
@@ -712,7 +755,10 @@ ShaderManager &Scene::GetShaderManager()
 
 void Scene::UpdateScene()
 {
-	SpawnEnemies();
+	if(isSpawning)
+	{
+		SpawnEnemies();
+	}
 
 	// Should be in the OnEvent function.
 	if(!suns.empty())
@@ -1021,9 +1067,7 @@ void Scene::OnEvent(Event &_event)
 				{
 					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-										  ///10.0f, 0.5f,
-										  SatelliteType(SATELLITE_FIRE)//, 
-										  /*5*/);
+										  SatelliteType(SATELLITE_FIRE));
 				}
 			}
 			if(strcmp(_event.GetArgument("buttons").varString, 
@@ -1033,9 +1077,7 @@ void Scene::OnEvent(Event &_event)
 				{
 					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-										  //10.0f, 0.5f,
-										  SatelliteType(SATELLITE_WATER)//, 
-										  /*5*/);
+										  SatelliteType(SATELLITE_WATER));
 				}
 			}
 			if(strcmp(_event.GetArgument("buttons").varString, 
@@ -1045,9 +1087,7 @@ void Scene::OnEvent(Event &_event)
 				{
 					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-										  //10.0f, 0.5f,
-										  SatelliteType(SATELLITE_EARTH)//, 
-										  /*5*/);
+										  SatelliteType(SATELLITE_EARTH));
 				}
 			}
 			if(strcmp(_event.GetArgument("buttons").varString,
@@ -1057,9 +1097,7 @@ void Scene::OnEvent(Event &_event)
 				{
 					suns[0]->AddSatellite("mesh-files/UnitSphere.xml",
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-										 // 10.0f, 0.5f, 
-										  SatelliteType(SATELLITE_AIR)//,
-										  /*5*/);
+										  SatelliteType(SATELLITE_AIR));
 				}
 			}
 

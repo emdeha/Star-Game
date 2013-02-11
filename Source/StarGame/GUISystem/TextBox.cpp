@@ -87,6 +87,13 @@ void TextBox::InputChar(char ch)
 	{
 		text += ch;
 	}
+	/*
+	// 13 represents the ASCII code of ENTER
+	if((int)ch == 133)
+	{
+
+	}
+	*/
 
 	if((int)text.length() > maxNumberChars)
 	{

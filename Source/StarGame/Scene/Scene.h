@@ -129,6 +129,8 @@ private:
 	float sceneGamma;
 	float enemyDestructionRadius;
 
+	bool isSpawning;
+
 private:
 	void SpawnSwarm();
 	void SpawnSpaceship();

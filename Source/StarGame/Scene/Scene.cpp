@@ -156,27 +156,6 @@ void Scene::InitEnemyStats()
 }
 void Scene::InitSkillStats()
 {
-	/*
-	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].damage = 20;
-	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].damageApplyTime_secs = 1.0f;
-	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].duration_secs = 2.0f;
-	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].range = 1.0f;
-	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].skillApplyCost = 10;
-
-	suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].damage = 20;
-	suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].range = 2.0f;
-	suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].scaleRate = 0.08f;
-	
-	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].damage = 5;
-	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].stunTime_secs = 3.0f;
-	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].range = 2.0f;
-	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].scaleRate = 0.1f;
-	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].skillApplyCost = 20;
-
-	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].defensePoints = 3;
-	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].range = 0.5f;
-	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].skillApplyCost = 10;
-	*/
 	skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].damage = 20;
 	skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].damageApplyTime_secs = 1.0f;
 	skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].duration_secs = 2.0f;
@@ -316,7 +295,6 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 			}
 
 			ProcessVariablesTweak(command);
-			//std::printf("%s\n", command.c_str());
 		}
 
 		// WARN: BADDDD!!!
@@ -1302,6 +1280,14 @@ void Scene::OnEvent(Event &_event)
 					skillDeployedEventArg[1].argument.varInteger = skills[i]->GetApplyCost();
 					Event skillDeployedEvent = Event(2, EVENT_TYPE_OTHER, skillDeployedEventArg);
 					suns[0]->OnEvent(skillDeployedEvent);
+					
+					// simple fix for hard problems... FOR HOW LONG?!
+					Event sunResourceEvent = suns[0]->GetGeneratedEvent("insufRes");
+					if(sunResourceEvent.GetType() != EVENT_TYPE_EMPTY)
+					{
+						skills[i]->isStarted = false;
+						suns[0]->RemoveGeneratedEvent("insufRes");
+					}
 				}
 			}
 		}

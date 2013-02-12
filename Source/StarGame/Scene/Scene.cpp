@@ -20,6 +20,8 @@
 
 #include <algorithm>
 #include <ctime>
+#include <sstream>
+
 
 #define DEPLOY_UNITS_COUNT 4
 static int countedUnits = 0;
@@ -154,6 +156,7 @@ void Scene::InitEnemyStats()
 }
 void Scene::InitSkillStats()
 {
+	/*
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].damage = 20;
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].damageApplyTime_secs = 1.0f;
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].duration_secs = 2.0f;
@@ -173,6 +176,47 @@ void Scene::InitSkillStats()
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].defensePoints = 3;
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].range = 0.5f;
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].skillApplyCost = 10;
+	*/
+	skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].damage = 20;
+	skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].damageApplyTime_secs = 1.0f;
+	skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].duration_secs = 2.0f;
+	skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].range = 1.0f;
+	skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].skillApplyCost = 10;
+
+	skillsStats[SKILL_TYPE_SAT_CHAIN].damage = 20;
+	skillsStats[SKILL_TYPE_SAT_CHAIN].range = 2.0f;
+	skillsStats[SKILL_TYPE_SAT_CHAIN].scaleRate = 0.08f;
+	
+	skillsStats[SKILL_TYPE_SAT_FROSTNOVA].damage = 5;
+	skillsStats[SKILL_TYPE_SAT_FROSTNOVA].stunTime_secs = 3.0f;
+	skillsStats[SKILL_TYPE_SAT_FROSTNOVA].range = 2.0f;
+	skillsStats[SKILL_TYPE_SAT_FROSTNOVA].scaleRate = 0.1f;
+	skillsStats[SKILL_TYPE_SAT_FROSTNOVA].skillApplyCost = 20;
+
+	skillsStats[SKILL_TYPE_SAT_SHIELD].defensePoints = 3;
+	skillsStats[SKILL_TYPE_SAT_SHIELD].range = 0.5f;
+	skillsStats[SKILL_TYPE_SAT_SHIELD].skillApplyCost = 10;
+
+	// WARN: DRY violation!!!
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].damage = skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].damage;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].damageApplyTime_secs = skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].damageApplyTime_secs;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].duration_secs = skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].duration_secs;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].range = skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].range;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].skillApplyCost = skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].skillApplyCost;
+
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].damage = skillsStats[SKILL_TYPE_SAT_CHAIN].damage;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].range = skillsStats[SKILL_TYPE_SAT_CHAIN].range;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].scaleRate = skillsStats[SKILL_TYPE_SAT_CHAIN].scaleRate;
+	
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].damage = skillsStats[SKILL_TYPE_SAT_FROSTNOVA].damage;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].stunTime_secs = skillsStats[SKILL_TYPE_SAT_FROSTNOVA].stunTime_secs;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].range = skillsStats[SKILL_TYPE_SAT_FROSTNOVA].range;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].scaleRate = skillsStats[SKILL_TYPE_SAT_FROSTNOVA].scaleRate;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].skillApplyCost = skillsStats[SKILL_TYPE_SAT_FROSTNOVA].skillApplyCost;
+
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].defensePoints = skillsStats[SKILL_TYPE_SAT_SHIELD].defensePoints;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].range = skillsStats[SKILL_TYPE_SAT_SHIELD].range;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].skillApplyCost = skillsStats[SKILL_TYPE_SAT_SHIELD].skillApplyCost;
 
 	skillsStats[SKILL_TYPE_AOE].damage = 20;
 	skillsStats[SKILL_TYPE_AOE].range = 2.0f;
@@ -247,8 +291,73 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 		for(std::vector<std::pair<std::string, TweakVarData>>::iterator iter = loadedData.begin();
 			iter != loadedData.end(); ++iter)
 		{
-			std::printf("%i\n", iter->second.itemIndex);
+			std::string command = "";
+			command.append(iter->first);
+			command.append(" ");
+			if(iter->second.itemIndex != -1)
+			{
+				char indexToChar[2];
+				itoa(iter->second.itemIndex, indexToChar, 10);
+				command.append(indexToChar);
+				command.append(" ");
+			}
+			switch(iter->second.currentType)
+			{
+			case TweakVarData::TYPE_TWEAK_INT:
+				char intToChar[8];
+				itoa(iter->second.varInt, intToChar, 10);
+				command.append(intToChar);
+				break;
+			case TweakVarData::TYPE_TWEAK_FLOAT:
+				std::ostringstream ss;
+				ss<<iter->second.varFloat;
+				command.append(ss.str());
+				break;
+			}
+
+			ProcessVariablesTweak(command);
+			//std::printf("%s\n", command.c_str());
 		}
+
+		// WARN: BADDDD!!!
+		std::shared_ptr<AOESkill> aoeSkill =
+			std::shared_ptr<AOESkill>(new AOESkill(glm::vec3(),
+												   skillsStats[SKILL_TYPE_AOE].damage, 
+												   skillsStats[SKILL_TYPE_AOE].range, 
+												   "aoeSkill",
+												   'q', 'q', 'w',
+												   skillsStats[SKILL_TYPE_AOE].skillApplyCost));
+		std::shared_ptr<PassiveAOESkill> passiveAOESkill =
+			std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(glm::vec3(),
+																 skillsStats[SKILL_TYPE_PASSIVE_AOE].damage, 
+																 skillsStats[SKILL_TYPE_PASSIVE_AOE].damageApplyTime_secs, 
+																 skillsStats[SKILL_TYPE_PASSIVE_AOE].duration_secs,
+																 skillsStats[SKILL_TYPE_PASSIVE_AOE].range,
+																 "passiveAOESkill",
+																 'q', 'q', 'e', 
+																 skillsStats[SKILL_TYPE_PASSIVE_AOE].skillApplyCost));
+		std::shared_ptr<SunNovaSkill> sunNovaSkill =
+			std::shared_ptr<SunNovaSkill>(new SunNovaSkill(glm::vec3(), 
+														   skillsStats[SKILL_TYPE_SUN_NOVA].damage, 
+														   skillsStats[SKILL_TYPE_SUN_NOVA].range, 
+														   skillsStats[SKILL_TYPE_SUN_NOVA].scaleRate, 
+														   "sunNovaSkill", 
+														   'w', 'w', 'e', 
+														   skillsStats[SKILL_TYPE_SUN_NOVA].skillApplyCost));
+		std::shared_ptr<BurnSkill> burnSkill =
+			std::shared_ptr<BurnSkill>(new BurnSkill(glm::vec3(), 
+													 skillsStats[SKILL_TYPE_BURN].damage, 
+													 skillsStats[SKILL_TYPE_BURN].damageApplyTime_secs, 
+													 skillsStats[SKILL_TYPE_BURN].duration_secs,
+													 skillsStats[SKILL_TYPE_BURN].range, 
+													 "burnSkill",
+													 'w', 'e', 'q',
+													 skillsStats[SKILL_TYPE_BURN].skillApplyCost));
+
+		suns[0]->AddSkill(aoeSkill);
+		suns[0]->AddSkill(passiveAOESkill);
+		suns[0]->AddSkill(sunNovaSkill);
+		suns[0]->AddSkill(burnSkill);
 	}
 	else
 	{
@@ -528,17 +637,17 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 		}
 		if(strcmp(cmd.c_str(), "resourceGainTime") == 0) 
 		{
-			// Takes effect after new satellites are created, except for the all_satellites.
-			// 5 for all sats;
+			// Takes effect after new satellites are created
+			// 4 for all sats;
 			SatelliteType type = SatelliteType(atoi(splittedCommand[1].c_str()));
 			float resourceGainTime = atof(splittedCommand[2].c_str());
 			if(type == SATELLITE_COUNT)
 			{
-				for(int i = 0; i < suns[0]->satellites.size(); i++)
+				for(int i = 0; i < SATELLITE_COUNT/*suns[0]->satellites.size()*/; i++)
 				{
-					suns[0]->satelliteStats[suns[0]->satellites[i]->satType].resourceGainTime = resourceGainTime;
-					suns[0]->satellites[i]->resource.resourceGainTime = resourceGainTime;
-					suns[0]->satellites[i]->resource.resourceTimer = Framework::Timer(Framework::Timer::TT_SINGLE, resourceGainTime);
+					suns[0]->satelliteStats[i].resourceGainTime = resourceGainTime;
+					//suns[0]->satellites[i]->resource.resourceGainTime = resourceGainTime;
+					//suns[0]->satellites[i]->resource.resourceTimer = Framework::Timer(Framework::Timer::TT_SINGLE, resourceGainTime);
 				}
 			}
 			else
@@ -549,15 +658,15 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 		if(strcmp(cmd.c_str(), "resourceGainPerTime") == 0)
 		{
 			// Takes effect after new satellites are created, except for the all_satellites.
-			// 5 for all sats;
+			// 4 for all sats;
 			SatelliteType type = SatelliteType(atoi(splittedCommand[1].c_str()));
 			float resourceGainPerTime = atof(splittedCommand[2].c_str());
 			if(type == SATELLITE_COUNT)
 			{
-				for(int i = 0; i < suns[0]->satellites.size(); i++)
+				for(int i = 0; i < SATELLITE_COUNT/*suns[0]->satellites.size()*/; i++)
 				{
-					suns[0]->satelliteStats[suns[0]->satellites[i]->satType].resourceGain_perTime = resourceGainPerTime;
-					suns[0]->satellites[i]->resource.resourceGain_perTime = resourceGainPerTime;
+					suns[0]->satelliteStats[i].resourceGain_perTime = resourceGainPerTime;
+					//suns[0]->satellites[i]->resource.resourceGain_perTime = resourceGainPerTime;
 				}
 			}
 			else
@@ -573,15 +682,15 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 		if(strcmp(cmd.c_str(), "satHealth") == 0)
 		{
 			// Takes effect after new satellites are created, except for the all_satellites.
-			// 5 for all sats;
+			// 4 for all sats;
 			SatelliteType type = SatelliteType(atoi(splittedCommand[1].c_str()));
 			int satHealth = atoi(splittedCommand[2].c_str());
 			if(type == SATELLITE_COUNT)
 			{
-				for(int i = 0; i < suns[0]->satellites.size(); i++)
+				for(int i = 0; i < SATELLITE_COUNT/*suns[0]->satellites.size()*/; i++)
 				{
-					suns[0]->satelliteStats[suns[0]->satellites[i]->satType].health = satHealth;
-					suns[0]->satellites[i]->health = satHealth;
+					suns[0]->satelliteStats[i].health = satHealth;
+					//suns[0]->satellites[i]->health = satHealth;
 				}
 			}
 			else
@@ -695,47 +804,90 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 		{
 			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
 			int damage = atoi(splittedCommand[2].c_str());
-			suns[0]->satSkillStats[skillType].damage = damage;
+			skillsStats[skillType].damage = damage;/*
+			if(skillType > SKILL_TYPE_MIDDLE) // WARN: Not sure if this is the right way!!!
+			{
+				suns[0]->satSkillStats[skillType].damage = damage;
+			}
+			//suns[0]->satSkillStats[skillType].damage = damage;*/
 		}
 		if(strcmp(cmd.c_str(), "skillRange") == 0)
 		{
 			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
 			float range = atof(splittedCommand[2].c_str());
-			suns[0]->satSkillStats[skillType].range = range;
+			skillsStats[skillType].range = range;/*
+			if(skillType > SKILL_TYPE_MIDDLE) // WARN: Not sure if this is the right way!!!
+			{
+				suns[0]->satSkillStats[skillType].range = range;
+			}
+			//suns[0]->satSkillStats[skillType].range = range;*/
 		}
 		if(strcmp(cmd.c_str(), "skillApplyCost") == 0)
 		{
 			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
 			int skillApplyCost = atoi(splittedCommand[2].c_str());
-			suns[0]->satSkillStats[skillType].skillApplyCost = skillApplyCost;
+			skillsStats[skillType].skillApplyCost = skillApplyCost;/*
+			if(skillType > SKILL_TYPE_MIDDLE) // WARN: Not sure if this is the right way!!!
+			{
+				suns[0]->satSkillStats[skillType].skillApplyCost = skillApplyCost;
+			}
+			//suns[0]->satSkillStats[skillType].skillApplyCost = skillApplyCost;*/
 		}
 		if(strcmp(cmd.c_str(), "skillScaleRate") == 0)
 		{
 			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
 			float skillScaleRate = atof(splittedCommand[2].c_str());
-			suns[0]->satSkillStats[skillType].scaleRate = skillScaleRate;
+			skillsStats[skillType].scaleRate = skillScaleRate;/*
+			if(skillType > SKILL_TYPE_MIDDLE) // WARN: Not sure if this is the right way!!!
+			{
+				suns[0]->satSkillStats[skillType].scaleRate = skillScaleRate;
+			}
+			//suns[0]->satSkillStats[skillType].scaleRate = skillScaleRate;*/
 		}
 		if(strcmp(cmd.c_str(), "skillDamageApplyTime") == 0)
 		{
 			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
 			float damageApplyTime = atof(splittedCommand[2].c_str());
-			suns[0]->satSkillStats[skillType].damageApplyTime_secs = damageApplyTime;
+			skillsStats[skillType].damageApplyTime_secs = damageApplyTime;/*
+			if(skillType > SKILL_TYPE_MIDDLE) // WARN: Not sure if this is the right way!!!
+			{
+				suns[0]->satSkillStats[skillType].damageApplyTime_secs = damageApplyTime;
+			}
+			//suns[0]->satSkillStats[skillType].damageApplyTime_secs = damageApplyTime;*/
 		}
 		if(strcmp(cmd.c_str(), "skillDuration") == 0)
 		{
 			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
 			float duration = atof(splittedCommand[2].c_str());
-			suns[0]->satSkillStats[skillType].duration_secs = duration;
+			skillsStats[skillType].duration_secs = duration;/*
+			if(skillType > SKILL_TYPE_MIDDLE) // WARN: Not sure if this is the right way!!!
+			{
+				suns[0]->satSkillStats[skillType].duration_secs = duration;
+			}
+			//suns[0]->satSkillStats[skillType].duration_secs = duration;*/
 		}
 		if(strcmp(cmd.c_str(), "skillDefensePoints") == 0)
 		{
-			int defensePoints = atoi(splittedCommand[1].c_str());
-			suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].defensePoints = defensePoints;
+			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+			int defensePoints = atoi(splittedCommand[2].c_str());
+			skillsStats[skillType].defensePoints = defensePoints;
+			/*
+			if(skillType > SKILL_TYPE_MIDDLE) // WARN: Not sure if this is the right way!!!
+			{
+				suns[0]->satSkillStats[skillType].defensePoints = defensePoints;
+			}
+			//suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].defensePoints = defensePoints;*/
 		}
 		if(strcmp(cmd.c_str(), "skillStunTime") == 0)
 		{
-			float stunTime = atof(splittedCommand[1].c_str());
-			suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].stunTime_secs = stunTime;
+			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+			float stunTime = atof(splittedCommand[2].c_str());
+			skillsStats[skillType].stunTime_secs = stunTime;/*
+			if(skillType > SKILL_TYPE_MIDDLE) // WARN: Not sure if this is the right way!!!
+			{
+				suns[0]->satSkillStats[skillType].stunTime_secs = stunTime;
+			}
+			//suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].stunTime_secs = stunTime;*/
 		}
 		if(strcmp(cmd.c_str(), "spawnMothership") == 0)
 		{
@@ -765,6 +917,20 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 		{
 			isSpawning = true;
 		}
+		if(strcmp(cmd.c_str(), "default") == 0)
+		{
+			InitTweakableVariables(true, "../data/loader-files/tweak-config.txt");
+		}
+		if(strcmp(cmd.c_str(), "save") == 0)
+		{
+			// Implement in the future
+		}
+	}
+
+	// WARN: BAD!!!
+	for(int i = 0; i < SKILL_TYPE_COUNT; i++)
+	{
+		suns[0]->satSkillStats[i] = skillsStats[i];
 	}
 }
 

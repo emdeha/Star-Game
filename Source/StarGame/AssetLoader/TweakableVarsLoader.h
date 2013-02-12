@@ -25,7 +25,14 @@
 
 struct TweakVarData
 {
+	enum VarType
+	{
+		TYPE_TWEAK_FLOAT,
+		TYPE_TWEAK_INT,
+	};
+
 	int itemIndex; // for indexed commands. -1 for non existence
+	VarType currentType;
 
 	union 
 	{
@@ -46,7 +53,7 @@ public:
 
 	TweakableVarsLoader(const std::string &fileName);
 
-	const std::vector<std::pair<std::string, TweakVarData>> &GetAllLoadedVars();
+	const std::vector<std::pair<std::string, TweakVarData>> GetAllLoadedVars();
 };
 
 

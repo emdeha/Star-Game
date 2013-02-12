@@ -112,13 +112,28 @@ void Scene::InitEnemyStats()
 	enemyStats[ENEMY_TYPE_SWARM].swarmersAttackTime_secs = 1;
 	enemyStats[ENEMY_TYPE_SWARM].swarmersCount = 100;
 
-	enemyStats[ENEMY_TYPE_ASTEROID].damage = 20;
-	enemyStats[ENEMY_TYPE_ASTEROID].health = 50;
-	enemyStats[ENEMY_TYPE_ASTEROID].lineOfSight = 0.0f;
-	enemyStats[ENEMY_TYPE_ASTEROID].resourceGivenOnKill = 10;
-	enemyStats[ENEMY_TYPE_ASTEROID].speed = 0.03f;
-	enemyStats[ENEMY_TYPE_ASTEROID].spawnRangeInnerRad = 8.0f;
-	enemyStats[ENEMY_TYPE_ASTEROID].spawnRangeOuterRad = 6.0f;
+	enemyStats[ENEMY_TYPE_SPACESHIP].damage = 1;
+	enemyStats[ENEMY_TYPE_SPACESHIP].projectileSpeed = 0.3f;
+	enemyStats[ENEMY_TYPE_SPACESHIP].health = 50;
+	enemyStats[ENEMY_TYPE_SPACESHIP].lineOfSight = 2.0f;
+	enemyStats[ENEMY_TYPE_SPACESHIP].resourceGivenOnKill = 10;
+	enemyStats[ENEMY_TYPE_SPACESHIP].speed = 0.05f;
+	enemyStats[ENEMY_TYPE_SPACESHIP].spawnRangeInnerRad = 2.0f;
+	enemyStats[ENEMY_TYPE_SPACESHIP].spawnRangeOuterRad = 4.0f;
+	
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].damage = 1;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].health = 300;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].lineOfSight = 5.0f;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].resourceGivenOnKill = 100;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].speed = 0.03f;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].spawnRangeInnerRad = 6.0f;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].spawnRangeOuterRad = 8.0f;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsCount = 4;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsProjSpeed = 0.3f; // WARN: may bug
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLife = 50;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsResourceGivenOnKill = 10;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsSpeed = 0.05f;
+	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLineOfSight = 2.0f;
 
 	enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].damage = 50;
 	enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].health = 50;
@@ -126,39 +141,24 @@ void Scene::InitEnemyStats()
 	enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].resourceGivenOnKill = 10;
 	enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].speed = 0.02f;
 	enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].fastSuicideBomberChargeSpeed = 0.1f;
-	enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].spawnRangeInnerRad = 4.0f;
-	enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].spawnRangeOuterRad = 2.0f;
+	enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].spawnRangeInnerRad = 2.0f;
+	enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].spawnRangeOuterRad = 4.0f;
 
-	enemyStats[ENEMY_TYPE_SPACESHIP].damage = 1;
-	enemyStats[ENEMY_TYPE_SPACESHIP].projectileSpeed = 0.3f;
-	enemyStats[ENEMY_TYPE_SPACESHIP].health = 50;
-	enemyStats[ENEMY_TYPE_SPACESHIP].lineOfSight = 2.0f;
-	enemyStats[ENEMY_TYPE_SPACESHIP].resourceGivenOnKill = 10;
-	enemyStats[ENEMY_TYPE_SPACESHIP].speed = 0.05f;
-	enemyStats[ENEMY_TYPE_SPACESHIP].spawnRangeInnerRad = 4.0f;
-	enemyStats[ENEMY_TYPE_SPACESHIP].spawnRangeOuterRad = 2.0f;
-
-	enemyStats[ENEMY_TYPE_MOTHERSHIP].damage = 1;
-	enemyStats[ENEMY_TYPE_MOTHERSHIP].health = 300;
-	enemyStats[ENEMY_TYPE_MOTHERSHIP].lineOfSight = 5.0f;
-	enemyStats[ENEMY_TYPE_MOTHERSHIP].resourceGivenOnKill = 100;
-	enemyStats[ENEMY_TYPE_MOTHERSHIP].speed = 0.03f;
-	enemyStats[ENEMY_TYPE_MOTHERSHIP].spawnRangeInnerRad = 8.0f;
-	enemyStats[ENEMY_TYPE_MOTHERSHIP].spawnRangeOuterRad = 6.0f;
-	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsCount = 4;
-	enemyStats[ENEMY_TYPE_MOTHERSHIP].projectileSpeed = 0.3f;
-	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLife = 50;
-	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsResourceGivenOnKill = 10;
-	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsSpeed = 0.05f;
-	enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLineOfSight = 2.0f;
+	enemyStats[ENEMY_TYPE_ASTEROID].damage = 20;
+	enemyStats[ENEMY_TYPE_ASTEROID].health = 50;
+	enemyStats[ENEMY_TYPE_ASTEROID].lineOfSight = 0.0f;
+	enemyStats[ENEMY_TYPE_ASTEROID].resourceGivenOnKill = 10;
+	enemyStats[ENEMY_TYPE_ASTEROID].speed = 0.03f;
+	enemyStats[ENEMY_TYPE_ASTEROID].spawnRangeInnerRad = 6.0f;
+	enemyStats[ENEMY_TYPE_ASTEROID].spawnRangeOuterRad = 8.0f;
 }
 void Scene::InitSkillStats()
 {
-	suns[0]->satSkillStats[SKILL_TYPE_PASSIVE_AOE].damage = 20;
-	suns[0]->satSkillStats[SKILL_TYPE_PASSIVE_AOE].damageApplyTime_secs = 1.0f;
-	suns[0]->satSkillStats[SKILL_TYPE_PASSIVE_AOE].duration_secs = 2.0f;
-	suns[0]->satSkillStats[SKILL_TYPE_PASSIVE_AOE].range = 1.0f;
-	suns[0]->satSkillStats[SKILL_TYPE_PASSIVE_AOE].skillApplyCost = 10;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].damage = 20;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].damageApplyTime_secs = 1.0f;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].duration_secs = 2.0f;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].range = 1.0f;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].skillApplyCost = 10;
 
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].damage = 20;
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].range = 2.0f;
@@ -241,7 +241,14 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 {
 	if(isLoadedFromConfig)
 	{
-
+		TweakableVarsLoader loader = TweakableVarsLoader(configFileName);
+		std::vector<std::pair<std::string, TweakVarData>> loadedData = loader.GetAllLoadedVars();
+		
+		for(std::vector<std::pair<std::string, TweakVarData>>::iterator iter = loadedData.begin();
+			iter != loadedData.end(); ++iter)
+		{
+			std::printf("%i\n", iter->second.itemIndex);
+		}
 	}
 	else
 	{
@@ -387,7 +394,7 @@ void Scene::SpawnMothership()
 	int deployUnitsCount = 4;
 	randMothership->InitDeployUnits("mesh-files/Ship.xml", 
 									enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsCount, 
-									enemyStats[ENEMY_TYPE_MOTHERSHIP].projectileSpeed, 
+									enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsProjSpeed, // WARN: may bug 
 									20, 
 									enemyStats[ENEMY_TYPE_MOTHERSHIP].damage, 
 									glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),

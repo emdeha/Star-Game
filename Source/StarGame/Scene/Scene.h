@@ -40,6 +40,7 @@
 #include "../GUISystem/GUISystem.h"
 #include "../StarGame/DisplayData.h"
 #include "../StarGame/ShaderManager.h"
+#include "../AssetLoader/TweakableVarsLoader.h"
 
 #include "../framework/EventSystem.h"
 /*
@@ -89,6 +90,7 @@ struct EnemyStats
 	int deployUnitsResourceGivenOnKill;
 	float deployUnitsSpeed;
 	float deployUnitsLineOfSight;
+	float deployUnitsProjSpeed;
 };
 
 

@@ -19,7 +19,7 @@
 #define TWEAKABLE_VARS_LOADER_H
 
 
-#include <map>
+#include <vector>
 #include <string>
 
 
@@ -32,19 +32,21 @@ struct TweakVarData
 		float varFloat;
 		int varInt;
 	};
+
+	TweakVarData() : itemIndex(-1) {}
 };
 
 class TweakableVarsLoader
 {
 private:
-	std::map<std::string, TweakVarData> loadedTweaks;
+	std::vector<std::pair<std::string, TweakVarData>> loadedTweaks;
 
 public:
 	TweakableVarsLoader() {}
 
 	TweakableVarsLoader(const std::string &fileName);
 
-	const std::map<std::string, TweakVarData> &GetAllLoadedVars();
+	const std::vector<std::pair<std::string, TweakVarData>> &GetAllLoadedVars();
 };
 
 

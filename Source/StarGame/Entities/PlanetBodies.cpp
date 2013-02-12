@@ -458,8 +458,7 @@ void CelestialBody::OnEvent(Event &_event)
 
 bool CelestialBody::AddSatellite(const std::string &fileName,
 								 glm::vec4 satelliteColor,
-								 //float speed, float diameter,
-								 SatelliteType type/*, int satelliteHealth*/)
+								 SatelliteType type)
 {
 	if(satellites.size() >= satelliteCap)
 	{
@@ -487,10 +486,10 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 
 	std::shared_ptr<PassiveAOESkill> satSkill = 
 		std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(glm::vec3(), 
-															 satSkillStats[SKILL_TYPE_PASSIVE_AOE].damage,
-															 satSkillStats[SKILL_TYPE_PASSIVE_AOE].damageApplyTime_secs, 
-															 satSkillStats[SKILL_TYPE_PASSIVE_AOE].duration_secs,
-															 satSkillStats[SKILL_TYPE_PASSIVE_AOE].range,
+															 satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].damage,
+															 satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].damageApplyTime_secs, 
+															 satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].duration_secs,
+															 satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].range,
 															 "passiveAOESkill",
 															 'q', 'q', 'e',
 															 satSkillStats[SKILL_TYPE_PASSIVE_AOE].skillApplyCost));

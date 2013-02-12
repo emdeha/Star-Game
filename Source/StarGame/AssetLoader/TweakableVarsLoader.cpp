@@ -38,345 +38,336 @@ TweakableVarsLoader::TweakableVarsLoader(const std::string &fileName)
 
 			if(strcmp(command, "currentEnemyCount") == 0)
 			{
-				line.erase(command[0], strlen("currentEnemyCount"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%i ", varData.varInt);
-				loadedTweaks.insert(std::make_pair("currentEnemyCount", varData));
+				sscanf(line.c_str(), "%i ", &varData.varInt);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("currentEnemyCount", varData));
 			}
 			if(strcmp(command, "maxEnemyCount") == 0)
 			{
-				line.erase(command[0], strlen("maxEnemyCount"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%i ", varData.varInt);
-				loadedTweaks.insert(std::make_pair("maxEnemyCount", varData));
+				sscanf(line.c_str(), "%i ", &varData.varInt);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("maxEnemyCount", varData));
 			}
 			if(strcmp(command, "initialSpawnTime") == 0)
 			{
-				line.erase(command[0], strlen("initialSpawnTime"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%f ", varData.varFloat);
-				loadedTweaks.insert(std::make_pair("initialSpawnTime", varData));
+				sscanf(line.c_str(), "%f ", &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("initialSpawnTime", varData));
 			}
 			if(strcmp(command, "endSpawnTime") == 0)
 			{
-				line.erase(command[0], strlen("endSpawnTime"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%f ", varData.varFloat);
-				loadedTweaks.insert(std::make_pair("endSpawnTime", varData));
+				sscanf(line.c_str(), "%f ", &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("endSpawnTime", varData));
 			}
 			if(strcmp(command, "timeDecrement") == 0)
 			{
-				line.erase(command[0], strlen("timeDecrement"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%f ", varData.varFloat);
-				loadedTweaks.insert(std::make_pair("timeDecrement", varData));
+				sscanf(line.c_str(), "%f ", &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("timeDecrement", varData));
 			}
 			if(strcmp(command, "enemyDestructionRadius") == 0)
 			{
-				line.erase(command[0], strlen("enemyDestructionRadius"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%f ", varData.varFloat);
-				loadedTweaks.insert(std::make_pair("enemyDestructionRadius", varData));
+				sscanf(line.c_str(), "%f ", &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("enemyDestructionRadius", varData));
 			}
 			if(strcmp(command, "resourceCount") == 0)
 			{
-				line.erase(command[0], strlen("resourceCount"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%i ", varData.varInt);
-				loadedTweaks.insert(std::make_pair("resourceCount", varData));
+				sscanf(line.c_str(), "%i ", &varData.varInt);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("resourceCount", varData));
 			}
 			if(strcmp(command, "resourceGainTime") == 0)
 			{
-				line.erase(command[0], strlen("resourceGainTime"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %f ", varData.itemIndex, varData.varFloat);
-				loadedTweaks.insert(std::make_pair("resourceGainTime", varData));
+				sscanf(line.c_str(), "%i %f ", &varData.itemIndex, &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("resourceGainTime", varData));
 			}
 			if(strcmp(command, "resourceGainPerTime") == 0)
 			{
-				line.erase(command[0], strlen("resourceGainPerTime"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %i ", varData.itemIndex, varData.varInt);
-				loadedTweaks.insert(std::make_pair("resourceGainPerTime", varData));
+				sscanf(line.c_str(), "%i %i ", &varData.itemIndex, &varData.varInt);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("resourceGainPerTime", varData));
 			}
 			if(strcmp(command, "satConstructionCost") == 0)
 			{
-				line.erase(command[0], strlen("satConstructionCost"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%i ", varData.varInt);
-				loadedTweaks.insert(std::make_pair("satConstructionCost", varData));
+				sscanf(line.c_str(), "%i ", &varData.varInt);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("satConstructionCost", varData));
 			}
 			if(strcmp(command, "satHealth") == 0)
 			{
-				line.erase(command[0], strlen("satHealth"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %i ", varData.itemIndex, varData.varInt);
-				loadedTweaks.insert(std::make_pair("satHealth", varData));
+				sscanf(line.c_str(), "%i %i ", &varData.itemIndex, &varData.varInt);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("satHealth", varData));
 			}
 			if(strcmp(command, "health") == 0)
 			{
-				line.erase(command[0], strlen("health"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%i ", varData.varInt);
-				loadedTweaks.insert(std::make_pair("health", varData));
+				sscanf(line.c_str(), "%i ", &varData.varInt);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("health", varData));
 			}
 			if(strcmp(command, "enemyDamage") == 0)
 			{
-				line.erase(command[0], strlen("enemyDamage"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %i ", varData.itemIndex, varData.varInt);
-				loadedTweaks.insert(std::make_pair("enemyDamage", varData));
+				sscanf(line.c_str(), "%i %i ", &varData.itemIndex, &varData.varInt);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("enemyDamage", varData));
 			}
 			if(strcmp(command, "enemyChargeSpeed") == 0)
 			{
-				line.erase(command[0], strlen("enemyChargeSpeed"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %f ", varData.itemIndex, varData.varFloat);
-				loadedTweaks.insert(std::make_pair("enemyChargeSpeed", varData));
+				sscanf(line.c_str(), "%i %f ", &varData.itemIndex, &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("enemyChargeSpeed", varData));
 			}
 			if(strcmp(command, "enemySpawnInnerRad") == 0)
 			{
-				line.erase(command[0], strlen("enemySpawnInnerRad"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %f ", varData.itemIndex, varData.varFloat);
-				loadedTweaks.insert(std::make_pair("enemySpawnInnerRad", varData));
+				sscanf(line.c_str(), "%i %f ", &varData.itemIndex, &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("enemySpawnInnerRad", varData));
 			}
 			if(strcmp(command, "enemySpawnOuterRad") == 0)
 			{
-				line.erase(command[0], strlen("enemySpawnOuterRad"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %f ", varData.itemIndex, varData.varFloat);
-				loadedTweaks.insert(std::make_pair("enemySpawnOuterRad", varData));
+				sscanf(line.c_str(), "%i %f ", &varData.itemIndex, &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("enemySpawnOuterRad", varData));
 			}
 			if(strcmp(command, "enemySpeed") == 0)
 			{
-				line.erase(command[0], strlen("enemySpeed"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %f ", varData.itemIndex, varData.varFloat);
-				loadedTweaks.insert(std::make_pair("enemySpeed", varData));
+				sscanf(line.c_str(), "%i %f ", &varData.itemIndex, &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("enemySpeed", varData));
 			}
 			if(strcmp(command, "enemyLOS") == 0)
 			{
-				line.erase(command[0], strlen("enemyLOS"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %f ", varData.itemIndex, varData.varFloat);
-				loadedTweaks.insert(std::make_pair("enemyLOS", varData));
+				sscanf(line.c_str(), "%i %f ", &varData.itemIndex, &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("enemyLOS", varData));
 			}
 			if(strcmp(command, "enemyHealth") == 0)
 			{
-				line.erase(command[0], strlen("enemyHealth"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %i ", varData.itemIndex, varData.varInt);
-				loadedTweaks.insert(std::make_pair("enemyHealth", varData));
+				sscanf(line.c_str(), "%i %i ", &varData.itemIndex, &varData.varInt);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("enemyHealth", varData));
 			}
 			if(strcmp(command, "enemyResource") == 0)
 			{
-				line.erase(command[0], strlen("enemyResource"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %i ", varData.itemIndex, varData.varInt);
-				loadedTweaks.insert(std::make_pair("enemyResource", varData));
+				sscanf(line.c_str(), "%i %i ", &varData.itemIndex, &varData.varInt);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("enemyResource", varData));
 			}
 			if(strcmp(command, "swarmersCount") == 0)
 			{
-				line.erase(command[0], strlen("swarmersCount"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%i ", varData.varInt);
-				loadedTweaks.insert(std::make_pair("swarmersCount", varData));
+				sscanf(line.c_str(), "%i ", &varData.varInt);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("swarmersCount", varData));
 			}
 			if(strcmp(command, "swarmersAttackTime") == 0)
 			{
-				line.erase(command[0], strlen("swarmersAttackTime"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%f ", varData.varFloat);
-				loadedTweaks.insert(std::make_pair("swarmersAttackTime", varData));
+				sscanf(line.c_str(), "%f ", &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("swarmersAttackTime", varData));
 			}
 			if(strcmp(command, "enemyProjectileSpeed") == 0)
 			{
-				line.erase(command[0], strlen("enemyProjectileSpeed"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %f ", varData.itemIndex, varData.varFloat);
-				loadedTweaks.insert(std::make_pair("enemyProjectileSpeed", varData));
+				sscanf(line.c_str(), "%i %f ", &varData.itemIndex, &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("enemyProjectileSpeed", varData));
 			}
 			if(strcmp(command, "deployUnitsCount") == 0)
 			{
-				line.erase(command[0], strlen("deployUnitsCount"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%i ", varData.varInt);
-				loadedTweaks.insert(std::make_pair("deployUnitsCount", varData));
+				sscanf(line.c_str(), "%i ", &varData.varInt);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("deployUnitsCount", varData));
 			}
 			if(strcmp(command, "deployUnitsLife") == 0)
 			{
-				line.erase(command[0], strlen("deployUnitsLife"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%i ", varData.varInt);
-				loadedTweaks.insert(std::make_pair("deployUnitsLife", varData));
+				sscanf(line.c_str(), "%i ", &varData.varInt);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("deployUnitsLife", varData));
 			}
 			if(strcmp(command, "deployUnitsResourceGivenOnKill") == 0)
 			{
-				line.erase(command[0], strlen("deployUnitsResourceGivenOnKill"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%i ", varData.varInt);
-				loadedTweaks.insert(std::make_pair("deployUnitsResourceGivenOnKill", varData));
+				sscanf(line.c_str(), "%i ", &varData.varInt);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("deployUnitsResourceGivenOnKill", varData));
 			}
 			if(strcmp(command, "deployUnitsSpeed") == 0)
 			{
-				line.erase(command[0], strlen("deployUnitsSpeed"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%f ", varData.varFloat);
-				loadedTweaks.insert(std::make_pair("deployUnitsSpeed", varData));
+				sscanf(line.c_str(), "%f ", &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("deployUnitsSpeed", varData));
 			}
 			if(strcmp(command, "deployUnitsLOS") == 0)
 			{
-				line.erase(command[0], strlen("deployUnitsLOS"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%f ", varData.varFloat);
-				loadedTweaks.insert(std::make_pair("deployUnitsLOS", varData));
+				sscanf(line.c_str(), "%f ", &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("deployUnitsLOS", varData));
+			}
+			if(strcmp(command, "deployUnitsProjSpeed") == 0)
+			{
+				line.erase(line.begin(), line.begin() + strlen(command));
+				line[0] = ' ';
+
+				TweakVarData varData;
+				sscanf(line.c_str(), "%f ", &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("deployUnitsProjSpeed", varData));
 			}
 			if(strcmp(command, "skillDamage") == 0)
 			{
-				line.erase(command[0], strlen("skillDamage"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %i ", varData.itemIndex, varData.varInt);
-				loadedTweaks.insert(std::make_pair("skillDamage", varData));
+				sscanf(line.c_str(), "%i %i ", &varData.itemIndex, &varData.varInt);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("skillDamage", varData));
 			}
 			if(strcmp(command, "skillRange") == 0)
 			{
-				line.erase(command[0], strlen("skillRange"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %f ", varData.itemIndex, varData.varFloat);
-				loadedTweaks.insert(std::make_pair("skillRange", varData));
+				sscanf(line.c_str(), "%i %f ", &varData.itemIndex, &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("skillRange", varData));
 			}
 			if(strcmp(command, "skillApplyCost") == 0)
 			{
-				line.erase(command[0], strlen("skillApplyCost"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %i ", varData.itemIndex, varData.varInt);
-				loadedTweaks.insert(std::make_pair("skillApplyCost", varData));
+				sscanf(line.c_str(), "%i %i ", &varData.itemIndex, &varData.varInt);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("skillApplyCost", varData));
 			}
 			if(strcmp(command, "skillScaleRate") == 0)
 			{
-				line.erase(command[0], strlen("skillScaleRate"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %f ", varData.itemIndex, varData.varFloat);
-				loadedTweaks.insert(std::make_pair("skillScaleRate", varData));
+				sscanf(line.c_str(), "%i %f ", &varData.itemIndex, &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("skillScaleRate", varData));
 			}
 			if(strcmp(command, "skillDamageApplyTime") == 0)
 			{
-				line.erase(command[0], strlen("skillDamageApplyTime"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %f ", varData.itemIndex, varData.varFloat);
-				loadedTweaks.insert(std::make_pair("skillDamageApplyTime", varData));
+				sscanf(line.c_str(), "%i %f ", &varData.itemIndex, &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("skillDamageApplyTime", varData));
 			}
 			if(strcmp(command, "skillDuration") == 0)
 			{
-				line.erase(command[0], strlen("skillDuration"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				sscanf(line.c_str(), "%i %f ", varData.itemIndex, varData.varFloat);
-				loadedTweaks.insert(std::make_pair("skillDuration", varData));
+				sscanf(line.c_str(), "%i %f ", &varData.itemIndex, &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("skillDuration", varData));
 			}
 			if(strcmp(command, "skillDefensePoints") == 0)
 			{
-				line.erase(command[0], strlen("skillDefensePoints"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%i ", varData.varInt);
-				loadedTweaks.insert(std::make_pair("skillDefensePoints", varData));
+				sscanf(line.c_str(), "%i ", &varData.varInt);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("skillDefensePoints", varData));
 			}
 			if(strcmp(command, "skillStunTime") == 0)
 			{
-				line.erase(command[0], strlen("skillStunTime"));
+				line.erase(line.begin(), line.begin() + strlen(command));
 				line[0] = ' ';
 
 				TweakVarData varData;
-				varData.itemIndex = -1;
-				sscanf(line.c_str(), "%f ", varData.varFloat);
-				loadedTweaks.insert(std::make_pair("skillStunTime", varData));
+				sscanf(line.c_str(), "%f ", &varData.varFloat);
+				loadedTweaks.push_back(std::pair<std::string, TweakVarData>("skillStunTime", varData));
 			}
 			if(strcmp(command, "**") == 0)
 			{
@@ -396,4 +387,9 @@ TweakableVarsLoader::TweakableVarsLoader(const std::string &fileName)
 		std::printf("Cannot open config file.\n");
 		return;
 	}
+}
+
+const std::vector<std::pair<std::string, TweakVarData>> &TweakableVarsLoader::GetAllLoadedVars()
+{
+	return loadedTweaks;
 }

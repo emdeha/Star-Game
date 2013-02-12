@@ -428,7 +428,7 @@ void InitializeScene()
 
 
 	InitializeGUI();
-	scene.InitTweakableVariables();
+	scene.InitTweakableVariables(true, "../data/loader-files/tweak-config.txt");
 }
 
 

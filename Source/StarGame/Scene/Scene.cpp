@@ -61,6 +61,7 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
 	UnlitProgData unLitData = shaderManager.GetUnlitProgData();
 	SimpleProgData simpleData = shaderManager.GetSimpleProgData();
 	BillboardProgDataNoTexture billboardNoTextureData = shaderManager.GetBillboardProgDataNoTexture();
+	SimpleTextureProgData textureData = shaderManager.GetSimpleTextureProgData();
 
 	int sizeLights = lights.size();
 	for(int i = 0; i < sizeLights; i++)
@@ -72,7 +73,7 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
 	for(int i = 0; i < sizeSuns; i++)
 	{
 		suns[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, 
-						litData, unLitData, simpleData,
+						litData, unLitData, simpleData, textureData,
 						interpolation);
 	}
 

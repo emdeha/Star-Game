@@ -263,6 +263,21 @@ void HandleMouse()
 			{
 				if((*iter)->IsClicked(mouseRay))
 				{
+					int buttonIndex = 0;
+					if((*iter)->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex) && 
+					   scene.GetMouse().IsLeftButtonDown())
+					{
+						EventArg upgradeSkillClickedEventArgs[2];
+						upgradeSkillClickedEventArgs[0].argType = "what_event";
+						upgradeSkillClickedEventArgs[0].argument.varType = TYPE_STRING;
+						strcpy(upgradeSkillClickedEventArgs[0].argument.varString, "skillUpgr");
+						upgradeSkillClickedEventArgs[1].argType = "index";
+						upgradeSkillClickedEventArgs[1].argument.varType = TYPE_INTEGER;
+						upgradeSkillClickedEventArgs[1].argument.varInteger = buttonIndex;
+						Event upgradeSkillClickedEvent(2, EVENT_TYPE_OTHER, upgradeSkillClickedEventArgs);
+
+						(*iter)->OnEvent(upgradeSkillClickedEvent);
+					}
 					Event satelliteHoveredEvent = StockEvents::EventOnHover();
 
 					(*iter)->OnEvent(satelliteHoveredEvent);
@@ -425,6 +440,12 @@ void InitializeScene()
 	glUseProgram(scene.GetShaderManager().GetTextureProgData().theProgram);
 	glUniform1i(scene.GetShaderManager().GetTextureProgData().colorTextureUnif, 0);
 	glUseProgram(0);
+	glUseProgram(scene.GetShaderManager().GetPerspectiveTextureProgData().theProgram);
+	glUniform1i(scene.GetShaderManager().GetPerspectiveTextureProgData().colorTextureUnif, 0);
+	glUseProgram(0);
+	glUseProgram(scene.GetShaderManager().GetSimpleTextureProgData().theProgram);
+	glUniform1i(scene.GetShaderManager().GetSimpleTextureProgData().textureUnif, 0);
+	glUseProgram(0);
 
 
 	InitializeGUI();
@@ -524,7 +545,7 @@ void Init()
 	nextGameTick = GetTickCount();
 
 	/*
-	if(!sampleMesh.LoadMesh("../data/mesh-files/spaceship.obj"))
+	if(!sampleMesh.LoadMesh("../data/mesh-files/phoenix_ugv.md2"))
 	{
 		std::printf("Problem loading texture\n");
 	}*/
@@ -536,7 +557,7 @@ void Display()
 
 	glClearDepth(1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	
 	if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 	{		
 		scene.SetDisplayData(displayData);
@@ -555,12 +576,10 @@ void Display()
 			loops++;
 		}
 
-
 		float interpolation = float(GetTickCount() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
 		scene.RenderScene(modelMatrix, interpolation);	
 		
-		scene.RenderCurrentLayout();
-		
+		scene.RenderCurrentLayout();	
 
 		//sampleMesh.Render(modelMatrix, shaderManager.GetSimpleTextureProgData());		
 	}

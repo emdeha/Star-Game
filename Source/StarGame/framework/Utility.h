@@ -288,9 +288,38 @@ namespace Utility
 			void Init(const std::string &textureFileName, 
 					  int windowWidth = 0, int windowHeight = 0);
 
-			void Draw(glutil::MatrixStack modelMat, const TextureProgData &textureData);
+			void Draw(glutil::MatrixStack &modelMat, const TextureProgData &textureData);
 
 			void ChangeTexture(const std::string &textureFileName);
+		};
+
+
+		class Sprite3D
+		{
+		private:
+			glm::vec3 position;
+
+			float width;
+			float height;
+
+			GLuint vertexBO;
+			GLuint indexBO;
+			GLuint textureCoordsBO;
+			GLuint vao;
+
+			std::shared_ptr<Texture2D> texture;
+
+		public:
+			Sprite3D() {}
+			Sprite3D(glm::vec3 newPosition, float newWidth, float newHeight);
+
+			void Init(const std::string &textureFileName);
+
+			void Draw(glutil::MatrixStack &modelMat, const SimpleTextureProgData &textureProgData);
+
+			void ChangeTexture(const std::string &textureFileName);
+
+			glm::vec3 GetPosition();
 		};
 
 
@@ -326,7 +355,7 @@ namespace Utility
 
 			//void AddPosition(glm::vec4 newPosition);
 
-			void Draw(glutil::MatrixStack modelMat, const TextureProgData &textureData,
+			void Draw(glutil::MatrixStack &modelMat, const TextureProgData &textureData,
 					  std::vector<glm::vec3> particlePositions);
 
 			void ChangeTexture(const std::string &textureFileName);

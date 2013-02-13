@@ -528,7 +528,7 @@ void Utility::Primitives::Sprite::Init(const std::string &textureFileName,
 	}
 }
 
-void Utility::Primitives::Sprite::Draw(glutil::MatrixStack modelMat, const TextureProgData &textureData)
+void Utility::Primitives::Sprite::Draw(glutil::MatrixStack &modelMat, const TextureProgData &textureData)
 {
 	glUseProgram(textureData.theProgram);
 	glBindVertexArray(vao);
@@ -574,6 +574,127 @@ void Utility::Primitives::Sprite::ChangeTexture(const std::string &textureFileNa
 	}
 }
 
+
+Utility::Primitives::Sprite3D::Sprite3D(glm::vec3 newPosition, float newWidth, float newHeight)
+{
+	position = newPosition;
+	height = newHeight;
+	width = newWidth;
+	
+	vao = 0;
+	indexBO = 0;
+	vertexBO = 0;
+	textureCoordsBO = 0;
+
+	texture = std::shared_ptr<Texture2D>(new Texture2D());
+}
+
+void Utility::Primitives::Sprite3D::Init(const std::string &textureFileName)
+{
+	std::vector<float> vertexData;
+	std::vector<float> textureCoordsData;
+	std::vector<unsigned short> indexData;
+
+	vertexData.push_back(position.x - width);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z - height); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z - height); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x - width);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z); vertexData.push_back(1.0f);
+		
+	textureCoordsData.push_back(0.0f); textureCoordsData.push_back(1.0f);
+	textureCoordsData.push_back(1.0f); textureCoordsData.push_back(1.0f);
+	textureCoordsData.push_back(1.0f); textureCoordsData.push_back(0.0f);
+	textureCoordsData.push_back(0.0f); textureCoordsData.push_back(0.0f);
+
+	indexData.push_back(0); indexData.push_back(1); indexData.push_back(2);
+	indexData.push_back(2); indexData.push_back(3); indexData.push_back(0);
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	glGenBuffers(1, &vertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);	
+	glBufferData(GL_ARRAY_BUFFER, 
+				 sizeof(float) * vertexData.size(), &vertexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	
+	glGenBuffers(1, &textureCoordsBO);
+	glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
+	glBufferData(GL_ARRAY_BUFFER, 
+				 sizeof(float) * textureCoordsData.size(), &textureCoordsData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+	glGenBuffers(1, &indexBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
+				 sizeof(unsigned short) * indexData.size(), &indexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	// TODO: Better error-handling needed
+	if(!texture->Load(textureFileName))
+	{
+		std::printf("Error loading texture");
+		return;
+	}
+}
+
+void Utility::Primitives::Sprite3D::Draw(glutil::MatrixStack &modelMat, const SimpleTextureProgData &textureData)
+{
+	glUseProgram(textureData.theProgram);
+	glBindVertexArray(vao);
+	{
+		glUniformMatrix4fv(
+			textureData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMat.Top()));
+		
+		glEnableVertexAttribArray(textureData.positionAttrib);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+		glVertexAttribPointer(textureData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+		glEnableVertexAttribArray(textureData.textureCoordAttrib);
+		glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
+		glVertexAttribPointer(textureData.textureCoordAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+		texture->Bind(GL_TEXTURE0);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+
+		glDisableVertexAttribArray(textureData.positionAttrib);
+		glDisableVertexAttribArray(textureData.textureCoordAttrib);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+	glBindVertexArray(0);
+	glUseProgram(0);
+}
+
+void Utility::Primitives::Sprite3D::ChangeTexture(const std::string &textureFileName)
+{
+	texture = std::shared_ptr<Texture2D>(new Texture2D());
+	if(!texture->Load(textureFileName))
+	{
+		std::printf("Error loading texture");
+		return;
+	}
+}
+
+glm::vec3 Utility::Primitives::Sprite3D::GetPosition()
+{
+	return position;
+}
 
 
 Utility::Primitives::SpriteArray::SpriteArray(glm::vec4 newColor,
@@ -705,7 +826,7 @@ void Utility::Primitives::SpriteArray::AddPosition(glm::vec4 newPosition)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }*/
 
-void Utility::Primitives::SpriteArray::Draw(glutil::MatrixStack modelMat,
+void Utility::Primitives::SpriteArray::Draw(glutil::MatrixStack &modelMat,
 											const TextureProgData &textureData,
 											std::vector<glm::vec3> particlePositions)
 {

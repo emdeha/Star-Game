@@ -50,6 +50,56 @@ void AOESelector::Update(glm::vec3 newPosition)
 }
 
 
+SkillUpgradeButtons::SkillUpgradeButtons(float newWidth, float newHeight,
+										 const std::string &noUpgradeFileName, const std::string &upgradeFileName,
+										 glm::vec3 newOrbitPosition, float newOrbitInnerRadius, float newOrbitOuterRadius)
+{
+	width = newWidth;
+	height = newHeight;
+
+	orbitPosition = newOrbitPosition;
+	orbitInnerRadius = newOrbitInnerRadius;
+	orbitOuterRadius = newOrbitOuterRadius;
+
+	textureFileNames[TEXTURE_TYPE_NO_UPGRADE] = noUpgradeFileName;
+	textureFileNames[TEXTURE_TYPE_UPGRADE] = upgradeFileName;
+
+	skillButtons[0] = 
+		Utility::Primitives::Sprite3D(glm::vec3(width / 2.0f, 0.01f, orbitPosition.z - orbitInnerRadius), width, height);
+	skillButtons[1] = 
+		Utility::Primitives::Sprite3D(glm::vec3(orbitPosition.x - orbitInnerRadius, 0.01f, height / 2.0f), width, height);
+	skillButtons[2] = 
+		Utility::Primitives::Sprite3D(glm::vec3(width / 2.0f, 0.01f, orbitPosition.z + orbitOuterRadius), width, height);
+}
+
+void SkillUpgradeButtons::Init()
+{
+	skillButtons[0].Init(textureFileNames[TEXTURE_TYPE_NO_UPGRADE]);
+	skillButtons[1].Init(textureFileNames[TEXTURE_TYPE_NO_UPGRADE]);
+	skillButtons[2].Init(textureFileNames[TEXTURE_TYPE_NO_UPGRADE]);
+}
+
+void SkillUpgradeButtons::Draw(glutil::MatrixStack &modelMatrix, const SimpleTextureProgData &textureData)
+{
+	skillButtons[0].Draw(modelMatrix, textureData);
+	skillButtons[1].Draw(modelMatrix, textureData);
+	skillButtons[2].Draw(modelMatrix, textureData);
+}
+
+bool SkillUpgradeButtons::IsClicked(Utility::Ray mouseRay, int &buttonIndex)
+{
+	for(int i = 0; i < 3; i++)
+	{
+		if(Utility::Intersections::RayIntersectsSphere(mouseRay, skillButtons[i].GetPosition(), 0.5f))
+		{
+			buttonIndex = i;
+			return true;
+		}
+	}
+	return false;
+}
+
+
 SatelliteOrbit::SatelliteOrbit()
 {
 	mainColor = glm::vec4();
@@ -87,6 +137,10 @@ SatelliteOrbit::SatelliteOrbit(glm::vec4 newMainColor, glm::vec4 newOutlineColor
 												   outerRadius,
 												   outerRadius + 0.05f,
 												   90);
+
+	upgradeButtons = SkillUpgradeButtons(1.0f, 1.0f,
+										 "../data/images/skill-noupgrade.jpg", "../data/images/skill-upgrade.jpg",
+										 position, innerRadius, outerRadius);
 }
 
 void SatelliteOrbit::Init()
@@ -94,9 +148,11 @@ void SatelliteOrbit::Init()
 	mainOrbit.Init();
 	orbitOutlineOne.Init();
 	orbitOutlineTwo.Init();
+	upgradeButtons.Init();
 }
 
-void SatelliteOrbit::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &simpleData)
+void SatelliteOrbit::Draw(glutil::MatrixStack &modelMatrix, 
+						  const SimpleProgData &simpleData, const SimpleTextureProgData &textureData)
 {
 	// TODO: Play with blending
 	glEnable(GL_BLEND);
@@ -108,4 +164,11 @@ void SatelliteOrbit::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData
 
 	orbitOutlineOne.Draw(modelMatrix, simpleData);
 	orbitOutlineTwo.Draw(modelMatrix, simpleData);
+
+	upgradeButtons.Draw(modelMatrix, textureData);
+}
+
+bool SatelliteOrbit::IsUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex)
+{
+	return upgradeButtons.IsClicked(mouseRay, buttonIndex);
 }

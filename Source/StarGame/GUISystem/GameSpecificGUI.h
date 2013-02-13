@@ -49,6 +49,40 @@ public:
 };
 
 
+class SkillUpgradeButtons
+{
+private:	
+	enum TextureType
+	{
+		TEXTURE_TYPE_NO_UPGRADE,
+		TEXTURE_TYPE_UPGRADE,
+	};
+
+	glm::vec3 orbitPosition;
+	float orbitInnerRadius;
+	float orbitOuterRadius;
+
+	float width;
+	float height;
+
+	std::string textureFileNames[2];
+
+	Utility::Primitives::Sprite3D skillButtons[3];
+
+public:
+	SkillUpgradeButtons() {}
+	SkillUpgradeButtons(float newWidth, float newHeight,
+						const std::string &noUpgradeFileName, const std::string &upgradeFileName,
+						glm::vec3 newOrbitPosition, float newOrbitInnerRadius, float newOrbitOuterRadius);
+
+	void Init();
+
+	void Draw(glutil::MatrixStack &modelMatrix, const SimpleTextureProgData &textureData);
+
+	bool IsClicked(Utility::Ray mouseRay, int &buttonIndex);
+};
+
+
 class SatelliteOrbit
 {
 private:
@@ -64,6 +98,7 @@ private:
 	Utility::Primitives::Torus2D mainOrbit;
 	Utility::Primitives::Torus2D orbitOutlineOne;
 	Utility::Primitives::Torus2D orbitOutlineTwo;
+	SkillUpgradeButtons upgradeButtons;
 
 public:
 	SatelliteOrbit();
@@ -76,7 +111,10 @@ public:
 
 	/// \fn Draw
 	/// \brief Draws the orbit.
-	void Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &simpleData);
+	void Draw(glutil::MatrixStack &modelMatrix, 
+			  const SimpleProgData &simpleData, const SimpleTextureProgData &textureData);
+
+	bool IsUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex);
 };
 
 

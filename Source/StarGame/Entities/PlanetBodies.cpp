@@ -265,6 +265,7 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 						   const LitProgData &litData,
 						   const UnlitProgData &unlitData,
 						   const SimpleProgData &simpleData,
+						   const SimpleTextureProgData &textureData,
 						   float interpolation)
 {
 	{
@@ -278,7 +279,7 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 				iter != satellites.end(); ++iter)
 			{
 				(*iter)->Render(modelMatrix, materialBlockIndex,
-								gamma, litData, unlitData, simpleData, interpolation);
+								gamma, litData, unlitData, simpleData, textureData, interpolation);
 			}
 
 			modelMatrix.Scale(diameter);
@@ -327,7 +328,7 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 		glutil::PushStack push(modelMatrix);
 		modelMatrix.RotateX(0.0f);
 
-		hoverOrbit.Draw(modelMatrix, simpleData);
+		hoverOrbit.Draw(modelMatrix, simpleData, textureData);
 	}
 	else if(isClicked)
 	{
@@ -346,11 +347,17 @@ void CelestialBody::OnEvent(Event &_event)
 			isClicked = true;
 			break;
 		case EVENT_TYPE_ON_HOVER:
-			std::printf("Satellite hovered!\n");
+			//std::printf("Satellite hovered!\n");
 			isClicked = true;
 			break;
 		case EVENT_TYPE_ATTACKED:
 			health -= _event.GetArgument("damage").varInteger;
+			break;
+		case EVENT_TYPE_OTHER:
+			if(strcmp(_event.GetArgument("what_event").varString, "skillUpgr") == 0)
+			{
+				std::printf("sad");
+			}
 			break;
 		default:
 			break;
@@ -679,6 +686,22 @@ bool CelestialBody::IsClicked(Utility::Ray mouseRay)
 		isClicked = false;
 		return false;
 	}
+}
+bool CelestialBody::IsSkillUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex)
+{
+	if(isSun)
+	{
+		return false;
+	}
+	else
+	{
+		int buttonIndex = 0;
+		if(hoverOrbit.IsUpgradeButtonClicked(mouseRay, buttonIndex))
+		{
+			return true;
+		}
+	}
+	return false;
 }
 bool CelestialBody::IsSatelliteClicked(Utility::Ray mouseRay)
 {

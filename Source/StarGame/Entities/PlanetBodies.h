@@ -161,6 +161,7 @@ public:
 				const LitProgData &litData,
 				const UnlitProgData &unlitData,
 				const SimpleProgData &simpleData,
+				const SimpleTextureProgData &textureData,
 				float interpolation);
 
 	void OnEvent(Event &_event);
@@ -177,6 +178,7 @@ public:
 	void RemoveSatellites();	
 
 	bool IsClicked(Utility::Ray mouseRay);
+	bool IsSkillUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex);
 	bool IsSatelliteClicked(Utility::Ray mouseRay);
 
 	bool IsSun();

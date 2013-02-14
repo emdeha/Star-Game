@@ -162,20 +162,31 @@ void Scene::InitSkillStats()
 	skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].duration_secs = 2.0f;
 	skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].range = 1.0f;
 	skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].skillApplyCost = 10;
+	skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].skillResearchCost = 10;
+	skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].upgradeBoxIndex = 0;
+	skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].forWhichSatellite = SATELLITE_EARTH;
 
 	skillsStats[SKILL_TYPE_SAT_CHAIN].damage = 20;
 	skillsStats[SKILL_TYPE_SAT_CHAIN].range = 2.0f;
 	skillsStats[SKILL_TYPE_SAT_CHAIN].scaleRate = 0.08f;
-	
+	skillsStats[SKILL_TYPE_SAT_CHAIN].upgradeBoxIndex = 0;
+	skillsStats[SKILL_TYPE_SAT_CHAIN].forWhichSatellite = SATELLITE_COUNT;
+
 	skillsStats[SKILL_TYPE_SAT_FROSTNOVA].damage = 5;
 	skillsStats[SKILL_TYPE_SAT_FROSTNOVA].stunTime_secs = 3.0f;
 	skillsStats[SKILL_TYPE_SAT_FROSTNOVA].range = 2.0f;
 	skillsStats[SKILL_TYPE_SAT_FROSTNOVA].scaleRate = 0.1f;
 	skillsStats[SKILL_TYPE_SAT_FROSTNOVA].skillApplyCost = 20;
+	skillsStats[SKILL_TYPE_SAT_FROSTNOVA].skillResearchCost = 10;
+	skillsStats[SKILL_TYPE_SAT_FROSTNOVA].upgradeBoxIndex = 0;
+	skillsStats[SKILL_TYPE_SAT_FROSTNOVA].forWhichSatellite = SATELLITE_WATER;
 
 	skillsStats[SKILL_TYPE_SAT_SHIELD].defensePoints = 3;
 	skillsStats[SKILL_TYPE_SAT_SHIELD].range = 0.5f;
 	skillsStats[SKILL_TYPE_SAT_SHIELD].skillApplyCost = 10;
+	skillsStats[SKILL_TYPE_SAT_SHIELD].skillResearchCost = 10;
+	skillsStats[SKILL_TYPE_SAT_SHIELD].upgradeBoxIndex = 0;
+	skillsStats[SKILL_TYPE_SAT_SHIELD].forWhichSatellite = SATELLITE_AIR;
 
 	// WARN: DRY violation!!!
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].damage = skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].damage;
@@ -183,41 +194,61 @@ void Scene::InitSkillStats()
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].duration_secs = skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].duration_secs;
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].range = skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].range;
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].skillApplyCost = skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].skillApplyCost;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].skillResearchCost = skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].skillResearchCost;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].upgradeBoxIndex = skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].upgradeBoxIndex;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].forWhichSatellite = skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].forWhichSatellite;
 
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].damage = skillsStats[SKILL_TYPE_SAT_CHAIN].damage;
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].range = skillsStats[SKILL_TYPE_SAT_CHAIN].range;
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].scaleRate = skillsStats[SKILL_TYPE_SAT_CHAIN].scaleRate;
-	
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].skillResearchCost = skillsStats[SKILL_TYPE_SAT_CHAIN].skillResearchCost;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].upgradeBoxIndex = skillsStats[SKILL_TYPE_SAT_CHAIN].upgradeBoxIndex;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].forWhichSatellite = skillsStats[SKILL_TYPE_SAT_CHAIN].forWhichSatellite;
+
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].damage = skillsStats[SKILL_TYPE_SAT_FROSTNOVA].damage;
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].stunTime_secs = skillsStats[SKILL_TYPE_SAT_FROSTNOVA].stunTime_secs;
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].range = skillsStats[SKILL_TYPE_SAT_FROSTNOVA].range;
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].scaleRate = skillsStats[SKILL_TYPE_SAT_FROSTNOVA].scaleRate;
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].skillApplyCost = skillsStats[SKILL_TYPE_SAT_FROSTNOVA].skillApplyCost;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].skillResearchCost = skillsStats[SKILL_TYPE_SAT_FROSTNOVA].skillResearchCost;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].upgradeBoxIndex = skillsStats[SKILL_TYPE_SAT_FROSTNOVA].upgradeBoxIndex;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].forWhichSatellite = skillsStats[SKILL_TYPE_SAT_FROSTNOVA].forWhichSatellite;
 
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].defensePoints = skillsStats[SKILL_TYPE_SAT_SHIELD].defensePoints;
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].range = skillsStats[SKILL_TYPE_SAT_SHIELD].range;
 	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].skillApplyCost = skillsStats[SKILL_TYPE_SAT_SHIELD].skillApplyCost;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].skillResearchCost = skillsStats[SKILL_TYPE_SAT_SHIELD].skillResearchCost;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].upgradeBoxIndex = skillsStats[SKILL_TYPE_SAT_SHIELD].upgradeBoxIndex;
+	suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].forWhichSatellite = skillsStats[SKILL_TYPE_SAT_SHIELD].forWhichSatellite;
 
 	skillsStats[SKILL_TYPE_AOE].damage = 20;
 	skillsStats[SKILL_TYPE_AOE].range = 2.0f;
 	skillsStats[SKILL_TYPE_AOE].skillApplyCost = 10;
+	skillsStats[SKILL_TYPE_AOE].skillResearchCost = 10;
+	skillsStats[SKILL_TYPE_AOE].upgradeBoxIndex = 3;
 
 	skillsStats[SKILL_TYPE_SUN_NOVA].damage = 40;
 	skillsStats[SKILL_TYPE_SUN_NOVA].range = 6.0f;
 	skillsStats[SKILL_TYPE_SUN_NOVA].scaleRate = 0.05f;
 	skillsStats[SKILL_TYPE_SUN_NOVA].skillApplyCost = 50;
+	skillsStats[SKILL_TYPE_SUN_NOVA].skillResearchCost = 10;
+	skillsStats[SKILL_TYPE_SUN_NOVA].upgradeBoxIndex = 2;
 
 	skillsStats[SKILL_TYPE_BURN].damage = 30;
 	skillsStats[SKILL_TYPE_BURN].damageApplyTime_secs = 1.0f;
 	skillsStats[SKILL_TYPE_BURN].duration_secs = 3.0f;
 	skillsStats[SKILL_TYPE_BURN].range = 2.0f;
 	skillsStats[SKILL_TYPE_BURN].skillApplyCost = 20;
+	skillsStats[SKILL_TYPE_BURN].skillResearchCost = 10;
+	skillsStats[SKILL_TYPE_BURN].upgradeBoxIndex = 1;
 
 	skillsStats[SKILL_TYPE_PASSIVE_AOE].damage = 20;
 	skillsStats[SKILL_TYPE_PASSIVE_AOE].damageApplyTime_secs = 1.0f;
 	skillsStats[SKILL_TYPE_PASSIVE_AOE].duration_secs = 4.0f;
 	skillsStats[SKILL_TYPE_PASSIVE_AOE].range = 2.0f;
 	skillsStats[SKILL_TYPE_PASSIVE_AOE].skillApplyCost = 10;
+	skillsStats[SKILL_TYPE_PASSIVE_AOE].skillResearchCost = 10;
+	skillsStats[SKILL_TYPE_PASSIVE_AOE].upgradeBoxIndex = 0;
 
 
 	// WARN: This is only for testing
@@ -227,7 +258,9 @@ void Scene::InitSkillStats()
 											   skillsStats[SKILL_TYPE_AOE].range, 
 											   "aoeSkill",
 											   'q', 'q', 'w',
-											   skillsStats[SKILL_TYPE_AOE].skillApplyCost));
+											   skillsStats[SKILL_TYPE_AOE].skillApplyCost,
+											   skillsStats[SKILL_TYPE_AOE].skillResearchCost,
+											   skillsStats[SKILL_TYPE_AOE].upgradeBoxIndex));
 	std::shared_ptr<PassiveAOESkill> passiveAOESkill =
 		std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(glm::vec3(),
 															 skillsStats[SKILL_TYPE_PASSIVE_AOE].damage, 
@@ -236,7 +269,9 @@ void Scene::InitSkillStats()
 															 skillsStats[SKILL_TYPE_PASSIVE_AOE].range,
 															 "passiveAOESkill",
 															 'q', 'q', 'e', 
-															 skillsStats[SKILL_TYPE_PASSIVE_AOE].skillApplyCost));
+															 skillsStats[SKILL_TYPE_PASSIVE_AOE].skillApplyCost,
+															 skillsStats[SKILL_TYPE_PASSIVE_AOE].skillResearchCost,
+															 skillsStats[SKILL_TYPE_PASSIVE_AOE].upgradeBoxIndex));
 	std::shared_ptr<SunNovaSkill> sunNovaSkill =
 		std::shared_ptr<SunNovaSkill>(new SunNovaSkill(glm::vec3(), 
 													   skillsStats[SKILL_TYPE_SUN_NOVA].damage, 
@@ -244,7 +279,9 @@ void Scene::InitSkillStats()
 													   skillsStats[SKILL_TYPE_SUN_NOVA].scaleRate, 
 													   "sunNovaSkill", 
 													   'w', 'w', 'e', 
-													   skillsStats[SKILL_TYPE_SUN_NOVA].skillApplyCost));
+													   skillsStats[SKILL_TYPE_SUN_NOVA].skillApplyCost,
+													   skillsStats[SKILL_TYPE_SUN_NOVA].skillResearchCost,
+													   skillsStats[SKILL_TYPE_SUN_NOVA].upgradeBoxIndex));
 	std::shared_ptr<BurnSkill> burnSkill =
 		std::shared_ptr<BurnSkill>(new BurnSkill(glm::vec3(), 
 												 skillsStats[SKILL_TYPE_BURN].damage, 
@@ -253,7 +290,9 @@ void Scene::InitSkillStats()
 												 skillsStats[SKILL_TYPE_BURN].range, 
 												 "burnSkill",
 												 'w', 'e', 'q',
-												 skillsStats[SKILL_TYPE_BURN].skillApplyCost));
+												 skillsStats[SKILL_TYPE_BURN].skillApplyCost,
+												 skillsStats[SKILL_TYPE_BURN].skillResearchCost,
+												 skillsStats[SKILL_TYPE_BURN].upgradeBoxIndex));
 
 	suns[0]->AddSkill(aoeSkill);
 	suns[0]->AddSkill(passiveAOESkill);
@@ -305,7 +344,9 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 												   skillsStats[SKILL_TYPE_AOE].range, 
 												   "aoeSkill",
 												   'q', 'q', 'w',
-												   skillsStats[SKILL_TYPE_AOE].skillApplyCost));
+												   skillsStats[SKILL_TYPE_AOE].skillApplyCost,
+												   skillsStats[SKILL_TYPE_AOE].skillResearchCost,
+												   skillsStats[SKILL_TYPE_AOE].upgradeBoxIndex));
 		std::shared_ptr<PassiveAOESkill> passiveAOESkill =
 			std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(glm::vec3(),
 																 skillsStats[SKILL_TYPE_PASSIVE_AOE].damage, 
@@ -314,7 +355,9 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 																 skillsStats[SKILL_TYPE_PASSIVE_AOE].range,
 																 "passiveAOESkill",
 																 'q', 'q', 'e', 
-																 skillsStats[SKILL_TYPE_PASSIVE_AOE].skillApplyCost));
+																 skillsStats[SKILL_TYPE_PASSIVE_AOE].skillApplyCost,
+																 skillsStats[SKILL_TYPE_PASSIVE_AOE].skillResearchCost,
+																 skillsStats[SKILL_TYPE_PASSIVE_AOE].upgradeBoxIndex));
 		std::shared_ptr<SunNovaSkill> sunNovaSkill =
 			std::shared_ptr<SunNovaSkill>(new SunNovaSkill(glm::vec3(), 
 														   skillsStats[SKILL_TYPE_SUN_NOVA].damage, 
@@ -322,7 +365,9 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 														   skillsStats[SKILL_TYPE_SUN_NOVA].scaleRate, 
 														   "sunNovaSkill", 
 														   'w', 'w', 'e', 
-														   skillsStats[SKILL_TYPE_SUN_NOVA].skillApplyCost));
+														   skillsStats[SKILL_TYPE_SUN_NOVA].skillApplyCost,
+														   skillsStats[SKILL_TYPE_SUN_NOVA].skillResearchCost,
+														   skillsStats[SKILL_TYPE_SUN_NOVA].upgradeBoxIndex));
 		std::shared_ptr<BurnSkill> burnSkill =
 			std::shared_ptr<BurnSkill>(new BurnSkill(glm::vec3(), 
 													 skillsStats[SKILL_TYPE_BURN].damage, 
@@ -331,7 +376,9 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 													 skillsStats[SKILL_TYPE_BURN].range, 
 													 "burnSkill",
 													 'w', 'e', 'q',
-													 skillsStats[SKILL_TYPE_BURN].skillApplyCost));
+													 skillsStats[SKILL_TYPE_BURN].skillApplyCost,
+													 skillsStats[SKILL_TYPE_BURN].skillResearchCost,
+													 skillsStats[SKILL_TYPE_BURN].upgradeBoxIndex));
 
 		suns[0]->AddSkill(aoeSkill);
 		suns[0]->AddSkill(passiveAOESkill);
@@ -1291,6 +1338,29 @@ void Scene::OnEvent(Event &_event)
 					}
 				}
 			}
+		}
+		
+		if(strcmp(_event.GetArgument("what_event").varString, "skillUpgr") == 0)
+		{
+			std::vector<std::shared_ptr<Skill>> sunSkills = suns[0]->GetAllSkills();
+			for(int i = 0; i < sunSkills.size(); i++)
+			{
+				if(sunSkills[i]->boxIndexForUpgrade == _event.GetArgument("index").varInteger)
+				{
+					if(sunSkills[i]->isResearched)
+					{
+						return;
+					}
+					if(sunSkills[i]->skillResearchCost > suns[0]->currentResource)
+					{
+						std::printf("not enough resource");
+						return;
+					}
+					sunSkills[i]->isResearched = true;
+					return;
+				}
+			}
+			//std::printf("%i\n", _event.GetArgument("index").varInteger);
 		}
 		break;
 	default:

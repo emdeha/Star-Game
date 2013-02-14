@@ -264,8 +264,8 @@ void HandleMouse()
 				if((*iter)->IsClicked(mouseRay))
 				{
 					int buttonIndex = 0;
-					if((*iter)->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex) && 
-					   scene.GetMouse().IsLeftButtonDown())
+					bool isUpgrBoxClicked = (*iter)->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex);
+					if(isUpgrBoxClicked && scene.GetMouse().IsLeftButtonDown())
 					{
 						EventArg upgradeSkillClickedEventArgs[2];
 						upgradeSkillClickedEventArgs[0].argType = "what_event";
@@ -277,6 +277,7 @@ void HandleMouse()
 						Event upgradeSkillClickedEvent(2, EVENT_TYPE_OTHER, upgradeSkillClickedEventArgs);
 
 						(*iter)->OnEvent(upgradeSkillClickedEvent);
+						scene.OnEvent(upgradeSkillClickedEvent);
 					}
 					Event satelliteHoveredEvent = StockEvents::EventOnHover();
 
@@ -449,7 +450,7 @@ void InitializeScene()
 
 
 	InitializeGUI();
-	scene.InitTweakableVariables(true, "../data/loader-files/tweak-config.txt");
+	scene.InitTweakableVariables(/*true, "../data/loader-files/tweak-config.txt"*/);
 }
 
 

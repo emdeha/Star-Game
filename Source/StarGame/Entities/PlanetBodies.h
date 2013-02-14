@@ -74,6 +74,7 @@ struct ResourceData
 
 struct SkillsStats
 {
+	int upgradeBoxIndex;
 	int skillApplyCost;
 	int skillResearchCost;
 	int damage;
@@ -83,6 +84,7 @@ struct SkillsStats
 	float damageApplyTime_secs;
 	float range;
 	float scaleRate;
+	SatelliteType forWhichSatellite;
 };
 
 

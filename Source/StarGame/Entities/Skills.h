@@ -68,11 +68,14 @@ protected:
 
 	bool isStarted;
 
+	bool isResearched;
+	int boxIndexForUpgrade;
+
 public:
 	Skill() { }
 	Skill(const std::string &newSkillType,
 		  char fusionCombA, char fusionCombB, char fusionCombC,
-		  int newSkillApplyCost, int newSkillResearchCost)
+		  int newSkillApplyCost, int newSkillResearchCost, int newBoxIndexForUpgrade)
 	{
 		fusionCombination[0] = fusionCombA;
 		fusionCombination[1] = fusionCombB;
@@ -83,6 +86,9 @@ public:
 
 		skillApplyCost = newSkillApplyCost;
 		skillResearchCost = newSkillResearchCost;
+
+		isResearched = false;
+		boxIndexForUpgrade = newBoxIndexForUpgrade;
 	}
 
 	virtual void Update() {}
@@ -101,14 +107,18 @@ public:
 	virtual void SetParameter(ParameterType paramType, float newParam_float) {}
 
 	virtual bool IsIntersectingObject(glm::vec3 objectPosition) { return false; }
-
-	virtual std::string GetSkillType() { return skillType; }
+	
 	virtual float GetRange() { return 0.0f; }
-	virtual int GetApplyCost() { return skillApplyCost; }
-	virtual int GetResearchCost() { return skillResearchCost; }
-	virtual glm::vec3 GetPosition() { return glm::vec3(); }
-	virtual bool IsDeployed() { return false; }
-	virtual bool IsStarted() { return isStarted; }
+
+	std::string GetSkillType() { return skillType; }
+	int GetApplyCost() { return skillApplyCost; }
+	int GetResearchCost() { return skillResearchCost; }
+	glm::vec3 GetPosition() { return glm::vec3(); }
+	bool IsDeployed() { return false; }
+	bool IsStarted() { return isStarted; }
+	bool IsResearched() { return isResearched; }
+
+	bool Research() { isResearched = true; }
 
 	
 	// Only for EVENT_TYPE_OTHER
@@ -136,7 +146,7 @@ public:
 			 int newDamage, float newRange,
 			 const std::string &newSkillType,
 			 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
-			 int skillApplyCost = 0, int skillResearchCost = 0);
+			 int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
 	void Update();
 	void Render(glutil::MatrixStack	&modelMatrix, 
@@ -174,7 +184,7 @@ public:
 					float newRange,
 					const std::string &newSkillType,
 					char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
-					int skillApplyCost = 0, int skillResearchCost = 0);
+					int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix,
@@ -214,7 +224,7 @@ public:
 				 float newRange, float newScaleRate,
 				 const std::string &skillType,
 				 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
-				 int skillApplyCost = 0, int skillResearchCost = 0);
+				 int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData);
@@ -253,7 +263,7 @@ public:
 						   const std::string &meshFileName, 
 						   const std::string &skillType,
 						   char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
-						   int skillApplyCost = 0, int skillResearchCost = 0);
+						   int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData, 
@@ -294,7 +304,7 @@ public:
 						  float newRange, float newScaleRate,
 						  const std::string &skillType,
 						  char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
-						  int skillApplyCost = 0, int skillResearchCost = 0);
+						  int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData);
@@ -335,7 +345,7 @@ public:
 				   glm::vec3 newPosition,
 				   const std::string &skillType,
 				   char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
-				   int skillApplyCost = 0, int skillResearchCost = 0);
+				   int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData);
@@ -370,7 +380,7 @@ public:
 				int newDefensePoints, float newRange, 
 				const std::string &skillType, 
 				char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
-				int skillApplyCost = 0, int skillResearchCost = 0);
+				int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData,
@@ -411,7 +421,7 @@ public:
 			  float newRange,
 			  const std::string &skillType,
 			  char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
-			  int skillApplyCost = 0, int skillResearchCost = 0);
+			  int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
 	void Update();/*
 	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData,

@@ -170,5 +170,6 @@ void SatelliteOrbit::Draw(glutil::MatrixStack &modelMatrix,
 
 bool SatelliteOrbit::IsUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex)
 {
-	return upgradeButtons.IsClicked(mouseRay, buttonIndex);
+	bool isUpgrButtonClicked = upgradeButtons.IsClicked(mouseRay, buttonIndex);
+	return isUpgrButtonClicked;
 }

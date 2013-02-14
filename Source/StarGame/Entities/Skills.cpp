@@ -101,10 +101,10 @@ AOESkill::AOESkill(glm::vec3 newPosition,
 				   int newDamage, float newRange,
 				   const std::string &newSkillType,
 				   char fusionCombA, char fusionCombB, char fusionCombC, 
-				   int skillApplyCost, int skillResearchCost)
+				   int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
 				   : Skill(newSkillType,
 						   fusionCombA, fusionCombB, fusionCombC,
-						   skillApplyCost, skillResearchCost)
+						   skillApplyCost, skillResearchCost, boxIndexForUpgrade)
 {
 	damage = newDamage;
 	range = newRange;
@@ -138,30 +138,33 @@ void AOESkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &pr
 
 void AOESkill::OnEvent(Event &_event)
 {
-	switch(_event.GetType())
+	if(isResearched)
 	{
-	case EVENT_TYPE_OTHER:
-		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+		switch(_event.GetType())
 		{
-			EventArg skillDeployedEventArgs[4];
-			skillDeployedEventArgs[0].argType = "skillRange";
-			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
-			skillDeployedEventArgs[0].argument.varFloat = range;
-			skillDeployedEventArgs[1].argType = "skillDamage";
-			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-			skillDeployedEventArgs[1].argument.varInteger = damage;
-			skillDeployedEventArgs[2].argType = "what_event";
-			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
-			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-			skillDeployedEventArgs[3].argType = "skillCost";
-			skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
-			skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-			Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-			generatedEvents.push_back(skillDeployedEvent);
+		case EVENT_TYPE_OTHER:
+			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+			{
+				EventArg skillDeployedEventArgs[4];
+				skillDeployedEventArgs[0].argType = "skillRange";
+				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+				skillDeployedEventArgs[0].argument.varFloat = range;
+				skillDeployedEventArgs[1].argType = "skillDamage";
+				skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+				skillDeployedEventArgs[1].argument.varInteger = damage;
+				skillDeployedEventArgs[2].argType = "what_event";
+				skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+				strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+				skillDeployedEventArgs[3].argType = "skillCost";
+				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+				Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+				generatedEvents.push_back(skillDeployedEvent);
 
-			isStarted = true;
+				isStarted = true;
+			}
+			break;
 		}
-		break;
 	}
 }
 
@@ -205,10 +208,10 @@ PassiveAOESkill::PassiveAOESkill(glm::vec3 newPosition,
 								 float newRange,
 								 const std::string &newSkillType,
 								 char fusionCombA, char fusionCombB, char fusionCombC, 
-								 int skillApplyCost, int skillResearchCost)
+								 int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
 								 : Skill(newSkillType,
 								   		 fusionCombA, fusionCombB, fusionCombC,
-										 skillApplyCost, skillResearchCost)
+										 skillApplyCost, skillResearchCost, boxIndexForUpgrade)
 {
 	damage = newDamage;
 	damageApplyTime_seconds = newDamageApplyTime_seconds;
@@ -277,31 +280,34 @@ void PassiveAOESkill::Render(glutil::MatrixStack &modelMatrix,
 
 void PassiveAOESkill::OnEvent(Event &_event)
 {
-	switch(_event.GetType())
+	if(isResearched)
 	{
-	case EVENT_TYPE_OTHER:
-		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+		switch(_event.GetType())
 		{
-			EventArg skillDeployedEventArgs[4];
-			skillDeployedEventArgs[0].argType = "skillRange";
-			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
-			skillDeployedEventArgs[0].argument.varFloat = range;
-			skillDeployedEventArgs[1].argType = "skillDamage";
-			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-			skillDeployedEventArgs[1].argument.varInteger = damage;
-			skillDeployedEventArgs[2].argType = "what_event";
-			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
-			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-			skillDeployedEventArgs[3].argType = "skillCost";
-			skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
-			skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-			Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-			generatedEvents.push_back(skillDeployedEvent);
+		case EVENT_TYPE_OTHER:
+			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+			{
+				EventArg skillDeployedEventArgs[4];
+				skillDeployedEventArgs[0].argType = "skillRange";
+				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+				skillDeployedEventArgs[0].argument.varFloat = range;
+				skillDeployedEventArgs[1].argType = "skillDamage";
+				skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+				skillDeployedEventArgs[1].argument.varInteger = damage;
+				skillDeployedEventArgs[2].argType = "what_event";
+				skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+				strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+				skillDeployedEventArgs[3].argType = "skillCost";
+				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+				Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+				generatedEvents.push_back(skillDeployedEvent);
 
-			isStarted = true;
-			skillLife.SetPause(false);
+				isStarted = true;
+				skillLife.SetPause(false);
+			}
+			break;
 		}
-		break;
 	}
 }
 
@@ -344,10 +350,10 @@ SunNovaSkill::SunNovaSkill(glm::vec3 newPosition,
 						   float newRange, float newScaleRate,
 						   const std::string &skillType,
 						   char fusionCombA, char fusionCombB, char fusionCombC, 
-						   int skillApplyCost, int skillResearchCost)
+						   int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
 						   : Skill(skillType,
 								   fusionCombA, fusionCombB, fusionCombC,
-								   skillApplyCost, skillResearchCost)
+								   skillApplyCost, skillResearchCost, boxIndexForUpgrade)
 {
 	position = newPosition;
 	damage = newDamage;
@@ -399,30 +405,33 @@ void SunNovaSkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData
 
 void SunNovaSkill::OnEvent(Event &_event)
 {
-	switch(_event.GetType())
+	if(isResearched)
 	{
-	case EVENT_TYPE_OTHER:
-		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+		switch(_event.GetType())
 		{
-			EventArg skillDeployedEventArgs[4];
-			skillDeployedEventArgs[0].argType = "skillRange";
-			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
-			skillDeployedEventArgs[0].argument.varFloat = range;
-			skillDeployedEventArgs[1].argType = "skillDamage";
-			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-			skillDeployedEventArgs[1].argument.varInteger = damage;
-			skillDeployedEventArgs[2].argType = "what_event";
-			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
-			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-			skillDeployedEventArgs[3].argType = "skillCost";
-			skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
-			skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-			Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-			generatedEvents.push_back(skillDeployedEvent);
+		case EVENT_TYPE_OTHER:
+			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+			{
+				EventArg skillDeployedEventArgs[4];
+				skillDeployedEventArgs[0].argType = "skillRange";
+				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+				skillDeployedEventArgs[0].argument.varFloat = range;
+				skillDeployedEventArgs[1].argType = "skillDamage";
+				skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+				skillDeployedEventArgs[1].argument.varInteger = damage;
+				skillDeployedEventArgs[2].argType = "what_event";
+				skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+				strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+				skillDeployedEventArgs[3].argType = "skillCost";
+				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+				Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+				generatedEvents.push_back(skillDeployedEvent);
 
-			isStarted = true;
+				isStarted = true;
+			}
+			break;
 		}
-		break;
 	}
 }
 
@@ -460,10 +469,10 @@ SatelliteChainingSkill::SatelliteChainingSkill(glm::vec3 newPosition,
 											   const std::string &meshFileName, 
 											   const std::string &skillType,
 											   char fusionCombA, char fusionCombB, char fusionCombC,
-											   int skillApplyCost, int skillResearchCost)
+											   int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
 											   : Skill(skillType,
 													   fusionCombA, fusionCombB, fusionCombC,
-													   skillApplyCost, skillResearchCost)
+													   skillApplyCost, skillResearchCost, boxIndexForUpgrade)
 {
 	currentPosition = newPosition;
 	startingPosition = newPosition;
@@ -627,10 +636,10 @@ SatelliteChainingNova::SatelliteChainingNova(glm::vec3 newPosition,
 											 float newRange, float newScaleRate,
 											 const std::string &skillType,
 											 char fusionCombA, char fusionCombB, char fusionCombC,
-											 int skillApplyCost, int skillResearchCost)
+											 int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
 											 : Skill(skillType,
 											   	     fusionCombA, fusionCombB, fusionCombC,
-													 skillApplyCost, skillResearchCost)
+													 skillApplyCost, skillResearchCost, boxIndexForUpgrade)
 {
 	position = newPosition;
 	damage = newDamage;
@@ -684,48 +693,51 @@ void SatelliteChainingNova::Render(glutil::MatrixStack &modelMatrix, const Simpl
 
 void SatelliteChainingNova::OnEvent(Event &_event)
 {
-	switch(_event.GetType())
+	if(isResearched)
 	{
-	case EVENT_TYPE_OTHER:
-		// ???: Should the skill be activated on fusion?
-		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+		switch(_event.GetType())
 		{
-			EventArg skillDeployedEventArgs[4];
-			skillDeployedEventArgs[0].argType = "skillRange";
-			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
-			skillDeployedEventArgs[0].argument.varFloat = range;
-			skillDeployedEventArgs[1].argType = "skillDamage";
-			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-			skillDeployedEventArgs[1].argument.varInteger = damage;
-			skillDeployedEventArgs[2].argType = "what_event";
-			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
-			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-			skillDeployedEventArgs[3].argType = "skillCost";
-			skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
-			skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-			Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-			generatedEvents.push_back(skillDeployedEvent);
+		case EVENT_TYPE_OTHER:
+			// ???: Should the skill be activated on fusion?
+			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+			{
+				EventArg skillDeployedEventArgs[4];
+				skillDeployedEventArgs[0].argType = "skillRange";
+				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+				skillDeployedEventArgs[0].argument.varFloat = range;
+				skillDeployedEventArgs[1].argType = "skillDamage";
+				skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+				skillDeployedEventArgs[1].argument.varInteger = damage;
+				skillDeployedEventArgs[2].argType = "what_event";
+				skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+				strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+				skillDeployedEventArgs[3].argType = "skillCost";
+				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+				Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+				generatedEvents.push_back(skillDeployedEvent);
 
-			isStarted = true;
-		}
-		if(_event.GetArgument("isIntersected").varBool == true)
-		{
-			EventArg skillDeployedEventArgs[3];
-			skillDeployedEventArgs[0].argType = "skillRange";
-			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
-			skillDeployedEventArgs[0].argument.varFloat = range;
-			skillDeployedEventArgs[1].argType = "skillDamage";
-			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-			skillDeployedEventArgs[1].argument.varInteger = damage;
-			skillDeployedEventArgs[2].argType = "what_event";
-			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
-			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-			generatedEvents.push_back(skillDeployedEvent);
+				isStarted = true;
+			}
+			if(_event.GetArgument("isIntersected").varBool == true)
+			{
+				EventArg skillDeployedEventArgs[3];
+				skillDeployedEventArgs[0].argType = "skillRange";
+				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+				skillDeployedEventArgs[0].argument.varFloat = range;
+				skillDeployedEventArgs[1].argType = "skillDamage";
+				skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+				skillDeployedEventArgs[1].argument.varInteger = damage;
+				skillDeployedEventArgs[2].argType = "what_event";
+				skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+				strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+				Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+				generatedEvents.push_back(skillDeployedEvent);
 
-			isStarted = true;
+				isStarted = true;
+			}
+			break;
 		}
-		break;
 	}
 }
 
@@ -773,10 +785,10 @@ FrostNovaSkill::FrostNovaSkill(int newDamage, float newStunTime_seconds,
 							   glm::vec3 newPosition,
 							   const std::string &skillType,
 							   char fusionCombA, char fusionCombB, char fusionCombC,
-							   int skillApplyCost, int skillResearchCost)
+							   int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
 							   : Skill(skillType,
 									   fusionCombA, fusionCombB, fusionCombC,
-									   skillApplyCost, skillResearchCost)
+									   skillApplyCost, skillResearchCost, boxIndexForUpgrade)
 {
 	damage = newDamage;
 	stunTime_seconds = newStunTime_seconds;
@@ -846,29 +858,32 @@ void FrostNovaSkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgDa
 
 void FrostNovaSkill::OnEvent(Event &_event)
 {
-	switch(_event.GetType())
+	if(isResearched)
 	{
-	case EVENT_TYPE_OTHER:
-		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0 && !isStarted)
+		switch(_event.GetType())
 		{
-			EventArg skillDeployedEventArgs[4];
-			skillDeployedEventArgs[0].argType = "skillRange";
-			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
-			skillDeployedEventArgs[0].argument.varFloat = range;
-			skillDeployedEventArgs[1].argType = "skillDamage";
-			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-			skillDeployedEventArgs[1].argument.varInteger = damage;
-			skillDeployedEventArgs[2].argType = "what_event";
-			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
-			strcpy(skillDeployedEventArgs[2].argument.varString, "stunskilldeployed");
-			skillDeployedEventArgs[3].argType = "skillCost";
-			skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
-			skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-			Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-			generatedEvents.push_back(skillDeployedEvent);
+		case EVENT_TYPE_OTHER:
+			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0 && !isStarted)
+			{
+				EventArg skillDeployedEventArgs[4];
+				skillDeployedEventArgs[0].argType = "skillRange";
+				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+				skillDeployedEventArgs[0].argument.varFloat = range;
+				skillDeployedEventArgs[1].argType = "skillDamage";
+				skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+				skillDeployedEventArgs[1].argument.varInteger = damage;
+				skillDeployedEventArgs[2].argType = "what_event";
+				skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+				strcpy(skillDeployedEventArgs[2].argument.varString, "stunskilldeployed");
+				skillDeployedEventArgs[3].argType = "skillCost";
+				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+				Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+				generatedEvents.push_back(skillDeployedEvent);
 
-			isStarted = true;
-			stunTimer.SetPause(false);
+				isStarted = true;
+				stunTimer.SetPause(false);
+			}
 		}
 	}
 }
@@ -918,10 +933,10 @@ ShieldSkill::ShieldSkill(glm::vec3 newPosition,
 						 int newDefensePoints, float newRange, 
 						 const std::string &skillType, 
 						 char fusionCombA, char fusionCombB, char fusionCombC,
-						 int skillApplyCost, int skillResearchCost)
+						 int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
 						 : Skill(skillType,
 								 fusionCombA, fusionCombB, fusionCombC,
-								 skillApplyCost, skillResearchCost)
+								 skillApplyCost, skillResearchCost, boxIndexForUpgrade)
 {
 	position = newPosition;
 	defensePoints = newDefensePoints;
@@ -970,29 +985,32 @@ void ShieldSkill::Render(glutil::MatrixStack &modelMatrix, const LitProgData &li
 
 void ShieldSkill::OnEvent(Event &_event)
 {
-	switch(_event.GetType())
+	if(isResearched)
 	{
-	case EVENT_TYPE_ATTACKED:
-		defensePoints--;
-		break;
-	case EVENT_TYPE_OTHER:
-		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+		switch(_event.GetType())
 		{
-			EventArg skillDeployedEventArgs[2];
-			skillDeployedEventArgs[0].argType = "what_event";
-			skillDeployedEventArgs[0].argument.varType = TYPE_STRING;
-			strcpy(skillDeployedEventArgs[0].argument.varString, "shieldskilldeployed");
-			skillDeployedEventArgs[1].argType = "skillCost";
-			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-			skillDeployedEventArgs[1].argument.varInteger = skillApplyCost;
-			Event skillDeployedEvent = Event(2, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-			generatedEvents.push_back(skillDeployedEvent);
+		case EVENT_TYPE_ATTACKED:
+			defensePoints--;
+			break;
+		case EVENT_TYPE_OTHER:
+			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+			{
+				EventArg skillDeployedEventArgs[2];
+				skillDeployedEventArgs[0].argType = "what_event";
+				skillDeployedEventArgs[0].argument.varType = TYPE_STRING;
+				strcpy(skillDeployedEventArgs[0].argument.varString, "shieldskilldeployed");
+				skillDeployedEventArgs[1].argType = "skillCost";
+				skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+				skillDeployedEventArgs[1].argument.varInteger = skillApplyCost;
+				Event skillDeployedEvent = Event(2, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+				generatedEvents.push_back(skillDeployedEvent);
 
-			isStarted = true;
+				isStarted = true;
+			}
+			break;
+		default:
+			break;
 		}
-		break;
-	default:
-		break;
 	}
 }
 
@@ -1035,10 +1053,10 @@ BurnSkill::BurnSkill(glm::vec3 newPosition,
 					 float newRange,
 					 const std::string &skillType,
 					 char fusionCombA, char fusionCombB, char fusionCombC,
-					 int skillApplyCost, int skillResearchCost)
+					 int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
 					 : Skill(skillType,
 						 	 fusionCombA, fusionCombB, fusionCombC,
-							 skillApplyCost, skillResearchCost)
+							 skillApplyCost, skillResearchCost, boxIndexForUpgrade)
 {
 	position = newPosition;
 	damage = newDamage;
@@ -1107,33 +1125,36 @@ void BurnSkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &s
 
 void BurnSkill::OnEvent(Event &_event)
 {
-	switch(_event.GetType())
+	if(isResearched)
 	{
-	case EVENT_TYPE_OTHER:
-		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+		switch(_event.GetType())
 		{
-			EventArg skillDeployedEventArgs[4];
-			skillDeployedEventArgs[0].argType = "skillRange";
-			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
-			skillDeployedEventArgs[0].argument.varFloat = range;
-			skillDeployedEventArgs[1].argType = "skillDamage";
-			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-			skillDeployedEventArgs[1].argument.varInteger = damage;
-			skillDeployedEventArgs[2].argType = "what_event";
-			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
-			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-			skillDeployedEventArgs[3].argType = "skillCost";
-			skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
-			skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-			Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-			generatedEvents.push_back(skillDeployedEvent);
+		case EVENT_TYPE_OTHER:
+			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+			{
+				EventArg skillDeployedEventArgs[4];
+				skillDeployedEventArgs[0].argType = "skillRange";
+				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+				skillDeployedEventArgs[0].argument.varFloat = range;
+				skillDeployedEventArgs[1].argType = "skillDamage";
+				skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+				skillDeployedEventArgs[1].argument.varInteger = damage;
+				skillDeployedEventArgs[2].argType = "what_event";
+				skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+				strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+				skillDeployedEventArgs[3].argType = "skillCost";
+				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+				Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+				generatedEvents.push_back(skillDeployedEvent);
 
-			isStarted = true;
-			damageApplyTime_seconds = damageApplyTimeDuration_seconds;
-			isDeployed = false;
-			attackTimer.SetPause(true);
+				isStarted = true;
+				damageApplyTime_seconds = damageApplyTimeDuration_seconds;
+				isDeployed = false;
+				attackTimer.SetPause(true);
+			}
+			break;
 		}
-		break;
 	}
 }
 

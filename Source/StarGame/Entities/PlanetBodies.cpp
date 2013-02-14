@@ -491,22 +491,35 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 	newSat->SetParent(this);
 	newSat->InitSatelliteOrbit();
 
-	std::shared_ptr<PassiveAOESkill> satSkill = 
-		std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(glm::vec3(), 
-															 satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].damage,
-															 satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].damageApplyTime_secs, 
-															 satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].duration_secs,
-															 satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].range,
-															 "passiveAOESkill",
-															 'q', 'q', 'e',
-															 satSkillStats[SKILL_TYPE_PASSIVE_AOE].skillApplyCost));
 	std::shared_ptr<SatelliteChainingNova> satChainSkill =
 		std::shared_ptr<SatelliteChainingNova>(new SatelliteChainingNova(newSat->GetPosition(),
 																		 satSkillStats[SKILL_TYPE_SAT_CHAIN].damage, 
 																		 satSkillStats[SKILL_TYPE_SAT_CHAIN].range, 
 																		 satSkillStats[SKILL_TYPE_SAT_CHAIN].scaleRate, 
-																		 "satChainSkill"));
-	if(type == SATELLITE_WATER)
+																		 "satChainSkill",
+																		 '\0', '\0', '\0', 
+																		 0, 
+																		 satSkillStats[SKILL_TYPE_SAT_CHAIN].skillResearchCost, 
+																		 satSkillStats[SKILL_TYPE_SAT_CHAIN].upgradeBoxIndex));
+	
+	
+	if(type == satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].forWhichSatellite)
+	{
+		std::shared_ptr<PassiveAOESkill> satSkill = 
+			std::shared_ptr<PassiveAOESkill>(new PassiveAOESkill(glm::vec3(), 
+																 satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].damage,
+																 satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].damageApplyTime_secs, 
+																 satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].duration_secs,
+																 satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].range,
+																 "passiveAOESkill",
+																 'q', 'q', 'e',
+																 satSkillStats[SKILL_TYPE_PASSIVE_AOE].skillApplyCost,
+																 satSkillStats[SKILL_TYPE_PASSIVE_AOE].skillResearchCost,
+																 satSkillStats[SKILL_TYPE_PASSIVE_AOE].upgradeBoxIndex));	
+																				 
+		newSat->AddSkill(satSkill);
+	}
+	if(type == satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].forWhichSatellite)
 	{
 		std::shared_ptr<FrostNovaSkill> satFrostNovaSkill = 
 			std::shared_ptr<FrostNovaSkill>(new FrostNovaSkill(satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].damage, 
@@ -516,21 +529,23 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 															   newSat->GetPosition(), 
 															   "satFrostNova",
 															   'q', 'w', 'q',
-															   satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].skillApplyCost));
+															   satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].skillApplyCost,
+															   satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].skillResearchCost, 
+															   satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].upgradeBoxIndex));
 		newSat->AddSkill(satFrostNovaSkill);
 	}
-	if(type == SATELLITE_EARTH)
+	if(type == satSkillStats[SKILL_TYPE_SAT_SHIELD].forWhichSatellite)
 	{
 		std::shared_ptr<ShieldSkill> satShieldSkill =
 			std::shared_ptr<ShieldSkill>(new ShieldSkill(newSat->GetPosition(), 
 														 satSkillStats[SKILL_TYPE_SAT_SHIELD].defensePoints, 
 														 satSkillStats[SKILL_TYPE_SAT_SHIELD].range, 
 														 "satShieldSkill", 'w', 'e', 'w',
-														 satSkillStats[SKILL_TYPE_SAT_SHIELD].skillApplyCost));
+														 satSkillStats[SKILL_TYPE_SAT_SHIELD].skillApplyCost,
+														 10));
 		newSat->AddSkill(satShieldSkill);
 	}
-																		 
-	newSat->AddSkill(satSkill);
+
 	newSat->AddSkill(satChainSkill);
 
 	satellites.push_back(newSat);
@@ -695,8 +710,8 @@ bool CelestialBody::IsSkillUpgradeButtonClicked(Utility::Ray mouseRay, int &butt
 	}
 	else
 	{
-		int buttonIndex = 0;
-		if(hoverOrbit.IsUpgradeButtonClicked(mouseRay, buttonIndex))
+		bool  isUpgrButtonClicked = hoverOrbit.IsUpgradeButtonClicked(mouseRay, buttonIndex);
+		if(isUpgrButtonClicked)
 		{
 			return true;
 		}

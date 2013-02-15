@@ -86,6 +86,11 @@ void SkillUpgradeButtons::Draw(glutil::MatrixStack &modelMatrix, const SimpleTex
 	skillButtons[2].Draw(modelMatrix, textureData);
 }
 
+void SkillUpgradeButtons::ChangeTexture(TextureType type, int buttonIndex)
+{
+	skillButtons[buttonIndex].ChangeTexture(textureFileNames[type]);
+}
+
 bool SkillUpgradeButtons::IsClicked(Utility::Ray mouseRay, int &buttonIndex)
 {
 	for(int i = 0; i < 3; i++)
@@ -168,8 +173,69 @@ void SatelliteOrbit::Draw(glutil::MatrixStack &modelMatrix,
 	upgradeButtons.Draw(modelMatrix, textureData);
 }
 
+void SatelliteOrbit::ChangeUpgradeButtonTexture(TextureType type, int buttonIndex)
+{
+	upgradeButtons.ChangeTexture(type, buttonIndex);
+}
+
 bool SatelliteOrbit::IsUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex)
 {
 	bool isUpgrButtonClicked = upgradeButtons.IsClicked(mouseRay, buttonIndex);
 	return isUpgrButtonClicked;
+}
+
+
+SunSkillUpgradeButtons::SunSkillUpgradeButtons(float newWidth, float newHeight, float newRadius,
+											   glm::vec3 newCenterPosition,
+											   const std::string &noUpgradeFileName, const std::string &upgradeFileName)
+{
+	width = newWidth;
+	height = newHeight;
+	radius = newRadius;
+	centerPosition = newCenterPosition;
+	textureFileNames[TEXTURE_TYPE_NO_UPGRADE] = noUpgradeFileName;
+	textureFileNames[TEXTURE_TYPE_UPGRADE] = upgradeFileName;
+
+	skillButtons[0] = 
+		Utility::Primitives::Sprite3D(glm::vec3(width / 2.0f, 0.01f, centerPosition.z + 2.5f * radius), width, height);
+	skillButtons[1] = 
+		Utility::Primitives::Sprite3D(glm::vec3(width / 2.0f, 0.01f, centerPosition.z - radius), width, height);
+	skillButtons[2] = 
+		Utility::Primitives::Sprite3D(glm::vec3(centerPosition.x + 2.5f * radius, 0.01f, height / 2.0f), width, height);
+	skillButtons[3] = 
+		Utility::Primitives::Sprite3D(glm::vec3(centerPosition.x - radius, 0.01f, height / 2.0f), width, height);
+}
+
+void SunSkillUpgradeButtons::Init()
+{
+	skillButtons[0].Init(textureFileNames[TEXTURE_TYPE_NO_UPGRADE]);
+	skillButtons[1].Init(textureFileNames[TEXTURE_TYPE_NO_UPGRADE]);
+	skillButtons[2].Init(textureFileNames[TEXTURE_TYPE_NO_UPGRADE]);
+	skillButtons[3].Init(textureFileNames[TEXTURE_TYPE_NO_UPGRADE]);
+}
+
+void SunSkillUpgradeButtons::Draw(glutil::MatrixStack &modelMatrix, const SimpleTextureProgData &textureData)
+{
+	skillButtons[0].Draw(modelMatrix, textureData);
+	skillButtons[1].Draw(modelMatrix, textureData);
+	skillButtons[2].Draw(modelMatrix, textureData);
+	skillButtons[3].Draw(modelMatrix, textureData);
+}
+
+void SunSkillUpgradeButtons::ChangeTexture(TextureType type, int buttonIndex)
+{
+	skillButtons[buttonIndex].ChangeTexture(textureFileNames[type]);
+}
+
+bool SunSkillUpgradeButtons::IsClicked(Utility::Ray mouseRay, int &buttonIndex)
+{
+	for(int i = 0; i < 4; i++)
+	{
+		if(Utility::Intersections::RayIntersectsSphere(mouseRay, skillButtons[i].GetPosition(), 0.5f))
+		{
+			buttonIndex = i;
+			return true;
+		}
+	}
+	return false;
 }

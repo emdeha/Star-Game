@@ -1342,22 +1342,52 @@ void Scene::OnEvent(Event &_event)
 		
 		if(strcmp(_event.GetArgument("what_event").varString, "skillUpgr") == 0)
 		{
-			std::vector<std::shared_ptr<Skill>> sunSkills = suns[0]->GetAllSkills();
-			for(int i = 0; i < sunSkills.size(); i++)
+			if(_event.GetArgument("satType").varInteger == -1)
 			{
-				if(sunSkills[i]->boxIndexForUpgrade == _event.GetArgument("index").varInteger)
+				std::vector<std::shared_ptr<Skill>> sunSkills = suns[0]->GetSunSkills();
+				for(int i = 0; i < sunSkills.size(); i++)
 				{
-					if(sunSkills[i]->isResearched)
+					if(sunSkills[i]->boxIndexForUpgrade == _event.GetArgument("index").varInteger)
 					{
+						if(sunSkills[i]->isResearched)
+						{
+							return;
+						}
+						if(sunSkills[i]->skillResearchCost > suns[0]->currentResource)
+						{
+							std::printf("not enough resource");
+							return;
+						}
+						sunSkills[i]->isResearched = true;
+						suns[0]->currentResource -= sunSkills[i]->skillResearchCost;
+						suns[0]->OnEvent(_event);
 						return;
 					}
-					if(sunSkills[i]->skillResearchCost > suns[0]->currentResource)
+				}
+			}
+			else 
+			{
+				std::vector<std::shared_ptr<Skill>> satSkills = 
+					suns[0]->GetSatelliteSkills(SatelliteType(_event.GetArgument("satType").varInteger));
+
+				for(int i = 0; i < satSkills.size(); i++)
+				{
+					if(satSkills[i]->boxIndexForUpgrade == _event.GetArgument("index").varInteger)
 					{
-						std::printf("not enough resource");
+						if(satSkills[i]->isResearched)
+						{
+							return;
+						}
+						if(satSkills[i]->skillResearchCost > suns[0]->currentResource)
+						{
+							std::printf("not enough resource\n");
+							return;
+						}
+						satSkills[i]->isResearched = true;
+						suns[0]->currentResource -= satSkills[i]->skillResearchCost;
+						suns[0]->OnEvent(_event);
 						return;
 					}
-					sunSkills[i]->isResearched = true;
-					return;
 				}
 			}
 			//std::printf("%i\n", _event.GetArgument("index").varInteger);

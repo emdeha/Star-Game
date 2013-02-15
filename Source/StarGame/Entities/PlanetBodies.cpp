@@ -127,6 +127,12 @@ void CelestialBody::InitSatelliteOrbit()
 								2.2f); // Change: gamma
 	hoverOrbit.Init();
 }
+void CelestialBody::InitSunSkillUpgradeButtons()
+{
+	sunSkillUpgradeBtns = SunSkillUpgradeButtons(1.0f, 1.0f, diameter / 2.0f, position, 
+												 "../data/images/skill-noupgrade.jpg", "../data/images/skill-upgrade.jpg");
+	sunSkillUpgradeBtns.Init();
+}
 
 void CelestialBody::InitSatelliteStats()
 {
@@ -330,6 +336,10 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 
 		hoverOrbit.Draw(modelMatrix, simpleData, textureData);
 	}
+	if(isClicked && isSun)
+	{
+		sunSkillUpgradeBtns.Draw(modelMatrix, textureData);
+	}
 	else if(isClicked)
 	{
 		isClicked = false;
@@ -393,6 +403,9 @@ void CelestialBody::OnEvent(Event &_event)
 				}
 			}
 			break;
+		case EVENT_TYPE_ON_HOVER:
+			isClicked = true;
+			break;
 		case EVENT_TYPE_ATTACKED:
 			if(_event.GetArgument("bodyIndex").varInteger == -1)
 			{
@@ -454,6 +467,25 @@ void CelestialBody::OnEvent(Event &_event)
 					Event insufficientResourcesEvent = Event(1, EVENT_TYPE_OTHER, insufficientResourcesEventArg);
 
 					generatedEvents.push_back(insufficientResourcesEvent);
+				}
+			}
+			if(strcmp(_event.GetArgument("what_event").varString, "skillUpgr") == 0)
+			{
+				if(_event.GetArgument("satType").varInteger == -1)
+				{
+					isClicked = true;
+					sunSkillUpgradeBtns.ChangeTexture(TEXTURE_TYPE_UPGRADE, _event.GetArgument("index").varInteger);
+				}
+				else
+				{
+					for(int i = 0; i < satellites.size(); i++)
+					{
+						if(satellites[i]->satType == SatelliteType(_event.GetArgument("satType").varInteger))
+						{
+							satellites[i]->hoverOrbit.ChangeUpgradeButtonTexture(
+								TEXTURE_TYPE_UPGRADE, _event.GetArgument("index").varInteger);
+						}
+					}
 				}
 			}
 			break;
@@ -706,11 +738,15 @@ bool CelestialBody::IsSkillUpgradeButtonClicked(Utility::Ray mouseRay, int &butt
 {
 	if(isSun)
 	{
-		return false;
+		bool isSunUpgrButtonClicked = sunSkillUpgradeBtns.IsClicked(mouseRay, buttonIndex);
+		if(isSunUpgrButtonClicked)
+		{
+			return true;
+		}
 	}
 	else
 	{
-		bool  isUpgrButtonClicked = hoverOrbit.IsUpgradeButtonClicked(mouseRay, buttonIndex);
+		bool isUpgrButtonClicked = hoverOrbit.IsUpgradeButtonClicked(mouseRay, buttonIndex);
 		if(isUpgrButtonClicked)
 		{
 			return true;
@@ -885,6 +921,24 @@ std::vector<std::shared_ptr<Skill>> CelestialBody::GetAllSkills()
 
 	return allSkills;
 }
+std::vector<std::shared_ptr<Skill>> CelestialBody::GetSatelliteSkills(SatelliteType type)
+{
+	std::vector<std::shared_ptr<Skill>> allSkills;
+
+	for(int i = 0; i < satellites.size(); i++)
+	{
+		if(satellites[i]->satType == type)
+		{
+			allSkills = satellites[i]->GetAllSkills();
+		}
+	}
+
+	return allSkills;
+}
+std::vector<std::shared_ptr<Skill>> CelestialBody::GetSunSkills()
+{
+	return skills;
+}
 
 const glm::vec3 CelestialBody::GetPosition() const
 {
@@ -909,6 +963,7 @@ SatelliteType CelestialBody::GetSatelliteType()
 	{
 		return satType;
 	}
+	else return SatelliteType(-1);
 }
 
 inline void CelestialBody::SetParent(CelestialBody *newParent)

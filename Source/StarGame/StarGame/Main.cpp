@@ -267,16 +267,19 @@ void HandleMouse()
 					bool isUpgrBoxClicked = (*iter)->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex);
 					if(isUpgrBoxClicked && scene.GetMouse().IsLeftButtonDown())
 					{
-						EventArg upgradeSkillClickedEventArgs[2];
+						EventArg upgradeSkillClickedEventArgs[3];
 						upgradeSkillClickedEventArgs[0].argType = "what_event";
 						upgradeSkillClickedEventArgs[0].argument.varType = TYPE_STRING;
 						strcpy(upgradeSkillClickedEventArgs[0].argument.varString, "skillUpgr");
 						upgradeSkillClickedEventArgs[1].argType = "index";
 						upgradeSkillClickedEventArgs[1].argument.varType = TYPE_INTEGER;
 						upgradeSkillClickedEventArgs[1].argument.varInteger = buttonIndex;
-						Event upgradeSkillClickedEvent(2, EVENT_TYPE_OTHER, upgradeSkillClickedEventArgs);
+						upgradeSkillClickedEventArgs[2].argType = "satType";
+						upgradeSkillClickedEventArgs[2].argument.varType = TYPE_INTEGER;
+						upgradeSkillClickedEventArgs[2].argument.varInteger = (*iter)->GetSatelliteType();
+						Event upgradeSkillClickedEvent(3, EVENT_TYPE_OTHER, upgradeSkillClickedEventArgs);
 
-						(*iter)->OnEvent(upgradeSkillClickedEvent);
+						//(*iter)->OnEvent(upgradeSkillClickedEvent);
 						scene.OnEvent(upgradeSkillClickedEvent);
 					}
 					Event satelliteHoveredEvent = StockEvents::EventOnHover();
@@ -284,6 +287,33 @@ void HandleMouse()
 					(*iter)->OnEvent(satelliteHoveredEvent);
 					scene.OnEvent(satelliteHoveredEvent);
 				}
+			}
+
+			if(scene.GetSun()->IsClicked(mouseRay))
+			{
+				int buttonIndex = 0;
+				bool isUpgrBoxClicked = scene.GetSun()->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex);
+				if(isUpgrBoxClicked && scene.GetMouse().IsLeftButtonDown())
+				{
+					EventArg upgradeSkillClickedEventArgs[3];
+					upgradeSkillClickedEventArgs[0].argType = "what_event";
+					upgradeSkillClickedEventArgs[0].argument.varType = TYPE_STRING;
+					strcpy(upgradeSkillClickedEventArgs[0].argument.varString, "skillUpgr");
+					upgradeSkillClickedEventArgs[1].argType = "index";
+					upgradeSkillClickedEventArgs[1].argument.varType = TYPE_INTEGER;
+					upgradeSkillClickedEventArgs[1].argument.varInteger = buttonIndex;
+					upgradeSkillClickedEventArgs[2].argType = "satType";
+					upgradeSkillClickedEventArgs[2].argument.varType = TYPE_INTEGER;
+					upgradeSkillClickedEventArgs[2].argument.varInteger = -1;
+					Event upgradeSkillClickedEvent(3, EVENT_TYPE_OTHER, upgradeSkillClickedEventArgs);
+
+					//(*iter)->OnEvent(upgradeSkillClickedEvent);
+					scene.OnEvent(upgradeSkillClickedEvent);
+				}
+				Event sunHoveredEvent = StockEvents::EventOnHover();
+
+				scene.GetSun()->OnEvent(sunHoveredEvent);
+				scene.OnEvent(sunHoveredEvent);
 			}
 		}
 	}
@@ -404,6 +434,8 @@ void InitializeScene()
 	std::shared_ptr<CelestialBody> 
 		mainSun(new CelestialBody(glm::vec3(0.0f), glm::vec4(0.738f, 0.738f, 0.423f, 1.0f), 1.25f, 4, 50, 
 								  200, 100));
+
+	mainSun->InitSunSkillUpgradeButtons();
 
 	SunLight 
 		mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, displayData.gamma));

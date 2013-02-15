@@ -105,8 +105,10 @@ private:
 
 	std::vector<std::shared_ptr<Skill>> skills; // TODO: Is a pointer needed?
 
-	SatelliteOrbit hoverOrbit; // TODO: Not sure if this should be here on somewhere more
+	SatelliteOrbit hoverOrbit; // TODO: Not sure if this should be here or somewhere more
 							   //	    GUI specific.
+	SunSkillUpgradeButtons sunSkillUpgradeBtns; // TODO: Not sure if this should be here or somewhere more
+												//       GUI specific.
 
 	std::vector<Event> generatedEvents;
 
@@ -154,6 +156,7 @@ public:
 																				   // satellite will be created
 
 	void InitSatelliteOrbit();
+	void InitSunSkillUpgradeButtons();
 
 	void LoadMesh(const std::string &fileName);
 	
@@ -207,6 +210,8 @@ public:
 	
 	// Gets the sun's and its satellites' skills.
 	std::vector<std::shared_ptr<Skill>> GetAllSkills();
+	std::vector<std::shared_ptr<Skill>> GetSatelliteSkills(SatelliteType type);
+	std::vector<std::shared_ptr<Skill>> GetSunSkills();
 
 	const glm::vec3 GetPosition() const;
 	const int GetCurrentResource() const;

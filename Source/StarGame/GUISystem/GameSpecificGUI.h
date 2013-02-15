@@ -27,6 +27,13 @@
 
 
 #define RESOLUTION 90
+	
+
+enum TextureType
+{
+	TEXTURE_TYPE_NO_UPGRADE,
+	TEXTURE_TYPE_UPGRADE,
+};
 
 
 class AOESelector
@@ -52,11 +59,8 @@ public:
 class SkillUpgradeButtons
 {
 private:	
-	enum TextureType
-	{
-		TEXTURE_TYPE_NO_UPGRADE,
-		TEXTURE_TYPE_UPGRADE,
-	};
+	friend class SatelliteOrbit; // WARN: Should I? Maybe, they are in parent-child relationship.
+
 
 	glm::vec3 orbitPosition;
 	float orbitInnerRadius;
@@ -78,6 +82,8 @@ public:
 	void Init();
 
 	void Draw(glutil::MatrixStack &modelMatrix, const SimpleTextureProgData &textureData);
+
+	void ChangeTexture(TextureType type, int buttonIndex);
 
 	bool IsClicked(Utility::Ray mouseRay, int &buttonIndex);
 };
@@ -114,7 +120,37 @@ public:
 	void Draw(glutil::MatrixStack &modelMatrix, 
 			  const SimpleProgData &simpleData, const SimpleTextureProgData &textureData);
 
+	void ChangeUpgradeButtonTexture(TextureType textType, int buttonIndex);
+
 	bool IsUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex);
+};
+
+
+class SunSkillUpgradeButtons
+{
+private:
+	glm::vec3 centerPosition;
+	float width;
+	float height;
+	float radius;
+
+	std::string textureFileNames[2];
+
+	Utility::Primitives::Sprite3D skillButtons[4];
+
+public:
+	SunSkillUpgradeButtons() {}
+	SunSkillUpgradeButtons(float newWidth, float newHeight, float newRadius,
+						   glm::vec3 newCenterPosition,
+						   const std::string &noUpgradeFileName, const std::string &upgradeFileName);
+
+	void Init();
+
+	void Draw(glutil::MatrixStack &modelMatrix, const SimpleTextureProgData &textureData);
+
+	void ChangeTexture(TextureType type, int buttonIndex);
+
+	bool IsClicked(Utility::Ray mouseRay, int &buttonIndex);
 };
 
 

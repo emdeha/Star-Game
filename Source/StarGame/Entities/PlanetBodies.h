@@ -122,6 +122,7 @@ private:
 	glm::vec3 position;
 
 	float diameter;
+	float clickableRadius;
 
 	bool isClicked;
 	bool isSun;

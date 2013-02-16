@@ -74,6 +74,7 @@ CelestialBody::CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float ne
 	position = newPosition;
 	color = newColor;
 	diameter = newDiameter;
+	clickableRadius = diameter / 2.0f;
 	satelliteCap = newSatelliteCap;
 	health = newHealth;
 	satelliteConstructionCost = newSatelliteConstructionCost;
@@ -94,6 +95,7 @@ CelestialBody::CelestialBody(float speed, float newOffsetFromParent, float newDi
 	revolutionDuration = Framework::Timer(Framework::Timer::TT_LOOP, speed);
 	color = newColor;
 	diameter = newDiameter;
+	clickableRadius = diameter;
 	health = newHealth;
 	satType = newSatType;
 	isSun = false; // no matter what the value of _isSun is, the body would be created as a sun
@@ -328,7 +330,11 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 		skills[i]->Render(modelMatrix, simpleData);
 		skills[i]->Render(modelMatrix, litData, materialBlockIndex);
 	}
-
+	
+	if(isClicked && isSun)
+	{
+		sunSkillUpgradeBtns.Draw(modelMatrix, textureData);
+	}
 	if(isClicked && !isSun)
 	{
 		glutil::PushStack push(modelMatrix);
@@ -336,13 +342,10 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 
 		hoverOrbit.Draw(modelMatrix, simpleData, textureData);
 	}
-	if(isClicked && isSun)
+	else if(!isClicked)
 	{
-		sunSkillUpgradeBtns.Draw(modelMatrix, textureData);
-	}
-	else if(isClicked)
-	{
-		isClicked = false;
+		//isClicked = false;
+		clickableRadius = diameter / 2.0f;
 	}
 }
 
@@ -405,6 +408,10 @@ void CelestialBody::OnEvent(Event &_event)
 			break;
 		case EVENT_TYPE_ON_HOVER:
 			isClicked = true;
+			if(clickableRadius <= diameter / 2.0f)
+			{
+				clickableRadius *= 2.5f;
+			}
 			break;
 		case EVENT_TYPE_ATTACKED:
 			if(_event.GetArgument("bodyIndex").varInteger == -1)
@@ -695,7 +702,7 @@ bool CelestialBody::IsClicked(Utility::Ray mouseRay)
 {
 	if(isSun)
 	{
-		if(Utility::Intersections::RayIntersectsSphere(mouseRay, position, diameter / 2.0f))
+		if(Utility::Intersections::RayIntersectsSphere(mouseRay, position, clickableRadius))
 		{
 			// event!
 			//isClicked = true;

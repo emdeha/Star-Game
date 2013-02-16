@@ -413,6 +413,8 @@ void InitializePrograms()
 	scene.GetShaderManager().LoadBillboardProgDataNoTexture("shaders/BillboardShader.vert", "shaders/BillboardShaderNoTexture.geom", "shaders/BillboardShaderNoTexture.frag");
 }
 
+FusionHint hintBox;
+
 void InitializeGUI()
 {
 	GUILoader guiLoader("../data/gui-descriptor/descriptor.txt", 
@@ -479,7 +481,16 @@ void InitializeScene()
 	glUseProgram(scene.GetShaderManager().GetSimpleTextureProgData().theProgram);
 	glUniform1i(scene.GetShaderManager().GetSimpleTextureProgData().textureUnif, 0);
 	glUseProgram(0);
+	/*
 
+	hintBox = FusionHint(LayoutPreset::MEDIUM, "hintBox", glm::vec2(430.0f, 510.0f), 50.0f, 50.0f);
+	std::string textures[3];
+	textures[0] = "../data/images/fusion-e.jpg";
+	textures[1] = "../data/images/fusion-w.jpg";
+	textures[2] = "../data/images/fusion-q.jpg";
+	//hintBox.SetTextures(textures, 3);
+	hintBox.Init();
+	*/
 
 	InitializeGUI();
 	scene.InitTweakableVariables(/*true, "../data/loader-files/tweak-config.txt"*/);
@@ -614,6 +625,8 @@ void Display()
 		
 		scene.RenderCurrentLayout();	
 
+		//hintBox.Draw(scene.GetShaderManager().GetTextureProgData());
+
 		//sampleMesh.Render(modelMatrix, shaderManager.GetSimpleTextureProgData());		
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
@@ -724,6 +737,21 @@ void Keyboard(unsigned char key, int x, int y)
 		scene.GetLayout(LAYOUT_IN_GAME)->GetControl("fusionOne")->OnEvent(returnedFusionEvent);
 		scene.GetLayout(LAYOUT_IN_GAME)->GetControl("fusionTwo")->OnEvent(returnedFusionEvent);
 		scene.GetLayout(LAYOUT_IN_GAME)->GetControl("fusionThree")->OnEvent(returnedFusionEvent);
+		/*scene.GetLayout(LAYOUT_IN_GAME)->GetControl("skillHint")->OnEvent(returnedFusionEvent);*/
+		if(returnedFusionEvent.GetArgument("isHint").varBool == true)
+		{
+			EventArg showHintEventArgs[2];
+			showHintEventArgs[0].argType = "what_event";
+			showHintEventArgs[0].argument.varType = TYPE_STRING;
+			strcpy(showHintEventArgs[0].argument.varString, "show_skill");
+			showHintEventArgs[1].argType = "skillIndex";
+			showHintEventArgs[1].argument.varType = TYPE_INTEGER;
+			std::string currentInputSequence = scene.GetCurrentFusionInputSequence();
+			showHintEventArgs[1].argument.varInteger = 
+				scene.GetSkillTypeByFusionCombination(currentInputSequence[0], currentInputSequence[1], currentInputSequence[2]);
+			Event showHintEvent(2, EVENT_TYPE_OTHER, showHintEventArgs);
+			scene.GetLayout(LAYOUT_IN_GAME)->GetControl("skillHint")->OnEvent(showHintEvent);
+		}
 	}
 
 	glutPostRedisplay();

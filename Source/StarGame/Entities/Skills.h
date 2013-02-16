@@ -37,7 +37,7 @@ enum ParameterType
 	PARAM_DAMAGE,
 };
 
-enum SkillTypes
+enum SkillType
 {
 	SKILL_TYPE_PASSIVE_AOE,
 	SKILL_TYPE_AOE,

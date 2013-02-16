@@ -118,6 +118,18 @@ std::string FusionInput::GetSequenceButtons(std::string sequenceName)
 	}*/
 }
 
+std::string FusionInput::GetSequenceName(std::string fusionButtons)
+{
+	for(std::vector<std::pair<std::string, FusionSequence>>::iterator iter = sequences.begin();
+		iter != sequences.end(); ++iter)
+	{
+		if((*iter).second.GetButtons() == fusionButtons)
+		{
+			return (*iter).first;
+		}
+	}
+}
+
 Event FusionInput::Update(char newButton)
 {
 	if(newButton == sequenceEndButton)
@@ -136,6 +148,7 @@ Event FusionInput::Update(char newButton)
 		currentInputSequence.resize(0);
 		return StockEvents::EmptyEvent();
 	}
+	
 
 	if(currentInputSequence.length() >= 3)
 	{
@@ -145,8 +158,9 @@ Event FusionInput::Update(char newButton)
 	}
 	currentInputSequence += newButton;
 
+	
 	// TODO: Should I check whether the input button is part of the sequence?
-	EventArg currentInputButtonEventArg[3];
+	EventArg currentInputButtonEventArg[4];
 	currentInputButtonEventArg[0].argType = "what_event";
 	currentInputButtonEventArg[0].argument.varType = TYPE_STRING;
 	strcpy(currentInputButtonEventArg[0].argument.varString, "fusion_button");
@@ -158,10 +172,25 @@ Event FusionInput::Update(char newButton)
 	currentInputButtonEventArg[2].argType = "button_pos";
 	currentInputButtonEventArg[2].argument.varType = TYPE_INTEGER;
 	currentInputButtonEventArg[2].argument.varInteger = currentInputSequence.length();
+	currentInputButtonEventArg[3].argType = "isHint";
+	currentInputButtonEventArg[3].argument.varType = TYPE_BOOL;
+	if(currentInputSequence.length() == 3)
+	{
+		currentInputButtonEventArg[3].argument.varBool = true;
+	}
+	else 
+	{
+		currentInputButtonEventArg[3].argument.varBool = false;
+	}
 		
-	Event currentInputButtonEvent = Event(3, EVENT_TYPE_OTHER, currentInputButtonEventArg);
+	Event currentInputButtonEvent = Event(4, EVENT_TYPE_OTHER, currentInputButtonEventArg);
 
 	return currentInputButtonEvent;
+}
+
+std::string FusionInput::GetCurrentInputSequence()
+{
+	return currentInputSequence;
 }
 
 void FusionInput::Clear()

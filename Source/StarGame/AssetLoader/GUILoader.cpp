@@ -45,6 +45,7 @@ struct ControlData
 	int imageBoxIndex; /// this is only needed for the fusion. should refactor
 
 	std::string fusionTextures[4];
+	std::vector<std::string> skillTextures;
 
 	LayoutType toLayout;
 };
@@ -104,6 +105,27 @@ GUILoader::GUILoader(const std::string &fileName,
 					controlData.fusionTextures[i] += textureFile[i];
 				}
 			}
+			if(strcmp(tag, "skillTextures") == 0)
+			{
+				line.erase(0, 13);
+				line[0] = ' ';
+				int skillTexturesCount = 0;
+				sscanf(line.c_str(), "%i ", &skillTexturesCount);
+
+				char chCount[3];
+				itoa(skillTexturesCount, chCount, 10);
+				line.erase(line.begin(), line.begin() + strlen(chCount) + 1);
+
+				controlData.skillTextures.resize(skillTexturesCount);
+				for(int i = 0; i < skillTexturesCount; i++)
+				{
+					char extractedTexture[30];
+					sscanf(line.c_str(), "%s ", &extractedTexture);
+					controlData.skillTextures[i] = texturesDir;
+					controlData.skillTextures[i] += extractedTexture;
+					line.erase(line.begin(), line.begin() + strlen(extractedTexture) + 1);
+				}
+			}
 			if(strcmp(tag, "layout") == 0)
 			{
 				line.erase(0, 6);
@@ -156,6 +178,35 @@ GUILoader::GUILoader(const std::string &fileName,
 				imageBox->AddPreset(MEDIUM, controlData.controlPresets[MEDIUM].position);
 				imageBox->AddPreset(BIG, controlData.controlPresets[BIG].position);
 				layouts[controlData.toLayout]->AddControl(imageBox);
+			}
+			if(strcmp(tag, "hintBox") == 0)
+			{
+				line.erase(0, 7); 
+				line[0] = ' ';
+				sscanf(line.c_str(), "%s %i %f %f %f %f %f %f %f %f",
+					&controlData.controlName,
+					&controlData.toLayout,
+					&controlData.controlPresets[SMALL].position.x,
+					&controlData.controlPresets[SMALL].position.y,
+					&controlData.controlPresets[MEDIUM].position.x,
+					&controlData.controlPresets[MEDIUM].position.y,
+					&controlData.controlPresets[BIG].position.x,
+					&controlData.controlPresets[BIG].position.y,
+					&controlData.imageBoxWidth,
+					&controlData.imageBoxHeight);
+
+				std::shared_ptr<FusionHint> hintBox =
+					std::shared_ptr<FusionHint>(new FusionHint(LayoutPreset(SMALL),
+															   controlData.controlName,
+															   controlData.controlPresets[SMALL].position,
+															   controlData.imageBoxWidth,
+															   controlData.imageBoxHeight));
+				
+				hintBox->SetTextures(controlData.skillTextures);
+				hintBox->Init();
+				hintBox->AddPreset(MEDIUM, controlData.controlPresets[MEDIUM].position);
+				hintBox->AddPreset(BIG, controlData.controlPresets[BIG].position);
+				layouts[controlData.toLayout]->AddControl(hintBox);
 			}
 			if(strcmp(tag, "button") == 0)
 			{

@@ -265,6 +265,66 @@ public:
 };
 
 
+class FusionHint : public TextControl
+{
+private:
+	LayoutPreset currentPreset;
+	glm::vec3 presetPosition[3];
+
+	float  width;
+	float height;
+
+	std::string name;
+	
+	std::vector<std::string> skillTextures; 
+
+	bool isActive;
+	bool isVisible;
+
+	Utility::Primitives::Sprite boxSprite;
+
+public:
+	FusionHint() : TextControl()
+	{
+		name = "";
+		isActive = false;
+		isVisible = true;
+	}
+	FusionHint(LayoutPreset newCurrentPreset,
+			   const std::string &newName,
+			   glm::vec2 newPosition, 
+			   float newWidth, float newHeight)
+			   : TextControl(newCurrentPreset, newName, newPosition)
+	{
+		width = newWidth;
+		height = newHeight;
+		name = newName;
+		isActive = false;
+		isVisible = true;
+
+		boxSprite = 
+			Utility::Primitives::Sprite(glm::vec3(newPosition, 0.0f),
+										glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
+										newWidth, newHeight, false);
+	}
+
+	void SetTextures(std::vector<std::string> textures);
+
+	void Init();
+
+	void OnEvent(Event &_event);
+
+	void AddPreset(LayoutPreset newPreset, glm::vec2 newPosition);
+
+	void Update(int newWindowWidth, int newWindowHeight);
+	void Draw(const TextureProgData &textureData);
+
+	bool IsImageBox()
+	{
+		return true;
+	}
+};
+
 
 class Button : public TextControl
 {

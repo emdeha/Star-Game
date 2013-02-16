@@ -214,6 +214,8 @@ public:
 	std::shared_ptr<CelestialBody> GetSun();
 
 	SunLight GetSunLight();
+	SkillType GetSkillTypeByFusionCombination(char fusionA, char fusionB, char fusionC);
+	std::string GetCurrentFusionInputSequence();
 
 	bool HasSuns();
 	

@@ -828,7 +828,7 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 		}
 		if(strcmp(cmd.c_str(), "skillDamage") == 0)
 		{
-			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
 			int damage = atoi(splittedCommand[2].c_str());
 			skillsStats[skillType].damage = damage;/*
 			if(skillType > SKILL_TYPE_MIDDLE) // WARN: Not sure if this is the right way!!!
@@ -839,7 +839,7 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 		}
 		if(strcmp(cmd.c_str(), "skillRange") == 0)
 		{
-			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
 			float range = atof(splittedCommand[2].c_str());
 			skillsStats[skillType].range = range;/*
 			if(skillType > SKILL_TYPE_MIDDLE) // WARN: Not sure if this is the right way!!!
@@ -850,7 +850,7 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 		}
 		if(strcmp(cmd.c_str(), "skillApplyCost") == 0)
 		{
-			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
 			int skillApplyCost = atoi(splittedCommand[2].c_str());
 			skillsStats[skillType].skillApplyCost = skillApplyCost;/*
 			if(skillType > SKILL_TYPE_MIDDLE) // WARN: Not sure if this is the right way!!!
@@ -861,7 +861,7 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 		}
 		if(strcmp(cmd.c_str(), "skillScaleRate") == 0)
 		{
-			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
 			float skillScaleRate = atof(splittedCommand[2].c_str());
 			skillsStats[skillType].scaleRate = skillScaleRate;/*
 			if(skillType > SKILL_TYPE_MIDDLE) // WARN: Not sure if this is the right way!!!
@@ -872,7 +872,7 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 		}
 		if(strcmp(cmd.c_str(), "skillDamageApplyTime") == 0)
 		{
-			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
 			float damageApplyTime = atof(splittedCommand[2].c_str());
 			skillsStats[skillType].damageApplyTime_secs = damageApplyTime;/*
 			if(skillType > SKILL_TYPE_MIDDLE) // WARN: Not sure if this is the right way!!!
@@ -883,7 +883,7 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 		}
 		if(strcmp(cmd.c_str(), "skillDuration") == 0)
 		{
-			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
 			float duration = atof(splittedCommand[2].c_str());
 			skillsStats[skillType].duration_secs = duration;/*
 			if(skillType > SKILL_TYPE_MIDDLE) // WARN: Not sure if this is the right way!!!
@@ -894,7 +894,7 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 		}
 		if(strcmp(cmd.c_str(), "skillDefensePoints") == 0)
 		{
-			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
 			int defensePoints = atoi(splittedCommand[2].c_str());
 			skillsStats[skillType].defensePoints = defensePoints;
 			/*
@@ -906,7 +906,7 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 		}
 		if(strcmp(cmd.c_str(), "skillStunTime") == 0)
 		{
-			SkillTypes skillType = SkillTypes(atoi(splittedCommand[1].c_str()));
+			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
 			float stunTime = atof(splittedCommand[2].c_str());
 			skillsStats[skillType].stunTime_secs = stunTime;/*
 			if(skillType > SKILL_TYPE_MIDDLE) // WARN: Not sure if this is the right way!!!
@@ -1561,6 +1561,47 @@ std::shared_ptr<CelestialBody> Scene::GetSun()
 SunLight Scene::GetSunLight()
 {
 	return lights.front();
+}
+
+SkillType Scene::GetSkillTypeByFusionCombination(char fusionA, char fusionB, char fusionC)
+{
+	std::string buttons = "";
+	buttons += fusionA;
+	buttons += fusionB;
+	buttons += fusionC;
+
+	std::string skillName = sceneFusionInput.GetSequenceName(buttons);
+	if(skillName == "aoeSkill")
+	{
+		return SkillType::SKILL_TYPE_AOE;
+	}
+	if(skillName == "passiveAoeSkill")
+	{
+		return SkillType::SKILL_TYPE_PASSIVE_AOE;
+	}
+	if(skillName == "sunNovaSkill")
+	{
+		return SkillType::SKILL_TYPE_SUN_NOVA;
+	}
+	if(skillName == "satFrostNova")
+	{
+		return SkillType::SKILL_TYPE_SAT_FROSTNOVA;
+	}
+	if(skillName == "satShieldSkill")
+	{
+		return SkillType::SKILL_TYPE_SAT_SHIELD;
+	}
+	if(skillName == "burnSkill")
+	{
+		return SkillType::SKILL_TYPE_BURN;
+	}
+
+	return SkillType(0);
+}
+
+std::string Scene::GetCurrentFusionInputSequence()
+{
+	return sceneFusionInput.GetCurrentInputSequence();
 }
 
 bool Scene::HasSuns()

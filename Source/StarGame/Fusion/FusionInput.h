@@ -56,6 +56,8 @@ public:
 					 char buttonA = ' ', char buttonB = ' ', char buttonC = ' ');
 
 	std::string GetSequenceButtons(std::string sequenceName);
+	std::string GetSequenceName(std::string sequenceButtons);
+	std::string GetCurrentInputSequence();
 
 	Event Update(char newButton);
 

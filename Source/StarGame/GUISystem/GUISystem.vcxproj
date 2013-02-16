@@ -80,6 +80,7 @@
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Control.cpp" />
+    <ClCompile Include="FusionHint.cpp" />
     <ClCompile Include="GameSpecificGUI.cpp" />
     <ClCompile Include="ImageBox.cpp" />
     <ClCompile Include="Label.cpp" />

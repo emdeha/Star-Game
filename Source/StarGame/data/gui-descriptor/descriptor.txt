@@ -1,10 +1,12 @@
 mainfont AGENCYR.TTF
 fusiontextures fusion-empty.jpg fusion-catalyst.jpg fusion-ectoplasm.jpg fusion-matter.jpg
+skillTextures 8 fusion-empty.jpg fusion-catalyst.jpg fusion-matter.jpg fusion-ectoplasm.jpg fusion-e.jpg fusion-w.jpg fusion-q.jpg particle-2.jpg
 layout 1 0.0 0.0 0.0 1.0 0
 label labelMatter Matter: 0 1 10 570 28 10 570 48 10 570 68
 imagebox fusionOne 1 375.0 570.0 375.0 570.0 375.0 570.0 50.0 50.0 3
 imagebox fusionTwo 1 430.0 570.0 430.0 570.0 430.0 570.0 50.0 50.0 2
 imagebox fusionThree 1 485.0 570.0 485.0 570.0 485.0 570.0 50.0 50.0 1
+hintBox skillHint 1 430.0 510.0 430.0 510.0 430.0 510.0 50.0 50.0 
 textbox varInput 200.0 15 1 1 540 560 28 540 560 48 540 560 68
 button applyInput Apply 0 1 750 570 28 750 570 48 750 570 68
 layout 0 0.0 0.5 0.6 1.0 1

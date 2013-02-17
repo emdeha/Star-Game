@@ -56,6 +56,10 @@ void Layout::Draw(const FontProgData &fontData, const SimpleProgData &simpleData
 		{
 			(*iter)->Draw(textureData);
 		}
+		else if((*iter)->IsHintBox())
+		{
+			(*iter)->Draw(fontData, textureData);
+		}
 		else
 		{
 			(*iter)->Draw(fontData, simpleData);

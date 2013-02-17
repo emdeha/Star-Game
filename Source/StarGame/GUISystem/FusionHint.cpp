@@ -22,6 +22,13 @@
 void FusionHint::Init()
 {
 	boxSprite.Init(skillTextures[0]);
+	
+	textToDisplay = Text("../data/fonts/AGENCYR.TTF");
+	textToDisplay.Init(800, 600);
+	
+	controlSquare.Init(800, 600);
+
+	ComputeNewAttributes();
 }
 
 void FusionHint::OnEvent(Event &_event)
@@ -32,6 +39,7 @@ void FusionHint::OnEvent(Event &_event)
 		if(strcmp(_event.GetArgument("what_event").varString, "show_skill") == 0)
 		{
 			boxSprite.ChangeTexture(skillTextures[_event.GetArgument("skillIndex").varInteger]);
+			text = skillDescriptions[_event.GetArgument("skillIndex").varInteger];
 			isVisible = true;
 		}
 		break;
@@ -49,9 +57,17 @@ void FusionHint::Update(int newWindowWidth, int newWindowHeight)
 {
 	windowHeight = newWindowHeight;
 	windowWidth = newWindowWidth;
+
+	textToDisplay.UpdateWindowDimensions(windowWidth, windowHeight);
+	ComputeNewAttributes();
 }
-void FusionHint::Draw(const TextureProgData &textureData)
-{
+void FusionHint::Draw(const FontProgData &fontData, const TextureProgData &textureData)
+{		
+	textToDisplay.Print(text.c_str(), fontData,
+						glm::vec2(presets[currentPreset].position.x + width, 600 - presets[currentPreset].position.y),
+						glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
+						presets[currentPreset].textSize);
+
 	if(isVisible)
 	{
 		glutil::MatrixStack identityMat;
@@ -59,6 +75,15 @@ void FusionHint::Draw(const TextureProgData &textureData)
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		/*
+		// TODO: Add simpleData
+		if(hasBackground)
+		{
+			controlSquare.Draw(modelMatrix, simpleData);
+		}
+		*/
+	
 
 		boxSprite.Draw(identityMat, textureData);
 
@@ -71,5 +96,12 @@ void FusionHint::SetTextures(std::vector<std::string> textures)
 	for(int i = 0; i < textures.size(); i++)
 	{
 		skillTextures.push_back(textures[i]);
+	}
+}
+void FusionHint::SetDescriptions(std::vector<std::string> descriptions)
+{
+	for(int i = 0; i < descriptions.size(); i++)
+	{
+		skillDescriptions.push_back(descriptions[i]);
 	}
 }

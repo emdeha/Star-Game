@@ -167,6 +167,7 @@ public:
 	virtual void Init() {};
 
 	virtual void Draw(const FontProgData &fontData, const SimpleProgData &simpleData);
+	virtual void Draw(const FontProgData &fontData, const TextureProgData &textureData) {};
 	virtual void Draw(const TextureProgData &textureData) {}; 
 
 	virtual void ComputeNewAttributes();
@@ -181,7 +182,8 @@ public:
 	virtual std::string GetContent() { return ""; }
 	virtual void ChangeText(const std::string &newText) { text = newText; }
 
-	virtual bool IsImageBox() { return false; };
+	virtual bool IsImageBox() { return false; }
+	virtual bool IsHintBox() { return false; }
 	bool IsActive();
 	void Deactivate();
 
@@ -277,6 +279,7 @@ private:
 	std::string name;
 	
 	std::vector<std::string> skillTextures; 
+	std::vector<std::string> skillDescriptions;
 
 	bool isActive;
 	bool isVisible;
@@ -293,9 +296,11 @@ public:
 	FusionHint(LayoutPreset newCurrentPreset,
 			   const std::string &newName,
 			   glm::vec2 newPosition, 
-			   float newWidth, float newHeight)
-			   : TextControl(newCurrentPreset, newName, newPosition)
+			   float newWidth, float newHeight,
+			   int textSize)
+			   : TextControl(newCurrentPreset, newName, "", newPosition, textSize, false)
 	{
+		currentPreset = newCurrentPreset;
 		width = newWidth;
 		height = newHeight;
 		name = newName;
@@ -309,6 +314,7 @@ public:
 	}
 
 	void SetTextures(std::vector<std::string> textures);
+	void SetDescriptions(std::vector<std::string> descriptions);
 
 	void Init();
 
@@ -317,9 +323,9 @@ public:
 	void AddPreset(LayoutPreset newPreset, glm::vec2 newPosition);
 
 	void Update(int newWindowWidth, int newWindowHeight);
-	void Draw(const TextureProgData &textureData);
+	void Draw(const FontProgData &fontData, const TextureProgData &textureData);
 
-	bool IsImageBox()
+	bool IsHintBox()
 	{
 		return true;
 	}

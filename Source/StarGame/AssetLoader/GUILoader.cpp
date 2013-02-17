@@ -46,6 +46,7 @@ struct ControlData
 
 	std::string fusionTextures[4];
 	std::vector<std::string> skillTextures;
+	std::vector<std::string> skillDescriptions;
 
 	LayoutType toLayout;
 };
@@ -105,25 +106,30 @@ GUILoader::GUILoader(const std::string &fileName,
 					controlData.fusionTextures[i] += textureFile[i];
 				}
 			}
-			if(strcmp(tag, "skillTextures") == 0)
+			if(strcmp(tag, "skillData") == 0)
 			{
-				line.erase(0, 13);
+				line.erase(0, 9);
 				line[0] = ' ';
-				int skillTexturesCount = 0;
-				sscanf(line.c_str(), "%i ", &skillTexturesCount);
+				int skillDataCount = 0;
+				sscanf(line.c_str(), "%i ", &skillDataCount);
 
 				char chCount[3];
-				itoa(skillTexturesCount, chCount, 10);
+				itoa(skillDataCount, chCount, 10);
 				line.erase(line.begin(), line.begin() + strlen(chCount) + 1);
 
-				controlData.skillTextures.resize(skillTexturesCount);
-				for(int i = 0; i < skillTexturesCount; i++)
+				controlData.skillTextures.resize(skillDataCount);
+				controlData.skillDescriptions.resize(skillDataCount);
+				for(int i = 0; i < skillDataCount; i++)
 				{
 					char extractedTexture[30];
 					sscanf(line.c_str(), "%s ", &extractedTexture);
 					controlData.skillTextures[i] = texturesDir;
 					controlData.skillTextures[i] += extractedTexture;
 					line.erase(line.begin(), line.begin() + strlen(extractedTexture) + 1);
+					char extractedDescription[30];
+					sscanf(line.c_str(), "%s ", &extractedDescription);
+					controlData.skillDescriptions[i] = extractedDescription;
+					line.erase(line.begin(), line.begin() + strlen(extractedDescription) + 1);
 				}
 			}
 			if(strcmp(tag, "layout") == 0)
@@ -183,26 +189,31 @@ GUILoader::GUILoader(const std::string &fileName,
 			{
 				line.erase(0, 7); 
 				line[0] = ' ';
-				sscanf(line.c_str(), "%s %i %f %f %f %f %f %f %f %f",
+				sscanf(line.c_str(), "%s %i %f %f %i %f %f %i %f %f %i %f %f",
 					&controlData.controlName,
 					&controlData.toLayout,
 					&controlData.controlPresets[SMALL].position.x,
 					&controlData.controlPresets[SMALL].position.y,
+					&controlData.controlPresets[SMALL].textSize,
 					&controlData.controlPresets[MEDIUM].position.x,
 					&controlData.controlPresets[MEDIUM].position.y,
+					&controlData.controlPresets[MEDIUM].textSize,
 					&controlData.controlPresets[BIG].position.x,
 					&controlData.controlPresets[BIG].position.y,
+					&controlData.controlPresets[BIG].textSize,
 					&controlData.imageBoxWidth,
 					&controlData.imageBoxHeight);
 
 				std::shared_ptr<FusionHint> hintBox =
-					std::shared_ptr<FusionHint>(new FusionHint(LayoutPreset(SMALL),
+					std::shared_ptr<FusionHint>(new FusionHint(SMALL,
 															   controlData.controlName,
 															   controlData.controlPresets[SMALL].position,
 															   controlData.imageBoxWidth,
-															   controlData.imageBoxHeight));
+															   controlData.imageBoxHeight,
+															   controlData.controlPresets[SMALL].textSize));
 				
 				hintBox->SetTextures(controlData.skillTextures);
+				hintBox->SetDescriptions(controlData.skillDescriptions);
 				hintBox->Init();
 				hintBox->AddPreset(MEDIUM, controlData.controlPresets[MEDIUM].position);
 				hintBox->AddPreset(BIG, controlData.controlPresets[BIG].position);

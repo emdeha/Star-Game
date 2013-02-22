@@ -42,6 +42,7 @@ public:
 			  GLuint store = GL_RGB, GLuint uploadFormat = GL_BGR, GLuint componentType = GL_UNSIGNED_BYTE);
 
 	void Bind(GLenum textureUnit);
+	void Unbind();
 };
 
 

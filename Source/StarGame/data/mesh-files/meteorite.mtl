@@ -1,0 +1,13 @@
+# Blender MTL File: 'meteorite.blend'
+# Material Count: 1
+newmtl Material
+Ns 13.725490
+Ka 0.000000 0.000000 0.000000
+Kd 0.138680 0.138680 0.138680
+Ks 0.219530 0.219530 0.219530
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd sun-texture.jpg
+
+

@@ -1,0 +1,13 @@
+# Blender MTL File: 'earth_planet.blend'
+# Material Count: 1
+newmtl WaterFlow
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.023278 0.007562 0.009943
+Ks 0.038462 0.038462 0.038462
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd texturez_4278.jpg
+
+

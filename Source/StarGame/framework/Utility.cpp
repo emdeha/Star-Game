@@ -676,6 +676,7 @@ void Utility::Primitives::Sprite3D::Draw(glutil::MatrixStack &modelMat, const Si
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		texture->Unbind();
 	}
 	glBindVertexArray(0);
 	glUseProgram(0);

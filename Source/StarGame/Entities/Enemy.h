@@ -36,6 +36,7 @@
 
 #include "../ProgramData/ProgramData.h"
 #include "../Entities/PlanetBodies.h"
+#include "../AssetLoader/MeshLoader.h"
 #include "MaterialBlock.h"
 #include "Skills.h"
 
@@ -192,6 +193,10 @@ public:
 	virtual void Render(glutil::MatrixStack &modelMatrix, 
 						glm::vec3 cameraPosition,
 						const BillboardProgDataNoTexture &billboardProgDataNoTexture) {}
+	virtual void Render(glutil::MatrixStack &modelMatrix,
+						int materialBlockIndex, float gamma, 
+						const LitProgData &litData, const SimpleTextureProgData &simpleTexData,
+						float interpolation) {}
 
 	virtual void OnEvent(Event &_event) 
 	{
@@ -272,7 +277,8 @@ private:
 	PatrolRoute patrolRoute;
 
 	std::unique_ptr<Projectile> projectile;
-	std::unique_ptr<Framework::Mesh> mesh;
+	//std::unique_ptr<Framework::Mesh> mesh;
+	Mesh mesh;
 
 	int materialBlockSize;
 	GLuint materialUniformBuffer;
@@ -289,7 +295,7 @@ public:
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
 	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
-				float gamma, const LitProgData &litData,
+				float gamma, const LitProgData &litData, const SimpleTextureProgData &simpleTextData,
 				float interpolation);
 
 	void OnEvent(Event &_event);
@@ -375,7 +381,8 @@ private:
 	bool isDeploying;
 	// TODO: Fast deploying on evade. Sth like HL2 helly.
 
-	std::unique_ptr<Framework::Mesh> mesh;
+	//std::unique_ptr<Framework::Mesh> mesh;
+	Mesh mesh;
 
 	int materialBlockSize;
 	GLuint materialUniformBuffer;
@@ -390,7 +397,7 @@ public:
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
 	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
-				float gamma, const LitProgData &litData,
+				float gamma, const LitProgData &litData, const SimpleTextureProgData &simpleTexData,
 				float interpolation);
 
 	void OnEvent(Event &_event);
@@ -426,7 +433,8 @@ private:
 	int damage;
 	float chargeSpeed;
 	
-	std::unique_ptr<Framework::Mesh> mesh;
+	//std::unique_ptr<Framework::Mesh> mesh;
+	Mesh mesh;
 
 	int materialBlockSize;
 	GLuint materialUniformBuffer;
@@ -445,7 +453,7 @@ public:
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
 	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
-				float gamma, const LitProgData &litData,
+				float gamma, const LitProgData &litData, const SimpleTextureProgData &simpleTexData,
 				float interpolation);
 
 	void OnEvent(Event &_event);
@@ -468,7 +476,8 @@ class Asteroid : public Enemy
 private:
 	int damage;
 
-	std::unique_ptr<Framework::Mesh> mesh;
+	//std::unique_ptr<Framework::Mesh> mesh;
+	Mesh mesh;
 
 	int materialBlockSize;
 	GLuint materialUniformBuffer;
@@ -487,7 +496,7 @@ public:
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
 	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
-				float gamma, const LitProgData &litData,
+				float gamma, const LitProgData &litData, const SimpleTextureProgData &simpleTexData,
 				float interpolation);
 
 	void OnEvent(Event &_event);

@@ -28,9 +28,9 @@
 
 #include <vector>
 
-#include <cimport.h>
-#include <scene.h>
-#include <postprocess.h>
+#include "..\assimp\include\assimp\cimport.h"
+#include "..\assimp\include\assimp\scene.h"
+#include "..\assimp\include\assimp\postprocess.h"
 
 #include <glm\glm.hpp>
 

@@ -177,7 +177,7 @@ bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
 				if(!textures[i]->Load(fullPath, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE))
 				{
 					std::printf("Error loading texture '%s'\n", fullPath.c_str());
-					return textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+					return textures[i]->Load("../data/images/white.png", GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 				}
 				else
 				{
@@ -192,7 +192,7 @@ bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
 		{
 			textures[i] = std::shared_ptr<Texture2D>(new Texture2D());
 
-			return textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+			return textures[i]->Load("../data/images/white.png", GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 		}
 	}
 	return false;
@@ -213,8 +213,10 @@ void Mesh::Render(glutil::MatrixStack &modelMatrix,
 	{
 		glUseProgram(progData.theProgram);
 		
-		modelMatrix.Translate(0.0f, 0.0f, 0.0f);
-		modelMatrix.Scale(0.2f);
+		glutil::PushStack push(modelMatrix);
+
+		//modelMatrix.Translate(0.0f, 0.0f, 0.0f);
+		//modelMatrix.Scale(0.2f);
 
 		glUniformMatrix4fv(progData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
 		

@@ -59,12 +59,12 @@ static void GenerateUniformBuffers(int &materialBlockSize, glm::vec4 diffuseColo
 
 CelestialBody::CelestialBody(const CelestialBody &other)
 {
-	bodyMesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(*other.bodyMesh));
+	//bodyMesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(*other.bodyMesh));
 }
 CelestialBody::~CelestialBody()
 {
 	parent.release();
-	bodyMesh.release();
+	//bodyMesh.release();
 }
 CelestialBody::CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float newDiameter,
 							 int newSatelliteCap, int newHealth, 
@@ -84,7 +84,7 @@ CelestialBody::CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float ne
 	generatedEvents.resize(0);
 	parent.reset();
 	satellites.resize(0);
-	bodyMesh.reset();
+	//bodyMesh.reset();
 	
 	InitSatelliteStats();
 }
@@ -99,7 +99,7 @@ CelestialBody::CelestialBody(float speed, float newOffsetFromParent, float newDi
 	health = newHealth;
 	satType = newSatType;
 	isSun = false; // no matter what the value of _isSun is, the body would be created as a sun
-	bodyMesh.reset();
+	//bodyMesh.reset();
 	parent.reset();
 	satellites.resize(0);
 	generatedEvents.resize(0);
@@ -169,6 +169,11 @@ void CelestialBody::InitSatelliteStats()
 
 void CelestialBody::LoadMesh(const std::string &fileName)
 {
+	if(!mesh.LoadMesh(fileName))
+	{
+		std::printf("Problem loading mesh\n");
+	}
+	/*
 	try
 	{
 		bodyMesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(fileName));
@@ -177,8 +182,7 @@ void CelestialBody::LoadMesh(const std::string &fileName)
 	{
 		printf("%s\n", except.what());
 		throw;
-	}
-
+	}*/
 }
 
 void CelestialBody::Update()
@@ -290,23 +294,25 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 								gamma, litData, unlitData, simpleData, textureData, interpolation);
 			}
 
-			modelMatrix.Scale(diameter);
-
+			modelMatrix.Scale(diameter / 2.0f);
+			/*
 			glm::vec4 sunColor = Utility::CorrectGamma(color, gamma);
 
 			glUseProgram(unlitData.theProgram);
 			glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
 			glUniform4f(unlitData.objectColorUnif, sunColor.r, sunColor.g, sunColor.b, sunColor.a);
+			*/
+			//bodyMesh->Render("flat");
 
-			bodyMesh->Render("flat");
+			mesh.Render(modelMatrix, textureData);
 		}
 		else
 		{
 			glutil::PushStack push(modelMatrix);
 			
 			modelMatrix.Translate(position);
-			modelMatrix.Scale(diameter);
-
+			modelMatrix.Scale(diameter / 2.0f);
+			/*
 			glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
 							  0, sizeof(MaterialBlock));
 
@@ -318,10 +324,12 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 			glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
 
 			bodyMesh->Render("lit");
+			*/
+			mesh.Render(modelMatrix, textureData);
 
-			glUseProgram(0);
+			//glUseProgram(0);
 
-			glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
+			//glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
 		}
 	}
 	

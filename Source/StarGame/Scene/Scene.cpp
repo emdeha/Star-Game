@@ -53,56 +53,6 @@ Scene::Scene(float newSceneGamma,
 }
 
 
-void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
-{
-	GLuint materialBlockIndex = shaderManager.GetBlockIndex(BT_MATERIAL);
-	GLuint lightUniformBuffer = shaderManager.GetUniformBuffer(UBT_LIGHT);
-	LitProgData litData = shaderManager.GetLitProgData();
-	UnlitProgData unLitData = shaderManager.GetUnlitProgData();
-	SimpleProgData simpleData = shaderManager.GetSimpleProgData();
-	BillboardProgDataNoTexture billboardNoTextureData = shaderManager.GetBillboardProgDataNoTexture();
-	SimpleTextureProgData textureData = shaderManager.GetSimpleTextureProgData();
-
-	int sizeLights = lights.size();
-	for(int i = 0; i < sizeLights; i++)
-	{
-		lights[i].Render(modelMatrix, litData, lightUniformBuffer);
-	}
-
-	int sizeSuns = suns.size();
-	for(int i = 0; i < sizeSuns; i++)
-	{
-		suns[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, 
-						litData, unLitData, simpleData, textureData,
-						interpolation);
-	}
-
-	for(int i = 0; i < enemies.size(); i++)
-	{
-		if(enemies[i]->IsSceneUpdated())
-		{
-			enemies[i]->Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), billboardNoTextureData);
-			enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, interpolation);
-		}
-	}
-}
-void Scene::RenderCurrentLayout()
-{
-	FontProgData fontData = shaderManager.GetFontProgData();
-	SimpleProgData simpleData = shaderManager.GetSimpleNoUBProgData();
-	TextureProgData textureData = shaderManager.GetTextureProgData();
-
-	for(std::map<LayoutType, std::shared_ptr<Layout>>::iterator iter = sceneLayouts.begin();
-		iter != sceneLayouts.end(); ++iter)
-	{
-		if(iter->second->IsSet())
-		{
-			iter->second->Draw(fontData, simpleData, textureData);
-			break;
-		}
-	}
-}
-
 void Scene::InitEnemyStats()
 {
 	enemyStats[ENEMY_TYPE_SWARM].damage = 5;
@@ -444,7 +394,7 @@ void Scene::SpawnSpaceship()
 												 enemyStats[ENEMY_TYPE_SPACESHIP].health, 
 												 enemyStats[ENEMY_TYPE_SPACESHIP].resourceGivenOnKill));
 
-	randSpaceship->LoadMesh("mesh-files/Ship.xml");
+	randSpaceship->LoadMesh("../data/mesh-files/spaceship.obj");
 	randSpaceship->LoadProjectileMesh("mesh-files/UnitSphere.xml");
 			
 	enemies.push_back(randSpaceship);
@@ -472,7 +422,7 @@ void Scene::SpawnFastSuicideBomber()
 																 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].lineOfSight, 
 																 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].health, 
 																 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].resourceGivenOnKill));
-	randBomber->LoadMesh("mesh-files/UnitSphere.xml");
+	randBomber->LoadMesh("../data/mesh-files/suicide_bomber.obj");
 
 	enemies.push_back(randBomber);
 }
@@ -501,7 +451,7 @@ void Scene::SpawnAsteroid()
 											   enemyStats[ENEMY_TYPE_ASTEROID].health, 
 											   enemyStats[ENEMY_TYPE_ASTEROID].resourceGivenOnKill));
 
-	randAsteroid->LoadMesh("mesh-files/UnitTetrahedron.xml");
+	randAsteroid->LoadMesh("../data/mesh-files/meteorite.obj");
 
 	enemies.push_back(randAsteroid);
 }
@@ -524,7 +474,7 @@ void Scene::SpawnMothership()
 												   enemyStats[ENEMY_TYPE_MOTHERSHIP].lineOfSight, 
 												   enemyStats[ENEMY_TYPE_MOTHERSHIP].health, 
 												   enemyStats[ENEMY_TYPE_MOTHERSHIP].resourceGivenOnKill));
-	randMothership->LoadMesh("mesh-files/Ship.xml");
+	randMothership->LoadMesh("../data/mesh-files/mothership.obj");
 
 	int deployUnitsCount = 4;
 	randMothership->InitDeployUnits("mesh-files/Ship.xml", 
@@ -965,6 +915,58 @@ ShaderManager &Scene::GetShaderManager()
 	return shaderManager;
 }
 
+void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
+{
+	GLuint materialBlockIndex = shaderManager.GetBlockIndex(BT_MATERIAL);
+	GLuint lightUniformBuffer = shaderManager.GetUniformBuffer(UBT_LIGHT);
+	LitProgData litData = shaderManager.GetLitProgData();
+	UnlitProgData unLitData = shaderManager.GetUnlitProgData();
+	SimpleProgData simpleData = shaderManager.GetSimpleProgData();
+	BillboardProgDataNoTexture billboardNoTextureData = shaderManager.GetBillboardProgDataNoTexture();
+	SimpleTextureProgData textureData = shaderManager.GetSimpleTextureProgData();
+	
+	
+	for(int i = 0; i < enemies.size(); i++)
+	{
+		if(enemies[i]->IsSceneUpdated())
+		{
+			enemies[i]->Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), billboardNoTextureData);
+			enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, textureData, interpolation);
+			enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, interpolation);
+		}
+	}
+
+	int sizeLights = lights.size();
+	for(int i = 0; i < sizeLights; i++)
+	{
+		lights[i].Render(modelMatrix, litData, lightUniformBuffer);
+	}	
+
+	int sizeSuns = suns.size();
+	for(int i = 0; i < sizeSuns; i++)
+	{
+		suns[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, 
+						litData, unLitData, simpleData, textureData,
+						interpolation);
+	}
+}
+void Scene::RenderCurrentLayout()
+{
+	FontProgData fontData = shaderManager.GetFontProgData();
+	SimpleProgData simpleData = shaderManager.GetSimpleNoUBProgData();
+	TextureProgData textureData = shaderManager.GetTextureProgData();
+
+	for(std::map<LayoutType, std::shared_ptr<Layout>>::iterator iter = sceneLayouts.begin();
+		iter != sceneLayouts.end(); ++iter)
+	{
+		if(iter->second->IsSet())
+		{
+			iter->second->Draw(fontData, simpleData, textureData);
+			break;
+		}
+	}
+}
+
 void Scene::UpdateScene()
 {
 	if(isSpawning)
@@ -1277,7 +1279,7 @@ void Scene::OnEvent(Event &_event)
 			{
 				if(HasSuns())
 				{
-					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
+					suns[0]->AddSatellite(/*"mesh-files/UnitSphere.xml"*/"../data/mesh-files/fire_planet.obj", 
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
 										  SatelliteType(SATELLITE_FIRE));
 				}
@@ -1287,7 +1289,7 @@ void Scene::OnEvent(Event &_event)
 			{
 				if(HasSuns())
 				{
-					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
+					suns[0]->AddSatellite(/*"mesh-files/UnitSphere.xml"*/"../data/mesh-files/water_planet.obj", 
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
 										  SatelliteType(SATELLITE_WATER));
 				}
@@ -1297,7 +1299,7 @@ void Scene::OnEvent(Event &_event)
 			{
 				if(HasSuns())
 				{
-					suns[0]->AddSatellite("mesh-files/UnitSphere.xml", 
+					suns[0]->AddSatellite(/*"mesh-files/UnitSphere.xml"*/"../data/mesh-files/earth_planet.obj", 
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
 										  SatelliteType(SATELLITE_EARTH));
 				}
@@ -1307,7 +1309,7 @@ void Scene::OnEvent(Event &_event)
 			{
 				if(HasSuns())
 				{
-					suns[0]->AddSatellite("mesh-files/UnitSphere.xml",
+					suns[0]->AddSatellite(/*"mesh-files/UnitSphere.xml"*/"../data/mesh-files/air_planet.obj",
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
 										  SatelliteType(SATELLITE_AIR));
 				}

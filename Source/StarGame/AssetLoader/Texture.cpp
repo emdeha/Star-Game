@@ -87,3 +87,8 @@ void Texture2D::Bind(GLenum textureUnit)
 	glActiveTexture(textureUnit);
 	glBindTexture(GL_TEXTURE_2D, textureObject);
 }
+
+void Texture2D::Unbind()
+{
+	glBindTexture(GL_TEXTURE_2D, 0);
+}

@@ -38,6 +38,7 @@
 #include "MaterialBlock.h"
 #include "../Mouse/Mouse.h"
 #include "Skills.h"
+#include "../AssetLoader/MeshLoader.h"
 
 
 // NOTE: Maybe the meshes of both the sun and satellites must be loaded in the constructors.
@@ -98,7 +99,8 @@ private:
 	// WARN: Is it a good practice?
 	friend class Scene;
 
-	std::unique_ptr<Framework::Mesh> bodyMesh;
+	//std::unique_ptr<Framework::Mesh> bodyMesh;
+	Mesh mesh;
 	
 	std::unique_ptr<CelestialBody> parent;
 	std::vector<std::shared_ptr<CelestialBody>> satellites;

@@ -442,7 +442,8 @@ void InitializeScene()
 	SunLight 
 		mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, displayData.gamma));
 
-	mainSun->LoadMesh("mesh-files/UnitSphere.xml");
+	//mainSun->LoadMesh("mesh-files/UnitSphere.xml");
+	mainSun->LoadMesh("../data/mesh-files/sun.obj");
 
 	scene.SetMouse(userMouse);
 	scene.SetTopDownCamera(userCamera);
@@ -527,7 +528,7 @@ void TimerFunction(int value)
 
 long long currentTime_milliseconds;
 
-//Mesh sampleMesh;
+Mesh sampleMesh;
 
 void Init()
 {
@@ -589,7 +590,7 @@ void Init()
 	nextGameTick = GetTickCount();
 
 	/*
-	if(!sampleMesh.LoadMesh("../data/mesh-files/phoenix_ugv.md2"))
+	if(!sampleMesh.LoadMesh("../data/mesh-files/meteorite.obj"))
 	{
 		std::printf("Problem loading texture\n");
 	}*/
@@ -610,6 +611,9 @@ void Display()
 
 		modelMatrix.SetMatrix(scene.GetTopDownCamera().CalcMatrix());
 		displayData.modelMatrix = modelMatrix.Top();
+		
+
+		//sampleMesh.Render(modelMatrix, scene.GetShaderManager().GetSimpleTextureProgData());
 
 		int loops = 0;
 		while(GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
@@ -625,9 +629,7 @@ void Display()
 		
 		scene.RenderCurrentLayout();	
 
-		//hintBox.Draw(scene.GetShaderManager().GetTextureProgData());
-
-		//sampleMesh.Render(modelMatrix, shaderManager.GetSimpleTextureProgData());		
+		//hintBox.Draw(scene.GetShaderManager().GetTextureProgData());		
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{

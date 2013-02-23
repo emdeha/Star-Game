@@ -227,6 +227,36 @@ void ShaderManager::LoadLitProgram(const std::string &vertexShader,
 	glUniformBlockBinding(litData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
 }
 
+void ShaderManager::LoadLitTextureProgram(const std::string &vertexShader,
+										  const std::string &fragmentShader)
+{
+	std::vector<GLuint> shaderList;
+
+	shaderList.push_back(Framework::LoadShader(GL_VERTEX_SHADER, vertexShader));
+	shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, fragmentShader));
+
+	litTextureData.theProgram = Framework::CreateProgram(shaderList);
+	litTextureData.modelToCameraMatrixUnif = glGetUniformLocation(litTextureData.theProgram, "modelToCameraMatrix");
+	litTextureData.lightIntensityUnif = glGetUniformLocation(litTextureData.theProgram, "lightIntensity");
+	litTextureData.normalModelToCameraMatrixUnif = glGetUniformLocation(litTextureData.theProgram, "normalModelToCameraMatrix");
+	litTextureData.cameraSpaceLightPosUnif = glGetUniformLocation(litTextureData.theProgram, "cameraSpaceLightPos");
+	litTextureData.textureUnif = glGetUniformLocation(litTextureData.theProgram, "_sampler");
+
+	litTextureData.positionAttrib = glGetAttribLocation(litTextureData.theProgram, "position");
+	litTextureData.normalAttrib = glGetAttribLocation(litTextureData.theProgram, "normal");
+	litTextureData.textureCoordAttrib = glGetAttribLocation(litTextureData.theProgram, "texCoord");
+
+	GLuint materialBlock = glGetUniformBlockIndex(litTextureData.theProgram, "Material");
+	GLuint lightBlock = glGetUniformBlockIndex(litTextureData.theProgram, "Light");
+	GLuint projectionBlock = glGetUniformBlockIndex(litTextureData.theProgram, "Projection");
+
+	if(materialBlock != GL_INVALID_INDEX)
+		glUniformBlockBinding(litTextureData.theProgram, materialBlock, blockIndices[BT_MATERIAL]);
+
+	glUniformBlockBinding(litTextureData.theProgram, lightBlock, blockIndices[BT_LIGHT]);
+	glUniformBlockBinding(litTextureData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
+}
+
 void ShaderManager::LoadUnlitProgram(const std::string &vertexShader, 
 								     const std::string &fragmentShader)
 {
@@ -496,6 +526,10 @@ void ShaderManager::LoadParticleProgData(const std::string &vertexShader,
 LitProgData ShaderManager::GetLitProgData()
 {
 	return litData;
+}
+LitTextureProgData ShaderManager::GetLitTextureProgData()
+{
+	return litTextureData;
 }
 UnlitProgData ShaderManager::GetUnlitProgData()
 {

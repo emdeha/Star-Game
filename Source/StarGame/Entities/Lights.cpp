@@ -64,3 +64,26 @@ void SunLight::Render(glutil::MatrixStack &modelMatrix, const LitProgData &light
 
 	glUseProgram(0);
 }
+
+void SunLight::Render(glutil::MatrixStack &modelMatrix, const LitTextureProgData &litTextureData,
+				      GLuint lightUniformBuffer)
+{
+	glm::vec4 position_cameraSpace = modelMatrix.Top() * glm::vec4(position, 1.0f);
+
+	glUseProgram(litTextureData.theProgram);
+
+	glUniform4fv(litTextureData.lightIntensityUnif, 1, glm::value_ptr(lightIntensity));
+	glUniform3fv(litTextureData.cameraSpaceLightPosUnif, 1, glm::value_ptr(position_cameraSpace));
+
+	LightBlockGamma blockLightData;
+	blockLightData.ambientIntensity = ambientIntensity;
+	blockLightData.lightAttenuation = lightAttenuation;
+	blockLightData.maxIntensity = maxIntensity;
+	blockLightData.gamma = gamma;
+
+	glBindBuffer(GL_UNIFORM_BUFFER, lightUniformBuffer);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(blockLightData), &blockLightData);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+	glUseProgram(0);
+}

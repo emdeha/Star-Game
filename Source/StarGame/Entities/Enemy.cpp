@@ -379,7 +379,8 @@ void Spaceship::LoadMesh(const std::string &meshFile)
 	{
 		std::printf("Error parsing mesh\n");
 	}
-	GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
+	mesh.LoadLight();
+	//GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 
 	//projectile->LoadMesh("../data/mesh-files/UnitSphere.xml"); // TODO: maybe this should be removed
 }
@@ -499,8 +500,9 @@ void Spaceship::Update(bool isSunKilled, CelestialBody &sun)
 	}
 }
 
-void Spaceship::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
-					   float gamma, const LitProgData &litData, const SimpleTextureProgData &simpleTexData,
+void Spaceship::Render(glutil::MatrixStack &modelMatrix,
+					   int materialBlockIndex, float gamma,
+					   const LitProgData &litData, const LitTextureProgData &litTextureData,
 					   float interpolation)
 {
 	{
@@ -527,7 +529,7 @@ void Spaceship::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 		glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
 		*/
 		//mesh->Render("lit");
-		mesh.Render(modelMatrix, simpleTexData);
+		mesh.Render(modelMatrix, litTextureData, materialBlockIndex);
 
 		glUseProgram(0);
 
@@ -849,7 +851,8 @@ void Mothership::LoadMesh(const std::string &meshFileName)
 	}
 	*/
 	mesh.LoadMesh(meshFileName); // TODO: Proper error handling
-	GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
+	mesh.LoadLight();
+	//GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 }
 
 void Mothership::InitDeployUnits(const std::string &meshFileName, int deployUnitsCount,
@@ -1007,9 +1010,10 @@ void Mothership::Update(bool isSunKilled, CelestialBody &sun)
 	}
 }
 
-void Mothership::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
-						float gamma, const LitProgData &litData, const SimpleTextureProgData &simpleTexData,
-						float interpolation)
+void Mothership::Render(glutil::MatrixStack &modelMatrix,
+					    int materialBlockIndex, float gamma,
+					    const LitProgData &litData, const LitTextureProgData &litTextureData,
+					    float interpolation)
 {
 	{
 		glutil::PushStack push(modelMatrix);
@@ -1021,7 +1025,7 @@ void Mothership::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex
 
 		modelMatrix.Translate(position);
 		modelMatrix.RotateY(rotation);
-		modelMatrix.Scale(0.5f);
+		modelMatrix.Scale(0.7f);
 
 		/*
 		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
@@ -1035,7 +1039,7 @@ void Mothership::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex
 		glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
 		*/
 		//mesh->Render("lit");
-		mesh.Render(modelMatrix, simpleTexData);
+		mesh.Render(modelMatrix, litTextureData, materialBlockIndex);
 
 		glUseProgram(0);
 
@@ -1126,7 +1130,8 @@ void FastSuicideBomber::LoadMesh(const std::string &meshFile)
 	}*/
 
 	mesh.LoadMesh(meshFile); // TODO: Proper error handling
-	GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
+	mesh.LoadLight();
+	//GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 }
 
 void FastSuicideBomber::AttackSolarSystem(CelestialBody &sun, bool isSatellite, float bodyIndex)
@@ -1252,8 +1257,9 @@ void FastSuicideBomber::Update(bool isSunKilled, CelestialBody &sun)
 	}
 }
 
-void FastSuicideBomber::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
-							   float gamma, const LitProgData &litData, const SimpleTextureProgData &simpleTexData,
+void FastSuicideBomber::Render(glutil::MatrixStack &modelMatrix,
+							   int materialBlockIndex, float gamma,
+							   const LitProgData &litData, const LitTextureProgData &litTextureData,
 							   float interpolation)
 {
 	glutil::PushStack push(modelMatrix);
@@ -1261,6 +1267,7 @@ void FastSuicideBomber::Render(glutil::MatrixStack &modelMatrix, int materialBlo
 	// glm::vec3 viewPosition = position + frontVector * speed * interpolation;
 
 	modelMatrix.Translate(position);
+	modelMatrix.Scale(0.2f);
 	/*
 	glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
 					  0, sizeof(MaterialBlock));
@@ -1273,7 +1280,7 @@ void FastSuicideBomber::Render(glutil::MatrixStack &modelMatrix, int materialBlo
 	glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
 	*/
 	//mesh->Render("lit");
-	mesh.Render(modelMatrix, simpleTexData);
+	mesh.Render(modelMatrix, litTextureData, materialBlockIndex);
 
 	glUseProgram(0);
 
@@ -1348,8 +1355,8 @@ void Asteroid::LoadMesh(const std::string &meshFile)
 		throw;
 	}*/
 	mesh.LoadMesh(meshFile); // TODO: Proper error handling
-
-	GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
+	mesh.LoadLight();
+	//GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 }
 
 void Asteroid::AttackSolarSystem(CelestialBody &sun, bool isSatellite, float bodyIndex)
@@ -1426,8 +1433,9 @@ void Asteroid::Update(bool isSunKilled, CelestialBody &sun)
 	}
 }
 
-void Asteroid::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
-					  float gamma, const LitProgData &litData, const SimpleTextureProgData &simpleTexData,
+void Asteroid::Render(glutil::MatrixStack &modelMatrix,
+					  int materialBlockIndex, float gamma,
+					  const LitProgData &litData, const LitTextureProgData &litTextureData,
 					  float interpolation)
 {
 	glutil::PushStack push(modelMatrix);
@@ -1435,7 +1443,7 @@ void Asteroid::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 	// glm::vec3 viewPosition = position + frontVector * speed * interpolation;
 
 	modelMatrix.Translate(position);
-	modelMatrix.Scale(0.2f);
+	modelMatrix.Scale(0.1f);
 	/*
 	glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
 					  0, sizeof(MaterialBlock));
@@ -1449,7 +1457,7 @@ void Asteroid::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 
 	mesh->Render("lit");
 	*/
-	mesh.Render(modelMatrix, simpleTexData);
+	mesh.Render(modelMatrix, litTextureData, materialBlockIndex);
 
 	glUseProgram(0);
 

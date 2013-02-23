@@ -51,7 +51,7 @@ vec4 ComputeLighting()
 
 	vec3 viewDirection = normalize(-cameraSpacePosition);
 
-	vec3 halfAngle = normalize(lightDirectio + viewDirection);
+	vec3 halfAngle = normalize(lightDirection + viewDirection);
 	float angleNormalHalf = acos(dot(halfAngle, surfaceNormal));
 	float exponent = angleNormalHalf / Mtl.shininessFactor;
 	exponent = -(exponent * exponent);
@@ -62,16 +62,16 @@ vec4 ComputeLighting()
 	vec4 lighting = Mtl.diffuseColor * attenIntensity * cosAngIncidence;
 	lighting += Mtl.specularColor * attenIntensity * gaussianTerm;
 
-	return lighting
+	return lighting;
 }
 
 void main()
 {
-	vec4 lighting = Mtl.diffuseColor * Lgt.ambientIntensity;
+	vec4 lighting = texture2D(_sampler, colorCoord).rgba * Mtl.diffuseColor * Lgt.ambientIntensity;
 	lighting += ComputeLighting();
 
 	lighting = lighting / Lgt.maxIntensity;
 	vec4 gamma = vec4(1.0 / Lgt.gamma);
 	gamma.w = 1.0;
-	outputColor = texture2D(_sampler, colorCoord).rgba * pow(lighting, gamma);
+	outputColor = pow(lighting, gamma);
 }

@@ -924,6 +924,7 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
 	SimpleProgData simpleData = shaderManager.GetSimpleProgData();
 	BillboardProgDataNoTexture billboardNoTextureData = shaderManager.GetBillboardProgDataNoTexture();
 	SimpleTextureProgData textureData = shaderManager.GetSimpleTextureProgData();
+	LitTextureProgData litTextureData = shaderManager.GetLitTextureProgData();
 	
 	
 	for(int i = 0; i < enemies.size(); i++)
@@ -933,6 +934,7 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
 			enemies[i]->Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), billboardNoTextureData);
 			enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, textureData, interpolation);
 			enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, interpolation);
+			enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, litTextureData, interpolation);
 		}
 	}
 
@@ -940,13 +942,14 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
 	for(int i = 0; i < sizeLights; i++)
 	{
 		lights[i].Render(modelMatrix, litData, lightUniformBuffer);
+		lights[i].Render(modelMatrix, litTextureData, lightUniformBuffer);
 	}	
 
 	int sizeSuns = suns.size();
 	for(int i = 0; i < sizeSuns; i++)
 	{
 		suns[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, 
-						litData, unLitData, simpleData, textureData,
+						litData, unLitData, simpleData, textureData, litTextureData,
 						interpolation);
 	}
 }

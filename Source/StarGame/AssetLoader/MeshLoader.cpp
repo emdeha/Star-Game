@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 #include "MeshLoader.h"
+#include "../Entities/MaterialBlock.h"
 
 
 #define DIR "../data/mesh-files/"
@@ -41,6 +42,29 @@ const std::string ExtractDirectory(const std::string &fileName)
 	}
 
 	return directory;
+}
+
+
+static void GenerateUniformBuffers(int &materialBlockSize, glm::vec4 diffuseColor, GLuint &materialUniformBuffer)
+{
+	MaterialBlock material;
+	material.diffuseColor = diffuseColor;
+	material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
+	material.shininessFactor = 0.3f;
+
+
+	int uniformBufferAlignSize = 0;
+	glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignSize);
+
+	materialBlockSize = sizeof(MaterialBlock);
+	materialBlockSize += uniformBufferAlignSize -
+		(materialBlockSize % uniformBufferAlignSize);
+
+	
+	glGenBuffers(1, &materialUniformBuffer);
+	glBindBuffer(GL_UNIFORM_BUFFER, materialUniformBuffer);
+	glBufferData(GL_UNIFORM_BUFFER, materialBlockSize, &material, GL_STATIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 
@@ -99,6 +123,11 @@ bool Mesh::LoadMesh(const std::string &fileName)
 		std::printf("Error parsing '%s': '%s'\n", fileName.c_str(), aiGetErrorString());
 		return false;
 	}
+}
+
+void Mesh::LoadLight()
+{	
+	GenerateUniformBuffers(materialBlockSize, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), materialUniformBuffer);
 }
 
 bool Mesh::InitFromScene(const aiScene *scene, const std::string &fileName)
@@ -198,8 +227,7 @@ bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
 	return false;
 }
 
-void Mesh::Render(glutil::MatrixStack &modelMatrix,
-				  SimpleTextureProgData progData)
+void Mesh::Render(glutil::MatrixStack &modelMatrix, const SimpleTextureProgData &progData)
 {
 	glFrontFace(GL_CCW); // Fixes face culling issues with rendering
 	
@@ -247,4 +275,58 @@ void Mesh::Render(glutil::MatrixStack &modelMatrix,
 	glBindVertexArray(0);
 
 	glFrontFace(GL_CW);
+}
+
+void Mesh::Render(glutil::MatrixStack &modelMatrix, const LitTextureProgData &progData,
+				  int materialBlockIndex)
+{
+	//glFrontFace(GL_CCW);
+
+	glBindVertexArray(vao);
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
+
+	for(unsigned int i = 0; i < entries.size(); i++)
+	{
+		glUseProgram(progData.theProgram);
+
+		glutil::PushStack push(modelMatrix);
+
+		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer, 0, sizeof(MaterialBlock));
+
+		glm::mat3 normMatrix(modelMatrix.Top());
+		normMatrix = glm::transpose(glm::inverse(normMatrix));
+
+		glUniformMatrix4fv(progData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+		glUniformMatrix3fv(progData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+
+		glBindBuffer(GL_ARRAY_BUFFER, entries[i].vertexBufferObject);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)12);
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)20);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, entries[i].indexBufferObject);
+
+		const unsigned int materialIndex = entries[i].materialIndex;
+		if(materialIndex < textures.size() && textures[materialIndex])
+		{
+			textures[materialIndex]->Bind(GL_TEXTURE0);
+		}
+
+		glDrawElements(GL_TRIANGLES, entries[i].indicesCount, GL_UNSIGNED_INT, 0);
+
+		glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
+
+		glUseProgram(0);
+	}
+
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
+
+	glBindVertexArray(0);
+
+	//glFrontFace(GL_CW);
 }

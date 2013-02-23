@@ -170,6 +170,7 @@ public:
 				const UnlitProgData &unlitData,
 				const SimpleProgData &simpleData,
 				const SimpleTextureProgData &textureData,
+				const LitTextureProgData &litTextureData,
 				float interpolation);
 
 	void OnEvent(Event &_event);

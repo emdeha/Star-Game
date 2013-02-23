@@ -149,6 +149,24 @@ struct FontProgData
 	GLuint textureCoordAttrib;
 };
 
+struct LitTextureProgData
+{
+	GLuint theProgram;
+
+	GLuint textureUnif;
+
+	GLuint lightIntensityUnif;
+	GLuint cameraSpaceLightPosUnif;
+
+	GLuint normalModelToCameraMatrixUnif;
+	GLuint projectionMatrixUnif;
+	GLuint modelToCameraMatrixUnif;
+
+	GLuint positionAttrib;
+	GLuint textureCoordAttrib;
+	GLuint normalAttrib;
+};
+
 struct SimpleTextureProgData
 {
 	GLuint theProgram;

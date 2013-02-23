@@ -81,6 +81,8 @@ private:
 	};
 
 	GLuint vao;
+	int materialBlockSize;
+	GLuint materialUniformBuffer;
 
 	std::vector<MeshEntry> entries;
 	std::vector<std::shared_ptr<Texture2D>> textures;
@@ -89,8 +91,10 @@ public:
 	Mesh();
 
 	bool LoadMesh(const std::string &fileName);
-	void Render(glutil::MatrixStack &modelMatrix,
-				SimpleTextureProgData progData);
+	void LoadLight();
+	void Render(glutil::MatrixStack &modelMatrix, const SimpleTextureProgData &progData);
+	void Render(glutil::MatrixStack &modelMatrix, const LitTextureProgData &progData,
+				int materialBlockIndex);
 };
 
 #endif

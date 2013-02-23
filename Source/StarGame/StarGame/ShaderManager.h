@@ -122,6 +122,7 @@ private:
 	std::map<std::string, ProgramData> programDatas;
 
 	LitProgData litData;
+	LitTextureProgData litTextureData;
 	UnlitProgData unlitData;
 	SimpleProgData simpleData;
 	SimpleProgData simpleNoUBData;
@@ -160,6 +161,7 @@ public:
 
 
 	void LoadLitProgram(const std::string &vertexShader, const std::string &fragmentShader);
+	void LoadLitTextureProgram(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadUnlitProgram(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadSimpleProgram(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadSimpleNoUBProgram(const std::string &vertexShader, const std::string &fragmentShader);
@@ -178,6 +180,7 @@ public:
 
 
 	LitProgData GetLitProgData();
+	LitTextureProgData GetLitTextureProgData();
 	UnlitProgData GetUnlitProgData();
 	SimpleProgData GetSimpleProgData();
 	SimpleProgData GetSimpleNoUBProgData();

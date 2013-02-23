@@ -117,7 +117,7 @@ CelestialBody::CelestialBody(float speed, float newOffsetFromParent, float newDi
 	resource.resourceGain_perTime = resourceGain_perTime;
 	resource.resourceTimer = Framework::Timer(Framework::Timer::TT_SINGLE, resource.resourceGainTime);
 
-	GenerateUniformBuffers(materialBlockSize, color, materialUniformBuffer);
+	//GenerateUniformBuffers(materialBlockSize, color, materialUniformBuffer);
 }
 
 void CelestialBody::InitSatelliteOrbit()
@@ -172,6 +172,10 @@ void CelestialBody::LoadMesh(const std::string &fileName)
 	if(!mesh.LoadMesh(fileName))
 	{
 		std::printf("Problem loading mesh\n");
+	}
+	if(!isSun)
+	{
+		mesh.LoadLight();
 	}
 	/*
 	try
@@ -278,6 +282,7 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 						   const UnlitProgData &unlitData,
 						   const SimpleProgData &simpleData,
 						   const SimpleTextureProgData &textureData,
+						   const LitTextureProgData &litTextureData,
 						   float interpolation)
 {
 	{
@@ -291,7 +296,7 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 				iter != satellites.end(); ++iter)
 			{
 				(*iter)->Render(modelMatrix, materialBlockIndex,
-								gamma, litData, unlitData, simpleData, textureData, interpolation);
+								gamma, litData, unlitData, simpleData, textureData, litTextureData, interpolation);
 			}
 
 			modelMatrix.Scale(diameter / 2.0f);
@@ -325,7 +330,7 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 
 			bodyMesh->Render("lit");
 			*/
-			mesh.Render(modelMatrix, textureData);
+			mesh.Render(modelMatrix, litTextureData, materialBlockIndex);
 
 			//glUseProgram(0);
 

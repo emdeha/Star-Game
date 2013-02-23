@@ -197,6 +197,10 @@ public:
 						int materialBlockIndex, float gamma, 
 						const LitProgData &litData, const SimpleTextureProgData &simpleTexData,
 						float interpolation) {}
+	virtual void Render(glutil::MatrixStack &modelMatrix,
+						int materialBlockIndex, float gamma,
+						const LitProgData &litDaat, const LitTextureProgData &litTextureData,
+						float interpolation) {}
 
 	virtual void OnEvent(Event &_event) 
 	{
@@ -294,8 +298,9 @@ public:
 
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
-	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
-				float gamma, const LitProgData &litData, const SimpleTextureProgData &simpleTextData,
+	void Render(glutil::MatrixStack &modelMatrix,
+				int materialBlockIndex, float gamma,
+				const LitProgData &litData, const LitTextureProgData &litTextureData,
 				float interpolation);
 
 	void OnEvent(Event &_event);
@@ -396,8 +401,9 @@ public:
 
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
-	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
-				float gamma, const LitProgData &litData, const SimpleTextureProgData &simpleTexData,
+	void Render(glutil::MatrixStack &modelMatrix,
+				int materialBlockIndex, float gamma,
+				const LitProgData &litData, const LitTextureProgData &litTextureData,
 				float interpolation);
 
 	void OnEvent(Event &_event);
@@ -452,8 +458,9 @@ public:
 
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
-	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
-				float gamma, const LitProgData &litData, const SimpleTextureProgData &simpleTexData,
+	void Render(glutil::MatrixStack &modelMatrix,
+				int materialBlockIndex, float gamma,
+				const LitProgData &litData, const LitTextureProgData &litTextureData,
 				float interpolation);
 
 	void OnEvent(Event &_event);
@@ -495,8 +502,9 @@ public:
 
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
-	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
-				float gamma, const LitProgData &litData, const SimpleTextureProgData &simpleTexData,
+	void Render(glutil::MatrixStack &modelMatrix,
+				int materialBlockIndex, float gamma,
+				const LitProgData &litData, const LitTextureProgData &litTextureData,
 				float interpolation);
 
 	void OnEvent(Event &_event);

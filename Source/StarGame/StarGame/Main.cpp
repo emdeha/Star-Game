@@ -411,6 +411,7 @@ void InitializePrograms()
 	scene.GetShaderManager().LoadBillboardProgData("shaders/BillboardShader.vert", "shaders/BillboardShader.geom", "shaders/BillboardShader.frag");
 	scene.GetShaderManager().LoadParticleProgData("shaders/ParticleShader.vert", "shaders/ParticleShader.geom");
 	scene.GetShaderManager().LoadBillboardProgDataNoTexture("shaders/BillboardShader.vert", "shaders/BillboardShaderNoTexture.geom", "shaders/BillboardShaderNoTexture.frag");
+	scene.GetShaderManager().LoadLitTextureProgram("shaders/LitTexture.vert", "shaders/LitTexture.frag");
 }
 
 FusionHint hintBox;
@@ -481,6 +482,9 @@ void InitializeScene()
 	glUseProgram(0);
 	glUseProgram(scene.GetShaderManager().GetSimpleTextureProgData().theProgram);
 	glUniform1i(scene.GetShaderManager().GetSimpleTextureProgData().textureUnif, 0);
+	glUseProgram(0);
+	glUseProgram(scene.GetShaderManager().GetLitTextureProgData().theProgram);
+	glUniform1i(scene.GetShaderManager().GetLitTextureProgData().textureUnif, 0);
 	glUseProgram(0);
 	/*
 

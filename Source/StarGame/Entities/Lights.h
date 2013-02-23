@@ -96,6 +96,8 @@ public:
 	/// \brief Applies the light to the scene.
 	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &lightData,
 				GLuint lightUniformBuffer);
+	void Render(glutil::MatrixStack &modelMatrix, const LitTextureProgData &litTextureData,
+				GLuint lightUniformBuffer);
 };
 
 #endif

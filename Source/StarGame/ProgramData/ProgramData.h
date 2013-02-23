@@ -172,6 +172,7 @@ struct SimpleTextureProgData
 	GLuint theProgram;
 
 	GLuint textureUnif;
+	GLuint colorUnif;
 
 	GLuint projectionMatrixUnif;
 	GLuint modelToCameraMatrixUnif;

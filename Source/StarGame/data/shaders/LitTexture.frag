@@ -59,7 +59,7 @@ vec4 ComputeLighting()
 
 	gaussianTerm = cosAngIncidence != 0.0 ? gaussianTerm : 0.0;
 
-	vec4 lighting = Mtl.diffuseColor * attenIntensity * cosAngIncidence;
+	vec4 lighting = /*texture2D(_sampler, colorCoord)*/ Mtl.diffuseColor * attenIntensity * cosAngIncidence;
 	lighting += Mtl.specularColor * attenIntensity * gaussianTerm;
 
 	return lighting;
@@ -67,9 +67,9 @@ vec4 ComputeLighting()
 
 void main()
 {
-	vec4 lighting = texture2D(_sampler, colorCoord).rgba * Mtl.diffuseColor * Lgt.ambientIntensity;
+	vec4 lighting = /*texture2D(_sampler, colorCoord)*/ Mtl.diffuseColor * Lgt.ambientIntensity;
 	lighting += ComputeLighting();
-
+	
 	lighting = lighting / Lgt.maxIntensity;
 	vec4 gamma = vec4(1.0 / Lgt.gamma);
 	gamma.w = 1.0;

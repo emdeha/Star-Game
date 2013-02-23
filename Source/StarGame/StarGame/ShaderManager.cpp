@@ -352,6 +352,8 @@ void ShaderManager::LoadSimpleTextureProgData(const std::string &vertexShader,
 		glGetUniformLocation(simpleTextureProgData.theProgram, "colorTexture");
 	simpleTextureProgData.modelToCameraMatrixUnif =
 		glGetUniformLocation(simpleTextureProgData.theProgram, "modelToCameraMatrix");
+	simpleTextureProgData.colorUnif = 
+		glGetUniformLocation(simpleTextureProgData.theProgram, "color");
 
 	GLuint projectionBlock = 
 		glGetUniformBlockIndex(simpleTextureProgData.theProgram, "Projection");

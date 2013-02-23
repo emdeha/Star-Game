@@ -206,7 +206,7 @@ bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
 				if(!textures[i]->Load(fullPath, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE))
 				{
 					std::printf("Error loading texture '%s'\n", fullPath.c_str());
-					return textures[i]->Load("../data/images/white.png", GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+					return textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 				}
 				else
 				{
@@ -221,7 +221,7 @@ bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
 		{
 			textures[i] = std::shared_ptr<Texture2D>(new Texture2D());
 
-			return textures[i]->Load("../data/images/white.png", GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+			return textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 		}
 	}
 	return false;
@@ -280,7 +280,7 @@ void Mesh::Render(glutil::MatrixStack &modelMatrix, const SimpleTextureProgData 
 void Mesh::Render(glutil::MatrixStack &modelMatrix, const LitTextureProgData &progData,
 				  int materialBlockIndex)
 {
-	//glFrontFace(GL_CCW);
+	glFrontFace(GL_CCW);
 
 	glBindVertexArray(vao);
 
@@ -328,5 +328,5 @@ void Mesh::Render(glutil::MatrixStack &modelMatrix, const LitTextureProgData &pr
 
 	glBindVertexArray(0);
 
-	//glFrontFace(GL_CW);
+	glFrontFace(GL_CW);
 }

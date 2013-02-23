@@ -666,6 +666,8 @@ void Utility::Primitives::Sprite3D::Draw(glutil::MatrixStack &modelMat, const Si
 		glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
 		glVertexAttribPointer(textureData.textureCoordAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
+		glUniform4f(textureData.colorUnif, 0.0f, 0.0f, 0.0f, 1.0f);
+
 		texture->Bind(GL_TEXTURE0);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);

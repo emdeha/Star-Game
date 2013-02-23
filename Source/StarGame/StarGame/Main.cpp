@@ -594,10 +594,11 @@ void Init()
 	nextGameTick = GetTickCount();
 
 	/*
-	if(!sampleMesh.LoadMesh("../data/mesh-files/meteorite.obj"))
+	if(!sampleMesh.LoadMesh("../data/mesh-files/phoenix_ugv.md2"))
 	{
 		std::printf("Problem loading texture\n");
-	}*/
+	}
+	sampleMesh.LoadLight();*/
 }
 
 void Display()
@@ -617,8 +618,6 @@ void Display()
 		displayData.modelMatrix = modelMatrix.Top();
 		
 
-		//sampleMesh.Render(modelMatrix, scene.GetShaderManager().GetSimpleTextureProgData());
-
 		int loops = 0;
 		while(GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
 		{
@@ -632,7 +631,11 @@ void Display()
 		scene.RenderScene(modelMatrix, interpolation);	
 		
 		scene.RenderCurrentLayout();	
-
+		/*
+		modelMatrix.Translate(4.0f, 0.0f, 0.0f);
+		modelMatrix.Scale(0.05f);
+		sampleMesh.Render(modelMatrix, scene.GetShaderManager().GetLitTextureProgData(), scene.GetShaderManager().GetBlockIndex(BT_MATERIAL));
+		*/
 		//hintBox.Draw(scene.GetShaderManager().GetTextureProgData());		
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))

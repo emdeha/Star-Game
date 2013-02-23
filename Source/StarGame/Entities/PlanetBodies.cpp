@@ -308,6 +308,11 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 			glUniform4f(unlitData.objectColorUnif, sunColor.r, sunColor.g, sunColor.b, sunColor.a);
 			*/
 			//bodyMesh->Render("flat");
+			glm::vec4 sunColor = Utility::CorrectGamma(color, gamma);
+
+			glUseProgram(textureData.theProgram);
+			glUniform4f(textureData.colorUnif, sunColor.r, sunColor.g, sunColor.b, sunColor.a);
+			glUseProgram(0);
 
 			mesh.Render(modelMatrix, textureData);
 		}
@@ -396,18 +401,18 @@ void CelestialBody::OnEvent(Event &_event)
 		case EVENT_TYPE_ON_CLICK:
 			if(_event.GetArgument("rightClick").varBool == true)
 			{
-				if(!this->RemoveSatellite())
+				/*if(!this->RemoveSatellite())
 				{
 					std::printf("No satellites left.\n");
 				}
 				else
 				{
 					typesTable[satellites.size()] = false;
-				}
+				}*/
 			}
 			else if(_event.GetArgument("rightClick").varBool == false)
 			{
-				if(this->AddSatellite("mesh-files/UnitSphere.xml",
+				/*if(this->AddSatellite("mesh-files/UnitSphere.xml",
 									  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
 									  SatelliteType(FindEmptySatelliteType()))) // lisp.. 
 				{
@@ -416,7 +421,7 @@ void CelestialBody::OnEvent(Event &_event)
 				else
 				{
 					std::printf("Satellite cap reached!\n");
-				}
+				}*/
 			}
 			break;
 		case EVENT_TYPE_ON_HOVER:

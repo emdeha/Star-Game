@@ -418,7 +418,7 @@ FusionHint hintBox;
 
 void InitializeGUI()
 {
-	GUILoader guiLoader("../data/gui-descriptor/descriptor.txt", 
+	GUILoader guiLoader("../data/loader-files/gui-config.txt", 
 						glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	scene.AddLayouts(guiLoader.GetAllLoadedLayouts());
@@ -451,16 +451,16 @@ void InitializeScene()
 
 	scene.AddSun(mainSun);
 	scene.AddSunLight(mainSunLight);
-
+	/*
 	scene.SetMusic("../data/music/background.mp3", MUSIC_BACKGROUND);
 	scene.SetMusic("../data/music/onclick.wav", MUSIC_ON_SUN_CLICK);
-
+	
 	const float musicVolumeInteraction = 0.1f;
 	const float musicVolumeMaster = 0.1f;
 
 	scene.SetMusicVolume(musicVolumeInteraction, CHANNEL_INTERACTION);
 	scene.SetMusicVolume(musicVolumeMaster, CHANNEL_MASTER);	
-
+	*/
 	scene.SetFusion(FusionInput('f'));
 	scene.AddFusionSequence("fireSatellite", 'q', 'q', 'q');
 	scene.AddFusionSequence("earthSatellite", 'e', 'e', 'e');
@@ -498,7 +498,16 @@ void InitializeScene()
 	*/
 
 	InitializeGUI();
-	scene.InitTweakableVariables(/*true, "../data/loader-files/tweak-config.txt"*/);
+	scene.InitTweakableVariables(true, "../data/loader-files/tweak-config.txt");
+	scene.LoadAudio("../data/loader-files/audio-config.txt");
+
+	EventArg inMenuEventArg[1];
+	inMenuEventArg[0].argType = "command";
+	inMenuEventArg[0].argument.varType = TYPE_STRING;
+	strcpy(inMenuEventArg[0].argument.varString, "playMenuMusic");
+	Event inMenuEvent = Event(1, EVENT_TYPE_OTHER, inMenuEventArg);
+
+	scene.OnEvent(inMenuEvent);
 }
 
 
@@ -630,7 +639,7 @@ void Display()
 		float interpolation = float(GetTickCount() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
 		scene.RenderScene(modelMatrix, interpolation);	
 		
-		scene.RenderCurrentLayout();	
+		scene.RenderCurrentLayout();
 		/*
 		modelMatrix.Translate(4.0f, 0.0f, 0.0f);
 		modelMatrix.Scale(0.05f);
@@ -728,14 +737,14 @@ void Keyboard(unsigned char key, int x, int y)
 		//	     the application crashes.
 		glutLeaveMainLoop();
 		return;
-	case 32:
-		/*EventArg spaceClickedEventArg[1];
+	case 32:/*
+		EventArg spaceClickedEventArg[1];
 		spaceClickedEventArg[0].argType = "command";
 		spaceClickedEventArg[0].argument.varType = TYPE_STRING;
 		strcpy(spaceClickedEventArg[0].argument.varString, "playBackgroundMusic");
 		Event spaceClickedEvent = Event(1, EVENT_TYPE_SPACE_BTN_CLICK, spaceClickedEventArg);
 
-		universe->OnEvent(spaceClickedEvent);*/
+		scene.OnEvent(spaceClickedEvent);*/
 		break;
 	}
 

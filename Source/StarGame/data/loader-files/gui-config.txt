@@ -1,0 +1,20 @@
+mainfont AGENCYR.TTF
+fusiontextures fusion-empty.jpg fusion-catalyst.jpg fusion-ectoplasm.jpg fusion-matter.jpg
+skillData 8 fusion-empty.jpg empty fusion-catalyst.jpg skillCat fusion-matter.jpg skillMatter fusion-ectoplasm.jpg skillEctoplasm fusion-e.jpg skillE fusion-w.jpg skillW fusion-q.jpg skillQ particle-2.jpg skillpart
+layout 1 0.0 0.0 0.0 1.0 0
+label labelMatter Matter: 0 1 10 570 28 10 570 48 10 570 68
+imagebox fusionOne 1 375.0 570.0 375.0 570.0 375.0 570.0 50.0 50.0 3
+imagebox fusionTwo 1 430.0 570.0 430.0 570.0 430.0 570.0 50.0 50.0 2
+imagebox fusionThree 1 485.0 570.0 485.0 570.0 485.0 570.0 50.0 50.0 1
+hintBox skillHint 1 430.0 510.0 28 430.0 510.0 48 430.0 510.0 68 50.0 50.0 
+textbox varInput 200.0 15 1 1 540 560 28 540 560 48 540 560 68
+button applyInput Apply 0 1 750 570 28 750 570 48 750 570 68
+layout 0 0.0 0.5 0.6 1.0 1
+button newGame New 0 0 10 100 28 10 100 48 10 100 68
+button saveGame Save 0 0 10 70 28 10 70 48 10 70 68 
+button quitGame Quit 0 0 10 40 28 10 40 48 10 40 68
+**button printCmd Print 0 0 560 300 28 560 300 48 560 300 68
+**textbox sample 100.0 5 1 0 350 300 28 350 300 48 350 300 68
+**textbox sampleTwo 200.0 15 1 0 350 250 28 350 250 48 350 250 68
+layout 2 0.0 0.5 0.6 1.0 0
+endfile

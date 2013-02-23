@@ -341,6 +341,25 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 		InitSkillStats();
 	}
 }
+void Scene::LoadAudio(const std::string &configFileName)
+{
+	AudioLoader audioLoader = AudioLoader(configFileName);
+	std::vector<std::pair<ChannelType, AudioData>> loadedAudio = audioLoader.GetAllLoadedAudios();
+
+	for(std::vector<std::pair<ChannelType, AudioData>>::iterator iter = loadedAudio.begin();
+		iter != loadedAudio.end(); ++iter)
+	{
+		for(std::vector<AudioFile>::iterator iterFile = iter->second.audioFiles.begin();
+			iterFile != iter->second.audioFiles.end(); ++iterFile)
+		{
+			std::string path = "../data/music/";
+			path += iterFile->path;
+			sceneMusic.SetFileForPlay(path, iterFile->soundType);
+			sceneMusic.SetVolume(iter->second.channelVolume, iter->second.channel);
+			//std::printf("Channel: %i; Audio: %i, %s\n", iter->first, iterFile->soundType, iterFile->path.c_str());
+		}
+	}
+}
 
 void Scene::SpawnSwarm()
 {
@@ -1205,7 +1224,7 @@ void Scene::OnEvent(Event &_event)
 	case EVENT_TYPE_ON_CLICK:
 		if(strcmp(_event.GetArgument("object").varString, "sun") == 0)
 		{
-			sceneMusic.Play(MUSIC_ON_SUN_CLICK);
+			sceneMusic.Play(MUSIC_ON_SUN_CLICK, CHANNEL_INTERACTION);
 		}
 		if(strcmp(_event.GetArgument("object").varString, "exitButton") == 0)
 		{
@@ -1216,6 +1235,14 @@ void Scene::OnEvent(Event &_event)
 		{
 			this->SetLayout(LAYOUT_MENU, false);
 			this->SetLayout(LAYOUT_IN_GAME, true);
+
+			EventArg inGameEventArg[1];
+			inGameEventArg[0].argType = "command";
+			inGameEventArg[0].argument.varType = TYPE_STRING;
+			strcpy(inGameEventArg[0].argument.varString, "playBackgroundMusic");
+			Event inGameEvent = Event(1, EVENT_TYPE_OTHER, inGameEventArg);
+
+			OnEvent(inGameEvent);
 		}
 		if(strcmp(_event.GetArgument("object").varString, "saveGameButton") == 0)
 		{
@@ -1275,6 +1302,16 @@ void Scene::OnEvent(Event &_event)
 		}
 		break;
 	case EVENT_TYPE_OTHER:
+		if(strcmp(_event.GetArgument("command").varString, "playMenuMusic") == 0)
+		{
+			//sceneMusic.Stop();
+			sceneMusic.Play(MUSIC_MENU, CHANNEL_MASTER);
+		}
+		if(strcmp(_event.GetArgument("command").varString, "playBackgroundMusic") == 0)
+		{
+			sceneMusic.Stop(CHANNEL_MASTER);
+			sceneMusic.Play(MUSIC_BACKGROUND, CHANNEL_MASTER);
+		}
 		if(strcmp(_event.GetArgument("what_event").varString, "fusion_seq") == 0)
 		{
 			if(strcmp(_event.GetArgument("buttons").varString, 

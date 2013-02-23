@@ -75,6 +75,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AudioLoader.h" />
     <ClInclude Include="GUILoader.h" />
     <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="stdafx.h" />
@@ -83,6 +84,7 @@
     <ClInclude Include="TweakableVarsLoader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AudioLoader.cpp" />
     <ClCompile Include="GUILoader.cpp" />
     <ClCompile Include="MeshLoader.cpp" />
     <ClCompile Include="stdafx.cpp">

@@ -1,0 +1,9 @@
+** ALWAYS put the channel initialization before the audio
+** type, volume
+channel 0 1.0
+channel 1 1.0
+** channel, sound type(event), file
+audio 0 0 ingame.mp3
+audio 0 1 menu.mp3
+audio 1 2 onclick.wav
+endfile

@@ -29,7 +29,7 @@
 #include <string>
 #include "../fmod/fmod.hpp"
 #include "../fmod/fmod_errors.h"
-
+#include "../StarGame/AudioEnums.h"
 
 /// \fn CheckForError
 /// \brief Checks if FMOD has generated an error.
@@ -42,23 +42,6 @@ static void CheckForError(FMOD_RESULT result)
 	}
 }
 
-/// \enum ChannelType
-/// \brief Holds the types of channels on which music is played.
-enum ChannelType
-{
-	CHANNEL_MASTER, ///< The 'master' music channel.
-	CHANNEL_INTERACTION, ///< The 'interaction' music channel.
-
-	CHANNEL_COUNT,
-};
-
-/// \enum SoundTypes
-/// \brief Holds the types of sounds which will be played.
-enum SoundTypes
-{
-	MUSIC_BACKGROUND, ///< The background music.
-	MUSIC_ON_SUN_CLICK, ///< The on-click music.
-};
 
 /// \class Audio
 /// \brief Handles music, sounds, etc.
@@ -91,6 +74,8 @@ public:
 	/// \fn Play
 	/// \brief Plays a given song.
 	void Play(SoundTypes soundName, ChannelType chType = CHANNEL_MASTER);
+
+	void Stop(ChannelType chType = CHANNEL_MASTER);
 
 	~Audio();
 

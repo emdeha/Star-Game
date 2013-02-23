@@ -19,6 +19,7 @@
 #include "Audio.h"
 
 #include <iostream>
+#include <assert.h>
 
 
 Audio::Audio()
@@ -89,7 +90,6 @@ void Audio::SetFileForPlay(const std::string &newFileName, SoundTypes prevSoundT
 void Audio::SetVolume(float volume, ChannelType chType)
 {
 	volumes[chType] = volume;
-	std::printf("%f\n", volumes[chType]);
 }
 
 void Audio::Play(SoundTypes soundType, ChannelType chType)
@@ -112,6 +112,13 @@ void Audio::Play(SoundTypes soundType, ChannelType chType)
 		result = channels[chType]->setVolume(volumes[chType]);
 		CheckForError(result);
 	}
+}
+
+void Audio::Stop(ChannelType chType)
+{	
+	FMOD_RESULT result;
+	result = channels[chType]->stop();
+	CheckForError(result);
 }
 
 Audio::~Audio()

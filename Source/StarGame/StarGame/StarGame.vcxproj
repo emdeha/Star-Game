@@ -84,6 +84,7 @@
     <ClCompile Include="ShaderManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AudioEnums.h" />
     <ClInclude Include="DisplayData.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="ShaderManager.h" />

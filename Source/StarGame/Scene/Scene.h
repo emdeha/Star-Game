@@ -41,6 +41,7 @@
 #include "../StarGame/DisplayData.h"
 #include "../StarGame/ShaderManager.h"
 #include "../AssetLoader/TweakableVarsLoader.h"
+#include "../AssetLoader/AudioLoader.h"
 
 #include "../framework/EventSystem.h"
 /*
@@ -221,6 +222,7 @@ public:
 	
 	void InitTweakableVariables(bool isLoadedFromConfig = false,
 								const std::string &configFileName = "");
+	void LoadAudio(const std::string &configFileName);
 	
 	// !!! Only for testing purposes !!!
 	/*

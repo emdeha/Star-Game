@@ -25,6 +25,7 @@ enum ChannelType
 {
 	CHANNEL_MASTER, ///< The 'master' music channel.
 	CHANNEL_INTERACTION, ///< The 'interaction' music channel.
+	CHANNEL_GAME, ///< for game behaviors - fusion, explosion, etc.
 
 	CHANNEL_COUNT,
 };
@@ -36,6 +37,10 @@ enum SoundTypes
 	MUSIC_BACKGROUND, ///< The background music.
 	MUSIC_MENU,
 	MUSIC_ON_SUN_CLICK, ///< The on-click music.
+	MUSIC_EXPLOSION,
+	MUSIC_FUSION,
+
+	MUSIC_COUNT,
 };
 
 

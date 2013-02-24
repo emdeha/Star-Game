@@ -33,7 +33,7 @@ struct AudioFile
 struct AudioData
 {
 	ChannelType channel;
-	int channelVolume;
+	float channelVolume;
 	std::vector<AudioFile> audioFiles;
 };
 

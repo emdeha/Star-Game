@@ -72,7 +72,6 @@ GUILoader::GUILoader(const std::string &fileName,
 
 	if(data.is_open())
 	{	
-		//getline(data, line);
 		while(!data.eof())
 		{
 			getline(data, line);
@@ -81,7 +80,7 @@ GUILoader::GUILoader(const std::string &fileName,
 
 			if(strcmp(tag, "mainfont") == 0)
 			{
-				line.erase(0, 8);
+				line.erase(line.begin(), line.begin() + strlen(tag));
 				line[0] = ' ';
 				sscanf(line.c_str(), "%s ", &fontFile);
 
@@ -94,7 +93,7 @@ GUILoader::GUILoader(const std::string &fileName,
 					controlData.fusionTextures[i] = texturesDir;
 				}
 
-				line.erase(0, 14);
+				line.erase(line.begin(), line.begin() + strlen(tag));
 				line[0] = ' ';
 				sscanf(line.c_str(), "%s %s %s %s ", &textureFile[0],
 													 &textureFile[1],
@@ -108,7 +107,7 @@ GUILoader::GUILoader(const std::string &fileName,
 			}
 			if(strcmp(tag, "skillData") == 0)
 			{
-				line.erase(0, 9);
+				line.erase(line.begin(), line.begin() + strlen(tag));
 				line[0] = ' ';
 				int skillDataCount = 0;
 				sscanf(line.c_str(), "%i ", &skillDataCount);
@@ -134,7 +133,7 @@ GUILoader::GUILoader(const std::string &fileName,
 			}
 			if(strcmp(tag, "layout") == 0)
 			{
-				line.erase(0, 6);
+				line.erase(line.begin(), line.begin() + strlen(tag));
 				line[0] = ' ';
 				sscanf(line.c_str(), "%i %f %f %f %f %i", 
 					&layoutData.layoutType,
@@ -156,7 +155,7 @@ GUILoader::GUILoader(const std::string &fileName,
 			}
 			if(strcmp(tag, "imagebox") == 0)
 			{
-				line.erase(0, 8);
+				line.erase(line.begin(), line.begin() + strlen(tag));
 				line[0] = ' ';
 				sscanf(line.c_str(), "%s %i %f %f %f %f %f %f %f %f %i",
 					&controlData.controlName,
@@ -187,7 +186,7 @@ GUILoader::GUILoader(const std::string &fileName,
 			}
 			if(strcmp(tag, "hintBox") == 0)
 			{
-				line.erase(0, 7); 
+				line.erase(line.begin(), line.begin() + strlen(tag)); 
 				line[0] = ' ';
 				sscanf(line.c_str(), "%s %i %f %f %i %f %f %i %f %f %i %f %f",
 					&controlData.controlName,
@@ -221,7 +220,7 @@ GUILoader::GUILoader(const std::string &fileName,
 			}
 			if(strcmp(tag, "button") == 0)
 			{
-				line.erase(0, 6);
+				line.erase(line.begin(), line.begin() + strlen(tag));
 				line[0] = ' ';
 				sscanf(line.c_str(), "%s %s %i %i %f %f %i %f %f %i %f %f %i", 
 					&controlData.controlName,
@@ -260,7 +259,7 @@ GUILoader::GUILoader(const std::string &fileName,
 			}
 			if(strcmp(tag, "textbox") == 0)
 			{
-				line.erase(0, 7);
+				line.erase(line.begin(), line.begin() + strlen(tag));
 				line[0] = ' ';
 				sscanf(line.c_str(), "%s %f %i %i %i %f %f %i %f %f %i %f %f %i", 
 					&controlData.controlName,
@@ -302,12 +301,12 @@ GUILoader::GUILoader(const std::string &fileName,
 			}
 			if(strcmp(tag, "label") == 0)
 			{
-				line.erase(0, 5);
+				line.erase(line.begin(), line.begin() + strlen(tag));
 				line[0] = ' ';
-				sscanf(line.c_str(), "%s %s %i %i %f %f %i %f %f %i %f %f %i", 
+				sscanf(line.c_str(), "%s %s %i %i %f %f %i %f %f %i %f %f %i",
 					&controlData.controlName,
-					&controlData.controlText,																
-					&controlData.controlHasBackground,	
+					&controlData.controlText,
+					&controlData.controlHasBackground,
 					&controlData.toLayout,
 					&controlData.controlPresets[SMALL].position.x,
 					&controlData.controlPresets[SMALL].position.y,

@@ -1055,6 +1055,8 @@ void Scene::UpdateScene()
 		}
 		if((*iter)->IsDestroyed())
 		{
+			sceneMusic.Play(MUSIC_EXPLOSION, CHANNEL_GAME); // WARN: has some delay but it is acceptable
+
 			EventArg enemyKilledEventArg[2];
 			enemyKilledEventArg[0].argType = "what_event";
 			enemyKilledEventArg[0].argument.varType = TYPE_STRING;
@@ -1305,15 +1307,17 @@ void Scene::OnEvent(Event &_event)
 		if(strcmp(_event.GetArgument("command").varString, "playMenuMusic") == 0)
 		{
 			//sceneMusic.Stop();
-			sceneMusic.Play(MUSIC_MENU, CHANNEL_MASTER);
+			sceneMusic.Play(MUSIC_MENU, CHANNEL_MASTER); // TODO: The channel should correspond to the music
 		}
 		if(strcmp(_event.GetArgument("command").varString, "playBackgroundMusic") == 0)
 		{
 			sceneMusic.Stop(CHANNEL_MASTER);
-			sceneMusic.Play(MUSIC_BACKGROUND, CHANNEL_MASTER);
+			sceneMusic.Play(MUSIC_BACKGROUND, CHANNEL_MASTER); // TODO: The channel should correspond to the music
 		}
 		if(strcmp(_event.GetArgument("what_event").varString, "fusion_seq") == 0)
 		{
+			sceneMusic.Play(MUSIC_FUSION, CHANNEL_GAME); // TODO: The channel should correspond to the music
+
 			if(strcmp(_event.GetArgument("buttons").varString, 
 					  sceneFusionInput.GetSequenceButtons("fireSatellite").c_str()) == 0)
 			{

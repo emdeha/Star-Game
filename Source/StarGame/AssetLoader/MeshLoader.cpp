@@ -18,6 +18,7 @@
 #include "stdafx.h"
 #include "MeshLoader.h"
 #include "../Entities/MaterialBlock.h"
+#include "../framework/ErrorAPI.h"
 
 
 #define DIR "../data/mesh-files/"
@@ -120,7 +121,11 @@ bool Mesh::LoadMesh(const std::string &fileName)
 	}
 	else
 	{
-		std::printf("Error parsing '%s': '%s'\n", fileName.c_str(), aiGetErrorString());
+		std::string errorMessage = "cannot parse ";
+		errorMessage += fileName;
+		errorMessage += ": ";
+		errorMessage += aiGetErrorString();
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 		return false;
 	}
 }

@@ -21,6 +21,7 @@
 #include <glload/_int_gl_3_3.h>
 
 #include "framework.h"
+#include "../framework/ErrorAPI.h"
 
 
 // TODO: Check if each uniform and attribute location is gathered correctly
@@ -582,7 +583,8 @@ const int ShaderManager::GetBlockIndex(BlockType blockType)
 
 	else 
 	{
-		std::printf("The block doesn't exist\n");
+		HandleUnexpectedError("the block doesn\'t exist", __LINE__, __FILE__);
+		//std::printf("The block doesn't exist\n");
 		return 0;
 	}
 }
@@ -593,7 +595,8 @@ unsigned int ShaderManager::GetUniformBuffer(UniformBufferType uniformBufferType
 
 	else
 	{
-		std::printf("The uniform buffer doesn't exist\n");
+		HandleUnexpectedError("the uniform buffer doesn\'t exist", __LINE__, __FILE__);
+		//std::printf("The uniform buffer doesn't exist\n");
 		return 0;
 	}
 }
@@ -605,7 +608,8 @@ void ShaderManager::SetUniformBuffer(UniformBufferType uniformBufferType,
 
 	else 
 	{
-		std::printf("The uniform buffer doesn't exist\n");
+		HandleUnexpectedError("the uniform buffe doesn\'t exist", __LINE__, __FILE__);
+		//std::printf("The uniform buffer doesn't exist\n");
 		return;
 	}
 }

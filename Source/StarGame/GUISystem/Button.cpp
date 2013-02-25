@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 #include "GUISystem.h"
+#include "../framework/ErrorAPI.h"
 
 
 void Button::OnEvent(Event &_event)
@@ -29,5 +30,8 @@ void Button::OnEvent(Event &_event)
 	//case EVENT_TYPE_ON_HOVER:
 		//textTitle.SetFont(_event.GetArgument("isBold").varBool);
 		//break;
+	default:
+		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+		break;
 	}
 }

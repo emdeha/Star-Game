@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 #include "Enemy.h"
+#include "../framework/ErrorAPI.h"
 
 
 static void GenerateUniformBuffers(int &materialBlockSize, 
@@ -58,6 +59,8 @@ Projectile::Projectile(glm::vec3 newPosition, glm::vec3 newVelocity,
 
 void Projectile::LoadMesh(const std::string &meshFile)
 {
+	// TODO: Change mesh
+	// TODO: Check for errors
 	try
 	{
 		mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFile));
@@ -71,8 +74,10 @@ void Projectile::LoadMesh(const std::string &meshFile)
 	GenerateUniformBuffers(materialBlockSize, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), materialUniformBuffer);
 }
 
-void Projectile::LoadMesh(const std::auto_ptr<Framework::Mesh> newMesh)
+void Projectile::LoadMesh(const std::auto_ptr<Framework::Mesh> newMesh) // WARN: Why auto_ptr???
 {
+	// TODO: Change mesh
+	// TODO: Check for errors
 	mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(*newMesh.get()));
 
 	GenerateUniformBuffers(materialBlockSize, glm::vec4(0.0f), materialUniformBuffer);

@@ -41,22 +41,32 @@ bool Texture2D::Load(const std::string &fileName,
 	fif = FreeImage_GetFileType(fileName.c_str(), 0);
 
 	if(fif == FIF_UNKNOWN)
+	{
 		fif = FreeImage_GetFIFFromFilename(fileName.c_str());
+	}
 	if(fif == FIF_UNKNOWN)
+	{
 		return false;
+	}
 
 	if(FreeImage_FIFSupportsReading(fif))
+	{
 		dib = FreeImage_Load(fif, fileName.c_str());
+	}
 
 	if(!dib)
+	{
 		return false;
+	}
 
 	bits = FreeImage_GetBits(dib);
 	width = FreeImage_GetWidth(dib);
 	height = FreeImage_GetHeight(dib);
 
 	if((bits == 0) || (width == 0) || (height == 0))
+	{
 		return false;
+	}
 
 
 	glActiveTexture(GL_TEXTURE0);

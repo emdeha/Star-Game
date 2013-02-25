@@ -17,7 +17,7 @@
 
 #include "stdafx.h"
 #include "Engine.h"
-
+#include "../framework/ErrorAPI.h"
 
 
 ParticleEmitter::ParticleEmitter(glm::vec3 newPosition, int newParticleCount)
@@ -31,7 +31,12 @@ ParticleEmitter::ParticleEmitter(glm::vec3 newPosition, int newParticleCount)
 	vertexBO = 0;
 
 	texture = Texture2D();
-	texture.Load("../data/images/particle.png");
+	if(!texture.Load("../data/images/particle.png"))
+	{
+		std::string errorMessage = "cannot load particle texture ";
+		errorMessage += "../data/images/particle.png";
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+	}
 
 
 	glGenVertexArrays(1, &vao);

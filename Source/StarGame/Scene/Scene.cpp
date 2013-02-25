@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 #include "Scene.h"
+#include "../framework/ErrorAPI.h"
 
 #include <algorithm>
 #include <ctime>
@@ -263,6 +264,7 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 			std::string command = "";
 			command.append(iter->first);
 			command.append(" ");
+			std::ostringstream ss;
 			if(iter->second.itemIndex != -1)
 			{
 				char indexToChar[2];
@@ -278,9 +280,11 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 				command.append(intToChar);
 				break;
 			case TweakVarData::TYPE_TWEAK_FLOAT:
-				std::ostringstream ss;
 				ss<<iter->second.varFloat;
 				command.append(ss.str());
+				break;
+			default:
+				HandleUnexpectedError("invalid tweak var type", __LINE__, __FILE__);
 				break;
 			}
 
@@ -568,6 +572,7 @@ void Scene::SpawnEnemies()
 			}
 			break;
 		default:
+			HandleUnexpectedError("ivalid enemy type", __LINE__, __FILE__);
 			break;
 		}
 
@@ -1440,6 +1445,8 @@ void Scene::OnEvent(Event &_event)
 		}
 		break;
 	default:
+		// ERR: Invalid event type when spawning sats
+		//HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 		break;
 	};
 }
@@ -1505,8 +1512,35 @@ std::shared_ptr<Layout> Scene::GetLayout(LayoutType layoutType)
 		return sceneLayouts[layoutType];
 	}
 
-	// TODO: Better error handling.
-	std::printf("No such layout\n");
+	std::string errorMessage = "no such layout ";
+	switch(layoutType)
+	{
+	case LAYOUT_IN_GAME:
+		errorMessage += "LAYOUT_IN_GAME";
+		break;
+	case LAYOUT_LOAD_GAME:
+		errorMessage += "LAYOUT_LOAD_GAME";
+		break;
+	case LAYOUT_MENU:
+		errorMessage += "LAYOUT_MENU";
+		break;
+	case LAYOUT_NEW_GAME:
+		errorMessage += "LAYOUT_NEW_GAME";
+		break;
+	case LAYOUT_OPTIONS:
+		errorMessage += "LAYOUT_OPTIONS";
+		break;
+	case LAYOUT_OTHER:
+		errorMessage += "LAYOUT_OTHER";
+		break;
+	case LAYOUT_SAVE_GAME:
+		errorMessage += "LAYOUT_SAVE_GAME";
+		break;
+	default:
+		HandleUnexpectedError("unexpected \'default\' reached", __LINE__, __FILE__);
+		break;
+	}
+	HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 }
 bool Scene::HasLayout(LayoutType layoutType)
 {
@@ -1526,9 +1560,38 @@ void Scene::SetLayout(LayoutType layoutType, bool isSet)
 	{
 		sceneLayouts[layoutType]->Set(isSet);
 	}
-
-	// TODO: Better error handling.
-	else std::printf("No such layout\n");
+	else
+	{
+		std::string errorMessage = "no such layout ";
+		switch(layoutType)
+		{
+		case LAYOUT_IN_GAME:
+			errorMessage += "LAYOUT_IN_GAME";
+			break;
+		case LAYOUT_LOAD_GAME:
+			errorMessage += "LAYOUT_LOAD_GAME";
+			break;
+		case LAYOUT_MENU:
+			errorMessage += "LAYOUT_MENU";
+			break;
+		case LAYOUT_NEW_GAME:
+			errorMessage += "LAYOUT_NEW_GAME";
+			break;
+		case LAYOUT_OPTIONS:
+			errorMessage += "LAYOUT_OPTIONS";
+			break;
+		case LAYOUT_OTHER:
+			errorMessage += "LAYOUT_OTHER";
+			break;
+		case LAYOUT_SAVE_GAME:
+			errorMessage += "LAYOUT_SAVE_GAME";
+			break;
+		default:
+			HandleUnexpectedError("unexpected \'default\' reached", __LINE__, __FILE__);
+			break;
+		}
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+	}
 }
 
 

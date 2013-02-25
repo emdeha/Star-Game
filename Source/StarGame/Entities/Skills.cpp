@@ -18,6 +18,7 @@
 #include "stdafx.h"
 #include "Skills.h"
 #include "MaterialBlock.h"
+#include "../framework/ErrorAPI.h"
 
 
 Event Skill::GetGeneratedEvent(const std::string &eventName)
@@ -164,6 +165,9 @@ void AOESkill::OnEvent(Event &_event)
 				isStarted = true;
 			}
 			break;
+		default:
+			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+			break;
 		}
 	}
 }
@@ -185,6 +189,7 @@ void AOESkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 		position = newParam_vec3;
 		break;
 	default:
+		HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
 		break;
 	}
 }
@@ -307,6 +312,9 @@ void PassiveAOESkill::OnEvent(Event &_event)
 				skillLife.SetPause(false);
 			}
 			break;
+		default:
+			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+			break;
 		}
 	}
 }
@@ -328,6 +336,7 @@ void PassiveAOESkill::SetParameter(ParameterType paramType, glm::vec3 newParam_v
 		position = newParam_vec3;
 		break;
 	default:
+		HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
 		break;
 	}
 }
@@ -431,6 +440,9 @@ void SunNovaSkill::OnEvent(Event &_event)
 				isStarted = true;
 			}
 			break;
+		default:
+			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+			break;
 		}
 	}
 }
@@ -485,6 +497,8 @@ SatelliteChainingSkill::SatelliteChainingSkill(glm::vec3 newPosition,
 	materialUniformBuffer = 0;
 	isStarted = false;
 
+	// TODO: Change mesh
+	// TODO: Handle errors
 	try
 	{
 		projectileMesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFileName));
@@ -585,6 +599,9 @@ void SatelliteChainingSkill::OnEvent(Event &_event)
 			isStarted = true;
 		}
 		break;
+	default:
+		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+		break;
 	}
 }
 
@@ -609,6 +626,7 @@ void SatelliteChainingSkill::SetParameter(ParameterType paramType, glm::vec3 new
 		}
 		break;
 	default:
+		HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
 		break;
 	}
 }
@@ -737,6 +755,9 @@ void SatelliteChainingNova::OnEvent(Event &_event)
 				isStarted = true;
 			}
 			break;
+		default:
+			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+			break;
 		}
 	}
 }
@@ -758,6 +779,7 @@ void SatelliteChainingNova::SetParameter(ParameterType paramType, glm::vec3 newP
 		position = newParam_vec3;
 		break;
 	default:
+		HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
 		break;
 	};
 }
@@ -884,6 +906,10 @@ void FrostNovaSkill::OnEvent(Event &_event)
 				isStarted = true;
 				stunTimer.SetPause(false);
 			}
+			break;
+		default:
+			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+			break;
 		}
 	}
 }
@@ -905,6 +931,7 @@ void FrostNovaSkill::SetParameter(ParameterType paramType, glm::vec3 newParam_ve
 		position = newParam_vec3;
 		break;
 	default:
+		HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
 		break;
 	}
 }
@@ -1009,6 +1036,7 @@ void ShieldSkill::OnEvent(Event &_event)
 			}
 			break;
 		default:
+			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 			break;
 		}
 	}
@@ -1031,6 +1059,7 @@ void ShieldSkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 		position = newParam_vec3;
 		break;
 	default:
+		HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
 		break;
 	}
 }
@@ -1154,6 +1183,9 @@ void BurnSkill::OnEvent(Event &_event)
 				attackTimer.SetPause(true);
 			}
 			break;
+		default:
+			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+			break;
 		}
 	}
 }
@@ -1181,6 +1213,7 @@ void BurnSkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 			position = newParam_vec3;
 			break;
 		default:
+			HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
 			break;
 		}
 	}

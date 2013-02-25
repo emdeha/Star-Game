@@ -66,7 +66,7 @@ void SunLight::Render(glutil::MatrixStack &modelMatrix, const LitProgData &light
 }
 
 void SunLight::Render(glutil::MatrixStack &modelMatrix, const LitTextureProgData &litTextureData,
-				      GLuint lightUniformBuffer)
+					  GLuint lightUniformBuffer)
 {
 	glm::vec4 position_cameraSpace = modelMatrix.Top() * glm::vec4(position, 1.0f);
 

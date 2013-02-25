@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 #include "GameSpecificGUI.h"
+#include "../framework/ErrorAPI.h"
 
 
 AOESelector::AOESelector(glm::vec3 newPosition, float newRadius,

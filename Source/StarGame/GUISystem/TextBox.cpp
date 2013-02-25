@@ -17,7 +17,7 @@
 
 #include "stdafx.h"
 #include "GUISystem.h"
-
+#include "../framework/ErrorAPI.h"
 
 
 void TextBox::Draw(const FontProgData &fontData, const SimpleProgData &simpleData)
@@ -135,6 +135,9 @@ void TextBox::OnEvent(Event &_event)
 		break;
 	case EVENT_TYPE_UNCLICK:
 		isActive = false;
+		break;
+	default:
+		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 		break;
 	}
 }

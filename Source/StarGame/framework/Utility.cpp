@@ -16,6 +16,7 @@
 
 
 #include "Utility.h"
+#include "../framework/ErrorAPI.h"
 #include <sstream>
 
 #define PI 3.14159f
@@ -520,10 +521,11 @@ void Utility::Primitives::Sprite::Init(const std::string &textureFileName,
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	
 
-	// TODO: Better error-handling needed
 	if(!texture->Load(textureFileName))
 	{
-		std::printf("Error loading texture");
+		std::string errorMessage = "cannot load texture ";
+		errorMessage += textureFileName;
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 		return;
 	}
 }
@@ -569,7 +571,9 @@ void Utility::Primitives::Sprite::ChangeTexture(const std::string &textureFileNa
 	texture = std::shared_ptr<Texture2D>(new Texture2D());
 	if(!texture->Load(textureFileName))
 	{
-		std::printf("Error loading texture");
+		std::string errorMessage = "cannot load texture ";
+		errorMessage += textureFileName;
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 		return;
 	}
 }
@@ -645,7 +649,9 @@ void Utility::Primitives::Sprite3D::Init(const std::string &textureFileName)
 	// TODO: Better error-handling needed
 	if(!texture->Load(textureFileName))
 	{
-		std::printf("Error loading texture");
+		std::string errorMessage = "cannot load texture ";
+		errorMessage += textureFileName;
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 		return;
 	}
 }
@@ -689,7 +695,9 @@ void Utility::Primitives::Sprite3D::ChangeTexture(const std::string &textureFile
 	texture = std::shared_ptr<Texture2D>(new Texture2D());
 	if(!texture->Load(textureFileName))
 	{
-		std::printf("Error loading texture");
+		std::string errorMessage = "cannot load texture ";
+		errorMessage += textureFileName;
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 		return;
 	}
 }
@@ -787,7 +795,9 @@ void Utility::Primitives::SpriteArray::Init(int newSpritesCount,
 
 	if(!texture->Load(textureFileName))
 	{
-		std::printf("Error loading texture");
+		std::string errorMessage = "cannot load texture ";
+		errorMessage += textureFileName;
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 		return;
 	}
 }

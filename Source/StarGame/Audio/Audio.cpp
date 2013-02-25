@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 #include "Audio.h"
+#include "../framework/ErrorAPI.h"
 
 #include <iostream>
 #include <assert.h>
@@ -43,8 +44,8 @@ Audio::Audio()
 
 	if(version < FMOD_VERSION)
 	{
-		std::printf("You are using an old version of FMOD %08x. This program requires %08x\n", 
-			version, FMOD_VERSION);
+		std::printf("You are using an old version of FMOD %08x. This program requires %08x\n", version, FMOD_VERSION);
+		HandleUnexpectedError("", __LINE__, __FILE__);
 	}
 
 	result = system->init(numberOfChannels, FMOD_INIT_NORMAL, 0);
@@ -71,11 +72,11 @@ void Audio::SetVolume(float volume, ChannelType chType)
 
 void Audio::Play(SoundTypes soundType, ChannelType chType)
 {
-	// TODO: Handle errors.
 	if(audioFiles.find(soundType) == audioFiles.end())
 	{
-		std::printf("There is no sound at this index. Check Audio.h.\n");
-		return;
+		HandleUnexpectedError("there is no sound at this index", __LINE__, __FILE__);
+		//std::printf("There is no sound at this index. Check Audio.h.\n");
+		//return;
 	}
 		
 	FMOD_RESULT result;

@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 #include "Mouse.h"
+#include "../framework/ErrorAPI.h"
 
 #include <glload/gl_3_3.h>
 #include <glutil/glutil.h>
@@ -177,6 +178,9 @@ glm::vec4 Mouse::GetPositionAtDimension(int windowWidth, int windowHeight,
 		break;
 	case glm::comp::Z:
 		distance = -cameraPos.z / direction.z;
+		break;
+	default:
+		HandleUnexpectedError("invalid mouse dimension", __LINE__, __FILE__);
 		break;
 	}
 

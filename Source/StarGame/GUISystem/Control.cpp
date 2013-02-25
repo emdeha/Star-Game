@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 #include "GUISystem.h"
+#include "../framework/ErrorAPI.h"
 
 
 // TODO: Make data-driven

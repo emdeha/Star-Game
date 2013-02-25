@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 #include "AudioLoader.h"
+#include "../framework/ErrorAPI.h"
 
 #include <fstream>
 
@@ -28,61 +29,59 @@ AudioLoader::AudioLoader(const std::string &fileName)
 
 	loadedAudio.clear();
 
-	if(data.is_open())
+	if(!data.is_open())
 	{
-		while(!data.eof())
+		std::string errorMessage = "cannot open audio config file ";
+		errorMessage += fileName;
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+	}
+
+	while(!data.eof())
+	{
+		getline(data, line);
+		char command[50];
+		sscanf(line.c_str(), "%s ", &command);
+
+		if(strcmp(command, "channel") == 0)
 		{
-			getline(data, line);
-			char command[50];
-			sscanf(line.c_str(), "%s ", &command);
+			line.erase(line.begin(), line.begin() + strlen(command));
+			line[0] = ' ';
 
-			if(strcmp(command, "channel") == 0)
+			AudioData audioData;
+			sscanf(line.c_str(), "%i %f ", &audioData.channel, &audioData.channelVolume);
+			loadedAudio.push_back(std::pair<ChannelType, AudioData>(audioData.channel, audioData));
+		}
+		if(strcmp(command, "audio") == 0)
+		{
+			line.erase(line.begin(), line.begin() + strlen(command));
+			line[0] = ' ';
+
+			AudioFile audioFile;
+			char path[50];
+			int chType;
+			sscanf(line.c_str(), "%i %i %s ", &chType, &audioFile.soundType, &path);
+			audioFile.path = path;
+			for(std::vector<std::pair<ChannelType, AudioData>>::iterator iter = loadedAudio.begin();
+				iter != loadedAudio.end(); ++iter)
 			{
-				line.erase(line.begin(), line.begin() + strlen(command));
-				line[0] = ' ';
-
-				AudioData audioData;
-				sscanf(line.c_str(), "%i %f ", &audioData.channel, &audioData.channelVolume);
-				loadedAudio.push_back(std::pair<ChannelType, AudioData>(audioData.channel, audioData));
-			}
-			if(strcmp(command, "audio") == 0)
-			{
-				line.erase(line.begin(), line.begin() + strlen(command));
-				line[0] = ' ';
-
-				AudioFile audioFile;
-				char path[50];
-				int chType;
-				sscanf(line.c_str(), "%i %i %s ", &chType, &audioFile.soundType, &path);
-				audioFile.path = path;
-				for(std::vector<std::pair<ChannelType, AudioData>>::iterator iter = loadedAudio.begin();
-					iter != loadedAudio.end(); ++iter)
+				if(iter->first == chType)
 				{
-					if(iter->first == chType)
-					{
-						iter->second.audioFiles.push_back(audioFile);
-						break;
-					}
+					iter->second.audioFiles.push_back(audioFile);
+					break;
 				}
 			}
-			if(strcmp(command, "**") == 0)
-			{
-				continue;
-			}
-			if(strcmp(command, "endfile") == 0)
-			{
-				data.close();
-				return;
-			}
 		}
-		data.close();
+		if(strcmp(command, "**") == 0)
+		{
+			continue;
+		}
+		if(strcmp(command, "endfile") == 0)
+		{
+			data.close();
+			return;
+		}
 	}
-	else
-	{
-		// TODO: Better error handling
-		std::printf("Cannot open audio config file.\n");
-		return;
-	}
+	data.close();
 }
 
 const std::vector<std::pair<ChannelType, AudioData>> AudioLoader::GetAllLoadedAudios()

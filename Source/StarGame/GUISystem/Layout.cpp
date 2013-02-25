@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 #include "GUISystem.h"
+#include "../framework/ErrorAPI.h"
 
 
 Layout::Layout()
@@ -112,8 +113,11 @@ std::shared_ptr<TextControl> Layout::GetControl(const std::string &controlName)
 		}
 	}
 
-	// TODO: Better error handling.
-	std::printf("There is no such control\n");
+	
+	std::string errorMessage = "there is no such control ";
+	errorMessage += controlName;
+	HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+	//std::printf("There is no such control\n");
 }
 
 LayoutType Layout::GetLayoutType()
@@ -153,6 +157,9 @@ void Layout::SetCurrentPreset(LayoutPreset newCurrentPreset)
 		{
 			(*iter)->SetPreset(BIG);
 		}
+		break;
+	default:
+		HandleUnexpectedError("invalid layout preset", __LINE__, __FILE__);
 		break;
 	}
 }

@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 #include "GUISystem.h"
+#include "../framework/ErrorAPI.h"
 
 
 void FusionHint::Init()
@@ -44,6 +45,7 @@ void FusionHint::OnEvent(Event &_event)
 		}
 		break;
 	default:
+		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 		break;
 	}
 }

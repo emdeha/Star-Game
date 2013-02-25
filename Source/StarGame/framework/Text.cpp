@@ -16,6 +16,7 @@
 
 
 #include "Text.h"
+#include "../framework/ErrorAPI.h"
 #include <glm/gtc/type_ptr.hpp>
 
 
@@ -28,20 +29,24 @@ Text::Text(const char *fontName/*, const char *fontName_bold*/)
 {
 	if(FT_Init_FreeType(&ft))
 	{
-		std::printf("Could not initialize the FreeType library.\n");
+		HandleUnexpectedError("could not initialize FreeType library", __LINE__, __FILE__);
+		//std::printf("Could not initialize the FreeType library.\n");
 		return;
 	}
 
 	if(FT_New_Face(ft, fontName, 0, &fontFace))
 	{
-		std::printf("Could not open font file.\n");
+		std::string errorMessage = "could not open font file";
+		errorMessage += fontName;
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+		//std::printf("Could not open font file.\n");
 		return;
 	}	
-	if(FT_New_Face(ft, "../data/fonts/AGENCYB.TTF", 0, &fontFace_bold))
+	/*if(FT_New_Face(ft, "../data/fonts/AGENCYB.TTF", 0, &fontFace_bold))
 	{
 		std::printf("Could not open font file.\n");
 		return;
-	}
+	}*/
 
 	isBold = false;
 

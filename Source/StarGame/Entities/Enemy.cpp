@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 #include "Enemy.h"
+#include "../framework/ErrorAPI.h"
 
 #include <ctime>
 
@@ -312,6 +313,7 @@ void Swarm::OnEvent(Event &_event)
 		}
 		break;
 	default:
+		//HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 		break;
 	}
 }
@@ -377,7 +379,10 @@ void Spaceship::LoadMesh(const std::string &meshFile)
 	*/
 	if(!mesh.LoadMesh(meshFile)) // TODO: Proper error handling
 	{
-		std::printf("Error parsing mesh\n");
+		std::string errorMessage = "cannot load mesh ";
+		errorMessage += meshFile;
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+		//std::printf("Error parsing mesh\n");
 	}
 	mesh.LoadLight();
 	//GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
@@ -582,6 +587,7 @@ void Spaceship::OnEvent(Event &_event)
 		}
 		break;
 	default:
+		//HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 		break;
 	}
 }
@@ -616,6 +622,8 @@ void DeployUnit::LoadProjectileMesh(const std::string &meshFile)
 
 void DeployUnit::LoadMesh(const std::string &meshFile)
 {
+	// TODO: Change mesh
+	// TODO: Error checking
 	try
 	{
 		mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFile));
@@ -799,6 +807,7 @@ void DeployUnit::OnEvent(Event &_event)
 		}
 		break;
 	default:
+		//HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 		break;
 	}
 }
@@ -850,7 +859,12 @@ void Mothership::LoadMesh(const std::string &meshFileName)
 		throw;
 	}
 	*/
-	mesh.LoadMesh(meshFileName); // TODO: Proper error handling
+	if(!mesh.LoadMesh(meshFileName))
+	{
+		std::string errorMessage = "cannot load mesh ";
+		errorMessage += meshFileName;
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+	}
 	mesh.LoadLight();
 	//GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 }
@@ -1094,6 +1108,7 @@ void Mothership::OnEvent(Event &_event)
 		}
 		break;
 	default:
+		//HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 		break;
 	}
 }
@@ -1129,7 +1144,12 @@ void FastSuicideBomber::LoadMesh(const std::string &meshFile)
 		throw;
 	}*/
 
-	mesh.LoadMesh(meshFile); // TODO: Proper error handling
+	if(!mesh.LoadMesh(meshFile))
+	{
+		std::string errorMessage = "cannot load mesh ";
+		errorMessage += meshFile;
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+	}
 	mesh.LoadLight();
 	//GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 }
@@ -1326,6 +1346,7 @@ void FastSuicideBomber::OnEvent(Event &_event)
 		}
 		break;
 	default:
+		//HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 		break;
 	}
 }
@@ -1354,7 +1375,12 @@ void Asteroid::LoadMesh(const std::string &meshFile)
 		printf("%s\n", except.what());
 		throw;
 	}*/
-	mesh.LoadMesh(meshFile); // TODO: Proper error handling
+	if(!mesh.LoadMesh(meshFile))
+	{
+		std::string errorMessage = "cannot load mesh ";
+		errorMessage += meshFile;
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+	}
 	mesh.LoadLight();
 	//GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 }
@@ -1503,6 +1529,7 @@ void Asteroid::OnEvent(Event &_event)
 		}
 		break;
 	default:
+		//HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 		break;
 	}
 }

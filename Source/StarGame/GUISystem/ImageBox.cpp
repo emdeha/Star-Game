@@ -17,6 +17,8 @@
 
 #include "stdafx.h"
 #include "GUISystem.h"
+#include "../framework/ErrorAPI.h"
+
 
 /*
 ImageBox::ImageBox()
@@ -78,6 +80,9 @@ void ImageBox::OnEvent(Event &_event)
 		{
 			boxSprite.ChangeTexture(fusionTextures[0]);
 		}
+		break;
+	default:
+		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 		break;
 	}
 }

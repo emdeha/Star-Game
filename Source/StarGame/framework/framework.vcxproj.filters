@@ -55,6 +55,9 @@
     <ClInclude Include="EventSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ErrorAPI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="framework.cpp">
@@ -76,6 +79,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EventSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ErrorAPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

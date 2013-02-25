@@ -285,7 +285,8 @@ void HandleMouse()
 					Event satelliteHoveredEvent = StockEvents::EventOnHover();
 
 					(*iter)->OnEvent(satelliteHoveredEvent);
-					scene.OnEvent(satelliteHoveredEvent);
+					// WARN: This would emit an unexpected error because the scene doesn't handle on hover events
+					//scene.OnEvent(satelliteHoveredEvent);
 				}
 			}
 
@@ -313,7 +314,8 @@ void HandleMouse()
 				Event sunHoveredEvent = StockEvents::EventOnHover();
 
 				scene.GetSun()->OnEvent(sunHoveredEvent);
-				scene.OnEvent(sunHoveredEvent);
+				// WARN: This would emit an unexpected error because the scene doesn't handle on hover events
+				//scene.OnEvent(sunHoveredEvent);
 			}
 		}
 	}

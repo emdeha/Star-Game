@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 #include "PlanetBodies.h"
+#include "../framework/ErrorAPI.h"
 
 #include <algorithm>
 
@@ -171,7 +172,10 @@ void CelestialBody::LoadMesh(const std::string &fileName)
 {
 	if(!mesh.LoadMesh(fileName))
 	{
-		std::printf("Problem loading mesh\n");
+		std::string errorMessage = "cannot load mesh ";
+		errorMessage += fileName;
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+		//std::printf("Problem loading mesh\n");
 	}
 	if(!isSun)
 	{
@@ -391,6 +395,7 @@ void CelestialBody::OnEvent(Event &_event)
 			}
 			break;
 		default:
+			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 			break;
 		}
 	}
@@ -515,6 +520,7 @@ void CelestialBody::OnEvent(Event &_event)
 			}
 			break;
 		default:
+			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 			break;
 		}
 	}
@@ -526,10 +532,14 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 {
 	if(satellites.size() >= satelliteCap)
 	{
+		// EXPECTED
+		// TODO: Print ingame text
 		return false;
 	}
 	if(currentResource < satelliteConstructionCost)
 	{
+		// EXPECTED
+		// TODO: Print ingame text
 		std::printf("Not enough resource.\n");
 		return false;
 	}
@@ -620,6 +630,8 @@ bool CelestialBody::RemoveSatellite()
 	{
 		if(satellites.empty())
 		{
+			// EXPECTED
+			// TODO: Print ingame text
 			return false;
 		}
 
@@ -645,10 +657,14 @@ bool CelestialBody::RemoveSatellite(std::vector<std::shared_ptr<CelestialBody>>:
 	{
 		if(satellites.empty())
 		{
+			// EXPECTED
+			// TODO: Print ingame text
 			return false;
 		}
 		if(std::find(satellites.begin(), satellites.end(), (*index_iterator)) == satellites.end())
 		{
+			// EXPECTED
+			// TODO: Print ingame text
 			return false;
 		}
 
@@ -674,6 +690,8 @@ bool CelestialBody::RemoveSatellite(SatelliteType type)
 	{
 		if(satellites.empty())
 		{
+			// EXPECTED
+			// TODO: Print ingame text
 			return false;
 		}
 
@@ -869,7 +887,27 @@ const bool CelestialBody::GetIsSatelliteClicked(SatelliteType type) const
 		}
 	}
 
-	std::printf("No such satellite. (PlanetBodies.cpp/CelestialBody::GetIsSatelliteClicked)\n");
+	std::string errorMessage = "no such satellite ";
+	switch(type)
+	{
+	case SATELLITE_FIRE:
+		errorMessage += "SATELLITE_FIRE";
+		break;
+	case SATELLITE_EARTH:
+		errorMessage += "SATELLITE_EARTH";
+		break;
+	case SATELLITE_WATER:
+		errorMessage += "SATELLITE_WATER";
+		break;
+	case SATELLITE_AIR:
+		errorMessage += "SATELLITE_AIR";
+		break;
+	default:
+		HandleUnexpectedError("invalid satellite type", __LINE__, __FILE__);
+		break;
+	}
+	HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+	//std::printf("No such satellite. (PlanetBodies.cpp/CelestialBody::GetIsSatelliteClicked)\n");
 	return false;
 }
 const float CelestialBody::GetRadius() const
@@ -900,7 +938,27 @@ std::shared_ptr<CelestialBody> CelestialBody::GetSatellite(SatelliteType type)
 		}
 	}
 
-	std::printf("No such satellite. (PlanetBodies.cpp/CelestialBody::GetSatellite)\n");
+	std::string errorMessage = "no such satellite ";
+	switch(type)
+	{
+	case SATELLITE_FIRE:
+		errorMessage += "SATELLITE_FIRE";
+		break;
+	case SATELLITE_EARTH:
+		errorMessage += "SATELLITE_EARTH";
+		break;
+	case SATELLITE_WATER:
+		errorMessage += "SATELLITE_WATER";
+		break;
+	case SATELLITE_AIR:
+		errorMessage += "SATELLITE_AIR";
+		break;
+	default:
+		HandleUnexpectedError("invalid satellite type", __LINE__, __FILE__);
+		break;
+	}
+	HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+	//std::printf("No such satellite. (PlanetBodies.cpp/CelestialBody::GetSatellite)\n");
 	return nullptr;
 }
 std::shared_ptr<CelestialBody> CelestialBody::GetOuterSatellite()
@@ -924,6 +982,7 @@ std::shared_ptr<CelestialBody> CelestialBody::GetOuterSatellite()
 		return outerSatellite;
 	}
 
+	HandleUnexpectedError("no outer satellite", __LINE__, __FILE__);
 	return nullptr;
 }
 

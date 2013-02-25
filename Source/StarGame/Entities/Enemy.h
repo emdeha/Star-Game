@@ -204,7 +204,7 @@ public:
 
 	virtual void OnEvent(Event &_event) 
 	{
-		switch(_event.GetType()) {}
+		switch(_event.GetType()) { default: break; }
 	}
 
 	virtual glm::vec3 GetPosition();

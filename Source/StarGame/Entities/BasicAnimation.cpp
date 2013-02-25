@@ -18,6 +18,7 @@
 #include "stdafx.h"
 #include "BasicAnimation.h"
 #include "MaterialBlock.h"
+#include "../framework/ErrorAPI.h"
 
 
 #define PI 3.141592
@@ -66,6 +67,8 @@ AnimationBody AnimationBody::operator=(const AnimationBody &other)
 
 AnimationBody::AnimationBody(const std::string &meshFileName)
 {
+	// TODO: Change mesh
+	// TODO: Error checking
 	try
 	{
 		mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFileName));

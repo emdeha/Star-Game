@@ -116,7 +116,8 @@ private:
 	std::vector<std::shared_ptr<CelestialBody>> suns;
 	std::vector<std::shared_ptr<Enemy>> enemies;
 
-	ExplosionEmitter explosion;
+	std::vector<ExplosionEmitter> explosion;
+	int lastUsedExplosion;
 
 	std::map<LayoutType, std::shared_ptr<Layout>> sceneLayouts;
 

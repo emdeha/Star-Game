@@ -61,6 +61,9 @@ FusionInput::FusionInput()
 }
 FusionInput::FusionInput(char newSequenceEndButton)
 {
+	validInputSequences[0] = 'q';
+	validInputSequences[1] = 'w';
+	validInputSequences[2] = 'e';
 	sequences.resize(0);
 	sequenceEndButton = newSequenceEndButton;
 }
@@ -156,7 +159,10 @@ Event FusionInput::Update(char newButton)
 		//std::printf("You can't input more buttons. Type \'F\' if you want to send fusion.\n");
 		//return StockEvents::EmptyEvent();
 	}
-	currentInputSequence += newButton;
+	if(newButton == validInputSequences[0] || newButton == validInputSequences[1] || newButton == validInputSequences[2])
+	{
+		currentInputSequence += newButton;
+	}
 
 	
 	// TODO: Should I check whether the input button is part of the sequence?

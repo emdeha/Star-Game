@@ -39,8 +39,16 @@ void FusionHint::OnEvent(Event &_event)
 	case EVENT_TYPE_OTHER:
 		if(strcmp(_event.GetArgument("what_event").varString, "show_skill") == 0)
 		{
-			boxSprite.ChangeTexture(skillTextures[_event.GetArgument("skillIndex").varInteger]);
-			text = skillDescriptions[_event.GetArgument("skillIndex").varInteger];
+			if(_event.GetArgument("skillIndex").varInteger == -1)
+			{
+				boxSprite.ChangeTexture("../data/images/fusion-empty.jpg");
+				text = "No skill";
+			}
+			else
+			{
+				boxSprite.ChangeTexture(skillTextures[_event.GetArgument("skillIndex").varInteger]);
+				text = skillDescriptions[_event.GetArgument("skillIndex").varInteger];
+			}
 			isVisible = true;
 		}
 		break;

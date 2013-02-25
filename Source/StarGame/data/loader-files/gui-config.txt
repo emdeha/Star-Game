@@ -1,6 +1,6 @@
 mainfont AGENCYR.TTF
 fusiontextures fusion-empty.jpg fusion-catalyst.jpg fusion-ectoplasm.jpg fusion-matter.jpg
-skillData 8 fusion-empty.jpg empty fusion-catalyst.jpg skillCat fusion-matter.jpg skillMatter fusion-ectoplasm.jpg skillEctoplasm fusion-e.jpg skillE fusion-w.jpg skillW fusion-q.jpg skillQ particle-2.jpg skillpart
+skillData 8 sun.jpg passiveAoE fusion-catalyst.jpg AoE fusion-matter.jpg sunNova fusion-ectoplasm.jpg burn fusion-e.jpg satPassiveAoE fusion-w.jpg satChain fusion-q.jpg satFrostNova mesh.jpg satShield
 layout 1 0.0 0.0 0.0 1.0 0
 label labelMatter Matter: 0 1 10 570 28 10 570 48 10 570 68
 imagebox fusionOne 1 375.0 570.0 375.0 570.0 375.0 570.0 50.0 50.0 3

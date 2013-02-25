@@ -50,6 +50,8 @@ Scene::Scene(float newSceneGamma,
 	spawnData.timeDecrement_secs = newTimeDecrement_secs;
 	spawnData.waveSpawnTimer = Framework::Timer(Framework::Timer::TT_SINGLE, spawnData.initialSpawnTime_secs);
 
+	lastUsedExplosion = 0;
+
 	isSpawning = true;
 }
 
@@ -950,9 +952,12 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
 	SimpleTextureProgData textureData = shaderManager.GetSimpleTextureProgData();
 	LitTextureProgData litTextureData = shaderManager.GetLitTextureProgData();
 	
-	if(explosion.IsActive())
+	for(int i = 0; i < 20; i++)
 	{
-		explosion.Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), billboardNoTextureData);
+		if(explosion[i].IsActive())
+		{
+			explosion[i].Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), billboardNoTextureData);
+		}
 	}
 
 	for(int i = 0; i < enemies.size(); i++)
@@ -1005,13 +1010,16 @@ void Scene::UpdateScene()
 		SpawnEnemies();
 	}
 	
-	if(explosion.IsActive())
+	for(int i = 0; i < 20; i++)
 	{
-		explosion.Update();
-	}
-	if(explosion.IsDead())
-	{
-		explosion.Init();
+		if(explosion[i].IsActive())
+		{
+			explosion[i].Update();
+		}
+		if(explosion[i].IsDead())
+		{
+			explosion[i].Init();
+		}
 	}
 
 	// Should be in the OnEvent function.
@@ -1019,9 +1027,14 @@ void Scene::UpdateScene()
 	{
 		if(suns.front()->GetHealth() <= 0)
 		{
-			explosion.SetPosition(glm::vec3());
-			explosion.Init();
-			explosion.Activate();
+			explosion[lastUsedExplosion].SetPosition(glm::vec3());
+			explosion[lastUsedExplosion].Init();
+			explosion[lastUsedExplosion].Activate();
+			lastUsedExplosion++;
+			if(lastUsedExplosion >= 20)
+			{
+				lastUsedExplosion = 0;
+			}
 
 			suns.front()->RemoveSatellites();
 			suns.pop_back();
@@ -1079,9 +1092,14 @@ void Scene::UpdateScene()
 		{
 			sceneMusic.Play(MUSIC_EXPLOSION, CHANNEL_GAME); // WARN: has some delay but it is acceptable
 
-			explosion.SetPosition((*iter)->position);
-			explosion.Init();
-			explosion.Activate();
+			explosion[lastUsedExplosion].SetPosition((*iter)->position);
+			explosion[lastUsedExplosion].Init();
+			explosion[lastUsedExplosion].Activate();
+			lastUsedExplosion++;
+			if(lastUsedExplosion >= 20)
+			{
+				lastUsedExplosion = 0;
+			}
 			
 			EventArg enemyKilledEventArg[2];
 			enemyKilledEventArg[0].argType = "what_event";
@@ -1663,7 +1681,10 @@ void Scene::SetFusion(const FusionInput &newFusionInput)
 
 void Scene::SetExplosion(const ExplosionEmitter &newExplosionEmitter)
 {
-	explosion = newExplosionEmitter;
+	for(int i = 0; i < 20; i++)
+	{	
+		explosion.push_back(newExplosionEmitter);
+	}
 }
 
 void Scene::SetLayoutPreset(LayoutPreset layoutPreset)
@@ -1716,7 +1737,7 @@ SkillType Scene::GetSkillTypeByFusionCombination(char fusionA, char fusionB, cha
 	}
 	if(skillName == "sunNovaSkill")
 	{
-		return SkillType::SKILL_TYPE_SUN_NOVA;
+		return SkillType::SKILL_TYPE_SUN_NOVA; 
 	}
 	if(skillName == "satFrostNova")
 	{
@@ -1731,7 +1752,7 @@ SkillType Scene::GetSkillTypeByFusionCombination(char fusionA, char fusionB, cha
 		return SkillType::SKILL_TYPE_BURN;
 	}
 
-	return SkillType(0);
+	return SkillType(-1);
 }
 
 std::string Scene::GetCurrentFusionInputSequence()

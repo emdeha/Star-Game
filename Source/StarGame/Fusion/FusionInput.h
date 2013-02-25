@@ -47,6 +47,7 @@ private:
 
 	std::string currentInputSequence;
 	char sequenceEndButton;
+	char validInputSequences[3];
 
 public:
 	FusionInput();

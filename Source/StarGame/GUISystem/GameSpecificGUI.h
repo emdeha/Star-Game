@@ -104,7 +104,7 @@ private:
 	Utility::Primitives::Torus2D mainOrbit;
 	Utility::Primitives::Torus2D orbitOutlineOne;
 	Utility::Primitives::Torus2D orbitOutlineTwo;
-	SkillUpgradeButtons upgradeButtons;
+	//SkillUpgradeButtons upgradeButtons;
 
 public:
 	SatelliteOrbit();
@@ -120,9 +120,9 @@ public:
 	void Draw(glutil::MatrixStack &modelMatrix, 
 			  const SimpleProgData &simpleData, const SimpleTextureProgData &textureData);
 
-	void ChangeUpgradeButtonTexture(TextureType textType, int buttonIndex);
+	//void ChangeUpgradeButtonTexture(TextureType textType, int buttonIndex);
 
-	bool IsUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex);
+	//bool IsUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex);
 };
 
 

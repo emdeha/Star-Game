@@ -196,15 +196,19 @@ void AOESkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 
 bool AOESkill::IsIntersectingObject(glm::vec3 objectPosition)
 {
-	float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
-
-	if(distanceBetweenObjectAndSkill < range)
+	if(isStarted)
 	{
-		isStarted = false;
-		return true;
-	}
+		float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
+
+		if(distanceBetweenObjectAndSkill < range)
+		{
+			isStarted = false;
+			return true;
+		}
 	
-	return false;
+		return false;
+	}
+	else return false;
 }
 
 
@@ -343,14 +347,18 @@ void PassiveAOESkill::SetParameter(ParameterType paramType, glm::vec3 newParam_v
 
 bool PassiveAOESkill::IsIntersectingObject(glm::vec3 objectPosition)
 {
-	float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
-
-	if(distanceBetweenObjectAndSkill < range)
+	if(isStarted)
 	{
-		return true;
-	}
+		float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
 
-	return false;
+		if(distanceBetweenObjectAndSkill < range)
+		{
+			return true;
+		}
+
+		return false;
+	}
+	else return false;
 }
 
 
@@ -371,11 +379,7 @@ SunNovaSkill::SunNovaSkill(glm::vec3 newPosition,
 	currentScale = 1.0f;
 	isStarted = false;
 
-#ifdef CIRCLE_SKILL
-	skillExpansionRadius = Utility::Primitives::Circle(glm::vec4(0.7f, 0.5f, 0.0f, 0.5f), position, currentScale, 90);
-#elif defined TORUS_SKILL
 	skillExpansionRadius = Utility::Primitives::Torus2D(glm::vec4(0.7f, 0.5f, 0.0f, 0.5f), position, currentScale, currentScale + 0.03f, 90);
-#endif
 	skillExpansionRadius.Init();
 }
 
@@ -667,11 +671,7 @@ SatelliteChainingNova::SatelliteChainingNova(glm::vec3 newPosition,
 	isStarted = false;
 	generatedEvents.resize(0);
 
-#ifdef CIRCLE_SKILL
-	skillExpansionRadius = Utility::Primitives::Circle(glm::vec4(0.2f, 0.0f, 0.8f, 0.5f), position, currentScale, 90);
-#elif defined TORUS_SKILL 
 	skillExpansionRadius = Utility::Primitives::Torus2D(glm::vec4(0.2f, 0.0f, 0.8f, 0.5f), position, currentScale, currentScale + 0.03f, 90);
-#endif
 	skillExpansionRadius.Init();
 }
 
@@ -822,11 +822,7 @@ FrostNovaSkill::FrostNovaSkill(int newDamage, float newStunTime_seconds,
 	currentScale = 1.0f;
 	isStarted = false;
 
-#ifdef CIRCLE_SKILL
-	skillExpansionRadius = Utility::Primitives::Circle(glm::vec4(0.2f, 0.0f, 0.8f, 0.5f), position, currentScale, 90);
-#elif defined TORUS_SKILL 
 	skillExpansionRadius = Utility::Primitives::Torus2D(glm::vec4(0.2f, 0.0f, 0.8f, 0.5f), position, currentScale, currentScale + 0.03f, 90);
-#endif
 	skillExpansionRadius.Init();
 }
 
@@ -978,9 +974,6 @@ ShieldSkill::ShieldSkill(glm::vec3 newPosition,
 	
 	skillAnimation.AddAnimationBody(bodyTwo);
 	skillAnimation.AddAnimationBody(bodyOne);
-
-	//skillRadius = Utility::Primitives::Circle(glm::vec4(0.7f, 0.5f, 0.0f, 1.0f), position, range, 90);
-	//skillRadius.Init();
 }
 
 void ShieldSkill::Update()
@@ -1006,7 +999,6 @@ void ShieldSkill::Render(glutil::MatrixStack &modelMatrix, const LitProgData &li
 		modelMatrix.Translate(position);
 
 		skillAnimation.Render(modelMatrix, materialBlockIndex, litData);
-		//skillRadius.Draw(modelMatrix, simpleData);
 	}
 }
 
@@ -1066,14 +1058,18 @@ void ShieldSkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 
 bool ShieldSkill::IsIntersectingObject(glm::vec3 objectPosition)
 {
-	float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
-
-	if(distanceBetweenObjectAndSkill < range)
+	if(isStarted)
 	{
-		return true;
-	}
+		float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
 
-	return false;
+		if(distanceBetweenObjectAndSkill < range)
+		{
+			return true;
+		}
+
+		return false;
+	}
+	else return false;
 }
 
 
@@ -1131,7 +1127,6 @@ void BurnSkill::Update()
 			generatedEvents.push_back(enemyDamageEvent);
 
 			damageApplyTime_seconds += damageApplyTimeDuration_seconds;
-			//attackTimer.Reset();
 		}
 	}
 }

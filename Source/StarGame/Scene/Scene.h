@@ -44,33 +44,6 @@
 #include "../AssetLoader/AudioLoader.h"
 
 #include "../framework/EventSystem.h"
-/*
-
-enum EnemyType
-{
-	ENEMY_TYPE_SWARM,
-	ENEMY_TYPE_SPACESHIP,
-	ENEMY_TYPE_MOTHERSHIP,
-	ENEMY_TYPE_FAST_SUICIDE_BOMBER,
-	ENEMY_TYPE_ASTEROID, // Should the asteroids be randomly spawned on waves, 
-						 // or should they act like background?
-
-	ENEMY_TYPE_COUNT,
-};*/
-
-/*
-// Maybe later it would be useful.
-
-class CommandHandler
-{
-public:
-	CommandHandler() {}
-
-	virtual void HandleCommand(const std::string &command) {};
-
-	virtual ~CommandHandler() {}
-};
-*/
 
 
 struct EnemyStats
@@ -228,15 +201,6 @@ public:
 	void InitTweakableVariables(bool isLoadedFromConfig = false,
 								const std::string &configFileName = "");
 	void LoadAudio(const std::string &configFileName);
-	
-	// !!! Only for testing purposes !!!
-	/*
-	void GenerateRandomSwarms(int count, const BillboardProgDataNoTexture &progData, int resourceOnKill);
-	void GenerateRandomSpaceships(int count, int resourceOnKill);
-	void GenerateRandomSuicideBombers(int count, int resourceOnKill);
-	void GenerateRandomMothership(int resourceOnKill);
-	void GenerateRandomAsteroids(int count, int resourceOnKill);
-	*/
 };
 
 

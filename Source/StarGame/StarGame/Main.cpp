@@ -82,23 +82,7 @@ void HandleMouse()
 	if(scene.GetMouse().IsLeftButtonDown())
 	{
 		if(scene.IsLayoutOn(LAYOUT_IN_GAME))
-		{/*
-			if(
-			   scene.GetLayout(LAYOUT_IN_GAME)->
-			   GetControl("exit")->
-			   IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("exitButton");
-
-				scene.GetLayout(LAYOUT_IN_GAME)->GetControl("exit")->OnEvent(leftClickButtonEvent);
-
-				scene.OnEvent(leftClickButtonEvent);
-
-				scene.GetMouse().ReleaseLeftButton();
-				return;
-			}*/
-
+		{
 			scene.OnEvent(StockEvents::EventOnLeftClick("deploySkill"));
 		}
 
@@ -142,59 +126,6 @@ void HandleMouse()
 
 				scene.OnEvent(leftClickButtonEvent);
 			}
-			/*
-			if(
-				scene.GetLayout(LAYOUT_MENU)->
-				GetControl("printCmd")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("printCmd");
-
-				scene.GetLayout(LAYOUT_MENU)->GetControl("printCmd")->OnEvent(leftClickButtonEvent);
-
-				scene.OnEvent(leftClickButtonEvent);
-			}
-			
-			if(
-				scene.GetLayout(LAYOUT_MENU)->
-				GetControl("sample")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickTextBoxEvent = StockEvents::EventOnLeftClick("sample");
-
-				scene.GetLayout(LAYOUT_MENU)->GetControl("sample")->OnEvent(leftClickTextBoxEvent);
-
-				
-				if(scene.GetLayout(LAYOUT_MENU)->GetControl("sample") != 
-				   scene.GetLayout(LAYOUT_MENU)->GetActiveControl())
-				{
-					Event unclickEvent = Event(EVENT_TYPE_UNCLICK);
-
-					scene.GetLayout(LAYOUT_MENU)->GetActiveControl()->OnEvent(unclickEvent);
-				}
-			}
-			
-			if(
-				scene.GetLayout(LAYOUT_MENU)->
-				GetControl("sampleTwo")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickTextBoxEvent = StockEvents::EventOnLeftClick("sampleTwo");
-
-				scene.GetLayout(LAYOUT_MENU)->GetControl("sampleTwo")->OnEvent(leftClickTextBoxEvent);
-
-				
-				if(scene.GetLayout(LAYOUT_MENU)->GetControl("sampleTwo") != 
-				   scene.GetLayout(LAYOUT_MENU)->GetActiveControl())
-				{
-					Event unclickEvent = Event(EVENT_TYPE_UNCLICK);
-
-					scene.GetLayout(LAYOUT_MENU)->GetActiveControl()->OnEvent(unclickEvent);
-				}
-			}*/
 		}
 
 		if(scene.IsLayoutOn(LAYOUT_IN_GAME))
@@ -445,7 +376,6 @@ void InitializeScene()
 	SunLight 
 		mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, displayData.gamma));
 
-	//mainSun->LoadMesh("mesh-files/UnitSphere.xml");
 	mainSun->LoadMesh("../data/mesh-files/sun.obj");
 
 	scene.SetMouse(userMouse);
@@ -458,16 +388,6 @@ void InitializeScene()
 	sceneExplosion.Init();
 	scene.SetExplosion(sceneExplosion);
 
-	/*
-	scene.SetMusic("../data/music/background.mp3", MUSIC_BACKGROUND);
-	scene.SetMusic("../data/music/onclick.wav", MUSIC_ON_SUN_CLICK);
-	
-	const float musicVolumeInteraction = 0.1f;
-	const float musicVolumeMaster = 0.1f;
-
-	scene.SetMusicVolume(musicVolumeInteraction, CHANNEL_INTERACTION);
-	scene.SetMusicVolume(musicVolumeMaster, CHANNEL_MASTER);	
-	*/
 	scene.SetFusion(FusionInput('f'));
 	scene.AddFusionSequence("fireSatellite", 'q', 'q', 'q');
 	scene.AddFusionSequence("earthSatellite", 'e', 'e', 'e');
@@ -493,16 +413,6 @@ void InitializeScene()
 	glUseProgram(scene.GetShaderManager().GetLitTextureProgData().theProgram);
 	glUniform1i(scene.GetShaderManager().GetLitTextureProgData().textureUnif, 0);
 	glUseProgram(0);
-	/*
-
-	hintBox = FusionHint(LayoutPreset::MEDIUM, "hintBox", glm::vec2(430.0f, 510.0f), 50.0f, 50.0f);
-	std::string textures[3];
-	textures[0] = "../data/images/fusion-e.jpg";
-	textures[1] = "../data/images/fusion-w.jpg";
-	textures[2] = "../data/images/fusion-q.jpg";
-	//hintBox.SetTextures(textures, 3);
-	hintBox.Init();
-	*/
 
 	InitializeGUI();
 	scene.InitTweakableVariables(true, "../data/loader-files/tweak-config.txt");
@@ -608,13 +518,6 @@ void Init()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	nextGameTick = GetTickCount();
-
-	/*
-	if(!sampleMesh.LoadMesh("../data/mesh-files/phoenix_ugv.md2"))
-	{
-		std::printf("Problem loading texture\n");
-	}
-	sampleMesh.LoadLight();*/
 }
 
 void Display()
@@ -632,11 +535,6 @@ void Display()
 
 		modelMatrix.SetMatrix(scene.GetTopDownCamera().CalcMatrix());
 		displayData.modelMatrix = modelMatrix.Top();
-		/*
-		modelMatrix.Translate(4.0f, 0.0f, 0.0f);
-		modelMatrix.Scale(0.05f);
-		sampleMesh.Render(modelMatrix, scene.GetShaderManager().GetSimpleTextureProgData());/*scene.GetShaderManager().GetLitTextureProgData(), scene.GetShaderManager().GetBlockIndex(BT_MATERIAL));*/
-		
 
 		int loops = 0;
 		while(GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
@@ -650,10 +548,7 @@ void Display()
 		float interpolation = float(GetTickCount() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
 		scene.RenderScene(modelMatrix, interpolation);	
 		
-		scene.RenderCurrentLayout();
-		
-		
-		//hintBox.Draw(scene.GetShaderManager().GetTextureProgData());		
+		scene.RenderCurrentLayout();	
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{
@@ -693,33 +588,13 @@ void Reshape(int width, int height)
 
 	projMatrix.SetIdentity();
 	projMatrix.Orthographic((float)width, 0.0f, (float)height, 0.0f, 1.0f, 1000.0f);
-
-	//displayData.projectionMatrix = projMatrix.Top(); <- bugs the clicking mechanism
-
-
+	
 	glBindBuffer(GL_UNIFORM_BUFFER, scene.GetShaderManager().GetUniformBuffer(UBT_ORTHOGRAPHIC));
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(displayData.projectionMatrix), &projMatrix.Top());
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	
 	scene.UpdateCurrentLayout(width, height);
-	// TODO: Isolate in a separate function.
-	/*if(width <= 800 || height <= 600)
-	{
-		scene->SetLayoutPreset(SMALL);
-		scene->UpdateCurrentLayout(800, 600);
-	}
-	else if(width > 800 && width <= 1440 ||
-			height > 600 && height <= 900)
-	{
-		scene->SetLayoutPreset(MEDIUM);
-		scene->UpdateCurrentLayout(1440, 900);
-	}
-	else
-	{
-		scene->SetLayoutPreset(BIG);
-		scene->UpdateCurrentLayout(1920, 1080);
-	}*/
 
 	displayData.windowHeight = height;
 	displayData.windowWidth = width;
@@ -745,14 +620,7 @@ void Keyboard(unsigned char key, int x, int y)
 		//	     the application crashes.
 		glutLeaveMainLoop();
 		return;
-	case 32:/*
-		EventArg spaceClickedEventArg[1];
-		spaceClickedEventArg[0].argType = "command";
-		spaceClickedEventArg[0].argument.varType = TYPE_STRING;
-		strcpy(spaceClickedEventArg[0].argument.varString, "playBackgroundMusic");
-		Event spaceClickedEvent = Event(1, EVENT_TYPE_SPACE_BTN_CLICK, spaceClickedEventArg);
-
-		scene.OnEvent(spaceClickedEvent);*/
+	case 32:
 		break;
 	}
 

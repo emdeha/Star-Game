@@ -138,7 +138,6 @@ private:
 	glm::vec3 position;
 	
 	AOESelector skillSelector;
-	//std::vector<Event> generatedEvents;
 
 public:
 	AOESkill() : Skill() {}
@@ -210,12 +209,7 @@ private:
 	float currentScale;
 	glm::vec3 position;
 
-
-#ifdef CIRCLE_SKILL
-	Utility::Primitives::Circle skillExpansionRadius;
-#elif defined TORUS_SKILL
 	Utility::Primitives::Torus2D skillExpansionRadius;
-#endif
 
 public:
 	SunNovaSkill() : Skill() {}
@@ -289,13 +283,8 @@ private:
 	float scaleRate;
 	float currentScale;
 	glm::vec3 position;
-
-
-#ifdef CIRCLE_SKILL
-	Utility::Primitives::Circle skillExpansionRadius;
-#elif defined TORUS_SKILL
+	
 	Utility::Primitives::Torus2D skillExpansionRadius;
-#endif
 
 public:
 	SatelliteChainingNova() : Skill() {}
@@ -331,12 +320,7 @@ private:
 	float currentScale;
 	glm::vec3 position;
 
-
-#ifdef CIRCLE_SKILL
-	Utility::Primitives::Circle skillExpansionRadius;
-#elif defined TORUS_SKILL
 	Utility::Primitives::Torus2D skillExpansionRadius;
-#endif
 
 public:
 	FrostNovaSkill() : Skill() {}
@@ -372,7 +356,6 @@ private:
 	bool isStarted;
 
 	Animation skillAnimation;
-	//Utility::Primitives::Circle skillRadius;
 
 public:
 	ShieldSkill() : Skill() {}
@@ -423,10 +406,7 @@ public:
 			  char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
 			  int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
-	void Update();/*
-	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData,
-				GLuint materialBlockIndex);
-	*/
+	void Update();
 	void Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &simpleData);
 
 	void OnEvent(Event &_event);

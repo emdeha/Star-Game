@@ -144,9 +144,9 @@ SatelliteOrbit::SatelliteOrbit(glm::vec4 newMainColor, glm::vec4 newOutlineColor
 												   outerRadius + 0.05f,
 												   90);
 
-	upgradeButtons = SkillUpgradeButtons(1.0f, 1.0f,
-										 "../data/images/skill-noupgrade.jpg", "../data/images/skill-upgrade.jpg",
-										 position, innerRadius, outerRadius);
+	//upgradeButtons = SkillUpgradeButtons(1.0f, 1.0f,
+	//									 "../data/images/skill-noupgrade.jpg", "../data/images/skill-upgrade.jpg",
+	//									 position, innerRadius, outerRadius);
 }
 
 void SatelliteOrbit::Init()
@@ -154,7 +154,7 @@ void SatelliteOrbit::Init()
 	mainOrbit.Init();
 	orbitOutlineOne.Init();
 	orbitOutlineTwo.Init();
-	upgradeButtons.Init();
+	//upgradeButtons.Init();
 }
 
 void SatelliteOrbit::Draw(glutil::MatrixStack &modelMatrix, 
@@ -171,19 +171,19 @@ void SatelliteOrbit::Draw(glutil::MatrixStack &modelMatrix,
 	orbitOutlineOne.Draw(modelMatrix, simpleData);
 	orbitOutlineTwo.Draw(modelMatrix, simpleData);
 
-	upgradeButtons.Draw(modelMatrix, textureData);
+	//upgradeButtons.Draw(modelMatrix, textureData);
 }
-
+/*
 void SatelliteOrbit::ChangeUpgradeButtonTexture(TextureType type, int buttonIndex)
 {
 	upgradeButtons.ChangeTexture(type, buttonIndex);
-}
-
+}*/
+/*
 bool SatelliteOrbit::IsUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex)
 {
 	bool isUpgrButtonClicked = upgradeButtons.IsClicked(mouseRay, buttonIndex);
 	return isUpgrButtonClicked;
-}
+}*/
 
 
 SunSkillUpgradeButtons::SunSkillUpgradeButtons(float newWidth, float newHeight, float newRadius,

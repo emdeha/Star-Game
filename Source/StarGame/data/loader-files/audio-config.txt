@@ -6,7 +6,10 @@ channel 2 0.5
 ** channel, sound type(event), file
 audio 0 0 ingame.mp3
 audio 0 1 menu.mp3
-audio 1 2 onclick.wav
+audio 1 2 Click.wav
 audio 2 3 explosion.wav
-audio 2 4 fusion.wav
+audio 2 4 Fusion.wav
+audio 2 5 sun_nova.wav
+audio 2 6 sun_death.wav
+audio 2 7 frost_nova.wav
 endfile

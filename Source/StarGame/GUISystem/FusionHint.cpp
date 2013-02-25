@@ -86,15 +86,6 @@ void FusionHint::Draw(const FontProgData &fontData, const TextureProgData &textu
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		/*
-		// TODO: Add simpleData
-		if(hasBackground)
-		{
-			controlSquare.Draw(modelMatrix, simpleData);
-		}
-		*/
-	
-
 		boxSprite.Draw(identityMat, textureData);
 
 		glDisable(GL_BLEND);

@@ -75,8 +75,6 @@ void Audio::Play(SoundTypes soundType, ChannelType chType)
 	if(audioFiles.find(soundType) == audioFiles.end())
 	{
 		HandleUnexpectedError("there is no sound at this index", __LINE__, __FILE__);
-		//std::printf("There is no sound at this index. Check Audio.h.\n");
-		//return;
 	}
 		
 	FMOD_RESULT result;

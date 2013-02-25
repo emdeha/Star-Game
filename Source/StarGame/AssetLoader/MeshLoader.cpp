@@ -257,9 +257,6 @@ void Mesh::Render(glutil::MatrixStack &modelMatrix, const SimpleTextureProgData 
 		
 		glutil::PushStack push(modelMatrix);
 
-		//modelMatrix.Translate(0.0f, 0.0f, 0.0f);
-		//modelMatrix.Scale(0.2f);
-
 		glUniformMatrix4fv(progData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
 		
 

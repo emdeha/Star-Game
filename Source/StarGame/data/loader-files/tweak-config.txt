@@ -15,7 +15,7 @@ enemyDamage 1 1
 enemyDamage 2 1
 enemyDamage 3 50
 enemyDamage 4 20
-enemyChargeSpeed 0.1
+enemyChargeSpeed 0.2
 enemySpawnInnerRad 0 4.0
 enemySpawnInnerRad 1 2.0
 enemySpawnInnerRad 2 6.0

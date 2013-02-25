@@ -99,7 +99,6 @@ private:
 	// WARN: Is it a good practice?
 	friend class Scene;
 
-	//std::unique_ptr<Framework::Mesh> bodyMesh;
 	Mesh mesh;
 	
 	std::unique_ptr<CelestialBody> parent;
@@ -109,7 +108,7 @@ private:
 
 	SatelliteOrbit hoverOrbit; // TODO: Not sure if this should be here or somewhere more
 							   //	    GUI specific.
-	SunSkillUpgradeButtons sunSkillUpgradeBtns; // TODO: Not sure if this should be here or somewhere more
+	//SunSkillUpgradeButtons sunSkillUpgradeBtns; // TODO: Not sure if this should be here or somewhere more
 												//       GUI specific.
 
 	std::vector<Event> generatedEvents;
@@ -177,8 +176,7 @@ public:
 
 	bool AddSatellite(const std::string &fileName,
 					  glm::vec4 satelliteColor,
-					 // float speed, float diameter,
-					  SatelliteType type/*, /*int satelliteHealth*/);
+					  SatelliteType type);
 	void AddSkill(const std::shared_ptr<Skill> newSkill);
 
 	bool RemoveSatellite();

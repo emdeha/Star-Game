@@ -313,7 +313,7 @@ void Swarm::OnEvent(Event &_event)
 		}
 		break;
 	default:
-		//HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 		break;
 	}
 }
@@ -366,28 +366,14 @@ void Spaceship::LoadProjectileMesh(const std::string &meshFile)
 }
 
 void Spaceship::LoadMesh(const std::string &meshFile)
-{/*
-	try
-	{
-		mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFile));
-	}
-	catch(std::exception &except)
-	{
-		printf("%s\n", except.what());
-		throw;
-	}
-	*/
+{
 	if(!mesh.LoadMesh(meshFile)) // TODO: Proper error handling
 	{
 		std::string errorMessage = "cannot load mesh ";
 		errorMessage += meshFile;
 		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
-		//std::printf("Error parsing mesh\n");
 	}
 	mesh.LoadLight();
-	//GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
-
-	//projectile->LoadMesh("../data/mesh-files/UnitSphere.xml"); // TODO: maybe this should be removed
 }
 
 void Spaceship::UpdateAI(CelestialBody &sun)
@@ -514,31 +500,15 @@ void Spaceship::Render(glutil::MatrixStack &modelMatrix,
 		glutil::PushStack push(modelMatrix);
 
 
-		//glm::vec3 viewPosition = position + frontVector * speed * interpolation;
-
 		float rotation = glm::degrees(atan2f(frontVector.x, frontVector.z));
 
 		modelMatrix.Translate(position);
 		modelMatrix.RotateY(rotation);
 		modelMatrix.Scale(0.05f);
 
-		/*
-		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
-						  0, sizeof(MaterialBlock));
-
-		glm::mat3 normMatrix(modelMatrix.Top());
-		normMatrix = glm::transpose(glm::inverse(normMatrix));
-
-		glUseProgram(litData.theProgram);
-		glUniformMatrix4fv(litData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-		glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
-		*/
-		//mesh->Render("lit");
 		mesh.Render(modelMatrix, litTextureData, materialBlockIndex);
 
 		glUseProgram(0);
-
-		//glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
 	}
 	
 	if(!projectile->IsDestroyed() && currentState == STATE_ATTACK)
@@ -587,7 +557,7 @@ void Spaceship::OnEvent(Event &_event)
 		}
 		break;
 	default:
-		//HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 		break;
 	}
 }
@@ -733,9 +703,6 @@ void DeployUnit::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex
 		{
 			glutil::PushStack push(modelMatrix);
 
-
-			//glm::vec3 viewPosition = position + frontVector * speed * interpolation;
-
 			float rotation = glm::degrees(atan2f(frontVector.x, frontVector.z));
 
 			modelMatrix.Translate(position);
@@ -807,7 +774,7 @@ void DeployUnit::OnEvent(Event &_event)
 		}
 		break;
 	default:
-		//HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 		break;
 	}
 }
@@ -848,17 +815,7 @@ Mothership::Mothership(glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
 }
 
 void Mothership::LoadMesh(const std::string &meshFileName)
-{/*
-	try
-	{
-		mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFileName));
-	}
-	catch(std::exception &except)
-	{
-		printf("%s\n", except.what());
-		throw;
-	}
-	*/
+{
 	if(!mesh.LoadMesh(meshFileName))
 	{
 		std::string errorMessage = "cannot load mesh ";
@@ -866,7 +823,6 @@ void Mothership::LoadMesh(const std::string &meshFileName)
 		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 	}
 	mesh.LoadLight();
-	//GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 }
 
 void Mothership::InitDeployUnits(const std::string &meshFileName, int deployUnitsCount,
@@ -1032,8 +988,6 @@ void Mothership::Render(glutil::MatrixStack &modelMatrix,
 	{
 		glutil::PushStack push(modelMatrix);
 
-	
-		// glm::vec3 viewPosition = position + frontVector * speed * interpolation;
 
 		float rotation = glm::degrees(atan2f(frontVector.x, frontVector.z));
 
@@ -1041,23 +995,9 @@ void Mothership::Render(glutil::MatrixStack &modelMatrix,
 		modelMatrix.RotateY(rotation);
 		modelMatrix.Scale(0.15f);
 
-		/*
-		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
-						  0, sizeof(MaterialBlock));
-
-		glm::mat3 normMatrix(modelMatrix.Top());
-		normMatrix = glm::transpose(glm::inverse(normMatrix));
-
-		glUseProgram(litData.theProgram);
-		glUniformMatrix4fv(litData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-		glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
-		*/
-		//mesh->Render("lit");
 		mesh.Render(modelMatrix, litTextureData, materialBlockIndex);
 
 		glUseProgram(0);
-
-		//glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
 	}
 
 	if(isDeploying)
@@ -1108,7 +1048,7 @@ void Mothership::OnEvent(Event &_event)
 		}
 		break;
 	default:
-		//HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 		break;
 	}
 }
@@ -1133,17 +1073,7 @@ FastSuicideBomber::FastSuicideBomber(int newDamage, float newChargeSpeed,
 }
 
 void FastSuicideBomber::LoadMesh(const std::string &meshFile)
-{/*
-	try
-	{
-		mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFile));
-	}
-	catch(std::exception &except)
-	{
-		printf("%s\n", except.what());
-		throw;
-	}*/
-
+{
 	if(!mesh.LoadMesh(meshFile))
 	{
 		std::string errorMessage = "cannot load mesh ";
@@ -1151,7 +1081,6 @@ void FastSuicideBomber::LoadMesh(const std::string &meshFile)
 		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 	}
 	mesh.LoadLight();
-	//GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 }
 
 void FastSuicideBomber::AttackSolarSystem(CelestialBody &sun, bool isSatellite, float bodyIndex)
@@ -1174,23 +1103,8 @@ void FastSuicideBomber::AttackSolarSystem(CelestialBody &sun, bool isSatellite, 
 	Event damageEvent(2, EVENT_TYPE_ATTACKED, damageEventArgs);
 
 	sun.OnEvent(damageEvent);
-
-
+	
 	isDestroyed = true;
-	/*
-	EventArg explodeEventArgs[2];
-	explodeEventArgs[0].argType = "what_event";
-	explodeEventArgs[0].argument.varType = TYPE_STRING;
-	strcpy(explodeEventArgs[0].argument.varString, "explStarted");
-	explodeEventArgs[1].argType = "expl_index";
-	explodeEventArgs[1].argument.varType = TYPE_INTEGER;
-	explodeEventArgs[1].argument.varInteger = 0;
-
-	Event explodeEvent(2, EVENT_TYPE_OTHER, explodeEventArgs);
-
-	generatedEvents.push_back(explodeEvent);
-	//scene.OnEvent(explodeEvent);
-	*/
 }
 
 void FastSuicideBomber::UpdateAI(CelestialBody &sun)
@@ -1284,27 +1198,12 @@ void FastSuicideBomber::Render(glutil::MatrixStack &modelMatrix,
 {
 	glutil::PushStack push(modelMatrix);
 
-	// glm::vec3 viewPosition = position + frontVector * speed * interpolation;
-
 	modelMatrix.Translate(position);
 	modelMatrix.Scale(0.1f);
-	/*
-	glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
-					  0, sizeof(MaterialBlock));
-
-	glm::mat3 normMatrix(modelMatrix.Top());
-	normMatrix = glm::transpose(glm::inverse(normMatrix));
-
-	glUseProgram(litData.theProgram);
-	glUniformMatrix4fv(litData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-	glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
-	*/
-	//mesh->Render("lit");
+	
 	mesh.Render(modelMatrix, litTextureData, materialBlockIndex);
 
 	glUseProgram(0);
-
-	//glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
 }
 
 void FastSuicideBomber::OnEvent(Event &_event)
@@ -1346,7 +1245,7 @@ void FastSuicideBomber::OnEvent(Event &_event)
 		}
 		break;
 	default:
-		//HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 		break;
 	}
 }
@@ -1365,16 +1264,7 @@ Asteroid::Asteroid(int newDamage,
 }
 
 void Asteroid::LoadMesh(const std::string &meshFile)
-{/*
-	try
-	{
-		mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFile));
-	}
-	catch(std::exception &except)
-	{
-		printf("%s\n", except.what());
-		throw;
-	}*/
+{
 	if(!mesh.LoadMesh(meshFile))
 	{
 		std::string errorMessage = "cannot load mesh ";
@@ -1382,7 +1272,6 @@ void Asteroid::LoadMesh(const std::string &meshFile)
 		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 	}
 	mesh.LoadLight();
-	//GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 }
 
 void Asteroid::AttackSolarSystem(CelestialBody &sun, bool isSatellite, float bodyIndex)
@@ -1466,28 +1355,12 @@ void Asteroid::Render(glutil::MatrixStack &modelMatrix,
 {
 	glutil::PushStack push(modelMatrix);
 
-	// glm::vec3 viewPosition = position + frontVector * speed * interpolation;
-
 	modelMatrix.Translate(position);
 	modelMatrix.Scale(0.15f);
-	/*
-	glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
-					  0, sizeof(MaterialBlock));
-
-	glm::mat3 normMatrix(modelMatrix.Top());
-	normMatrix = glm::transpose(glm::inverse(normMatrix));
-
-	glUseProgram(litData.theProgram);
-	glUniformMatrix4fv(litData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-	glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
-
-	mesh->Render("lit");
-	*/
+	
 	mesh.Render(modelMatrix, litTextureData, materialBlockIndex);
 
 	glUseProgram(0);
-
-	//glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
 }
 
 void Asteroid::OnEvent(Event &_event)
@@ -1529,7 +1402,7 @@ void Asteroid::OnEvent(Event &_event)
 		}
 		break;
 	default:
-		//HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 		break;
 	}
 }

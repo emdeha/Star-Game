@@ -117,7 +117,6 @@ std::shared_ptr<TextControl> Layout::GetControl(const std::string &controlName)
 	std::string errorMessage = "there is no such control ";
 	errorMessage += controlName;
 	HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
-	//std::printf("There is no such control\n");
 }
 
 LayoutType Layout::GetLayoutType()

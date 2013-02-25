@@ -60,12 +60,11 @@ static void GenerateUniformBuffers(int &materialBlockSize, glm::vec4 diffuseColo
 
 CelestialBody::CelestialBody(const CelestialBody &other)
 {
-	//bodyMesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(*other.bodyMesh));
+	
 }
 CelestialBody::~CelestialBody()
 {
 	parent.release();
-	//bodyMesh.release();
 }
 CelestialBody::CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float newDiameter,
 							 int newSatelliteCap, int newHealth, 
@@ -132,9 +131,9 @@ void CelestialBody::InitSatelliteOrbit()
 }
 void CelestialBody::InitSunSkillUpgradeButtons()
 {
-	sunSkillUpgradeBtns = SunSkillUpgradeButtons(1.0f, 1.0f, diameter / 2.0f, position, 
-												 "../data/images/skill-noupgrade.jpg", "../data/images/skill-upgrade.jpg");
-	sunSkillUpgradeBtns.Init();
+	//sunSkillUpgradeBtns = SunSkillUpgradeButtons(1.0f, 1.0f, diameter / 2.0f, position, 
+	//											 "../data/images/skill-noupgrade.jpg", "../data/images/skill-upgrade.jpg");
+	//sunSkillUpgradeBtns.Init();
 }
 
 void CelestialBody::InitSatelliteStats()
@@ -175,22 +174,11 @@ void CelestialBody::LoadMesh(const std::string &fileName)
 		std::string errorMessage = "cannot load mesh ";
 		errorMessage += fileName;
 		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
-		//std::printf("Problem loading mesh\n");
 	}
 	if(!isSun)
 	{
 		mesh.LoadLight();
 	}
-	/*
-	try
-	{
-		bodyMesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(fileName));
-	}
-	catch(std::exception &except)
-	{
-		printf("%s\n", except.what());
-		throw;
-	}*/
 }
 
 void CelestialBody::Update()
@@ -214,7 +202,10 @@ void CelestialBody::Update()
 
 		for(int i = 0; i < skills.size(); i++)
 		{
-			skills[i]->Update();
+			if(skills[i]->IsStarted())
+			{
+				skills[i]->Update();
+			}
 		}
 
 		std::shared_ptr<Skill> sunNovaSkill;
@@ -259,8 +250,11 @@ void CelestialBody::Update()
 
 		for(int i = 0; i < skills.size(); i++)
 		{
-			skills[i]->Update();
-			skills[i]->SetParameter(PARAM_POSITION, position);
+			if(skills[i]->IsStarted())
+			{
+				skills[i]->Update();
+				skills[i]->SetParameter(PARAM_POSITION, position);
+			}
 		}
 
 		if(resource.resourceTimer.Update())
@@ -304,14 +298,7 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 			}
 
 			modelMatrix.Scale(diameter / 2.0f);
-			/*
-			glm::vec4 sunColor = Utility::CorrectGamma(color, gamma);
 
-			glUseProgram(unlitData.theProgram);
-			glUniformMatrix4fv(unlitData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-			glUniform4f(unlitData.objectColorUnif, sunColor.r, sunColor.g, sunColor.b, sunColor.a);
-			*/
-			//bodyMesh->Render("flat");
 			glm::vec4 sunColor = Utility::CorrectGamma(color, gamma);
 
 			glUseProgram(textureData.theProgram);
@@ -326,36 +313,23 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 			
 			modelMatrix.Translate(position);
 			modelMatrix.Scale(diameter / 2.0f);
-			/*
-			glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
-							  0, sizeof(MaterialBlock));
 
-			glm::mat3 normMatrix(modelMatrix.Top());
-			normMatrix = glm::transpose(glm::inverse(normMatrix));
-
-			glUseProgram(litData.theProgram);
-			glUniformMatrix4fv(litData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-			glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
-
-			bodyMesh->Render("lit");
-			*/
 			mesh.Render(modelMatrix, litTextureData, materialBlockIndex);
-
-			//glUseProgram(0);
-
-			//glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
 		}
 	}
 	
 	for(int i = 0; i < skills.size(); i++)
 	{
-		skills[i]->Render(modelMatrix, simpleData);
-		skills[i]->Render(modelMatrix, litData, materialBlockIndex);
+		if(skills[i]->IsStarted())
+		{
+			skills[i]->Render(modelMatrix, simpleData);
+			skills[i]->Render(modelMatrix, litData, materialBlockIndex);
+		}
 	}
 	
 	if(isClicked && isSun)
 	{
-		sunSkillUpgradeBtns.Draw(modelMatrix, textureData);
+		//sunSkillUpgradeBtns.Draw(modelMatrix, textureData);
 	}
 	if(isClicked && !isSun)
 	{
@@ -366,7 +340,6 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 	}
 	else if(!isClicked)
 	{
-		//isClicked = false;
 		clickableRadius = diameter / 2.0f;
 	}
 }
@@ -382,7 +355,6 @@ void CelestialBody::OnEvent(Event &_event)
 			isClicked = true;
 			break;
 		case EVENT_TYPE_ON_HOVER:
-			//std::printf("Satellite hovered!\n");
 			isClicked = true;
 			break;
 		case EVENT_TYPE_ATTACKED:
@@ -406,27 +378,9 @@ void CelestialBody::OnEvent(Event &_event)
 		case EVENT_TYPE_ON_CLICK:
 			if(_event.GetArgument("rightClick").varBool == true)
 			{
-				/*if(!this->RemoveSatellite())
-				{
-					std::printf("No satellites left.\n");
-				}
-				else
-				{
-					typesTable[satellites.size()] = false;
-				}*/
 			}
 			else if(_event.GetArgument("rightClick").varBool == false)
 			{
-				/*if(this->AddSatellite("mesh-files/UnitSphere.xml",
-									  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
-									  SatelliteType(FindEmptySatelliteType()))) // lisp.. 
-				{
-					// currentSatelliteType = FindEmptySatelliteType();
-				}
-				else
-				{
-					std::printf("Satellite cap reached!\n");
-				}*/
 			}
 			break;
 		case EVENT_TYPE_ON_HOVER:
@@ -498,7 +452,7 @@ void CelestialBody::OnEvent(Event &_event)
 
 					generatedEvents.push_back(insufficientResourcesEvent);
 				}
-			}
+			}/*
 			if(strcmp(_event.GetArgument("what_event").varString, "skillUpgr") == 0)
 			{
 				if(_event.GetArgument("satType").varInteger == -1)
@@ -517,7 +471,7 @@ void CelestialBody::OnEvent(Event &_event)
 						}
 					}
 				}
-			}
+			}*/
 			break;
 		default:
 			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
@@ -778,7 +732,7 @@ bool CelestialBody::IsClicked(Utility::Ray mouseRay)
 	}
 }
 bool CelestialBody::IsSkillUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex)
-{
+{/*
 	if(isSun)
 	{
 		bool isSunUpgrButtonClicked = sunSkillUpgradeBtns.IsClicked(mouseRay, buttonIndex);
@@ -795,6 +749,7 @@ bool CelestialBody::IsSkillUpgradeButtonClicked(Utility::Ray mouseRay, int &butt
 			return true;
 		}
 	}
+	return false;*/
 	return false;
 }
 bool CelestialBody::IsSatelliteClicked(Utility::Ray mouseRay)
@@ -907,7 +862,6 @@ const bool CelestialBody::GetIsSatelliteClicked(SatelliteType type) const
 		break;
 	}
 	HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
-	//std::printf("No such satellite. (PlanetBodies.cpp/CelestialBody::GetIsSatelliteClicked)\n");
 	return false;
 }
 const float CelestialBody::GetRadius() const
@@ -958,7 +912,6 @@ std::shared_ptr<CelestialBody> CelestialBody::GetSatellite(SatelliteType type)
 		break;
 	}
 	HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
-	//std::printf("No such satellite. (PlanetBodies.cpp/CelestialBody::GetSatellite)\n");
 	return nullptr;
 }
 std::shared_ptr<CelestialBody> CelestialBody::GetOuterSatellite()

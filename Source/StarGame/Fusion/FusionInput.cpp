@@ -26,7 +26,6 @@ FusionSequence::FusionSequence(char buttonA, char buttonB, char buttonC)
 	buttons[1] = buttonB;
 	buttons[2] = buttonC;
 	buttons[3] = '\0';
-	// buttons[3] = buttonD; -- if we decide to make the fusion use three buttons
 }
 
 std::string FusionSequence::GetButtons()
@@ -71,17 +70,7 @@ FusionInput::FusionInput(char newSequenceEndButton)
 void FusionInput::AddSequence(std::string sequenceName,
 							  char buttonA, char buttonB, char buttonC)
 {
-	// std::lower_bound returns "the first position in which a value can be inserted 
-	// without violating the ordering".
-	// Therefore, I must make sure that while inserting a new sequence it is unique.
-
 	sequences.push_back(std::make_pair(sequenceName, FusionSequence(buttonA, buttonB, buttonC)));
-	/*std::sort(sequences.begin(), sequences.end(),
-			  [](const std::pair<std::string, FusionSequence> &first, 
-				 const std::pair<std::string, FusionSequence> &second)
-	             { 
-					 return first.first < second.first; 
-				 });*/
 }
 
 std::string FusionInput::GetSequenceButtons(std::string sequenceName)
@@ -94,31 +83,6 @@ std::string FusionInput::GetSequenceButtons(std::string sequenceName)
 			return (*iter).second.GetButtons();
 		}
 	}
-
-	// There is a strange problem with this method. 
-	// To reproduce it:
-	//		-- Use four fusion sequences for the four satellites (qqq - fire, www - earth, eee - water, qwe - air)
-	//		-- Make possible the addition of all satellites
-	// On www fusion sequence you should get two satellites at the same time
-	// Should investigate.
-
-	/*std::vector<std::pair<std::string, FusionSequence>>::iterator lowerBound;
-	lowerBound = std::lower_bound(sequences.begin(), sequences.end(), sequenceName, 
-								  [](const std::pair<std::string, FusionSequence> &current,
-									 const std::string seqName)
-									 { 
-							   			 return current.first == seqName; 
-									 });
-
-	if(lowerBound == sequences.begin())
-	{
-		lowerBound = sequences.end();
-		return (--lowerBound)->second.GetButtons();
-	}
-	else
-	{
-		return (--lowerBound)->second.GetButtons();
-	}*/
 }
 
 std::string FusionInput::GetSequenceName(std::string fusionButtons)
@@ -156,8 +120,6 @@ Event FusionInput::Update(char newButton)
 	if(currentInputSequence.length() >= 3)
 	{
 		currentInputSequence.clear();
-		//std::printf("You can't input more buttons. Type \'F\' if you want to send fusion.\n");
-		//return StockEvents::EmptyEvent();
 	}
 	if(newButton == validInputSequences[0] || newButton == validInputSequences[1] || newButton == validInputSequences[2])
 	{

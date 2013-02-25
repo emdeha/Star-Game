@@ -128,17 +128,6 @@ void OrbitingAnimationBody::Render(glutil::MatrixStack &modelMatrix, int materia
 	}
 }
 
-
-/*
-Animation::Animation(int animationBodiesCount, const std::string &meshFileName)
-{
-	animationBodies.resize(animationBodiesCount);
-
-	for(int animBody = 0; animBody < animationBodiesCount; animBody++)
-	{
-		animationBodies[animBody] = AnimationBody(meshFileName);
-	}
-}*/
 void Animation::AddAnimationBody(const std::shared_ptr<AnimationBody> newAnimationBody)
 {
 	animationBodies.push_back(newAnimationBody);

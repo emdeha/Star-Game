@@ -281,7 +281,6 @@ private:
 	PatrolRoute patrolRoute;
 
 	std::unique_ptr<Projectile> projectile;
-	//std::unique_ptr<Framework::Mesh> mesh;
 	Mesh mesh;
 
 	int materialBlockSize;
@@ -384,9 +383,6 @@ private:
 	std::vector<std::shared_ptr<DeployUnit>> deployUnits;
 
 	bool isDeploying;
-	// TODO: Fast deploying on evade. Sth like HL2 helly.
-
-	//std::unique_ptr<Framework::Mesh> mesh;
 	Mesh mesh;
 
 	int materialBlockSize;
@@ -439,7 +435,6 @@ private:
 	int damage;
 	float chargeSpeed;
 	
-	//std::unique_ptr<Framework::Mesh> mesh;
 	Mesh mesh;
 
 	int materialBlockSize;
@@ -482,8 +477,7 @@ class Asteroid : public Enemy
 {
 private:
 	int damage;
-
-	//std::unique_ptr<Framework::Mesh> mesh;
+	
 	Mesh mesh;
 
 	int materialBlockSize;

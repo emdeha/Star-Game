@@ -20,31 +20,6 @@
 #include "../framework/ErrorAPI.h"
 
 
-/*
-ImageBox::ImageBox()
-{
-	
-}
-ImageBox::ImageBox(LayoutPreset newCurrentPreset,
-			       const std::string &newName, 
-				   glm::vec2 newPosition,
-				   float newWidth, float newHeight,
-				   int newIndex)
-{
-	width = newWidth;
-	height = newHeight;
-	name = newName;
-	isActive = false;
-
-	index = newIndex;
-
-	boxSprite = 
-		Utility::Primitives::Sprite(glm::vec4(newPosition, 0.0f, 1.0f), 
-									glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
-									newWidth, newHeight, false);
-}
-*/
-
 void ImageBox::Init()
 {
 	boxSprite.Init(fusionTextures[0]);

@@ -520,7 +520,7 @@ void Spaceship::Render(glutil::MatrixStack &modelMatrix,
 
 		modelMatrix.Translate(position);
 		modelMatrix.RotateY(rotation);
-		modelMatrix.Scale(0.1f);
+		modelMatrix.Scale(0.05f);
 
 		/*
 		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
@@ -740,7 +740,7 @@ void DeployUnit::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex
 
 			modelMatrix.Translate(position);
 			modelMatrix.RotateY(rotation);
-			modelMatrix.Scale(0.05f);
+			modelMatrix.Scale(0.03f);
 
 
 			glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
@@ -1039,7 +1039,7 @@ void Mothership::Render(glutil::MatrixStack &modelMatrix,
 
 		modelMatrix.Translate(position);
 		modelMatrix.RotateY(rotation);
-		modelMatrix.Scale(0.7f);
+		modelMatrix.Scale(0.15f);
 
 		/*
 		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
@@ -1287,7 +1287,7 @@ void FastSuicideBomber::Render(glutil::MatrixStack &modelMatrix,
 	// glm::vec3 viewPosition = position + frontVector * speed * interpolation;
 
 	modelMatrix.Translate(position);
-	modelMatrix.Scale(0.2f);
+	modelMatrix.Scale(0.1f);
 	/*
 	glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
 					  0, sizeof(MaterialBlock));
@@ -1469,7 +1469,7 @@ void Asteroid::Render(glutil::MatrixStack &modelMatrix,
 	// glm::vec3 viewPosition = position + frontVector * speed * interpolation;
 
 	modelMatrix.Translate(position);
-	modelMatrix.Scale(0.1f);
+	modelMatrix.Scale(0.15f);
 	/*
 	glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
 					  0, sizeof(MaterialBlock));

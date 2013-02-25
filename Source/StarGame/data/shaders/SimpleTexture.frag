@@ -9,5 +9,5 @@ out vec4 outputColor;
 
 void main()
 {
-	outputColor = texture2D(colorTexture, colorCoord).rgba + color;
+	outputColor = texture2D(colorTexture, colorCoord);// + color;
 }

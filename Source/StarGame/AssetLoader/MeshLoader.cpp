@@ -176,7 +176,7 @@ void Mesh::InitMesh(unsigned int index, const aiMesh *mesh)
 	{
 		const aiFace &face = mesh->mFaces[i];
 
-		assert(face.mNumIndices == 3);
+		//assert(face.mNumIndices == 3);
 
 		indices.push_back(face.mIndices[0]);
 		indices.push_back(face.mIndices[1]);
@@ -213,10 +213,6 @@ bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
 					std::printf("Error loading texture '%s'\n", fullPath.c_str());
 					return textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 				}
-				else
-				{
-					return true;
-				}
 			}
 		}
 	
@@ -226,7 +222,20 @@ bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
 		{
 			textures[i] = std::shared_ptr<Texture2D>(new Texture2D());
 
-			return textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+			std::string path = fileName;
+			path.erase(path.end() - 4, path.end());
+			path += ".jpg";
+
+			if(!textures[i]->Load(path, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE))
+			{
+				//HandleUnexpectedError("cannot load texture", __LINE__, __FILE__);
+				if(!textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_BGR, GL_UNSIGNED_BYTE))
+				{
+					HandleUnexpectedError("cannot load texture", __LINE__, __FILE__);
+				}
+				return true;
+			}
+			return true;
 		}
 	}
 	return false;

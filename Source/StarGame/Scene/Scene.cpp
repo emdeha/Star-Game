@@ -950,7 +950,11 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
 	SimpleTextureProgData textureData = shaderManager.GetSimpleTextureProgData();
 	LitTextureProgData litTextureData = shaderManager.GetLitTextureProgData();
 	
-	
+	if(explosion.IsActive())
+	{
+		explosion.Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), billboardNoTextureData);
+	}
+
 	for(int i = 0; i < enemies.size(); i++)
 	{
 		if(enemies[i]->IsSceneUpdated())
@@ -1000,12 +1004,25 @@ void Scene::UpdateScene()
 	{
 		SpawnEnemies();
 	}
+	
+	if(explosion.IsActive())
+	{
+		explosion.Update();
+	}
+	if(explosion.IsDead())
+	{
+		explosion.Init();
+	}
 
 	// Should be in the OnEvent function.
 	if(!suns.empty())
 	{
 		if(suns.front()->GetHealth() <= 0)
 		{
+			explosion.SetPosition(glm::vec3());
+			explosion.Init();
+			explosion.Activate();
+
 			suns.front()->RemoveSatellites();
 			suns.pop_back();
 			lights.pop_back(); // got to find the light connected to the sun
@@ -1062,6 +1079,10 @@ void Scene::UpdateScene()
 		{
 			sceneMusic.Play(MUSIC_EXPLOSION, CHANNEL_GAME); // WARN: has some delay but it is acceptable
 
+			explosion.SetPosition((*iter)->position);
+			explosion.Init();
+			explosion.Activate();
+			
 			EventArg enemyKilledEventArg[2];
 			enemyKilledEventArg[0].argType = "what_event";
 			enemyKilledEventArg[0].argument.varType = TYPE_STRING;
@@ -1638,6 +1659,11 @@ void Scene::SetGamma(float newSceneGamma)
 void Scene::SetFusion(const FusionInput &newFusionInput)
 {
 	sceneFusionInput = newFusionInput;
+}
+
+void Scene::SetExplosion(const ExplosionEmitter &newExplosionEmitter)
+{
+	explosion = newExplosionEmitter;
 }
 
 void Scene::SetLayoutPreset(LayoutPreset layoutPreset)

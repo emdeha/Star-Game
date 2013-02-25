@@ -453,6 +453,11 @@ void InitializeScene()
 
 	scene.AddSun(mainSun);
 	scene.AddSunLight(mainSunLight);
+
+	ExplosionEmitter sceneExplosion = ExplosionEmitter(glm::vec3(), 300, 30, 0.1f);
+	sceneExplosion.Init();
+	scene.SetExplosion(sceneExplosion);
+
 	/*
 	scene.SetMusic("../data/music/background.mp3", MUSIC_BACKGROUND);
 	scene.SetMusic("../data/music/onclick.wav", MUSIC_ON_SUN_CLICK);
@@ -627,6 +632,10 @@ void Display()
 
 		modelMatrix.SetMatrix(scene.GetTopDownCamera().CalcMatrix());
 		displayData.modelMatrix = modelMatrix.Top();
+		/*
+		modelMatrix.Translate(4.0f, 0.0f, 0.0f);
+		modelMatrix.Scale(0.05f);
+		sampleMesh.Render(modelMatrix, scene.GetShaderManager().GetSimpleTextureProgData());/*scene.GetShaderManager().GetLitTextureProgData(), scene.GetShaderManager().GetBlockIndex(BT_MATERIAL));*/
 		
 
 		int loops = 0;
@@ -642,11 +651,8 @@ void Display()
 		scene.RenderScene(modelMatrix, interpolation);	
 		
 		scene.RenderCurrentLayout();
-		/*
-		modelMatrix.Translate(4.0f, 0.0f, 0.0f);
-		modelMatrix.Scale(0.05f);
-		sampleMesh.Render(modelMatrix, scene.GetShaderManager().GetLitTextureProgData(), scene.GetShaderManager().GetBlockIndex(BT_MATERIAL));
-		*/
+		
+		
 		//hintBox.Draw(scene.GetShaderManager().GetTextureProgData());		
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))

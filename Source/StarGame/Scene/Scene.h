@@ -116,6 +116,8 @@ private:
 	std::vector<std::shared_ptr<CelestialBody>> suns;
 	std::vector<std::shared_ptr<Enemy>> enemies;
 
+	ExplosionEmitter explosion;
+
 	std::map<LayoutType, std::shared_ptr<Layout>> sceneLayouts;
 
 	SpawnData spawnData;
@@ -197,6 +199,8 @@ public:
 	void SetMusicVolume(float volume, ChannelType chType);
 
 	void SetDisplayData(const DisplayData &newDisplayData);
+
+	void SetExplosion(const ExplosionEmitter &newExplosionEmitter);
 
 	void PlayMusic(SoundTypes soundType);
 

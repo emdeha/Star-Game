@@ -125,8 +125,8 @@ void CelestialBody::InitSatelliteOrbit()
 {	
 	hoverOrbit = SatelliteOrbit(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
 								parent->GetPosition(),
-								satelliteStats[satType].satelliteOffsetFromSun + diameter,
-								satelliteStats[satType].satelliteOffsetFromSun - diameter,
+								satelliteStats[satType].satelliteOffsetFromSun + diameter / 2.0f,
+								satelliteStats[satType].satelliteOffsetFromSun - diameter / 2.0f,
 								2.2f); // Change: gamma
 	hoverOrbit.Init();
 }
@@ -139,23 +139,23 @@ void CelestialBody::InitSunSkillUpgradeButtons()
 
 void CelestialBody::InitSatelliteStats()
 {
-	satelliteStats[SATELLITE_FIRE].diameter = 0.5f;
+	satelliteStats[SATELLITE_FIRE].diameter = 0.8;
 	satelliteStats[SATELLITE_FIRE].health = 5;
-	satelliteStats[SATELLITE_FIRE].speed = 10.0f;	
-	satelliteStats[SATELLITE_FIRE].satelliteOffsetFromSun = 1.75f;
+	satelliteStats[SATELLITE_FIRE].speed = 8.0f;	
+	satelliteStats[SATELLITE_FIRE].satelliteOffsetFromSun = 2.75f;
 	satelliteStats[SATELLITE_FIRE].resourceGainTime = 3.0f;
 	satelliteStats[SATELLITE_FIRE].resourceGain_perTime = 5;
 
 	satelliteStats[SATELLITE_EARTH].diameter = 0.5f;
 	satelliteStats[SATELLITE_EARTH].health = 5;
-	satelliteStats[SATELLITE_EARTH].speed = 10.0f;	
-	satelliteStats[SATELLITE_EARTH].satelliteOffsetFromSun = 2.75f;
+	satelliteStats[SATELLITE_EARTH].speed = 5.0f;	
+	satelliteStats[SATELLITE_EARTH].satelliteOffsetFromSun = 1.75f;
 	satelliteStats[SATELLITE_EARTH].resourceGainTime = 3.0f;
 	satelliteStats[SATELLITE_EARTH].resourceGain_perTime = 5;
 
 	satelliteStats[SATELLITE_AIR].diameter = 0.5f;
 	satelliteStats[SATELLITE_AIR].health = 5;
-	satelliteStats[SATELLITE_AIR].speed = 10.0f;
+	satelliteStats[SATELLITE_AIR].speed = 7.0f;
 	satelliteStats[SATELLITE_AIR].satelliteOffsetFromSun = 3.75f;
 	satelliteStats[SATELLITE_AIR].resourceGainTime = 3.0f;
 	satelliteStats[SATELLITE_AIR].resourceGain_perTime = 5;

@@ -114,7 +114,7 @@ void Projectile::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex
 
 		glm::vec3 viewPosition = position + velocity * interpolation;
 		modelMatrix.Translate(viewPosition);
-		modelMatrix.Scale(0.1f);
+		modelMatrix.Scale(0.05f);
 
 		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
 						  0, sizeof(MaterialBlock));

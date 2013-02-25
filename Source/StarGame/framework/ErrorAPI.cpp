@@ -17,7 +17,7 @@
 
 #include "ErrorAPI.h"
 // WARN: Remove in release!!!
-#define FUSION_ERROR
+//#define FUSION_ERROR
 
 
 void HandleUnexpectedError(const std::string &message, unsigned line, const std::string &file)

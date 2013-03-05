@@ -65,7 +65,7 @@ public:
 	
 	/// \fn SetFileForPlay
 	/// \brief Loads a sound for later playing.
-	void SetFileForPlay(const std::string &newFileName, SoundTypes prevSoundType);
+	void SetFileForPlay(const std::string &newFileName, SoundType prevSoundType);
 	
 	/// \fn SetVolume
 	/// \brief Fills the `volumes` array which later will be passed to Play().
@@ -73,7 +73,7 @@ public:
 
 	/// \fn Play
 	/// \brief Plays a given song.
-	void Play(SoundTypes soundName, ChannelType chType = CHANNEL_MASTER);
+	void Play(SoundType soundName, ChannelType chType = CHANNEL_MASTER);
 
 	void Stop(ChannelType chType = CHANNEL_MASTER);
 
@@ -83,7 +83,7 @@ private:
 	FMOD::System *system;
 	std::vector<FMOD::Channel *> channels;
 
-	std::map<SoundTypes, FMOD::Sound *> audioFiles;
+	std::map<SoundType, FMOD::Sound *> audioFiles;
 };
 
 #endif

@@ -52,7 +52,7 @@ Audio::Audio()
 	CheckForError(result);
 }
 
-void Audio::SetFileForPlay(const std::string &newFileName, SoundTypes prevSoundType)
+void Audio::SetFileForPlay(const std::string &newFileName, SoundType prevSoundType)
 {
 	FMOD_RESULT result;
 
@@ -70,7 +70,7 @@ void Audio::SetVolume(float volume, ChannelType chType)
 	volumes[chType] = volume;
 }
 
-void Audio::Play(SoundTypes soundType, ChannelType chType)
+void Audio::Play(SoundType soundType, ChannelType chType)
 {
 	if(audioFiles.find(soundType) == audioFiles.end())
 	{
@@ -102,7 +102,7 @@ Audio::~Audio()
 {
 	FMOD_RESULT result;
 
-	for(std::map<SoundTypes, FMOD::Sound *>::iterator iter = audioFiles.begin();
+	for(std::map<SoundType, FMOD::Sound *>::iterator iter = audioFiles.begin();
 		iter != audioFiles.end(); ++iter)
 	{
 		result = iter->second->release();

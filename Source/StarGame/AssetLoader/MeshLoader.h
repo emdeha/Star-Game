@@ -91,7 +91,7 @@ public:
 	Mesh();
 
 	bool LoadMesh(const std::string &fileName);
-	void LoadLight();
+	void LoadLight(const glm::vec4 &diffuseColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	void Render(glutil::MatrixStack &modelMatrix, const SimpleTextureProgData &progData);
 	void Render(glutil::MatrixStack &modelMatrix, const LitTextureProgData &progData,
 				int materialBlockIndex);

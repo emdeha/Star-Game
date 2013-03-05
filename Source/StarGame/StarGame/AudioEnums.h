@@ -30,9 +30,9 @@ enum ChannelType
 	CHANNEL_COUNT,
 };
 
-/// \enum SoundTypes
+/// \enum SoundType
 /// \brief Holds the types of sounds which will be played.
-enum SoundTypes
+enum SoundType
 {
 	MUSIC_BACKGROUND, ///< The background music.
 	MUSIC_MENU,
@@ -42,6 +42,9 @@ enum SoundTypes
 	MUSIC_SUN_NOVA,
 	MUSIC_GAME_OVER, 
 	MUSIC_FROST_NOVA,
+	MUSIC_AOE,
+	MUSIC_EXPLOSION_2,
+	MUSIC_EXPLOSION_3,
 
 	MUSIC_COUNT,
 };

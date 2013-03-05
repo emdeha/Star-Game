@@ -250,11 +250,11 @@ void CelestialBody::Update()
 
 		for(int i = 0; i < skills.size(); i++)
 		{
-			if(skills[i]->IsStarted())
-			{
+			//if(skills[i]->IsStarted())
+			//{
 				skills[i]->Update();
 				skills[i]->SetParameter(PARAM_POSITION, position);
-			}
+			//}
 		}
 
 		if(resource.resourceTimer.Update())
@@ -436,11 +436,11 @@ void CelestialBody::OnEvent(Event &_event)
 			{
 				currentResource += _event.GetArgument("how_much").varInteger;
 			}
-			if(strcmp(_event.GetArgument("what_event").varString, "skillDeployed") == 0)
+			if(strcmp(_event.GetArgument("what_event").varString, "skilldeployed") == 0)
 			{
-				if(currentResource > _event.GetArgument("how_much").varInteger)
+				if(currentResource > _event.GetArgument("skillCost").varInteger)
 				{
-					currentResource -= _event.GetArgument("how_much").varInteger;
+					currentResource -= _event.GetArgument("skillCost").varInteger;
 				}
 				else
 				{
@@ -795,6 +795,7 @@ Event CelestialBody::GetGeneratedEvent(const std::string &eventName)
 				return generatedEvents[i];
 			}
 		}
+		return StockEvents::EmptyEvent();
 	}
 	else
 	{

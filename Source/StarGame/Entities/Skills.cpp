@@ -183,14 +183,17 @@ glm::vec3 AOESkill::GetPosition()
 
 void AOESkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 {
-	switch(paramType)
+	if(isStarted)
 	{
-	case PARAM_POSITION:
-		position = newParam_vec3;
-		break;
-	default:
-		HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
-		break;
+		switch(paramType)
+		{
+		case PARAM_POSITION:
+			position = newParam_vec3;
+			break;
+		default:
+			HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
+			break;
+		}
 	}
 }
 
@@ -334,14 +337,17 @@ glm::vec3 PassiveAOESkill::GetPosition()
 
 void PassiveAOESkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 {
-	switch(paramType)
+	if(isStarted)
 	{
-	case PARAM_POSITION:
-		position = newParam_vec3;
-		break;
-	default:
-		HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
-		break;
+		switch(paramType)
+		{
+		case PARAM_POSITION:
+			position = newParam_vec3;
+			break;
+		default:
+			HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
+			break;
+		}
 	}
 }
 
@@ -418,7 +424,7 @@ void SunNovaSkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData
 
 void SunNovaSkill::OnEvent(Event &_event)
 {
-	if(isResearched)
+	if(isResearched && !isStarted)
 	{
 		switch(_event.GetType())
 		{
@@ -620,18 +626,21 @@ glm::vec3 SatelliteChainingSkill::GetPosition()
 
 void SatelliteChainingSkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 {
-	switch(paramType)
+	if(isStarted)
 	{
-	case PARAM_POSITION:
-		if(!isStarted)
+		switch(paramType)
 		{
-			startingPosition = newParam_vec3;
-			currentPosition = newParam_vec3;
+		case PARAM_POSITION:
+			if(!isStarted)
+			{
+				startingPosition = newParam_vec3;
+				currentPosition = newParam_vec3;
+			}
+			break;
+		default:
+			HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
+			break;
 		}
-		break;
-	default:
-		HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
-		break;
 	}
 }
 
@@ -773,15 +782,18 @@ glm::vec3 SatelliteChainingNova::GetPosition()
 
 void SatelliteChainingNova::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 {
-	switch(paramType)
+	if(isStarted)
 	{
-	case PARAM_POSITION:
-		position = newParam_vec3;
-		break;
-	default:
-		HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
-		break;
-	};
+		switch(paramType)
+		{
+		case PARAM_POSITION:
+			position = newParam_vec3;
+			break;
+		default:
+			HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
+			break;
+		};
+	}
 }
 
 bool SatelliteChainingNova::IsIntersectingObject(glm::vec3 objectPosition)
@@ -829,6 +841,7 @@ FrostNovaSkill::FrostNovaSkill(int newDamage, float newStunTime_seconds,
 void FrostNovaSkill::Update()
 {
 	stunTimer.Update();
+	std::printf("elapsed time: %f / %f\n", stunTimer.GetTimeSinceStart(), stunTime_seconds);
 	if(stunTimer.GetTimeSinceStart() >= stunTime_seconds && stunTimer.IsPaused() == false)
 	{
 		EventArg enemyStunFinishedEventArgs[1];
@@ -921,14 +934,17 @@ glm::vec3 FrostNovaSkill::GetPosition()
 
 void FrostNovaSkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 {
+	if(isStarted)
+	{
 	switch(paramType)
 	{
-	case PARAM_POSITION:
-		position = newParam_vec3;
-		break;
-	default:
-		HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
-		break;
+		case PARAM_POSITION:
+			position = newParam_vec3;
+			break;
+		default:
+			HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
+			break;
+		}
 	}
 }
 
@@ -1045,14 +1061,17 @@ glm::vec3 ShieldSkill::GetPosition()
 
 void ShieldSkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 {
-	switch(paramType)
+	if(isStarted)
 	{
-	case PARAM_POSITION:
-		position = newParam_vec3;
-		break;
-	default:
-		HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
-		break;
+		switch(paramType)
+		{
+		case PARAM_POSITION:
+			position = newParam_vec3;
+			break;
+		default:
+			HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
+			break;
+		}
 	}
 }
 
@@ -1200,16 +1219,19 @@ bool BurnSkill::IsDeployed()
 
 void BurnSkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 {
-	if(!isDeployed)
+	if(isStarted)
 	{
-		switch(paramType)
+		if(!isDeployed)
 		{
-		case PARAM_POSITION:
-			position = newParam_vec3;
-			break;
-		default:
-			HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
-			break;
+			switch(paramType)
+			{
+			case PARAM_POSITION:
+				position = newParam_vec3;
+				break;
+			default:
+				HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
+				break;
+			}
 		}
 	}
 }

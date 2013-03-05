@@ -109,6 +109,7 @@ public:
 	virtual bool IsIntersectingObject(glm::vec3 objectPosition) { return false; }
 	
 	virtual float GetRange() { return 0.0f; }
+	virtual int GetDamage() { return 0; }
 
 	std::string GetSkillType() { return skillType; }
 	int GetApplyCost() { return skillApplyCost; }
@@ -155,6 +156,7 @@ public:
 
 	float GetRange();
 	glm::vec3 GetPosition();
+	int GetDamage() { return damage; }
 
 	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 
@@ -193,6 +195,7 @@ public:
 
 	float GetRange();
 	glm::vec3 GetPosition();
+	int GetDamage() { return damage; }
 
 	bool IsIntersectingObject(glm::vec3 objectPosition);
 
@@ -227,6 +230,7 @@ public:
 
 	float GetRange();
 	glm::vec3 GetPosition();
+	int GetDamage() { return damage; }
 
 	bool IsIntersectingObject(glm::vec3 objectPosition);
 };
@@ -267,6 +271,7 @@ public:
 
 	float GetRange();
 	glm::vec3 GetPosition();
+	int GetDamage() { return damage; }
 
 	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 
@@ -302,6 +307,7 @@ public:
 
 	float GetRange();
 	glm::vec3 GetPosition();
+	int GetDamage() { return damage; }
 
 	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 
@@ -338,6 +344,7 @@ public:
 
 	float GetRange();
 	glm::vec3 GetPosition();
+	int GetDamage() { return damage; }
 
 	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 
@@ -413,6 +420,7 @@ public:
 
 	float GetRange();
 	glm::vec3 GetPosition();
+	int GetDamage() { return damage; }
 	bool IsDeployed();
 
 	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);

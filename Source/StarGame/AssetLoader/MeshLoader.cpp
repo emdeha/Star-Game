@@ -130,9 +130,9 @@ bool Mesh::LoadMesh(const std::string &fileName)
 	}
 }
 
-void Mesh::LoadLight()
+void Mesh::LoadLight(const glm::vec4 &diffuseColor)
 {	
-	GenerateUniformBuffers(materialBlockSize, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), materialUniformBuffer);
+	GenerateUniformBuffers(materialBlockSize, diffuseColor, materialUniformBuffer);
 }
 
 bool Mesh::InitFromScene(const aiScene *scene, const std::string &fileName)

@@ -505,8 +505,8 @@ void Scene::SpawnMothership()
 									glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
 									enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsSpeed, 
 									enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLineOfSight, 
-									enemyStats[ENEMY_TYPE_MOTHERSHIP].health, 
-									enemyStats[ENEMY_TYPE_MOTHERSHIP].resourceGivenOnKill);
+									enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLife, 
+									enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsResourceGivenOnKill);
 	enemies.push_back(randMothership);
 		
 	std::vector<std::shared_ptr<DeployUnit>> deployUnits = randMothership->GetDeployUnits();
@@ -797,6 +797,11 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 			float deployUnitsLineOfSight = atof(splittedCommand[1].c_str());
 			enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLineOfSight = deployUnitsLineOfSight;
 		}
+		if(strcmp(cmd.c_str(), "deployUnitsProjSpeed") == 0)
+		{
+			float deployUnitsProjSpeed = atof(splittedCommand[1].c_str());
+			enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsProjSpeed = deployUnitsProjSpeed;
+		}
 		if(strcmp(cmd.c_str(), "skillDamage") == 0)
 		{
 			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
@@ -1013,7 +1018,7 @@ void Scene::UpdateScene()
 		}
 		if(explosion[i].IsDead())
 		{
-			explosion[i].Init();
+			explosion[i].Init();			
 		}
 	}
 
@@ -1087,10 +1092,14 @@ void Scene::UpdateScene()
 		}
 		if((*iter)->IsDestroyed())
 		{
-			sceneMusic.Play(MUSIC_EXPLOSION, CHANNEL_GAME); // WARN: has some delay but it is acceptable
+			srand(time(0));
+			int explosionIndices[3] = { MUSIC_EXPLOSION, MUSIC_EXPLOSION_2, MUSIC_EXPLOSION_3 };
+			SoundType explType = SoundType(explosionIndices[rand() % 3]);
+
+			sceneMusic.Play(explType, CHANNEL_GAME); // WARN: has some delay but it is acceptable
 
 			explosion[lastUsedExplosion].SetPosition((*iter)->position);
-			explosion[lastUsedExplosion].Init();
+			//explosion[lastUsedExplosion].Init();
 			explosion[lastUsedExplosion].Activate();
 			lastUsedExplosion++;
 			if(lastUsedExplosion >= 20)
@@ -1188,10 +1197,11 @@ void Scene::UpdateScene()
 						}
 						else
 						{
-							Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
-							if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
+							//Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
+							if(skills[skillIndex]->IsStarted()/*skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY*/)
 							{
-								enemies[enemyIndex]->OnEvent(skillEvent);
+								enemies[enemyIndex]->health -= skills[skillIndex]->GetDamage();
+								//enemies[enemyIndex]->OnEvent(skillEvent);
 							}
 						}
 					}
@@ -1199,9 +1209,7 @@ void Scene::UpdateScene()
 					if(skills[skillIndex]->GetSkillType() == "satFrostNova")
 					{			
 						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("stuntimeended");
-
-
-
+						
 						if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
 						{
 							enemies[enemyIndex]->OnEvent(skillEvent);
@@ -1326,12 +1334,17 @@ void Scene::OnEvent(Event &_event)
 						for(int skillIndex = 0; skillIndex < skills.size(); skillIndex++)
 						{
 							Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
-							skills[skillIndex]->RemoveGeneratedEvent("skilldeployed");
+							//skills[skillIndex]->RemoveGeneratedEvent("skilldeployed");
 
 							if(skills[skillIndex]->IsIntersectingObject(enemies[i]->GetPosition()) &&
 							   skills[skillIndex]->GetSkillType() != "burnSkill")
 							{
-								enemies[i]->OnEvent(skillEvent);
+								enemies[i]->health -= skills[skillIndex]->GetDamage();
+								if(skills[skillIndex]->GetSkillType() == "aoeSkill")
+								{
+									sceneMusic.Play(MUSIC_AOE, CHANNEL_GAME);
+								}
+								//enemies[i]->OnEvent(skillEvent);
 							}
 						}
 					}
@@ -1405,17 +1418,9 @@ void Scene::OnEvent(Event &_event)
 			for(int i = 0; i < skills.size(); i++)
 			{
 				skills[i]->OnEvent(_event);
+				std::printf("Fusion called: %s\n", _event.GetArgument("buttons").varString);
 				if(skills[i]->IsStarted())
-				{
-					if(skills[i]->GetSkillType() == "sunNovaSkill")
-					{
-						sceneMusic.Play(MUSIC_SUN_NOVA, CHANNEL_GAME);
-					}
-					if(skills[i]->GetSkillType() == "satFrostNova")
-					{
-						sceneMusic.Play(MUSIC_FROST_NOVA, CHANNEL_GAME);
-					}
-
+				{/*
 					EventArg skillDeployedEventArg[2];
 					skillDeployedEventArg[0].argType = "what_event";
 					skillDeployedEventArg[0].argument.varType = TYPE_STRING;
@@ -1423,8 +1428,13 @@ void Scene::OnEvent(Event &_event)
 					skillDeployedEventArg[1].argType = "how_much";
 					skillDeployedEventArg[1].argument.varType = TYPE_INTEGER;
 					skillDeployedEventArg[1].argument.varInteger = skills[i]->GetApplyCost();
-					Event skillDeployedEvent = Event(2, EVENT_TYPE_OTHER, skillDeployedEventArg);
-					suns[0]->OnEvent(skillDeployedEvent);
+					Event skillDeployedEvent = Event(2, EVENT_TYPE_OTHER, skillDeployedEventArg);*/
+					Event skillDeployedEvent = skills[i]->GetGeneratedEvent("skilldeployed");
+					if(skillDeployedEvent.GetType() != EVENT_TYPE_EMPTY)
+					{
+						suns[0]->OnEvent(skillDeployedEvent);
+					}
+					skills[i]->RemoveGeneratedEvent("skilldeployed");
 					
 					// simple fix for hard problems... FOR HOW LONG?!
 					Event sunResourceEvent = suns[0]->GetGeneratedEvent("insufRes");
@@ -1432,6 +1442,17 @@ void Scene::OnEvent(Event &_event)
 					{
 						skills[i]->isStarted = false;
 						suns[0]->RemoveGeneratedEvent("insufRes");
+					}
+					else if(skillDeployedEvent.GetType() != EVENT_TYPE_EMPTY)
+					{						
+						if(skills[i]->GetSkillType() == "sunNovaSkill") 
+						{
+							sceneMusic.Play(MUSIC_SUN_NOVA, CHANNEL_GAME);
+						}
+						if(skills[i]->GetSkillType() == "satFrostNova")
+						{
+							sceneMusic.Play(MUSIC_FROST_NOVA, CHANNEL_GAME);
+						}
 					}
 				}
 			}
@@ -1641,7 +1662,7 @@ void Scene::SetLayout(LayoutType layoutType, bool isSet)
 }
 
 
-void Scene::SetMusic(const std::string &fileName, SoundTypes soundType)
+void Scene::SetMusic(const std::string &fileName, SoundType soundType)
 {
 	sceneMusic.SetFileForPlay(fileName, soundType);
 }
@@ -1662,7 +1683,7 @@ void Scene::SetDisplayData(const DisplayData &newDisplayData)
 	currentDisplayData.zNear = newDisplayData.zNear;
 }
 
-void Scene::PlayMusic(SoundTypes soundType)
+void Scene::PlayMusic(SoundType soundType)
 {
 	sceneMusic.Play(soundType);
 }

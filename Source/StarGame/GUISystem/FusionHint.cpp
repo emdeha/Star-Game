@@ -25,9 +25,9 @@ void FusionHint::Init()
 	boxSprite.Init(skillTextures[0]);
 	
 	textToDisplay = Text("../data/fonts/AGENCYR.TTF");
-	textToDisplay.Init(800, 600);
+	textToDisplay.Init(1440, 900);
 	
-	controlSquare.Init(800, 600);
+	controlSquare.Init(1440, 900);
 
 	ComputeNewAttributes();
 }
@@ -74,7 +74,7 @@ void FusionHint::Update(int newWindowWidth, int newWindowHeight)
 void FusionHint::Draw(const FontProgData &fontData, const TextureProgData &textureData)
 {		
 	textToDisplay.Print(text.c_str(), fontData,
-						glm::vec2(presets[currentPreset].position.x + width, 600 - presets[currentPreset].position.y),
+						glm::vec2(presets[currentPreset].position.x, presets[currentPreset].position.y - 700),
 						glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
 						presets[currentPreset].textSize);
 

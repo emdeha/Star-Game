@@ -27,7 +27,7 @@
 struct AudioFile
 {
 	std::string path;
-	SoundTypes soundType;
+	SoundType soundType;
 };
 
 struct AudioData

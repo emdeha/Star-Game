@@ -628,23 +628,25 @@ void Keyboard(unsigned char key, int x, int y)
 	{
 		Event returnedFusionEvent = StockEvents::EmptyEvent();
 		scene.UpdateFusion(key, returnedFusionEvent);
-		scene.GetLayout(LAYOUT_IN_GAME)->GetControl("fusionOne")->OnEvent(returnedFusionEvent);
-		scene.GetLayout(LAYOUT_IN_GAME)->GetControl("fusionTwo")->OnEvent(returnedFusionEvent);
-		scene.GetLayout(LAYOUT_IN_GAME)->GetControl("fusionThree")->OnEvent(returnedFusionEvent);
-		/*scene.GetLayout(LAYOUT_IN_GAME)->GetControl("skillHint")->OnEvent(returnedFusionEvent);*/
-		if(returnedFusionEvent.GetArgument("isHint").varBool == true)
+		if(returnedFusionEvent.GetType() != StockEvents::EmptyEvent().GetType())
 		{
-			EventArg showHintEventArgs[2];
-			showHintEventArgs[0].argType = "what_event";
-			showHintEventArgs[0].argument.varType = TYPE_STRING;
-			strcpy(showHintEventArgs[0].argument.varString, "show_skill");
-			showHintEventArgs[1].argType = "skillIndex";
-			showHintEventArgs[1].argument.varType = TYPE_INTEGER;
-			std::string currentInputSequence = scene.GetCurrentFusionInputSequence();
-			showHintEventArgs[1].argument.varInteger = 
-				scene.GetSkillTypeByFusionCombination(currentInputSequence[0], currentInputSequence[1], currentInputSequence[2]);
-			Event showHintEvent(2, EVENT_TYPE_OTHER, showHintEventArgs);
-			scene.GetLayout(LAYOUT_IN_GAME)->GetControl("skillHint")->OnEvent(showHintEvent);
+			scene.GetLayout(LAYOUT_IN_GAME)->GetControl("fusionOne")->OnEvent(returnedFusionEvent);
+			scene.GetLayout(LAYOUT_IN_GAME)->GetControl("fusionTwo")->OnEvent(returnedFusionEvent);
+			scene.GetLayout(LAYOUT_IN_GAME)->GetControl("fusionThree")->OnEvent(returnedFusionEvent);
+			if(returnedFusionEvent.GetArgument("isHint").varBool == true)
+			{
+				EventArg showHintEventArgs[2];
+				showHintEventArgs[0].argType = "what_event";
+				showHintEventArgs[0].argument.varType = TYPE_STRING;
+				strcpy(showHintEventArgs[0].argument.varString, "show_skill");
+				showHintEventArgs[1].argType = "skillIndex";
+				showHintEventArgs[1].argument.varType = TYPE_INTEGER;
+				std::string currentInputSequence = scene.GetCurrentFusionInputSequence();
+				showHintEventArgs[1].argument.varInteger = 
+					scene.GetSkillTypeByFusionCombination(currentInputSequence[0], currentInputSequence[1], currentInputSequence[2]);
+				Event showHintEvent(2, EVENT_TYPE_OTHER, showHintEventArgs);
+				scene.GetLayout(LAYOUT_IN_GAME)->GetControl("skillHint")->OnEvent(showHintEvent);
+			}
 		}
 	}
 

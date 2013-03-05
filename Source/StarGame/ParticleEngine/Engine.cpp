@@ -198,6 +198,7 @@ ExplosionEmitter::ExplosionEmitter(glm::vec3 newPosition, int newParticleCount,
 								   float newVelocityMultiplier)
 {
 	position = newPosition;
+	startingParticleCount = newParticleCount;
 	particleCount = newParticleCount;
 
 	particles.resize(particleCount);
@@ -225,6 +226,10 @@ ExplosionEmitter::ExplosionEmitter(glm::vec3 newPosition, int newParticleCount,
 
 void ExplosionEmitter::Init()
 {
+	isActive = false;
+	isDead = false;
+	particles.resize(startingParticleCount);
+	particleCount = startingParticleCount;
 	for(int i = 0; i < particleCount; i++)
 	{
 		particles[i].position = position + glm::vec3();

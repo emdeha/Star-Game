@@ -119,6 +119,7 @@ private:
 	glm::vec3 position;
 	float velocityMultiplier;
 	int particleCount;
+	int startingParticleCount;
 
 	int particleLifeTime;
 

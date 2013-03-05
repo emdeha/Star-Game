@@ -540,12 +540,14 @@ void Spaceship::OnEvent(Event &_event)
 			// WARN: It should be 'currentState'.
 			lastState = STATE_ATTACK;
 			currentState = STATE_STOPPED;
-			GenerateUniformBuffers(materialBlockSize, onFreezeColor, materialUniformBuffer);
+			mesh.LoadLight(onFreezeColor);
+			//GenerateUniformBuffers(materialBlockSize, onFreezeColor, materialUniformBuffer);
 		}
 		if(strcmp(_event.GetArgument("what_event").varString, "stuntimeended") == 0)
 		{
 			currentState = lastState;
-			GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
+			mesh.LoadLight();
+			//GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 		}
 		if(strcmp(_event.GetArgument("what_event").varString, "shieldskilldeployed") == 0)
 		{
@@ -674,11 +676,11 @@ void DeployUnit::Update(bool isSunKilled, CelestialBody &sun)
 				position += frontVector * speed;
 				UpdateAI(sun);
 			}
-				
+			/*	
 			if(health <= 20)
 			{
 				currentState = STATE_EVADE;
-			}
+			}*/
 
 			if(health <= 0)
 			{
@@ -1031,12 +1033,14 @@ void Mothership::OnEvent(Event &_event)
 			// WARN: It should be 'currentState'.
 			lastState = STATE_ATTACK;
 			currentState = STATE_STOPPED;
-			GenerateUniformBuffers(materialBlockSize, onFreezeColor, materialUniformBuffer);
+			mesh.LoadLight(onFreezeColor);
+			//GenerateUniformBuffers(materialBlockSize, onFreezeColor, materialUniformBuffer);
 		}
 		if(strcmp(_event.GetArgument("what_event").varString, "stuntimeended") == 0)
 		{
 			currentState = lastState;
-			GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
+			mesh.LoadLight();
+			//GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 		}
 		if(strcmp(_event.GetArgument("what_event").varString, "shieldskilldeployed") == 0)
 		{
@@ -1198,6 +1202,7 @@ void FastSuicideBomber::Render(glutil::MatrixStack &modelMatrix,
 {
 	glutil::PushStack push(modelMatrix);
 
+	
 	modelMatrix.Translate(position);
 	modelMatrix.Scale(0.1f);
 	
@@ -1228,12 +1233,14 @@ void FastSuicideBomber::OnEvent(Event &_event)
 			// WARN: It should be 'currentState'.
 			lastState = STATE_ATTACK;
 			currentState = STATE_STOPPED;
-			GenerateUniformBuffers(materialBlockSize, onFreezeColor, materialUniformBuffer);
+			mesh.LoadLight(onFreezeColor);
+			//GenerateUniformBuffers(materialBlockSize, onFreezeColor, materialUniformBuffer);
 		}
 		if(strcmp(_event.GetArgument("what_event").varString, "stuntimeended") == 0)
 		{
 			currentState = lastState;
-			GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
+			mesh.LoadLight();
+			//GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 		}
 		if(strcmp(_event.GetArgument("what_event").varString, "shieldskilldeployed") == 0)
 		{
@@ -1385,12 +1392,14 @@ void Asteroid::OnEvent(Event &_event)
 			// WARN: It should be 'currentState'.
 			lastState = STATE_ATTACK;
 			currentState = STATE_STOPPED;
-			GenerateUniformBuffers(materialBlockSize, onFreezeColor, materialUniformBuffer);
+			mesh.LoadLight(onFreezeColor);
+			//GenerateUniformBuffers(materialBlockSize, onFreezeColor, materialUniformBuffer);
 		}
 		if(strcmp(_event.GetArgument("what_event").varString, "stuntimeended") == 0)
 		{
 			currentState = lastState;
-			GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
+			mesh.LoadLight();
+			//GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
 		}
 		if(strcmp(_event.GetArgument("what_event").varString, "shieldskilldeployed") == 0)
 		{

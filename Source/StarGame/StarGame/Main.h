@@ -24,6 +24,7 @@
 
 
 #include <string>
+#include <sstream>
 #include <vector>
 #include <stack>
 #include <math.h>
@@ -142,8 +143,8 @@ int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 
-	int width = 800;
-	int height = 600;
+	int width = 1440;
+	int height = 900;
 	unsigned int displayMode = GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH | GLUT_STENCIL;
 	displayMode = Defaults(displayMode, width, height);
 
@@ -163,8 +164,12 @@ int main(int argc, char** argv)
 
 	if(!glload::IsVersionGEQ(3, 3))
 	{
-		printf("Your OpenGL version is %i, %i. You must have at least OpenGL 3.3 to run this tutorial.\n",
-			glload::GetMajorVersion(), glload::GetMinorVersion());
+		std::wstringstream messageBoxText;
+		messageBoxText<<"Your OpenGL version is "<<glload::GetMajorVersion()<<", "<<glload::GetMinorVersion()
+					  <<". You must have at least OpenGL 3.3 to run this game.\n\n"
+					  <<"If your videocard is bought after year 2008, updating its drivers might fix this problem. "
+					  <<"Else you\'ll have to upgrade your video.";
+		MessageBox(NULL, messageBoxText.str().c_str(), L"OpenGL initialization error", MB_ICONERROR);
 		glutDestroyWindow(window);
 		return 0;
 	}

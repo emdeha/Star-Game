@@ -169,14 +169,14 @@ public:
 	void SetLayout(LayoutType layoutType, bool isSet);
 	void SetLayoutPreset(LayoutPreset layoutPreset);
 
-	void SetMusic(const std::string &fileName, SoundTypes soundType);
+	void SetMusic(const std::string &fileName, SoundType soundType);
 	void SetMusicVolume(float volume, ChannelType chType);
 
 	void SetDisplayData(const DisplayData &newDisplayData);
 
 	void SetExplosion(const ExplosionEmitter &newExplosionEmitter);
 
-	void PlayMusic(SoundTypes soundType);
+	void PlayMusic(SoundType soundType);
 
 	void SetTopDownCamera(const TopDownCamera &newCamera);
 	void SetMouse(const Mouse &newMouse);

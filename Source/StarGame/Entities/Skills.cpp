@@ -841,7 +841,6 @@ FrostNovaSkill::FrostNovaSkill(int newDamage, float newStunTime_seconds,
 void FrostNovaSkill::Update()
 {
 	stunTimer.Update();
-	std::printf("elapsed time: %f / %f\n", stunTimer.GetTimeSinceStart(), stunTime_seconds);
 	if(stunTimer.GetTimeSinceStart() >= stunTime_seconds && stunTimer.IsPaused() == false)
 	{
 		EventArg enemyStunFinishedEventArgs[1];

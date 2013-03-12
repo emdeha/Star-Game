@@ -108,7 +108,7 @@ private:
 
 	SatelliteOrbit hoverOrbit; // TODO: Not sure if this should be here or somewhere more
 							   //	    GUI specific.
-	//SunSkillUpgradeButtons sunSkillUpgradeBtns; // TODO: Not sure if this should be here or somewhere more
+	SunSkillUpgradeButtons sunSkillUpgradeBtns; // TODO: Not sure if this should be here or somewhere more
 												//       GUI specific.
 
 	std::vector<Event> generatedEvents;

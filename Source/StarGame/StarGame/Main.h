@@ -143,8 +143,8 @@ int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 
-	int width = 1440;
-	int height = 900;
+	int width = 1280;
+	int height = 768;
 	unsigned int displayMode = GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH | GLUT_STENCIL;
 	displayMode = Defaults(displayMode, width, height);
 

@@ -87,7 +87,7 @@ public:
 		skillApplyCost = newSkillApplyCost;
 		skillResearchCost = newSkillResearchCost;
 
-		isResearched = true;
+		isResearched = false;
 		boxIndexForUpgrade = newBoxIndexForUpgrade;
 	}
 

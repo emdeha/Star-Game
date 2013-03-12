@@ -20,6 +20,7 @@
 #include <sstream>
 
 #define PI 3.14159f
+#define EPSILON 0.000001
 
 
 glm::vec4 Utility::CorrectGamma(const glm::vec4 &inputColor, float gamma)
@@ -121,6 +122,66 @@ bool Utility::Intersections::RayIntersectsEllipsoid(Ray mouseRay, glm::vec3 body
 {
 	Ray distortedRay = Ray(deformationMat * mouseRay.origin, deformationMat * mouseRay.direction);
 	return Utility::Intersections::RayIntersectsSphere(distortedRay, bodyPosition, sphereRadius);
+}
+bool Utility::Intersections::RayIntersectsTriangle(Ray mouseRay, 
+												   glm::vec3 vertOne, glm::vec3 vertTwo, glm::vec3 vertThree)
+{
+	glm::vec3 edgeOne, edgeTwo;
+	glm::vec3 tVect, pVect, qVect;
+	float determinant, inverseDeterminant;
+
+	/* Find vectors for two edges sharing vertOne */
+	edgeOne = vertTwo - vertOne;
+	edgeTwo = vertThree - vertOne;
+
+	/* Begin calculating determinant - also used to calculate the U parameter */
+	pVect = glm::cross(glm::vec3(mouseRay.direction), edgeTwo);
+
+	/* If determinant is near zero, ray lies in plane of triangle */
+	determinant = glm::dot(edgeOne, pVect);
+
+	// Non-culling test
+	if(determinant > -EPSILON && determinant < EPSILON)
+	{
+		return false;
+	}
+	inverseDeterminant = 1.0f / determinant;
+
+	// Calculate distance from vertOne to rayOrigin
+	tVect = glm::vec3(mouseRay.origin) - vertOne;
+
+	// Calculate U param and test bounds
+	float u = glm::dot(tVect, pVect) * inverseDeterminant;
+	if(u < 0.0f || u > 1.0f)
+	{
+		return false;
+	}
+
+	// Prepare to test V param
+	qVect = glm::cross(tVect, edgeOne);
+
+	// Calculate V param and test bounds
+	float v = glm::dot(glm::vec3(mouseRay.direction), qVect) * inverseDeterminant;
+	if(v < 0.0f || (u + v) > 1.0f)
+	{
+		return false;
+	}
+
+	// Calculate T, ray intersects triangle
+	float t = glm::dot(edgeTwo, qVect) * inverseDeterminant;
+
+	return true;
+}
+bool Utility::Intersections::RayIntersectsSquare(Ray mouseRay,
+											     glm::vec3 vertOne, glm::vec3 vertTwo, 
+												 glm::vec3 vertThree, glm::vec3 vertFour)
+{
+	if(RayIntersectsTriangle(mouseRay, vertOne, vertTwo, vertThree) || 
+	   RayIntersectsTriangle(mouseRay, vertOne, vertTwo, vertFour))
+	{
+		return true;
+	}
+	else return false;
 }
 
 
@@ -705,6 +766,16 @@ void Utility::Primitives::Sprite3D::ChangeTexture(const std::string &textureFile
 glm::vec3 Utility::Primitives::Sprite3D::GetPosition()
 {
 	return position;
+}
+std::vector<glm::vec3> Utility::Primitives::Sprite3D::GetVertices()
+{
+	std::vector<glm::vec3> vertices(4);
+	vertices[0] = glm::vec3(position.x - width, position.y, position.z - height);
+	vertices[1] = glm::vec3(position.x, position.y, position.z - height);
+	vertices[2] = glm::vec3(position.x, position.y, position.z);
+	vertices[3] = glm::vec3(position.x - width, position.y, position.z);
+
+	return vertices;
 }
 
 

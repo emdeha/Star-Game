@@ -103,6 +103,11 @@ namespace Utility
 		/// pass the deformed ray to the RayIntersectsSphere function.
 		bool RayIntersectsEllipsoid(Ray mouseRay, glm::vec3 bodyPosition, 
 								    float sphereRadius, glm::mat4 deformationMat);
+
+		bool RayIntersectsTriangle(Ray mouseRay, 
+								   glm::vec3 vertOne, glm::vec3 vertTwo, glm::vec3 vertThree);
+		bool RayIntersectsSquare(Ray mouseRay,
+								 glm::vec3 vertOne, glm::vec3 vertTwo, glm::vec3 vertThree, glm::vec3 vertFour);
 	}
 
 	namespace ClickDetection
@@ -320,6 +325,7 @@ namespace Utility
 			void ChangeTexture(const std::string &textureFileName);
 
 			glm::vec3 GetPosition();
+			std::vector<glm::vec3> GetVertices();
 		};
 
 

@@ -96,11 +96,21 @@ bool SkillUpgradeButtons::IsClicked(Utility::Ray mouseRay, int &buttonIndex)
 {
 	for(int i = 0; i < 3; i++)
 	{
+		std::vector<glm::vec3> buttonVertices = skillButtons[i].GetVertices();
+		if(Utility::Intersections::RayIntersectsSquare(mouseRay, 
+													   buttonVertices[0], buttonVertices[1], 
+													   buttonVertices[2], buttonVertices[3]))
+		{
+			buttonIndex = i;
+			return true;
+		}
+		/*
 		if(Utility::Intersections::RayIntersectsSphere(mouseRay, skillButtons[i].GetPosition(), 0.5f))
 		{
 			buttonIndex = i;
 			return true;
 		}
+		*/
 	}
 	return false;
 }
@@ -144,9 +154,9 @@ SatelliteOrbit::SatelliteOrbit(glm::vec4 newMainColor, glm::vec4 newOutlineColor
 												   outerRadius + 0.05f,
 												   90);
 
-	//upgradeButtons = SkillUpgradeButtons(1.0f, 1.0f,
-	//									 "../data/images/skill-noupgrade.jpg", "../data/images/skill-upgrade.jpg",
-	//									 position, innerRadius, outerRadius);
+	upgradeButtons = SkillUpgradeButtons(1.0f, 1.0f,
+										 "../data/images/skill-noupgrade.jpg", "../data/images/skill-upgrade.jpg",
+										 position, innerRadius, outerRadius);
 }
 
 void SatelliteOrbit::Init()
@@ -154,7 +164,7 @@ void SatelliteOrbit::Init()
 	mainOrbit.Init();
 	orbitOutlineOne.Init();
 	orbitOutlineTwo.Init();
-	//upgradeButtons.Init();
+	upgradeButtons.Init();
 }
 
 void SatelliteOrbit::Draw(glutil::MatrixStack &modelMatrix, 
@@ -171,19 +181,19 @@ void SatelliteOrbit::Draw(glutil::MatrixStack &modelMatrix,
 	orbitOutlineOne.Draw(modelMatrix, simpleData);
 	orbitOutlineTwo.Draw(modelMatrix, simpleData);
 
-	//upgradeButtons.Draw(modelMatrix, textureData);
+	upgradeButtons.Draw(modelMatrix, textureData);
 }
-/*
+
 void SatelliteOrbit::ChangeUpgradeButtonTexture(TextureType type, int buttonIndex)
 {
 	upgradeButtons.ChangeTexture(type, buttonIndex);
-}*/
-/*
+}
+
 bool SatelliteOrbit::IsUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex)
 {
 	bool isUpgrButtonClicked = upgradeButtons.IsClicked(mouseRay, buttonIndex);
 	return isUpgrButtonClicked;
-}*/
+}
 
 
 SunSkillUpgradeButtons::SunSkillUpgradeButtons(float newWidth, float newHeight, float newRadius,
@@ -232,11 +242,21 @@ bool SunSkillUpgradeButtons::IsClicked(Utility::Ray mouseRay, int &buttonIndex)
 {
 	for(int i = 0; i < 4; i++)
 	{
+		std::vector<glm::vec3> buttonVertices = skillButtons[i].GetVertices();
+		if(Utility::Intersections::RayIntersectsSquare(mouseRay, 
+													   buttonVertices[0], buttonVertices[1], 
+													   buttonVertices[2], buttonVertices[3]))
+		{
+			buttonIndex = i;
+			return true;
+		}
+		/*
 		if(Utility::Intersections::RayIntersectsSphere(mouseRay, skillButtons[i].GetPosition(), 0.5f))
 		{
 			buttonIndex = i;
 			return true;
 		}
+		*/
 	}
 	return false;
 }

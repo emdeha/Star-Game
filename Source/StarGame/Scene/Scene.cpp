@@ -288,6 +288,17 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 			ProcessVariablesTweak(command);
 		}
 
+		// Only because not data-driven
+		skillsStats[SKILL_TYPE_AOE].upgradeBoxIndex = 3;
+		skillsStats[SKILL_TYPE_SUN_NOVA].upgradeBoxIndex = 2;
+		skillsStats[SKILL_TYPE_BURN].upgradeBoxIndex = 1;
+		skillsStats[SKILL_TYPE_PASSIVE_AOE].upgradeBoxIndex = 0;
+
+		skillsStats[SKILL_TYPE_SAT_CHAIN].upgradeBoxIndex = 0;
+		skillsStats[SKILL_TYPE_SAT_FROSTNOVA].upgradeBoxIndex = 0;
+		skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].upgradeBoxIndex = 0;
+		skillsStats[SKILL_TYPE_SAT_SHIELD].upgradeBoxIndex = 0;
+
 		// WARN: BADDDD!!!
 		std::shared_ptr<AOESkill> aoeSkill =
 			std::shared_ptr<AOESkill>(new AOESkill(glm::vec3(),
@@ -1457,7 +1468,7 @@ void Scene::OnEvent(Event &_event)
 				}
 			}
 		}
-		/*
+		
 		if(strcmp(_event.GetArgument("what_event").varString, "skillUpgr") == 0)
 		{
 			if(_event.GetArgument("satType").varInteger == -1)
@@ -1509,7 +1520,7 @@ void Scene::OnEvent(Event &_event)
 				}
 			}
 			//std::printf("%i\n", _event.GetArgument("index").varInteger);
-		}*/
+		}
 		break;
 	default:
 		// ERR: Invalid event type when spawning sats

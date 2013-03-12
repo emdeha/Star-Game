@@ -131,9 +131,9 @@ void CelestialBody::InitSatelliteOrbit()
 }
 void CelestialBody::InitSunSkillUpgradeButtons()
 {
-	//sunSkillUpgradeBtns = SunSkillUpgradeButtons(1.0f, 1.0f, diameter / 2.0f, position, 
-	//											 "../data/images/skill-noupgrade.jpg", "../data/images/skill-upgrade.jpg");
-	//sunSkillUpgradeBtns.Init();
+	sunSkillUpgradeBtns = SunSkillUpgradeButtons(1.0f, 1.0f, diameter / 2.0f, position, 
+												 "../data/images/skill-noupgrade.jpg", "../data/images/skill-upgrade.jpg");
+	sunSkillUpgradeBtns.Init();
 }
 
 void CelestialBody::InitSatelliteStats()
@@ -329,7 +329,7 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 	
 	if(isClicked && isSun)
 	{
-		//sunSkillUpgradeBtns.Draw(modelMatrix, textureData);
+		sunSkillUpgradeBtns.Draw(modelMatrix, textureData);
 	}
 	if(isClicked && !isSun)
 	{
@@ -452,7 +452,7 @@ void CelestialBody::OnEvent(Event &_event)
 
 					generatedEvents.push_back(insufficientResourcesEvent);
 				}
-			}/*
+			}
 			if(strcmp(_event.GetArgument("what_event").varString, "skillUpgr") == 0)
 			{
 				if(_event.GetArgument("satType").varInteger == -1)
@@ -471,7 +471,7 @@ void CelestialBody::OnEvent(Event &_event)
 						}
 					}
 				}
-			}*/
+			}
 			break;
 		default:
 			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
@@ -732,7 +732,7 @@ bool CelestialBody::IsClicked(Utility::Ray mouseRay)
 	}
 }
 bool CelestialBody::IsSkillUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex)
-{/*
+{
 	if(isSun)
 	{
 		bool isSunUpgrButtonClicked = sunSkillUpgradeBtns.IsClicked(mouseRay, buttonIndex);
@@ -749,7 +749,6 @@ bool CelestialBody::IsSkillUpgradeButtonClicked(Utility::Ray mouseRay, int &butt
 			return true;
 		}
 	}
-	return false;*/
 	return false;
 }
 bool CelestialBody::IsSatelliteClicked(Utility::Ray mouseRay)

@@ -29,10 +29,19 @@
 #define RESOLUTION 90
 	
 
-enum TextureType
+enum TextureTypeSun
 {
-	TEXTURE_TYPE_NO_UPGRADE,
-	TEXTURE_TYPE_UPGRADE,
+	TEXTURE_TYPE_UPGRADE_AOE,
+	TEXTURE_TYPE_UPGRADE_SUN_NOVA,
+	TEXTURE_TYPE_UPGRADE_PASSIVE_AOE,
+	TEXTURE_TYPE_UPGRADE_BURN,
+	TEXTURE_TYPE_NO_UPGRADE
+};
+
+enum TextureTypeSat
+{
+	TEXTURE_TYPE_SAT_UPGRADE,
+	TEXTURE_TYPE_SAT_NO_UPGRADE,
 };
 
 
@@ -83,7 +92,7 @@ public:
 
 	void Draw(glutil::MatrixStack &modelMatrix, const SimpleTextureProgData &textureData);
 
-	void ChangeTexture(TextureType type, int buttonIndex);
+	void ChangeTexture(TextureTypeSat type, int buttonIndex);
 
 	bool IsClicked(Utility::Ray mouseRay, int &buttonIndex);
 };
@@ -110,6 +119,7 @@ public:
 	SatelliteOrbit();
 	SatelliteOrbit(glm::vec4 newMainColor, glm::vec4 newOutlineColor,
 				   glm::vec3 newPosition, 
+				   const std::vector<std::string> &texturesFileButtons,
 				   float newOuterRadius, float newInnerRadius,
 				   float gamma);
 
@@ -120,7 +130,7 @@ public:
 	void Draw(glutil::MatrixStack &modelMatrix, 
 			  const SimpleProgData &simpleData, const SimpleTextureProgData &textureData);
 
-	void ChangeUpgradeButtonTexture(TextureType textType, int buttonIndex);
+	void ChangeUpgradeButtonTexture(TextureTypeSat textType, int buttonIndex);
 
 	bool IsUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex);
 };
@@ -134,7 +144,7 @@ private:
 	float height;
 	float radius;
 
-	std::string textureFileNames[2];
+	std::string textureFileNames[5];
 
 	Utility::Primitives::Sprite3D skillButtons[4];
 
@@ -142,13 +152,13 @@ public:
 	SunSkillUpgradeButtons() {}
 	SunSkillUpgradeButtons(float newWidth, float newHeight, float newRadius,
 						   glm::vec3 newCenterPosition,
-						   const std::string &noUpgradeFileName, const std::string &upgradeFileName);
+						   const std::vector<std::string> &texturesFileNames);
 
 	void Init();
 
 	void Draw(glutil::MatrixStack &modelMatrix, const SimpleTextureProgData &textureData);
 
-	void ChangeTexture(TextureType type, int buttonIndex);
+	void ChangeTexture(TextureTypeSun type, int buttonIndex);
 
 	bool IsClicked(Utility::Ray mouseRay, int &buttonIndex);
 };

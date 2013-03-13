@@ -295,9 +295,33 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 		skillsStats[SKILL_TYPE_PASSIVE_AOE].upgradeBoxIndex = 0;
 
 		skillsStats[SKILL_TYPE_SAT_CHAIN].upgradeBoxIndex = 0;
-		skillsStats[SKILL_TYPE_SAT_FROSTNOVA].upgradeBoxIndex = 0;
-		skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].upgradeBoxIndex = 0;
+		skillsStats[SKILL_TYPE_SAT_CHAIN].forWhichSatellite = SATELLITE_FIRE;
+		skillsStats[SKILL_TYPE_SAT_FROSTNOVA].upgradeBoxIndex = 0;		
+		skillsStats[SKILL_TYPE_SAT_FROSTNOVA].forWhichSatellite = SATELLITE_WATER;
+		skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].upgradeBoxIndex = 0;		
+		skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].forWhichSatellite = SATELLITE_EARTH;
 		skillsStats[SKILL_TYPE_SAT_SHIELD].upgradeBoxIndex = 0;
+		skillsStats[SKILL_TYPE_SAT_SHIELD].forWhichSatellite = SATELLITE_AIR;
+
+		suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].upgradeBoxIndex = 
+			skillsStats[SKILL_TYPE_SAT_CHAIN].upgradeBoxIndex;
+		suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].forWhichSatellite = 
+			skillsStats[SKILL_TYPE_SAT_CHAIN].forWhichSatellite;
+
+		suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].upgradeBoxIndex = 
+			skillsStats[SKILL_TYPE_SAT_FROSTNOVA].upgradeBoxIndex;		
+		suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].forWhichSatellite =
+			skillsStats[SKILL_TYPE_SAT_FROSTNOVA].forWhichSatellite;
+
+		suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].upgradeBoxIndex = 
+			skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].upgradeBoxIndex;		
+		suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].forWhichSatellite = 
+			skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].forWhichSatellite;
+
+		suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].upgradeBoxIndex = 
+			skillsStats[SKILL_TYPE_SAT_SHIELD].upgradeBoxIndex;
+		suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].forWhichSatellite = 
+			skillsStats[SKILL_TYPE_SAT_SHIELD].forWhichSatellite;
 
 		// WARN: BADDDD!!!
 		std::shared_ptr<AOESkill> aoeSkill =

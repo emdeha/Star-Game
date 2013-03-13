@@ -122,8 +122,29 @@ CelestialBody::CelestialBody(float speed, float newOffsetFromParent, float newDi
 
 void CelestialBody::InitSatelliteOrbit()
 {	
+	std::vector<std::string> texturesFileNames;
+	switch(satType)
+	{	
+	case SATELLITE_WATER:		
+		texturesFileNames.push_back("../data/images/skill-sat-freeze.jpg");
+		break;
+	case SATELLITE_EARTH:
+		texturesFileNames.push_back("../data/images/skill-sat-passive-aoe.jpg");
+		break;
+	case SATELLITE_FIRE:
+		texturesFileNames.push_back("../data/images/skill-sat-nova.jpg");
+		break;
+	case SATELLITE_AIR:
+		texturesFileNames.push_back("../data/images/skill-sat-shield.jpg");
+		break;
+	default:
+		break;
+	}
+	texturesFileNames.push_back("../data/images/skill-noupgrade.jpg");
+
 	hoverOrbit = SatelliteOrbit(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
 								parent->GetPosition(),
+								texturesFileNames,
 								satelliteStats[satType].satelliteOffsetFromSun + diameter / 2.0f,
 								satelliteStats[satType].satelliteOffsetFromSun - diameter / 2.0f,
 								2.2f); // Change: gamma
@@ -131,8 +152,15 @@ void CelestialBody::InitSatelliteOrbit()
 }
 void CelestialBody::InitSunSkillUpgradeButtons()
 {
+	std::vector<std::string> skillTexturesFileNames;
+	skillTexturesFileNames.push_back("../data/images/skill-sun-passive-aoe.jpg");
+	skillTexturesFileNames.push_back("../data/images/skill-sun-burn.jpg");
+	skillTexturesFileNames.push_back("../data/images/skill-sun-nova.jpg");
+	skillTexturesFileNames.push_back("../data/images/skill-sun-aoe.jpg");
+	skillTexturesFileNames.push_back("../data/images/skill-noupgrade.jpg");
+
 	sunSkillUpgradeBtns = SunSkillUpgradeButtons(1.0f, 1.0f, diameter / 2.0f, position, 
-												 "../data/images/skill-noupgrade.jpg", "../data/images/skill-upgrade.jpg");
+												 skillTexturesFileNames);
 	sunSkillUpgradeBtns.Init();
 }
 
@@ -458,7 +486,8 @@ void CelestialBody::OnEvent(Event &_event)
 				if(_event.GetArgument("satType").varInteger == -1)
 				{
 					isClicked = true;
-					sunSkillUpgradeBtns.ChangeTexture(TEXTURE_TYPE_UPGRADE, _event.GetArgument("index").varInteger);
+					sunSkillUpgradeBtns.ChangeTexture((TextureTypeSun)_event.GetArgument("index").varInteger,
+													  _event.GetArgument("index").varInteger);
 				}
 				else
 				{
@@ -467,7 +496,7 @@ void CelestialBody::OnEvent(Event &_event)
 						if(satellites[i]->satType == SatelliteType(_event.GetArgument("satType").varInteger))
 						{
 							satellites[i]->hoverOrbit.ChangeUpgradeButtonTexture(
-								TEXTURE_TYPE_UPGRADE, _event.GetArgument("index").varInteger);
+								TEXTURE_TYPE_SAT_UPGRADE, _event.GetArgument("index").varInteger);
 						}
 					}
 				}
@@ -512,18 +541,20 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 	newSat->SetParent(this);
 	newSat->InitSatelliteOrbit();
 
-	std::shared_ptr<SatelliteChainingNova> satChainSkill =
-		std::shared_ptr<SatelliteChainingNova>(new SatelliteChainingNova(newSat->GetPosition(),
-																		 satSkillStats[SKILL_TYPE_SAT_CHAIN].damage, 
-																		 satSkillStats[SKILL_TYPE_SAT_CHAIN].range, 
-																		 satSkillStats[SKILL_TYPE_SAT_CHAIN].scaleRate, 
-																		 "satChainSkill",
-																		 '\0', '\0', '\0', 
-																		 0, 
-																		 satSkillStats[SKILL_TYPE_SAT_CHAIN].skillResearchCost, 
-																		 satSkillStats[SKILL_TYPE_SAT_CHAIN].upgradeBoxIndex));
-	
-	
+	if(type == satSkillStats[SKILL_TYPE_SAT_CHAIN].forWhichSatellite)
+	{
+		std::shared_ptr<SatelliteChainingNova> satChainSkill =
+			std::shared_ptr<SatelliteChainingNova>(new SatelliteChainingNova(newSat->GetPosition(),
+																			 satSkillStats[SKILL_TYPE_SAT_CHAIN].damage, 
+																			 satSkillStats[SKILL_TYPE_SAT_CHAIN].range, 
+																			 satSkillStats[SKILL_TYPE_SAT_CHAIN].scaleRate, 
+																			 "satChainSkill",
+																			 '\0', '\0', '\0', 
+																			 0, 
+																			 satSkillStats[SKILL_TYPE_SAT_CHAIN].skillResearchCost, 
+																			 satSkillStats[SKILL_TYPE_SAT_CHAIN].upgradeBoxIndex));
+		newSat->AddSkill(satChainSkill);
+	}
 	if(type == satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].forWhichSatellite)
 	{
 		std::shared_ptr<PassiveAOESkill> satSkill = 
@@ -563,11 +594,11 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 														 satSkillStats[SKILL_TYPE_SAT_SHIELD].range, 
 														 "satShieldSkill", 'w', 'e', 'w',
 														 satSkillStats[SKILL_TYPE_SAT_SHIELD].skillApplyCost,
-														 10));
+														 satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].skillResearchCost,
+														 satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].upgradeBoxIndex));
 		newSat->AddSkill(satShieldSkill);
 	}
 
-	newSat->AddSkill(satChainSkill);
 
 	satellites.push_back(newSat);
 

@@ -288,6 +288,7 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 			ProcessVariablesTweak(command);
 		}
 
+		/*
 		// Only because not data-driven
 		skillsStats[SKILL_TYPE_AOE].upgradeBoxIndex = 3;
 		skillsStats[SKILL_TYPE_SUN_NOVA].upgradeBoxIndex = 2;
@@ -322,6 +323,7 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 			skillsStats[SKILL_TYPE_SAT_SHIELD].upgradeBoxIndex;
 		suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].forWhichSatellite = 
 			skillsStats[SKILL_TYPE_SAT_SHIELD].forWhichSatellite;
+		*/
 
 		// WARN: BADDDD!!!
 		std::shared_ptr<AOESkill> aoeSkill =
@@ -392,7 +394,6 @@ void Scene::LoadAudio(const std::string &configFileName)
 			path += iterFile->path;
 			sceneMusic.SetFileForPlay(path, iterFile->soundType);
 			sceneMusic.SetVolume(iter->second.channelVolume, iter->second.channel);
-			//std::printf("Channel: %i; Audio: %i, %s\n", iter->first, iterFile->soundType, iterFile->path.c_str());
 		}
 	}
 }
@@ -925,6 +926,18 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 				suns[0]->satSkillStats[skillType].stunTime_secs = stunTime;
 			}
 			//suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].stunTime_secs = stunTime;*/
+		}
+		if(strcmp(cmd.c_str(), "skillUpgradeBoxIndex") == 0)
+		{
+			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
+			int boxIndex = atoi(splittedCommand[2].c_str());
+			skillsStats[skillType].upgradeBoxIndex = boxIndex;
+		}
+		if(strcmp(cmd.c_str(), "skillForWhichSatellite") == 0)
+		{
+			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
+			SatelliteType satType = SatelliteType(atoi(splittedCommand[2].c_str()));
+			skillsStats[skillType].forWhichSatellite = satType;
 		}
 		if(strcmp(cmd.c_str(), "spawnMothership") == 0)
 		{

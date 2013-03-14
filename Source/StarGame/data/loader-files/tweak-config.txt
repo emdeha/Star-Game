@@ -88,4 +88,16 @@ skillDuration 3 3.0
 skillDuration 4 2.0
 skillDefensePoints 7 3
 skillStunTime 6 3.0
+skillUpgradeBoxIndex 0 0
+skillUpgradeBoxIndex 1 3
+skillUpgradeBoxIndex 2 2
+skillUpgradeBoxIndex 3 1 
+skillUpgradeBoxIndex 4 0 
+skillUpgradeBoxIndex 5 0 
+skillUpgradeBoxIndex 6 0
+skillUpgradeBoxIndex 7 0
+skillForWhichSatellite 4 3
+skillForWhichSatellite 5 0 
+skillForWhichSatellite 6 1
+skillForWhichSatellite 7 2
 endfile

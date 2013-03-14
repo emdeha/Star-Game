@@ -371,7 +371,7 @@ void InitializeScene()
 		mainSun(new CelestialBody(glm::vec3(0.0f), glm::vec4(0.738f, 0.738f, 0.423f, 1.0f), 1.25f, 4, 50, 
 								  200, 100));
 
-	mainSun->InitSunSkillUpgradeButtons();
+	//mainSun->InitSunSkillUpgradeButtons();
 
 	SunLight 
 		mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, displayData.gamma));

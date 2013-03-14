@@ -100,4 +100,12 @@ skillForWhichSatellite 4 3
 skillForWhichSatellite 5 0 
 skillForWhichSatellite 6 1
 skillForWhichSatellite 7 2
+skillUpgradedTexture 0 skill-sun-passive-aoe.jpg
+skillUpgradedTexture 1 skill-sun-aoe.jpg
+skillUpgradedTexture 2 skill-sun-nova.jpg
+skillUpgradedTexture 3 skill-sun-burn.jpg
+skillUpgradedTexture 4 skill-sat-passive-aoe.jpg
+skillUpgradedTexture 5 skill-sat-nova.jpg
+skillUpgradedTexture 6 skill-sat-freeze.jpg
+skillUpgradedTexture 7 skill-sat-shield.jpg
 endfile

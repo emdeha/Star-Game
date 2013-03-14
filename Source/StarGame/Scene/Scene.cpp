@@ -280,6 +280,10 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 				ss<<iter->second.varFloat;
 				command.append(ss.str());
 				break;
+			case TweakVarData::TYPE_TWEAK_STRING:
+				ss<<iter->second.varString;
+				command.append(ss.str());
+				break;
 			default:
 				HandleUnexpectedError("invalid tweak var type", __LINE__, __FILE__);
 				break;
@@ -287,43 +291,6 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 
 			ProcessVariablesTweak(command);
 		}
-
-		/*
-		// Only because not data-driven
-		skillsStats[SKILL_TYPE_AOE].upgradeBoxIndex = 3;
-		skillsStats[SKILL_TYPE_SUN_NOVA].upgradeBoxIndex = 2;
-		skillsStats[SKILL_TYPE_BURN].upgradeBoxIndex = 1;
-		skillsStats[SKILL_TYPE_PASSIVE_AOE].upgradeBoxIndex = 0;
-
-		skillsStats[SKILL_TYPE_SAT_CHAIN].upgradeBoxIndex = 0;
-		skillsStats[SKILL_TYPE_SAT_CHAIN].forWhichSatellite = SATELLITE_FIRE;
-		skillsStats[SKILL_TYPE_SAT_FROSTNOVA].upgradeBoxIndex = 0;		
-		skillsStats[SKILL_TYPE_SAT_FROSTNOVA].forWhichSatellite = SATELLITE_WATER;
-		skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].upgradeBoxIndex = 0;		
-		skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].forWhichSatellite = SATELLITE_EARTH;
-		skillsStats[SKILL_TYPE_SAT_SHIELD].upgradeBoxIndex = 0;
-		skillsStats[SKILL_TYPE_SAT_SHIELD].forWhichSatellite = SATELLITE_AIR;
-
-		suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].upgradeBoxIndex = 
-			skillsStats[SKILL_TYPE_SAT_CHAIN].upgradeBoxIndex;
-		suns[0]->satSkillStats[SKILL_TYPE_SAT_CHAIN].forWhichSatellite = 
-			skillsStats[SKILL_TYPE_SAT_CHAIN].forWhichSatellite;
-
-		suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].upgradeBoxIndex = 
-			skillsStats[SKILL_TYPE_SAT_FROSTNOVA].upgradeBoxIndex;		
-		suns[0]->satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].forWhichSatellite =
-			skillsStats[SKILL_TYPE_SAT_FROSTNOVA].forWhichSatellite;
-
-		suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].upgradeBoxIndex = 
-			skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].upgradeBoxIndex;		
-		suns[0]->satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].forWhichSatellite = 
-			skillsStats[SKILL_TYPE_SAT_PASSIVE_AOE].forWhichSatellite;
-
-		suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].upgradeBoxIndex = 
-			skillsStats[SKILL_TYPE_SAT_SHIELD].upgradeBoxIndex;
-		suns[0]->satSkillStats[SKILL_TYPE_SAT_SHIELD].forWhichSatellite = 
-			skillsStats[SKILL_TYPE_SAT_SHIELD].forWhichSatellite;
-		*/
 
 		// WARN: BADDDD!!!
 		std::shared_ptr<AOESkill> aoeSkill =
@@ -372,6 +339,14 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 		suns[0]->AddSkill(passiveAOESkill);
 		suns[0]->AddSkill(sunNovaSkill);
 		suns[0]->AddSkill(burnSkill);
+
+		std::vector<std::string> skillTextures;
+		skillTextures.push_back("../data/images/" + skillsStats[SKILL_TYPE_PASSIVE_AOE].skillUpgradedTexture);
+		skillTextures.push_back("../data/images/" + skillsStats[SKILL_TYPE_BURN].skillUpgradedTexture);
+		skillTextures.push_back("../data/images/" + skillsStats[SKILL_TYPE_SUN_NOVA].skillUpgradedTexture);
+		skillTextures.push_back("../data/images/" + skillsStats[SKILL_TYPE_AOE].skillUpgradedTexture);
+		skillTextures.push_back("../data/images/skill-noupgrade.jpg");
+		suns[0]->InitSunSkillUpgradeButtons(skillTextures);
 	}
 	else
 	{
@@ -938,6 +913,12 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
 			SatelliteType satType = SatelliteType(atoi(splittedCommand[2].c_str()));
 			skillsStats[skillType].forWhichSatellite = satType;
+		}
+		if(strcmp(cmd.c_str(), "skillUpgradedTexture") == 0)
+		{
+			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
+			std::string skillTexture = splittedCommand[2];
+			skillsStats[skillType].skillUpgradedTexture = skillTexture;
 		}
 		if(strcmp(cmd.c_str(), "spawnMothership") == 0)
 		{

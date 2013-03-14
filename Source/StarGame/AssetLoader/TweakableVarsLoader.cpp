@@ -432,6 +432,16 @@ TweakableVarsLoader::TweakableVarsLoader(const std::string &fileName)
 			sscanf(line.c_str(), "%i %i ", &varData.itemIndex, &varData.varInt);
 			loadedTweaks.push_back(std::pair<std::string, TweakVarData>(command, varData));
 		}
+		if(strcmp(command, "skillUpgradedTexture") == 0)
+		{
+			line.erase(line.begin(), line.begin() + strlen(command));
+			line[0] = ' ';
+
+			TweakVarData varData;
+			varData.currentType = TweakVarData::TYPE_TWEAK_STRING;
+			sscanf(line.c_str(), "%i %s ", &varData.itemIndex, &varData.varString);
+			loadedTweaks.push_back(std::pair<std::string, TweakVarData>(command, varData));
+		}
 		if(strcmp(command, "**") == 0)
 		{
 			continue;

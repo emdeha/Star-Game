@@ -120,8 +120,9 @@ CelestialBody::CelestialBody(float speed, float newOffsetFromParent, float newDi
 	//GenerateUniformBuffers(materialBlockSize, color, materialUniformBuffer);
 }
 
-void CelestialBody::InitSatelliteOrbit()
+void CelestialBody::InitSatelliteOrbit(const std::vector<std::string> &textureFileNames)
 {	
+	/*
 	std::vector<std::string> texturesFileNames;
 	switch(satType)
 	{	
@@ -141,26 +142,29 @@ void CelestialBody::InitSatelliteOrbit()
 		break;
 	}
 	texturesFileNames.push_back("../data/images/skill-noupgrade.jpg");
+	*/
 
 	hoverOrbit = SatelliteOrbit(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
 								parent->GetPosition(),
-								texturesFileNames,
+								textureFileNames,//texturesFileNames,
 								satelliteStats[satType].satelliteOffsetFromSun + diameter / 2.0f,
 								satelliteStats[satType].satelliteOffsetFromSun - diameter / 2.0f,
 								2.2f); // Change: gamma
 	hoverOrbit.Init();
 }
-void CelestialBody::InitSunSkillUpgradeButtons()
+void CelestialBody::InitSunSkillUpgradeButtons(const std::vector<std::string> &textureFileNames)
 {
+	/*
 	std::vector<std::string> skillTexturesFileNames;
 	skillTexturesFileNames.push_back("../data/images/skill-sun-passive-aoe.jpg");
 	skillTexturesFileNames.push_back("../data/images/skill-sun-burn.jpg");
 	skillTexturesFileNames.push_back("../data/images/skill-sun-nova.jpg");
 	skillTexturesFileNames.push_back("../data/images/skill-sun-aoe.jpg");
 	skillTexturesFileNames.push_back("../data/images/skill-noupgrade.jpg");
+	*/
 
 	sunSkillUpgradeBtns = SunSkillUpgradeButtons(1.0f, 1.0f, diameter / 2.0f, position, 
-												 skillTexturesFileNames);
+												 textureFileNames);//skillTexturesFileNames);
 	sunSkillUpgradeBtns.Init();
 }
 
@@ -539,7 +543,26 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 								 type, satelliteColor));
 	newSat->LoadMesh(fileName);
 	newSat->SetParent(this);
-	newSat->InitSatelliteOrbit();
+
+	std::vector<std::string> skillTextures;
+	switch(type)
+	{
+	case SATELLITE_WATER:		
+		skillTextures.push_back("../data/images/" + satSkillStats[SKILL_TYPE_SAT_FROSTNOVA].skillUpgradedTexture);
+		break;
+	case SATELLITE_FIRE:
+		skillTextures.push_back("../data/images/" + satSkillStats[SKILL_TYPE_SAT_CHAIN].skillUpgradedTexture);
+		break;
+	case SATELLITE_EARTH:
+		skillTextures.push_back("../data/images/" + satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].skillUpgradedTexture);
+		break;
+	case SATELLITE_AIR:
+		skillTextures.push_back("../data/images/" + satSkillStats[SKILL_TYPE_SAT_SHIELD].skillUpgradedTexture);
+		break;
+	}
+	skillTextures.push_back("../data/images/skill-noupgrade.jpg");
+
+	newSat->InitSatelliteOrbit(skillTextures);
 
 	if(type == satSkillStats[SKILL_TYPE_SAT_CHAIN].forWhichSatellite)
 	{

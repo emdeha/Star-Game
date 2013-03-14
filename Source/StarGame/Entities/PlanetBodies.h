@@ -86,6 +86,7 @@ struct SkillsStats
 	float range;
 	float scaleRate;
 	SatelliteType forWhichSatellite;
+	std::string skillUpgradedTexture;
 };
 
 
@@ -157,8 +158,8 @@ public:
 				  glm::vec4 newColor, bool _isSun = false);						   // isSun = false means that a 
 																				   // satellite will be created
 
-	void InitSatelliteOrbit();
-	void InitSunSkillUpgradeButtons();
+	void InitSatelliteOrbit(const std::vector<std::string> &textureFileNames);
+	void InitSunSkillUpgradeButtons(const std::vector<std::string> &textureFileNames);
 
 	void LoadMesh(const std::string &fileName);
 	

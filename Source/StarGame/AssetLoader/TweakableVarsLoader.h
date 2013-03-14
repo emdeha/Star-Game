@@ -29,6 +29,7 @@ struct TweakVarData
 	{
 		TYPE_TWEAK_FLOAT,
 		TYPE_TWEAK_INT,
+		TYPE_TWEAK_STRING,
 	};
 
 	int itemIndex; // for indexed commands. -1 for non existence
@@ -38,6 +39,7 @@ struct TweakVarData
 	{
 		float varFloat;
 		int varInt;
+		char varString[50];
 	};
 
 	TweakVarData() : itemIndex(-1) {}

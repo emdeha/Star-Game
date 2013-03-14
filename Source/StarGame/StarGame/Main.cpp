@@ -44,6 +44,9 @@ DisplayData displayData;
 Scene scene = Scene(2.2f, 8.0f, 3.0f, 0.5f, 0, 4, 20.0f);
 
 
+Label toolTip;
+
+
 long long GetCurrentTimeMillis()
 {
 	return time(0) * 1000;
@@ -63,6 +66,9 @@ void HandleMouse()
 									windowWidth, windowHeight);
 
 
+	//toolTip.SetPosition(glm::vec2(scene.GetMouse().GetCurrentPosition().x, 
+	//							    glutGet(GLUT_WINDOW_HEIGHT) - scene.GetMouse().GetCurrentPosition().y));
+
 	if(scene.GetMouse().IsRightButtonDown())
 	{		
 		if(scene.HasSuns())
@@ -77,6 +83,67 @@ void HandleMouse()
 				scene.GetSun()->RemoveGeneratedEvent("satelliteRemoved");
 			}
 		}
+	}
+
+	std::vector<std::shared_ptr<CelestialBody>> sunSatellites = scene.GetSun()->GetSatellites();
+	for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = sunSatellites.begin(); 
+		iter != sunSatellites.end(); ++iter)
+	{
+		if((*iter)->IsClicked(mouseRay))
+		{
+			int buttonIndex = 0;
+			bool isUpgrBoxClicked = (*iter)->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex);
+			if(isUpgrBoxClicked)
+			{
+				EventArg upgradeSkillHoveredEventArgs[3];
+				upgradeSkillHoveredEventArgs[0].argType = "what_event";
+				upgradeSkillHoveredEventArgs[0].argument.varType = TYPE_STRING;
+				strcpy(upgradeSkillHoveredEventArgs[0].argument.varString, "skillHov");
+				upgradeSkillHoveredEventArgs[1].argType = "index";
+				upgradeSkillHoveredEventArgs[1].argument.varType = TYPE_INTEGER;
+				upgradeSkillHoveredEventArgs[1].argument.varInteger = buttonIndex;
+				upgradeSkillHoveredEventArgs[2].argType = "satType";
+				upgradeSkillHoveredEventArgs[2].argument.varType = TYPE_INTEGER;
+				upgradeSkillHoveredEventArgs[2].argument.varInteger = (*iter)->GetSatelliteType();
+				Event upgradeSkillHoveredEvent(3, EVENT_TYPE_OTHER, upgradeSkillHoveredEventArgs);
+
+				//(*iter)->OnEvent(upgradeSkillClickedEvent);
+				scene.OnEvent(upgradeSkillHoveredEvent);
+			}
+			Event satelliteHoveredEvent = StockEvents::EventOnHover();
+
+			(*iter)->OnEvent(satelliteHoveredEvent);
+			// WARN: This would emit an unexpected error because the scene doesn't handle on hover events
+			//scene.OnEvent(satelliteHoveredEvent);
+		}
+	}
+
+	if(scene.GetSun()->IsClicked(mouseRay))
+	{
+		int buttonIndex = 0;
+		bool isUpgrBoxClicked = scene.GetSun()->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex);
+		if(isUpgrBoxClicked)
+		{
+			EventArg upgradeSkillHoveredEventArgs[3];
+			upgradeSkillHoveredEventArgs[0].argType = "what_event";
+			upgradeSkillHoveredEventArgs[0].argument.varType = TYPE_STRING;
+			strcpy(upgradeSkillHoveredEventArgs[0].argument.varString, "skillHov");
+			upgradeSkillHoveredEventArgs[1].argType = "index";
+			upgradeSkillHoveredEventArgs[1].argument.varType = TYPE_INTEGER;
+			upgradeSkillHoveredEventArgs[1].argument.varInteger = buttonIndex;
+			upgradeSkillHoveredEventArgs[2].argType = "satType";
+			upgradeSkillHoveredEventArgs[2].argument.varType = TYPE_INTEGER;
+			upgradeSkillHoveredEventArgs[2].argument.varInteger = -1;
+			Event upgradeSkillHoveredEvent(3, EVENT_TYPE_OTHER, upgradeSkillHoveredEventArgs);
+
+			//(*iter)->OnEvent(upgradeSkillClickedEvent);
+			scene.OnEvent(upgradeSkillHoveredEvent);
+		}
+		Event sunHoveredEvent = StockEvents::EventOnHover();
+
+		scene.GetSun()->OnEvent(sunHoveredEvent);
+		// WARN: This would emit an unexpected error because the scene doesn't handle on hover events
+		//scene.OnEvent(sunHoveredEvent);
 	}
 
 	if(scene.GetMouse().IsLeftButtonDown())
@@ -425,6 +492,11 @@ void InitializeScene()
 	Event inMenuEvent = Event(1, EVENT_TYPE_OTHER, inMenuEventArg);
 
 	scene.OnEvent(inMenuEvent);
+
+	toolTip = Label(SMALL, "testTooltip", "sad sad sad", glm::vec2(700, 700), 28, false);
+	toolTip.Init("../data/fonts/AGENCYR.TTF", glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	toolTip.AddPreset(MEDIUM, 48, glm::vec2(700, 700));
+	toolTip.AddPreset(BIG, 68, glm::vec2(700, 700));
 }
 
 
@@ -549,6 +621,8 @@ void Display()
 		scene.RenderScene(modelMatrix, interpolation);	
 		
 		scene.RenderCurrentLayout();	
+
+		toolTip.Draw(scene.GetShaderManager().GetFontProgData(), scene.GetShaderManager().GetSimpleProgData());
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{

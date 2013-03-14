@@ -61,6 +61,8 @@ TextControl::TextControl(LayoutPreset newCurrentPreset,
 
 	isActive = false;
 
+	isVisible = true; // TODO: Should also disable button events
+
 	controlSquare =
 		Utility::Primitives::Square(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
 									glm::vec3(newPosition, 0.0f),
@@ -93,6 +95,18 @@ void TextControl::Init(const std::string &fontName,
 	controlSquare.Init(windowWidth, windowHeight);
 	
 	ComputeNewAttributes();
+}
+
+void TextControl::SetPosition(glm::vec2 newPosition)
+{
+	presets[SMALL].position = newPosition;
+	presets[MEDIUM].position = newPosition;
+	presets[BIG].position = newPosition;
+}
+
+void TextControl::SetIsVisible(bool newIsVisible)
+{
+	isVisible = newIsVisible;
 }
 
 void TextControl::ComputeNewAttributes()
@@ -149,18 +163,21 @@ void TextControl::ComputeNewAttributes()
 
 void TextControl::Draw(const FontProgData &fontData, const SimpleProgData &simpleData)
 {
-	if(hasBackground)
+	if(isVisible)
 	{
-		glutil::MatrixStack identityMatStack;
-		identityMatStack.SetIdentity();
+		if(hasBackground)
+		{
+			glutil::MatrixStack identityMatStack;
+			identityMatStack.SetIdentity();
 
-		controlSquare.Draw(identityMatStack, simpleData);
+			controlSquare.Draw(identityMatStack, simpleData);
+		}
+
+		textToDisplay.Print(text.c_str(), fontData, 
+							presets[currentPreset].position, 
+							glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
+							presets[currentPreset].textSize);
 	}
-
-	textToDisplay.Print(text.c_str(), fontData, 
-						presets[currentPreset].position, 
-						glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
-						presets[currentPreset].textSize);
 }
 
 void TextControl::Update(int newWindowWidth, int newWindowHeight)

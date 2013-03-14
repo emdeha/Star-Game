@@ -143,6 +143,7 @@ protected:
 	int windowWidth;
 	int windowHeight;
 
+	bool isVisible;
 	
 	Utility::Primitives::Square controlSquare;
 
@@ -180,6 +181,8 @@ public:
 	virtual void InputChar(char ch) {}
 	virtual void Clear() {}
 	virtual std::string GetContent() { return ""; }
+	virtual void SetPosition(glm::vec2 newPosition);
+	virtual void SetIsVisible(bool newIsVisible);
 	virtual void ChangeText(const std::string &newText) { text = newText; }
 
 	virtual bool IsImageBox() { return false; }

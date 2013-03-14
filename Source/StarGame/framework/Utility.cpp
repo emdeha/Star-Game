@@ -177,7 +177,7 @@ bool Utility::Intersections::RayIntersectsSquare(Ray mouseRay,
 												 glm::vec3 vertThree, glm::vec3 vertFour)
 {
 	if(RayIntersectsTriangle(mouseRay, vertOne, vertTwo, vertThree) || 
-	   RayIntersectsTriangle(mouseRay, vertOne, vertTwo, vertFour))
+	   RayIntersectsTriangle(mouseRay, vertOne, vertThree, vertFour))
 	{
 		return true;
 	}

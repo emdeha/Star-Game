@@ -1486,6 +1486,11 @@ void Scene::OnEvent(Event &_event)
 				}
 			}
 		}
+
+		if(strcmp(_event.GetArgument("what_event").varString, "skillHov") == 0)
+		{
+			std::printf("skill hov");
+		}
 		
 		if(strcmp(_event.GetArgument("what_event").varString, "skillUpgr") == 0)
 		{

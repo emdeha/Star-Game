@@ -36,7 +36,7 @@ AudioLoader::AudioLoader(const std::string &fileName)
 		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 	}
 
-	while(!data.eof())
+	while(data)
 	{
 		getline(data, line);
 		char command[50];

@@ -920,6 +920,12 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 			std::string skillTexture = splittedCommand[2];
 			skillsStats[skillType].skillUpgradedTexture = skillTexture;
 		}
+		if(strcmp(cmd.c_str(), "skillToolTipText") == 0)
+		{
+			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
+			std::string skillToolTipText = splittedCommand[2];
+			skillsStats[skillType].skillToolTipText = skillToolTipText;
+		}
 		if(strcmp(cmd.c_str(), "spawnMothership") == 0)
 		{
 			SpawnMothership();
@@ -1496,36 +1502,7 @@ void Scene::OnEvent(Event &_event)
 					GetSkillTypeByUpgradeButton(_event.GetArgument("index").varInteger, 
 												_event.GetArgument("satType").varInteger);
 
-				switch(hoveredSkillType)
-				{
-				case SKILL_TYPE_AOE:
-					toolTipText = "Skill aoe";
-					break;
-				case SKILL_TYPE_BURN:
-					toolTipText = "Skill burn";
-					break;
-				case SKILL_TYPE_SUN_NOVA:
-					toolTipText = "Skill sun nova";
-					break;
-				case SKILL_TYPE_PASSIVE_AOE:
-					toolTipText = "Skill passive aoe";
-					break;
-				case SKILL_TYPE_SAT_SHIELD:
-					toolTipText = "Skill sat shield";
-					break;
-				case SKILL_TYPE_SAT_CHAIN:
-					toolTipText = "Skill sat chain";
-					break;
-				case SKILL_TYPE_SAT_FROSTNOVA:
-					toolTipText = "Skill sat frostnova";
-					break;
-				case SKILL_TYPE_SAT_PASSIVE_AOE:
-					toolTipText = "Skill sat passive aoe";
-					break;
-				default:
-					break;
-				}
-
+				toolTipText = skillsStats[hoveredSkillType].skillToolTipText;
 
 				glm::vec2 mousePosition = 
 					glm::vec2(sceneMouse.GetCurrentPosition().x, 

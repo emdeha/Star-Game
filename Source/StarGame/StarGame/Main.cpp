@@ -85,6 +85,8 @@ void HandleMouse()
 		}
 	}
 
+	bool isBodySkillHovered = false;
+
 	std::vector<std::shared_ptr<CelestialBody>> sunSatellites = scene.GetSun()->GetSatellites();
 	for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = sunSatellites.begin(); 
 		iter != sunSatellites.end(); ++iter)
@@ -109,16 +111,13 @@ void HandleMouse()
 
 				//(*iter)->OnEvent(upgradeSkillClickedEvent);
 				scene.OnEvent(upgradeSkillHoveredEvent);
+				isBodySkillHovered = true;
 			}
 			Event satelliteHoveredEvent = StockEvents::EventOnHover();
 
 			(*iter)->OnEvent(satelliteHoveredEvent);
 			// WARN: This would emit an unexpected error because the scene doesn't handle on hover events
 			//scene.OnEvent(satelliteHoveredEvent);
-		}
-		else
-		{
-			scene.GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetIsVisible(false);
 		}
 	}
 
@@ -142,6 +141,7 @@ void HandleMouse()
 
 			//(*iter)->OnEvent(upgradeSkillClickedEvent);
 			scene.OnEvent(upgradeSkillHoveredEvent);
+			isBodySkillHovered = true;
 		}
 		Event sunHoveredEvent = StockEvents::EventOnHover();
 
@@ -149,7 +149,7 @@ void HandleMouse()
 		// WARN: This would emit an unexpected error because the scene doesn't handle on hover events
 		//scene.OnEvent(sunHoveredEvent);
 	}
-	else
+	if(!isBodySkillHovered)
 	{
 		scene.GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetIsVisible(false);
 	}

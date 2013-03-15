@@ -36,7 +36,7 @@ TweakableVarsLoader::TweakableVarsLoader(const std::string &fileName)
 		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 	}
 
-	while(!data.eof())
+	while(data)
 	{
 		getline(data, line);
 		char command[50];
@@ -433,6 +433,16 @@ TweakableVarsLoader::TweakableVarsLoader(const std::string &fileName)
 			loadedTweaks.push_back(std::pair<std::string, TweakVarData>(command, varData));
 		}
 		if(strcmp(command, "skillUpgradedTexture") == 0)
+		{
+			line.erase(line.begin(), line.begin() + strlen(command));
+			line[0] = ' ';
+
+			TweakVarData varData;
+			varData.currentType = TweakVarData::TYPE_TWEAK_STRING;
+			sscanf(line.c_str(), "%i %s ", &varData.itemIndex, &varData.varString);
+			loadedTweaks.push_back(std::pair<std::string, TweakVarData>(command, varData));
+		}
+		if(strcmp(command, "skillToolTipText") == 0)
 		{
 			line.erase(line.begin(), line.begin() + strlen(command));
 			line[0] = ' ';

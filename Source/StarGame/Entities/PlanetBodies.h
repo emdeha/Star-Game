@@ -87,6 +87,7 @@ struct SkillsStats
 	float scaleRate;
 	SatelliteType forWhichSatellite;
 	std::string skillUpgradedTexture;
+	std::string skillToolTipText;
 };
 
 

@@ -77,7 +77,7 @@ GUILoader::GUILoader(const std::string &fileName,
 	char fontFile[30];
 	char textureFile[4][30];
 
-	while(!data.eof())
+	while(data)
 	{
 		getline(data, line);
 		char tag[30];

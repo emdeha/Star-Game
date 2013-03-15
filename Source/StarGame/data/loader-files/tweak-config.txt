@@ -108,4 +108,12 @@ skillUpgradedTexture 4 skill-sat-passive-aoe.jpg
 skillUpgradedTexture 5 skill-sat-nova.jpg
 skillUpgradedTexture 6 skill-sat-freeze.jpg
 skillUpgradedTexture 7 skill-sat-shield.jpg
+skillToolTipText 0 sun_passive_aoe
+skillToolTipText 1 sun_aoe
+skillToolTipText 2 sun_nova
+skillToolTipText 3 sun_burn
+skillToolTipText 4 sat_passive_aoe
+skillToolTipText 5 sat_nova
+skillToolTipText 6 sat_freeze
+skillToolTipText 7 sat_shield
 endfile

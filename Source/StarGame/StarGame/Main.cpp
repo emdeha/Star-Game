@@ -116,6 +116,10 @@ void HandleMouse()
 			// WARN: This would emit an unexpected error because the scene doesn't handle on hover events
 			//scene.OnEvent(satelliteHoveredEvent);
 		}
+		else
+		{
+			scene.GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetIsVisible(false);
+		}
 	}
 
 	if(scene.GetSun()->IsClicked(mouseRay))
@@ -144,6 +148,10 @@ void HandleMouse()
 		scene.GetSun()->OnEvent(sunHoveredEvent);
 		// WARN: This would emit an unexpected error because the scene doesn't handle on hover events
 		//scene.OnEvent(sunHoveredEvent);
+	}
+	else
+	{
+		scene.GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetIsVisible(false);
 	}
 
 	if(scene.GetMouse().IsLeftButtonDown())
@@ -422,10 +430,14 @@ void InitializeGUI()
 						glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	scene.AddLayouts(guiLoader.GetAllLoadedLayouts());
-	
+
+	scene.GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetIsVisible(false);
+	/*
 	glm::vec4 mousePos_worldSpace = 
 		scene.GetMouse().GetWorldSpacePosition(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
 											   displayData.projectionMatrix, displayData.modelMatrix);
+
+*/
 }
 
 void InitializeScene()
@@ -492,11 +504,11 @@ void InitializeScene()
 	Event inMenuEvent = Event(1, EVENT_TYPE_OTHER, inMenuEventArg);
 
 	scene.OnEvent(inMenuEvent);
-
+	/*
 	toolTip = Label(SMALL, "testTooltip", "sad sad sad", glm::vec2(700, 700), 28, false);
 	toolTip.Init("../data/fonts/AGENCYR.TTF", glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 	toolTip.AddPreset(MEDIUM, 48, glm::vec2(700, 700));
-	toolTip.AddPreset(BIG, 68, glm::vec2(700, 700));
+	toolTip.AddPreset(BIG, 68, glm::vec2(700, 700));*/
 }
 
 
@@ -622,7 +634,7 @@ void Display()
 		
 		scene.RenderCurrentLayout();	
 
-		toolTip.Draw(scene.GetShaderManager().GetFontProgData(), scene.GetShaderManager().GetSimpleProgData());
+		//toolTip.Draw(scene.GetShaderManager().GetFontProgData(), scene.GetShaderManager().GetSimpleProgData());
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{

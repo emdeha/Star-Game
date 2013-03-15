@@ -194,6 +194,7 @@ public:
 
 	SunLight GetSunLight();
 	SkillType GetSkillTypeByFusionCombination(char fusionA, char fusionB, char fusionC);
+	SkillType GetSkillTypeByUpgradeButton(int buttonIndex, int bodyType);
 	std::string GetCurrentFusionInputSequence();
 
 	bool HasSuns();

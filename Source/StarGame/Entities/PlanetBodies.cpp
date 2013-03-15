@@ -122,28 +122,6 @@ CelestialBody::CelestialBody(float speed, float newOffsetFromParent, float newDi
 
 void CelestialBody::InitSatelliteOrbit(const std::vector<std::string> &textureFileNames)
 {	
-	/*
-	std::vector<std::string> texturesFileNames;
-	switch(satType)
-	{	
-	case SATELLITE_WATER:		
-		texturesFileNames.push_back("../data/images/skill-sat-freeze.jpg");
-		break;
-	case SATELLITE_EARTH:
-		texturesFileNames.push_back("../data/images/skill-sat-passive-aoe.jpg");
-		break;
-	case SATELLITE_FIRE:
-		texturesFileNames.push_back("../data/images/skill-sat-nova.jpg");
-		break;
-	case SATELLITE_AIR:
-		texturesFileNames.push_back("../data/images/skill-sat-shield.jpg");
-		break;
-	default:
-		break;
-	}
-	texturesFileNames.push_back("../data/images/skill-noupgrade.jpg");
-	*/
-
 	hoverOrbit = SatelliteOrbit(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
 								parent->GetPosition(),
 								textureFileNames,//texturesFileNames,
@@ -154,15 +132,6 @@ void CelestialBody::InitSatelliteOrbit(const std::vector<std::string> &textureFi
 }
 void CelestialBody::InitSunSkillUpgradeButtons(const std::vector<std::string> &textureFileNames)
 {
-	/*
-	std::vector<std::string> skillTexturesFileNames;
-	skillTexturesFileNames.push_back("../data/images/skill-sun-passive-aoe.jpg");
-	skillTexturesFileNames.push_back("../data/images/skill-sun-burn.jpg");
-	skillTexturesFileNames.push_back("../data/images/skill-sun-nova.jpg");
-	skillTexturesFileNames.push_back("../data/images/skill-sun-aoe.jpg");
-	skillTexturesFileNames.push_back("../data/images/skill-noupgrade.jpg");
-	*/
-
 	sunSkillUpgradeBtns = SunSkillUpgradeButtons(1.0f, 1.0f, diameter / 2.0f, position, 
 												 textureFileNames);//skillTexturesFileNames);
 	sunSkillUpgradeBtns.Init();

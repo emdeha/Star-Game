@@ -3,6 +3,7 @@ fusiontextures fusion-empty.jpg fusion-catalyst.jpg fusion-ectoplasm.jpg fusion-
 skillData 8 sun.jpg passiveAoE fusion-catalyst.jpg AoE fusion-matter.jpg sunNova fusion-ectoplasm.jpg burn fusion-e.jpg satPassiveAoE fusion-w.jpg satChain fusion-q.jpg satFrostNova mesh.jpg satShield
 layout 1 0.0 0.0 0.0 1.0 0
 label labelMatter Matter: 0 1 10 738 28 10 738 48 10 738 68
+label labelToolTip sad 0 1 0 0 28 0 0 48 0 0 68
 imagebox fusionOne 1 615.0 738 615.0 738 615.0 738 50.0 50.0 3
 imagebox fusionTwo 1 670.0 738 670.0 738 670.0 738 50.0 50.0 2
 imagebox fusionThree 1 725.0 738 725.0 738 725.0 738 50.0 50.0 1

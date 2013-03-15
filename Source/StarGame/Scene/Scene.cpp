@@ -1489,7 +1489,53 @@ void Scene::OnEvent(Event &_event)
 
 		if(strcmp(_event.GetArgument("what_event").varString, "skillHov") == 0)
 		{
-			std::printf("skill hov");
+			if(IsLayoutOn(LAYOUT_IN_GAME))
+			{
+				std::string toolTipText = "";
+				SkillType hoveredSkillType = 
+					GetSkillTypeByUpgradeButton(_event.GetArgument("index").varInteger, 
+												_event.GetArgument("satType").varInteger);
+
+				switch(hoveredSkillType)
+				{
+				case SKILL_TYPE_AOE:
+					toolTipText = "Skill aoe";
+					break;
+				case SKILL_TYPE_BURN:
+					toolTipText = "Skill burn";
+					break;
+				case SKILL_TYPE_SUN_NOVA:
+					toolTipText = "Skill sun nova";
+					break;
+				case SKILL_TYPE_PASSIVE_AOE:
+					toolTipText = "Skill passive aoe";
+					break;
+				case SKILL_TYPE_SAT_SHIELD:
+					toolTipText = "Skill sat shield";
+					break;
+				case SKILL_TYPE_SAT_CHAIN:
+					toolTipText = "Skill sat chain";
+					break;
+				case SKILL_TYPE_SAT_FROSTNOVA:
+					toolTipText = "Skill sat frostnova";
+					break;
+				case SKILL_TYPE_SAT_PASSIVE_AOE:
+					toolTipText = "Skill sat passive aoe";
+					break;
+				default:
+					break;
+				}
+
+
+				glm::vec2 mousePosition = 
+					glm::vec2(sceneMouse.GetCurrentPosition().x, 
+							  currentDisplayData.windowHeight - sceneMouse.GetCurrentPosition().y);
+
+				GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetPosition(mousePosition);
+				GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->ChangeText(toolTipText);
+				GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetIsVisible(true);
+			}
+			//std::printf("skill hov");
 		}
 		
 		if(strcmp(_event.GetArgument("what_event").varString, "skillUpgr") == 0)
@@ -1812,6 +1858,59 @@ SkillType Scene::GetSkillTypeByFusionCombination(char fusionA, char fusionB, cha
 	if(skillName == "burnSkill")
 	{
 		return SkillType::SKILL_TYPE_BURN;
+	}
+
+	return SkillType(-1);
+}
+
+SkillType Scene::GetSkillTypeByUpgradeButton(int buttonIndex, int bodyType)
+{
+	switch(bodyType)
+	{
+	case -1:
+		if(buttonIndex == 0)
+		{
+			return SkillType::SKILL_TYPE_PASSIVE_AOE;
+		}
+		if(buttonIndex == 1)
+		{
+			return SkillType::SKILL_TYPE_BURN;
+		}
+		if(buttonIndex == 2)
+		{
+			return SkillType::SKILL_TYPE_SUN_NOVA;
+		}
+		if(buttonIndex == 3)
+		{
+			return SkillType::SKILL_TYPE_AOE;
+		}
+		break;
+	case SATELLITE_AIR:
+		if(buttonIndex == 0)
+		{
+			return SkillType::SKILL_TYPE_SAT_PASSIVE_AOE;
+		}
+		break;
+	case SATELLITE_EARTH:
+		if(buttonIndex == 0)
+		{
+			return SkillType::SKILL_TYPE_SAT_SHIELD;
+		}
+		break;
+	case SATELLITE_FIRE:
+		if(buttonIndex == 0)
+		{
+			return SkillType::SKILL_TYPE_SAT_CHAIN;
+		}
+		break;
+	case SATELLITE_WATER:
+		if(buttonIndex == 0)
+		{
+			return SkillType::SKILL_TYPE_SAT_FROSTNOVA;
+		}
+		break;
+	default:
+		break;
 	}
 
 	return SkillType(-1);

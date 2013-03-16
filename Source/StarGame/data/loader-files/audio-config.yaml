@@ -1,0 +1,42 @@
+channel-master: 
+    index: 0
+    volume: 0.5
+    music:
+        music-ingame:
+            sound-type: 0
+            sound-file: ingame.mp3
+        music-menu:
+            sound-type: 1
+            sound-file: menu.mp3
+channel-interaction:
+    index: 1
+    volume: 1.0
+    music:
+        music-on-sun-click:
+            sound-type: 2
+            sound-file: Click.wav
+channel-game:
+    index: 2
+    volume: 1.0
+    music:
+        music-explosion1:
+            sound-type: 3
+            sound-file: explosion1.wav
+        music-explosion2:
+            sound-type: 9
+            sound-file: explosion2.wav
+        music-explosion3:
+            sound-type: 10
+            sound-file: explosion3.wav
+        music-fusion:
+            sound-type: 4
+            sound-file: Fusion.wav
+        music-sun-nova:
+            sound-type: 5
+            sound-file: sun_nova.wav
+        music-game-over:
+            sound-type: 6
+            sound-file: sun_death.wav
+        music-aoe:
+            sound-type: 7
+            sound-file: aoe.wav

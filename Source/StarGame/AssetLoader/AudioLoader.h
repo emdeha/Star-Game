@@ -22,6 +22,7 @@
 #include <vector>
 #include <string>
 #include "../StarGame/AudioEnums.h"
+#include "yaml-cpp\yaml.h"
 
 
 struct AudioFile

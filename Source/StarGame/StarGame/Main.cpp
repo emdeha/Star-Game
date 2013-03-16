@@ -495,7 +495,7 @@ void InitializeScene()
 
 	InitializeGUI();
 	scene.InitTweakableVariables(true, "../data/loader-files/tweak-config.txt");
-	scene.LoadAudio("../data/loader-files/audio-config.txt");
+	scene.LoadAudio("../data/loader-files/audio-config.yaml");
 
 	EventArg inMenuEventArg[1];
 	inMenuEventArg[0].argType = "command";

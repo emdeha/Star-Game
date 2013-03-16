@@ -24,64 +24,33 @@
 
 AudioLoader::AudioLoader(const std::string &fileName)
 {
-	std::string line;
-	std::ifstream data(fileName);
+	YAML::Node audio = YAML::LoadFile(fileName);
 
-	loadedAudio.clear();
+	AudioData audioData;
+	//audioData.channel = ChannelType(audio["channel-master"]["index"].as<int>());
+	//audioData.channelVolume = audio["channel-master"]["volume"].as<float>();
+	
+	for(YAML::Node::const_iterator channel = audio.begin();
+		channel != audio.end(); ++channel)
+	{	
+		audioData.channel = ChannelType((*channel).second["index"].as<int>());
+		audioData.channelVolume = (*channel).second["volume"].as<float>();
 
-	if(!data.is_open())
-	{
-		std::string errorMessage = "cannot open audio config file ";
-		errorMessage += fileName;
-		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
-	}
+		loadedAudio.push_back(std::pair<ChannelType, AudioData>(audioData.channel, audioData));
+		
+		AudioFile audioFile;
 
-	while(data)
-	{
-		getline(data, line);
-		char command[50];
-		sscanf(line.c_str(), "%s ", &command);
+		std::printf("channel: %i, %f: \n", audioData.channel, audioData.channelVolume);
 
-		if(strcmp(command, "channel") == 0)
+		for(YAML::Node::const_iterator music = (*channel).second["music"].begin();
+			music != (*channel).second["music"].end(); ++music)
 		{
-			line.erase(line.begin(), line.begin() + strlen(command));
-			line[0] = ' ';
-
-			AudioData audioData;
-			sscanf(line.c_str(), "%i %f ", &audioData.channel, &audioData.channelVolume);
-			loadedAudio.push_back(std::pair<ChannelType, AudioData>(audioData.channel, audioData));
-		}
-		if(strcmp(command, "audio") == 0)
-		{
-			line.erase(line.begin(), line.begin() + strlen(command));
-			line[0] = ' ';
-
-			AudioFile audioFile;
-			char path[50];
-			int chType;
-			sscanf(line.c_str(), "%i %i %s ", &chType, &audioFile.soundType, &path);
-			audioFile.path = path;
-			for(std::vector<std::pair<ChannelType, AudioData>>::iterator iter = loadedAudio.begin();
-				iter != loadedAudio.end(); ++iter)
-			{
-				if(iter->first == chType)
-				{
-					iter->second.audioFiles.push_back(audioFile);
-					break;
-				}
-			}
-		}
-		if(strcmp(command, "**") == 0)
-		{
-			continue;
-		}
-		if(strcmp(command, "endfile") == 0)
-		{
-			data.close();
-			return;
+			audioFile.soundType = SoundType((*music).second["sound-type"].as<int>());
+			audioFile.path = (*music).second["sound-file"].as<std::string>();
+			loadedAudio[audioData.channel].second.audioFiles.push_back(audioFile);
+			std::printf("	audio: %i %s \n", audioFile.soundType, audioFile.path.c_str());
 		}
 	}
-	data.close();
 }
 
 const std::vector<std::pair<ChannelType, AudioData>> AudioLoader::GetAllLoadedAudios()

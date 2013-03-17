@@ -24,6 +24,10 @@
 
 AudioLoader::AudioLoader(const std::string &fileName)
 {
+	//////////////////////////////////
+	/// WARN: Changed! Check it!!! ///
+	//////////////////////////////////
+
 	YAML::Node audio = YAML::LoadFile(fileName);
 
 	AudioData audioData;
@@ -31,29 +35,29 @@ AudioLoader::AudioLoader(const std::string &fileName)
 	for(YAML::Node::const_iterator channel = audio.begin();
 		channel != audio.end(); ++channel)
 	{	
-		if((*channel).first.as<std::string>() == "channel-master")
+		if(channel->first.as<std::string>() == "channel-master")
 		{
 			audioData.channel = CHANNEL_MASTER;
 		}
-		else if((*channel).first.as<std::string>() == "channel-interaction")
+		else if(channel->first.as<std::string>() == "channel-interaction")
 		{
 			audioData.channel = CHANNEL_INTERACTION;
 		}
-		else if((*channel).first.as<std::string>() == "channel-game")
+		else if(channel->first.as<std::string>() == "channel-game")
 		{
 			audioData.channel = CHANNEL_GAME;
 		}
-		audioData.channelVolume = (*channel).second["volume"].as<float>();
+		audioData.channelVolume = channel->second["volume"].as<float>();
 
 		loadedAudio.push_back(std::pair<ChannelType, AudioData>(audioData.channel, audioData));
 		
 		AudioFile audioFile;
 
-		for(YAML::Node::const_iterator music = (*channel).second["music"].begin();
-			music != (*channel).second["music"].end(); ++music)
+		for(YAML::Node::const_iterator music = channel->second["music"].begin();
+			music != channel->second["music"].end(); ++music)
 		{
-			audioFile.soundType = SoundType((*music).second["sound-type"].as<int>());
-			audioFile.path = (*music).second["sound-file"].as<std::string>();
+			audioFile.soundType = SoundType(music->second["sound-type"].as<int>());
+			audioFile.path = music->second["sound-file"].as<std::string>();
 			loadedAudio[audioData.channel].second.audioFiles.push_back(audioFile);
 		}
 	}

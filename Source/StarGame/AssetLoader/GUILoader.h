@@ -24,6 +24,7 @@
 #include <string>
 
 #include "../GUISystem/GUISystem.h"
+#include "yaml-cpp/yaml.h"
 
 
 class GUILoader

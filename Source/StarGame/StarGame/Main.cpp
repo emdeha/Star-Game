@@ -419,18 +419,12 @@ FusionHint hintBox;
 
 void InitializeGUI()
 {
-	GUILoader guiLoader("../data/loader-files/gui-config.txt", 
+	GUILoader guiLoader("../data/loader-files/gui-config.yaml", 
 						glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	scene.AddLayouts(guiLoader.GetAllLoadedLayouts());
 
 	scene.GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetIsVisible(false);
-	/*
-	glm::vec4 mousePos_worldSpace = 
-		scene.GetMouse().GetWorldSpacePosition(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
-											   displayData.projectionMatrix, displayData.modelMatrix);
-
-*/
 }
 
 void InitializeScene()
@@ -486,9 +480,9 @@ void InitializeScene()
 	glUniform1i(scene.GetShaderManager().GetLitTextureProgData().textureUnif, 0);
 	glUseProgram(0);
 
-	InitializeGUI();
 	scene.InitTweakableVariables(true, "../data/loader-files/tweak-config.txt");
 	scene.LoadAudio("../data/loader-files/audio-config.yaml");
+	InitializeGUI();
 
 	EventArg inMenuEventArg[1];
 	inMenuEventArg[0].argType = "command";

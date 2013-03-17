@@ -1,0 +1,184 @@
+layout-game:
+    background-color: [ 0.0, 0.0, 0.0, 1.0 ]
+    is-active: false
+    controls:
+        control-label-matter:
+            control-type: label
+            name: labelMatter
+            text: "Matter:"
+            has-background: false
+            presets:
+                preset-small:
+                    position: [ 10, 738 ]
+                    text-size: 28
+                preset-medium:
+                    position: [ 10, 738 ]
+                    text-size: 48
+                preset-big:
+                    position: [ 10, 738 ]
+                    text-size: 68
+        control-label-tooltip:
+            control-type: label
+            name: labelToolTip
+            text: ""
+            has-background: false
+            presets:
+                preset-small:
+                    position: [ 0, 0 ]
+                    text-size: 28
+                preset-medium:
+                    position: [ 0, 0 ]
+                    text-size: 48
+                preset-big:
+                    position: [ 0, 0 ]
+                    text-size: 68
+        control-imagebox-fusone:
+            control-type: imageBox
+            name: fusionOne
+            presets:
+                preset-small:
+                    position: [ 615, 738 ]
+                preset-medium:
+                    position: [ 615, 738 ]
+                preset-big:
+                    position: [ 615, 738 ]
+            width: 50
+            height: 50
+            index: 3
+            textures: [ "fusion-empty.jpg", "fusion-catalyst.jpg", "fusion-ectoplasm.jpg", "fusion-matter.jpg" ]
+        control-imagebox-fustwo:
+            control-type: imageBox
+            name: fusionTwo
+            presets:
+                preset-small:
+                    position: [ 670, 738 ]
+                preset-medium:
+                    position: [ 670, 738 ]
+                preset-big:
+                    position: [ 670, 738 ]
+            width: 50
+            height: 50
+            index: 2       
+            textures: [ "fusion-empty.jpg", "fusion-catalyst.jpg", "fusion-ectoplasm.jpg", "fusion-matter.jpg" ]
+        control-imagebox-fusthree:
+            control-type: imageBox
+            name: fusionThree
+            presets:
+                preset-small:
+                    position: [ 725, 738 ]
+                preset-medium:
+                    position: [ 725, 738 ]
+                preset-big:
+                    position: [ 725, 738 ]
+            width: 50
+            height: 50
+            index: 1
+            textures: [ "fusion-empty.jpg", "fusion-catalyst.jpg", "fusion-ectoplasm.jpg", "fusion-matter.jpg" ]
+        control-hintbox:
+            control-type: hintBox
+            name: skillHint
+            presets:
+                preset-small:
+                    position: [ 670, 683 ]
+                    text-size: 28
+                preset-medium:
+                    position: [ 670, 683 ]
+                    text-size: 48
+                preset-big:
+                    position: [ 670, 683 ]
+                    text-size: 68
+            width: 50
+            height: 50
+            textures: [ 
+                        "sun.jpg", "fusion-catalyst.jpg", 
+                        "fusion-matter.jpg", "fusion-ectoplasm.jpg", 
+                        "fusion-e.jpg", "fusion-w.jpg", 
+                        "fusion-q.jpg", "mesh.jpg" ]
+            descriptions: [ 
+                            "passive aoe", "aoe",
+                            "sun nova", "burn", 
+                            "sat passive aoe", "sat chain",
+                            "sat frost nova", "sat shield" ]
+        control-textbox-varinput:
+            control-type: textBox
+            name: varInput
+            width: 200
+            char-width: 15
+            has-background: true
+            presets:
+                preset-small:
+                    position: [ 1020, 728 ]
+                    text-size: 28
+                preset-medium:
+                    position: [ 1020, 728 ]
+                    text-size: 48
+                preset-big:
+                    position: [ 1020, 728 ]
+                    text-size: 68
+        control-button-apply:
+            control-type: button
+            name: applyInput
+            text: Apply
+            has-background: false
+            presets:
+                preset-small:
+                    position: [ 1230, 728 ]
+                    text-size: 28
+                preset-medium:
+                    position: [ 1230, 728 ]
+                    text-size: 48
+                preset-big:
+                    position: [ 1230, 728 ]
+                    text-size: 68
+layout-menu:
+    background-color: [ 0.0, 0.5, 0.6, 1.0 ]
+    is-active: true
+    controls:
+        control-button-new:
+            control-type: button
+            name: newGame
+            text: New Game
+            has-background: false
+            presets:
+                preset-small:
+                    position: [ 10, 100 ]
+                    text-size: 28
+                preset-medium:
+                    position: [ 10, 100 ]
+                    text-size: 48
+                preset-big:
+                    position: [ 10, 100 ]
+                    text-size: 68
+        control-button-save:
+            control-type: button
+            name: saveGame
+            text: Save Game
+            has-background: false
+            presets:
+                preset-small:
+                    position: [ 10, 70 ]
+                    text-size: 28
+                preset-medium:
+                    position: [ 10, 70 ]
+                    text-size: 48
+                preset-big:
+                    position: [ 10, 70 ]
+                    text-size: 68
+        control-button-quit:
+            control-type: button
+            name: quitGame 
+            text: Quit Game
+            has-background: false
+            presets:
+                preset-small:
+                    position: [ 10, 40 ]
+                    text-size: 28   
+                preset-medium:
+                    position: [ 10, 40 ]
+                    text-size: 48
+                preset-big:
+                    position: [ 10, 40 ]
+                    text-size: 68
+layout-save-game:
+    background-color: [ 0.0, 0.5, 0.6, 1.0 ]
+    is-active: false

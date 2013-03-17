@@ -1,5 +1,4 @@
 channel-master: 
-    index: 0
     volume: 0.5
     music:
         music-ingame:
@@ -9,14 +8,12 @@ channel-master:
             sound-type: 1
             sound-file: menu.mp3
 channel-interaction:
-    index: 1
     volume: 1.0
     music:
         music-on-sun-click:
             sound-type: 2
             sound-file: Click.wav
 channel-game:
-    index: 2
     volume: 1.0
     music:
         music-explosion1:

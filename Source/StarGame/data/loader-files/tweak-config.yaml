@@ -1,0 +1,151 @@
+# sat-'type': value - for each satellite
+# enemy-'type': value - for each enemy
+currentEnemyCount: 0
+maxEnemyCount: 4
+initialSpawnTime: 8.0
+endSpawnTime: 3.0
+timeDecrement: 0.5
+enemyDestructionRadius: 20.0
+resourceCount: 200
+resourceGainTime:
+    sat-all: 3.0
+resourceGainPerTime:
+    sat-all: 5
+satConstructionCost: 100
+satHealth:
+    sat-all: 5
+health: 50
+enemyDamage:
+    enemy-swarm: 5
+    enemy-spaceship: 1
+    enemy-mothership: 1
+    enemy-fast-suicide-bomber: 50
+    enemy-asteroid: 20
+enemyChargeSpeed: 0.2
+enemySpawnInnerRad:
+    enemy-swarm: 4.0
+    enemy-spaceship: 2.0
+    enemy-mothership: 6.0
+    enemy-fast-suicide-bomber: 2.0
+    enemy-asteroid: 6.0
+enemySpawnOuterRad:
+    enemy-swarm: 4.0
+    enemy-spaceship: 4.0
+    enemy-mothership: 8.0
+    enemy-fast-suicide-bomber: 4.0
+    enemy-asteroid: 8.0
+enemySpeed:
+    enemy-swarm: 0.02
+    enemy-spaceship: 0.05
+    enemy-mothership: 0.03
+    enemy-fast-suicide-bomber: 0.02
+    enemy-asteroid: 0.03
+enemyLOS:
+    enemy-swarm: 3.0
+    enemy-spaceship: 2.0
+    enemy-mothership: 5.0 
+    enemy-fast-suicide-bomber: 2.0
+    enemy-asteroid: 0.0
+enemyHealth:
+    enemy-swarm: 50
+    enemy-spaceship: 50
+    enemy-mothership: 300 
+    enemy-fast-suicide-bomber: 50
+    enemy-asteroid: 50
+enemyResource:
+    enemy-swarm: 10
+    enemy-spaceship: 10
+    enemy-mothership: 100 
+    enemy-fast-suicide-bomber: 10
+    enemy-asteroid: 10
+swarmersCount: 100
+swarmersAttackTime: 1
+enemyProjectileSpeed: 0.3
+deployUnitsCount: 4
+deployUnitsLife: 50
+deployUnitsResourceGivenOnKill: 10
+deployUnitsSpeed: 0.05
+deployUnitsLOS: 2.0
+deployUnitsProjSpeed: 0.3
+skillDamage:
+    skill-passive-aoe: 20
+    skill-aoe: 20
+    skill-sun-nova: 40
+    skill-burn: 30
+    skill-sat-passive-aoe: 20
+    skill-sat-chain: 20
+    skill-frost-nova: 5
+skillRange:
+    skill-passive-aoe: 2.0
+    skill-aoe: 2.0
+    skill-sun-nova: 6.0
+    skill-burn: 2.0
+    skill-sat-passive-aoe: 1.0
+    skill-sat-chain: 2.0
+    skill-frost-nova: 2.0
+    skill-sat-shield: 0.5
+skillApplyCost:
+    skill-passive-aoe: 10
+    skill-aoe: 10
+    skill-sun-nova: 50
+    skill-burn: 20
+    skill-sat-passive-aoe: 10
+    skill-sat-chain: 20
+    skill-frost-nova: 10
+skillScaleRate:
+    skill-sun-nova: 0.05
+    skill-sat-chain: 0.08
+    skill-frost-nova: 0.1
+skillDamageApplyTime:
+    skill-passive-aoe: 1.0
+    skill-burn: 1.0
+    skill-sat-passive-aoe: 1.0
+skillDuration: 
+    skill-passive-aoe: 4.0
+    skill-burn: 3.0
+    skill-sat-passive-aoe: 2.0
+skillDefensePoints:
+    skill-sat-shield: 3
+skillStunTime:
+    skill-frost-nova: 3.0
+skillUpgradeBoxIndex:
+    skill-passive-aoe: 0
+    skill-aoe: 3
+    skill-sun-nova: 2
+    skill-burn: 1
+    skill-sat-passive-aoe: 0
+    skill-sat-chain: 0
+    skill-frost-nova: 0
+    skill-sat-shield: 0
+skillForWhichSatellite:
+    skill-sat-passive-aoe: 3
+    skill-sat-chain: 0
+    skill-frost-nova: 1
+    skill-sat-shield: 2
+skillUpgradedTexture:
+    skill-passive-aoe: skill-sun-passive-aoe.jpg
+    skill-aoe: skill-sun-aoe.jpg
+    skill-sun-nova: skill-sun-nova.jpg
+    skill-burn: skill-sun-burn.jpg
+    skill-sat-passive-aoe: skill-sat-passive-aoe.jpg
+    skill-sat-chain: skill-sat-nova.jpg
+    skill-frost-nova: skill-sat-freeze.jpg
+    skill-sat-shield: skill-sat-shield.jpg
+skillToolTipText:
+    skill-passive-aoe: Sun Passive Aoe 
+    skill-aoe: Sun Aoe
+    skill-sun-nova: Sun Nova 
+    skill-burn: Sun Burn
+    skill-sat-passive-aoe: Sat Passive Aoe
+    skill-sat-chain: Sat Nova
+    skill-frost-nova: Sat Freeze
+    skill-sat-shield: Sat Shield
+skill-research-cost:
+    skill-passive-aoe: 0 
+    skill-aoe: 0
+    skill-sun-nova: 0
+    skill-burn: 0
+    skill-sat-passive-aoe: 0
+    skill-sat-chain: 0
+    skill-frost-nova: 0
+    skill-sat-shield: 0

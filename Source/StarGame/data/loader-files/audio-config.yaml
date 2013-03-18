@@ -34,6 +34,9 @@ channel-game:
         music-game-over:
             sound-type: 6
             sound-file: sun_death.wav
-        music-aoe:
+        music-frost-nova:
             sound-type: 7
+            sound-file: frost_nova.wav
+        music-aoe:
+            sound-type: 8
             sound-file: aoe.wav

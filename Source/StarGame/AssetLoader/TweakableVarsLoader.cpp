@@ -22,8 +22,100 @@
 #include <fstream>
 
 
+// TODO: It has room for further generalization
+
+
+void TweakableVarsLoader::PushInt(std::string command, int value, int enumIndex)
+{
+	TweakVarData tweakData;
+	tweakData.currentType = TweakVarData::TYPE_TWEAK_INT;
+	tweakData.varInt = value;
+	if(enumIndex != -999)
+	{
+		tweakData.itemIndex = enumIndex;
+	}
+	loadedTweaks.push_back(std::pair<std::string, TweakVarData>(command, tweakData));
+}
+
+void TweakableVarsLoader::PushFloat(std::string command, float value, int enumIndex)
+{
+	TweakVarData tweakData;
+	tweakData.currentType = TweakVarData::TYPE_TWEAK_FLOAT;
+	tweakData.varFloat = value;
+	if(enumIndex != -999)
+	{
+		tweakData.itemIndex = enumIndex;
+	}
+	loadedTweaks.push_back(std::pair<std::string, TweakVarData>(command, tweakData));
+}
+
 TweakableVarsLoader::TweakableVarsLoader(const std::string &fileName)
 {
+	YAML::Node tweaks = YAML::LoadFile(fileName);
+	
+	for(YAML::Node::const_iterator tweak = tweaks.begin();
+		tweak != tweaks.end(); ++tweak)
+	{
+		TweakVarData tweakData;
+		std::string command = tweak->first.as<std::string>();
+		if(command == "currentEnemyCount")
+		{
+			PushInt(command, tweak->second.as<int>());
+		}
+		else if(command == "maxEnemyCount")
+		{
+			PushInt(command, tweak->second.as<int>());
+		}
+		else if(command == "initialSpawnTime")
+		{
+			PushFloat(command, tweak->second.as<float>());
+		}
+		else if(command == "endSpawnTime")
+		{
+			PushFloat(command, tweak->second.as<float>());
+		}
+		else if(command == "timDecrement")
+		{
+			PushFloat(command, tweak->second.as<float>());
+		}
+		else if(command == "enemyDestructionRadius")
+		{
+			PushFloat(command, tweak->second.as<float>());
+		}
+		else if(command == "resourceCount")
+		{
+			PushInt(command, tweak->second.as<int>());
+		}
+		else if(command == "resourceGainPerTime")
+		{
+			for(YAML::Node::const_iterator satType = tweak->begin();
+				satType != tweak->end(); ++satType)
+			{
+				if(satType->second["sat-all"]) 
+				{
+					PushInt(command, satType->second["sat-all"].as<int>(), 4);
+				}
+				else if(satType->second["sat-fire"]) 
+				{
+					PushInt(command, satType->second["sat-fire"].as<int>(), 0);
+				}
+				else if(satType->second["sat-water"])
+				{
+					PushInt(command, satType->second["sat-water"].as<int>(), 1);
+				}
+				else if(satType->second["sat-air"])
+				{
+					PushInt(command, satType->second["sat-air"].as<int>(), 2);
+				}
+				else if(satType->second["sat-earth"])
+				{
+					PushInt(command, satType->second["sat-earth"].as<int>(), 3);
+				}
+			}
+		}
+	}
+
+	/*
 	std::string line;
 	std::ifstream data(fileName);
 
@@ -463,6 +555,7 @@ TweakableVarsLoader::TweakableVarsLoader(const std::string &fileName)
 		}
 	}
 	data.close();
+	*/
 }
 
 const std::vector<std::pair<std::string, TweakVarData>> TweakableVarsLoader::GetAllLoadedVars()

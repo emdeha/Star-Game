@@ -16,7 +16,7 @@ layout-game:
                     text-size: 48
                 preset-big:
                     position: [ 10, 738 ]
-                    text-size: 68
+                    text-size: 28 # must be 68, but buggy 
         control-label-tooltip:
             control-type: label
             name: labelToolTip
@@ -31,7 +31,7 @@ layout-game:
                     text-size: 48
                 preset-big:
                     position: [ 0, 0 ]
-                    text-size: 68
+                    text-size: 28 # must be 68, but buggy
         control-imagebox-fusone:
             control-type: imageBox
             name: fusionOne

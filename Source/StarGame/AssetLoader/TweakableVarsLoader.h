@@ -22,6 +22,8 @@
 #include <vector>
 #include <string>
 
+#include "yaml-cpp\yaml.h"
+
 
 struct TweakVarData
 {
@@ -49,6 +51,9 @@ class TweakableVarsLoader
 {
 private:
 	std::vector<std::pair<std::string, TweakVarData>> loadedTweaks;
+
+	void PushInt(std::string command, int value, int enumIndex = -999);
+	void PushFloat(std::string command, float value, int enumIndex = -999);
 
 public:
 	TweakableVarsLoader() {}

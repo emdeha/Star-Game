@@ -480,7 +480,7 @@ void InitializeScene()
 	glUniform1i(scene.GetShaderManager().GetLitTextureProgData().textureUnif, 0);
 	glUseProgram(0);
 
-	scene.InitTweakableVariables(true, "../data/loader-files/tweak-config.txt");
+	scene.InitTweakableVariables(true, "../data/loader-files/tweak-config.yaml");
 	scene.LoadAudio("../data/loader-files/audio-config.yaml");
 	InitializeGUI();
 

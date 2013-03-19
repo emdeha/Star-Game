@@ -59,7 +59,7 @@ enemyResource:
     enemy-fast-suicide-bomber: 10
     enemy-asteroid: 10
 swarmersCount: 100
-swarmersAttackTime: 1
+swarmersAttackTime: 1.0
 enemyProjectileSpeed: 0.3
 deployUnitsCount: 4
 deployUnitsLife: 50
@@ -140,7 +140,7 @@ skillToolTipText:
     skill-sat-chain: Sat Nova
     skill-frost-nova: Sat Freeze
     skill-sat-shield: Sat Shield
-skill-research-cost:
+skillResearchCost:
     skill-passive-aoe: 0 
     skill-aoe: 0
     skill-sun-nova: 0

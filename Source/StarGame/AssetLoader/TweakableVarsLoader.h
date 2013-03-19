@@ -52,8 +52,9 @@ class TweakableVarsLoader
 private:
 	std::vector<std::pair<std::string, TweakVarData>> loadedTweaks;
 
-	void PushInt(std::string command, int value, int enumIndex = -999);
-	void PushFloat(std::string command, float value, int enumIndex = -999);
+	void PushInt(const std::string &command, int value, int enumIndex = -999);
+	void PushFloat(const std::string &command, float value, int enumIndex = -999);
+	void PushString(const std::string &command, const std::string &value, int enumIndex = -999);
 
 public:
 	TweakableVarsLoader() {}

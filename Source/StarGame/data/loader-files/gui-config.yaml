@@ -1,3 +1,7 @@
+details:
+    fonts-dir: "../data/fonts/"
+    textures-dir: "../data/images/"
+    default-font: AGENCYR.TTF
 layout-game:
     background-color: [ 0.0, 0.0, 0.0, 1.0 ]
     is-active: false
@@ -13,7 +17,7 @@ layout-game:
                     text-size: 28
                 preset-medium:
                     position: [ 10, 738 ]
-                    text-size: 48
+                    text-size: 28
                 preset-big:
                     position: [ 10, 738 ]
                     text-size: 28 # must be 68, but buggy 
@@ -28,7 +32,7 @@ layout-game:
                     text-size: 28
                 preset-medium:
                     position: [ 0, 0 ]
-                    text-size: 48
+                    text-size: 28
                 preset-big:
                     position: [ 0, 0 ]
                     text-size: 28 # must be 68, but buggy

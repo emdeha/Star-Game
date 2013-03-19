@@ -479,9 +479,11 @@ void InitializeScene()
 	glUseProgram(scene.GetShaderManager().GetLitTextureProgData().theProgram);
 	glUniform1i(scene.GetShaderManager().GetLitTextureProgData().textureUnif, 0);
 	glUseProgram(0);
+	
 
-	scene.InitTweakableVariables(true, "../data/loader-files/tweak-config.yaml");
+	// WARN: When audio is not loaded first, a break is thrown
 	scene.LoadAudio("../data/loader-files/audio-config.yaml");
+	scene.InitTweakableVariables(true, "../data/loader-files/tweak-config.yaml");
 	InitializeGUI();
 
 	EventArg inMenuEventArg[1];

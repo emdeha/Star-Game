@@ -923,8 +923,19 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 		if(strcmp(cmd.c_str(), "skillToolTipText") == 0)
 		{
 			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
-			std::string skillToolTipText = splittedCommand[2];
+			std::string skillToolTipText = "";
+			// TODO: little ugly but functional. for now...
+			for(int i = 2; i < splittedCommand.size(); i++)
+			{
+				skillToolTipText += splittedCommand[i] + " ";
+			}
 			skillsStats[skillType].skillToolTipText = skillToolTipText;
+		}
+		if(strcmp(cmd.c_str(), "skillResearchCost") == 0)
+		{
+			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
+			int skillResearchCost = atoi(splittedCommand[2].c_str());
+			skillsStats[skillType].skillResearchCost = skillResearchCost;
 		}
 		if(strcmp(cmd.c_str(), "spawnMothership") == 0)
 		{

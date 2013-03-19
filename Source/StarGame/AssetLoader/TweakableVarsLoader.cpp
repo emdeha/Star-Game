@@ -25,7 +25,7 @@
 // TODO: It has room for further generalization
 
 
-void TweakableVarsLoader::PushInt(std::string command, int value, int enumIndex)
+void TweakableVarsLoader::PushInt(const std::string &command, int value, int enumIndex)
 {
 	TweakVarData tweakData;
 	tweakData.currentType = TweakVarData::TYPE_TWEAK_INT;
@@ -37,11 +37,23 @@ void TweakableVarsLoader::PushInt(std::string command, int value, int enumIndex)
 	loadedTweaks.push_back(std::pair<std::string, TweakVarData>(command, tweakData));
 }
 
-void TweakableVarsLoader::PushFloat(std::string command, float value, int enumIndex)
+void TweakableVarsLoader::PushFloat(const std::string &command, float value, int enumIndex)
 {
 	TweakVarData tweakData;
 	tweakData.currentType = TweakVarData::TYPE_TWEAK_FLOAT;
 	tweakData.varFloat = value;
+	if(enumIndex != -999)
+	{
+		tweakData.itemIndex = enumIndex;
+	}
+	loadedTweaks.push_back(std::pair<std::string, TweakVarData>(command, tweakData));
+}
+
+void TweakableVarsLoader::PushString(const std::string &command, const std::string &value, int enumIndex)
+{
+	TweakVarData tweakData;
+	tweakData.currentType = TweakVarData::TYPE_TWEAK_STRING;
+	std::strcpy(tweakData.varString, value.c_str());
 	if(enumIndex != -999)
 	{
 		tweakData.itemIndex = enumIndex;
@@ -58,6 +70,7 @@ TweakableVarsLoader::TweakableVarsLoader(const std::string &fileName)
 	{
 		TweakVarData tweakData;
 		std::string command = tweak->first.as<std::string>();
+
 		if(command == "currentEnemyCount")
 		{
 			PushInt(command, tweak->second.as<int>());
@@ -74,7 +87,7 @@ TweakableVarsLoader::TweakableVarsLoader(const std::string &fileName)
 		{
 			PushFloat(command, tweak->second.as<float>());
 		}
-		else if(command == "timDecrement")
+		else if(command == "timeDecrement")
 		{
 			PushFloat(command, tweak->second.as<float>());
 		}
@@ -86,34 +99,921 @@ TweakableVarsLoader::TweakableVarsLoader(const std::string &fileName)
 		{
 			PushInt(command, tweak->second.as<int>());
 		}
+		else if(command == "resourceGainTime")
+		{
+			for(YAML::Node::const_iterator satType = tweak->second.begin();
+				satType != tweak->second.end(); ++satType)
+			{
+				if(satType->first.as<std::string>() == "sat-all") 
+				{
+					PushFloat(command, satType->second.as<float>(), 4);
+				}
+				else if(satType->first.as<std::string>() == "sat-fire") 
+				{
+					PushFloat(command, satType->second.as<float>(), 0);
+				}
+				else if(satType->first.as<std::string>() == "sat-water")
+				{
+					PushFloat(command, satType->second.as<float>(), 1);
+				}
+				else if(satType->first.as<std::string>() == "sat-air")
+				{
+					PushFloat(command, satType->second.as<float>(), 2);
+				}
+				else if(satType->first.as<std::string>() == "sat-earth")
+				{
+					PushFloat(command, satType->second.as<float>(), 3);
+				}
+			}
+		}
 		else if(command == "resourceGainPerTime")
 		{
-			for(YAML::Node::const_iterator satType = tweak->begin();
-				satType != tweak->end(); ++satType)
+			for(YAML::Node::const_iterator satType = tweak->second.begin();
+				satType != tweak->second.end(); ++satType)
 			{
-				if(satType->second["sat-all"]) 
+				if(satType->first.as<std::string>() == "sat-all") 
 				{
-					PushInt(command, satType->second["sat-all"].as<int>(), 4);
+					PushInt(command, satType->second.as<int>(), 4);
 				}
-				else if(satType->second["sat-fire"]) 
+				else if(satType->first.as<std::string>() == "sat-fire") 
 				{
-					PushInt(command, satType->second["sat-fire"].as<int>(), 0);
+					PushInt(command, satType->second.as<int>(), 0);
 				}
-				else if(satType->second["sat-water"])
+				else if(satType->first.as<std::string>() == "sat-water")
 				{
-					PushInt(command, satType->second["sat-water"].as<int>(), 1);
+					PushInt(command, satType->second.as<int>(), 1);
 				}
-				else if(satType->second["sat-air"])
+				else if(satType->first.as<std::string>() == "sat-air")
 				{
-					PushInt(command, satType->second["sat-air"].as<int>(), 2);
+					PushInt(command, satType->second.as<int>(), 2);
 				}
-				else if(satType->second["sat-earth"])
+				else if(satType->first.as<std::string>() == "sat-earth")
 				{
-					PushInt(command, satType->second["sat-earth"].as<int>(), 3);
+					PushInt(command, satType->second.as<int>(), 3);
+				}
+			}
+		}
+		else if(command == "satConstructionCost")
+		{
+			PushInt(command, tweak->second.as<int>());
+		}
+		else if(command == "satHealth")
+		{
+			for(YAML::Node::const_iterator satType = tweak->second.begin();
+				satType != tweak->second.end(); ++satType)
+			{
+				if(satType->first.as<std::string>() == "sat-all") 
+				{
+					PushInt(command, satType->second.as<int>(), 4);
+				}
+				else if(satType->first.as<std::string>() == "sat-fire") 
+				{
+					PushInt(command, satType->second.as<int>(), 0);
+				}
+				else if(satType->first.as<std::string>() == "sat-water")
+				{
+					PushInt(command, satType->second.as<int>(), 1);
+				}
+				else if(satType->first.as<std::string>() == "sat-air")
+				{
+					PushInt(command, satType->second.as<int>(), 2);
+				}
+				else if(satType->first.as<std::string>() == "sat-earth")
+				{
+					PushInt(command, satType->second.as<int>(), 3);
+				}
+			}
+		}
+		else if(command == "health")
+		{
+			PushInt(command, tweak->second.as<int>());
+		}
+		else if(command == "enemyDamage")
+		{
+			for(YAML::Node::const_iterator enemyType = tweak->second.begin();
+				enemyType != tweak->second.end(); ++enemyType)
+			{
+				if(enemyType->first.as<std::string>() == "enemy-all")
+				{
+					PushInt(command, enemyType->second.as<int>(), 5);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-swarm")
+				{
+					PushInt(command, enemyType->second.as<int>(), 0);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-spaceship")
+				{
+					PushInt(command, enemyType->second.as<int>(), 1);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-mothership")
+				{
+					PushInt(command, enemyType->second.as<int>(), 2);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-fast-suicide-bomber")
+				{
+					PushInt(command, enemyType->second.as<int>(), 3);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-asteroid")
+				{
+					PushInt(command, enemyType->second.as<int>(), 4);
+				}
+			}
+		}
+		else if(command == "enemyChargeSpeed")
+		{
+			PushFloat(command, tweak->second.as<float>());
+		}
+		else if(command == "enemySpawnInnerRad")
+		{
+			for(YAML::Node::const_iterator enemyType = tweak->second.begin();
+				enemyType != tweak->second.end(); ++enemyType)
+			{
+				if(enemyType->first.as<std::string>() == "enemy-all")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 5);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-swarm")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 0);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-spaceship")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 1);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-mothership")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 2);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-fast-suicide-bomber")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 3);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-asteroid")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 4);
+				}
+			}
+		}
+		else if(command == "enemySpawnOuterRad")
+		{
+			for(YAML::Node::const_iterator enemyType = tweak->second.begin();
+				enemyType != tweak->second.end(); ++enemyType)
+			{
+				if(enemyType->first.as<std::string>() == "enemy-all")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 5);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-swarm")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 0);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-spaceship")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 1);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-mothership")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 2);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-fast-suicide-bomber")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 3);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-asteroid")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 4);
+				}
+			}
+		}
+		else if(command == "enemySpeed")
+		{
+			for(YAML::Node::const_iterator enemyType = tweak->second.begin();
+				enemyType != tweak->second.end(); ++enemyType)
+			{
+				if(enemyType->first.as<std::string>() == "enemy-all")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 5);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-swarm")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 0);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-spaceship")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 1);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-mothership")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 2);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-fast-suicide-bomber")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 3);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-asteroid")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 4);
+				}
+			}
+		}
+		else if(command == "enemyLOS")
+		{
+			for(YAML::Node::const_iterator enemyType = tweak->second.begin();
+				enemyType != tweak->second.end(); ++enemyType)
+			{
+				if(enemyType->first.as<std::string>() == "enemy-all")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 5);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-swarm")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 0);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-spaceship")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 1);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-mothership")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 2);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-fast-suicide-bomber")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 3);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-asteroid")
+				{
+					PushFloat(command, enemyType->second.as<float>(), 4);
+				}
+			}
+		}
+		else if(command == "enemyHealth")
+		{
+			for(YAML::Node::const_iterator enemyType = tweak->second.begin();
+				enemyType != tweak->second.end(); ++enemyType)
+			{
+				if(enemyType->first.as<std::string>() == "enemy-all")
+				{
+					PushInt(command, enemyType->second.as<int>(), 5);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-swarm")
+				{
+					PushInt(command, enemyType->second.as<int>(), 0);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-spaceship")
+				{
+					PushInt(command, enemyType->second.as<int>(), 1);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-mothership")
+				{
+					PushInt(command, enemyType->second.as<int>(), 2);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-fast-suicide-bomber")
+				{
+					PushInt(command, enemyType->second.as<int>(), 3);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-asteroid")
+				{
+					PushInt(command, enemyType->second.as<int>(), 4);
+				}
+			}
+		}
+		else if(command == "enemyResource")
+		{
+			for(YAML::Node::const_iterator enemyType = tweak->second.begin();
+				enemyType != tweak->second.end(); ++enemyType)
+			{
+				if(enemyType->first.as<std::string>() == "enemy-all")
+				{
+					PushInt(command, enemyType->second.as<int>(), 5);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-swarm")
+				{
+					PushInt(command, enemyType->second.as<int>(), 0);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-spaceship")
+				{
+					PushInt(command, enemyType->second.as<int>(), 1);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-mothership")
+				{
+					PushInt(command, enemyType->second.as<int>(), 2);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-fast-suicide-bomber")
+				{
+					PushInt(command, enemyType->second.as<int>(), 3);
+				}
+				else if(enemyType->first.as<std::string>() == "enemy-asteroid")
+				{
+					PushInt(command, enemyType->second.as<int>(), 4);
+				}
+			}
+		}
+		else if(command == "swarmersCount")
+		{
+			PushInt(command, tweak->second.as<int>());
+		}
+		else if(command == "swarmersAttackTime")
+		{
+			PushFloat(command, tweak->second.as<float>());
+		}
+		else if(command == "enemyProjectileSpeed")
+		{
+			PushFloat(command, tweak->second.as<float>());
+		}
+		else if(command == "deployUnitsCount")
+		{
+			PushInt(command, tweak->second.as<int>());
+		}
+		else if(command == "deployUnitsLife")
+		{
+			PushInt(command, tweak->second.as<int>());
+		}
+		else if(command == "deployUnitsResourceGivenOnKill")
+		{
+			PushInt(command, tweak->second.as<int>());
+		}
+		else if(command == "deployUnitsSpeed")
+		{
+			PushFloat(command, tweak->second.as<float>());
+		}
+		else if(command == "deployUnitsLOS")
+		{
+			PushFloat(command, tweak->second.as<float>());
+		}
+		else if(command == "deployUnitsProjSpeed")
+		{
+			PushFloat(command, tweak->second.as<float>());
+		}
+		else if(command == "skillDamage")
+		{
+			for(YAML::Node::const_iterator skillType = tweak->second.begin();
+				skillType != tweak->second.end(); ++skillType)
+			{
+				if(skillType->first.as<std::string>() == "skill-all")
+				{
+					PushInt(command, skillType->second.as<int>(), 8);
+				}
+				else if(skillType->first.as<std::string>() == "skill-passive-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 0);
+				}
+				else if(skillType->first.as<std::string>() == "skill-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 1);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sun-nova")
+				{
+					PushInt(command, skillType->second.as<int>(), 2);
+				}
+				else if(skillType->first.as<std::string>() == "skill-burn")
+				{
+					PushInt(command, skillType->second.as<int>(), 3);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-passive-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 4);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-chain")
+				{
+					PushInt(command, skillType->second.as<int>(), 5);
+				}
+				else if(skillType->first.as<std::string>() == "skill-frost-nova")
+				{
+					PushInt(command, skillType->second.as<int>(), 6);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-shield")
+				{
+					PushInt(command, skillType->second.as<int>(), 7);
+				}
+			}
+		}
+		else if(command == "skillRange")
+		{
+			for(YAML::Node::const_iterator skillType = tweak->second.begin();
+				skillType != tweak->second.end(); ++skillType)
+			{
+				if(skillType->first.as<std::string>() == "skill-all")
+				{
+					PushFloat(command, skillType->second.as<float>(), 8);
+				}
+				else if(skillType->first.as<std::string>() == "skill-passive-aoe")
+				{
+					PushFloat(command, skillType->second.as<float>(), 0);
+				}
+				else if(skillType->first.as<std::string>() == "skill-aoe")
+				{
+					PushFloat(command, skillType->second.as<float>(), 1);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sun-nova")
+				{
+					PushFloat(command, skillType->second.as<float>(), 2);
+				}
+				else if(skillType->first.as<std::string>() == "skill-burn")
+				{
+					PushFloat(command, skillType->second.as<float>(), 3);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-passive-aoe")
+				{
+					PushFloat(command, skillType->second.as<float>(), 4);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-chain")
+				{
+					PushFloat(command, skillType->second.as<float>(), 5);
+				}
+				else if(skillType->first.as<std::string>() == "skill-frost-nova")
+				{
+					PushFloat(command, skillType->second.as<float>(), 6);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-shield")
+				{
+					PushFloat(command, skillType->second.as<float>(), 7);
+				}
+			}
+		}
+		else if(command == "skillApplyCost")
+		{
+			for(YAML::Node::const_iterator skillType = tweak->second.begin();
+				skillType != tweak->second.end(); ++skillType)
+			{
+				if(skillType->first.as<std::string>() == "skill-all")
+				{
+					PushInt(command, skillType->second.as<int>(), 8);
+				}
+				else if(skillType->first.as<std::string>() == "skill-passive-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 0);
+				}
+				else if(skillType->first.as<std::string>() == "skill-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 1);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sun-nova")
+				{
+					PushInt(command, skillType->second.as<int>(), 2);
+				}
+				else if(skillType->first.as<std::string>() == "skill-burn")
+				{
+					PushInt(command, skillType->second.as<int>(), 3);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-passive-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 4);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-chain")
+				{
+					PushInt(command, skillType->second.as<int>(), 5);
+				}
+				else if(skillType->first.as<std::string>() == "skill-frost-nova")
+				{
+					PushInt(command, skillType->second.as<int>(), 6);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-shield")
+				{
+					PushInt(command, skillType->second.as<int>(), 7);
+				}
+			}
+		}
+		else if(command == "skillScaleRate")
+		{
+			for(YAML::Node::const_iterator skillType = tweak->second.begin();
+				skillType != tweak->second.end(); ++skillType)
+			{
+				if(skillType->first.as<std::string>() == "skill-all")
+				{
+					PushFloat(command, skillType->second.as<float>(), 8);
+				}
+				else if(skillType->first.as<std::string>() == "skill-passive-aoe")
+				{
+					PushFloat(command, skillType->second.as<float>(), 0);
+				}
+				else if(skillType->first.as<std::string>() == "skill-aoe")
+				{
+					PushFloat(command, skillType->second.as<float>(), 1);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sun-nova")
+				{
+					PushFloat(command, skillType->second.as<float>(), 2);
+				}
+				else if(skillType->first.as<std::string>() == "skill-burn")
+				{
+					PushFloat(command, skillType->second.as<float>(), 3);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-passive-aoe")
+				{
+					PushFloat(command, skillType->second.as<float>(), 4);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-chain")
+				{
+					PushFloat(command, skillType->second.as<float>(), 5);
+				}
+				else if(skillType->first.as<std::string>() == "skill-frost-nova")
+				{
+					PushFloat(command, skillType->second.as<float>(), 6);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-shield")
+				{
+					PushFloat(command, skillType->second.as<float>(), 7);
+				}
+			}
+		}
+		else if(command == "skillDamageApplyTime")
+		{
+			for(YAML::Node::const_iterator skillType = tweak->second.begin();
+				skillType != tweak->second.end(); ++skillType)
+			{
+				if(skillType->first.as<std::string>() == "skill-all")
+				{
+					PushFloat(command, skillType->second.as<float>(), 8);
+				}
+				else if(skillType->first.as<std::string>() == "skill-passive-aoe")
+				{
+					PushFloat(command, skillType->second.as<float>(), 0);
+				}
+				else if(skillType->first.as<std::string>() == "skill-aoe")
+				{
+					PushFloat(command, skillType->second.as<float>(), 1);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sun-nova")
+				{
+					PushFloat(command, skillType->second.as<float>(), 2);
+				}
+				else if(skillType->first.as<std::string>() == "skill-burn")
+				{
+					PushFloat(command, skillType->second.as<float>(), 3);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-passive-aoe")
+				{
+					PushFloat(command, skillType->second.as<float>(), 4);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-chain")
+				{
+					PushFloat(command, skillType->second.as<float>(), 5);
+				}
+				else if(skillType->first.as<std::string>() == "skill-frost-nova")
+				{
+					PushFloat(command, skillType->second.as<float>(), 6);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-shield")
+				{
+					PushFloat(command, skillType->second.as<float>(), 7);
+				}
+			}
+		}
+		else if(command == "skillDuration")
+		{
+			for(YAML::Node::const_iterator skillType = tweak->second.begin();
+				skillType != tweak->second.end(); ++skillType)
+			{
+				if(skillType->first.as<std::string>() == "skill-all")
+				{
+					PushFloat(command, skillType->second.as<float>(), 8);
+				}
+				else if(skillType->first.as<std::string>() == "skill-passive-aoe")
+				{
+					PushFloat(command, skillType->second.as<float>(), 0);
+				}
+				else if(skillType->first.as<std::string>() == "skill-aoe")
+				{
+					PushFloat(command, skillType->second.as<float>(), 1);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sun-nova")
+				{
+					PushFloat(command, skillType->second.as<float>(), 2);
+				}
+				else if(skillType->first.as<std::string>() == "skill-burn")
+				{
+					PushFloat(command, skillType->second.as<float>(), 3);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-passive-aoe")
+				{
+					PushFloat(command, skillType->second.as<float>(), 4);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-chain")
+				{
+					PushFloat(command, skillType->second.as<float>(), 5);
+				}
+				else if(skillType->first.as<std::string>() == "skill-frost-nova")
+				{
+					PushFloat(command, skillType->second.as<float>(), 6);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-shield")
+				{
+					PushFloat(command, skillType->second.as<float>(), 7);
+				}
+			}
+		}
+		else if(command == "skillDefensePoints")
+		{
+			for(YAML::Node::const_iterator skillType = tweak->second.begin();
+				skillType != tweak->second.end(); ++skillType)
+			{
+				if(skillType->first.as<std::string>() == "skill-all")
+				{
+					PushInt(command, skillType->second.as<int>(), 8);
+				}
+				else if(skillType->first.as<std::string>() == "skill-passive-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 0);
+				}
+				else if(skillType->first.as<std::string>() == "skill-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 1);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sun-nova")
+				{
+					PushInt(command, skillType->second.as<int>(), 2);
+				}
+				else if(skillType->first.as<std::string>() == "skill-burn")
+				{
+					PushInt(command, skillType->second.as<int>(), 3);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-passive-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 4);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-chain")
+				{
+					PushInt(command, skillType->second.as<int>(), 5);
+				}
+				else if(skillType->first.as<std::string>() == "skill-frost-nova")
+				{
+					PushInt(command, skillType->second.as<int>(), 6);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-shield")
+				{
+					PushInt(command, skillType->second.as<int>(), 7);
+				}
+			}
+		}
+		else if(command == "skillStunTime")
+		{
+			for(YAML::Node::const_iterator skillType = tweak->second.begin();
+				skillType != tweak->second.end(); ++skillType)
+			{
+				if(skillType->first.as<std::string>() == "skill-all")
+				{
+					PushFloat(command, skillType->second.as<float>(), 8);
+				}
+				else if(skillType->first.as<std::string>() == "skill-passive-aoe")
+				{
+					PushFloat(command, skillType->second.as<float>(), 0);
+				}
+				else if(skillType->first.as<std::string>() == "skill-aoe")
+				{
+					PushFloat(command, skillType->second.as<float>(), 1);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sun-nova")
+				{
+					PushFloat(command, skillType->second.as<float>(), 2);
+				}
+				else if(skillType->first.as<std::string>() == "skill-burn")
+				{
+					PushFloat(command, skillType->second.as<float>(), 3);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-passive-aoe")
+				{
+					PushFloat(command, skillType->second.as<float>(), 4);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-chain")
+				{
+					PushFloat(command, skillType->second.as<float>(), 5);
+				}
+				else if(skillType->first.as<std::string>() == "skill-frost-nova")
+				{
+					PushFloat(command, skillType->second.as<float>(), 6);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-shield")
+				{
+					PushFloat(command, skillType->second.as<float>(), 7);
+				}
+			}
+		}
+		else if(command == "skillUpgradeBoxIndex")
+		{
+			for(YAML::Node::const_iterator skillType = tweak->second.begin();
+				skillType != tweak->second.end(); ++skillType)
+			{
+				if(skillType->first.as<std::string>() == "skill-all")
+				{
+					PushInt(command, skillType->second.as<int>(), 8);
+				}
+				else if(skillType->first.as<std::string>() == "skill-passive-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 0);
+				}
+				else if(skillType->first.as<std::string>() == "skill-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 1);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sun-nova")
+				{
+					PushInt(command, skillType->second.as<int>(), 2);
+				}
+				else if(skillType->first.as<std::string>() == "skill-burn")
+				{
+					PushInt(command, skillType->second.as<int>(), 3);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-passive-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 4);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-chain")
+				{
+					PushInt(command, skillType->second.as<int>(), 5);
+				}
+				else if(skillType->first.as<std::string>() == "skill-frost-nova")
+				{
+					PushInt(command, skillType->second.as<int>(), 6);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-shield")
+				{
+					PushInt(command, skillType->second.as<int>(), 7);
+				}
+			}
+		}
+		else if(command == "skillForWhichSatellite")
+		{
+			for(YAML::Node::const_iterator skillType = tweak->second.begin();
+				skillType != tweak->second.end(); ++skillType)
+			{
+				if(skillType->first.as<std::string>() == "skill-all")
+				{
+					PushInt(command, skillType->second.as<int>(), 8);
+				}
+				else if(skillType->first.as<std::string>() == "skill-passive-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 0);
+				}
+				else if(skillType->first.as<std::string>() == "skill-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 1);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sun-nova")
+				{
+					PushInt(command, skillType->second.as<int>(), 2);
+				}
+				else if(skillType->first.as<std::string>() == "skill-burn")
+				{
+					PushInt(command, skillType->second.as<int>(), 3);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-passive-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 4);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-chain")
+				{
+					PushInt(command, skillType->second.as<int>(), 5);
+				}
+				else if(skillType->first.as<std::string>() == "skill-frost-nova")
+				{
+					PushInt(command, skillType->second.as<int>(), 6);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-shield")
+				{
+					PushInt(command, skillType->second.as<int>(), 7);
+				}
+			}
+		}
+		else if(command == "skillUpgradedTexture")
+		{
+			for(YAML::Node::const_iterator skillType = tweak->second.begin();
+				skillType != tweak->second.end(); ++skillType)
+			{
+				if(skillType->first.as<std::string>() == "skill-all")
+				{
+					PushString(command, skillType->second.as<std::string>(), 8);
+				}
+				else if(skillType->first.as<std::string>() == "skill-passive-aoe")
+				{
+					PushString(command, skillType->second.as<std::string>(), 0);
+				}
+				else if(skillType->first.as<std::string>() == "skill-aoe")
+				{
+					PushString(command, skillType->second.as<std::string>(), 1);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sun-nova")
+				{
+					PushString(command, skillType->second.as<std::string>(), 2);
+				}
+				else if(skillType->first.as<std::string>() == "skill-burn")
+				{
+					PushString(command, skillType->second.as<std::string>(), 3);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-passive-aoe")
+				{
+					PushString(command, skillType->second.as<std::string>(), 4);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-chain")
+				{
+					PushString(command, skillType->second.as<std::string>(), 5);
+				}
+				else if(skillType->first.as<std::string>() == "skill-frost-nova")
+				{
+					PushString(command, skillType->second.as<std::string>(), 6);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-shield")
+				{
+					PushString(command, skillType->second.as<std::string>(), 7);
+				}
+			}
+		}
+		else if(command == "skillToolTipText")
+		{
+			for(YAML::Node::const_iterator skillType = tweak->second.begin();
+				skillType != tweak->second.end(); ++skillType)
+			{
+				if(skillType->first.as<std::string>() == "skill-all")
+				{
+					PushString(command, skillType->second.as<std::string>(), 8);
+				}
+				else if(skillType->first.as<std::string>() == "skill-passive-aoe")
+				{
+					PushString(command, skillType->second.as<std::string>(), 0);
+				}
+				else if(skillType->first.as<std::string>() == "skill-aoe")
+				{
+					PushString(command, skillType->second.as<std::string>(), 1);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sun-nova")
+				{
+					PushString(command, skillType->second.as<std::string>(), 2);
+				}
+				else if(skillType->first.as<std::string>() == "skill-burn")
+				{
+					PushString(command, skillType->second.as<std::string>(), 3);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-passive-aoe")
+				{
+					PushString(command, skillType->second.as<std::string>(), 4);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-chain")
+				{
+					PushString(command, skillType->second.as<std::string>(), 5);
+				}
+				else if(skillType->first.as<std::string>() == "skill-frost-nova")
+				{
+					PushString(command, skillType->second.as<std::string>(), 6);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-shield")
+				{
+					PushString(command, skillType->second.as<std::string>(), 7);
+				}
+			}
+		}
+		else if(command == "skillResearchCost")
+		{
+			for(YAML::Node::const_iterator skillType = tweak->second.begin();
+				skillType != tweak->second.end(); ++skillType)
+			{
+				if(skillType->first.as<std::string>() == "skill-all")
+				{
+					PushInt(command, skillType->second.as<int>(), 8);
+				}
+				else if(skillType->first.as<std::string>() == "skill-passive-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 0);
+				}
+				else if(skillType->first.as<std::string>() == "skill-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 1);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sun-nova")
+				{
+					PushInt(command, skillType->second.as<int>(), 2);
+				}
+				else if(skillType->first.as<std::string>() == "skill-burn")
+				{
+					PushInt(command, skillType->second.as<int>(), 3);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-passive-aoe")
+				{
+					PushInt(command, skillType->second.as<int>(), 4);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-chain")
+				{
+					PushInt(command, skillType->second.as<int>(), 5);
+				}
+				else if(skillType->first.as<std::string>() == "skill-frost-nova")
+				{
+					PushInt(command, skillType->second.as<int>(), 6);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-shield")
+				{
+					PushInt(command, skillType->second.as<int>(), 7);
 				}
 			}
 		}
 	}
+	
+	/*
+	for(int i = 0; i < loadedTweaks.size(); i++)
+	{
+		std::printf("%s\n", loadedTweaks[i].first.c_str());
+	}
+	int a = 0;
+	std::cin>>a;
+	*/
 
 	/*
 	std::string line;

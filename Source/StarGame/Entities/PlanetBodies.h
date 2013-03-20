@@ -75,6 +75,7 @@ struct ResourceData
 
 struct SkillsStats
 {
+	bool isResearched;
 	int upgradeBoxIndex;
 	int skillApplyCost;
 	int skillResearchCost;

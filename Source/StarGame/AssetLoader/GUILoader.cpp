@@ -74,28 +74,6 @@ GUILoader::GUILoader(const std::string &fileName,
 	for(YAML::Node::const_iterator guiNode = guiData.begin();
 		guiNode != guiData.end(); ++guiNode)
 	{
-		/*
-		if(guiNode->first.as<std::string>() == "details")
-		{
-			for(YAML::Node::const_iterator detail = guiNode->second.begin();
-				detail != guiNode->second.end(); ++detail)
-			{
-				if(detail->first.as<std::string>() == "fonts-dir")
-				{
-					fontsDir = detail->second.as<std::string>();
-				}
-				else if(detail->first.as<std::string>() == "textures-dir")
-				{
-					texturesDir = detail->second.as<std::string>();
-				}
-				else if(detail->first.as<std::string>() == "default-font")
-				{
-					defaultFont = detail->second.as<std::string>();
-				}
-			}
-		}
-		*/
-
 		if(guiNode->first.as<std::string>() == "layout-game")
 		{
 			layoutData.layoutType = LAYOUT_IN_GAME;

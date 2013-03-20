@@ -110,6 +110,8 @@ private:
 
 	bool isSpawning;
 
+	//std::vector<std::pair<std::string, TweakVarData>> tweakVarsData;
+
 private:
 	void SpawnSwarm();
 	void SpawnSpaceship();
@@ -119,6 +121,7 @@ private:
 	void SpawnEnemies();
 
 	void ProcessVariablesTweak(const std::string &command);
+	void SaveVariablesTweak();
 
 	void InitEnemyStats();
 	void InitSkillStats();

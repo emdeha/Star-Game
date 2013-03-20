@@ -253,10 +253,10 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 	if(isLoadedFromConfig)
 	{
 		TweakableVarsLoader loader = TweakableVarsLoader(configFileName);
-		std::vector<std::pair<std::string, TweakVarData>> loadedData = loader.GetAllLoadedVars();
+		std::vector<std::pair<std::string, TweakVarData>> tweakVarsData = loader.GetAllLoadedVars();
 		
-		for(std::vector<std::pair<std::string, TweakVarData>>::iterator iter = loadedData.begin();
-			iter != loadedData.end(); ++iter)
+		for(std::vector<std::pair<std::string, TweakVarData>>::iterator iter = tweakVarsData.begin();
+			iter != tweakVarsData.end(); ++iter)
 		{
 			std::string command = "";
 			command.append(iter->first);
@@ -973,6 +973,20 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 		{
 			// Implement in the future
 		}
+		if(strcmp(cmd.c_str(), "killAll") == 0)
+		{
+			enemies.clear();
+		}
+		if(strcmp(cmd.c_str(), "researchAll") == 0)
+		{
+			// Implement in the future
+			/*
+			for(int i = 0; i < SKILL_TYPE_COUNT; i++)
+			{
+				skillsStats[i].isResearched = true;
+			}
+			*/
+		}
 	}
 
 	// WARN: BAD!!!
@@ -980,6 +994,11 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 	{
 		suns[0]->satSkillStats[i] = skillsStats[i];
 	}
+}
+
+void SaveVariablesTweak()
+{
+
 }
 
 ShaderManager &Scene::GetShaderManager()

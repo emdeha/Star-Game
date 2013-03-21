@@ -45,6 +45,8 @@ Scene scene = Scene(2.2f, 8.0f, 3.0f, 0.5f, 0, 4, 20.0f);
 
 TexturedExplosionEmitter testEmitter;
 
+SpriteParticleEmitter testSpriteEmitter;
+
 
 long long GetCurrentTimeMillis()
 {
@@ -439,8 +441,6 @@ void InitializeScene()
 		mainSun(new CelestialBody(glm::vec3(0.0f), glm::vec4(0.738f, 0.738f, 0.423f, 1.0f), 1.25f, 4, 50, 
 								  200, 100));
 
-	//mainSun->InitSunSkillUpgradeButtons();
-
 	SunLight 
 		mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, displayData.gamma));
 
@@ -530,8 +530,6 @@ long long currentTime_milliseconds;
 
 Mesh sampleMesh;
 
-//SpriteParticleEmitter testSpriteParticleEmitter;
-
 void Init()
 {
 	currentTime_milliseconds = GetCurrentTimeMillis();
@@ -592,12 +590,12 @@ void Init()
 	nextGameTick = GetTickCount();
 
 
-	testEmitter = TexturedExplosionEmitter(glm::vec3(3.0f, 0.0f, 0.0f), 300, 3000, 0.5f, 0.01f, "../data/images/particle.png");
+	testEmitter = TexturedExplosionEmitter(glm::vec3(3.0f, 0.0f, 0.0f), 100, 1000, 0.5f, 0.01f, "../data/images/particle.png");
 	testEmitter.Init();
 
-	//testSpriteParticleEmitter = SpriteParticleEmitter(glm::vec3(1.0f, 0.0f, 0.0f), 300, 3000, 0.5f,
-	//												  0.01f, "../data/images/particle.png");
-	//testSpriteParticleEmitter.Init();
+	/// slower
+	//testSpriteEmitter = SpriteParticleEmitter(glm::vec3(2.0f, 0.0f, 0.0f), 100, 1000, 0.2f, 0.01f, "../data/images/particle.png");
+	//testSpriteEmitter.Init();
 }
 
 bool isEmitterStarted = false;
@@ -634,13 +632,12 @@ void Display()
 
 		if(isEmitterStarted)
 		{
-			//testSpriteParticleEmitter.Update();
-			//testSpriteParticleEmitter.Render(modelMatrix, 
-			//								 scene.GetShaderManager().GetSimpleTextureProgData());
-
 			testEmitter.Update();			
 			testEmitter.Render(modelMatrix, scene.GetTopDownCamera().ResolveCamPosition(),
 							   scene.GetShaderManager().GetBillboardProgData());
+			/// slower
+			//testSpriteEmitter.Update();
+			//testSpriteEmitter.Render(modelMatrix, scene.GetShaderManager().GetSimpleTextureProgData());
 		}
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))

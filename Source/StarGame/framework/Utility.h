@@ -285,7 +285,10 @@ namespace Utility
 			bool isCoordinateSystemBottomLeft;
 
 		public:
-			Sprite() {};
+			Sprite() 
+			{
+				color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+			}
 			Sprite(glm::vec3 newPosition, glm::vec4 newColor,
 				   float newWidth, float newHeight,
 				   bool newIsCoordinateSystemBottomLeft);
@@ -350,7 +353,10 @@ namespace Utility
 			bool isCoordinateSystemBottomLeft;
 
 		public:
-			SpriteArray() {}
+			SpriteArray() 
+			{
+				color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+			}
 			SpriteArray(glm::vec4 newColor,
 						float newWidth, float newHeight,
 						bool newIsCoordinateSystemBottomLeft);

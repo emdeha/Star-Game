@@ -381,7 +381,7 @@ void TexturedExplosionEmitter::Init()
 										  //((float)rand() / RAND_MAX) * velocityMultiplier,
 										  ((float)rand() / RAND_MAX - 0.5f) * 
 										  ((float)rand() / RAND_MAX) * velocityMultiplier);
-		particles[i].color = glm::vec4(0.5f, 0.0f, 0.0f, 1.0f);
+		particles[i].color = glm::vec4(0.9f, 0.5f, 0.0f, 1.0f);
 		particles[i].lifeTime = rand() % particleLifeTime;
 	}
 }
@@ -405,6 +405,7 @@ void TexturedExplosionEmitter::Update()
 	{
 		particles[i].position += particles[i].velocity;
 		particles[i].lifeTime--;
+		particles[i].color.g -= 0.001f;
 		if(particles[i].lifeTime <= 0)
 		{
 			std::vector<ExplosionParticle>::iterator particleToErase =
@@ -439,7 +440,7 @@ void TexturedExplosionEmitter::Render(glutil::MatrixStack &modelMatrix,
 	glDepthMask(GL_FALSE);
 	glEnable(GL_BLEND);
 	glBlendEquation(GL_FUNC_ADD);
-	glBlendFunc(GL_ONE, GL_ONE);
+	glBlendFunc(GL_DST_COLOR, GL_ONE);
 
 	for(int i = 0; i < particleCount; i++)
 	{
@@ -628,9 +629,9 @@ void SpriteParticleEmitter::Render(glutil::MatrixStack &modelMatrix,
 		texture->Bind(GL_TEXTURE0);
 
 		glEnable(GL_BLEND);
-		//glDepthMask(GL_FALSE);
+		glDepthMask(GL_FALSE);
 		glBlendEquation(GL_FUNC_ADD);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
 		for(int i = 0; i < particleCount; i++)

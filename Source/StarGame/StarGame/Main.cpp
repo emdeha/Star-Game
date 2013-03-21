@@ -43,6 +43,8 @@ DisplayData displayData;
 
 Scene scene = Scene(2.2f, 8.0f, 3.0f, 0.5f, 0, 4, 20.0f);
 
+TexturedExplosionEmitter testEmitter;
+
 
 long long GetCurrentTimeMillis()
 {
@@ -528,6 +530,8 @@ long long currentTime_milliseconds;
 
 Mesh sampleMesh;
 
+//SpriteParticleEmitter testSpriteParticleEmitter;
+
 void Init()
 {
 	currentTime_milliseconds = GetCurrentTimeMillis();
@@ -586,7 +590,17 @@ void Init()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	nextGameTick = GetTickCount();
+
+
+	testEmitter = TexturedExplosionEmitter(glm::vec3(3.0f, 0.0f, 0.0f), 300, 3000, 0.5f, 0.01f, "../data/images/particle.png");
+	testEmitter.Init();
+
+	//testSpriteParticleEmitter = SpriteParticleEmitter(glm::vec3(1.0f, 0.0f, 0.0f), 300, 3000, 0.5f,
+	//												  0.01f, "../data/images/particle.png");
+	//testSpriteParticleEmitter.Init();
 }
+
+bool isEmitterStarted = false;
 
 void Display()
 {
@@ -617,6 +631,17 @@ void Display()
 		scene.RenderScene(modelMatrix, interpolation);	
 		
 		scene.RenderCurrentLayout();	
+
+		if(isEmitterStarted)
+		{
+			//testSpriteParticleEmitter.Update();
+			//testSpriteParticleEmitter.Render(modelMatrix, 
+			//								 scene.GetShaderManager().GetSimpleTextureProgData());
+
+			testEmitter.Update();			
+			testEmitter.Render(modelMatrix, scene.GetTopDownCamera().ResolveCamPosition(),
+							   scene.GetShaderManager().GetBillboardProgData());
+		}
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{
@@ -689,6 +714,7 @@ void Keyboard(unsigned char key, int x, int y)
 		glutLeaveMainLoop();
 		return;
 	case 32:
+		isEmitterStarted = true;
 		break;
 	}
 

@@ -71,6 +71,7 @@ struct BillboardProgData
 	GLuint cameraToClipMatrixUnif;
 	GLuint cameraPositionUnif;
 	GLuint samplerUnif;
+	GLuint colorUnif;
 	GLuint billboardSizeUnif;
 	GLuint deltaPositionUnif;
 };

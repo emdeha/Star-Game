@@ -324,6 +324,359 @@ bool ExplosionEmitter::IsDead()
 }
 
 
+TexturedExplosionEmitter::TexturedExplosionEmitter(glm::vec3 newPosition, int newParticleCount,
+												   int newParticleLifeTime, 
+												   float newSize,
+												   float newVelocityMultiplier,
+												   const std::string &textureFileName)
+{
+	position = newPosition;
+	startingParticleCount = newParticleCount;
+	particleCount = newParticleCount;
+	particleLifeTime = newParticleLifeTime;
+	velocityMultiplier = newVelocityMultiplier;
+	size = newSize;
+
+	particles.resize(particleCount);
+
+	isActive = false;
+	isDead = false;
+
+	vao = 0;
+	vertexBO = 0;
+	textureCoordsBO = 0;
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	glGenBuffers(1, &vertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3, glm::value_ptr(position), GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	
+	texture = std::shared_ptr<Texture2D>(new Texture2D());
+	if(!texture->Load(textureFileName, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE))
+	{
+		std::string errorMessage = "cannot load texture";
+		errorMessage += textureFileName;
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+	}
+}
+
+void TexturedExplosionEmitter::Init()
+{
+	isActive = false;
+	isDead = false;
+	particles.resize(startingParticleCount);
+	particleCount = startingParticleCount;
+	for(int i = 0; i < particleCount; i++)
+	{
+		particles[i].position = position + glm::vec3();
+		particles[i].velocity = glm::vec3(((float)rand() / RAND_MAX - 0.5f) * 
+										  ((float)rand() / RAND_MAX) * velocityMultiplier,
+										  0.0f,
+										  //((float)rand() / RAND_MAX - 0.5f) * 
+										  //((float)rand() / RAND_MAX) * velocityMultiplier,
+										  ((float)rand() / RAND_MAX - 0.5f) * 
+										  ((float)rand() / RAND_MAX) * velocityMultiplier);
+		particles[i].color = glm::vec4(0.5f, 0.0f, 0.0f, 1.0f);
+		particles[i].lifeTime = rand() % particleLifeTime;
+	}
+}
+
+void TexturedExplosionEmitter::SetPosition(glm::vec3 newPosition)
+{
+	position = newPosition;
+	for(int i = 0; i < particleCount; i++)
+	{
+		particles[i].position = newPosition;
+	}
+}
+
+void TexturedExplosionEmitter::Update()
+{
+	if(particleCount == 0)
+	{
+		isDead = true;
+	}
+	for(int i = 0; i < particleCount; i++)
+	{
+		particles[i].position += particles[i].velocity;
+		particles[i].lifeTime--;
+		if(particles[i].lifeTime <= 0)
+		{
+			std::vector<ExplosionParticle>::iterator particleToErase =
+				particles.begin();
+			particleToErase += i;
+
+			particles.erase(particleToErase);
+			particleCount--;
+		}
+	}
+}
+
+void TexturedExplosionEmitter::Render(glutil::MatrixStack &modelMatrix,
+									  glm::vec3 cameraPosition,
+									  const BillboardProgData &billboardProgData)
+{
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+
+	glutil::PushStack push(modelMatrix);
+
+	glUseProgram(billboardProgData.theProgram);
+
+	glUniformMatrix4fv(billboardProgData.modelToCameraMatrixUnif, 
+					   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+	glUniform3f(billboardProgData.cameraPositionUnif,
+				cameraPosition.x, cameraPosition.y, cameraPosition.z);
+	glUniform1f(billboardProgData.billboardSizeUnif, size);//0.1f);
+
+	texture->Bind(GL_TEXTURE0);
+	
+	glDepthMask(GL_FALSE);
+	glEnable(GL_BLEND);
+	glBlendEquation(GL_FUNC_ADD);
+	glBlendFunc(GL_ONE, GL_ONE);
+
+	for(int i = 0; i < particleCount; i++)
+	{
+		glUniform3f(billboardProgData.deltaPositionUnif,
+					particles[i].position.x, particles[i].position.y, particles[i].position.z);
+		glUniform4f(billboardProgData.colorUnif,
+					particles[i].color.r, particles[i].color.g,
+					particles[i].color.b, particles[i].color.a);
+		
+		glDrawArrays(GL_POINTS, 0, 1);
+	}
+	glDisable(GL_BLEND);
+	glDepthMask(GL_TRUE);
+
+	glDisableVertexAttribArray(0);
+
+	glUseProgram(0);
+}
+
+void TexturedExplosionEmitter::Activate()
+{
+	isActive = true;
+}
+bool TexturedExplosionEmitter::IsActive()
+{
+	return isActive;
+}
+
+bool TexturedExplosionEmitter::IsDead()
+{
+	return isDead;
+}
+
+
+SpriteParticleEmitter::SpriteParticleEmitter(glm::vec3 newPosition, int newParticleCount,
+											 int newParticleLifeTime, float newSize,
+											 float newVelocityMultiplier, 
+											 const std::string &textureFileName)
+{
+	position = newPosition;
+	startingParticleCount = newParticleCount;
+	particleCount = newParticleCount;
+	particleLifeTime = newParticleLifeTime;
+	velocityMultiplier = newVelocityMultiplier;
+	size = newSize;
+
+	particles.resize(particleCount);
+
+	isActive = false;
+	isDead = false;
+
+	vao = 0;
+	vertexBO = 0;
+	textureCoordsBO = 0;
+	indexBO = 0;
+
+	texture = std::shared_ptr<Texture2D>(new Texture2D());
+	if(!texture->Load(textureFileName, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE))
+	{
+		std::string errorMessage = "cannot load texture";
+		errorMessage += textureFileName;
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+	}
+
+
+	std::vector<float> vertexData;
+	std::vector<float> textureCoordsData;
+	std::vector<unsigned short> indexData;
+
+	vertexData.push_back(position.x - size);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z - size); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z - size); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x - size);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z); vertexData.push_back(1.0f);
+		
+	textureCoordsData.push_back(0.0f); textureCoordsData.push_back(1.0f);
+	textureCoordsData.push_back(1.0f); textureCoordsData.push_back(1.0f);
+	textureCoordsData.push_back(1.0f); textureCoordsData.push_back(0.0f);
+	textureCoordsData.push_back(0.0f); textureCoordsData.push_back(0.0f);
+
+	indexData.push_back(0); indexData.push_back(1); indexData.push_back(2);
+	indexData.push_back(2); indexData.push_back(3); indexData.push_back(0);
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	glGenBuffers(1, &vertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);	
+	glBufferData(GL_ARRAY_BUFFER, 
+				 sizeof(float) * vertexData.size(), &vertexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	
+	glGenBuffers(1, &textureCoordsBO);
+	glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
+	glBufferData(GL_ARRAY_BUFFER, 
+				 sizeof(float) * textureCoordsData.size(), &textureCoordsData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+	glGenBuffers(1, &indexBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
+				 sizeof(unsigned short) * indexData.size(), &indexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void SpriteParticleEmitter::Init()
+{
+	isActive = false;
+	isDead = false;
+	particles.resize(startingParticleCount);
+	particleCount = startingParticleCount;
+	for(int i = 0; i < particleCount; i++)
+	{
+		particles[i].position = position + glm::vec3();
+		particles[i].velocity = glm::vec3(((float)rand() / RAND_MAX - 0.5f) * 
+										  ((float)rand() / RAND_MAX) * velocityMultiplier,
+										  0.0f,
+										  //((float)rand() / RAND_MAX - 0.5f) * 
+										  //((float)rand() / RAND_MAX) * velocityMultiplier,
+										  ((float)rand() / RAND_MAX - 0.5f) * 
+										  ((float)rand() / RAND_MAX) * velocityMultiplier);
+		particles[i].color = glm::vec4(0.5f, 0.0f, 0.0f, 1.0f);
+		particles[i].lifeTime = rand() % particleLifeTime;
+	}
+}
+
+void SpriteParticleEmitter::SetPosition(glm::vec3 newPosition)
+{
+	position = newPosition;
+	for(int i = 0; i < particleCount; i++)
+	{
+		particles[i].position = newPosition;
+	}
+}
+
+void SpriteParticleEmitter::Update()
+{
+	if(particleCount == 0)
+	{
+		isDead = true;
+	}
+	for(int i = 0; i < particleCount; i++)
+	{
+		particles[i].position += particles[i].velocity;
+		particles[i].lifeTime--;
+		if(particles[i].lifeTime <= 0)
+		{
+			std::vector<ExplosionParticle>::iterator particleToErase =
+				particles.begin();
+			particleToErase += i;
+
+			particles.erase(particleToErase);
+			particleCount--;
+		}
+	}
+}
+
+void SpriteParticleEmitter::Render(glutil::MatrixStack &modelMatrix, 
+								   const SimpleTextureProgData &textureProgData)
+{
+	glUseProgram(textureProgData.theProgram);
+	glBindVertexArray(vao);
+	{
+		// TODO: Add particle shader with deltaPos optimization
+		
+		glEnableVertexAttribArray(textureProgData.positionAttrib);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+		glVertexAttribPointer(textureProgData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+		glEnableVertexAttribArray(textureProgData.textureCoordAttrib);
+		glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
+		glVertexAttribPointer(textureProgData.textureCoordAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		
+		texture->Bind(GL_TEXTURE0);
+
+		glEnable(GL_BLEND);
+		//glDepthMask(GL_FALSE);
+		glBlendEquation(GL_FUNC_ADD);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+		for(int i = 0; i < particleCount; i++)
+		{			
+			glutil::PushStack push(modelMatrix);
+			modelMatrix.Translate(particles[i].position.x, particles[i].position.y, particles[i].position.z);
+
+			glUniformMatrix4fv(textureProgData.modelToCameraMatrixUnif, 
+							   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+
+			glUniform4f(textureProgData.colorUnif,
+						particles[i].color.r, particles[i].color.g,
+						particles[i].color.b, particles[i].color.a);
+
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+		}
+		
+		glDepthMask(GL_TRUE);
+		glDisable(GL_BLEND);
+
+		glDisableVertexAttribArray(textureProgData.positionAttrib);
+		glDisableVertexAttribArray(textureProgData.textureCoordAttrib);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		texture->Unbind();
+	}
+	glBindVertexArray(0);
+	glUseProgram(0);
+}
+
+void SpriteParticleEmitter::Activate()
+{
+	isActive = true;
+}
+bool SpriteParticleEmitter::IsActive()
+{
+	return isActive;
+}
+
+bool SpriteParticleEmitter::IsDead()
+{
+	return isDead;
+}
+
+
 RayEmitter::RayEmitter(glm::vec3 newPosition, int newParticleCount,
 					   float newRayLength)
 {

@@ -148,6 +148,95 @@ public:
 };
 
 
+class TexturedExplosionEmitter
+{
+private:
+	std::vector<ExplosionParticle> particles;
+
+	bool isActive;
+	bool isDead;
+
+	glm::vec3 position;
+	float velocityMultiplier;
+	float size;
+	int particleCount;
+	int startingParticleCount;
+
+	int particleLifeTime;
+
+	GLuint vao;
+	GLuint vertexBO;
+	GLuint textureCoordsBO;
+
+	std::shared_ptr<Texture2D> texture;
+
+public:
+	TexturedExplosionEmitter() {}
+	TexturedExplosionEmitter(glm::vec3 newPosition, int newParticleCount,
+							 int newParticleLifeTime, float newSize,
+							 float newVelocityMultiplier,
+							 const std::string &textureFileName);
+
+	void Init();
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix, 
+				glm::vec3 cameraPosition,
+				const BillboardProgData &billboardProgData);
+
+	void SetPosition(glm::vec3 newPosition);
+
+	void Activate();
+	bool IsActive();
+
+	bool IsDead();
+};
+
+
+class SpriteParticleEmitter
+{
+private:
+	std::vector<ExplosionParticle> particles;
+
+	bool isActive;
+	bool isDead;
+
+	glm::vec3 position;
+	float velocityMultiplier;
+	float size;
+	int particleCount;
+	int startingParticleCount;
+	int particleLifeTime;
+
+	GLuint vao;
+	GLuint vertexBO;
+	GLuint textureCoordsBO;
+	GLuint indexBO;
+
+	std::shared_ptr<Texture2D> texture;
+
+public:
+	SpriteParticleEmitter() {}
+	SpriteParticleEmitter(glm::vec3 newPosition, int newParticleCount,
+						  int newParticleLifeTime, float newSize,
+						  float newVelocityMultiplier, 
+						  const std::string &textureFileName);
+
+	void Init();
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix, 
+				const SimpleTextureProgData &textureProgData);
+
+	void SetPosition(glm::vec3 newPosition);
+
+	void Activate();
+	bool IsActive();
+
+	bool IsDead();
+};
+
+
 class RayEmitter
 {
 private:

@@ -282,6 +282,7 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 						   const SimpleProgData &simpleData,
 						   const SimpleTextureProgData &textureData,
 						   const LitTextureProgData &litTextureData,
+						   const SpriteParticleProgData &spriteParticleProgData,
 						   float interpolation)
 {
 	{
@@ -295,7 +296,8 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 				iter != satellites.end(); ++iter)
 			{
 				(*iter)->Render(modelMatrix, materialBlockIndex,
-								gamma, litData, unlitData, simpleData, textureData, litTextureData, interpolation);
+								gamma, litData, unlitData, simpleData, textureData, litTextureData, spriteParticleProgData, 
+								interpolation);
 			}
 
 			modelMatrix.Scale(diameter / 2.0f);
@@ -325,6 +327,7 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 		{
 			skills[i]->Render(modelMatrix, simpleData);
 			skills[i]->Render(modelMatrix, litData, materialBlockIndex);
+			skills[i]->Render(modelMatrix, spriteParticleProgData, simpleData);
 		}
 	}
 	

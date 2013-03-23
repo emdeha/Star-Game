@@ -99,6 +99,8 @@ public:
 						const SimpleProgData &simpleData) {}
 	virtual void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData,
 						GLuint materialBlockIndex) {}
+	virtual void Render(glutil::MatrixStack &modelMatrix, 
+						const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &simpleData) {}
 
 	virtual void OnEvent(Event &_event) {}
 
@@ -404,6 +406,8 @@ private:
 
 	Utility::Primitives::Circle skillRadius;
 
+	ParticleAnimation burnAnim;
+
 public:
 	BurnSkill() : Skill() {}
 	BurnSkill(glm::vec3 newPosition, 
@@ -414,7 +418,8 @@ public:
 			  int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
 	void Update();
-	void Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &simpleData);
+	void Render(glutil::MatrixStack &modelMatrix, 
+				const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &simpleData);
 
 	void OnEvent(Event &_event);
 

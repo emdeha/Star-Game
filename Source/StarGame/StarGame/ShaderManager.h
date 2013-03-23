@@ -133,6 +133,7 @@ private:
 	BillboardProgDataNoTexture billboardProgDataNoTexture;
 	BillboardProgData billboardProgData;
 	ParticleProgData particleProgData;
+	SpriteParticleProgData spriteParticleProgData;
 
 public:
 	ShaderManager();
@@ -177,6 +178,7 @@ public:
 							   const std::string &fragmentShader);
 	void LoadParticleProgData(const std::string &vertexShader,
 							  const std::string &geometryShader);
+	void LoadSpriteParticleProgData(const std::string &vertexShader, const std::string &fragmentShader);
 
 
 	LitProgData GetLitProgData();
@@ -191,6 +193,7 @@ public:
 	BillboardProgDataNoTexture GetBillboardProgDataNoTexture();
 	BillboardProgData GetBillboardProgData();
 	ParticleProgData GetParticleProgData();
+	SpriteParticleProgData GetSpriteParticleProgData();
 
 
 	const int GetBlockIndex(BlockType);

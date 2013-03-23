@@ -417,6 +417,7 @@ void InitializePrograms()
 	scene.GetShaderManager().LoadParticleProgData("shaders/ParticleShader.vert", "shaders/ParticleShader.geom");
 	scene.GetShaderManager().LoadBillboardProgDataNoTexture("shaders/BillboardShader.vert", "shaders/BillboardShaderNoTexture.geom", "shaders/BillboardShaderNoTexture.frag");
 	scene.GetShaderManager().LoadLitTextureProgram("shaders/LitTexture.vert", "shaders/LitTexture.frag");
+	scene.GetShaderManager().LoadSpriteParticleProgData("shaders/SpriteParticleShader.vert", "shaders/SpriteParticleShader.frag");
 }
 
 FusionHint hintBox;
@@ -481,6 +482,9 @@ void InitializeScene()
 	glUseProgram(scene.GetShaderManager().GetLitTextureProgData().theProgram);
 	glUniform1i(scene.GetShaderManager().GetLitTextureProgData().textureUnif, 0);
 	glUseProgram(0);
+	glUseProgram(scene.GetShaderManager().GetSpriteParticleProgData().theProgram);
+	glUniform1i(scene.GetShaderManager().GetSpriteParticleProgData().samplerUnif, 0);
+	glUseProgram(0);
 	
 
 	// WARN: When audio is not loaded first, a break is thrown
@@ -529,6 +533,8 @@ void TimerFunction(int value)
 long long currentTime_milliseconds;
 
 Mesh sampleMesh;
+
+//ParticleAnimation testAnim;
 
 void Init()
 {
@@ -590,12 +596,14 @@ void Init()
 	nextGameTick = GetTickCount();
 
 
-	testEmitter = TexturedExplosionEmitter(glm::vec3(3.0f, 0.0f, 0.0f), 100, 1000, 0.5f, 0.01f, "../data/images/particle.png");
-	testEmitter.Init();
+	//testEmitter = TexturedExplosionEmitter(glm::vec3(3.0f, 0.0f, 0.0f), 100, 1000, 0.5f, 0.01f, "../data/images/particle.png");
+	//testEmitter.Init();
 
 	/// slower
 	//testSpriteEmitter = SpriteParticleEmitter(glm::vec3(2.0f, 0.0f, 0.0f), 100, 1000, 0.2f, 0.01f, "../data/images/particle.png");
 	//testSpriteEmitter.Init();
+
+	//testAnim = ParticleAnimation(glm::vec3(2.0f, 0.0f, 0.0f), 100, 1000, 0.2f, 0.01f, "../data/images/particle.png");
 }
 
 bool isEmitterStarted = false;
@@ -632,12 +640,12 @@ void Display()
 
 		if(isEmitterStarted)
 		{
-			testEmitter.Update();			
-			testEmitter.Render(modelMatrix, scene.GetTopDownCamera().ResolveCamPosition(),
-							   scene.GetShaderManager().GetBillboardProgData());
+			//testEmitter.Update();			
+			//testEmitter.Render(modelMatrix, scene.GetTopDownCamera().ResolveCamPosition(),
+			//				   scene.GetShaderManager().GetBillboardProgData());
 			/// slower
 			//testSpriteEmitter.Update();
-			//testSpriteEmitter.Render(modelMatrix, scene.GetShaderManager().GetSimpleTextureProgData());
+			//testSpriteEmitter.Render(modelMatrix, scene.GetShaderManager().GetSpriteParticleProgData());
 		}
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))

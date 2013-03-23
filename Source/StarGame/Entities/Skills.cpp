@@ -1115,6 +1115,8 @@ BurnSkill::BurnSkill(glm::vec3 newPosition,
 
 	skillRadius = Utility::Primitives::Circle(glm::vec4(0.4f, 0.9f, 0.1f, 0.5f), position, range, 90);
 	skillRadius.Init();
+
+	burnAnim = ParticleAnimation(position, 100, 300, 0.4f, 0.01f, "../data/images/particle.png");
 }
 
 void BurnSkill::Update()
@@ -1146,10 +1148,16 @@ void BurnSkill::Update()
 
 			damageApplyTime_seconds += damageApplyTimeDuration_seconds;
 		}
+
+		if(isDeployed)
+		{
+			burnAnim.Update();
+		}
 	}
 }
 
-void BurnSkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &simpleData)
+void BurnSkill::Render(glutil::MatrixStack &modelMatrix, 
+					   const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &simpleData)
 {
 	if(isStarted)
 	{
@@ -1162,6 +1170,11 @@ void BurnSkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &s
 		skillRadius.Draw(modelMatrix, simpleData);
 
 		glDisable(GL_BLEND);
+
+		if(isDeployed)
+		{
+			burnAnim.Render(modelMatrix, spriteParticleProgData);
+		}
 	}
 }
 

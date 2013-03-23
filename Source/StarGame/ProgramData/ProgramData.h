@@ -43,6 +43,20 @@ struct ProgramData
 };
 
 
+struct SpriteParticleProgData
+{
+	GLuint theProgram;
+
+	GLuint deltaPositionUnif;
+	GLuint modelToCameraMatrixUnif;
+	GLuint cameraToClipMatrixUnif;
+	GLuint colorUnif;
+	GLuint samplerUnif;
+
+	GLuint positionAttrib;
+	GLuint texCoordAttrib;
+};
+
 struct ParticleProgData
 {
 	GLuint theProgram;

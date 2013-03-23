@@ -151,11 +151,12 @@ void Animation::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 
 
 ParticleAnimation::ParticleAnimation(glm::vec3 newPosition, int newParticleCount,
-									 int newParticleLifeTime, float newSize,
+									 int newParticleLifeTime, float newSize, bool isLooping,
 									 float newVelocityMultiplier, 
 									 const std::string &textureFileName)
 {
-	burnAnim = SpriteParticleEmitter(newPosition, newParticleCount, newParticleLifeTime, newSize, newVelocityMultiplier, textureFileName);
+	burnAnim = 
+		SpriteParticleEmitter(newPosition, newParticleCount, newParticleLifeTime, newSize, isLooping, newVelocityMultiplier, textureFileName);
 	burnAnim.Init();
 }
 

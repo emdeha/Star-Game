@@ -476,8 +476,8 @@ bool TexturedExplosionEmitter::IsDead()
 
 
 SpriteParticleEmitter::SpriteParticleEmitter(glm::vec3 newPosition, int newParticleCount,
-											 int newParticleLifeTime, float newSize,
-											 float newVelocityMultiplier, 
+											 int newParticleLifeTime, float newSize, bool newIsLooping,
+											 float newVelocityMultiplier,  
 											 const std::string &textureFileName)
 {
 	position = newPosition;
@@ -487,6 +487,7 @@ SpriteParticleEmitter::SpriteParticleEmitter(glm::vec3 newPosition, int newParti
 	velocityMultiplier = newVelocityMultiplier;
 	size = newSize;
 	
+	isLooping = newIsLooping;
 	//particles.resize(particleCount); // double resize resulting in bugs...
 	
 	isActive = false;
@@ -600,12 +601,28 @@ void SpriteParticleEmitter::Update()
 		particles[i].lifeTime--;
 		if(particles[i].lifeTime <= 0)
 		{
-			std::vector<ExplosionParticle>::iterator particleToErase =
-				particles.begin();
-			particleToErase += i;
+			if(isLooping)
+			{
+				particles[i].position = position + glm::vec3();
+				particles[i].velocity = glm::vec3(((float)rand() / RAND_MAX - 0.5f) * 
+												  ((float)rand() / RAND_MAX) * velocityMultiplier,
+												  0.0f,
+												  //((float)rand() / RAND_MAX - 0.5f) * 
+												  //((float)rand() / RAND_MAX) * velocityMultiplier,
+												  ((float)rand() / RAND_MAX - 0.5f) * 
+												  ((float)rand() / RAND_MAX) * velocityMultiplier);
+				particles[i].color = glm::vec4(0.5f, 0.0f, 0.0f, 1.0f);
+				particles[i].lifeTime = rand() % particleLifeTime;
+			}
+			else
+			{
+				std::vector<ExplosionParticle>::iterator particleToErase =
+					particles.begin();
+				particleToErase += i;
 
-			particles.erase(particleToErase);
-			particleCount--;
+				particles.erase(particleToErase);
+				particleCount--;
+			}
 		}
 	}
 }

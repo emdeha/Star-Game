@@ -93,7 +93,7 @@ private:
 public:
 	ParticleAnimation() {}
 	ParticleAnimation(glm::vec3 newPosition, int newParticleCount,
-					  int newParticleLifeTime, float newSize,
+					  int newParticleLifeTime, float newSize, bool isLooping,
 					  float newVelocityMultiplier, 
 					  const std::string &textureFileName);
 

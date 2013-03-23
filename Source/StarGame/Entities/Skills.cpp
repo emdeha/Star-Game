@@ -1116,7 +1116,7 @@ BurnSkill::BurnSkill(glm::vec3 newPosition,
 	skillRadius = Utility::Primitives::Circle(glm::vec4(0.4f, 0.9f, 0.1f, 0.5f), position, range, 90);
 	skillRadius.Init();
 
-	burnAnim = ParticleAnimation(position, 100, 300, 0.4f, 0.01f, "../data/images/particle.png");
+	burnAnim = ParticleAnimation(position, 100, 100, 0.4f, true, 0.1f, "../data/images/particle.png");
 }
 
 void BurnSkill::Update()

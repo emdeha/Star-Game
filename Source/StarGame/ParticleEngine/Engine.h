@@ -201,6 +201,8 @@ private:
 	bool isActive;
 	bool isDead;
 
+	bool isLooping;
+
 	glm::vec3 position;
 	float velocityMultiplier;
 	float size;
@@ -218,7 +220,7 @@ private:
 public:
 	SpriteParticleEmitter() {}
 	SpriteParticleEmitter(glm::vec3 newPosition, int newParticleCount,
-						  int newParticleLifeTime, float newSize,
+						  int newParticleLifeTime, float newSize, bool newIsLooping, 
 						  float newVelocityMultiplier, 
 						  const std::string &textureFileName);
 

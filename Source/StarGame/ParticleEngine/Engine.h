@@ -226,7 +226,7 @@ public:
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix, 
-				const SimpleTextureProgData &textureProgData);
+				const SpriteParticleData &progData);
 
 	void SetPosition(glm::vec3 newPosition);
 

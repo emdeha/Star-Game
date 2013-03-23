@@ -527,6 +527,34 @@ void ShaderManager::LoadParticleProgData(const std::string &vertexShader,
 		glGetAttribLocation(particleProgData.theProgram, "velocity");
 }
 
+void ShaderManager::LoadSpriteParticleProgData(const std::string &vertexShader,
+											   const std::string &fragmentShader)
+{
+	std::vector<GLuint> shaderList;
+
+	shaderList.push_back(Framework::LoadShader(GL_VERTEX_SHADER, vertexShader));
+	shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, fragmentShader));
+
+	spriteParticleProgData.theProgram = Framework::CreateProgram(shaderList);
+
+
+	spriteParticleProgData.colorUnif =
+		glGetUniformLocation(spriteParticleProgData.theProgram, "color");
+	spriteParticleProgData.deltaPositionUnif =
+		glGetUniformLocation(spriteParticleProgData.theProgram, "deltaPosition");
+	spriteParticleProgData.modelToCameraMatrixUnif =
+		glGetUniformLocation(spriteParticleProgData.theProgram, "modelToCameraMatrix");
+	spriteParticleProgData.cameraToClipMatrixUnif =
+		glGetUniformLocation(spriteParticleProgData.theProgram, "cameraToClipMatrix");
+	spriteParticleProgData.textureUnif =
+		glGetUniformLocation(spriteParticleProgData.theProgram, "_sampler");
+
+	spriteParticleProgData.positionAttrib =
+		glGetAttribLocation(spriteParticleProgData.theProgram, "position");
+	spriteParticleProgData.textureCoordAttrib =
+		glGetAttribLocation(spriteParticleProgData.theProgram, "texCoord");
+}
+
 
 LitProgData ShaderManager::GetLitProgData()
 {
@@ -575,6 +603,10 @@ BillboardProgData ShaderManager::GetBillboardProgData()
 ParticleProgData ShaderManager::GetParticleProgData()
 {
 	return particleProgData;
+}
+SpriteParticleData ShaderManager::GetSpriteParticleProgData()
+{
+	return spriteParticleProgData;
 }
 
 

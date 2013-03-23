@@ -26,6 +26,7 @@
 #include "../framework/Mesh.h"
 #include "../framework/Timer.h"
 #include "../ProgramData/ProgramData.h"
+#include "../ParticleEngine/Engine.h"
 
 
 class AnimationBody
@@ -81,6 +82,23 @@ public:
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex, const LitProgData &progData);
+};
+
+
+class ParticleBurnAnimation
+{
+private:
+	SpriteParticleEmitter burnEmitter;
+
+public:
+	ParticleBurnAnimation() {}
+	ParticleBurnAnimation(glm::vec3 position, int particleCount,
+						  int particleLifeTime, float size,
+						  float velocityMultiplier, 
+						  const std::string &textureFileName);
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix, const SpriteParticleData &progData);
 };
 
 

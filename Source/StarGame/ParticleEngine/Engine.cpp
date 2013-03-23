@@ -611,20 +611,23 @@ void SpriteParticleEmitter::Update()
 }
 
 void SpriteParticleEmitter::Render(glutil::MatrixStack &modelMatrix, 
-								   const SimpleTextureProgData &textureProgData)
+								   const SpriteParticleData &progData)
 {
-	glUseProgram(textureProgData.theProgram);
+	glUseProgram(progData.theProgram);
 	glBindVertexArray(vao);
 	{
 		// TODO: Add particle shader with deltaPos optimization
-		
-		glEnableVertexAttribArray(textureProgData.positionAttrib);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
-		glVertexAttribPointer(textureProgData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+		glutil::PushStack push(modelMatrix);
+		glUniformMatrix4fv(progData.modelToCameraMatrixUnif,
+						   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
 
-		glEnableVertexAttribArray(textureProgData.textureCoordAttrib);
+		glEnableVertexAttribArray(progData.positionAttrib);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+		glVertexAttribPointer(progData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+		glEnableVertexAttribArray(progData.textureCoordAttrib);
 		glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
-		glVertexAttribPointer(textureProgData.textureCoordAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer(progData.textureCoordAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
 		
 		texture->Bind(GL_TEXTURE0);
 
@@ -636,13 +639,14 @@ void SpriteParticleEmitter::Render(glutil::MatrixStack &modelMatrix,
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
 		for(int i = 0; i < particleCount; i++)
 		{			
-			glutil::PushStack push(modelMatrix);
-			modelMatrix.Translate(particles[i].position.x, particles[i].position.y, particles[i].position.z);
+			//glutil::PushStack push(modelMatrix);
+			//modelMatrix.Translate(particles[i].position.x, particles[i].position.y, particles[i].position.z);
 
-			glUniformMatrix4fv(textureProgData.modelToCameraMatrixUnif, 
-							   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-
-			glUniform4f(textureProgData.colorUnif,
+			//glUniformMatrix4fv(progData.modelToCameraMatrixUnif, 
+			//				   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+			glUniform3f(progData.deltaPositionUnif,
+						particles[i].position.x, particles[i].position.y, particles[i].position.z);
+			glUniform4f(progData.colorUnif,
 						particles[i].color.r, particles[i].color.g,
 						particles[i].color.b, particles[i].color.a);
 
@@ -652,8 +656,8 @@ void SpriteParticleEmitter::Render(glutil::MatrixStack &modelMatrix,
 		glDepthMask(GL_TRUE);
 		glDisable(GL_BLEND);
 
-		glDisableVertexAttribArray(textureProgData.positionAttrib);
-		glDisableVertexAttribArray(textureProgData.textureCoordAttrib);
+		glDisableVertexAttribArray(progData.positionAttrib);
+		glDisableVertexAttribArray(progData.textureCoordAttrib);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

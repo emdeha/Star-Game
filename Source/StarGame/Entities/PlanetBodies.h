@@ -173,6 +173,7 @@ public:
 				const SimpleProgData &simpleData,
 				const SimpleTextureProgData &textureData,
 				const LitTextureProgData &litTextureData,
+				const SpriteParticleData &spriteParticleData,
 				float interpolation);
 
 	void OnEvent(Event &_event);

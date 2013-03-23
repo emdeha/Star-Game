@@ -148,3 +148,23 @@ void Animation::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 		animationBodies[animBody]->Render(modelMatrix, materialBlockIndex, progData);
 	}
 }
+
+
+ParticleBurnAnimation::ParticleBurnAnimation(glm::vec3 position, int particleCount,
+											 int particleLifeTime, float size,
+											 float velocityMultiplier, 
+											 const std::string &textureFileName)
+{
+	burnEmitter = SpriteParticleEmitter(position, particleCount, particleLifeTime, size, velocityMultiplier, textureFileName);
+	burnEmitter.Init();
+}
+
+void ParticleBurnAnimation::Update()
+{
+	burnEmitter.Update();
+}
+
+void ParticleBurnAnimation::Render(glutil::MatrixStack &modelMatrix, const SpriteParticleData &progData)
+{
+	burnEmitter.Render(modelMatrix, progData);
+}

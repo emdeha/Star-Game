@@ -87,10 +87,10 @@ layout-game:
                     text-size: 28
                 preset-medium:
                     position: [ 670, 683 ]
-                    text-size: 48
+                    text-size: 28
                 preset-big:
                     position: [ 670, 683 ]
-                    text-size: 68
+                    text-size: 28
             width: 50
             height: 50
             textures: [ 
@@ -115,10 +115,10 @@ layout-game:
                     text-size: 28
                 preset-medium:
                     position: [ 1020, 728 ]
-                    text-size: 48
+                    text-size: 28
                 preset-big:
                     position: [ 1020, 728 ]
-                    text-size: 68
+                    text-size: 28
         control-button-apply:
             control-type: button
             name: applyInput
@@ -130,10 +130,10 @@ layout-game:
                     text-size: 28
                 preset-medium:
                     position: [ 1230, 728 ]
-                    text-size: 48
+                    text-size: 28
                 preset-big:
                     position: [ 1230, 728 ]
-                    text-size: 68
+                    text-size: 28
 layout-menu:
     background-color: [ 0.0, 0.5, 0.6, 1.0 ]
     is-active: true
@@ -149,10 +149,10 @@ layout-menu:
                     text-size: 28
                 preset-medium:
                     position: [ 10, 100 ]
-                    text-size: 48
+                    text-size: 28
                 preset-big:
                     position: [ 10, 100 ]
-                    text-size: 68
+                    text-size: 28
         control-button-save:
             control-type: button
             name: saveGame
@@ -164,10 +164,10 @@ layout-menu:
                     text-size: 28
                 preset-medium:
                     position: [ 10, 70 ]
-                    text-size: 48
+                    text-size: 28
                 preset-big:
                     position: [ 10, 70 ]
-                    text-size: 68
+                    text-size: 28
         control-button-quit:
             control-type: button
             name: quitGame 
@@ -179,10 +179,10 @@ layout-menu:
                     text-size: 28   
                 preset-medium:
                     position: [ 10, 40 ]
-                    text-size: 48
+                    text-size: 28
                 preset-big:
                     position: [ 10, 40 ]
-                    text-size: 68
+                    text-size: 28
 layout-save-game:
     background-color: [ 0.0, 0.5, 0.6, 1.0 ]
     is-active: false

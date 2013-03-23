@@ -48,8 +48,6 @@ AudioLoader::AudioLoader(const std::string &fileName)
 			audioData.channel = CHANNEL_GAME;
 		}
 		audioData.channelVolume = channel->second["volume"].as<float>();
-
-		loadedAudio.push_back(std::pair<ChannelType, AudioData>(audioData.channel, audioData));
 		
 		AudioFile audioFile;
 
@@ -58,8 +56,10 @@ AudioLoader::AudioLoader(const std::string &fileName)
 		{
 			audioFile.soundType = SoundType(music->second["sound-type"].as<int>());
 			audioFile.path = music->second["sound-file"].as<std::string>();
-			loadedAudio[audioData.channel].second.audioFiles.push_back(audioFile);
+			audioData.audioFiles.push_back(audioFile);
 		}
+
+		loadedAudio.push_back(std::pair<ChannelType, AudioData>(audioData.channel, audioData));
 	}
 }
 

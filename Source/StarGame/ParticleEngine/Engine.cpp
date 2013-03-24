@@ -629,7 +629,6 @@ void SpriteParticleEmitter::Update()
 
 void SpriteParticleEmitter::Render(glutil::MatrixStack &modelMatrix, 
 								   const SpriteParticleProgData &progData)
-								   //const SimpleTextureProgData &textureProgData)
 {
 	glUseProgram(progData.theProgram);
 	glBindVertexArray(vao);

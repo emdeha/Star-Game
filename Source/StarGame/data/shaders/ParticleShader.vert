@@ -1,21 +1,23 @@
 #version 330
 
-layout (location = 0) in float type;
-layout (location = 1) in vec3 position;
-layout (location = 2) in vec3 velocity;
-layout (location = 3) in float age;
+layout(std140) uniform;
 
+layout(location = 0) in vec3 position;
+layout(location = 1) in vec2 texCoord;
 
-out float typeToGS;
-out vec3 positionToGS;
-out vec3 velocityToGS;
-out float ageToGS;
+out vec2 colorCoord;
 
+uniform Projection
+{
+	mat4 cameraToClipMatrix;
+};
+uniform mat4 modelToCameraMatrix;
+
+uniform vec3 deltaPosition;
 
 void main()
 {
-	typeToGS = type;
-	positionToGS = position;
-	velocityToGS = velocity;
-	ageToGS = age;
+	vec3 updatedPosition = position + deltaPosition;
+	gl_Position = cameraToClipMatrix * (modelToCameraMatrix * vec4(updatedPosition, 1.0));
+	colorCoord = texCoord;
 }

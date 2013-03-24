@@ -1163,17 +1163,19 @@ void BurnSkill::Render(glutil::MatrixStack &modelMatrix,
 	{
 		glutil::PushStack push(modelMatrix);
 		modelMatrix.Translate(position);
-
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		skillRadius.Draw(modelMatrix, simpleData);
-
-		glDisable(GL_BLEND);
-
+		
 		if(isDeployed)
 		{
 			burnAnim.Render(modelMatrix, spriteParticleProgData);
+		}
+		else
+		{
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+			skillRadius.Draw(modelMatrix, simpleData);
+
+			glDisable(GL_BLEND);
 		}
 	}
 }

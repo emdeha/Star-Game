@@ -536,7 +536,6 @@ void ShaderManager::LoadSpriteParticleProgData(const std::string &vertexShader, 
 
 	spriteParticleProgData.theProgram = Framework::CreateProgram(shaderList);
 
-
 	spriteParticleProgData.deltaPositionUnif = 
 		glGetUniformLocation(spriteParticleProgData.theProgram, "deltaPosition");
 	spriteParticleProgData.cameraToClipMatrixUnif = 

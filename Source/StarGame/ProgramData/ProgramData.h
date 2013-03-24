@@ -74,6 +74,20 @@ struct ParticleProgData
 	GLuint particleAgeAttrib;
 };
 
+struct SpriteParticleData
+{
+	GLuint theProgram;
+
+	GLuint deltaPositionUnif;
+	GLuint textureUnif;
+	GLuint colorUnif;
+	GLuint cameraToClipMatrixUnif;
+	GLuint modelToCameraMatrixUnif;
+
+	GLuint positionAttrib;
+	GLuint textureCoordAttrib;
+};
+
 struct BillboardProgData
 {
 	GLuint theProgram;

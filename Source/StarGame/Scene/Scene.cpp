@@ -1047,7 +1047,7 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
 	int sizeSuns = suns.size();
 	for(int i = 0; i < sizeSuns; i++)
 	{
-		suns[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, 
+		suns[i]->Render(modelMatrix, materialBlockIndex, sceneGamma,
 						litData, unLitData, simpleData, textureData, litTextureData, spriteParticleProgData,
 						interpolation);
 	}

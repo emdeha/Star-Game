@@ -102,4 +102,17 @@ public:
 };
 
 
+class AoEAnimation
+{
+private:
+
+public:
+	AoEAnimation() {}
+	AoEAnimation(glm::vec3 position);
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteParticleProgData);
+};
+
+
 #endif

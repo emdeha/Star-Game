@@ -534,7 +534,7 @@ long long currentTime_milliseconds;
 
 Mesh sampleMesh;
 
-//ParticleAnimation testAnim;
+MeteoriteEmitter testMeteoriteEmitter;
 
 void Init()
 {
@@ -595,6 +595,11 @@ void Init()
 
 	nextGameTick = GetTickCount();
 
+
+	testMeteoriteEmitter = MeteoriteEmitter(glm::vec3(0.0f, 0.0f, 0.0f), 100, 3, 50, 0.3f, 0.5f, 0.01f, 
+											"../data/images/particle.png", "../data/images/meteor.png");
+	testMeteoriteEmitter.Init();
+
 	/// slower
 	//testSpriteEmitter = SpriteParticleEmitter(glm::vec3(2.0f, 0.0f, 0.0f), 100, 300, 0.2f, true, 0.01f, "../data/images/particle.png");
 	//testSpriteEmitter.Init();
@@ -636,9 +641,12 @@ void Display()
 
 		if(isEmitterStarted)
 		{
+			testMeteoriteEmitter.Update();
+			testMeteoriteEmitter.Render(modelMatrix, scene.GetShaderManager().GetSpriteParticleProgData());
+
 			/// slower
-			testSpriteEmitter.Update();
-			testSpriteEmitter.Render(modelMatrix, scene.GetShaderManager().GetSpriteParticleProgData());
+			//testSpriteEmitter.Update();
+			//testSpriteEmitter.Render(modelMatrix, scene.GetShaderManager().GetSpriteParticleProgData());
 		}
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))

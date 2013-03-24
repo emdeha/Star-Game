@@ -638,7 +638,6 @@ void SpriteParticleEmitter::Render(glutil::MatrixStack &modelMatrix,
 	glUseProgram(progData.theProgram);
 	glBindVertexArray(vao);
 	{
-		// TODO: Add particle shader with deltaPos optimization
 		glutil::PushStack push(modelMatrix);
 		glUniformMatrix4fv(progData.modelToCameraMatrixUnif,
 						   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
@@ -694,6 +693,207 @@ bool SpriteParticleEmitter::IsActive()
 }
 
 bool SpriteParticleEmitter::IsDead()
+{
+	return isDead;
+}
+
+
+MeteoriteEmitter::MeteoriteEmitter(glm::vec3 newPosition, 
+								   int newExplosionParticlesCount, int newMeteoriteParticlesCount,
+								   int newExplosionParticlesLifeTime, 
+								   float newExplosionParticlesSize, float newMeteoriteParticlesSize,
+								   float newExplosionParticlesVelocityMultiplier,
+								   const std::string &explosionParticlesTextureFileName,
+								   const std::string &meteoriteParticlesTextureFileName)
+{/*
+	position = newPosition;	
+	explosionParticlesCount = newExplosionParticlesCount;
+	meteoriteParticlesCount = newMeteoriteParticlesCount;
+	explosionParticlesLifeTime = newExplosionParticlesLifeTime;
+	explosionParticlesSize = newExplosionParticlesSize;
+	meteoriteParticlesSize = newMeteoriteParticlesSize;
+	explosionParticlesVelocityMultiplier = newExplosionParticlesVelocityMultiplier;
+
+	isActive = false;
+	isDead = false;
+
+	vao = 0;
+	explosion*/
+	position = newPosition;
+	meteoriteParticlesCount = newMeteoriteParticlesCount;
+	meteoriteStartingParticlesCount = meteoriteParticlesCount;
+	meteoriteParticlesSize = newMeteoriteParticlesSize;
+	
+	isActive = false;
+	isDead = false;
+
+	vao = 0;
+	meteoriteVertexBO = 0;
+	textureCoordsBO = 0;
+	indexBO = 0;
+
+	meteoriteTexture = std::shared_ptr<Texture2D>(new Texture2D());
+	if(!meteoriteTexture->Load(meteoriteParticlesTextureFileName, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE))
+	{
+		std::string errorMessage = "cannot load texture";
+		errorMessage += meteoriteParticlesTextureFileName;
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+	}
+
+	std::vector<float> vertexData;
+	std::vector<float> textureCoordsData;
+	std::vector<unsigned short> indexData;
+
+	vertexData.push_back(position.x - meteoriteParticlesSize);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z - meteoriteParticlesSize); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z - meteoriteParticlesSize); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x - meteoriteParticlesSize);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z); vertexData.push_back(1.0f);
+		
+	textureCoordsData.push_back(0.0f); textureCoordsData.push_back(1.0f);
+	textureCoordsData.push_back(1.0f); textureCoordsData.push_back(1.0f);
+	textureCoordsData.push_back(1.0f); textureCoordsData.push_back(0.0f);
+	textureCoordsData.push_back(0.0f); textureCoordsData.push_back(0.0f);
+
+	indexData.push_back(0); indexData.push_back(1); indexData.push_back(2);
+	indexData.push_back(2); indexData.push_back(3); indexData.push_back(0);
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	glGenBuffers(1, &meteoriteVertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, meteoriteVertexBO);	
+	glBufferData(GL_ARRAY_BUFFER, 
+				 sizeof(float) * vertexData.size(), &vertexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	
+	glGenBuffers(1, &textureCoordsBO);
+	glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
+	glBufferData(GL_ARRAY_BUFFER, 
+				 sizeof(float) * textureCoordsData.size(), &textureCoordsData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+	glGenBuffers(1, &indexBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
+				 sizeof(unsigned short) * indexData.size(), &indexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	onHitExplosionEmitter = SpriteParticleEmitter(position, newExplosionParticlesCount, newExplosionParticlesLifeTime, 
+												  newExplosionParticlesSize, false, newExplosionParticlesVelocityMultiplier, 
+												  explosionParticlesTextureFileName);
+}
+// resize on init!!!
+void MeteoriteEmitter::Init()
+{
+	isActive = false;
+	isDead = false;
+	meteorites.resize(meteoriteStartingParticlesCount);
+	meteoriteParticlesCount = meteoriteStartingParticlesCount;
+	for(int i = 0; i < meteoriteParticlesCount; i++)
+	{
+		meteorites[i].position = position + 
+								 glm::vec3(0.0f, 3.0f, 0.0f); // simulating height
+		meteorites[i].velocity = glm::vec3(0.0f, ((float)rand() / RAND_MAX - 0.5f) * 0.001f, 0.0f); // only rand speed on y
+	}
+	onHitExplosionEmitter.Init();
+}
+
+void MeteoriteEmitter::Update()
+{
+	if(meteoriteParticlesCount == 0)
+	{
+		isDead = true;
+	}
+	for(int i = 0; i < meteoriteParticlesCount; i++)
+	{
+		meteorites[i].position += meteorites[i].velocity;
+		if(meteorites[i].position.z > 0.0f) // later: delete meteorite and set a bool flag indicating whether the onHit should be updated
+		{
+			onHitExplosionEmitter.Update(); 
+		}
+	}
+}
+
+void MeteoriteEmitter::Render(glutil::MatrixStack &modelMatrix,
+							  const SpriteParticleProgData &progData)
+{
+	glUseProgram(progData.theProgram);
+	glBindVertexArray(vao);
+	{
+		glutil::PushStack push(modelMatrix);
+		glUniformMatrix4fv(progData.modelToCameraMatrixUnif, 
+						   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+
+		glEnableVertexAttribArray(progData.positionAttrib);
+		glBindBuffer(GL_ARRAY_BUFFER, meteoriteVertexBO);
+		glVertexAttribPointer(progData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+		glEnableVertexAttribArray(progData.texCoordAttrib);
+		glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
+		glVertexAttribPointer(progData.texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		
+		meteoriteTexture->Bind(GL_TEXTURE0);
+
+		glEnable(GL_BLEND);
+		glDepthMask(GL_FALSE);
+		glBlendEquation(GL_FUNC_ADD);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+		for(int i = 0; i < meteoriteParticlesCount; i++)
+		{			
+			glUniform3f(progData.deltaPositionUnif,
+						meteorites[i].position.x, meteorites[i].position.y, meteorites[i].position.z);
+			glUniform4f(progData.colorUnif, 1.0f, 1.0f, 1.0f, 1.0f);
+
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+		}
+		
+		glDepthMask(GL_TRUE);
+		glDisable(GL_BLEND);
+
+		glDisableVertexAttribArray(progData.positionAttrib);
+		glDisableVertexAttribArray(progData.texCoordAttrib);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		meteoriteTexture->Unbind();
+	}
+	glBindVertexArray(0);
+	glUseProgram(0);
+
+	for(int i = 0; i < meteoriteParticlesCount; i++)
+	{
+		if(meteorites[i].position.z > 0.0f)
+		{
+			onHitExplosionEmitter.Render(modelMatrix, progData);
+		}
+	}
+}
+
+void MeteoriteEmitter::Activate()
+{
+	isActive = true;
+}
+bool MeteoriteEmitter::IsActive()
+{
+	return isActive;
+}
+
+bool MeteoriteEmitter::IsDead()
 {
 	return isDead;
 }

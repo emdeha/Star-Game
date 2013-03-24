@@ -45,6 +45,12 @@ struct ExplosionParticle
 	float lifeTime;
 };
 
+struct MeteoriteParticle
+{
+	glm::vec3 position;
+	glm::vec3 velocity;
+};
+
 struct RayParticle
 {
 	glm::vec4 color;
@@ -233,6 +239,57 @@ public:
 				const SpriteParticleProgData &progData);
 
 	void SetPosition(glm::vec3 newPosition);
+
+	void Activate();
+	bool IsActive();
+
+	bool IsDead();
+};
+
+
+class MeteoriteEmitter
+{
+private:
+	std::vector<MeteoriteParticle> meteorites;
+	SpriteParticleEmitter onHitExplosionEmitter; // add a vector later
+	//std::vector<ExplosionParticle> explosionParticles;
+
+	bool isActive;
+	bool isDead;
+
+	glm::vec3 position;
+	//float explosionParticlesVelocityMultiplier;
+	//float explosionParticlesSize;
+	//float explosionParticlesLifeTime;
+	float meteoriteParticlesSize;
+	//int explosionParticlesCount;
+	int meteoriteParticlesCount;
+	int meteoriteStartingParticlesCount;
+
+	GLuint vao;
+	GLuint meteoriteVertexBO;
+	//GLuint explosionVertexBO;
+	GLuint textureCoordsBO;
+	GLuint indexBO;
+
+	std::shared_ptr<Texture2D> meteoriteTexture;
+	//std::shared_ptr<Texture2D> explosionTexture;
+
+public:
+	MeteoriteEmitter() {}
+	MeteoriteEmitter(glm::vec3 newPosition, 
+					 int newExplosionParticlesCount, int newMeteoriteParticlesCount,
+					 int newExplosionParticlesLifeTime, 
+					 float newExplosionParticlesSize, float newMeteoriteParticlesSize,
+					 float newExplosionParticlesVelocityMultiplier,
+					 const std::string &explosionParticlesTextureFileName,
+					 const std::string &meteoriteParticlesTextureFileName);
+
+	void Init();
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix,
+				const SpriteParticleProgData &progData);
 
 	void Activate();
 	bool IsActive();

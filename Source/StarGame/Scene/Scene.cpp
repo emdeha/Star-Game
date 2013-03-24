@@ -1230,18 +1230,21 @@ void Scene::UpdateScene()
 
 			if(skills[skillIndex]->GetSkillType() == "burnSkill" && 
 			   skills[skillIndex]->IsDeployed() == true)
-			{
-				for(int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++)
+			{				
+				Event skillEvent = skills[skillIndex]->GetGeneratedEvent("timeended");
+				if(skillEvent.GetType() != EVENT_TYPE_EMPTY)
 				{
-					if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition()))
+					for(int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++)
 					{
-						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("timeended");
-						if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
+						if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition()))
 						{
-							enemies[enemyIndex]->OnEvent(skillEvent);
-							skills[skillIndex]->RemoveGeneratedEvent("timeended");
+							if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
+							{
+								enemies[enemyIndex]->OnEvent(skillEvent);
+							}
 						}
 					}
+					skills[skillIndex]->RemoveGeneratedEvent("timeended");
 				}
 			}
 
@@ -1395,13 +1398,23 @@ void Scene::OnEvent(Event &_event)
 				std::vector<std::shared_ptr<Skill>> skills = suns[0]->GetAllSkills();
 				if(!enemies.empty() && !skills.empty())
 				{
-					for(int i = 0; i < enemies.size(); i++)
+					for(int skillIndex = 0; skillIndex < skills.size(); skillIndex++)
 					{
-						for(int skillIndex = 0; skillIndex < skills.size(); skillIndex++)
+						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
+						if(skills[skillIndex]->GetSkillType() == "burnSkill")
 						{
-							Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
-							//skills[skillIndex]->RemoveGeneratedEvent("skilldeployed");
+							EventArg deploySkillEventArgs[1];
+							deploySkillEventArgs[0].argType = "deploy";
+							deploySkillEventArgs[0].argument.varType = TYPE_BOOL;
+							deploySkillEventArgs[0].argument.varBool = true;
 
+							Event deploySkillEvent = Event(1, EVENT_TYPE_OTHER, deploySkillEventArgs);
+							skills[skillIndex]->OnEvent(deploySkillEvent);
+						}
+						//skills[skillIndex]->RemoveGeneratedEvent("skilldeployed");
+
+						for(int i = 0; i < enemies.size(); i++)
+						{
 							if(skills[skillIndex]->IsIntersectingObject(enemies[i]->GetPosition()) &&
 							   skills[skillIndex]->GetSkillType() != "burnSkill")
 							{
@@ -1412,6 +1425,11 @@ void Scene::OnEvent(Event &_event)
 								}
 								//enemies[i]->OnEvent(skillEvent);
 							}
+						}
+						if(skills[skillIndex]->GetSkillType() == "aoeSkill")
+						{
+							// WARN: May bug
+							skills[skillIndex]->isStarted = false;
 						}
 					}
 				}

@@ -67,6 +67,7 @@ protected:
 	int skillResearchCost;
 
 	bool isStarted;
+	bool isDeployed;
 
 	bool isResearched;
 	int boxIndexForUpgrade;
@@ -88,6 +89,7 @@ public:
 		skillResearchCost = newSkillResearchCost;
 
 		isResearched = false;
+		isDeployed = false;
 		boxIndexForUpgrade = newBoxIndexForUpgrade;
 	}
 
@@ -117,7 +119,7 @@ public:
 	int GetApplyCost() { return skillApplyCost; }
 	int GetResearchCost() { return skillResearchCost; }
 	glm::vec3 GetPosition() { return glm::vec3(); }
-	bool IsDeployed() { return false; }
+	bool IsDeployed() { return isDeployed; }
 	bool IsStarted() { return isStarted; }
 	bool IsResearched() { return isResearched; }
 
@@ -402,7 +404,7 @@ private:
 	//
 	Framework::Timer attackTimer;
 
-	bool isDeployed;
+	//bool isDeployed;
 
 	Utility::Primitives::Circle skillRadius;
 

@@ -205,7 +205,7 @@ bool AOESkill::IsIntersectingObject(glm::vec3 objectPosition)
 
 		if(distanceBetweenObjectAndSkill < range)
 		{
-			isStarted = false;
+			//isStarted = false;
 			return true;
 		}
 	
@@ -1116,7 +1116,7 @@ BurnSkill::BurnSkill(glm::vec3 newPosition,
 	skillRadius = Utility::Primitives::Circle(glm::vec4(0.4f, 0.9f, 0.1f, 0.5f), position, range, 90);
 	skillRadius.Init();
 
-	burnAnim = ParticleAnimation(position, 100, 100, 0.4f, true, 0.1f, "../data/images/particle.png");
+	burnAnim = ParticleAnimation(position, 100, 50, 0.4f, true, 0.1f, "../data/images/particle.png");
 }
 
 void BurnSkill::Update()
@@ -1210,6 +1210,12 @@ void BurnSkill::OnEvent(Event &_event)
 				isDeployed = false;
 				attackTimer.SetPause(true);
 			}
+			if(_event.GetArgument("deploy").varBool == true)
+			{	
+				attackTimer.SetPause(false);
+				attackTimer.Reset();
+				isDeployed = true;
+			}
 			break;
 		default:
 			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
@@ -1225,11 +1231,11 @@ float BurnSkill::GetRange()
 glm::vec3 BurnSkill::GetPosition()
 {
 	return position;
-}
+}/*
 bool BurnSkill::IsDeployed()
 {
 	return isDeployed;
-}
+}*/
 
 void BurnSkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 {
@@ -1257,14 +1263,14 @@ bool BurnSkill::IsIntersectingObject(glm::vec3 objectPosition)
 		float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
 
 		if(distanceBetweenObjectAndSkill < range)
-		{
+		{/*
 			if(!isDeployed)
 			{
 				attackTimer.SetPause(false);
 				attackTimer.Reset();
 				isDeployed = true;
 			}
-
+			*/
 			return true;
 		}
 

@@ -570,13 +570,15 @@ void SpriteParticleEmitter::Init()
 		particles[i].position = position + glm::vec3();
 		particles[i].velocity = glm::vec3(((float)rand() / RAND_MAX - 0.5f) * 
 										  ((float)rand() / RAND_MAX) * velocityMultiplier,
-										  0.0f,
-										  //((float)rand() / RAND_MAX - 0.5f) * 
-										  //((float)rand() / RAND_MAX) * velocityMultiplier,
+										  //0.0f,
+										  ((float)rand() / RAND_MAX - 0.5f) * 
+										  ((float)rand() / RAND_MAX) * velocityMultiplier,
 										  ((float)rand() / RAND_MAX - 0.5f) * 
 										  ((float)rand() / RAND_MAX) * velocityMultiplier);
-		particles[i].color = glm::vec4(0.5f, 0.0f, 0.0f, 1.0f);
-		particles[i].lifeTime = rand() % particleLifeTime;
+		particles[i].interpColorBegin = glm::vec4(0.5f, 0.0f, 0.0f, 1.0f);
+		particles[i].interpColorEnd = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+		particles[i].color = particles[i].interpColorBegin;
+		particles[i].lifeTime = (rand() % particleLifeTime) / 2.0f + particleLifeTime / 2.0f;
 	}
 }
 
@@ -599,6 +601,9 @@ void SpriteParticleEmitter::Update()
 	{
 		particles[i].position += particles[i].velocity;
 		particles[i].lifeTime--;
+		float colorLerpFactor = particles[i].lifeTime / particleLifeTime;
+		particles[i].color = 
+			glm::mix(particles[i].interpColorBegin, particles[i].interpColorEnd, colorLerpFactor);
 		if(particles[i].lifeTime <= 0)
 		{
 			if(isLooping)
@@ -606,13 +611,13 @@ void SpriteParticleEmitter::Update()
 				particles[i].position = position + glm::vec3();
 				particles[i].velocity = glm::vec3(((float)rand() / RAND_MAX - 0.5f) * 
 												  ((float)rand() / RAND_MAX) * velocityMultiplier,
-												  0.0f,
-												  //((float)rand() / RAND_MAX - 0.5f) * 
-												  //((float)rand() / RAND_MAX) * velocityMultiplier,
+												  //0.0f,
+												  ((float)rand() / RAND_MAX - 0.5f) * 
+												  ((float)rand() / RAND_MAX) * velocityMultiplier,
 												  ((float)rand() / RAND_MAX - 0.5f) * 
 												  ((float)rand() / RAND_MAX) * velocityMultiplier);
-				particles[i].color = glm::vec4(0.5f, 0.0f, 0.0f, 1.0f);
-				particles[i].lifeTime = rand() % particleLifeTime;
+				particles[i].color = particles[i].interpColorBegin;
+				particles[i].lifeTime = (rand() % particleLifeTime) / 2.0f + particleLifeTime / 2.0f;
 			}
 			else
 			{
@@ -651,16 +656,11 @@ void SpriteParticleEmitter::Render(glutil::MatrixStack &modelMatrix,
 		glEnable(GL_BLEND);
 		glDepthMask(GL_FALSE);
 		glBlendEquation(GL_FUNC_ADD);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
 		for(int i = 0; i < particleCount; i++)
 		{			
-			//glutil::PushStack push(modelMatrix);
-			//modelMatrix.Translate(particles[i].position.x, particles[i].position.y, particles[i].position.z);
-
-			//glUniformMatrix4fv(progData.modelToCameraMatrixUnif, 
-			//				   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
 			glUniform3f(progData.deltaPositionUnif,
 						particles[i].position.x, particles[i].position.y, particles[i].position.z);
 			glUniform4f(progData.colorUnif,

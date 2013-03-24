@@ -36,6 +36,8 @@ struct StandardParticle
 struct ExplosionParticle
 {
 	glm::vec4 color;
+	glm::vec4 interpColorBegin;
+	glm::vec4 interpColorEnd;
 
 	glm::vec3 position;
 	glm::vec3 velocity;

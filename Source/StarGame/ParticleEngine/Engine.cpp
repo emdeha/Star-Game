@@ -702,7 +702,9 @@ MeteoriteEmitter::MeteoriteEmitter(glm::vec3 newPosition,
 								   int newExplosionParticlesCount, int newMeteoriteParticlesCount,
 								   int newExplosionParticlesLifeTime, 
 								   float newExplosionParticlesSize, float newMeteoriteParticlesSize,
+								   float newMeteoriteSpreadRadius,
 								   float newExplosionParticlesVelocityMultiplier,
+								   float newMeteoriteVelocityMultiplier,
 								   const std::string &explosionParticlesTextureFileName,
 								   const std::string &meteoriteParticlesTextureFileName)
 {/*
@@ -723,6 +725,10 @@ MeteoriteEmitter::MeteoriteEmitter(glm::vec3 newPosition,
 	meteoriteParticlesCount = newMeteoriteParticlesCount;
 	meteoriteStartingParticlesCount = meteoriteParticlesCount;
 	meteoriteParticlesSize = newMeteoriteParticlesSize;
+	meteoriteSpreadRadius = newMeteoriteSpreadRadius;
+	meteoriteVelocityMultiplier = newMeteoriteVelocityMultiplier;
+
+	isOnHitExplosionUpdate = false;
 	
 	isActive = false;
 	isDead = false;
@@ -805,8 +811,13 @@ void MeteoriteEmitter::Init()
 	for(int i = 0; i < meteoriteParticlesCount; i++)
 	{
 		meteorites[i].position = position + 
-								 glm::vec3(0.0f, 3.0f, 0.0f); // simulating height
-		meteorites[i].velocity = glm::vec3(0.0f, ((float)rand() / RAND_MAX - 0.5f) * 0.001f, 0.0f); // only rand speed on y
+								 glm::vec3(((float)rand() / RAND_MAX * meteoriteSpreadRadius) - meteoriteSpreadRadius, 
+										   3.0f, 
+										   ((float)rand() / RAND_MAX * meteoriteSpreadRadius) - meteoriteSpreadRadius); // simulating height
+		meteorites[i].velocity = 
+			glm::vec3(0.0f, 
+					  fabs(((float)rand() / RAND_MAX - 0.5f)) * (-meteoriteVelocityMultiplier), 
+					  0.0f); // only rand speed on y
 	}
 	onHitExplosionEmitter.Init();
 }
@@ -820,9 +831,24 @@ void MeteoriteEmitter::Update()
 	for(int i = 0; i < meteoriteParticlesCount; i++)
 	{
 		meteorites[i].position += meteorites[i].velocity;
-		if(meteorites[i].position.z > 0.0f) // later: delete meteorite and set a bool flag indicating whether the onHit should be updated
+		if(meteorites[i].position.y < 0.0f) // later: delete meteorite and set a bool flag indicating whether the onHit should be updated
+		{		
+			onHitExplosionEmitter.SetPosition(meteorites[i].position);
+			onHitExplosionEmitter.Init();
+			isOnHitExplosionUpdate = true;
+			//onHitExplosionEmitter.Update(); 
+			meteorites[i].position = position + 
+									 glm::vec3(((float)rand() / RAND_MAX * meteoriteSpreadRadius) - meteoriteSpreadRadius, 
+											   3.0f, 
+											   ((float)rand() / RAND_MAX * meteoriteSpreadRadius) - meteoriteSpreadRadius);
+		}
+	}
+	if(isOnHitExplosionUpdate)
+	{
+		onHitExplosionEmitter.Update(); 
+		if(onHitExplosionEmitter.IsDead())
 		{
-			onHitExplosionEmitter.Update(); 
+			isOnHitExplosionUpdate = false;
 		}
 	}
 }
@@ -875,12 +901,9 @@ void MeteoriteEmitter::Render(glutil::MatrixStack &modelMatrix,
 	glBindVertexArray(0);
 	glUseProgram(0);
 
-	for(int i = 0; i < meteoriteParticlesCount; i++)
+	if(isOnHitExplosionUpdate)
 	{
-		if(meteorites[i].position.z > 0.0f)
-		{
-			onHitExplosionEmitter.Render(modelMatrix, progData);
-		}
+		onHitExplosionEmitter.Render(modelMatrix, progData);
 	}
 }
 

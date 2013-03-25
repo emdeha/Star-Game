@@ -144,6 +144,8 @@ private:
 	
 	AOESelector skillSelector;
 
+	AoEAnimation aoeAnim;
+
 public:
 	AOESkill() : Skill() {}
 	AOESkill(glm::vec3 newPosition,
@@ -154,7 +156,7 @@ public:
 
 	void Update();
 	void Render(glutil::MatrixStack	&modelMatrix, 
-				const SimpleProgData &progData);
+				const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &progData);
 
 	void OnEvent(Event &_event);
 

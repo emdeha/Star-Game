@@ -105,13 +105,31 @@ public:
 class AoEAnimation
 {
 private:
+	MeteoriteEmitter meteoriteRain;
+
+	float animDuration_secs;
+
+	Framework::Timer animTimer;
 
 public:
 	AoEAnimation() {}
-	AoEAnimation(glm::vec3 position);
+	AoEAnimation(glm::vec3 position, 
+				 float newAnimDuration_secs,
+				 int explosionParticlesCount, int meteoriteParticlesCount,
+				 int explosionParticlesLifeTime,
+				 float explosionParticlesSize, float meteoriteParticlesSize, 
+				 float meteoriteSpreadRadius,
+				 float explosionParticleVelocityMultiplier,
+				 float meteoriteVelocityMultiplier,
+				 const std::string &explosionParticlesTextureFileName,
+				 const std::string &meteoriteParticlesTextureFileName);
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteParticleProgData);
+
+	void Restart();
+
+	bool IsEnded();
 };
 
 

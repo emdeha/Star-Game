@@ -257,14 +257,19 @@ private:
 	bool isActive;
 	bool isDead;
 
+	bool isOnHitExplosionUpdate;
+
 	glm::vec3 position;
 	//float explosionParticlesVelocityMultiplier;
 	//float explosionParticlesSize;
 	//float explosionParticlesLifeTime;
 	float meteoriteParticlesSize;
+	float meteoriteSpreadRadius;
 	//int explosionParticlesCount;
 	int meteoriteParticlesCount;
 	int meteoriteStartingParticlesCount;
+
+	float meteoriteVelocityMultiplier;
 
 	GLuint vao;
 	GLuint meteoriteVertexBO;
@@ -281,7 +286,9 @@ public:
 					 int newExplosionParticlesCount, int newMeteoriteParticlesCount,
 					 int newExplosionParticlesLifeTime, 
 					 float newExplosionParticlesSize, float newMeteoriteParticlesSize,
+					 float newMeteoriteSpreadRadius,
 					 float newExplosionParticlesVelocityMultiplier,
+					 float newMeteoriteVelocityMultiplier,
 					 const std::string &explosionParticlesTextureFileName,
 					 const std::string &meteoriteParticlesTextureFileName);
 
@@ -295,6 +302,31 @@ public:
 	bool IsActive();
 
 	bool IsDead();
+};
+
+
+class RadialEmitter
+{
+private:
+	std::vector<StandardParticle> particles;
+
+	bool isActive;
+	bool isDead;
+
+	glm::vec3 position;
+	float particleSize;
+	float spreadRadius;
+	int particleCount;
+
+	GLuint vao;
+	GLuint vertexBO;
+	GLuint textureCoordsBO;
+	GLuint indicesBO;
+
+	std::shared_ptr<Texture2D> particleTexture;
+
+public:
+
 };
 
 

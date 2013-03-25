@@ -534,7 +534,8 @@ long long currentTime_milliseconds;
 
 Mesh sampleMesh;
 
-MeteoriteEmitter testMeteoriteEmitter;
+//MeteoriteEmitter testMeteoriteEmitter;
+//AoEAnimation testAoEAnim;
 
 void Init()
 {
@@ -596,9 +597,12 @@ void Init()
 	nextGameTick = GetTickCount();
 
 
-	testMeteoriteEmitter = MeteoriteEmitter(glm::vec3(0.0f, 0.0f, 0.0f), 100, 3, 50, 0.3f, 0.5f, 0.01f, 
-											"../data/images/particle.png", "../data/images/meteor.png");
-	testMeteoriteEmitter.Init();
+	//testAoEAnim = AoEAnimation(glm::vec3(1.0f, 0.0f, 0.0f), 100, 1, 200, 0.3f, 0.5f, 1.0f, 0.01f, 
+	//						   "../data/images/particle.png", "../data/images/meteor.png");
+
+	//testMeteoriteEmitter = MeteoriteEmitter(glm::vec3(1.0f, 0.0f, 0.0f), 100, 1, 200, 0.3f, 0.5f, 1.0f, 0.01f, 
+	//										"../data/images/particle.png", "../data/images/meteor.png");
+	//testMeteoriteEmitter.Init();
 
 	/// slower
 	//testSpriteEmitter = SpriteParticleEmitter(glm::vec3(2.0f, 0.0f, 0.0f), 100, 300, 0.2f, true, 0.01f, "../data/images/particle.png");
@@ -641,8 +645,10 @@ void Display()
 
 		if(isEmitterStarted)
 		{
-			testMeteoriteEmitter.Update();
-			testMeteoriteEmitter.Render(modelMatrix, scene.GetShaderManager().GetSpriteParticleProgData());
+			//testAoEAnim.Update();
+			//testAoEAnim.Render(modelMatrix, scene.GetShaderManager().GetSpriteParticleProgData());
+			//testMeteoriteEmitter.Update();
+			//testMeteoriteEmitter.Render(modelMatrix, scene.GetShaderManager().GetSpriteParticleProgData());
 
 			/// slower
 			//testSpriteEmitter.Update();

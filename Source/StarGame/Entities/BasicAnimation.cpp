@@ -169,3 +169,52 @@ void ParticleAnimation::Render(glutil::MatrixStack &modelMatrix, const SpritePar
 {
 	burnAnim.Render(modelMatrix, spriteParticleProgData);
 }
+
+
+AoEAnimation::AoEAnimation(glm::vec3 position, 
+						   float newAnimDuration_secs,
+						   int explosionParticlesCount, int meteoriteParticlesCount,
+						   int explosionParticlesLifeTime,
+						   float explosionParticlesSize, float meteoriteParticlesSize, 
+						   float meteoriteSpreadRadius,
+						   float explosionParticleVelocityMultiplier,
+						   float meteoriteVelocityMultiplier,
+						   const std::string &explosionParticlesTextureFileName,
+						   const std::string &meteoriteParticlesTextureFileName)
+{
+	meteoriteRain = MeteoriteEmitter(position, explosionParticlesCount, meteoriteParticlesCount,
+									 explosionParticlesLifeTime, explosionParticlesSize, meteoriteParticlesSize,
+									 meteoriteSpreadRadius, explosionParticleVelocityMultiplier,
+									 meteoriteVelocityMultiplier,
+									 explosionParticlesTextureFileName, meteoriteParticlesTextureFileName);
+	meteoriteRain.Init();
+
+	animDuration_secs = newAnimDuration_secs;
+	animTimer = Framework::Timer(Framework::Timer::TT_SINGLE, animDuration_secs);
+}
+
+void AoEAnimation::Update()
+{
+	if(!animTimer.Update())
+	{
+		meteoriteRain.Update();
+	}
+}
+
+void AoEAnimation::Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteParticleProgData)
+{
+	if(animTimer.GetProgression() < animTimer.GetDuration())
+	{
+		meteoriteRain.Render(modelMatrix, spriteParticleProgData);
+	}
+}
+
+void AoEAnimation::Restart()
+{
+	animTimer.Reset();
+}
+
+bool AoEAnimation::IsEnded()
+{
+	return animTimer.GetProgression() >= animTimer.GetDuration();
+}

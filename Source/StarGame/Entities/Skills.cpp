@@ -116,6 +116,9 @@ AOESkill::AOESkill(glm::vec3 newPosition,
 	skillSelector = 
 		AOESelector(position, range, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
 	skillSelector.Init();
+
+	aoeAnim = AoEAnimation(glm::vec3(1.0f, 0.0f, 0.0f), 2.0f, 100, 1, 25, 0.3f, 0.5f, range, 0.1f, 0.6f, 
+						   "../data/images/particle.png", "../data/images/meteor.png");
 }
 
 void AOESkill::Update()
@@ -124,9 +127,19 @@ void AOESkill::Update()
 	{
 		skillSelector.Update(position);
 	}
+	if(isDeployed)
+	{
+		aoeAnim.Update();
+		if(aoeAnim.IsEnded())
+		{
+			isDeployed = false;
+			aoeAnim.Restart();
+		}
+	}
 }
 
-void AOESkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData)
+void AOESkill::Render(glutil::MatrixStack &modelMatrix,
+					  const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &progData)
 {
 	if(isStarted)
 	{
@@ -134,6 +147,13 @@ void AOESkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &pr
 		modelMatrix.Translate(position);
 
 		skillSelector.Draw(modelMatrix, progData);
+	}
+	if(isDeployed)
+	{
+		glutil::PushStack push(modelMatrix);
+		modelMatrix.Translate(position);
+
+		aoeAnim.Render(modelMatrix, spriteParticleProgData);
 	}
 }
 
@@ -163,6 +183,10 @@ void AOESkill::OnEvent(Event &_event)
 				generatedEvents.push_back(skillDeployedEvent);
 
 				isStarted = true;
+			}
+			if(_event.GetArgument("deploy").varBool == true)
+			{	
+				isDeployed = true;
 			}
 			break;
 		default:

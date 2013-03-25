@@ -1401,7 +1401,8 @@ void Scene::OnEvent(Event &_event)
 					for(int skillIndex = 0; skillIndex < skills.size(); skillIndex++)
 					{
 						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
-						if(skills[skillIndex]->GetSkillType() == "burnSkill")
+						if(skills[skillIndex]->GetSkillType() == "burnSkill" ||
+						   skills[skillIndex]->GetSkillType() == "aoeSkill")
 						{
 							EventArg deploySkillEventArgs[1];
 							deploySkillEventArgs[0].argType = "deploy";

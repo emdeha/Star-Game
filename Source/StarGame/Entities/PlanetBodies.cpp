@@ -203,10 +203,10 @@ void CelestialBody::Update()
 
 		for(int i = 0; i < skills.size(); i++)
 		{
-			if(skills[i]->IsStarted())
-			{
+			//if(skills[i]->IsStarted())
+			//{
 				skills[i]->Update();
-			}
+			//}
 		}
 
 		std::shared_ptr<Skill> sunNovaSkill;
@@ -323,12 +323,12 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 	
 	for(int i = 0; i < skills.size(); i++)
 	{
-		if(skills[i]->IsStarted())
-		{
+		//if(skills[i]->IsStarted())
+		//{
 			skills[i]->Render(modelMatrix, simpleData);
 			skills[i]->Render(modelMatrix, litData, materialBlockIndex);
 			skills[i]->Render(modelMatrix, spriteParticleProgData, simpleData);
-		}
+		//}
 	}
 	
 	if(isClicked && isSun)

@@ -316,7 +316,10 @@ private:
 	glm::vec3 position;
 	float particleSize;
 	float spreadRadius;
+	float density;
+	float particleSpeed;
 	int particleCount;
+	int startingParticleCount;
 
 	GLuint vao;
 	GLuint vertexBO;
@@ -326,7 +329,21 @@ private:
 	std::shared_ptr<Texture2D> particleTexture;
 
 public:
+	RadialEmitter() {}
+	RadialEmitter(glm::vec3 newPosition, 
+				  float newParticleSize, float newSpreadRadius, float newParticleSpeed,
+				  int newParticleCount, const std::string &particleTextureFileName);
 
+	void Init();
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix,
+				const SpriteParticleProgData &progData);
+
+	void Activate();
+	bool IsActive();
+
+	bool IsDead();
 };
 
 

@@ -922,6 +922,196 @@ bool MeteoriteEmitter::IsDead()
 }
 
 
+RadialEmitter::RadialEmitter(glm::vec3 newPosition, 
+							 float newParticleSize, float newSpreadRadius, float newParticleSpeed,
+							 int newParticleCount, const std::string &particleTextureFileName)
+{
+	position = newPosition;
+	particleSize = newParticleSize;
+	spreadRadius = newSpreadRadius;
+	particleCount = newParticleCount;
+	startingParticleCount = particleCount;
+	particleSpeed = newParticleSpeed;
+
+	isActive = false;
+	isDead = false;
+
+	vao = 0;
+	vertexBO = 0;
+	textureCoordsBO = 0;
+	indicesBO = 0;
+
+	particleTexture = std::shared_ptr<Texture2D>(new Texture2D());
+	if(!particleTexture->Load(particleTextureFileName, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE))
+	{
+		std::string errorMessage = "cannot load texture";
+		errorMessage += particleTextureFileName;
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+	}
+
+	std::vector<float> vertexData;
+	std::vector<float> textureCoordsData;
+	std::vector<unsigned short> indexData;
+
+	vertexData.push_back(position.x - particleSize);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z - particleSize); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z - particleSize); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x - particleSize);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z); vertexData.push_back(1.0f);
+		
+	textureCoordsData.push_back(0.0f); textureCoordsData.push_back(1.0f);
+	textureCoordsData.push_back(1.0f); textureCoordsData.push_back(1.0f);
+	textureCoordsData.push_back(1.0f); textureCoordsData.push_back(0.0f);
+	textureCoordsData.push_back(0.0f); textureCoordsData.push_back(0.0f);
+
+	indexData.push_back(0); indexData.push_back(1); indexData.push_back(2);
+	indexData.push_back(2); indexData.push_back(3); indexData.push_back(0);
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	glGenBuffers(1, &vertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);	
+	glBufferData(GL_ARRAY_BUFFER, 
+				 sizeof(float) * vertexData.size(), &vertexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	
+	glGenBuffers(1, &textureCoordsBO);
+	glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
+	glBufferData(GL_ARRAY_BUFFER, 
+				 sizeof(float) * textureCoordsData.size(), &textureCoordsData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+	glGenBuffers(1, &indicesBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
+				 sizeof(unsigned short) * indexData.size(), &indexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void RadialEmitter::Init()
+{
+	isActive = false;
+	isDead = false;
+	particles.resize(particleCount);
+	particleCount = startingParticleCount;
+	
+	float rotationDegs = 360.0f; // the length of the arc the particles should make
+	float decrement = rotationDegs / (float)particleCount;
+	glutil::MatrixStack rotMatrix;
+	for(int i = 0; i < particleCount; i++)
+	{
+		particles[i].position = position + glm::vec3();
+		
+		rotMatrix.SetIdentity();
+		rotMatrix.RotateY(rotationDegs);
+		glm::vec4 frontVector = glm::vec4(-1.0f, 0.0f, 0.0f, 1.0f);
+		frontVector = frontVector * rotMatrix.Top();
+
+		particles[i].velocity = glm::vec3(frontVector) * particleSpeed;
+
+		rotationDegs -= decrement;
+	}
+}
+
+void RadialEmitter::Update()
+{
+	if(particleCount == 0)
+	{
+		isDead = true;
+	}
+	for(int i = 0; i < particleCount; i++)
+	{
+		particles[i].position += particles[i].velocity;
+
+		glm::vec3 particleToOriginVector = particles[i].position - position;
+		if(glm::length(particleToOriginVector) > spreadRadius)
+		{
+			std::vector<StandardParticle>::iterator particleToErase =
+				particles.begin();
+			particleToErase += i;
+
+			particles.erase(particleToErase);
+			particleCount--;
+		}
+	}
+}
+
+void RadialEmitter::Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &progData)
+{
+	glUseProgram(progData.theProgram);
+	glBindVertexArray(vao);
+	{
+		glutil::PushStack push(modelMatrix);
+		glUniformMatrix4fv(progData.modelToCameraMatrixUnif, 
+						   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+
+		glEnableVertexAttribArray(progData.positionAttrib);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+		glVertexAttribPointer(progData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+		glEnableVertexAttribArray(progData.texCoordAttrib);
+		glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
+		glVertexAttribPointer(progData.texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		
+		particleTexture->Bind(GL_TEXTURE0);
+
+		glEnable(GL_BLEND);
+		glDepthMask(GL_FALSE);
+		glBlendEquation(GL_FUNC_ADD);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBO);
+		for(int i = 0; i < particleCount; i++)
+		{			
+			glUniform3f(progData.deltaPositionUnif,
+						particles[i].position.x, particles[i].position.y, particles[i].position.z);
+			glUniform4f(progData.colorUnif, 1.0f, 1.0f, 1.0f, 1.0f);
+
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+		}
+		
+		glDepthMask(GL_TRUE);
+		glDisable(GL_BLEND);
+
+		glDisableVertexAttribArray(progData.positionAttrib);
+		glDisableVertexAttribArray(progData.texCoordAttrib);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		particleTexture->Unbind();
+	}
+	glBindVertexArray(0);
+	glUseProgram(0);
+}
+
+void RadialEmitter::Activate()
+{
+	isActive = true;
+}
+bool RadialEmitter::IsActive()
+{
+	return isActive;
+}
+
+bool RadialEmitter::IsDead()
+{
+	return isDead;
+}
+
+
 RayEmitter::RayEmitter(glm::vec3 newPosition, int newParticleCount,
 					   float newRayLength)
 {

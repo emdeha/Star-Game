@@ -536,6 +536,7 @@ Mesh sampleMesh;
 
 //MeteoriteEmitter testMeteoriteEmitter;
 //AoEAnimation testAoEAnim;
+RadialEmitter testRadialEmitter;
 
 void Init()
 {
@@ -597,6 +598,10 @@ void Init()
 	nextGameTick = GetTickCount();
 
 
+	testRadialEmitter = RadialEmitter(glm::vec3(0.0f, 0.0f, 2.0f), 0.3f, 2.0f, 0.0008f, 12, 
+									  "../data/images/aoe_target.png");
+	testRadialEmitter.Init();
+
 	//testAoEAnim = AoEAnimation(glm::vec3(1.0f, 0.0f, 0.0f), 100, 1, 200, 0.3f, 0.5f, 1.0f, 0.01f, 
 	//						   "../data/images/particle.png", "../data/images/meteor.png");
 
@@ -645,6 +650,9 @@ void Display()
 
 		if(isEmitterStarted)
 		{
+			testRadialEmitter.Update();
+			testRadialEmitter.Render(modelMatrix, scene.GetShaderManager().GetSpriteParticleProgData());
+
 			//testAoEAnim.Update();
 			//testAoEAnim.Render(modelMatrix, scene.GetShaderManager().GetSpriteParticleProgData());
 			//testMeteoriteEmitter.Update();

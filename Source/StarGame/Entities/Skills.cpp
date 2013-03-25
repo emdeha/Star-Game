@@ -873,8 +873,9 @@ FrostNovaSkill::FrostNovaSkill(int newDamage, float newStunTime_seconds,
 	currentScale = 1.0f;
 	isStarted = false;
 
-	skillExpansionRadius = Utility::Primitives::Torus2D(glm::vec4(0.2f, 0.0f, 0.8f, 0.5f), position, currentScale, currentScale + 0.03f, 90);
-	skillExpansionRadius.Init();
+	skillAnimation = FrostNovaAnimation(position, 0.3f, range, 0.1f, 12, "../data/images/aoe_target.png");
+	//skillExpansionRadius = Utility::Primitives::Torus2D(glm::vec4(0.2f, 0.0f, 0.8f, 0.5f), position, currentScale, currentScale + 0.03f, 90);
+	//skillExpansionRadius.Init();
 }
 
 void FrostNovaSkill::Update()
@@ -896,32 +897,41 @@ void FrostNovaSkill::Update()
 
 	if(isStarted)
 	{
-		if(currentScale <= range)
+		//if(currentScale <= range)
+		//{
+		//	currentScale += scaleRate;
+		//}
+		//else
+		//{
+		//	currentScale = 1.0f;
+		//	isStarted = false;
+		//}
+		skillAnimation.Update();
+		if(skillAnimation.IsEnded())
 		{
-			currentScale += scaleRate;
-		}
-		else
-		{
-			currentScale = 1.0f;
+			skillAnimation.Restart();
 			isStarted = false;
 		}
 	}
 }
 
-void FrostNovaSkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData)
+//void FrostNovaSkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData)
+void FrostNovaSkill::Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteProgData)
 {
 	if(isStarted)
 	{
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glutil::PushStack push(modelMatrix);
 		modelMatrix.Translate(position);
-		modelMatrix.Scale(currentScale, 0.0f, currentScale);
-		
-		skillExpansionRadius.Draw(modelMatrix, progData);
 
-		glDisable(GL_BLEND);
+		skillAnimation.Render(modelMatrix, spriteProgData);
+		//modelMatrix.Scale(currentScale, 0.0f, currentScale);
+		
+		//skillExpansionRadius.Draw(modelMatrix, progData);
+
+		//glDisable(GL_BLEND);
 	}
 }
 

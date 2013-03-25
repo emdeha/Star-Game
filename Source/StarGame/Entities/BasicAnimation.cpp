@@ -218,3 +218,33 @@ bool AoEAnimation::IsEnded()
 {
 	return animTimer.GetProgression() >= animTimer.GetDuration();
 }
+
+
+FrostNovaAnimation::FrostNovaAnimation(glm::vec3 position, 
+									   float particleSize, float spreadRadius, float particleSpeed,
+									   int particleCount, const std::string &particleTextureFileName)
+{
+	frostSpikes = RadialEmitter(position, particleSize, spreadRadius, particleSpeed, particleCount, 
+								particleTextureFileName);
+	frostSpikes.Init();
+}
+
+void FrostNovaAnimation::Update()
+{
+	frostSpikes.Update();
+}
+
+void FrostNovaAnimation::Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteParticleProgData)
+{
+	frostSpikes.Render(modelMatrix, spriteParticleProgData);
+}
+
+void FrostNovaAnimation::Restart()
+{
+	frostSpikes.Init();
+}
+
+bool FrostNovaAnimation::IsEnded()
+{
+	return frostSpikes.IsDead();
+}

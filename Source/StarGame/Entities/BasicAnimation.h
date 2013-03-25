@@ -133,4 +133,24 @@ public:
 };
 
 
+class FrostNovaAnimation
+{
+private:
+	RadialEmitter frostSpikes;
+
+public:
+	FrostNovaAnimation() {}
+	FrostNovaAnimation(glm::vec3 position, 
+					   float particleSize, float spreadRadius, float particleSpeed,
+					   int particleCount, const std::string &particleTextureFileName);
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteParticleProgData);
+
+	void Restart();
+
+	bool IsEnded();
+};
+
+
 #endif

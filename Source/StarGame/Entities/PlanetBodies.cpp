@@ -328,6 +328,7 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 			skills[i]->Render(modelMatrix, simpleData);
 			skills[i]->Render(modelMatrix, litData, materialBlockIndex);
 			skills[i]->Render(modelMatrix, spriteParticleProgData, simpleData);
+			skills[i]->Render(modelMatrix, spriteParticleProgData);
 		//}
 	}
 	

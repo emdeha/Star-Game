@@ -1005,8 +1005,8 @@ void RadialEmitter::Init()
 {
 	isActive = false;
 	isDead = false;
-	particles.resize(particleCount);
 	particleCount = startingParticleCount;
+	particles.resize(particleCount);
 	
 	float rotationDegs = 360.0f; // the length of the arc the particles should make
 	float decrement = rotationDegs / (float)particleCount;

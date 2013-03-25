@@ -1398,39 +1398,44 @@ void Scene::OnEvent(Event &_event)
 				std::vector<std::shared_ptr<Skill>> skills = suns[0]->GetAllSkills();
 				if(!enemies.empty() && !skills.empty())
 				{
+
+					// !!!! skills don't throw event !!!! fix fix fix !!!!!
 					for(int skillIndex = 0; skillIndex < skills.size(); skillIndex++)
 					{
 						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
-						if(skills[skillIndex]->GetSkillType() == "burnSkill" ||
-						   skills[skillIndex]->GetSkillType() == "aoeSkill")
+						if(skillEvent.GetType() != EVENT_TYPE_EMPTY)
 						{
-							EventArg deploySkillEventArgs[1];
-							deploySkillEventArgs[0].argType = "deploy";
-							deploySkillEventArgs[0].argument.varType = TYPE_BOOL;
-							deploySkillEventArgs[0].argument.varBool = true;
-
-							Event deploySkillEvent = Event(1, EVENT_TYPE_OTHER, deploySkillEventArgs);
-							skills[skillIndex]->OnEvent(deploySkillEvent);
-						}
-						//skills[skillIndex]->RemoveGeneratedEvent("skilldeployed");
-
-						for(int i = 0; i < enemies.size(); i++)
-						{
-							if(skills[skillIndex]->IsIntersectingObject(enemies[i]->GetPosition()) &&
-							   skills[skillIndex]->GetSkillType() != "burnSkill")
+							if(strcmp(skills[skillIndex]->GetSkillType().c_str(), skillEvent.GetArgument("which_skill").varString) 
+							   == 0)
 							{
-								enemies[i]->health -= skills[skillIndex]->GetDamage();
-								if(skills[skillIndex]->GetSkillType() == "aoeSkill")
-								{
-									sceneMusic.Play(MUSIC_AOE, CHANNEL_GAME);
-								}
-								//enemies[i]->OnEvent(skillEvent);
+								EventArg deploySkillEventArgs[1];
+								deploySkillEventArgs[0].argType = "deploy";
+								deploySkillEventArgs[0].argument.varType = TYPE_BOOL;
+								deploySkillEventArgs[0].argument.varBool = true;
+
+								Event deploySkillEvent = Event(1, EVENT_TYPE_OTHER, deploySkillEventArgs);
+								skills[skillIndex]->OnEvent(deploySkillEvent);
 							}
-						}
-						if(skills[skillIndex]->GetSkillType() == "aoeSkill")
-						{
-							// WARN: May bug
-							skills[skillIndex]->isStarted = false;
+							skills[skillIndex]->RemoveGeneratedEvent("skilldeployed");
+
+							for(int i = 0; i < enemies.size(); i++)
+							{
+								if(skills[skillIndex]->IsIntersectingObject(enemies[i]->GetPosition()) &&
+								   skills[skillIndex]->GetSkillType() != "burnSkill")
+								{
+									enemies[i]->health -= skills[skillIndex]->GetDamage();
+									if(skills[skillIndex]->GetSkillType() == "aoeSkill")
+									{
+										sceneMusic.Play(MUSIC_AOE, CHANNEL_GAME);
+									}
+									//enemies[i]->OnEvent(skillEvent);
+								}
+							}
+							if(skills[skillIndex]->GetSkillType() == "aoeSkill")
+							{
+								// WARN: May bug
+								skills[skillIndex]->isStarted = false;
+							}
 						}
 					}
 				}
@@ -1519,7 +1524,7 @@ void Scene::OnEvent(Event &_event)
 					{
 						suns[0]->OnEvent(skillDeployedEvent);
 					}
-					skills[i]->RemoveGeneratedEvent("skilldeployed");
+					//skills[i]->RemoveGeneratedEvent("skilldeployed");
 					
 					// simple fix for hard problems... FOR HOW LONG?!
 					Event sunResourceEvent = suns[0]->GetGeneratedEvent("insufRes");

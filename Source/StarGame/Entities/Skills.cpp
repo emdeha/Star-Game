@@ -166,7 +166,7 @@ void AOESkill::OnEvent(Event &_event)
 		case EVENT_TYPE_OTHER:
 			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
 			{
-				EventArg skillDeployedEventArgs[4];
+				EventArg skillDeployedEventArgs[5];
 				skillDeployedEventArgs[0].argType = "skillRange";
 				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
 				skillDeployedEventArgs[0].argument.varFloat = range;
@@ -179,7 +179,10 @@ void AOESkill::OnEvent(Event &_event)
 				skillDeployedEventArgs[3].argType = "skillCost";
 				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
 				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-				Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+				skillDeployedEventArgs[4].argType = "which_skill";
+				skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
+				strcpy(skillDeployedEventArgs[4].argument.varString, "aoeSkill");
+				Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
 				generatedEvents.push_back(skillDeployedEvent);
 
 				isStarted = true;
@@ -323,7 +326,7 @@ void PassiveAOESkill::OnEvent(Event &_event)
 		case EVENT_TYPE_OTHER:
 			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
 			{
-				EventArg skillDeployedEventArgs[4];
+				EventArg skillDeployedEventArgs[5];
 				skillDeployedEventArgs[0].argType = "skillRange";
 				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
 				skillDeployedEventArgs[0].argument.varFloat = range;
@@ -336,7 +339,10 @@ void PassiveAOESkill::OnEvent(Event &_event)
 				skillDeployedEventArgs[3].argType = "skillCost";
 				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
 				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-				Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+				skillDeployedEventArgs[4].argType = "which_skill";
+				skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
+				strcpy(skillDeployedEventArgs[4].argument.varString, "passiveAoeSkill");
+				Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
 				generatedEvents.push_back(skillDeployedEvent);
 
 				isStarted = true;
@@ -455,7 +461,7 @@ void SunNovaSkill::OnEvent(Event &_event)
 		case EVENT_TYPE_OTHER:
 			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
 			{
-				EventArg skillDeployedEventArgs[4];
+				EventArg skillDeployedEventArgs[5];
 				skillDeployedEventArgs[0].argType = "skillRange";
 				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
 				skillDeployedEventArgs[0].argument.varFloat = range;
@@ -468,7 +474,10 @@ void SunNovaSkill::OnEvent(Event &_event)
 				skillDeployedEventArgs[3].argType = "skillCost";
 				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
 				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-				Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+				skillDeployedEventArgs[4].argType = "which_skill";
+				skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
+				strcpy(skillDeployedEventArgs[4].argument.varString, "sunNovaSkill");
+				Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
 				generatedEvents.push_back(skillDeployedEvent);
 
 				isStarted = true;
@@ -597,7 +606,7 @@ void SatelliteChainingSkill::OnEvent(Event &_event)
 		// ???: Should the skill be activated on fusion?
 		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
 		{
-			EventArg skillDeployedEventArgs[4];
+			EventArg skillDeployedEventArgs[5];
 			skillDeployedEventArgs[0].argType = "skillRange";
 			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
 			skillDeployedEventArgs[0].argument.varFloat = range;
@@ -610,7 +619,10 @@ void SatelliteChainingSkill::OnEvent(Event &_event)
 			skillDeployedEventArgs[3].argType = "skillCost";
 			skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
 			skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-			Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+			skillDeployedEventArgs[4].argType = "which_skill";
+			skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
+			strcpy(skillDeployedEventArgs[4].argument.varString, "aoeSkill");
+			Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
 			generatedEvents.push_back(skillDeployedEvent);
 
 			isStarted = true;
@@ -752,7 +764,7 @@ void SatelliteChainingNova::OnEvent(Event &_event)
 			// ???: Should the skill be activated on fusion?
 			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
 			{
-				EventArg skillDeployedEventArgs[4];
+				EventArg skillDeployedEventArgs[5];
 				skillDeployedEventArgs[0].argType = "skillRange";
 				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
 				skillDeployedEventArgs[0].argument.varFloat = range;
@@ -765,7 +777,10 @@ void SatelliteChainingNova::OnEvent(Event &_event)
 				skillDeployedEventArgs[3].argType = "skillCost";
 				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
 				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-				Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+				skillDeployedEventArgs[4].argType = "which_skill";
+				skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
+				strcpy(skillDeployedEventArgs[4].argument.varString, "satFrostNova");
+				Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
 				generatedEvents.push_back(skillDeployedEvent);
 
 				isStarted = true;
@@ -919,7 +934,7 @@ void FrostNovaSkill::OnEvent(Event &_event)
 		case EVENT_TYPE_OTHER:
 			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0 && !isStarted)
 			{
-				EventArg skillDeployedEventArgs[4];
+				EventArg skillDeployedEventArgs[5];
 				skillDeployedEventArgs[0].argType = "skillRange";
 				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
 				skillDeployedEventArgs[0].argument.varFloat = range;
@@ -932,7 +947,10 @@ void FrostNovaSkill::OnEvent(Event &_event)
 				skillDeployedEventArgs[3].argType = "skillCost";
 				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
 				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-				Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+				skillDeployedEventArgs[4].argType = "which_skill";
+				skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
+				strcpy(skillDeployedEventArgs[4].argument.varString, "satFrostNova");
+				Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
 				generatedEvents.push_back(skillDeployedEvent);
 
 				isStarted = true;
@@ -1213,7 +1231,7 @@ void BurnSkill::OnEvent(Event &_event)
 		case EVENT_TYPE_OTHER:
 			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
 			{
-				EventArg skillDeployedEventArgs[4];
+				EventArg skillDeployedEventArgs[5];
 				skillDeployedEventArgs[0].argType = "skillRange";
 				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
 				skillDeployedEventArgs[0].argument.varFloat = range;
@@ -1226,7 +1244,10 @@ void BurnSkill::OnEvent(Event &_event)
 				skillDeployedEventArgs[3].argType = "skillCost";
 				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
 				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-				Event skillDeployedEvent = Event(4, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+				skillDeployedEventArgs[4].argType = "which_skill";
+				skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
+				strcpy(skillDeployedEventArgs[4].argument.varString, "burnSkill");
+				Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
 				generatedEvents.push_back(skillDeployedEvent);
 
 				isStarted = true;

@@ -539,6 +539,8 @@ Mesh sampleMesh;
 //RadialEmitter testRadialEmitter;
 //FrostNovaAnimation testFrostNovaAnim;
 
+//SunNovaAnimation testSunNovaAnim;
+
 void Init()
 {
 	currentTime_milliseconds = GetCurrentTimeMillis();
@@ -598,6 +600,10 @@ void Init()
 
 	nextGameTick = GetTickCount();
 
+
+	//testSunNovaAnim = SunNovaAnimation(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(0.5f, 0.5f, 0.0f, 1.0f),
+	//								   0.3f, 6.0f, 0.005f, 360,
+	//								   "../data/images/particle.png");
 
 	//testFrostNovaAnim = FrostNovaAnimation(glm::vec3(0.0f, 0.0f, 2.0f), 0.3f, 2.0f, 0.0008f, 12,
 	//									   "../data/images/aoe_target.png");
@@ -667,6 +673,9 @@ void Display()
 			/// slower
 			//testSpriteEmitter.Update();
 			//testSpriteEmitter.Render(modelMatrix, scene.GetShaderManager().GetSpriteParticleProgData());
+
+			//testSunNovaAnim.Update();
+			///testSunNovaAnim.Render(modelMatrix, scene.GetShaderManager().GetSpriteParticleProgData());
 		}
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))

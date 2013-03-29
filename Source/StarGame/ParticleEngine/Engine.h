@@ -45,6 +45,14 @@ struct ExplosionParticle
 	float lifeTime;
 };
 
+struct ColoredStandardParticle
+{
+	glm::vec4 color;
+
+	glm::vec3 position;
+	glm::vec3 velocity;
+};
+
 struct MeteoriteParticle
 {
 	glm::vec3 position;
@@ -308,15 +316,15 @@ public:
 class RadialEmitter
 {
 private:
-	std::vector<StandardParticle> particles;
+	std::vector<ColoredStandardParticle> particles;
 
 	bool isActive;
 	bool isDead;
 
 	glm::vec3 position;
+	glm::vec4 color;
 	float particleSize;
 	float spreadRadius;
-	float density;
 	float particleSpeed;
 	int particleCount;
 	int startingParticleCount;
@@ -332,7 +340,8 @@ public:
 	RadialEmitter() {}
 	RadialEmitter(glm::vec3 newPosition, 
 				  float newParticleSize, float newSpreadRadius, float newParticleSpeed,
-				  int newParticleCount, const std::string &particleTextureFileName);
+				  int newParticleCount, const std::string &particleTextureFileName, 
+				  glm::vec4 newColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	void Init();
 
@@ -342,6 +351,48 @@ public:
 
 	void Activate();
 	bool IsActive();
+
+	bool IsDead();
+};
+
+
+class BurningRadialEmitter
+{
+private:
+	std::vector<ColoredStandardParticle> particles;
+
+	bool isActive;
+	bool isDead;
+
+	glm::vec3 position;
+	float particleSize;
+	float spreadRadius;
+	float particleSpeed;
+	int particleCount;
+	int startingParticleCount;
+
+	GLuint vao;
+	GLuint vertexBO;
+	GLuint textureCoordsBO;
+	GLuint indicesBO;
+
+	std::shared_ptr<Texture2D> particleTexture;
+
+public:
+	BurningRadialEmitter() {}
+	BurningRadialEmitter(glm::vec3 newPosition,
+						 float newParticleSize, float newSpreadRadius, float newParticleSpeed,
+						 int newParticleCount, const std::string &particleTextureFileName);
+
+	void Init();
+
+	void Update();
+
+	void Render(glutil::MatrixStack &modelMatrix,
+				const SpriteParticleProgData &progData);
+
+	void Activate();
+	void IsActive();
 
 	bool IsDead();
 };

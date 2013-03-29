@@ -153,4 +153,24 @@ public:
 };
 
 
+class SunNovaAnimation
+{
+private:
+	RadialEmitter novaCircleEmitter;
+
+public:
+	SunNovaAnimation() {}
+	SunNovaAnimation(glm::vec3 position, glm::vec4 color,
+					 float particleSize, float spreadRadius, float particleSpeed,
+					 int particleCount, const std::string &particleTextureFileName);
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteParticleProgData);
+
+	void Restart();
+
+	bool IsEnded();
+};
+
+
 #endif

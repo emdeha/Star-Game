@@ -248,3 +248,33 @@ bool FrostNovaAnimation::IsEnded()
 {
 	return frostSpikes.IsDead();
 }
+
+
+SunNovaAnimation::SunNovaAnimation(glm::vec3 position, glm::vec4 color,
+								   float particleSize, float spreadRadius, float particleSpeed,
+								   int particleCount, const std::string &particleTextureFileName)
+{
+	novaCircleEmitter = RadialEmitter(position, particleSize, spreadRadius, particleSpeed, particleCount, 
+									  particleTextureFileName, color);
+	novaCircleEmitter.Init();
+}
+
+void SunNovaAnimation::Update()
+{
+	novaCircleEmitter.Update();
+}
+
+void SunNovaAnimation::Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteParticleProgData)
+{
+	novaCircleEmitter.Render(modelMatrix, spriteParticleProgData);
+}
+
+void SunNovaAnimation::Restart()
+{
+	novaCircleEmitter.Init();
+}
+
+bool SunNovaAnimation::IsEnded()
+{
+	return novaCircleEmitter.IsDead();
+}

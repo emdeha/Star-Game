@@ -221,7 +221,7 @@ private:
 	glm::vec3 position;
 
 	//Utility::Primitives::Torus2D skillExpansionRadius;
-	SunNovaAnimation sunNovaAnim;
+	NovaAnimation sunNovaAnim;
 
 public:
 	SunNovaSkill() : Skill() {}
@@ -299,7 +299,8 @@ private:
 	float currentScale;
 	glm::vec3 position;
 	
-	Utility::Primitives::Torus2D skillExpansionRadius;
+	//Utility::Primitives::Torus2D skillExpansionRadius;
+	NovaAnimation satNovaAnim;
 
 public:
 	SatelliteChainingNova() : Skill() {}
@@ -311,7 +312,8 @@ public:
 						  int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
 	void Update();
-	void Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData);
+	//void Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData);
+	void Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &progData);
 
 	void OnEvent(Event &_event);
 

@@ -250,7 +250,7 @@ bool FrostNovaAnimation::IsEnded()
 }
 
 
-SunNovaAnimation::SunNovaAnimation(glm::vec3 position, glm::vec4 color,
+NovaAnimation::NovaAnimation(glm::vec3 position, glm::vec4 color,
 								   float particleSize, float spreadRadius, float particleSpeed,
 								   int particleCount, const std::string &particleTextureFileName)
 {
@@ -259,22 +259,22 @@ SunNovaAnimation::SunNovaAnimation(glm::vec3 position, glm::vec4 color,
 	novaCircleEmitter.Init();
 }
 
-void SunNovaAnimation::Update()
+void NovaAnimation::Update()
 {
 	novaCircleEmitter.Update();
 }
 
-void SunNovaAnimation::Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteParticleProgData)
+void NovaAnimation::Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteParticleProgData)
 {
 	novaCircleEmitter.Render(modelMatrix, spriteParticleProgData);
 }
 
-void SunNovaAnimation::Restart()
+void NovaAnimation::Restart()
 {
 	novaCircleEmitter.Init();
 }
 
-bool SunNovaAnimation::IsEnded()
+bool NovaAnimation::IsEnded()
 {
 	return novaCircleEmitter.IsDead();
 }

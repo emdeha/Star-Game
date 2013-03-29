@@ -539,7 +539,7 @@ Mesh sampleMesh;
 //RadialEmitter testRadialEmitter;
 //FrostNovaAnimation testFrostNovaAnim;
 
-//SunNovaAnimation testSunNovaAnim;
+//NovaAnimation testSunNovaAnim;
 
 void Init()
 {
@@ -601,7 +601,7 @@ void Init()
 	nextGameTick = GetTickCount();
 
 
-	//testSunNovaAnim = SunNovaAnimation(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(0.5f, 0.5f, 0.0f, 1.0f),
+	//testSunNovaAnim = NovaAnimation(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(0.5f, 0.5f, 0.0f, 1.0f),
 	//								   0.3f, 6.0f, 0.005f, 360,
 	//								   "../data/images/particle.png");
 

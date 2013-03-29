@@ -417,8 +417,8 @@ SunNovaSkill::SunNovaSkill(glm::vec3 newPosition,
 
 	//skillExpansionRadius = Utility::Primitives::Torus2D(glm::vec4(0.7f, 0.5f, 0.0f, 0.5f), position, currentScale, currentScale + 0.03f, 90);
 	//skillExpansionRadius.Init();
-	glm::vec3 animPos(0.1f, 0.0f, 0.1f); // adjust pos because the sun is not exactly at the scene's center
-	sunNovaAnim = SunNovaAnimation(animPos, glm::vec4(0.7f, 0.3f, 0.0f, 1.0f), 0.3f, range, scaleRate, 360, 
+	glm::vec3 animPos(0.1f, 0.0f, 0.08f);
+	sunNovaAnim = NovaAnimation(animPos, glm::vec4(0.7f, 0.3f, 0.0f, 1.0f), 0.3f, range, scaleRate + 0.01f, 360, 
 								   "../data/images/particle.png");
 }
 
@@ -733,15 +733,28 @@ SatelliteChainingNova::SatelliteChainingNova(glm::vec3 newPosition,
 	isStarted = false;
 	generatedEvents.resize(0);
 
-	skillExpansionRadius = Utility::Primitives::Torus2D(glm::vec4(0.2f, 0.0f, 0.8f, 0.5f), position, currentScale, currentScale + 0.03f, 90);
-	skillExpansionRadius.Init();
+	//skillExpansionRadius = Utility::Primitives::Torus2D(glm::vec4(0.2f, 0.0f, 0.8f, 0.5f), position, currentScale, currentScale + 0.03f, 90);
+	//skillExpansionRadius.Init();
+	satNovaAnim = NovaAnimation(position, glm::vec4(0.0f, 0.7f, 0.3f, 1.0f), 0.3f, range, scaleRate, 360,
+							    "../data/images/particle.png");
 }
 
 void SatelliteChainingNova::Update()
 {
 	if(isStarted)
 	{
+		satNovaAnim.Update();
+		if(satNovaAnim.IsEnded())
+		{
+			satNovaAnim.Restart();
+			currentScale = 1.0f;
+			isStarted = false;
+		}
 		if(currentScale <= range)
+		{
+			currentScale += scaleRate;
+		}
+	/*	if(currentScale <= range)
 		{
 			currentScale += scaleRate;
 		}
@@ -749,25 +762,27 @@ void SatelliteChainingNova::Update()
 		{
 			currentScale = 1.0f;
 			isStarted = false;
-		}
+		}*/
 	}
 }
 
-void SatelliteChainingNova::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData)
+//void SatelliteChainingNova::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData)
+void SatelliteChainingNova::Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &progData)
 {
 	if(isStarted)
 	{
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glutil::PushStack push(modelMatrix);
-		//position.y = 0.1f; // -- layering on y
 		modelMatrix.Translate(position);
-		modelMatrix.Scale(currentScale, 0.0f, currentScale);
 
-		skillExpansionRadius.Draw(modelMatrix, progData);
+		satNovaAnim.Render(modelMatrix, progData);
+		//modelMatrix.Scale(currentScale, 0.0f, currentScale);
 
-		glDisable(GL_BLEND);
+		//skillExpansionRadius.Draw(modelMatrix, progData);
+
+		//glDisable(GL_BLEND);
 	}
 }
 

@@ -153,14 +153,14 @@ public:
 };
 
 
-class SunNovaAnimation
+class NovaAnimation
 {
 private:
 	RadialEmitter novaCircleEmitter;
 
 public:
-	SunNovaAnimation() {}
-	SunNovaAnimation(glm::vec3 position, glm::vec4 color,
+	NovaAnimation() {}
+	NovaAnimation(glm::vec3 position, glm::vec4 color,
 					 float particleSize, float spreadRadius, float particleSpeed,
 					 int particleCount, const std::string &particleTextureFileName);
 

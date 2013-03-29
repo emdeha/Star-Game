@@ -29,6 +29,7 @@ struct AudioFile
 {
 	std::string path;
 	SoundType soundType;
+	bool isLooping;
 };
 
 struct AudioData

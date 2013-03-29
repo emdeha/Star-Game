@@ -367,7 +367,7 @@ void Scene::LoadAudio(const std::string &configFileName)
 		{
 			std::string path = "../data/music/";
 			path += iterFile->path;
-			sceneMusic.SetFileForPlay(path, iterFile->soundType);
+			sceneMusic.SetFileForPlay(path, iterFile->soundType, iterFile->isLooping);
 			sceneMusic.SetVolume(iter->second.channelVolume, iter->second.channel);
 		}
 	}

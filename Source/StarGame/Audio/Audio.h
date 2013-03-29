@@ -65,7 +65,7 @@ public:
 	
 	/// \fn SetFileForPlay
 	/// \brief Loads a sound for later playing.
-	void SetFileForPlay(const std::string &newFileName, SoundType prevSoundType);
+	void SetFileForPlay(const std::string &newFileName, SoundType prevSoundType, bool isLooping = false);
 	
 	/// \fn SetVolume
 	/// \brief Fills the `volumes` array which later will be passed to Play().

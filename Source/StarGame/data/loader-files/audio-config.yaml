@@ -4,9 +4,11 @@ channel-master:
         music-ingame:
             sound-type: 0
             sound-file: ingame.mp3
+            sound-loop: 1
         music-menu:
             sound-type: 1
             sound-file: menu.mp3
+            sound-loop: 1
 channel-interaction:
     volume: 1.0
     music:

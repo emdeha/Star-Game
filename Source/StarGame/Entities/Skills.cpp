@@ -415,8 +415,6 @@ SunNovaSkill::SunNovaSkill(glm::vec3 newPosition,
 	currentScale = 1.0f;
 	isStarted = false;
 
-	//skillExpansionRadius = Utility::Primitives::Torus2D(glm::vec4(0.7f, 0.5f, 0.0f, 0.5f), position, currentScale, currentScale + 0.03f, 90);
-	//skillExpansionRadius.Init();
 	glm::vec3 animPos(0.1f, 0.0f, 0.08f);
 	sunNovaAnim = NovaAnimation(animPos, glm::vec4(0.7f, 0.3f, 0.0f, 1.0f), 0.3f, range, scaleRate + 0.01f, 360, 
 								   "../data/images/particle.png");
@@ -437,15 +435,6 @@ void SunNovaSkill::Update()
 		{
 			currentScale += scaleRate;
 		}
-		//if(currentScale <= range)
-		//{
-		//	currentScale += scaleRate;
-		//}
-		//else
-		//{
-		//	currentScale = 1.0f;
-		//	isStarted = false;
-		//}
 	}
 }
 
@@ -454,18 +443,10 @@ void SunNovaSkill::Render(glutil::MatrixStack &modelMatrix, const SpriteParticle
 {
 	if(isStarted)
 	{
-		//glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 		glutil::PushStack push(modelMatrix);
 		modelMatrix.Translate(position);
 
 		sunNovaAnim.Render(modelMatrix, progData);
-		//modelMatrix.Scale(currentScale, 0.0f, currentScale);
-
-		//skillExpansionRadius.Draw(modelMatrix, progData);
-
-		//glDisable(GL_BLEND);
 	}
 }
 
@@ -733,8 +714,6 @@ SatelliteChainingNova::SatelliteChainingNova(glm::vec3 newPosition,
 	isStarted = false;
 	generatedEvents.resize(0);
 
-	//skillExpansionRadius = Utility::Primitives::Torus2D(glm::vec4(0.2f, 0.0f, 0.8f, 0.5f), position, currentScale, currentScale + 0.03f, 90);
-	//skillExpansionRadius.Init();
 	satNovaAnim = NovaAnimation(position, glm::vec4(0.0f, 0.7f, 0.3f, 1.0f), 0.3f, range, scaleRate, 360,
 							    "../data/images/particle.png");
 }
@@ -754,35 +733,17 @@ void SatelliteChainingNova::Update()
 		{
 			currentScale += scaleRate;
 		}
-	/*	if(currentScale <= range)
-		{
-			currentScale += scaleRate;
-		}
-		else
-		{
-			currentScale = 1.0f;
-			isStarted = false;
-		}*/
 	}
 }
 
-//void SatelliteChainingNova::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData)
 void SatelliteChainingNova::Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &progData)
 {
 	if(isStarted)
 	{
-		//glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 		glutil::PushStack push(modelMatrix);
 		modelMatrix.Translate(position);
 
 		satNovaAnim.Render(modelMatrix, progData);
-		//modelMatrix.Scale(currentScale, 0.0f, currentScale);
-
-		//skillExpansionRadius.Draw(modelMatrix, progData);
-
-		//glDisable(GL_BLEND);
 	}
 }
 

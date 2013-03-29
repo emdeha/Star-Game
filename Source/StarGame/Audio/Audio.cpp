@@ -52,13 +52,18 @@ Audio::Audio()
 	CheckForError(result);
 }
 
-void Audio::SetFileForPlay(const std::string &newFileName, SoundType prevSoundType)
+void Audio::SetFileForPlay(const std::string &newFileName, SoundType prevSoundType, bool isLooping)
 {
 	FMOD_RESULT result;
 
 	FMOD::Sound *newSound;
 	result = system->createSound(newFileName.c_str(), FMOD_HARDWARE, 0, &newSound);
 	CheckForError(result);
+	if(isLooping)
+	{
+		result = newSound->setMode(FMOD_LOOP_NORMAL);
+		CheckForError(result);
+	}
 
 	if(audioFiles.find(prevSoundType) != audioFiles.end())
 		audioFiles[prevSoundType] = newSound;
@@ -78,7 +83,7 @@ void Audio::Play(SoundType soundType, ChannelType chType)
 	}
 		
 	FMOD_RESULT result;
-
+	
 	result = system->playSound(FMOD_CHANNEL_FREE, audioFiles[soundType], false, &channels[chType]);
 	CheckForError(result);
 		

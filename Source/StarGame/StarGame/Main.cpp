@@ -534,13 +534,6 @@ long long currentTime_milliseconds;
 
 Mesh sampleMesh;
 
-//MeteoriteEmitter testMeteoriteEmitter;
-//AoEAnimation testAoEAnim;
-//RadialEmitter testRadialEmitter;
-//FrostNovaAnimation testFrostNovaAnim;
-
-//NovaAnimation testSunNovaAnim;
-
 void Init()
 {
 	currentTime_milliseconds = GetCurrentTimeMillis();
@@ -599,31 +592,6 @@ void Init()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	nextGameTick = GetTickCount();
-
-
-	//testSunNovaAnim = NovaAnimation(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(0.5f, 0.5f, 0.0f, 1.0f),
-	//								   0.3f, 6.0f, 0.005f, 360,
-	//								   "../data/images/particle.png");
-
-	//testFrostNovaAnim = FrostNovaAnimation(glm::vec3(0.0f, 0.0f, 2.0f), 0.3f, 2.0f, 0.0008f, 12,
-	//									   "../data/images/aoe_target.png");
-
-	//testRadialEmitter = RadialEmitter(glm::vec3(0.0f, 0.0f, 2.0f), 0.3f, 2.0f, 0.0008f, 12, 
-	//								  "../data/images/aoe_target.png");
-	//testRadialEmitter.Init();
-
-	//testAoEAnim = AoEAnimation(glm::vec3(1.0f, 0.0f, 0.0f), 100, 1, 200, 0.3f, 0.5f, 1.0f, 0.01f, 
-	//						   "../data/images/particle.png", "../data/images/meteor.png");
-
-	//testMeteoriteEmitter = MeteoriteEmitter(glm::vec3(1.0f, 0.0f, 0.0f), 100, 1, 200, 0.3f, 0.5f, 1.0f, 0.01f, 
-	//										"../data/images/particle.png", "../data/images/meteor.png");
-	//testMeteoriteEmitter.Init();
-
-	/// slower
-	//testSpriteEmitter = SpriteParticleEmitter(glm::vec3(2.0f, 0.0f, 0.0f), 100, 300, 0.2f, true, 0.01f, "../data/images/particle.png");
-	//testSpriteEmitter.Init();
-
-	//testAnim = ParticleAnimation(glm::vec3(2.0f, 0.0f, 0.0f), 100, 1000, 0.2f, 0.01f, "../data/images/particle.png");
 }
 
 bool isEmitterStarted = false;
@@ -660,22 +628,6 @@ void Display()
 
 		if(isEmitterStarted)
 		{
-			//testFrostNovaAnim.Update();
-			//testFrostNovaAnim.Render(modelMatrix, scene.GetShaderManager().GetSpriteParticleProgData());
-			//testRadialEmitter.Update();
-			//testRadialEmitter.Render(modelMatrix, scene.GetShaderManager().GetSpriteParticleProgData());
-
-			//testAoEAnim.Update();
-			//testAoEAnim.Render(modelMatrix, scene.GetShaderManager().GetSpriteParticleProgData());
-			//testMeteoriteEmitter.Update();
-			//testMeteoriteEmitter.Render(modelMatrix, scene.GetShaderManager().GetSpriteParticleProgData());
-
-			/// slower
-			//testSpriteEmitter.Update();
-			//testSpriteEmitter.Render(modelMatrix, scene.GetShaderManager().GetSpriteParticleProgData());
-
-			//testSunNovaAnim.Update();
-			///testSunNovaAnim.Render(modelMatrix, scene.GetShaderManager().GetSpriteParticleProgData());
 		}
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))

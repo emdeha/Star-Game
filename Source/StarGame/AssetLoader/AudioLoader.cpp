@@ -24,10 +24,6 @@
 
 AudioLoader::AudioLoader(const std::string &fileName)
 {
-	//////////////////////////////////
-	/// WARN: Changed! Check it!!! ///
-	//////////////////////////////////
-
 	YAML::Node audio = YAML::LoadFile(fileName);
 
 	AudioData audioData;
@@ -56,6 +52,14 @@ AudioLoader::AudioLoader(const std::string &fileName)
 		{
 			audioFile.soundType = SoundType(music->second["sound-type"].as<int>());
 			audioFile.path = music->second["sound-file"].as<std::string>();
+			if(music->second["sound-loop"])
+			{
+				audioFile.isLooping = true;
+			}
+			else
+			{
+				audioFile.isLooping = false;
+			}
 			audioData.audioFiles.push_back(audioFile);
 		}
 

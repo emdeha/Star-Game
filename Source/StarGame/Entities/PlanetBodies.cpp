@@ -85,6 +85,8 @@ CelestialBody::CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float ne
 	parent.reset();
 	satellites.resize(0);
 	//bodyMesh.reset();
+
+	isDrawingUpgradeButtons = false;
 	
 	InitSatelliteStats();
 }
@@ -104,6 +106,8 @@ CelestialBody::CelestialBody(float speed, float newOffsetFromParent, float newDi
 	satellites.resize(0);
 	generatedEvents.resize(0);
 	isClicked = false;
+
+	isDrawingUpgradeButtons = false;
 	
 	satelliteStats[satType].resourceGainTime = resourceGainTime;
 	satelliteStats[satType].resourceGain_perTime = resourceGain_perTime;
@@ -332,7 +336,7 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 		//}
 	}
 	
-	if(isClicked && isSun)
+	if(isClicked && isSun && isDrawingUpgradeButtons)
 	{
 		sunSkillUpgradeBtns.Draw(modelMatrix, textureData);
 	}
@@ -341,7 +345,7 @@ void CelestialBody::Render(glutil::MatrixStack &modelMatrix, GLuint materialBloc
 		glutil::PushStack push(modelMatrix);
 		modelMatrix.RotateX(0.0f);
 
-		hoverOrbit.Draw(modelMatrix, simpleData, textureData);
+		hoverOrbit.Draw(modelMatrix, simpleData, textureData, isDrawingUpgradeButtons);
 	}
 	else if(!isClicked)
 	{
@@ -358,9 +362,11 @@ void CelestialBody::OnEvent(Event &_event)
 		case EVENT_TYPE_ON_CLICK:
 			std::printf("Satellite clicked!\n");
 			isClicked = true;
+			isDrawingUpgradeButtons = true;
 			break;
 		case EVENT_TYPE_ON_HOVER:
 			isClicked = true;
+			//isDrawingUpgradeButtons = false;
 			break;
 		case EVENT_TYPE_ATTACKED:
 			health -= _event.GetArgument("damage").varInteger;
@@ -369,6 +375,10 @@ void CelestialBody::OnEvent(Event &_event)
 			if(strcmp(_event.GetArgument("what_event").varString, "skillUpgr") == 0)
 			{
 				std::printf("sad");
+			}
+			if(strcmp(_event.GetArgument("what_event").varString, "satUnhov") == 0)
+			{
+				isDrawingUpgradeButtons = false;
 			}
 			break;
 		default:
@@ -387,6 +397,7 @@ void CelestialBody::OnEvent(Event &_event)
 			else if(_event.GetArgument("rightClick").varBool == false)
 			{
 			}
+			isDrawingUpgradeButtons = true;
 			break;
 		case EVENT_TYPE_ON_HOVER:
 			isClicked = true;
@@ -477,6 +488,10 @@ void CelestialBody::OnEvent(Event &_event)
 						}
 					}
 				}
+			}
+			if(strcmp(_event.GetArgument("what_event").varString, "sunUnhov") == 0)
+			{
+				isDrawingUpgradeButtons = false;
 			}
 			break;
 		default:
@@ -890,6 +905,10 @@ const bool CelestialBody::GetIsSatelliteClicked(SatelliteType type) const
 	}
 	HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 	return false;
+}
+const bool CelestialBody::GetIsDrawingUpgradeButtons() const
+{
+	return isDrawingUpgradeButtons;
 }
 const float CelestialBody::GetRadius() const
 {

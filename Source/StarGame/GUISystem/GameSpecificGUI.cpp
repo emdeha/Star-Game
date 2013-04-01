@@ -163,7 +163,8 @@ void SatelliteOrbit::Init()
 }
 
 void SatelliteOrbit::Draw(glutil::MatrixStack &modelMatrix, 
-						  const SimpleProgData &simpleData, const SimpleTextureProgData &textureData)
+						  const SimpleProgData &simpleData, const SimpleTextureProgData &textureData,
+						  bool isDrawingUpgradeButtons)
 {
 	// TODO: Play with blending
 	glEnable(GL_BLEND);
@@ -176,7 +177,10 @@ void SatelliteOrbit::Draw(glutil::MatrixStack &modelMatrix,
 	orbitOutlineOne.Draw(modelMatrix, simpleData);
 	orbitOutlineTwo.Draw(modelMatrix, simpleData);
 
-	upgradeButtons.Draw(modelMatrix, textureData);
+	if(isDrawingUpgradeButtons)
+	{
+		upgradeButtons.Draw(modelMatrix, textureData);
+	}
 }
 
 void SatelliteOrbit::ChangeUpgradeButtonTexture(TextureTypeSat type, int buttonIndex)

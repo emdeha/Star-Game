@@ -128,7 +128,8 @@ public:
 	/// \fn Draw
 	/// \brief Draws the orbit.
 	void Draw(glutil::MatrixStack &modelMatrix, 
-			  const SimpleProgData &simpleData, const SimpleTextureProgData &textureData);
+			  const SimpleProgData &simpleData, const SimpleTextureProgData &textureData,
+			  bool isDrawingUpgradeButtons);
 
 	void ChangeUpgradeButtonTexture(TextureTypeSat textType, int buttonIndex);
 

@@ -131,6 +131,8 @@ private:
 	bool isClicked;
 	bool isSun;
 
+	bool isDrawingUpgradeButtons;
+
 	int health;
 	int satelliteCap;
 	int satelliteConstructionCost; // WARN: Can't tell if this is the right approach.
@@ -204,6 +206,7 @@ public:
 
 	const bool GetIsClicked() const;
 	const bool GetIsSatelliteClicked(SatelliteType type) const;
+	const bool GetIsDrawingUpgradeButtons() const;
 
 	const float GetRadius() const;
 	const float GetDiameter() const;

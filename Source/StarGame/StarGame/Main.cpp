@@ -80,152 +80,12 @@ void HandleMouse()
 			}
 		}
 	}
-	/*
-	bool isBodySkillHovered = false;
-
-	std::vector<std::shared_ptr<CelestialBody>> sunSatellites = scene.GetSun()->GetSatellites();
-	for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = sunSatellites.begin(); 
-		iter != sunSatellites.end(); ++iter)
-	{
-		if((*iter)->IsClicked(mouseRay))
-		{
-			int buttonIndex = 0;
-			bool isUpgrBoxClicked = (*iter)->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex);
-			if(isUpgrBoxClicked)
-			{
-				EventArg upgradeSkillHoveredEventArgs[3];
-				upgradeSkillHoveredEventArgs[0].argType = "what_event";
-				upgradeSkillHoveredEventArgs[0].argument.varType = TYPE_STRING;
-				strcpy(upgradeSkillHoveredEventArgs[0].argument.varString, "skillHov");
-				upgradeSkillHoveredEventArgs[1].argType = "index";
-				upgradeSkillHoveredEventArgs[1].argument.varType = TYPE_INTEGER;
-				upgradeSkillHoveredEventArgs[1].argument.varInteger = buttonIndex;
-				upgradeSkillHoveredEventArgs[2].argType = "satType";
-				upgradeSkillHoveredEventArgs[2].argument.varType = TYPE_INTEGER;
-				upgradeSkillHoveredEventArgs[2].argument.varInteger = (*iter)->GetSatelliteType();
-				Event upgradeSkillHoveredEvent(3, EVENT_TYPE_OTHER, upgradeSkillHoveredEventArgs);
-
-				//(*iter)->OnEvent(upgradeSkillClickedEvent);
-				scene.OnEvent(upgradeSkillHoveredEvent);
-				isBodySkillHovered = true;
-			}
-			Event satelliteHoveredEvent = StockEvents::EventOnHover();
-
-			(*iter)->OnEvent(satelliteHoveredEvent);
-			// WARN: This would emit an unexpected error because the scene doesn't handle on hover events
-			//scene.OnEvent(satelliteHoveredEvent);
-		}
-	}
-
-	if(scene.GetSun()->IsClicked(mouseRay))
-	{
-		int buttonIndex = 0;
-		bool isUpgrBoxClicked = scene.GetSun()->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex);
-		if(isUpgrBoxClicked)
-		{
-			EventArg upgradeSkillHoveredEventArgs[3];
-			upgradeSkillHoveredEventArgs[0].argType = "what_event";
-			upgradeSkillHoveredEventArgs[0].argument.varType = TYPE_STRING;
-			strcpy(upgradeSkillHoveredEventArgs[0].argument.varString, "skillHov");
-			upgradeSkillHoveredEventArgs[1].argType = "index";
-			upgradeSkillHoveredEventArgs[1].argument.varType = TYPE_INTEGER;
-			upgradeSkillHoveredEventArgs[1].argument.varInteger = buttonIndex;
-			upgradeSkillHoveredEventArgs[2].argType = "satType";
-			upgradeSkillHoveredEventArgs[2].argument.varType = TYPE_INTEGER;
-			upgradeSkillHoveredEventArgs[2].argument.varInteger = -1;
-			Event upgradeSkillHoveredEvent(3, EVENT_TYPE_OTHER, upgradeSkillHoveredEventArgs);
-
-			//(*iter)->OnEvent(upgradeSkillClickedEvent);
-			scene.OnEvent(upgradeSkillHoveredEvent);
-			isBodySkillHovered = true;
-		}
-		Event sunHoveredEvent = StockEvents::EventOnHover();
-
-		scene.GetSun()->OnEvent(sunHoveredEvent);
-		// WARN: This would emit an unexpected error because the scene doesn't handle on hover events
-		//scene.OnEvent(sunHoveredEvent);
-	}
-	if(!isBodySkillHovered)
-	{
-		scene.GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetIsVisible(false);
-	}*/
 
 	if(scene.GetMouse().IsLeftButtonDown())
 	{
 		if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 		{
 			scene.OnEvent(StockEvents::EventOnLeftClick("deploySkill"));
-
-
-			/*
-			bool isBodySkillHovered = false;
-
-			std::vector<std::shared_ptr<CelestialBody>> sunSatellites = scene.GetSun()->GetSatellites();
-			for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = sunSatellites.begin(); 
-				iter != sunSatellites.end(); ++iter)
-			{
-				if((*iter)->IsClicked(mouseRay))
-				{
-					int buttonIndex = 0;
-					bool isUpgrBoxClicked = (*iter)->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex);
-					if(isUpgrBoxClicked)
-					{
-						EventArg upgradeSkillHoveredEventArgs[3];
-						upgradeSkillHoveredEventArgs[0].argType = "what_event";
-						upgradeSkillHoveredEventArgs[0].argument.varType = TYPE_STRING;
-						strcpy(upgradeSkillHoveredEventArgs[0].argument.varString, "skillHov");
-						upgradeSkillHoveredEventArgs[1].argType = "index";
-						upgradeSkillHoveredEventArgs[1].argument.varType = TYPE_INTEGER;
-						upgradeSkillHoveredEventArgs[1].argument.varInteger = buttonIndex;
-						upgradeSkillHoveredEventArgs[2].argType = "satType";
-						upgradeSkillHoveredEventArgs[2].argument.varType = TYPE_INTEGER;
-						upgradeSkillHoveredEventArgs[2].argument.varInteger = (*iter)->GetSatelliteType();
-						Event upgradeSkillHoveredEvent(3, EVENT_TYPE_OTHER, upgradeSkillHoveredEventArgs);
-
-						//(*iter)->OnEvent(upgradeSkillClickedEvent);
-						scene.OnEvent(upgradeSkillHoveredEvent);
-						isBodySkillHovered = true;
-					}
-					Event satelliteHoveredEvent = StockEvents::EventOnHover();
-
-					(*iter)->OnEvent(satelliteHoveredEvent);
-					// WARN: This would emit an unexpected error because the scene doesn't handle on hover events
-					//scene.OnEvent(satelliteHoveredEvent);
-				}
-			}
-
-			if(scene.GetSun()->IsClicked(mouseRay))
-			{
-				int buttonIndex = 0;
-				bool isUpgrBoxClicked = scene.GetSun()->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex);
-				if(isUpgrBoxClicked)
-				{
-					EventArg upgradeSkillHoveredEventArgs[3];
-					upgradeSkillHoveredEventArgs[0].argType = "what_event";
-					upgradeSkillHoveredEventArgs[0].argument.varType = TYPE_STRING;
-					strcpy(upgradeSkillHoveredEventArgs[0].argument.varString, "skillHov");
-					upgradeSkillHoveredEventArgs[1].argType = "index";
-					upgradeSkillHoveredEventArgs[1].argument.varType = TYPE_INTEGER;
-					upgradeSkillHoveredEventArgs[1].argument.varInteger = buttonIndex;
-					upgradeSkillHoveredEventArgs[2].argType = "satType";
-					upgradeSkillHoveredEventArgs[2].argument.varType = TYPE_INTEGER;
-					upgradeSkillHoveredEventArgs[2].argument.varInteger = -1;
-					Event upgradeSkillHoveredEvent(3, EVENT_TYPE_OTHER, upgradeSkillHoveredEventArgs);
-
-					//(*iter)->OnEvent(upgradeSkillClickedEvent);
-					scene.OnEvent(upgradeSkillHoveredEvent);
-					isBodySkillHovered = true;
-				}
-				Event sunHoveredEvent = StockEvents::EventOnHover();
-
-				scene.GetSun()->OnEvent(sunHoveredEvent);
-				// WARN: This would emit an unexpected error because the scene doesn't handle on hover events
-				//scene.OnEvent(sunHoveredEvent);
-			}
-			if(!isBodySkillHovered)
-			{
-				scene.GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetIsVisible(false);
-			}*/
 		}
 		if(scene.HasSuns())
 		{
@@ -501,73 +361,6 @@ void HandleMouse()
 		}
 	}
 
-	if(scene.IsLayoutOn(LAYOUT_IN_GAME))
-	{/*
-		if(scene.HasSuns())
-		{
-			std::vector<std::shared_ptr<CelestialBody>> sunSatellites = scene.GetSun()->GetSatellites();
-			for(std::vector<std::shared_ptr<CelestialBody>>::iterator iter = sunSatellites.begin(); 
-				iter != sunSatellites.end(); ++iter)
-			{
-				if((*iter)->IsClicked(mouseRay))
-				{
-					int buttonIndex = 0;
-					bool isUpgrBoxClicked = (*iter)->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex);
-					if(isUpgrBoxClicked && scene.GetMouse().IsLeftButtonDown())
-					{
-						EventArg upgradeSkillClickedEventArgs[3];
-						upgradeSkillClickedEventArgs[0].argType = "what_event";
-						upgradeSkillClickedEventArgs[0].argument.varType = TYPE_STRING;
-						strcpy(upgradeSkillClickedEventArgs[0].argument.varString, "skillUpgr");
-						upgradeSkillClickedEventArgs[1].argType = "index";
-						upgradeSkillClickedEventArgs[1].argument.varType = TYPE_INTEGER;
-						upgradeSkillClickedEventArgs[1].argument.varInteger = buttonIndex;
-						upgradeSkillClickedEventArgs[2].argType = "satType";
-						upgradeSkillClickedEventArgs[2].argument.varType = TYPE_INTEGER;
-						upgradeSkillClickedEventArgs[2].argument.varInteger = (*iter)->GetSatelliteType();
-						Event upgradeSkillClickedEvent(3, EVENT_TYPE_OTHER, upgradeSkillClickedEventArgs);
-
-						//(*iter)->OnEvent(upgradeSkillClickedEvent);
-						scene.OnEvent(upgradeSkillClickedEvent);
-					}
-					Event satelliteHoveredEvent = StockEvents::EventOnHover();
-
-					(*iter)->OnEvent(satelliteHoveredEvent);
-					// WARN: This would emit an unexpected error because the scene doesn't handle on hover events
-					//scene.OnEvent(satelliteHoveredEvent);
-				}
-			}
-
-			if(scene.GetSun()->IsClicked(mouseRay))
-			{
-				int buttonIndex = 0;
-				bool isUpgrBoxClicked = scene.GetSun()->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex);
-				if(isUpgrBoxClicked && scene.GetMouse().IsLeftButtonDown())
-				{
-					EventArg upgradeSkillClickedEventArgs[3];
-					upgradeSkillClickedEventArgs[0].argType = "what_event";
-					upgradeSkillClickedEventArgs[0].argument.varType = TYPE_STRING;
-					strcpy(upgradeSkillClickedEventArgs[0].argument.varString, "skillUpgr");
-					upgradeSkillClickedEventArgs[1].argType = "index";
-					upgradeSkillClickedEventArgs[1].argument.varType = TYPE_INTEGER;
-					upgradeSkillClickedEventArgs[1].argument.varInteger = buttonIndex;
-					upgradeSkillClickedEventArgs[2].argType = "satType";
-					upgradeSkillClickedEventArgs[2].argument.varType = TYPE_INTEGER;
-					upgradeSkillClickedEventArgs[2].argument.varInteger = -1;
-					Event upgradeSkillClickedEvent(3, EVENT_TYPE_OTHER, upgradeSkillClickedEventArgs);
-
-					//(*iter)->OnEvent(upgradeSkillClickedEvent);
-					scene.OnEvent(upgradeSkillClickedEvent);
-				}
-				Event sunHoveredEvent = StockEvents::EventOnHover();
-
-				scene.GetSun()->OnEvent(sunHoveredEvent);
-				// WARN: This would emit an unexpected error because the scene doesn't handle on hover events
-				//scene.OnEvent(sunHoveredEvent);
-			}
-		}*/
-	}
-
 	if(scene.IsLayoutOn(LAYOUT_MENU))
 	{
 		/*if(
@@ -778,7 +571,7 @@ void TimerFunction(int value)
 
 long long currentTime_milliseconds;
 
-Mesh sampleMesh;
+PassiveAoeAnimation testPassiveAoeAnim;
 
 void Init()
 {
@@ -838,6 +631,10 @@ void Init()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	nextGameTick = GetTickCount();
+
+
+	testPassiveAoeAnim = PassiveAoeAnimation(glm::vec3(2.0f, 0.0f, -2.0f), 30, 1000, 0.2f, true, 0.001f, 2.0f, 
+											 "../data/images/particle.png", "../data/images/aoe_target.png");
 }
 
 bool isEmitterStarted = false;
@@ -874,6 +671,9 @@ void Display()
 
 		if(isEmitterStarted)
 		{
+			testPassiveAoeAnim.Update();
+			testPassiveAoeAnim.Render(modelMatrix, 
+				scene.GetShaderManager().GetSpriteParticleProgData(), scene.GetShaderManager().GetSimpleTextureProgData());
 		}
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
@@ -946,6 +746,13 @@ void Keyboard(unsigned char key, int x, int y)
 		//	     the application crashes.
 		glutLeaveMainLoop();
 		return;
+	case '1':
+		testPassiveAoeAnim.SetFreeParticleAnimPosition(glm::vec3(0.0f, 0.0f, -1.5f));
+		break;
+	case '2':
+		testPassiveAoeAnim.SetFreeParticleAnimPosition(glm::vec3(1.0f, 0.0f, -2.0f));
+	case '3':
+		testPassiveAoeAnim.SetFreeParticleAnimPosition(glm::vec3((float)rand() / RAND_MAX + 2.0f, 0.0f, (float)rand() / RAND_MAX - 3.0f));
 	case 32:
 		isEmitterStarted = true;
 		break;

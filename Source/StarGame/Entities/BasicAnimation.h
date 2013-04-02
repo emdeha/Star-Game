@@ -99,6 +99,14 @@ public:
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteParticleProgData);
+	
+	void SetPosition(glm::vec3 newPosition);
+
+	bool IsEnded();
+	bool IsActive();
+	void Activate();
+
+	void Reset();
 };
 
 
@@ -169,6 +177,33 @@ public:
 
 	void Restart();
 
+	bool IsEnded();
+};
+
+
+class PassiveAoeAnimation
+{
+private:
+	std::vector<ParticleAnimation> lifeDrainAnims;
+
+	Utility::Primitives::Sprite3D skillRadiusSprite;
+
+	int lifeDrainAnimsSize;
+
+public:
+	PassiveAoeAnimation() {}
+	PassiveAoeAnimation(glm::vec3 position, int particleCount,
+						int particleLifeTime, float particleSize, bool isParticleLooping,
+						float particleVelocityMultiplier, float skillRadiusSize,
+						const std::string &particleTextureFileName, const std::string &skillRadiusTextureFileName);
+
+	void Update();
+	void Render(glutil::MatrixStack &modelMatrix, 
+				const SpriteParticleProgData &spriteParticleProgData, const SimpleTextureProgData &simpleTextureProgData);
+
+	void SetFreeParticleAnimPosition(glm::vec3 newPosition);
+
+	void Restart();
 	bool IsEnded();
 };
 

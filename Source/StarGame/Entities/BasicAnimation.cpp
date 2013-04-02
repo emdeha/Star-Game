@@ -170,6 +170,29 @@ void ParticleAnimation::Render(glutil::MatrixStack &modelMatrix, const SpritePar
 	burnAnim.Render(modelMatrix, spriteParticleProgData);
 }
 
+void ParticleAnimation::SetPosition(glm::vec3 newPosition)
+{
+	burnAnim.SetPosition(newPosition);
+}
+
+bool ParticleAnimation::IsEnded()
+{
+	return burnAnim.IsDead();
+}
+bool ParticleAnimation::IsActive()
+{
+	return burnAnim.IsActive();
+}
+void ParticleAnimation::Activate()
+{
+	burnAnim.Activate();
+}
+
+void ParticleAnimation::Reset()
+{
+	burnAnim.Init();
+}
+
 
 AoEAnimation::AoEAnimation(glm::vec3 position, 
 						   float newAnimDuration_secs,
@@ -277,4 +300,85 @@ void NovaAnimation::Restart()
 bool NovaAnimation::IsEnded()
 {
 	return novaCircleEmitter.IsDead();
+}
+
+
+PassiveAoeAnimation::PassiveAoeAnimation(glm::vec3 position, int particleCount,
+										 int particleLifeTime, float particleSize, bool isParticleLooping,
+										 float particleVelocityMultiplier, float skillRadiusSize,
+										 const std::string &particleTextureFileName, const std::string &skillRadiusTextureFileName)
+{
+	lifeDrainAnimsSize = 10;
+	for(int i = 0; i < lifeDrainAnimsSize; i++)
+	{
+		lifeDrainAnims.push_back(ParticleAnimation(position, particleCount, particleLifeTime, particleSize, 
+												   isParticleLooping, particleVelocityMultiplier,
+												   particleTextureFileName));
+	}
+
+	skillRadiusSprite = Utility::Primitives::Sprite3D(position, skillRadiusSize, skillRadiusSize);
+	skillRadiusSprite.Init(skillRadiusTextureFileName);
+}
+
+void PassiveAoeAnimation::Update()
+{
+	for(int i = 0; i < lifeDrainAnimsSize; i++)
+	{
+		if(lifeDrainAnims[i].IsActive())
+		{
+			lifeDrainAnims[i].Update();
+		}
+	}
+}
+
+void PassiveAoeAnimation::Render(glutil::MatrixStack &modelMatrix, 
+								 const SpriteParticleProgData &spriteParticleProgData,
+								 const SimpleTextureProgData &simpleTextureProgData)
+{
+	for(int i = 0; i < lifeDrainAnimsSize; i++)
+	{
+		if(lifeDrainAnims[i].IsActive())
+		{
+			lifeDrainAnims[i].Render(modelMatrix, spriteParticleProgData);
+		}
+	}
+
+	skillRadiusSprite.Draw(modelMatrix, simpleTextureProgData);
+}
+
+void PassiveAoeAnimation::SetFreeParticleAnimPosition(glm::vec3 newPosition)
+{
+	for(int i = 0; i < lifeDrainAnimsSize; i++)
+	{
+		if(!lifeDrainAnims[i].IsActive())
+		{
+			lifeDrainAnims[i].SetPosition(newPosition);
+			lifeDrainAnims[i].Activate();
+			return;
+		}
+	}
+
+	//lifeDrainAnims.push_back(ParticleAnimation(
+}
+
+void PassiveAoeAnimation::Restart()
+{
+	for(int i = 0; i < lifeDrainAnimsSize; i++)
+	{
+		lifeDrainAnims[i].Reset();
+	}
+}
+
+bool PassiveAoeAnimation::IsEnded()
+{
+	bool isEnded = true;
+	for(int i = 0; i < lifeDrainAnimsSize; i++)
+	{
+		if(!lifeDrainAnims[i].IsEnded())
+		{
+			isEnded = false;
+		}
+	}
+
+	return isEnded;
 }

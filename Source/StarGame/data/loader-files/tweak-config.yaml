@@ -17,7 +17,7 @@ satHealth:
 health: 50
 enemyDamage:
     enemy-swarm: 5
-    enemy-spaceship: 1
+    enemy-spaceship: 0 #changed!!!
     enemy-mothership: 1
     enemy-fast-suicide-bomber: 50
     enemy-asteroid: 20
@@ -68,9 +68,9 @@ deployUnitsSpeed: 0.05
 deployUnitsLOS: 2.0
 deployUnitsProjSpeed: 0.3
 skillDamage:
-    skill-passive-aoe: 20
+    skill-passive-aoe: 10
     skill-aoe: 20
-    skill-sun-nova: 40
+    skill-sun-nova: 51
     skill-burn: 30
     skill-sat-passive-aoe: 20
     skill-sat-chain: 20
@@ -101,7 +101,7 @@ skillDamageApplyTime:
     skill-burn: 1.0
     skill-sat-passive-aoe: 1.0
 skillDuration: 
-    skill-passive-aoe: 4.0
+    skill-passive-aoe: 10.0
     skill-burn: 3.0
     skill-sat-passive-aoe: 2.0
 skillDefensePoints:

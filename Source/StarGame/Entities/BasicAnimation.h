@@ -187,8 +187,21 @@ private:
 	std::vector<ParticleAnimation> lifeDrainAnims;
 
 	Utility::Primitives::Sprite3D skillRadiusSprite;
+	
+	// used to create new particles from input data when the lifeDrainAnims vector is out of space.
+	struct AnimData
+	{
+		glm::vec3 position;
+		int particleCount;
+		int particleLifeTime;
+		float particleSize;
+		bool isParticleLooping;
+		float particleVelocityMultiplier;
+		std::string particleTextureFileName;
 
-	int lifeDrainAnimsSize;
+		AnimData() {}
+	};
+	AnimData inputAnimData;
 
 public:
 	PassiveAoeAnimation() {}
@@ -202,6 +215,7 @@ public:
 				const SpriteParticleProgData &spriteParticleProgData, const SimpleTextureProgData &simpleTextureProgData);
 
 	void SetFreeParticleAnimPosition(glm::vec3 newPosition);
+	void SetParticleAnimPosition(glm::vec3 newPosition, int particleAnimIndex);
 
 	void Restart();
 	bool IsEnded();

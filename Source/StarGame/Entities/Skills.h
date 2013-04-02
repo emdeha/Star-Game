@@ -33,6 +33,7 @@
 enum ParameterType
 {
 	PARAM_POSITION,
+	PARAM_LIFE_DRAIN_PARTICLE_EMITTER_POSITION,
 	PARAM_RANGE,
 	PARAM_DAMAGE,
 };
@@ -105,6 +106,8 @@ public:
 						const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &simpleData) {}
 	virtual void Render(glutil::MatrixStack &modelMatrix,
 						const SpriteParticleProgData &spriteParticleProgData) {}
+	virtual void Render(glutil::MatrixStack &modelMatrix,
+						const SpriteParticleProgData &spriteParticleProgData, const SimpleTextureProgData &SimpleTextureProgData) {}
 
 	virtual void OnEvent(Event &_event) {}
 
@@ -113,6 +116,7 @@ public:
 	virtual void SetParameter(ParameterType paramType, float newParam_float) {}
 
 	virtual bool IsIntersectingObject(glm::vec3 objectPosition) { return false; }
+	virtual bool IsIntersectingObject(glm::vec3 objectPosition, int objectIndex) { return false; }
 	
 	virtual float GetRange() { return 0.0f; }
 	virtual int GetDamage() { return 0; }
@@ -184,7 +188,8 @@ private:
 	float range;
 	glm::vec3 position;
 
-	Utility::Primitives::Circle skillVisibleRadius;
+	//Utility::Primitives::Circle skillVisibleRadius;
+	PassiveAoeAnimation skillAnim;
 
 public:
 	PassiveAOESkill() : Skill() {}
@@ -197,7 +202,8 @@ public:
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix,
-				const SimpleProgData &progData);
+				const SpriteParticleProgData &spriteParticleProgData, const SimpleTextureProgData &simpleTextureProgData);
+				//const SimpleProgData &progData);
 
 	void OnEvent(Event &_event);
 
@@ -205,7 +211,7 @@ public:
 	glm::vec3 GetPosition();
 	int GetDamage() { return damage; }
 
-	bool IsIntersectingObject(glm::vec3 objectPosition);
+	bool IsIntersectingObject(glm::vec3 objectPosition, int objectIndex = -1);
 
 	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 };

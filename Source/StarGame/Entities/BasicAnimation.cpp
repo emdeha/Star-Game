@@ -308,13 +308,21 @@ PassiveAoeAnimation::PassiveAoeAnimation(glm::vec3 position, int particleCount,
 										 float particleVelocityMultiplier, float skillRadiusSize,
 										 const std::string &particleTextureFileName, const std::string &skillRadiusTextureFileName)
 {
-	lifeDrainAnimsSize = 10;
+	/*lifeDrainAnimsSize = 10;
 	for(int i = 0; i < lifeDrainAnimsSize; i++)
 	{
 		lifeDrainAnims.push_back(ParticleAnimation(position, particleCount, particleLifeTime, particleSize, 
 												   isParticleLooping, particleVelocityMultiplier,
 												   particleTextureFileName));
-	}
+	}*/
+
+	inputAnimData.particleCount = particleCount;
+	inputAnimData.position = position;
+	inputAnimData.particleLifeTime = particleLifeTime;
+	inputAnimData.particleSize = particleSize;
+	inputAnimData.isParticleLooping = isParticleLooping;
+	inputAnimData.particleVelocityMultiplier = particleVelocityMultiplier;
+	inputAnimData.particleTextureFileName = particleTextureFileName;
 
 	skillRadiusSprite = Utility::Primitives::Sprite3D(position, skillRadiusSize, skillRadiusSize);
 	skillRadiusSprite.Init(skillRadiusTextureFileName);
@@ -322,7 +330,7 @@ PassiveAoeAnimation::PassiveAoeAnimation(glm::vec3 position, int particleCount,
 
 void PassiveAoeAnimation::Update()
 {
-	for(int i = 0; i < lifeDrainAnimsSize; i++)
+	for(int i = 0; i < lifeDrainAnims.size(); i++)
 	{
 		if(lifeDrainAnims[i].IsActive())
 		{
@@ -335,7 +343,7 @@ void PassiveAoeAnimation::Render(glutil::MatrixStack &modelMatrix,
 								 const SpriteParticleProgData &spriteParticleProgData,
 								 const SimpleTextureProgData &simpleTextureProgData)
 {
-	for(int i = 0; i < lifeDrainAnimsSize; i++)
+	for(int i = 0; i < lifeDrainAnims.size(); i++)
 	{
 		if(lifeDrainAnims[i].IsActive())
 		{
@@ -348,7 +356,7 @@ void PassiveAoeAnimation::Render(glutil::MatrixStack &modelMatrix,
 
 void PassiveAoeAnimation::SetFreeParticleAnimPosition(glm::vec3 newPosition)
 {
-	for(int i = 0; i < lifeDrainAnimsSize; i++)
+	for(int i = 0; i < lifeDrainAnims.size(); i++)
 	{
 		if(!lifeDrainAnims[i].IsActive())
 		{
@@ -358,21 +366,52 @@ void PassiveAoeAnimation::SetFreeParticleAnimPosition(glm::vec3 newPosition)
 		}
 	}
 
-	//lifeDrainAnims.push_back(ParticleAnimation(
+	lifeDrainAnims.push_back(ParticleAnimation(newPosition, inputAnimData.particleCount, 
+											   inputAnimData.particleLifeTime, inputAnimData.particleSize,
+											   inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
+											   inputAnimData.particleTextureFileName));
+	lifeDrainAnims.back().Activate();
+}
+
+void PassiveAoeAnimation::SetParticleAnimPosition(glm::vec3 newPosition, int particleAnimIndex)
+{
+	int size = lifeDrainAnims.size() - 1;
+
+	if(particleAnimIndex > size)
+	{
+		//SetFreeParticleAnimPosition(newPosition);
+		while(particleAnimIndex > lifeDrainAnims.size())
+		{
+			lifeDrainAnims.push_back(ParticleAnimation(inputAnimData.position, inputAnimData.particleCount, 
+										inputAnimData.particleLifeTime, inputAnimData.particleSize,
+										inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
+										inputAnimData.particleTextureFileName));
+		}
+		lifeDrainAnims.push_back(ParticleAnimation(newPosition, inputAnimData.particleCount, 
+										inputAnimData.particleLifeTime, inputAnimData.particleSize,
+										inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
+										inputAnimData.particleTextureFileName));
+		lifeDrainAnims[particleAnimIndex].Activate();
+		return;
+	}
+
+	lifeDrainAnims[particleAnimIndex].SetPosition(newPosition);
+	lifeDrainAnims[particleAnimIndex].Activate();
 }
 
 void PassiveAoeAnimation::Restart()
 {
-	for(int i = 0; i < lifeDrainAnimsSize; i++)
+	/*for(int i = 0; i < lifeDrainAnimsSize; i++)
 	{
 		lifeDrainAnims[i].Reset();
-	}
+	}*/
+	lifeDrainAnims.resize(0);
 }
 
 bool PassiveAoeAnimation::IsEnded()
 {
 	bool isEnded = true;
-	for(int i = 0; i < lifeDrainAnimsSize; i++)
+	for(int i = 0; i < lifeDrainAnims.size(); i++)
 	{
 		if(!lifeDrainAnims[i].IsEnded())
 		{

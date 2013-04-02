@@ -548,6 +548,8 @@ void Scene::SpawnEnemies()
 			}
 		}
 
+		chosenType = ENEMY_TYPE_SPACESHIP;
+
 		switch(chosenType)
 		{
 		case ENEMY_TYPE_SWARM:
@@ -1216,16 +1218,17 @@ void Scene::UpdateScene()
 			{
 				for(int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++)
 				{
-					if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition()))
+					if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition(), enemyIndex))
 					{
 						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("timeended");
 						if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
 						{
 							enemies[enemyIndex]->OnEvent(skillEvent);
-							skills[skillIndex]->RemoveGeneratedEvent("timeended");
+							//skills[skillIndex]->RemoveGeneratedEvent("timeended");
 						}
 					}
 				}
+				skills[skillIndex]->RemoveGeneratedEvent("timeended");
 			}
 
 			if(skills[skillIndex]->GetSkillType() == "burnSkill" && 

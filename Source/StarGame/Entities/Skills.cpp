@@ -261,9 +261,12 @@ PassiveAOESkill::PassiveAOESkill(glm::vec3 newPosition,
 
 	isStarted = false;
 
-	skillVisibleRadius = 
-		Utility::Primitives::Circle(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), position, range, 90);
-	skillVisibleRadius.Init();
+	//skillVisibleRadius = 
+	//	Utility::Primitives::Circle(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), position, range, 90);
+	//skillVisibleRadius.Init();
+	glm::vec3 realPosition = glm::vec3(position.x + range / 2.0f, 0.0f, position.z + range / 2.0f);
+	skillAnim = PassiveAoeAnimation(realPosition, 30, 50, 0.2f, true, 0.01f, range, 
+									"../data/images/particle.png", "../data/images/aoe_target.png");
 }
 
 void PassiveAOESkill::Update()
@@ -290,30 +293,37 @@ void PassiveAOESkill::Update()
 
 				attackTimer.Reset();
 			}
+			skillAnim.Update();
 		}
 		else
 		{
 			isStarted = false;
 			skillLife.Reset();
 			skillLife.SetPause(true);
+
+			skillAnim.Restart();
 		}
 	}
 }
 
 void PassiveAOESkill::Render(glutil::MatrixStack &modelMatrix,
-							 const SimpleProgData &progData)
+							 const SpriteParticleProgData &spriteParticleProgData, 
+							 const SimpleTextureProgData &simpleTextureProgData)
+							 //const SimpleProgData &progData)
 {
 	if(isStarted)
 	{
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glutil::PushStack push(modelMatrix);
 		modelMatrix.Translate(position);
 
-		skillVisibleRadius.Draw(modelMatrix, progData);
+		skillAnim.Render(modelMatrix, spriteParticleProgData, simpleTextureProgData);
 
-		glDisable(GL_BLEND);
+		//skillVisibleRadius.Draw(modelMatrix, progData);
+
+		//glDisable(GL_BLEND);
 	}
 }
 
@@ -381,7 +391,7 @@ void PassiveAOESkill::SetParameter(ParameterType paramType, glm::vec3 newParam_v
 	}
 }
 
-bool PassiveAOESkill::IsIntersectingObject(glm::vec3 objectPosition)
+bool PassiveAOESkill::IsIntersectingObject(glm::vec3 objectPosition, int objectIndex)
 {
 	if(isStarted)
 	{
@@ -389,6 +399,10 @@ bool PassiveAOESkill::IsIntersectingObject(glm::vec3 objectPosition)
 
 		if(distanceBetweenObjectAndSkill < range)
 		{
+			if(objectIndex != -1)
+			{
+				skillAnim.SetParticleAnimPosition(objectPosition, objectIndex);
+			}
 			return true;
 		}
 

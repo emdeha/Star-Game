@@ -633,8 +633,8 @@ void Init()
 	nextGameTick = GetTickCount();
 
 
-	testPassiveAoeAnim = PassiveAoeAnimation(glm::vec3(2.0f, 0.0f, -2.0f), 30, 1000, 0.2f, true, 0.001f, 2.0f, 
-											 "../data/images/particle.png", "../data/images/aoe_target.png");
+	//testPassiveAoeAnim = PassiveAoeAnimation(glm::vec3(2.0f, 0.0f, -2.0f), 30, 1000, 0.2f, true, 0.001f, 2.0f, 
+	//										 "../data/images/particle.png", "../data/images/aoe_target.png");
 }
 
 bool isEmitterStarted = false;
@@ -671,9 +671,9 @@ void Display()
 
 		if(isEmitterStarted)
 		{
-			testPassiveAoeAnim.Update();
-			testPassiveAoeAnim.Render(modelMatrix, 
-				scene.GetShaderManager().GetSpriteParticleProgData(), scene.GetShaderManager().GetSimpleTextureProgData());
+			//testPassiveAoeAnim.Update();
+			//testPassiveAoeAnim.Render(modelMatrix, 
+			//	scene.GetShaderManager().GetSpriteParticleProgData(), scene.GetShaderManager().GetSimpleTextureProgData());
 		}
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
@@ -746,13 +746,9 @@ void Keyboard(unsigned char key, int x, int y)
 		//	     the application crashes.
 		glutLeaveMainLoop();
 		return;
-	case '1':
-		testPassiveAoeAnim.SetFreeParticleAnimPosition(glm::vec3(0.0f, 0.0f, -1.5f));
-		break;
-	case '2':
-		testPassiveAoeAnim.SetFreeParticleAnimPosition(glm::vec3(1.0f, 0.0f, -2.0f));
-	case '3':
-		testPassiveAoeAnim.SetFreeParticleAnimPosition(glm::vec3((float)rand() / RAND_MAX + 2.0f, 0.0f, (float)rand() / RAND_MAX - 3.0f));
+	//case '1':
+	//	testPassiveAoeAnim.SetFreeParticleAnimPosition(glm::vec3((float)rand() / RAND_MAX + 2.0f, 0.0f, (float)rand() / RAND_MAX - 3.0f));
+	
 	case 32:
 		isEmitterStarted = true;
 		break;

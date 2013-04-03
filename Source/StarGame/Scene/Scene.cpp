@@ -1032,10 +1032,10 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
 	{
 		if(enemies[i]->IsSceneUpdated())
 		{
-			enemies[i]->Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), billboardNoTextureData);
-			enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, textureData, interpolation);
-			enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, interpolation);
-			enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, litTextureData, interpolation);
+			enemies[i]->Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), billboardNoTextureData, spriteParticleProgData);
+			enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, textureData, spriteParticleProgData, interpolation);
+			enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, spriteParticleProgData, interpolation);
+			enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, litTextureData, spriteParticleProgData, interpolation);
 		}
 	}
 
@@ -1218,14 +1218,20 @@ void Scene::UpdateScene()
 			{
 				for(int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++)
 				{
-					if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition(), enemyIndex))
+					if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition()/*, enemyIndex*/))
 					{
+						//skills[skillIndex]->SetSkillAnim(enemies[enemyIndex]->GetPosition(), enemyIndex);
+						enemies[enemyIndex]->StartEmittingPain();
 						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("timeended");
 						if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
 						{
 							enemies[enemyIndex]->OnEvent(skillEvent);
 							//skills[skillIndex]->RemoveGeneratedEvent("timeended");
 						}
+					}
+					else
+					{
+						enemies[enemyIndex]->StopEmittingPain();
 					}
 				}
 				skills[skillIndex]->RemoveGeneratedEvent("timeended");
@@ -1431,7 +1437,19 @@ void Scene::OnEvent(Event &_event)
 									{
 										sceneMusic.Play(MUSIC_AOE, CHANNEL_GAME);
 									}
+									if(skills[skillIndex]->GetSkillType() == "passiveAoeSkill")
+									{
+										enemies[i]->StartEmittingPain();
+										//skills[skillIndex]->SetSkillAnim(enemies[i]->GetPosition(), i);
+									}
 									//enemies[i]->OnEvent(skillEvent);
+								}
+								else 
+								{
+									if(skills[skillIndex]->GetSkillType() == "passiveAoeSkill")
+									{
+										enemies[i]->StopEmittingPain();
+									}
 								}
 							}
 							if(skills[skillIndex]->GetSkillType() == "aoeSkill")

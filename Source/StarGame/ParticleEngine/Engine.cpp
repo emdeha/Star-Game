@@ -585,10 +585,10 @@ void SpriteParticleEmitter::Init()
 void SpriteParticleEmitter::SetPosition(glm::vec3 newPosition)
 {
 	position = newPosition;
-	for(int i = 0; i < particleCount; i++)
-	{
-		particles[i].position = newPosition;
-	}
+	//for(int i = 0; i < particleCount; i++)
+	//{
+	//	particles[i].position = newPosition;
+	//}
 }
 
 void SpriteParticleEmitter::Update()

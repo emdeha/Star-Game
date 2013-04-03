@@ -121,6 +121,8 @@ public:
 	virtual float GetRange() { return 0.0f; }
 	virtual int GetDamage() { return 0; }
 
+	virtual void SetSkillAnim(glm::vec3 position, int enemyIndex) {}
+
 	std::string GetSkillType() { return skillType; }
 	int GetApplyCost() { return skillApplyCost; }
 	int GetResearchCost() { return skillResearchCost; }
@@ -211,9 +213,10 @@ public:
 	glm::vec3 GetPosition();
 	int GetDamage() { return damage; }
 
-	bool IsIntersectingObject(glm::vec3 objectPosition, int objectIndex = -1);
+	bool IsIntersectingObject(glm::vec3 objectPosition/*, int objectIndex = -1*/);
 
 	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
+	void SetSkillAnim(glm::vec3 position, int enemyIndex);
 };
 
 

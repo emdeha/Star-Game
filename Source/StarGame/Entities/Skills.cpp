@@ -267,6 +267,7 @@ PassiveAOESkill::PassiveAOESkill(glm::vec3 newPosition,
 	glm::vec3 realPosition = glm::vec3(position.x + range / 2.0f, 0.0f, position.z + range / 2.0f);
 	skillAnim = PassiveAoeAnimation(realPosition, 30, 50, 0.2f, true, 0.01f, range, 
 									"../data/images/particle.png", "../data/images/aoe_target.png");
+	skillAnim.Init();
 }
 
 void PassiveAOESkill::Update()
@@ -391,7 +392,7 @@ void PassiveAOESkill::SetParameter(ParameterType paramType, glm::vec3 newParam_v
 	}
 }
 
-bool PassiveAOESkill::IsIntersectingObject(glm::vec3 objectPosition, int objectIndex)
+bool PassiveAOESkill::IsIntersectingObject(glm::vec3 objectPosition/*, int objectIndex*/)
 {
 	if(isStarted)
 	{
@@ -399,16 +400,21 @@ bool PassiveAOESkill::IsIntersectingObject(glm::vec3 objectPosition, int objectI
 
 		if(distanceBetweenObjectAndSkill < range)
 		{
-			if(objectIndex != -1)
-			{
-				skillAnim.SetParticleAnimPosition(objectPosition, objectIndex);
-			}
+			////if(objectIndex != -1)
+			//{
+			//	skillAnim.SetParticleAnimPosition(objectPosition, objectIndex);
+			//}
 			return true;
 		}
 
 		return false;
 	}
 	else return false;
+}
+
+void PassiveAOESkill::SetSkillAnim(glm::vec3 position, int enemyIndex)
+{
+	skillAnim.SetParticleAnimPosition(position, enemyIndex);
 }
 
 

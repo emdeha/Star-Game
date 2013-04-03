@@ -160,6 +160,9 @@ protected:
 
 	std::vector<Event> generatedEvents;
 
+	SpriteParticleEmitter painEmitter;
+	bool isStartedEmittingPain;
+
 public:
 	Enemy() {}
 	Enemy(glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
@@ -180,6 +183,9 @@ public:
 		isDestroyed = false;
 		isSceneUpdated = true;
 		generatedEvents.resize(0);
+
+		painEmitter = SpriteParticleEmitter(position, 30, 50, 0.2f, true, 0.01f, "../data/images/particle.png");
+		isStartedEmittingPain = false;
 	}
 
 	virtual ~Enemy() {}
@@ -188,18 +194,21 @@ public:
 	virtual void Update(bool isSunKilled, CelestialBody &sun = CelestialBody()) {}
 	virtual void Render(glutil::MatrixStack &modelMatrix, 
 						int materialBlockIndex,	float gamma, 
-						const LitProgData &litData,
+						const LitProgData &litData, const SpriteParticleProgData &spriteParticleData,
 						float interpolation) {}
 	virtual void Render(glutil::MatrixStack &modelMatrix, 
 						glm::vec3 cameraPosition,
-						const BillboardProgDataNoTexture &billboardProgDataNoTexture) {}
+						const BillboardProgDataNoTexture &billboardProgDataNoTexture,
+						const SpriteParticleProgData &spriteParticleData) {}
 	virtual void Render(glutil::MatrixStack &modelMatrix,
 						int materialBlockIndex, float gamma, 
 						const LitProgData &litData, const SimpleTextureProgData &simpleTexData,
+						const SpriteParticleProgData &spriteParticleData,
 						float interpolation) {}
 	virtual void Render(glutil::MatrixStack &modelMatrix,
 						int materialBlockIndex, float gamma,
 						const LitProgData &litDaat, const LitTextureProgData &litTextureData,
+						const SpriteParticleProgData &spriteParticleData,
 						float interpolation) {}
 
 	virtual void OnEvent(Event &_event) 
@@ -214,6 +223,9 @@ public:
 
 	virtual void SetDamage(int newDamage, EnemyType enemyType) {}
 	virtual void SetChargeSpeed(int newChargeSpeed) {}
+
+	void StartEmittingPain();
+	void StopEmittingPain();
 
 	EnemyRank GetRank();
 
@@ -257,7 +269,8 @@ public:
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
 	void Render(glutil::MatrixStack &modelMatrix, 
 				glm::vec3 cameraPosition,
-				const BillboardProgDataNoTexture &billboardProgDataNoTexture);
+				const BillboardProgDataNoTexture &billboardProgDataNoTexture,
+				const SpriteParticleProgData &spriteParticleData);
 
 	void OnEvent(Event &_event);
 
@@ -300,6 +313,7 @@ public:
 	void Render(glutil::MatrixStack &modelMatrix,
 				int materialBlockIndex, float gamma,
 				const LitProgData &litData, const LitTextureProgData &litTextureData,
+				const SpriteParticleProgData &spriteParticleData,
 				float interpolation);
 
 	void OnEvent(Event &_event);
@@ -345,6 +359,7 @@ public:
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
 	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 				float gamma, const LitProgData &litData,
+				const SpriteParticleProgData &spriteParticleData,
 				float interpolation);
 
 	void OnEvent(Event &_event);
@@ -400,6 +415,7 @@ public:
 	void Render(glutil::MatrixStack &modelMatrix,
 				int materialBlockIndex, float gamma,
 				const LitProgData &litData, const LitTextureProgData &litTextureData,
+				const SpriteParticleProgData &spriteParticleData,
 				float interpolation);
 
 	void OnEvent(Event &_event);
@@ -456,6 +472,7 @@ public:
 	void Render(glutil::MatrixStack &modelMatrix,
 				int materialBlockIndex, float gamma,
 				const LitProgData &litData, const LitTextureProgData &litTextureData,
+				const SpriteParticleProgData &spriteParticleData,
 				float interpolation);
 
 	void OnEvent(Event &_event);
@@ -499,6 +516,7 @@ public:
 	void Render(glutil::MatrixStack &modelMatrix,
 				int materialBlockIndex, float gamma,
 				const LitProgData &litData, const LitTextureProgData &litTextureData,
+				const SpriteParticleProgData &spriteParticleData,
 				float interpolation);
 
 	void OnEvent(Event &_event);

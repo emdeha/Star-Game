@@ -91,6 +91,24 @@ std::vector<Event> Enemy::GetGeneratedEvents()
 	return eventsToReturn;
 }
 
+void Enemy::StartEmittingPain()
+{
+	if(!isStartedEmittingPain)
+	{
+		painEmitter.Init();
+		painEmitter.Activate();
+		isStartedEmittingPain = true;
+	}
+}
+void Enemy::StopEmittingPain()
+{
+	if(isStartedEmittingPain)
+	{
+		painEmitter.Init();
+		isStartedEmittingPain = false;
+	}
+}
+
 EnemyRank Enemy::GetRank()
 {
 	return rank;
@@ -263,16 +281,27 @@ void Swarm::Update(bool isSunKilled, CelestialBody &sun)
 			currentState = STATE_IDLE;
 			UpdateAI(CelestialBody());
 		}
+
+		if(isStartedEmittingPain)
+		{
+			painEmitter.SetPosition(position);
+			painEmitter.Update();
+		}
 	}
 }
 
 void Swarm::Render(glutil::MatrixStack &modelMatrix,
 				   glm::vec3 cameraPosition,
-				   const BillboardProgDataNoTexture &billboardProgramNoTexture)
+				   const BillboardProgDataNoTexture &billboardProgramNoTexture,
+				   const SpriteParticleProgData &spriteParticleData)
 {
 	if(!isDestroyed)
 	{
 		swarmBody.Render(modelMatrix, cameraPosition, billboardProgramNoTexture);
+		if(isStartedEmittingPain)
+		{
+			painEmitter.Render(modelMatrix, spriteParticleData);
+		}
 	}
 }
 
@@ -489,11 +518,18 @@ void Spaceship::Update(bool isSunKilled, CelestialBody &sun)
 		currentState = STATE_PATROL;
 		UpdateAI(CelestialBody());
 	}
+
+	if(isStartedEmittingPain)
+	{
+		painEmitter.SetPosition(position);
+		painEmitter.Update();
+	}
 }
 
 void Spaceship::Render(glutil::MatrixStack &modelMatrix,
 					   int materialBlockIndex, float gamma,
 					   const LitProgData &litData, const LitTextureProgData &litTextureData,
+					   const SpriteParticleProgData &spriteParticleData,
 					   float interpolation)
 {
 	{
@@ -503,6 +539,12 @@ void Spaceship::Render(glutil::MatrixStack &modelMatrix,
 		float rotation = glm::degrees(atan2f(frontVector.x, frontVector.z));
 
 		modelMatrix.Translate(position);
+
+		if(isStartedEmittingPain)
+		{
+			painEmitter.Render(modelMatrix, spriteParticleData);
+		}
+
 		modelMatrix.RotateY(rotation);
 		modelMatrix.Scale(0.05f);
 
@@ -693,11 +735,18 @@ void DeployUnit::Update(bool isSunKilled, CelestialBody &sun)
 			position += frontVector * speed;
 			currentState = STATE_IDLE;
 		}
+
+		if(isStartedEmittingPain)
+		{
+			painEmitter.SetPosition(position);
+			painEmitter.Update();
+		}
 	}
 }
 
 void DeployUnit::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
 					   float gamma, const LitProgData &litData,
+					   const SpriteParticleProgData &spriteParticleData,
 					   float interpolation)
 {
 	if(!isForRejuvenation && !isDestroyed)
@@ -708,6 +757,12 @@ void DeployUnit::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex
 			float rotation = glm::degrees(atan2f(frontVector.x, frontVector.z));
 
 			modelMatrix.Translate(position);
+
+			if(isStartedEmittingPain)
+			{
+				painEmitter.Render(modelMatrix, spriteParticleData);
+			}
+
 			modelMatrix.RotateY(rotation);
 			modelMatrix.Scale(0.03f);
 
@@ -980,11 +1035,18 @@ void Mothership::Update(bool isSunKilled, CelestialBody &sun)
 			deployUnits[i]->Update(isSunKilled);
 		}
 	}
+
+	if(isStartedEmittingPain)
+	{
+		painEmitter.SetPosition(position);
+		painEmitter.Update();
+	}
 }
 
 void Mothership::Render(glutil::MatrixStack &modelMatrix,
 					    int materialBlockIndex, float gamma,
 					    const LitProgData &litData, const LitTextureProgData &litTextureData,
+						const SpriteParticleProgData &spriteParticleData,
 					    float interpolation)
 {
 	{
@@ -994,6 +1056,12 @@ void Mothership::Render(glutil::MatrixStack &modelMatrix,
 		float rotation = glm::degrees(atan2f(frontVector.x, frontVector.z));
 
 		modelMatrix.Translate(position);
+
+		if(isStartedEmittingPain)
+		{
+			painEmitter.Render(modelMatrix, spriteParticleData);
+		}
+
 		modelMatrix.RotateY(rotation);
 		modelMatrix.Scale(0.15f);
 
@@ -1006,7 +1074,7 @@ void Mothership::Render(glutil::MatrixStack &modelMatrix,
 	{
 		for(int i = 0; i < deployUnits.size(); i++)
 		{
-			deployUnits[i]->Render(modelMatrix, materialBlockIndex, gamma, litData, interpolation);
+			deployUnits[i]->Render(modelMatrix, materialBlockIndex, gamma, litData, spriteParticleData, interpolation);
 		}
 	}
 }
@@ -1193,17 +1261,30 @@ void FastSuicideBomber::Update(bool isSunKilled, CelestialBody &sun)
 	{
 		currentState = STATE_IDLE;
 	}
+
+	if(isStartedEmittingPain)
+	{
+		painEmitter.SetPosition(position);
+		painEmitter.Update();
+	}
 }
 
 void FastSuicideBomber::Render(glutil::MatrixStack &modelMatrix,
 							   int materialBlockIndex, float gamma,
 							   const LitProgData &litData, const LitTextureProgData &litTextureData,
+							   const SpriteParticleProgData &spriteParticleData,
 							   float interpolation)
 {
 	glutil::PushStack push(modelMatrix);
 
 	
 	modelMatrix.Translate(position);
+
+	if(isStartedEmittingPain)
+	{
+		painEmitter.Render(modelMatrix, spriteParticleData);
+	}
+
 	modelMatrix.Scale(0.1f);
 	
 	mesh.Render(modelMatrix, litTextureData, materialBlockIndex);
@@ -1353,16 +1434,29 @@ void Asteroid::Update(bool isSunKilled, CelestialBody &sun)
 	{
 		currentState = STATE_IDLE;
 	}
+
+	if(isStartedEmittingPain)
+	{
+		painEmitter.SetPosition(position);
+		painEmitter.Update();
+	}
 }
 
 void Asteroid::Render(glutil::MatrixStack &modelMatrix,
 					  int materialBlockIndex, float gamma,
 					  const LitProgData &litData, const LitTextureProgData &litTextureData,
+					  const SpriteParticleProgData &spriteParticleData,
 					  float interpolation)
 {
 	glutil::PushStack push(modelMatrix);
 
 	modelMatrix.Translate(position);
+
+	if(isStartedEmittingPain)
+	{
+		painEmitter.Render(modelMatrix, spriteParticleData);
+	}
+
 	modelMatrix.Scale(0.15f);
 	
 	mesh.Render(modelMatrix, litTextureData, materialBlockIndex);

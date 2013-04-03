@@ -184,7 +184,8 @@ public:
 class PassiveAoeAnimation
 {
 private:
-	std::vector<ParticleAnimation> lifeDrainAnims;
+	//std::vector<ParticleAnimation> lifeDrainAnims;
+	std::vector<SpriteParticleEmitter> lifeDrainAnims;
 
 	Utility::Primitives::Sprite3D skillRadiusSprite;
 	
@@ -209,6 +210,8 @@ public:
 						int particleLifeTime, float particleSize, bool isParticleLooping,
 						float particleVelocityMultiplier, float skillRadiusSize,
 						const std::string &particleTextureFileName, const std::string &skillRadiusTextureFileName);
+
+	void Init();
 
 	void Update();
 	void Render(glutil::MatrixStack &modelMatrix, 

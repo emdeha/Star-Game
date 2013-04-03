@@ -328,35 +328,51 @@ PassiveAoeAnimation::PassiveAoeAnimation(glm::vec3 position, int particleCount,
 	skillRadiusSprite.Init(skillRadiusTextureFileName);
 }
 
+void PassiveAoeAnimation::Init()
+{
+	/*for(int i = 0; i < 6; i++)
+	{
+		//lifeDrainAnims.push_back(SpriteParticleEmitter(inputAnimData.position, inputAnimData.particleCount, 
+													   inputAnimData.particleLifeTime, inputAnimData.particleSize, 
+												       inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
+												       inputAnimData.particleTextureFileName));
+		//lifeDrainAnims.back().Init();
+		//lifeDrainAnims.push_back(ParticleAnimation(inputAnimData.position, inputAnimData.particleCount, 
+		//										   inputAnimData.particleLifeTime, inputAnimData.particleSize, 
+		///										   inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
+		//										   inputAnimData.particleTextureFileName));
+	}*/
+}
+
 void PassiveAoeAnimation::Update()
 {
-	for(int i = 0; i < lifeDrainAnims.size(); i++)
+	/*for(int i = 0; i < lifeDrainAnims.size(); i++)
 	{
 		if(lifeDrainAnims[i].IsActive())
 		{
 			lifeDrainAnims[i].Update();
 		}
-	}
+	}*/
 }
 
 void PassiveAoeAnimation::Render(glutil::MatrixStack &modelMatrix, 
 								 const SpriteParticleProgData &spriteParticleProgData,
 								 const SimpleTextureProgData &simpleTextureProgData)
 {
-	for(int i = 0; i < lifeDrainAnims.size(); i++)
+	/*for(int i = 0; i < lifeDrainAnims.size(); i++)
 	{
 		if(lifeDrainAnims[i].IsActive())
 		{
 			lifeDrainAnims[i].Render(modelMatrix, spriteParticleProgData);
 		}
-	}
+	}*/
 
 	skillRadiusSprite.Draw(modelMatrix, simpleTextureProgData);
 }
 
 void PassiveAoeAnimation::SetFreeParticleAnimPosition(glm::vec3 newPosition)
 {
-	for(int i = 0; i < lifeDrainAnims.size(); i++)
+	/*for(int i = 0; i < lifeDrainAnims.size(); i++)
 	{
 		if(!lifeDrainAnims[i].IsActive())
 		{
@@ -365,38 +381,40 @@ void PassiveAoeAnimation::SetFreeParticleAnimPosition(glm::vec3 newPosition)
 			return;
 		}
 	}
-
-	lifeDrainAnims.push_back(ParticleAnimation(newPosition, inputAnimData.particleCount, 
+	
+	lifeDrainAnims.push_back(SpriteParticleEmitter(newPosition, inputAnimData.particleCount, 
 											   inputAnimData.particleLifeTime, inputAnimData.particleSize,
 											   inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
 											   inputAnimData.particleTextureFileName));
-	lifeDrainAnims.back().Activate();
+	lifeDrainAnims.back().Init();
+	lifeDrainAnims.back().Activate();*/
 }
 
 void PassiveAoeAnimation::SetParticleAnimPosition(glm::vec3 newPosition, int particleAnimIndex)
 {
-	int size = lifeDrainAnims.size() - 1;
+	/*int size = lifeDrainAnims.size() - 1;
 
 	if(particleAnimIndex > size)
 	{
-		//SetFreeParticleAnimPosition(newPosition);
 		while(particleAnimIndex > lifeDrainAnims.size())
 		{
-			lifeDrainAnims.push_back(ParticleAnimation(inputAnimData.position, inputAnimData.particleCount, 
+			lifeDrainAnims.push_back(SpriteParticleEmitter(inputAnimData.position, inputAnimData.particleCount, 
 										inputAnimData.particleLifeTime, inputAnimData.particleSize,
 										inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
 										inputAnimData.particleTextureFileName));
+			lifeDrainAnims.back().Init();
 		}
-		lifeDrainAnims.push_back(ParticleAnimation(newPosition, inputAnimData.particleCount, 
+		lifeDrainAnims.push_back(SpriteParticleEmitter(newPosition, inputAnimData.particleCount, 
 										inputAnimData.particleLifeTime, inputAnimData.particleSize,
 										inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
 										inputAnimData.particleTextureFileName));
+		lifeDrainAnims.back().Init();
 		lifeDrainAnims[particleAnimIndex].Activate();
 		return;
 	}
 
 	lifeDrainAnims[particleAnimIndex].SetPosition(newPosition);
-	lifeDrainAnims[particleAnimIndex].Activate();
+	lifeDrainAnims[particleAnimIndex].Activate();*/
 }
 
 void PassiveAoeAnimation::Restart()
@@ -405,19 +423,20 @@ void PassiveAoeAnimation::Restart()
 	{
 		lifeDrainAnims[i].Reset();
 	}*/
-	lifeDrainAnims.resize(0);
+	//lifeDrainAnims.resize(0);
 }
 
 bool PassiveAoeAnimation::IsEnded()
 {
-	bool isEnded = true;
+	/*bool isEnded = true;
 	for(int i = 0; i < lifeDrainAnims.size(); i++)
 	{
-		if(!lifeDrainAnims[i].IsEnded())
+		if(!lifeDrainAnims[i].IsDead())
 		{
 			isEnded = false;
 		}
 	}
 
-	return isEnded;
+	return isEnded;*/
+	return true;
 }

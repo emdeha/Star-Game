@@ -140,6 +140,7 @@ protected:
 
 	glm::vec4 initialColor;
 	glm::vec4 onFreezeColor;
+	glm::vec4 painEmitColor;
 
 	glm::vec3 position;
 	glm::vec3 frontVector;
@@ -160,17 +161,18 @@ protected:
 
 	std::vector<Event> generatedEvents;
 
-	SpriteParticleEmitter painEmitter;
-	bool isStartedEmittingPain;
+	//SpriteParticleEmitter painEmitter;
+	//bool isStartedEmittingPain;
 
 public:
 	Enemy() {}
-	Enemy(glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+	Enemy(glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor, glm::vec4 newPainEmitColor,
 		  glm::vec3 newPosition, glm::vec3 newFrontVector, float newSpeed,
 		  float newLineOfSight, int newHealth, int newResourceGivenOnKill)
 	{
 		initialColor = newInitialColor;
 		onFreezeColor = newOnFreezeColor;
+		painEmitColor = newPainEmitColor;
 		position = newPosition;
 		frontVector = newFrontVector;
 		lastFrontVector = frontVector;
@@ -184,8 +186,9 @@ public:
 		isSceneUpdated = true;
 		generatedEvents.resize(0);
 
-		painEmitter = SpriteParticleEmitter(position, 30, 50, 0.2f, true, 0.01f, "../data/images/particle.png");
-		isStartedEmittingPain = false;
+		//painEmitter = SpriteParticleEmitter(position, 30, 50, 0.2f, true, 0.01f, "../data/images/particle.png");
+		//painEmitter.Init();
+		//isStartedEmittingPain = false;
 	}
 
 	virtual ~Enemy() {}
@@ -260,7 +263,7 @@ public:
 	Swarm(int newSwarmersCount, 
 		  float newTime_seconds, int newDamage,
 		  const BillboardProgDataNoTexture &billboardProgDataNoTexture,
-		  glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+		  glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor, glm::vec4 newPainEmitColor,
 		  glm::vec3 newPosition, glm::vec3 newFrontVector,
 		  float newSpeed, float newLineOfSight,
 		  int newHealth, int newResourceGivenOnKill);
@@ -303,7 +306,7 @@ public:
 	Spaceship() {}
 	Spaceship(float newProjectileSpeed, int newProjectileLifeSpan,
 			  int newProjectileDamage,
-			  glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+			  glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor, glm::vec4 newPainEmitColor,
 			  glm::vec3 newPosition, glm::vec3 newFrontVector,
 			  float newSpeed, float newLineOfSight,
 			  int newHealth, int newResourceGivenOnKill);
@@ -350,7 +353,7 @@ public:
 	DeployUnit() {}
 	DeployUnit(float newProjectileSpeed, int newProjectileLifeSpan,
 			   int newProjectileDamage,
-			   glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+			   glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor, glm::vec4 newPainEmitColor,
 			   glm::vec3 newPosition, glm::vec3 newFrontVector,
 			   float newSpeed, float newLineOfSight,
 			   int newHealth, int newResourceGivenOnKill);
@@ -387,6 +390,7 @@ private:
 		int projectileDamage;
 		glm::vec4 initialColor;
 		glm::vec4 onFreezeColor;
+		glm::vec4 painEmitColor;
 		float speed;
 		float lineOfSight;
 		int health;
@@ -405,7 +409,7 @@ private:
 
 public:
 	Mothership() {}
-	Mothership(glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+	Mothership(glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor, glm::vec4 newPainEmitColor,
 			   glm::vec3 newPosition, glm::vec3 newFrontVector,
 			   float newSpeed, float newLineOfSight,
 			   int newHealth, int newResourceGivenOnKill);
@@ -424,9 +428,9 @@ public:
 
 	bool IsMothership() { return true; }
 	void InitDeployUnits(const std::string &meshFileName, int deployUnitsCount,
-						 float projectileSpeed, int projectileLifeSpan, int projectileDamage,
-						 glm::vec4 initialColor, glm::vec4 onFreezeColor,
-						 float speed, float lineOfSight, int health, int resourceGivenOnKill);
+						 float newProjectileSpeed, int newProjectileLifeSpan, int newProjectileDamage,
+						 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor, glm::vec4 newPainEmitColor,
+						 float newSpeed, float newLineOfSight, int newHealth, int newResourceGivenOnKill);
 	void RejuvenateDeployUnits();
 
 	void SetDamage(int newDamage, EnemyType type)
@@ -462,7 +466,7 @@ private:
 public:
 	FastSuicideBomber() {}
 	FastSuicideBomber(int newDamage, float newChargeSpeed,
-					  glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+					  glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor, glm::vec4 newPainEmitColor,
 					  glm::vec3 newPosition, glm::vec3 newFrontVector,
 					  float newSpeed, float newLineOfSight,
 					  int newHealth, int newResourceGivenOnKill);
@@ -506,7 +510,7 @@ private:
 public:
 	Asteroid() {}
 	Asteroid(int newDamage, 
-			 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+			 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor, glm::vec4 newPainEmitColor,
 			 glm::vec3 newPosition, glm::vec3 newFrontVector,
 			 float newSpeed, float newLineOfSight,
 			 int newHealth, int newResourceGivenOnKill);

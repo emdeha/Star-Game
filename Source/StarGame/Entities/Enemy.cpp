@@ -91,6 +91,7 @@ std::vector<Event> Enemy::GetGeneratedEvents()
 	return eventsToReturn;
 }
 
+/*
 void Enemy::StartEmittingPain()
 {
 	if(!isStartedEmittingPain)
@@ -108,6 +109,7 @@ void Enemy::StopEmittingPain()
 		isStartedEmittingPain = false;
 	}
 }
+*/
 
 EnemyRank Enemy::GetRank()
 {
@@ -143,11 +145,11 @@ static void GenerateUniformBuffers(int &materialBlockSize,
 Swarm::Swarm(int newSwarmersCount, 
 			 float newTime_seconds, int newDamage,
 			 const BillboardProgDataNoTexture &billboardProgDataNoTexture,
-			 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+			 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor, glm::vec4 newPainEmitColor,
 			 glm::vec3 newPosition, glm::vec3 newFrontVector,
 			 float newSpeed, float newLineOfSight,
 			 int newHealth, int newResourceGivenOnKill)
-			 : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight,
+			 : Enemy(newInitialColor, newOnFreezeColor, newPainEmitColor, newPosition, newFrontVector, newSpeed, newLineOfSight,
 					 newHealth, newResourceGivenOnKill)
 {
 	swarmersCount = newSwarmersCount;
@@ -281,12 +283,13 @@ void Swarm::Update(bool isSunKilled, CelestialBody &sun)
 			currentState = STATE_IDLE;
 			UpdateAI(CelestialBody());
 		}
-
+		/*
 		if(isStartedEmittingPain)
 		{
 			painEmitter.SetPosition(position);
 			painEmitter.Update();
 		}
+		*/
 	}
 }
 
@@ -298,10 +301,12 @@ void Swarm::Render(glutil::MatrixStack &modelMatrix,
 	if(!isDestroyed)
 	{
 		swarmBody.Render(modelMatrix, cameraPosition, billboardProgramNoTexture);
+		/*
 		if(isStartedEmittingPain)
 		{
 			painEmitter.Render(modelMatrix, spriteParticleData);
 		}
+		*/
 	}
 }
 
@@ -340,6 +345,14 @@ void Swarm::OnEvent(Event &_event)
 		{
 			isDestroyed = true;
 		}
+		if(strcmp(_event.GetArgument("what_event").varString, "startPain") == 0)
+		{
+			swarmBody.SetColor(painEmitColor);
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "stopPain") == 0)
+		{
+			swarmBody.SetColor(initialColor);
+		}
 		break;
 	default:
 		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
@@ -350,11 +363,11 @@ void Swarm::OnEvent(Event &_event)
 
 Spaceship::Spaceship(float newProjectileSpeed, int newProjectileLifeSpan,
 					 int newProjectileDamage,
-					 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+					 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor, glm::vec4 newPainEmitColor,
 					 glm::vec3 newPosition, glm::vec3 newFrontVector,
 					 float newSpeed, float newLineOfSight,
 					 int newHealth, int newResourceGivenOnKill)
-					 : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight,
+					 : Enemy(newInitialColor, newOnFreezeColor, newPainEmitColor, newPosition, newFrontVector, newSpeed, newLineOfSight,
 							 newHealth, newResourceGivenOnKill)
 {
 	projectileSpeed = newProjectileSpeed;
@@ -518,12 +531,14 @@ void Spaceship::Update(bool isSunKilled, CelestialBody &sun)
 		currentState = STATE_PATROL;
 		UpdateAI(CelestialBody());
 	}
-
+	/*
 	if(isStartedEmittingPain)
 	{
 		painEmitter.SetPosition(position);
+		//painEmitter.Init();
 		painEmitter.Update();
 	}
+	*/
 }
 
 void Spaceship::Render(glutil::MatrixStack &modelMatrix,
@@ -539,12 +554,12 @@ void Spaceship::Render(glutil::MatrixStack &modelMatrix,
 		float rotation = glm::degrees(atan2f(frontVector.x, frontVector.z));
 
 		modelMatrix.Translate(position);
-
+		/*
 		if(isStartedEmittingPain)
 		{
 			painEmitter.Render(modelMatrix, spriteParticleData);
 		}
-
+		*/
 		modelMatrix.RotateY(rotation);
 		modelMatrix.Scale(0.05f);
 
@@ -599,6 +614,14 @@ void Spaceship::OnEvent(Event &_event)
 		{
 			isDestroyed = true;
 		}
+		if(strcmp(_event.GetArgument("what_event").varString, "startPain") == 0)
+		{
+			mesh.LoadLight(painEmitColor);
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "stopPain") == 0)
+		{
+			mesh.LoadLight();
+		}
 		break;
 	default:
 		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
@@ -609,11 +632,11 @@ void Spaceship::OnEvent(Event &_event)
 
 DeployUnit::DeployUnit(float newProjectileSpeed, int newProjectileLifeSpan,
 					   int newProjectileDamage,
-					   glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+					   glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor, glm::vec4 newPainEmitColor,
 					   glm::vec3 newPosition, glm::vec3 newFrontVector,
 					   float newSpeed, float newLineOfSight,
 					   int newHealth, int newResourceGivenOnKill)
-					   : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight,
+					   : Enemy(newInitialColor, newOnFreezeColor, newPainEmitColor, newPosition, newFrontVector, newSpeed, newLineOfSight,
 							   newHealth, newResourceGivenOnKill)
 {
 	projectileSpeed = newProjectileSpeed;
@@ -735,12 +758,13 @@ void DeployUnit::Update(bool isSunKilled, CelestialBody &sun)
 			position += frontVector * speed;
 			currentState = STATE_IDLE;
 		}
-
+		/*
 		if(isStartedEmittingPain)
 		{
 			painEmitter.SetPosition(position);
 			painEmitter.Update();
 		}
+		*/
 	}
 }
 
@@ -757,11 +781,12 @@ void DeployUnit::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex
 			float rotation = glm::degrees(atan2f(frontVector.x, frontVector.z));
 
 			modelMatrix.Translate(position);
-
+			/*
 			if(isStartedEmittingPain)
 			{
 				painEmitter.Render(modelMatrix, spriteParticleData);
 			}
+			*/
 
 			modelMatrix.RotateY(rotation);
 			modelMatrix.Scale(0.03f);
@@ -829,6 +854,14 @@ void DeployUnit::OnEvent(Event &_event)
 		{
 			isDestroyed = true;
 		}
+		if(strcmp(_event.GetArgument("what_event").varString, "startPain") == 0)
+		{
+			GenerateUniformBuffers(materialBlockSize, painEmitColor, materialUniformBuffer);
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "stopPain") == 0)
+		{
+			GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
+		}
 		break;
 	default:
 		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
@@ -860,11 +893,11 @@ void DeployUnit::Rejuvenate(const glm::vec3 &newPosition, int newHealth,
 }
 
 
-Mothership::Mothership(glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+Mothership::Mothership(glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor, glm::vec4 newPainEmitColor,
 					   glm::vec3 newPosition, glm::vec3 newFrontVector,
 					   float newSpeed, float newLineOfSight,
 					   int newHealth, int newResourceGivenOnKill)
-					   : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight,
+					   : Enemy(newInitialColor, newOnFreezeColor, newPainEmitColor, newPosition, newFrontVector, newSpeed, newLineOfSight,
 							   newHealth, newResourceGivenOnKill)
 {
 	isDeploying = false;
@@ -883,21 +916,22 @@ void Mothership::LoadMesh(const std::string &meshFileName)
 }
 
 void Mothership::InitDeployUnits(const std::string &meshFileName, int deployUnitsCount,
-								 float projectileSpeed, int projectileLifeSpan, int projectileDamage,
-								 glm::vec4 initialColor, glm::vec4 onFreezeColor,
-								 float speed, float lineOfSight, int health, int resourceGivenOnKill)
+								 float newProjectileSpeed, int newProjectileLifeSpan, int newProjectileDamage,
+								 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor, glm::vec4 newPainEmitColor,
+								 float newSpeed, float newLineOfSight, int newHealth, int newResourceGivenOnKill)
 {
 	deployUnitsInfo.deployUnitsCount = deployUnitsCount;
-	deployUnitsInfo.health = health;
-	deployUnitsInfo.initialColor = initialColor;
-	deployUnitsInfo.lineOfSight = lineOfSight;
+	deployUnitsInfo.health = newHealth;
+	deployUnitsInfo.initialColor = newInitialColor;
+	deployUnitsInfo.lineOfSight = newLineOfSight;
 	deployUnitsInfo.meshFileName = meshFileName;
-	deployUnitsInfo.onFreezeColor = onFreezeColor;
-	deployUnitsInfo.projectileDamage = projectileDamage;
-	deployUnitsInfo.projectileLifeSpan = projectileLifeSpan;
-	deployUnitsInfo.projectileSpeed = projectileSpeed;
-	deployUnitsInfo.speed = speed;
-	deployUnitsInfo.resourceGivenOnKill = resourceGivenOnKill;
+	deployUnitsInfo.onFreezeColor = newOnFreezeColor;
+	deployUnitsInfo.painEmitColor = newPainEmitColor;
+	deployUnitsInfo.projectileDamage = newProjectileDamage;
+	deployUnitsInfo.projectileLifeSpan = newProjectileLifeSpan;
+	deployUnitsInfo.projectileSpeed = newProjectileSpeed;
+	deployUnitsInfo.speed = newSpeed;
+	deployUnitsInfo.resourceGivenOnKill = newResourceGivenOnKill;
 
 	float rotationDegs = 30.0f;
 	float decrement = (2 * rotationDegs) / (float)deployUnitsInfo.deployUnitsCount;
@@ -915,7 +949,8 @@ void Mothership::InitDeployUnits(const std::string &meshFileName, int deployUnit
 		std::shared_ptr<DeployUnit> newDeployUnit = 
 			std::shared_ptr<DeployUnit>(new DeployUnit(deployUnitsInfo.projectileSpeed, deployUnitsInfo.projectileLifeSpan, 
 													   deployUnitsInfo.projectileDamage, 
-													   deployUnitsInfo.initialColor, deployUnitsInfo.onFreezeColor, position,
+													   deployUnitsInfo.initialColor, deployUnitsInfo.onFreezeColor, 
+													   deployUnitsInfo.painEmitColor, position,
 													   glm::vec3(shipFrontVector), deployUnitsInfo.speed, deployUnitsInfo.lineOfSight, 
 													   deployUnitsInfo.health, deployUnitsInfo.resourceGivenOnKill));
 		newDeployUnit->LoadMesh(deployUnitsInfo.meshFileName);
@@ -1035,12 +1070,13 @@ void Mothership::Update(bool isSunKilled, CelestialBody &sun)
 			deployUnits[i]->Update(isSunKilled);
 		}
 	}
-
+	/*
 	if(isStartedEmittingPain)
 	{
 		painEmitter.SetPosition(position);
 		painEmitter.Update();
 	}
+	*/
 }
 
 void Mothership::Render(glutil::MatrixStack &modelMatrix,
@@ -1056,12 +1092,12 @@ void Mothership::Render(glutil::MatrixStack &modelMatrix,
 		float rotation = glm::degrees(atan2f(frontVector.x, frontVector.z));
 
 		modelMatrix.Translate(position);
-
+		/*
 		if(isStartedEmittingPain)
 		{
 			painEmitter.Render(modelMatrix, spriteParticleData);
 		}
-
+		*/
 		modelMatrix.RotateY(rotation);
 		modelMatrix.Scale(0.15f);
 
@@ -1118,6 +1154,14 @@ void Mothership::OnEvent(Event &_event)
 		{
 			isDestroyed = true;
 		}
+		if(strcmp(_event.GetArgument("what_event").varString, "startPain") == 0)
+		{
+			mesh.LoadLight(painEmitColor);
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "stopPain") == 0)
+		{
+			mesh.LoadLight();
+		}
 		break;
 	default:
 		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
@@ -1131,12 +1175,12 @@ std::vector<std::shared_ptr<DeployUnit>> Mothership::GetDeployUnits() const
 }
 
 
-FastSuicideBomber::FastSuicideBomber(int newDamage, float newChargeSpeed,
-									 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+FastSuicideBomber::FastSuicideBomber(int newDamage, float newChargeSpeed, 
+									 glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor, glm::vec4 newPainEmitColor,
 									 glm::vec3 newPosition, glm::vec3 newFrontVector,
 									 float newSpeed, float newLineOfSight,
 									 int newHealth, int newResourceGivenOnKill)
-									 : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, 
+									 : Enemy(newInitialColor, newOnFreezeColor, newPainEmitColor, newPosition, newFrontVector, newSpeed, 
 											 newLineOfSight, newHealth, newResourceGivenOnKill)
 {
 	damage = newDamage;
@@ -1261,12 +1305,13 @@ void FastSuicideBomber::Update(bool isSunKilled, CelestialBody &sun)
 	{
 		currentState = STATE_IDLE;
 	}
-
+	/*
 	if(isStartedEmittingPain)
 	{
 		painEmitter.SetPosition(position);
 		painEmitter.Update();
 	}
+	*/
 }
 
 void FastSuicideBomber::Render(glutil::MatrixStack &modelMatrix,
@@ -1279,12 +1324,12 @@ void FastSuicideBomber::Render(glutil::MatrixStack &modelMatrix,
 
 	
 	modelMatrix.Translate(position);
-
+	/*
 	if(isStartedEmittingPain)
 	{
 		painEmitter.Render(modelMatrix, spriteParticleData);
 	}
-
+	*/
 	modelMatrix.Scale(0.1f);
 	
 	mesh.Render(modelMatrix, litTextureData, materialBlockIndex);
@@ -1331,6 +1376,14 @@ void FastSuicideBomber::OnEvent(Event &_event)
 		{
 			isDestroyed = true;
 		}
+		if(strcmp(_event.GetArgument("what_event").varString, "startPain") == 0)
+		{
+			mesh.LoadLight(painEmitColor);
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "stopPain") == 0)
+		{
+			mesh.LoadLight(initialColor);
+		}
 		break;
 	default:
 		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
@@ -1340,11 +1393,11 @@ void FastSuicideBomber::OnEvent(Event &_event)
 
 
 Asteroid::Asteroid(int newDamage, 
-				   glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor,
+				   glm::vec4 newInitialColor, glm::vec4 newOnFreezeColor, glm::vec4 newPainEmitColor,
 				   glm::vec3 newPosition, glm::vec3 newFrontVector,
 				   float newSpeed, float newLineOfSight,
 				   int newHealth, int newResourceGivenOnKill)
-				   : Enemy(newInitialColor, newOnFreezeColor, newPosition, newFrontVector, newSpeed, newLineOfSight,
+				   : Enemy(newInitialColor, newOnFreezeColor, newPainEmitColor, newPosition, newFrontVector, newSpeed, newLineOfSight,
 						   newHealth, newResourceGivenOnKill)
 {
 	damage = newDamage;
@@ -1434,12 +1487,13 @@ void Asteroid::Update(bool isSunKilled, CelestialBody &sun)
 	{
 		currentState = STATE_IDLE;
 	}
-
+	/*
 	if(isStartedEmittingPain)
 	{
 		painEmitter.SetPosition(position);
 		painEmitter.Update();
 	}
+	*/
 }
 
 void Asteroid::Render(glutil::MatrixStack &modelMatrix,
@@ -1451,12 +1505,12 @@ void Asteroid::Render(glutil::MatrixStack &modelMatrix,
 	glutil::PushStack push(modelMatrix);
 
 	modelMatrix.Translate(position);
-
+	/*
 	if(isStartedEmittingPain)
 	{
 		painEmitter.Render(modelMatrix, spriteParticleData);
 	}
-
+	*/
 	modelMatrix.Scale(0.15f);
 	
 	mesh.Render(modelMatrix, litTextureData, materialBlockIndex);
@@ -1502,6 +1556,14 @@ void Asteroid::OnEvent(Event &_event)
 		if(strcmp(_event.GetArgument("what_event").varString, "destroy") == 0)
 		{
 			isDestroyed = true;
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "startPain") == 0)
+		{
+			mesh.LoadLight(painEmitColor);
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "stopPain") == 0)
+		{
+			mesh.LoadLight(initialColor);
 		}
 		break;
 	default:

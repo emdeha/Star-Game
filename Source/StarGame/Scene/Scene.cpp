@@ -393,6 +393,7 @@ void Scene::SpawnSwarm()
 										 enemyStats[ENEMY_TYPE_SWARM].damage, 
 										 billboardNoTextureProgData, 
 										 glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 
+										 glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
 										 position, frontVector, 
 										 enemyStats[ENEMY_TYPE_SWARM].speed,
 										 enemyStats[ENEMY_TYPE_SWARM].lineOfSight, 
@@ -419,6 +420,7 @@ void Scene::SpawnSpaceship()
 												 20,
 												 enemyStats[ENEMY_TYPE_SPACESHIP].damage, 
 												 glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+												 glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
 												 position, frontVector, 
 												 enemyStats[ENEMY_TYPE_SPACESHIP].speed, 
 												 enemyStats[ENEMY_TYPE_SPACESHIP].lineOfSight,
@@ -448,6 +450,7 @@ void Scene::SpawnFastSuicideBomber()
 		std::shared_ptr<FastSuicideBomber>(new FastSuicideBomber(enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].damage, 
 																 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].fastSuicideBomberChargeSpeed,
 																 glm::vec4(0.5f, 0.5f, 0.7f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+																 glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
 																 position, frontVector,
 																 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].speed,
 																 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].lineOfSight, 
@@ -476,6 +479,7 @@ void Scene::SpawnAsteroid()
 	std::shared_ptr<Asteroid> randAsteroid = 
 		std::shared_ptr<Asteroid>(new Asteroid(enemyStats[ENEMY_TYPE_ASTEROID].damage, 
 											   glm::vec4(0.57, 0.37, 0.26, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+											   glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
 											   position, frontVector, 
 											   enemyStats[ENEMY_TYPE_ASTEROID].speed, 
 											   enemyStats[ENEMY_TYPE_ASTEROID].lineOfSight, 
@@ -500,6 +504,7 @@ void Scene::SpawnMothership()
 
 	std::shared_ptr<Mothership> randMothership =
 		std::shared_ptr<Mothership>(new Mothership(glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+												   glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
 												   position, frontVector, 
 												   enemyStats[ENEMY_TYPE_MOTHERSHIP].speed, 
 												   enemyStats[ENEMY_TYPE_MOTHERSHIP].lineOfSight, 
@@ -514,6 +519,7 @@ void Scene::SpawnMothership()
 									20, 
 									enemyStats[ENEMY_TYPE_MOTHERSHIP].damage, 
 									glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+									glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
 									enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsSpeed, 
 									enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLineOfSight, 
 									enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLife, 
@@ -548,7 +554,7 @@ void Scene::SpawnEnemies()
 			}
 		}
 
-		chosenType = ENEMY_TYPE_SPACESHIP;
+		//chosenType = ENEMY_TYPE_SPACESHIP;
 
 		switch(chosenType)
 		{
@@ -1221,7 +1227,14 @@ void Scene::UpdateScene()
 					if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition()/*, enemyIndex*/))
 					{
 						//skills[skillIndex]->SetSkillAnim(enemies[enemyIndex]->GetPosition(), enemyIndex);
-						enemies[enemyIndex]->StartEmittingPain();
+						//enemies[enemyIndex]->StartEmittingPain();
+						EventArg enemyEmitPainEventArg[1];
+						enemyEmitPainEventArg[0].argType = "what_event";
+						enemyEmitPainEventArg[0].argument.varType = TYPE_STRING;
+						strcpy(enemyEmitPainEventArg[0].argument.varString, "startPain");
+						Event enemyEmitPainEvent(1, EVENT_TYPE_OTHER, enemyEmitPainEventArg);
+						enemies[enemyIndex]->OnEvent(enemyEmitPainEvent);
+						
 						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("timeended");
 						if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
 						{
@@ -1231,7 +1244,13 @@ void Scene::UpdateScene()
 					}
 					else
 					{
-						enemies[enemyIndex]->StopEmittingPain();
+						EventArg enemyEmitPainEventArg[1];
+						enemyEmitPainEventArg[0].argType = "what_event";
+						enemyEmitPainEventArg[0].argument.varType = TYPE_STRING;
+						strcpy(enemyEmitPainEventArg[0].argument.varString, "stopPain");
+						Event enemyEmitPainEvent(1, EVENT_TYPE_OTHER, enemyEmitPainEventArg);
+						enemies[enemyIndex]->OnEvent(enemyEmitPainEvent);
+						//enemies[enemyIndex]->StopEmittingPain();
 					}
 				}
 				skills[skillIndex]->RemoveGeneratedEvent("timeended");
@@ -1439,7 +1458,13 @@ void Scene::OnEvent(Event &_event)
 									}
 									if(skills[skillIndex]->GetSkillType() == "passiveAoeSkill")
 									{
-										enemies[i]->StartEmittingPain();
+										EventArg enemyEmitPainEventArg[1];
+										enemyEmitPainEventArg[0].argType = "what_event";
+										enemyEmitPainEventArg[0].argument.varType = TYPE_STRING;
+										strcpy(enemyEmitPainEventArg[0].argument.varString, "startPain");
+										Event enemyEmitPainEvent(1, EVENT_TYPE_OTHER, enemyEmitPainEventArg);
+										enemies[i]->OnEvent(enemyEmitPainEvent);
+										//enemies[i]->StartEmittingPain();
 										//skills[skillIndex]->SetSkillAnim(enemies[i]->GetPosition(), i);
 									}
 									//enemies[i]->OnEvent(skillEvent);
@@ -1448,7 +1473,13 @@ void Scene::OnEvent(Event &_event)
 								{
 									if(skills[skillIndex]->GetSkillType() == "passiveAoeSkill")
 									{
-										enemies[i]->StopEmittingPain();
+										EventArg enemyEmitPainEventArg[1];
+										enemyEmitPainEventArg[0].argType = "what_event";
+										enemyEmitPainEventArg[0].argument.varType = TYPE_STRING;
+										strcpy(enemyEmitPainEventArg[0].argument.varString, "stopPain");
+										Event enemyEmitPainEvent(1, EVENT_TYPE_OTHER, enemyEmitPainEventArg);
+										enemies[i]->OnEvent(enemyEmitPainEvent);
+										//enemies[i]->StopEmittingPain();
 									}
 								}
 							}

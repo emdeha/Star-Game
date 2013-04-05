@@ -224,9 +224,9 @@ bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
 
 			std::string path = fileName;
 			path.erase(path.end() - 4, path.end());
-			path += ".jpg";
+			path += ".png";
 
-			if(!textures[i]->Load(path, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE))
+			if(!textures[i]->Load(path, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE))
 			{
 				//HandleUnexpectedError("cannot load texture", __LINE__, __FILE__);
 				if(!textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_BGR, GL_UNSIGNED_BYTE))

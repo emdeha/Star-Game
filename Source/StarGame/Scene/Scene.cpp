@@ -513,7 +513,7 @@ void Scene::SpawnMothership()
 	randMothership->LoadMesh("../data/mesh-files/mothership.obj");
 
 	int deployUnitsCount = 4;
-	randMothership->InitDeployUnits("mesh-files/Ship.xml", 
+	randMothership->InitDeployUnits("../data/mesh-files/deployed_unit.obj", 
 									enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsCount, 
 									enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsProjSpeed, // WARN: may bug 
 									20, 
@@ -554,7 +554,7 @@ void Scene::SpawnEnemies()
 			}
 		}
 
-		//chosenType = ENEMY_TYPE_SPACESHIP;
+		chosenType = ENEMY_TYPE_MOTHERSHIP;
 
 		switch(chosenType)
 		{

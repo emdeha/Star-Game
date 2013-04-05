@@ -8,7 +8,7 @@ Ks 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 0
-map_Kd sun_texture.jpg
-map_Ka sun_texture.jpg
+map_Kd sun_texture.png
+map_Ka sun_texture.png
 
 

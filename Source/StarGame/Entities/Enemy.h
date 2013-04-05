@@ -344,7 +344,8 @@ private:
 	bool isForRejuvenation;
 
 	std::unique_ptr<Projectile> projectile;
-	std::unique_ptr<Framework::Mesh> mesh;
+	//std::unique_ptr<Framework::Mesh> mesh;
+	Mesh mesh;
 
 	int materialBlockSize;
 	GLuint materialUniformBuffer;
@@ -361,7 +362,7 @@ public:
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
 	void Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
-				float gamma, const LitProgData &litData,
+				float gamma, const LitTextureProgData &litTextureData, const LitProgData &litData,
 				const SpriteParticleProgData &spriteParticleData,
 				float interpolation);
 

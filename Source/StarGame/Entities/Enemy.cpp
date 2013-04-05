@@ -661,6 +661,7 @@ void DeployUnit::LoadMesh(const std::string &meshFile)
 {
 	// TODO: Change mesh
 	// TODO: Error checking
+	/*
 	try
 	{
 		mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFile));
@@ -672,8 +673,16 @@ void DeployUnit::LoadMesh(const std::string &meshFile)
 	}
 
 	GenerateUniformBuffers(materialBlockSize, initialColor, materialUniformBuffer);
+	
+	projectile->LoadMesh(meshFile); // TODO: maybe this should be removed*/
 
-	projectile->LoadMesh(meshFile); // TODO: maybe this should be removed
+	if(!mesh.LoadMesh(meshFile)) // TODO: Proper error handling
+	{
+		std::string errorMessage = "cannot load mesh ";
+		errorMessage += meshFile;
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+	}
+	mesh.LoadLight();
 }
 
 void DeployUnit::UpdateAI(CelestialBody &sun)
@@ -769,7 +778,7 @@ void DeployUnit::Update(bool isSunKilled, CelestialBody &sun)
 }
 
 void DeployUnit::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
-					   float gamma, const LitProgData &litData,
+					   float gamma, const LitTextureProgData &litTextureData, const LitProgData &litData,
 					   const SpriteParticleProgData &spriteParticleData,
 					   float interpolation)
 {
@@ -789,9 +798,10 @@ void DeployUnit::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex
 			*/
 
 			modelMatrix.RotateY(rotation);
-			modelMatrix.Scale(0.03f);
+			modelMatrix.Scale(0.1f);
 
-
+			mesh.Render(modelMatrix, litTextureData, materialBlockIndex);
+			/*
 			glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
 							  0, sizeof(MaterialBlock));
 
@@ -806,7 +816,7 @@ void DeployUnit::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex
 
 			glUseProgram(0);
 
-			glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
+			glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);*/
 		}
 
 		if(!projectile->IsDestroyed() && currentState == STATE_ATTACK)
@@ -1110,7 +1120,8 @@ void Mothership::Render(glutil::MatrixStack &modelMatrix,
 	{
 		for(int i = 0; i < deployUnits.size(); i++)
 		{
-			deployUnits[i]->Render(modelMatrix, materialBlockIndex, gamma, litData, spriteParticleData, interpolation);
+			deployUnits[i]->Render(modelMatrix, materialBlockIndex, gamma, litTextureData, litData,
+				spriteParticleData, interpolation);
 		}
 	}
 }

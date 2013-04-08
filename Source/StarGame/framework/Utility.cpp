@@ -627,6 +627,38 @@ void Utility::Primitives::Sprite::Draw(glutil::MatrixStack &modelMat, const Text
 	glUseProgram(0);
 }
 
+void Utility::Primitives::Sprite::Update(float newWidth, float newHeight)
+{
+	width = newWidth;
+	height = newHeight;
+	position.x = newWidth;
+	position.y = newHeight;
+
+	std::vector<float> vertexData;
+
+	vertexData.push_back(position.x);
+	vertexData.push_back(position.y - height);
+	vertexData.push_back(position.z); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x - width);
+	vertexData.push_back(position.y - height);
+	vertexData.push_back(position.z); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x - width);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x);
+	vertexData.push_back(position.y);
+	vertexData.push_back(position.z); vertexData.push_back(1.0f);
+
+	glGenBuffers(1, &vertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);	
+	glBufferData(GL_ARRAY_BUFFER, 
+				 sizeof(float) * vertexData.size(), &vertexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 void Utility::Primitives::Sprite::ChangeTexture(const std::string &textureFileName)
 {
 	texture = std::shared_ptr<Texture2D>(new Texture2D());

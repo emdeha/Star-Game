@@ -75,10 +75,13 @@ private:
 	LayoutInfo layoutInfo;
 
 
+	Utility::Primitives::Sprite backgroundSprite;
+
 	std::vector<std::shared_ptr<TextControl>> controls;
 	std::vector<std::shared_ptr<Layout>> subLayouts;
 
 	bool isSet;
+	bool hasBackground;
 
 public:
 	Layout();
@@ -87,6 +90,8 @@ public:
 
 	void AddControl(std::shared_ptr<TextControl> newControl);
 	void AddSubLayout(std::shared_ptr<Layout> newSubLayout);
+
+	void SetBackgroundImage(float width, float height, const std::string &backgroundImageFileName);
 
 
 	std::shared_ptr<TextControl> GetControl(const std::string &controlName);

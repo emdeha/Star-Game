@@ -144,8 +144,24 @@ layout-game:
                     text-size: 28
 layout-menu:
     background-color: [ 0.0, 0.5, 0.6, 1.0 ]
+    background-image: "background.png"
     is-active: true
     controls:
+        #control-imagebox-background:
+        #    control-type: imageBox
+        #    name: backgroundImageBox
+        #    is-visible: true
+        #    presets:
+        #        preset-small:
+        #            position: [ 1280, 768 ]
+        #        preset-medium:
+        #            position: [ 1280, 768 ]
+        #        preset-big:
+        #            position: [ 1280, 768 ]
+        #    width: 1280
+        #    height: 768
+        #    index: -1       
+        #    textures: [ "background.png", "", "", "" ]
         control-button-new:
             control-type: button
             name: newGame

@@ -30,6 +30,9 @@ Layout::Layout()
 	subLayouts.resize(0);
 
 	isSet = false;
+	hasBackground = false;
+
+	backgroundSprite = Utility::Primitives::Sprite(glm::vec3(), layoutInfo.backgroundColor, 0.0f, 0.0f, false); 
 }
 Layout::Layout(LayoutType newLayoutType, LayoutInfo newLayoutInfo)
 {
@@ -41,6 +44,9 @@ Layout::Layout(LayoutType newLayoutType, LayoutInfo newLayoutInfo)
 	subLayouts.resize(0);
 
 	isSet = true;
+	hasBackground = false;
+
+	backgroundSprite = Utility::Primitives::Sprite(glm::vec3(), layoutInfo.backgroundColor, 0.0f, 0.0f, false); 
 }
 
 void Layout::Draw(const FontProgData &fontData, const SimpleProgData &simpleData,
@@ -49,6 +55,18 @@ void Layout::Draw(const FontProgData &fontData, const SimpleProgData &simpleData
 	glm::vec4 backgroundColor = layoutInfo.backgroundColor;
 	glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
 
+	if(hasBackground)
+	{
+		glutil::MatrixStack identityMatrix;
+		identityMatrix.SetIdentity();
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		backgroundSprite.Draw(identityMatrix, textureData);
+
+		glDisable(GL_BLEND);
+	}
 
 	for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
 		iter != controls.end(); ++iter)
@@ -89,6 +107,11 @@ void Layout::Update(int windowWidth, int windowHeight)
 	{
 		(*iter)->Update(windowWidth, windowHeight);
 	}
+
+	if(hasBackground)
+	{
+		backgroundSprite.Update(windowWidth, windowHeight);
+	}
 }
 
 
@@ -99,6 +122,14 @@ void Layout::AddControl(std::shared_ptr<TextControl> newControl)
 void Layout::AddSubLayout(std::shared_ptr<Layout> newSubLayout)
 {
 	subLayouts.push_back(newSubLayout);
+}
+
+void Layout::SetBackgroundImage(float width, float height, const std::string &backgroundImageFileName)
+{
+	backgroundSprite =
+		Utility::Primitives::Sprite(glm::vec3(1280, 768, 0), layoutInfo.backgroundColor, width, height, false);
+	backgroundSprite.Init(backgroundImageFileName, 1280, 768);
+	hasBackground = true;
 }
 
 

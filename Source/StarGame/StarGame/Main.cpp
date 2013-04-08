@@ -598,6 +598,9 @@ void InitializeScene()
 	scene.InitTweakableVariables(true, "../data/loader-files/tweak-config.yaml");
 	InitializeGUI();
 
+	//scene.GetLayout(LAYOUT_IN_GAME)->SetBackgroundImage(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
+	//													"../data/images/background.png");
+
 	EventArg inMenuEventArg[1];
 	inMenuEventArg[0].argType = "command";
 	inMenuEventArg[0].argument.varType = TYPE_STRING;
@@ -698,7 +701,6 @@ void Init()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	nextGameTick = GetTickCount();
-
 
 	//testPassiveAoeAnim = PassiveAoeAnimation(glm::vec3(2.0f, 0.0f, -2.0f), 30, 1000, 0.2f, true, 0.001f, 2.0f, 
 	//										 "../data/images/particle.png", "../data/images/aoe_target.png");

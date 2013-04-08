@@ -27,6 +27,7 @@ struct LayoutData
 	LayoutType layoutType;
 	glm::vec4 layoutColor;
 	int layoutIsSet;
+	std::string layoutBackgroundImageFileName;
 };
 
 struct ControlData
@@ -112,6 +113,12 @@ GUILoader::GUILoader(const std::string &fileName,
 			layouts.insert(std::make_pair(layoutData.layoutType, newLayout));
 
 			layouts[layoutData.layoutType]->Set(layoutData.layoutIsSet);
+			if(guiNode->second["background-image"].IsDefined())
+			{
+				layoutData.layoutBackgroundImageFileName = texturesDir;
+				layoutData.layoutBackgroundImageFileName += guiNode->second["background-image"].as<std::string>();
+				layouts[layoutData.layoutType]->SetBackgroundImage(1280, 768, layoutData.layoutBackgroundImageFileName);
+			}
 
 			if(guiNode->second["controls"])
 			{

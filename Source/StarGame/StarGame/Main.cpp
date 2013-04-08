@@ -151,6 +151,49 @@ void HandleMouse()
 			}
 		}
 
+		if(scene.IsLayoutOn(LAYOUT_LOAD_GAME))
+		{
+			if(
+				scene.GetLayout(LAYOUT_LOAD_GAME)->
+				GetControl("backBtn")->
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("backButton");
+
+				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("backBtn")->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
+			}
+		}
+		if(scene.IsLayoutOn(LAYOUT_SAVE_GAME))
+		{
+			if(
+				scene.GetLayout(LAYOUT_SAVE_GAME)->
+				GetControl("backBtn")->
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("backButton");
+
+				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl("backBtn")->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
+			}
+		}
+		if(scene.IsLayoutOn(LAYOUT_OPTIONS))
+		{
+			if(
+				scene.GetLayout(LAYOUT_OPTIONS)->
+				GetControl("backBtn")->
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("backButton");
+
+				scene.GetLayout(LAYOUT_OPTIONS)->GetControl("backBtn")->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
+			}
+		}
+
 		if(scene.IsLayoutOn(LAYOUT_MENU))
 		{
 			if(
@@ -176,6 +219,30 @@ void HandleMouse()
 
 				scene.GetLayout(LAYOUT_MENU)->GetControl("saveGame")->OnEvent(leftClickButtonEvent);
 
+				scene.OnEvent(leftClickButtonEvent);
+			}
+
+			if(
+				scene.GetLayout(LAYOUT_MENU)->
+				GetControl("loadGame")->
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("loadGameButton");
+
+				scene.GetLayout(LAYOUT_MENU)->GetControl("loadGame")->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
+			}
+
+			if(
+				scene.GetLayout(LAYOUT_MENU)->
+				GetControl("options")->
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("options");
+
+				scene.GetLayout(LAYOUT_MENU)->GetControl("options")->OnEvent(leftClickButtonEvent);
 				scene.OnEvent(leftClickButtonEvent);
 			}
 

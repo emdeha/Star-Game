@@ -34,6 +34,7 @@ struct ControlData
 	char controlName[30];
 	char controlText[30]; 
 	int controlHasBackground;
+	bool controlIsVisible;
 	
 	PresetAttributes controlPresets[3];
 
@@ -86,6 +87,14 @@ GUILoader::GUILoader(const std::string &fileName,
 		{
 			layoutData.layoutType = LAYOUT_SAVE_GAME;
 		}
+		else if(guiNode->first.as<std::string>() == "layout-load-game")
+		{
+			layoutData.layoutType = LAYOUT_LOAD_GAME;
+		}
+		else if(guiNode->first.as<std::string>() == "layout-options")
+		{
+			layoutData.layoutType = LAYOUT_OPTIONS;
+		}
 		
 		if(guiNode->first.as<std::string>() != "details")
 		{
@@ -115,6 +124,7 @@ GUILoader::GUILoader(const std::string &fileName,
 						strcpy(controlData.controlName, control->second["name"].as<std::string>().c_str());
 						strcpy(controlData.controlText, control->second["text"].as<std::string>().c_str());
 						controlData.controlHasBackground = control->second["has-background"].as<bool>();
+						controlData.controlIsVisible = control->second["is-visible"].as<bool>();
 
 						int presetID = 0;
 						for(YAML::Node::const_iterator preset = control->second["presets"].begin();
@@ -133,7 +143,8 @@ GUILoader::GUILoader(const std::string &fileName,
 															 controlData.controlText,
 															 controlData.controlPresets[SMALL].position,
 															 controlData.controlPresets[SMALL].textSize,
-															 controlData.controlHasBackground));
+															 controlData.controlHasBackground,
+															 controlData.controlIsVisible));
 						label->Init(fontsDir + defaultFont, windowWidth, windowHeight);
 
 						label->AddPreset(MEDIUM, 
@@ -150,6 +161,7 @@ GUILoader::GUILoader(const std::string &fileName,
 						strcpy(controlData.controlName, control->second["name"].as<std::string>().c_str());
 						strcpy(controlData.controlText, control->second["text"].as<std::string>().c_str());
 						controlData.controlHasBackground = control->second["has-background"].as<bool>();
+						controlData.controlIsVisible = control->second["is-visible"].as<bool>();
 
 						int presetID = 0;
 						for(YAML::Node::const_iterator preset = control->second["presets"].begin();
@@ -168,7 +180,8 @@ GUILoader::GUILoader(const std::string &fileName,
 															   controlData.controlText,
 															   controlData.controlPresets[SMALL].position,
 															   controlData.controlPresets[SMALL].textSize,
-															   controlData.controlHasBackground));
+															   controlData.controlHasBackground,
+															   controlData.controlIsVisible));
 						button->Init(fontsDir + defaultFont, windowWidth, windowHeight);
 					
 						button->AddPreset(MEDIUM, 
@@ -186,6 +199,7 @@ GUILoader::GUILoader(const std::string &fileName,
 						controlData.imageBoxHeight = control->second["height"].as<int>();
 						controlData.imageBoxWidth = control->second["width"].as<int>();
 						controlData.imageBoxIndex = control->second["index"].as<int>();
+						controlData.controlIsVisible = control->second["is-visible"].as<bool>();
 
 						int presetID = 0;
 						for(YAML::Node::const_iterator preset = control->second["presets"].begin();
@@ -208,7 +222,8 @@ GUILoader::GUILoader(const std::string &fileName,
 																   controlData.controlPresets[SMALL].position,
 																   controlData.imageBoxWidth,
 																   controlData.imageBoxHeight,
-																   controlData.imageBoxIndex));
+																   controlData.imageBoxIndex,
+																   controlData.controlIsVisible));
 
 						imageBox->SetTextures(controlData.fusionTextures);
 						imageBox->Init();
@@ -221,6 +236,7 @@ GUILoader::GUILoader(const std::string &fileName,
 						strcpy(controlData.controlName, control->second["name"].as<std::string>().c_str());
 						controlData.imageBoxHeight = control->second["height"].as<int>();
 						controlData.imageBoxWidth = control->second["width"].as<int>();
+						controlData.controlIsVisible = control->second["is-visible"].as<bool>();
 
 						int presetID = 0;
 						for(YAML::Node::const_iterator preset = control->second["presets"].begin();
@@ -250,7 +266,8 @@ GUILoader::GUILoader(const std::string &fileName,
 																	   controlData.controlPresets[SMALL].position,
 																	   controlData.imageBoxWidth,
 																	   controlData.imageBoxHeight,
-																	   controlData.imageBoxIndex));
+																	   controlData.imageBoxIndex,
+																	   controlData.controlIsVisible));
 
 						hintBox->SetTextures(controlData.skillTextures);
 						hintBox->SetDescriptions(controlData.skillDescriptions);
@@ -265,6 +282,7 @@ GUILoader::GUILoader(const std::string &fileName,
 						controlData.textBoxWidth = control->second["width"].as<int>();
 						controlData.textBoxCharWidth = control->second["char-width"].as<int>();
 						controlData.controlHasBackground = control->second["has-background"].as<bool>();
+						controlData.controlIsVisible = control->second["is-visible"].as<bool>();
 
 						int presetID = 0;
 						for(YAML::Node::const_iterator preset = control->second["presets"].begin();
@@ -284,7 +302,8 @@ GUILoader::GUILoader(const std::string &fileName,
 																 controlData.controlName, "",
 																 controlData.controlPresets[SMALL].position,
 																 controlData.controlPresets[SMALL].textSize,
-																 controlData.controlHasBackground));
+																 controlData.controlHasBackground, 
+																 controlData.controlIsVisible));
 						textBox->Init(fontsDir + defaultFont, windowWidth, windowHeight);
 
 						textBox->AddPreset(MEDIUM, 

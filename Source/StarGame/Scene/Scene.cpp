@@ -1397,6 +1397,24 @@ void Scene::OnEvent(Event &_event)
 			this->SetLayout(LAYOUT_SAVE_GAME, true);
 			this->SetLayout(LAYOUT_MENU, false);
 		}
+		if(strcmp(_event.GetArgument("object").varString, "loadGameButton") == 0)
+		{
+			this->SetLayout(LAYOUT_LOAD_GAME, true);
+			this->SetLayout(LAYOUT_MENU, false);
+		}
+		if(strcmp(_event.GetArgument("object").varString, "options") == 0)
+		{
+			this->SetLayout(LAYOUT_OPTIONS, true);
+			this->SetLayout(LAYOUT_MENU, false);
+		}
+		if(strcmp(_event.GetArgument("object").varString, "backButton") == 0)
+		{
+			this->SetLayout(LAYOUT_MENU, true);
+			// TODO: Set layout should deset all other layouts
+			this->SetLayout(LAYOUT_LOAD_GAME, false);
+			this->SetLayout(LAYOUT_SAVE_GAME, false);
+			this->SetLayout(LAYOUT_OPTIONS, false);
+		}
 		if(strcmp(_event.GetArgument("object").varString, "printCmd") == 0)
 		{
 			std::printf("%s", 

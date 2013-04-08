@@ -153,21 +153,24 @@ void TextBox::SetContent(std::string newInputText)
 
 bool TextBox::IsMouseOn(glm::vec2 mouseCoordinates_windowSpace)
 {
-	mouseCoordinates_windowSpace.y = windowHeight - mouseCoordinates_windowSpace.y;
-
-
-	float minHeight = controlSquare.GetPosition().y;
-	float minWidth = controlSquare.GetPosition().x;
-
-	float maxHeight = minHeight + controlSquare.GetHeight();
-	float maxWidth = minWidth + controlSquare.GetWidth();
-
-	if(mouseCoordinates_windowSpace.y > minHeight &&
-	   mouseCoordinates_windowSpace.x > minWidth &&
-	   mouseCoordinates_windowSpace.y < maxHeight &&
-	   mouseCoordinates_windowSpace.x < maxWidth)
+	if(isVisible)
 	{
-		return true;
+		mouseCoordinates_windowSpace.y = windowHeight - mouseCoordinates_windowSpace.y;
+
+
+		float minHeight = controlSquare.GetPosition().y;
+		float minWidth = controlSquare.GetPosition().x;
+
+		float maxHeight = minHeight + controlSquare.GetHeight();
+		float maxWidth = minWidth + controlSquare.GetWidth();
+
+		if(mouseCoordinates_windowSpace.y > minHeight &&
+		   mouseCoordinates_windowSpace.x > minWidth &&
+		   mouseCoordinates_windowSpace.y < maxHeight &&
+		   mouseCoordinates_windowSpace.x < maxWidth)
+		{
+			return true;
+		}
+		else return false;
 	}
-	else return false;
 }

@@ -157,11 +157,11 @@ public:
 	TextControl(LayoutPreset newCurrentPreset,
 				const std::string &newName, const std::string &newText,
 				glm::vec2 newPosition, int newTextSize,
-				bool newHasBackground);
+				bool newHasBackground, bool newIsVisible);
 
 	TextControl(LayoutPreset newCurrentPreset,
 				const std::string &newName, 
-				glm::vec2 newPosition);
+				glm::vec2 newPosition, bool newIsVisible);
 
 	void Init(const std::string &fontName, 
 			  int newWindowWidth, int newWindowHeight);
@@ -236,8 +236,9 @@ public:
 			 const std::string &newName, 
 			 glm::vec2 newPosition,
 			 float newWidth, float newHeight,
-			 int newIndex) 
-			 : TextControl(newCurrentPreset, newName, newPosition) 
+			 int newIndex,
+			 bool newIsVisible) 
+			 : TextControl(newCurrentPreset, newName, newPosition, newIsVisible) 
 	{
 		width = newWidth;
 		height = newHeight;
@@ -300,8 +301,8 @@ public:
 			   const std::string &newName,
 			   glm::vec2 newPosition, 
 			   float newWidth, float newHeight,
-			   int textSize)
-			   : TextControl(newCurrentPreset, newName, "", newPosition, textSize, false)
+			   int textSize, bool newIsVisible)
+			   : TextControl(newCurrentPreset, newName, "", newPosition, textSize, false, newIsVisible)
 	{
 		currentPreset = newCurrentPreset;
 		width = newWidth;
@@ -343,11 +344,11 @@ public:
 	Button(LayoutPreset newCurrentPreset,
 		   const std::string &newName, const std::string &newText,
 		   glm::vec2 newPosition, int newTextSize,
-		   bool newHasBackground) 
+		   bool newHasBackground, bool newIsVisible) 
 		   : TextControl(newCurrentPreset, 
 						 newName, newText,
 						 newPosition, newTextSize,
-						 newHasBackground) {};
+						 newHasBackground, newIsVisible) {};
 
 	void OnEvent(Event &_event);
 };
@@ -361,11 +362,11 @@ public:
 	Label(LayoutPreset newCurrentPreset,
 		  const std::string &newName, const std::string &newText,
 		  glm::vec2 newPosition, int newTextSize,
-		  bool newHasBackground) 
+		  bool newHasBackground, bool newIsVisible) 
 		  : TextControl(newCurrentPreset, 
 						newName, newText,
 						newPosition, newTextSize,
-						newHasBackground) {};
+						newHasBackground, newIsVisible) {};
 
 	void OnEvent(Event &_event);
 };
@@ -390,11 +391,11 @@ public:
 			LayoutPreset newCurrentPreset,
 		    const std::string &newName, const std::string &newText,
 		    glm::vec2 newPosition, int newTextSize,
-		    bool newHasBackground) 
+		    bool newHasBackground, bool newIsVisible) 
 		    : TextControl(newCurrentPreset, 
 						  newName, newText,
 						  newPosition, newTextSize,
-						  newHasBackground)
+						  newHasBackground, newIsVisible)
 	{
 		visibleText = "";
 

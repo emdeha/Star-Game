@@ -11,6 +11,7 @@ layout-game:
             name: labelMatter
             text: "Matter:"
             has-background: false
+            is-visible: true
             presets:
                 preset-small:
                     position: [ 10, 738 ]
@@ -26,6 +27,7 @@ layout-game:
             name: labelToolTip
             text: ""
             has-background: false
+            is-visible: true
             presets:
                 preset-small:
                     position: [ 0, 0 ]
@@ -39,6 +41,7 @@ layout-game:
         control-imagebox-fusone:
             control-type: imageBox
             name: fusionOne
+            is-visible: true
             presets:
                 preset-small:
                     position: [ 615, 738 ]
@@ -53,6 +56,7 @@ layout-game:
         control-imagebox-fustwo:
             control-type: imageBox
             name: fusionTwo
+            is-visible: true
             presets:
                 preset-small:
                     position: [ 670, 738 ]
@@ -67,6 +71,7 @@ layout-game:
         control-imagebox-fusthree:
             control-type: imageBox
             name: fusionThree
+            is-visible: true
             presets:
                 preset-small:
                     position: [ 725, 738 ]
@@ -81,6 +86,7 @@ layout-game:
         control-hintbox:
             control-type: hintBox
             name: skillHint
+            is-visible: true
             presets:
                 preset-small:
                     position: [ 670, 683 ]
@@ -109,6 +115,7 @@ layout-game:
             width: 200
             char-width: 15
             has-background: true
+            is-visible: true
             presets:
                 preset-small:
                     position: [ 1020, 728 ]
@@ -124,6 +131,7 @@ layout-game:
             name: applyInput
             text: Apply
             has-background: false
+            is-visible: true
             presets:
                 preset-small:
                     position: [ 1230, 728 ]
@@ -143,6 +151,39 @@ layout-menu:
             name: newGame
             text: New Game
             has-background: false
+            is-visible: true
+            presets:
+                preset-small:
+                    position: [ 10, 130 ]
+                    text-size: 28
+                preset-medium:
+                    position: [ 10, 130 ]
+                    text-size: 28
+                preset-big:
+                    position: [ 10, 130 ]
+                    text-size: 28
+        control-button-resume:
+            control-type: button
+            name: resumeGame
+            text: Resume Game
+            has-background: false
+            is-visible: false
+            presets:
+                preset-small: 
+                    position: [ 10, 130 ]
+                    text-size: 28
+                preset-medium: 
+                    position: [ 10, 130 ]
+                    text-size: 28
+                preset-big: 
+                    position: [ 10, 130 ]
+                    text-size: 28
+        control-button-save:
+            control-type: button
+            name: saveGame
+            text: Save Game
+            has-background: false
+            is-visible: true
             presets:
                 preset-small:
                     position: [ 10, 100 ]
@@ -153,11 +194,28 @@ layout-menu:
                 preset-big:
                     position: [ 10, 100 ]
                     text-size: 28
-        control-button-save:
+        control-button-load:
             control-type: button
-            name: saveGame
-            text: Save Game
+            name: loadGame
+            text: Load Game
             has-background: false
+            is-visible: false
+            presets:
+                preset-small:
+                    position: [ 10, 100 ]
+                    text-size: 28
+                preset-medium:
+                    position: [ 10, 100 ]
+                    text-size: 28
+                preset-big:
+                    position: [ 10, 100 ]
+                    text-size: 28
+        control-button-options:
+            control-type: button
+            name: options
+            text: Options
+            has-background: false
+            is-visible: true
             presets:
                 preset-small:
                     position: [ 10, 70 ]
@@ -171,8 +229,9 @@ layout-menu:
         control-button-quit:
             control-type: button
             name: quitGame 
-            text: Quit Game
+            text: Quit 
             has-background: false
+            is-visible: true
             presets:
                 preset-small:
                     position: [ 10, 40 ]
@@ -186,3 +245,60 @@ layout-menu:
 layout-save-game:
     background-color: [ 0.0, 0.5, 0.6, 1.0 ]
     is-active: false
+    controls:
+        control-button-back:
+            control-type: button
+            name: backBtn
+            text: Back to Main
+            has-background: false
+            is-visible: true
+            presets:
+                preset-small:
+                    position: [ 10, 40 ]
+                    text-size: 28   
+                preset-medium:
+                    position: [ 10, 40 ]
+                    text-size: 28
+                preset-big:
+                    position: [ 10, 40 ]
+                    text-size: 28
+layout-load-game:
+    background-color: [ 0.0, 0.5, 0.6, 1.0 ]
+    is-active: false
+    controls:
+        control-button-back:
+            control-type: button
+            name: backBtn
+            text: Back to Main
+            has-background: false
+            is-visible: true
+            presets:
+                preset-small:
+                    position: [ 10, 40 ]
+                    text-size: 28   
+                preset-medium:
+                    position: [ 10, 40 ]
+                    text-size: 28
+                preset-big:
+                    position: [ 10, 40 ]
+                    text-size: 28
+layout-options:
+    background-color: [ 0.0, 0.5, 0.6, 1.0 ]
+    is-active: false
+    controls:
+        control-button-back:
+            control-type: button
+            name: backBtn
+            text: Back to Main
+            has-background: false
+            is-visible: true
+            presets:
+                preset-small:
+                    position: [ 10, 40 ]
+                    text-size: 28   
+                preset-medium:
+                    position: [ 10, 40 ]
+                    text-size: 28
+                preset-big:
+                    position: [ 10, 40 ]
+                    text-size: 28

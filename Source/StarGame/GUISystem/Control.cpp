@@ -38,7 +38,7 @@ TextControl::TextControl()
 TextControl::TextControl(LayoutPreset newCurrentPreset,
 						 const std::string &newName, const std::string &newText,
 						 glm::vec2 newPosition, int newTextSize,
-						 bool newHasBackground)
+						 bool newHasBackground, bool newIsVisible)
 {
 	name = newName;
 	text = newText;
@@ -61,7 +61,7 @@ TextControl::TextControl(LayoutPreset newCurrentPreset,
 
 	isActive = false;
 
-	isVisible = true; // TODO: Should also disable button events
+	isVisible = newIsVisible; // TODO: Should also disable button events
 
 	controlSquare =
 		Utility::Primitives::Square(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
@@ -71,12 +71,13 @@ TextControl::TextControl(LayoutPreset newCurrentPreset,
 
 TextControl::TextControl(LayoutPreset newCurrentPreset,
 						 const std::string &newName, 
-						 glm::vec2 newPosition)
+						 glm::vec2 newPosition, bool newIsVisible)
 {
 	name = newName;
 	currentPreset = newCurrentPreset;
 	presets[currentPreset].position = newPosition;
 	isActive = false;
+	isVisible = newIsVisible;
 	controlSquare = 
 		Utility::Primitives::Square(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
 									glm::vec3(newPosition, 0.0f),
@@ -182,12 +183,15 @@ void TextControl::Draw(const FontProgData &fontData, const SimpleProgData &simpl
 
 void TextControl::Update(int newWindowWidth, int newWindowHeight)
 {
-	windowWidth = newWindowWidth;
-	windowHeight = newWindowHeight;
+	if(isVisible)
+	{
+		windowWidth = newWindowWidth;
+		windowHeight = newWindowHeight;
 
-	textToDisplay.UpdateWindowDimensions(windowWidth, windowHeight);
+		textToDisplay.UpdateWindowDimensions(windowWidth, windowHeight);
 
-	ComputeNewAttributes();
+		ComputeNewAttributes();
+	}
 }
 
 std::string TextControl::GetName()
@@ -246,21 +250,25 @@ void TextControl::SetPreset(LayoutPreset newCurrentPreset)
 
 bool TextControl::IsMouseOn(glm::vec2 mouseCoordinates_windowSpace)
 {
-	mouseCoordinates_windowSpace.y = windowHeight - mouseCoordinates_windowSpace.y;
-
-	float minHeight = controlSquare.GetPosition().y;
-	float minWidth = controlSquare.GetPosition().x;
-
-	float maxHeight = windowHeight - controlSquare.GetHeight();
-	float maxWidth = windowWidth - controlSquare.GetWidth();
-
-
-	if(mouseCoordinates_windowSpace.y > minHeight &&
-	   mouseCoordinates_windowSpace.x > minWidth &&
-	   mouseCoordinates_windowSpace.y < maxHeight &&
-	   mouseCoordinates_windowSpace.x < maxWidth)
+	if(isVisible)
 	{
-		return true;
+		mouseCoordinates_windowSpace.y = windowHeight - mouseCoordinates_windowSpace.y;
+
+		float minHeight = controlSquare.GetPosition().y;
+		float minWidth = controlSquare.GetPosition().x;
+
+		float maxHeight = windowHeight - controlSquare.GetHeight();
+		float maxWidth = windowWidth - controlSquare.GetWidth();
+
+
+		if(mouseCoordinates_windowSpace.y > minHeight &&
+		   mouseCoordinates_windowSpace.x > minWidth &&
+		   mouseCoordinates_windowSpace.y < maxHeight &&
+		   mouseCoordinates_windowSpace.x < maxWidth)
+		{
+			return true;
+		}
+		else return false;
 	}
 	else return false;
 }

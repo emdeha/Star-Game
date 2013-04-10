@@ -58,6 +58,13 @@ void FusionHint::OnEvent(Event &_event)
 	}
 }
 
+void FusionHint::SetPosition(glm::vec2 newPosition)
+{
+	presets[SMALL].position = newPosition;
+	presets[MEDIUM].position = newPosition;
+	presets[BIG].position = newPosition;
+}
+
 void FusionHint::AddPreset(LayoutPreset newPreset, glm::vec2 newPosition)
 {
 	presets[newPreset].position = newPosition;

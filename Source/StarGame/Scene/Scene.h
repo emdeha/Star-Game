@@ -74,8 +74,10 @@ struct SpawnData
 	float timeDecrement_secs;
 	float initialSpawnTime_secs;
 	float endSpawnTime_secs;
+	float startingSpawnTime_secs;
 	int currentEnemyCount; // used as an index which fibonacci number to find
 	int maxEnemyCount;
+	int startingEnemyCount;
 };
 
 
@@ -109,6 +111,7 @@ private:
 	float enemyDestructionRadius;
 
 	bool isSpawning;
+	bool isPaused;
 
 	//std::vector<std::pair<std::string, TweakVarData>> tweakVarsData;
 
@@ -152,6 +155,8 @@ public:
 
 	void StopScene();
 	void StartScene();
+
+	void ResetScene();
 	
 	void AddFusionSequence(std::string sequenceName, 
 						   char buttonA, char buttonB, char buttonC);

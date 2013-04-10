@@ -211,6 +211,18 @@ void HandleMouse()
 
 			if(
 				scene.GetLayout(LAYOUT_MENU)->
+				GetControl("resumeGame")->
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("resumeGameButton");
+
+				scene.GetLayout(LAYOUT_MENU)->GetControl("resumeGame")->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
+			}
+
+			if(
+				scene.GetLayout(LAYOUT_MENU)->
 				GetControl("saveGame")->
 				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
 			  )
@@ -810,14 +822,26 @@ void Keyboard(unsigned char key, int x, int y)
 
 	switch (key)
 	{
+	/*
+	// exit the game
 	case 27:
 		// TODO: When exiting that way, if the scene is not a pointer, 
 		//	     the application crashes.
 		glutLeaveMainLoop();
 		return;
-	//case '1':
-	//	testPassiveAoeAnim.SetFreeParticleAnimPosition(glm::vec3((float)rand() / RAND_MAX + 2.0f, 0.0f, (float)rand() / RAND_MAX - 3.0f));
-	
+	*/
+	case 27:
+		if(scene.GetLayout(LAYOUT_IN_GAME)->IsSet())
+		{
+			EventArg escapeHitEventArg[1];
+			escapeHitEventArg[0].argType = "what_event";
+			escapeHitEventArg[0].argument.varType = TYPE_STRING;
+			strcpy(escapeHitEventArg[0].argument.varString, "pauseGame");
+			Event escapeHitEvent = Event(1, EVENT_TYPE_OTHER, escapeHitEventArg);
+
+			scene.OnEvent(escapeHitEvent);
+		}
+		break;
 	case 32:
 		isEmitterStarted = true;
 		break;

@@ -81,6 +81,7 @@ CelestialBody::CelestialBody(glm::vec3 newPosition, glm::vec4 newColor, float ne
 	isSun = true; // no matter what the value of _isSun is, the body would be created as a sun
 	isClicked = false;
 	currentResource = newCurrentResource;
+	initialResource = currentResource;
 	generatedEvents.resize(0);
 	parent.reset();
 	satellites.resize(0);
@@ -243,7 +244,7 @@ void CelestialBody::Update()
 		}
 	}
 
-	if(!isSun)
+	if(!isSun && !revolutionDuration.IsPaused())
 	{
 		revolutionDuration.Update();
 

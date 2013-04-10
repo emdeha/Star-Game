@@ -62,6 +62,12 @@ void ImageBox::OnEvent(Event &_event)
 	}
 }
 
+void ImageBox::SetPosition(glm::vec2 newPosition)
+{
+	presets[SMALL].position = newPosition;
+	presets[MEDIUM].position = newPosition;
+	presets[BIG].position = newPosition;
+}
 
 void ImageBox::AddPreset(LayoutPreset newPreset, glm::vec2 newPosition)
 {

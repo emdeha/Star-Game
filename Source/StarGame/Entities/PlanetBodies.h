@@ -138,6 +138,7 @@ private:
 	int satelliteConstructionCost; // WARN: Can't tell if this is the right approach.
 
 	int currentResource;
+	int initialResource;
 
 	SkillsStats satSkillStats[SKILL_TYPE_COUNT];
 

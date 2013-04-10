@@ -259,6 +259,7 @@ public:
 	}
 
 	void SetTextures(std::string textures[]);
+	void SetPosition(glm::vec2 newPosition);
 
 	void Init();
 
@@ -324,6 +325,7 @@ public:
 
 	void SetTextures(std::vector<std::string> textures);
 	void SetDescriptions(std::vector<std::string> descriptions);
+	void SetPosition(glm::vec2 newPosition);
 
 	void Init();
 

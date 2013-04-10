@@ -103,6 +103,7 @@ void TextControl::SetPosition(glm::vec2 newPosition)
 	presets[SMALL].position = newPosition;
 	presets[MEDIUM].position = newPosition;
 	presets[BIG].position = newPosition;
+	ComputeNewAttributes();
 }
 
 void TextControl::SetIsVisible(bool newIsVisible)

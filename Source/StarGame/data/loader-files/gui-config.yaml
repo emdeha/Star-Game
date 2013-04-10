@@ -143,25 +143,10 @@ layout-game:
                     position: [ 1230, 728 ]
                     text-size: 28
 layout-menu:
-    background-color: [ 0.0, 0.5, 0.6, 1.0 ]
+    background-color: [ 1.0, 1.0, 1.0, 1.0 ]
     background-image: "background.png"
     is-active: true
     controls:
-        #control-imagebox-background:
-        #    control-type: imageBox
-        #    name: backgroundImageBox
-        #    is-visible: true
-        #    presets:
-        #        preset-small:
-        #            position: [ 1280, 768 ]
-        #        preset-medium:
-        #            position: [ 1280, 768 ]
-        #        preset-big:
-        #            position: [ 1280, 768 ]
-        #    width: 1280
-        #    height: 768
-        #    index: -1       
-        #    textures: [ "background.png", "", "", "" ]
         control-button-new:
             control-type: button
             name: newGame
@@ -199,7 +184,7 @@ layout-menu:
             name: saveGame
             text: Save Game
             has-background: false
-            is-visible: true
+            is-visible: false
             presets:
                 preset-small:
                     position: [ 10, 100 ]
@@ -215,7 +200,7 @@ layout-menu:
             name: loadGame
             text: Load Game
             has-background: false
-            is-visible: false
+            is-visible: true
             presets:
                 preset-small:
                     position: [ 10, 100 ]
@@ -259,8 +244,9 @@ layout-menu:
                     position: [ 10, 40 ]
                     text-size: 28
 layout-save-game:
-    background-color: [ 0.0, 0.5, 0.6, 1.0 ]
+    background-color: [ 1.0, 1.0, 1.0, 1.0 ]
     is-active: false
+    background-image: "background.png"
     controls:
         control-button-back:
             control-type: button
@@ -279,8 +265,9 @@ layout-save-game:
                     position: [ 10, 40 ]
                     text-size: 28
 layout-load-game:
-    background-color: [ 0.0, 0.5, 0.6, 1.0 ]
+    background-color: [ 1.0, 1.0, 1.0, 1.0 ]
     is-active: false
+    background-image: "background.png"
     controls:
         control-button-back:
             control-type: button
@@ -299,8 +286,9 @@ layout-load-game:
                     position: [ 10, 40 ]
                     text-size: 28
 layout-options:
-    background-color: [ 0.0, 0.5, 0.6, 1.0 ]
+    background-color: [ 1.0, 1.0, 1.0, 1.0 ]
     is-active: false
+    background-image: "background.png"
     controls:
         control-button-back:
             control-type: button

@@ -44,10 +44,13 @@ Scene::Scene(float newSceneGamma,
 	spawnData.endSpawnTime_secs = newEndSpawnTime_secs;
 	spawnData.timeDecrement_secs = newTimeDecrement_secs;
 	spawnData.waveSpawnTimer = Framework::Timer(Framework::Timer::TT_SINGLE, spawnData.initialSpawnTime_secs);
+	spawnData.startingEnemyCount = newCurrentEnemyCount;
+	spawnData.startingSpawnTime_secs = newInitialSpawnTime_secs;
 
 	lastUsedExplosion = 0;
 
 	isSpawning = true;
+	isPaused = false;
 }
 
 
@@ -534,7 +537,7 @@ void Scene::SpawnMothership()
 }
 void Scene::SpawnEnemies()
 {
-	if(spawnData.waveSpawnTimer.Update() == true)
+	if(spawnData.waveSpawnTimer.Update() == true && isPaused == false && spawnData.waveSpawnTimer.IsPaused() == false)
 	{
 		srand(time(0));
 
@@ -554,7 +557,7 @@ void Scene::SpawnEnemies()
 			}
 		}
 
-		chosenType = ENEMY_TYPE_MOTHERSHIP;
+		//chosenType = ENEMY_TYPE_MOTHERSHIP;
 
 		switch(chosenType)
 		{
@@ -1016,48 +1019,51 @@ ShaderManager &Scene::GetShaderManager()
 
 void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
 {
-	GLuint materialBlockIndex = shaderManager.GetBlockIndex(BT_MATERIAL);
-	GLuint lightUniformBuffer = shaderManager.GetUniformBuffer(UBT_LIGHT);
-	LitProgData litData = shaderManager.GetLitProgData();
-	UnlitProgData unLitData = shaderManager.GetUnlitProgData();
-	SimpleProgData simpleData = shaderManager.GetSimpleProgData();
-	BillboardProgDataNoTexture billboardNoTextureData = shaderManager.GetBillboardProgDataNoTexture();
-	SimpleTextureProgData textureData = shaderManager.GetSimpleTextureProgData();
-	LitTextureProgData litTextureData = shaderManager.GetLitTextureProgData();
-	SpriteParticleProgData spriteParticleProgData = shaderManager.GetSpriteParticleProgData();
+	if(!isPaused)
+	{
+		GLuint materialBlockIndex = shaderManager.GetBlockIndex(BT_MATERIAL);
+		GLuint lightUniformBuffer = shaderManager.GetUniformBuffer(UBT_LIGHT);
+		LitProgData litData = shaderManager.GetLitProgData();
+		UnlitProgData unLitData = shaderManager.GetUnlitProgData();
+		SimpleProgData simpleData = shaderManager.GetSimpleProgData();
+		BillboardProgDataNoTexture billboardNoTextureData = shaderManager.GetBillboardProgDataNoTexture();
+		SimpleTextureProgData textureData = shaderManager.GetSimpleTextureProgData();
+		LitTextureProgData litTextureData = shaderManager.GetLitTextureProgData();
+		SpriteParticleProgData spriteParticleProgData = shaderManager.GetSpriteParticleProgData();
 	
-	for(int i = 0; i < 20; i++)
-	{
-		if(explosion[i].IsActive())
+		for(int i = 0; i < 20; i++)
 		{
-			explosion[i].Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), billboardNoTextureData);
+			if(explosion[i].IsActive())
+			{
+				explosion[i].Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), billboardNoTextureData);
+			}
 		}
-	}
 
-	for(int i = 0; i < enemies.size(); i++)
-	{
-		if(enemies[i]->IsSceneUpdated())
+		for(int i = 0; i < enemies.size(); i++)
 		{
-			enemies[i]->Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), billboardNoTextureData, spriteParticleProgData);
-			enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, textureData, spriteParticleProgData, interpolation);
-			enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, spriteParticleProgData, interpolation);
-			enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, litTextureData, spriteParticleProgData, interpolation);
+			if(enemies[i]->IsSceneUpdated())
+			{
+				enemies[i]->Render(modelMatrix, sceneTopDownCamera.ResolveCamPosition(), billboardNoTextureData, spriteParticleProgData);
+				enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, textureData, spriteParticleProgData, interpolation);
+				enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, spriteParticleProgData, interpolation);
+				enemies[i]->Render(modelMatrix, materialBlockIndex, sceneGamma, litData, litTextureData, spriteParticleProgData, interpolation);
+			}
 		}
-	}
 
-	int sizeLights = lights.size();
-	for(int i = 0; i < sizeLights; i++)
-	{
-		lights[i].Render(modelMatrix, litData, lightUniformBuffer);
-		lights[i].Render(modelMatrix, litTextureData, lightUniformBuffer);
-	}	
+		int sizeLights = lights.size();
+		for(int i = 0; i < sizeLights; i++)
+		{
+			lights[i].Render(modelMatrix, litData, lightUniformBuffer);
+			lights[i].Render(modelMatrix, litTextureData, lightUniformBuffer);
+		}	
 
-	int sizeSuns = suns.size();
-	for(int i = 0; i < sizeSuns; i++)
-	{
-		suns[i]->Render(modelMatrix, materialBlockIndex, sceneGamma,
-						litData, unLitData, simpleData, textureData, litTextureData, spriteParticleProgData,
-						interpolation);
+		int sizeSuns = suns.size();
+		for(int i = 0; i < sizeSuns; i++)
+		{
+			suns[i]->Render(modelMatrix, materialBlockIndex, sceneGamma,
+							litData, unLitData, simpleData, textureData, litTextureData, spriteParticleProgData,
+							interpolation);
+		}
 	}
 }
 void Scene::RenderCurrentLayout()
@@ -1079,271 +1085,277 @@ void Scene::RenderCurrentLayout()
 
 void Scene::UpdateScene()
 {
-	if(isSpawning)
+	if(!isPaused)
 	{
-		SpawnEnemies();
-	}
+		if(isSpawning)
+		{
+			SpawnEnemies();
+		}
 	
-	for(int i = 0; i < 20; i++)
-	{
-		if(explosion[i].IsActive())
+		for(int i = 0; i < 20; i++)
 		{
-			explosion[i].Update();
-		}
-		if(explosion[i].IsDead())
-		{
-			explosion[i].Init();			
-		}
-	}
-
-	// Should be in the OnEvent function.
-	if(!suns.empty())
-	{
-		if(suns.front()->GetHealth() <= 0)
-		{
-			explosion[lastUsedExplosion].SetPosition(glm::vec3());
-			explosion[lastUsedExplosion].Init();
-			explosion[lastUsedExplosion].Activate();
-			lastUsedExplosion++;
-			if(lastUsedExplosion >= 20)
+			if(explosion[i].IsActive())
 			{
-				lastUsedExplosion = 0;
+				explosion[i].Update();
 			}
-
-			sceneMusic.Play(MUSIC_GAME_OVER, CHANNEL_GAME);
-
-			suns.front()->RemoveSatellites();
-			suns.pop_back();
-			lights.pop_back(); // got to find the light connected to the sun
-							   // even if I remove the light the ship is still lit
+			if(explosion[i].IsDead())
+			{
+				explosion[i].Init();			
+			}
 		}
-	}
 
-	int sizeSuns = suns.size();
-	for(int i = 0; i < sizeSuns; i++)
-	{
-		suns[i]->Update();
+		// Should be in the OnEvent function.
+		if(!suns.empty())
+		{
+			if(suns.front()->GetHealth() <= 0)
+			{
+				explosion[lastUsedExplosion].SetPosition(glm::vec3());
+				explosion[lastUsedExplosion].Init();
+				explosion[lastUsedExplosion].Activate();
+				lastUsedExplosion++;
+				if(lastUsedExplosion >= 20)
+				{
+					lastUsedExplosion = 0;
+				}
 
-		// TODO: should send an event from the sun instead.
-		char matter[10];
-		itoa(suns[i]->GetCurrentResource(), matter, 10);
-		std::string labelText = "Matter: ";
-		labelText.append(matter);
-		GetLayout(LAYOUT_IN_GAME)->GetControl("labelMatter")->ChangeText(labelText);
-	}
+				sceneMusic.Play(MUSIC_GAME_OVER, CHANNEL_GAME);
+
+				suns.front()->RemoveSatellites();
+				suns.pop_back();
+				lights.pop_back(); // got to find the light connected to the sun
+								   // even if I remove the light the ship is still lit
+			}
+		}
+
+		int sizeSuns = suns.size();
+		for(int i = 0; i < sizeSuns; i++)
+		{
+			suns[i]->Update();
+
+			// TODO: should send an event from the sun instead.
+			char matter[10];
+			itoa(suns[i]->GetCurrentResource(), matter, 10);
+			std::string labelText = "Matter: ";
+			labelText.append(matter);
+			GetLayout(LAYOUT_IN_GAME)->GetControl("labelMatter")->ChangeText(labelText);
+		}
 	
-	for(std::vector<std::shared_ptr<Enemy>>::iterator iter = enemies.begin();
-		iter != enemies.end();
-		)
-	{
-		if((*iter)->IsSceneUpdated())
+		for(std::vector<std::shared_ptr<Enemy>>::iterator iter = enemies.begin();
+			iter != enemies.end();
+			)
 		{
-			if(!suns.empty())
+			if((*iter)->IsSceneUpdated())
 			{
-				(*iter)->Update(false, *suns.front().get());
-			}
-			else
-			{
-				(*iter)->Update(true);
-			}
+				if(!suns.empty())
+				{
+					(*iter)->Update(false, *suns.front().get());
+				}
+				else
+				{
+					(*iter)->Update(true);
+				}
 			
-			// Should be done by a collision system
-			float distanceBetweenEnemyAndSceneOrigin = glm::length(glm::vec3() - (*iter)->GetPosition());
-			if(distanceBetweenEnemyAndSceneOrigin > enemyDestructionRadius)
-			{
-				/*
-				EventArg enemyOutOfBoundsEventArg[1];
-				enemyOutOfBoundsEventArg[0].argType = "what_event";
-				enemyOutOfBoundsEventArg[0].argument.varType = TYPE_STRING;
-				strcpy(enemyOutOfBoundsEventArg[0].argument.varString, "destroy");
-				Event enemyOutOfBoundsEvent = Event(1, EVENT_TYPE_OTHER, enemyOutOfBoundsEventArg);
+				// Should be done by a collision system
+				float distanceBetweenEnemyAndSceneOrigin = glm::length(glm::vec3() - (*iter)->GetPosition());
+				if(distanceBetweenEnemyAndSceneOrigin > enemyDestructionRadius)
+				{
+					/*
+					EventArg enemyOutOfBoundsEventArg[1];
+					enemyOutOfBoundsEventArg[0].argType = "what_event";
+					enemyOutOfBoundsEventArg[0].argument.varType = TYPE_STRING;
+					strcpy(enemyOutOfBoundsEventArg[0].argument.varString, "destroy");
+					Event enemyOutOfBoundsEvent = Event(1, EVENT_TYPE_OTHER, enemyOutOfBoundsEventArg);
 
-				(*iter)->OnEvent(enemyOutOfBoundsEvent);
-				*/
+					(*iter)->OnEvent(enemyOutOfBoundsEvent);
+					*/
+					enemies.erase(iter);
+					break;
+				}
+			}
+			if((*iter)->IsDestroyed())
+			{
+				srand(time(0));
+				int explosionIndices[3] = { MUSIC_EXPLOSION, MUSIC_EXPLOSION_2, MUSIC_EXPLOSION_3 };
+				SoundType explType = SoundType(explosionIndices[rand() % 3]);
+
+				sceneMusic.Play(explType, CHANNEL_GAME); // WARN: has some delay but it is acceptable
+
+				explosion[lastUsedExplosion].SetPosition((*iter)->position);
+				//explosion[lastUsedExplosion].Init();
+				explosion[lastUsedExplosion].Activate();
+				lastUsedExplosion++;
+				if(lastUsedExplosion >= 20)
+				{
+					lastUsedExplosion = 0;
+				}
+			
+				EventArg enemyKilledEventArg[2];
+				enemyKilledEventArg[0].argType = "what_event";
+				enemyKilledEventArg[0].argument.varType = TYPE_STRING;
+				strcpy(enemyKilledEventArg[0].argument.varString, "enemyGainedResource");
+				enemyKilledEventArg[1].argType = "how_much";
+				enemyKilledEventArg[1].argument.varType = TYPE_INTEGER;
+				enemyKilledEventArg[1].argument.varInteger = (*iter)->GetResourceGivenOnKill();
+				Event enemyKilledEvent = Event(2, EVENT_TYPE_OTHER, enemyKilledEventArg);
+
+				suns[0]->OnEvent(enemyKilledEvent);
+
 				enemies.erase(iter);
 				break;
 			}
+			++iter;
 		}
-		if((*iter)->IsDestroyed())
-		{
-			srand(time(0));
-			int explosionIndices[3] = { MUSIC_EXPLOSION, MUSIC_EXPLOSION_2, MUSIC_EXPLOSION_3 };
-			SoundType explType = SoundType(explosionIndices[rand() % 3]);
-
-			sceneMusic.Play(explType, CHANNEL_GAME); // WARN: has some delay but it is acceptable
-
-			explosion[lastUsedExplosion].SetPosition((*iter)->position);
-			//explosion[lastUsedExplosion].Init();
-			explosion[lastUsedExplosion].Activate();
-			lastUsedExplosion++;
-			if(lastUsedExplosion >= 20)
-			{
-				lastUsedExplosion = 0;
-			}
-			
-			EventArg enemyKilledEventArg[2];
-			enemyKilledEventArg[0].argType = "what_event";
-			enemyKilledEventArg[0].argument.varType = TYPE_STRING;
-			strcpy(enemyKilledEventArg[0].argument.varString, "enemyGainedResource");
-			enemyKilledEventArg[1].argType = "how_much";
-			enemyKilledEventArg[1].argument.varType = TYPE_INTEGER;
-			enemyKilledEventArg[1].argument.varInteger = (*iter)->GetResourceGivenOnKill();
-			Event enemyKilledEvent = Event(2, EVENT_TYPE_OTHER, enemyKilledEventArg);
-
-			suns[0]->OnEvent(enemyKilledEvent);
-
-			enemies.erase(iter);
-			break;
-		}
-		++iter;
-	}
 	
-	if(!suns.empty())
-	{
-		std::vector<std::shared_ptr<Skill>> skills = suns[0]->GetAllSkills();
-		int sizeSkills = skills.size();
-		for(int skillIndex = 0; skillIndex < sizeSkills; skillIndex++)
+		if(!suns.empty())
 		{
-			if(skills[skillIndex]->GetSkillType() == "aoeSkill" || 
-			   skills[skillIndex]->GetSkillType() == "burnSkill")
+			std::vector<std::shared_ptr<Skill>> skills = suns[0]->GetAllSkills();
+			int sizeSkills = skills.size();
+			for(int skillIndex = 0; skillIndex < sizeSkills; skillIndex++)
 			{
-				glm::vec4 mousePos_atZ = 
-					sceneMouse.GetPositionAtDimension(currentDisplayData.windowWidth, 
-													  currentDisplayData.windowHeight,
-													  currentDisplayData.projectionMatrix, 
-													  currentDisplayData.modelMatrix, 
-													  glm::vec4(sceneTopDownCamera.ResolveCamPosition(), 1.0f), 
-													  glm::comp::Y);
-
-				skills[skillIndex]->SetParameter(PARAM_POSITION, 
-												 mousePos_atZ.swizzle(glm::comp::X, glm::comp::Y, glm::comp::Z));
-			}
-			// TODO:
-			// Maybe a design flaw - http://stackoverflow.com/a/307793/628873
-			if(skills[skillIndex]->GetSkillType() == "passiveAOESkill")
-			{
-				for(int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++)
+				if(skills[skillIndex]->GetSkillType() == "aoeSkill" || 
+				   skills[skillIndex]->GetSkillType() == "burnSkill")
 				{
-					if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition()/*, enemyIndex*/))
+					glm::vec4 mousePos_atZ = 
+						sceneMouse.GetPositionAtDimension(currentDisplayData.windowWidth, 
+														  currentDisplayData.windowHeight,
+														  currentDisplayData.projectionMatrix, 
+														  currentDisplayData.modelMatrix, 
+														  glm::vec4(sceneTopDownCamera.ResolveCamPosition(), 1.0f), 
+														  glm::comp::Y);
+
+					skills[skillIndex]->SetParameter(PARAM_POSITION, 
+													 mousePos_atZ.swizzle(glm::comp::X, glm::comp::Y, glm::comp::Z));
+				}
+				// TODO:
+				// Maybe a design flaw - http://stackoverflow.com/a/307793/628873
+				if(skills[skillIndex]->GetSkillType() == "passiveAOESkill")
+				{
+					for(int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++)
 					{
-						//skills[skillIndex]->SetSkillAnim(enemies[enemyIndex]->GetPosition(), enemyIndex);
-						//enemies[enemyIndex]->StartEmittingPain();
-						EventArg enemyEmitPainEventArg[1];
-						enemyEmitPainEventArg[0].argType = "what_event";
-						enemyEmitPainEventArg[0].argument.varType = TYPE_STRING;
-						strcpy(enemyEmitPainEventArg[0].argument.varString, "startPain");
-						Event enemyEmitPainEvent(1, EVENT_TYPE_OTHER, enemyEmitPainEventArg);
-						enemies[enemyIndex]->OnEvent(enemyEmitPainEvent);
-						
-						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("timeended");
-						if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
+						if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition()/*, enemyIndex*/))
 						{
-							enemies[enemyIndex]->OnEvent(skillEvent);
-							//skills[skillIndex]->RemoveGeneratedEvent("timeended");
+							//skills[skillIndex]->SetSkillAnim(enemies[enemyIndex]->GetPosition(), enemyIndex);
+							//enemies[enemyIndex]->StartEmittingPain();
+							EventArg enemyEmitPainEventArg[1];
+							enemyEmitPainEventArg[0].argType = "what_event";
+							enemyEmitPainEventArg[0].argument.varType = TYPE_STRING;
+							strcpy(enemyEmitPainEventArg[0].argument.varString, "startPain");
+							Event enemyEmitPainEvent(1, EVENT_TYPE_OTHER, enemyEmitPainEventArg);
+							enemies[enemyIndex]->OnEvent(enemyEmitPainEvent);
+						
+							Event skillEvent = skills[skillIndex]->GetGeneratedEvent("timeended");
+							if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
+							{
+								enemies[enemyIndex]->OnEvent(skillEvent);
+								//skills[skillIndex]->RemoveGeneratedEvent("timeended");
+							}
+						}
+						else
+						{
+							EventArg enemyEmitPainEventArg[1];
+							enemyEmitPainEventArg[0].argType = "what_event";
+							enemyEmitPainEventArg[0].argument.varType = TYPE_STRING;
+							strcpy(enemyEmitPainEventArg[0].argument.varString, "stopPain");
+							Event enemyEmitPainEvent(1, EVENT_TYPE_OTHER, enemyEmitPainEventArg);
+							enemies[enemyIndex]->OnEvent(enemyEmitPainEvent);
+							//enemies[enemyIndex]->StopEmittingPain();
 						}
 					}
-					else
+					skills[skillIndex]->RemoveGeneratedEvent("timeended");
+				}
+
+				if(skills[skillIndex]->GetSkillType() == "burnSkill" && 
+				   skills[skillIndex]->IsDeployed() == true)
+				{				
+					Event skillEvent = skills[skillIndex]->GetGeneratedEvent("timeended");
+					if(skillEvent.GetType() != EVENT_TYPE_EMPTY)
 					{
-						EventArg enemyEmitPainEventArg[1];
-						enemyEmitPainEventArg[0].argType = "what_event";
-						enemyEmitPainEventArg[0].argument.varType = TYPE_STRING;
-						strcpy(enemyEmitPainEventArg[0].argument.varString, "stopPain");
-						Event enemyEmitPainEvent(1, EVENT_TYPE_OTHER, enemyEmitPainEventArg);
-						enemies[enemyIndex]->OnEvent(enemyEmitPainEvent);
-						//enemies[enemyIndex]->StopEmittingPain();
+						for(int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++)
+						{
+							if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition()))
+							{
+								if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
+								{
+									enemies[enemyIndex]->OnEvent(skillEvent);
+								}
+							}
+						}
+						skills[skillIndex]->RemoveGeneratedEvent("timeended");
 					}
 				}
-				skills[skillIndex]->RemoveGeneratedEvent("timeended");
-			}
 
-			if(skills[skillIndex]->GetSkillType() == "burnSkill" && 
-			   skills[skillIndex]->IsDeployed() == true)
-			{				
-				Event skillEvent = skills[skillIndex]->GetGeneratedEvent("timeended");
-				if(skillEvent.GetType() != EVENT_TYPE_EMPTY)
+				if(skills[skillIndex]->GetSkillType() == "sunNovaSkill" ||
+				   skills[skillIndex]->GetSkillType() == "satChainSkill" ||
+				   skills[skillIndex]->GetSkillType() == "satFrostNova")
 				{
 					for(int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++)
 					{
 						if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition()))
 						{
-							if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
+							if(skills[skillIndex]->GetSkillType() == "satFrostNova")
 							{
-								enemies[enemyIndex]->OnEvent(skillEvent);
+								Event skillEvent = skills[skillIndex]->GetGeneratedEvent("stunskilldeployed");
+								if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
+								{
+									enemies[enemyIndex]->OnEvent(skillEvent);
+								}
+							}
+							else
+							{
+								//Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
+								if(skills[skillIndex]->IsStarted()/*skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY*/)
+								{
+									enemies[enemyIndex]->health -= skills[skillIndex]->GetDamage();
+									//enemies[enemyIndex]->OnEvent(skillEvent);
+								}
 							}
 						}
-					}
-					skills[skillIndex]->RemoveGeneratedEvent("timeended");
-				}
-			}
 
-			if(skills[skillIndex]->GetSkillType() == "sunNovaSkill" ||
-			   skills[skillIndex]->GetSkillType() == "satChainSkill" ||
-			   skills[skillIndex]->GetSkillType() == "satFrostNova")
-			{
-				for(int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++)
-				{
-					if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition()))
-					{
 						if(skills[skillIndex]->GetSkillType() == "satFrostNova")
-						{
-							Event skillEvent = skills[skillIndex]->GetGeneratedEvent("stunskilldeployed");
+						{			
+							Event skillEvent = skills[skillIndex]->GetGeneratedEvent("stuntimeended");
+						
 							if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
 							{
 								enemies[enemyIndex]->OnEvent(skillEvent);
+								skills[skillIndex]->RemoveGeneratedEvent("stuntimeended");
 							}
-						}
-						else
-						{
-							//Event skillEvent = skills[skillIndex]->GetGeneratedEvent("skilldeployed");
-							if(skills[skillIndex]->IsStarted()/*skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY*/)
-							{
-								enemies[enemyIndex]->health -= skills[skillIndex]->GetDamage();
-								//enemies[enemyIndex]->OnEvent(skillEvent);
-							}
-						}
-					}
-
-					if(skills[skillIndex]->GetSkillType() == "satFrostNova")
-					{			
-						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("stuntimeended");
-						
-						if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
-						{
-							enemies[enemyIndex]->OnEvent(skillEvent);
-							skills[skillIndex]->RemoveGeneratedEvent("stuntimeended");
 						}
 					}
 				}
-			}
 
-			if(skills[skillIndex]->GetSkillType() == "satShieldSkill")
-			{
-				for(int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++)
+				if(skills[skillIndex]->GetSkillType() == "satShieldSkill")
 				{
-					if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition()))
+					for(int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++)
 					{
-						Event skillEvent = skills[skillIndex]->GetGeneratedEvent("shieldskilldeployed");
-						if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
+						if(skills[skillIndex]->IsIntersectingObject(enemies[enemyIndex]->GetPosition()))
 						{
-							enemies[enemyIndex]->OnEvent(skillEvent);
-							skills[skillIndex]->OnEvent(Event(EVENT_TYPE_ATTACKED));
+							Event skillEvent = skills[skillIndex]->GetGeneratedEvent("shieldskilldeployed");
+							if(skillEvent.GetType() != EventType::EVENT_TYPE_EMPTY)
+							{
+								enemies[enemyIndex]->OnEvent(skillEvent);
+								skills[skillIndex]->OnEvent(Event(EVENT_TYPE_ATTACKED));
+							}
 						}
 					}
 				}
 			}
 		}
-	}
-	else if(suns.empty())
-	{
-		sceneFusionInput.Clear();
+		else if(suns.empty())
+		{
+			sceneFusionInput.Clear();
+		}
 	}
 }
 void Scene::UpdateFusion(char key, Event &returnedFusionEvent)
 {
-	returnedFusionEvent = sceneFusionInput.Update(key);
-	if(returnedFusionEvent.GetType() != EVENT_TYPE_EMPTY)
+	if(!isPaused)
 	{
-		OnEvent(returnedFusionEvent);
+		returnedFusionEvent = sceneFusionInput.Update(key);
+		if(returnedFusionEvent.GetType() != EVENT_TYPE_EMPTY)
+		{
+			OnEvent(returnedFusionEvent);
+		}
 	}
 }
 void Scene::UpdateCurrentLayout(int windowWidth, int windowHeight)
@@ -1384,6 +1396,8 @@ void Scene::OnEvent(Event &_event)
 			this->SetLayout(LAYOUT_MENU, false);
 			this->SetLayout(LAYOUT_IN_GAME, true);
 
+			ResetScene();
+
 			EventArg inGameEventArg[1];
 			inGameEventArg[0].argType = "command";
 			inGameEventArg[0].argument.varType = TYPE_STRING;
@@ -1391,6 +1405,16 @@ void Scene::OnEvent(Event &_event)
 			Event inGameEvent = Event(1, EVENT_TYPE_OTHER, inGameEventArg);
 
 			OnEvent(inGameEvent);
+		}
+		if(strcmp(_event.GetArgument("object").varString, "resumeGameButton") == 0)
+		{
+			this->SetLayout(LAYOUT_MENU, false);
+			this->SetLayout(LAYOUT_IN_GAME, true);
+
+			sceneMusic.Stop(CHANNEL_MASTER);
+			sceneMusic.Play(MUSIC_BACKGROUND, CHANNEL_MASTER);
+
+			StartScene();
 		}
 		if(strcmp(_event.GetArgument("object").varString, "saveGameButton") == 0)
 		{
@@ -1437,7 +1461,7 @@ void Scene::OnEvent(Event &_event)
 			// Add clean-up if necessary.
 			exit(EXIT_SUCCESS);
 		}
-		if(strcmp(_event.GetArgument("object").varString, "deploySkill") == 0)
+		if(strcmp(_event.GetArgument("object").varString, "deploySkill") == 0 && !isPaused)
 		{
 			if(!suns.empty())
 			{
@@ -1529,7 +1553,7 @@ void Scene::OnEvent(Event &_event)
 			sceneMusic.Stop(CHANNEL_MASTER);
 			sceneMusic.Play(MUSIC_BACKGROUND, CHANNEL_MASTER); // TODO: The channel should correspond to the music
 		}
-		if(strcmp(_event.GetArgument("what_event").varString, "fusion_seq") == 0)
+		if(strcmp(_event.GetArgument("what_event").varString, "fusion_seq") == 0 && !isPaused)
 		{
 			sceneMusic.Play(MUSIC_FUSION, CHANNEL_GAME); // TODO: The channel should correspond to the music
 
@@ -1618,7 +1642,7 @@ void Scene::OnEvent(Event &_event)
 			}
 		}
 
-		if(strcmp(_event.GetArgument("what_event").varString, "skillHov") == 0)
+		if(strcmp(_event.GetArgument("what_event").varString, "skillHov") == 0 && !isPaused)
 		{
 			if(IsLayoutOn(LAYOUT_IN_GAME))
 			{
@@ -1640,7 +1664,7 @@ void Scene::OnEvent(Event &_event)
 			//std::printf("skill hov");
 		}
 		
-		if(strcmp(_event.GetArgument("what_event").varString, "skillUpgr") == 0)
+		if(strcmp(_event.GetArgument("what_event").varString, "skillUpgr") == 0 && !isPaused)
 		{
 			if(_event.GetArgument("satType").varInteger == -1)
 			{
@@ -1690,7 +1714,21 @@ void Scene::OnEvent(Event &_event)
 					}
 				}
 			}
+
 			//std::printf("%i\n", _event.GetArgument("index").varInteger);
+		}
+		if(strcmp(_event.GetArgument("what_event").varString, "pauseGame") == 0)
+		{
+			this->SetLayout(LAYOUT_MENU, true);
+			this->SetLayout(LAYOUT_IN_GAME, false);
+
+			sceneMusic.Stop(CHANNEL_MASTER);
+			sceneMusic.Play(MUSIC_MENU, CHANNEL_MASTER);
+
+			this->GetLayout(LAYOUT_MENU)->GetControl("newGame")->SetPosition(glm::vec2(10, 160));//->SetIsVisible(false);
+			this->GetLayout(LAYOUT_MENU)->GetControl("resumeGame")->SetIsVisible(true);
+			
+			StopScene();
 		}
 		break;
 	default:
@@ -1712,6 +1750,8 @@ void Scene::StartScene()
 			(*iter)->Start();
 		}
 	}
+	isPaused = false;
+	spawnData.waveSpawnTimer.SetPause(false);
 }
 void Scene::StopScene()
 {
@@ -1724,6 +1764,26 @@ void Scene::StopScene()
 		{
 			(*iter)->Stop();
 		}
+	}
+	isPaused = true;
+	spawnData.waveSpawnTimer.SetPause(true);
+}
+
+void Scene::ResetScene()
+{
+	enemies.resize(0);
+	spawnData.initialSpawnTime_secs = spawnData.startingSpawnTime_secs;
+	spawnData.currentEnemyCount = spawnData.startingEnemyCount;
+	spawnData.waveSpawnTimer = Framework::Timer(Framework::Timer::TT_SINGLE, spawnData.initialSpawnTime_secs);
+	suns[0]->RemoveSatellites();
+	suns[0]->currentResource = suns[0]->initialResource;
+	for(int i = 0; i < suns[0]->skills.size(); i++)
+	{
+		suns[0]->skills[i]->isResearched = false;
+		suns[0]->skills[i]->isStarted = false;
+		suns[0]->skills[i]->isDeployed = false;
+		suns[0]->skills[i]->generatedEvents.resize(0);
+		suns[0]->sunSkillUpgradeBtns.ChangeTexture(TEXTURE_TYPE_NO_UPGRADE, i);
 	}
 }
 

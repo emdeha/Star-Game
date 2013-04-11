@@ -537,7 +537,8 @@ void Scene::SpawnMothership()
 }
 void Scene::SpawnEnemies()
 {
-	if(spawnData.waveSpawnTimer.Update() == true && isPaused == false && spawnData.waveSpawnTimer.IsPaused() == false)
+	//std::printf("Spawn timer: %f\n", spawnData.waveSpawnTimer.GetTimeSinceStart());
+	if(spawnData.waveSpawnTimer.Update() == true)
 	{
 		srand(time(0));
 
@@ -556,8 +557,6 @@ void Scene::SpawnEnemies()
 				chosenType = EnemyType(rand() % ENEMY_TYPE_COUNT);
 			}
 		}
-
-		//chosenType = ENEMY_TYPE_MOTHERSHIP;
 
 		switch(chosenType)
 		{
@@ -1019,8 +1018,8 @@ ShaderManager &Scene::GetShaderManager()
 
 void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
 {
-	if(!isPaused)
-	{
+	//if(!isPaused)
+	//{
 		GLuint materialBlockIndex = shaderManager.GetBlockIndex(BT_MATERIAL);
 		GLuint lightUniformBuffer = shaderManager.GetUniformBuffer(UBT_LIGHT);
 		LitProgData litData = shaderManager.GetLitProgData();
@@ -1064,7 +1063,7 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
 							litData, unLitData, simpleData, textureData, litTextureData, spriteParticleProgData,
 							interpolation);
 		}
-	}
+	//}
 }
 void Scene::RenderCurrentLayout()
 {
@@ -1085,7 +1084,17 @@ void Scene::RenderCurrentLayout()
 
 void Scene::UpdateScene()
 {
-	if(!isPaused)
+	if(isPaused)
+	{
+		std::vector<std::shared_ptr<CelestialBody>> satellites = suns[0]->GetSatellites();
+		for(int i = 0; i < satellites.size(); i++)
+		{
+			satellites[i]->revolutionDuration.Update();
+		}
+		spawnData.waveSpawnTimer.Update();
+	}
+	else
+	//if(!isPaused)
 	{
 		if(isSpawning)
 		{

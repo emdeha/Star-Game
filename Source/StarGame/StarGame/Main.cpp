@@ -759,6 +759,14 @@ void Display()
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{
+		int loops = 0;
+		while(GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
+		{
+			scene.UpdateScene();
+
+			nextGameTick += SKIP_TICKS;
+			loops++;
+		}
 		scene.RenderCurrentLayout();
 	}
 

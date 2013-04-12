@@ -1091,6 +1091,15 @@ void Scene::UpdateScene()
 		{
 			satellites[i]->revolutionDuration.Update();
 		}
+		std::vector<std::shared_ptr<Skill>> skills = suns[0]->GetAllSkills();
+		for(int i = 0; i < skills.size(); i++)
+		{
+			skills[i]->UpdateTimersOnIdle();
+		}
+		for(int i = 0; i < enemies.size(); i++)
+		{
+			enemies[i]->UpdateTimersOnIdle();
+		}
 		spawnData.waveSpawnTimer.Update();
 	}
 	else
@@ -1759,6 +1768,15 @@ void Scene::StartScene()
 			(*iter)->Start();
 		}
 	}
+	for(int i = 0; i < enemies.size(); i++)
+	{
+		enemies[i]->StartAllTimers();
+	}
+	std::vector<std::shared_ptr<Skill>> skills = suns[0]->GetAllSkills();
+	for(int i = 0; i < skills.size(); i++)
+	{
+		skills[i]->StartAllTimers();
+	}
 	isPaused = false;
 	spawnData.waveSpawnTimer.SetPause(false);
 }
@@ -1773,6 +1791,15 @@ void Scene::StopScene()
 		{
 			(*iter)->Stop();
 		}
+	}
+	for(int i = 0; i < enemies.size(); i++)
+	{
+		enemies[i]->StopAllTimers();
+	}
+	std::vector<std::shared_ptr<Skill>> skills = suns[0]->GetAllSkills();
+	for(int i = 0; i < skills.size(); i++)
+	{
+		skills[i]->StopAllTimers();
 	}
 	isPaused = true;
 	spawnData.waveSpawnTimer.SetPause(true);

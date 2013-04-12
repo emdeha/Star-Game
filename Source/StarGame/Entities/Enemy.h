@@ -195,6 +195,7 @@ public:
 
 	virtual void UpdateAI(CelestialBody &sun) {}
 	virtual void Update(bool isSunKilled, CelestialBody &sun = CelestialBody()) {}
+	virtual void UpdateTimersOnIdle() {}
 	virtual void Render(glutil::MatrixStack &modelMatrix, 
 						int materialBlockIndex,	float gamma, 
 						const LitProgData &litData, const SpriteParticleProgData &spriteParticleData,
@@ -226,6 +227,9 @@ public:
 
 	virtual void SetDamage(int newDamage, EnemyType enemyType) {}
 	virtual void SetChargeSpeed(int newChargeSpeed) {}
+
+	virtual void StopAllTimers() {}
+	virtual void StartAllTimers() {}
 
 	void StartEmittingPain();
 	void StopEmittingPain();
@@ -270,6 +274,7 @@ public:
 
 	void UpdateAI(CelestialBody &sun);
 	void Update(bool isSunKilled, CelestialBody &sun = CelestialBody());
+	void UpdateTimersOnIdle();
 	void Render(glutil::MatrixStack &modelMatrix, 
 				glm::vec3 cameraPosition,
 				const BillboardProgDataNoTexture &billboardProgDataNoTexture,
@@ -284,6 +289,9 @@ public:
 			damage.damage = newDamage; 
 		}
 	}
+
+	void StopAllTimers();
+	void StartAllTimers();
 };
 
 

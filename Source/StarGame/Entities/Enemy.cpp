@@ -293,6 +293,11 @@ void Swarm::Update(bool isSunKilled, CelestialBody &sun)
 	}
 }
 
+void Swarm::UpdateTimersOnIdle()
+{
+	attackTimer.Update();
+}
+
 void Swarm::Render(glutil::MatrixStack &modelMatrix,
 				   glm::vec3 cameraPosition,
 				   const BillboardProgDataNoTexture &billboardProgramNoTexture,
@@ -358,6 +363,15 @@ void Swarm::OnEvent(Event &_event)
 		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
 		break;
 	}
+}
+
+void Swarm::StopAllTimers()
+{
+	attackTimer.SetPause(true);
+}
+void Swarm::StartAllTimers()
+{
+	attackTimer.SetPause(false);
 }
 
 

@@ -307,6 +307,12 @@ void PassiveAOESkill::Update()
 	}
 }
 
+void PassiveAOESkill::UpdateTimersOnIdle()
+{
+	skillLife.Update();
+	attackTimer.Update();
+}
+
 void PassiveAOESkill::Render(glutil::MatrixStack &modelMatrix,
 							 const SpriteParticleProgData &spriteParticleProgData, 
 							 const SimpleTextureProgData &simpleTextureProgData)
@@ -415,6 +421,17 @@ bool PassiveAOESkill::IsIntersectingObject(glm::vec3 objectPosition/*, int objec
 void PassiveAOESkill::SetSkillAnim(glm::vec3 position, int enemyIndex)
 {
 	skillAnim.SetParticleAnimPosition(position, enemyIndex);
+}
+
+void PassiveAOESkill::StopAllTimers()
+{
+	attackTimer.SetPause(true);
+	skillLife.SetPause(true);
+}
+void PassiveAOESkill::StartAllTimers()
+{
+	attackTimer.SetPause(false);
+	skillLife.SetPause(false);
 }
 
 
@@ -1206,6 +1223,11 @@ void BurnSkill::Update()
 	}
 }
 
+void BurnSkill::UpdateTimersOnIdle()
+{
+	attackTimer.Update();
+}
+
 void BurnSkill::Render(glutil::MatrixStack &modelMatrix, 
 					   const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &simpleData)
 {
@@ -1330,4 +1352,13 @@ bool BurnSkill::IsIntersectingObject(glm::vec3 objectPosition)
 		return false;
 	}
 	else return false;
+}
+
+void BurnSkill::StopAllTimers()
+{
+	attackTimer.SetPause(true);
+}
+void BurnSkill::StartAllTimers()
+{
+	attackTimer.SetPause(false);
 }

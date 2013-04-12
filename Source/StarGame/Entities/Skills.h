@@ -95,6 +95,7 @@ public:
 	}
 
 	virtual void Update() {}
+	virtual void UpdateTimersOnIdle() {}
 	virtual void Render(glutil::MatrixStack &modelMatrix,
 						glm::vec3 cameraPosition,
 						const BillboardProgDataNoTexture &progData) {}
@@ -122,6 +123,9 @@ public:
 	virtual int GetDamage() { return 0; }
 
 	virtual void SetSkillAnim(glm::vec3 position, int enemyIndex) {}
+
+	virtual void StopAllTimers() {}
+	virtual void StartAllTimers() {}
 
 	std::string GetSkillType() { return skillType; }
 	int GetApplyCost() { return skillApplyCost; }
@@ -203,6 +207,7 @@ public:
 					int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
 	void Update();
+	void UpdateTimersOnIdle();
 	void Render(glutil::MatrixStack &modelMatrix,
 				const SpriteParticleProgData &spriteParticleProgData, const SimpleTextureProgData &simpleTextureProgData);
 				//const SimpleProgData &progData);
@@ -217,6 +222,9 @@ public:
 
 	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 	void SetSkillAnim(glm::vec3 position, int enemyIndex);
+
+	void StopAllTimers();
+	void StartAllTimers();
 };
 
 
@@ -433,6 +441,7 @@ public:
 			  int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
 	void Update();
+	void UpdateTimersOnIdle();
 	void Render(glutil::MatrixStack &modelMatrix, 
 				const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &simpleData);
 
@@ -446,6 +455,9 @@ public:
 	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 
 	bool IsIntersectingObject(glm::vec3 objectPosition);
+
+	void StopAllTimers();
+	void StartAllTimers();
 };
 
 

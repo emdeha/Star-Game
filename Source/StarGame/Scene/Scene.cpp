@@ -376,6 +376,55 @@ void Scene::LoadAudio(const std::string &configFileName)
 	}
 }
 
+void Scene::LoadGame(const std::string &saveGameFileName)
+{
+	YAML::Node loadDataNode = YAML::LoadFile(saveGameFileName);
+	suns[0]->currentResource = loadDataNode["matter"].as<int>();
+	
+	for(YAML::Node::const_iterator savedItemNode  = loadDataNode.begin();
+		savedItemNode != loadDataNode.end(); ++savedItemNode)
+	{
+		if(savedItemNode->first.as<std::string>() == "satellites")
+		{
+			for(YAML::Node::const_iterator satelliteNode = savedItemNode->second.begin();
+				satelliteNode != savedItemNode->second.end(); ++satelliteNode)
+			{
+				SatelliteType satType = (SatelliteType)satelliteNode->second["type"].as<int>();
+
+				suns[0]->AddSatellite("../data/mesh-files/air_satellite.obj",
+									  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType);
+			}
+		}
+	}
+}
+void Scene::SaveGame(const std::string &saveGameFileName)
+{
+	YAML::Node saveDataNode;
+	saveDataNode["matter"] = suns[0]->GetCurrentResource();
+
+	std::vector<std::shared_ptr<CelestialBody>> satellites = suns[0]->GetSatellites();
+
+	for(int i = 0; i < satellites.size(); i++)
+	{
+		std::stringstream satName;
+		satName<<"satellite";
+		satName<<i;
+		saveDataNode["satellites"][satName.str()]["type"] = (int)satellites[i]->GetSatelliteType();
+		saveDataNode["satellites"][satName.str()]["position"][0] = satellites[i]->GetPosition().x;
+		saveDataNode["satellites"][satName.str()]["position"][1] = satellites[i]->GetPosition().y;
+		saveDataNode["satellites"][satName.str()]["position"][2] = satellites[i]->GetPosition().z;
+	}
+
+	std::ofstream saveFile(saveGameFileName);
+	if(!saveFile.is_open())
+	{
+		HandleUnexpectedError("Sad file", __LINE__, __FILE__);
+		return;
+	}
+	saveFile << saveDataNode;
+	saveFile.close();
+}
+
 void Scene::SpawnSwarm()
 {
 	BillboardProgDataNoTexture billboardNoTextureProgData = shaderManager.GetBillboardProgDataNoTexture();
@@ -1438,11 +1487,15 @@ void Scene::OnEvent(Event &_event)
 		{
 			this->SetLayout(LAYOUT_SAVE_GAME, true);
 			this->SetLayout(LAYOUT_MENU, false);
+
+			SaveGame("../data/saved-games/test.yaml");
 		}
 		if(strcmp(_event.GetArgument("object").varString, "loadGameButton") == 0)
 		{
 			this->SetLayout(LAYOUT_LOAD_GAME, true);
 			this->SetLayout(LAYOUT_MENU, false);
+
+			LoadGame("../data/saved-games/test.yaml");
 		}
 		if(strcmp(_event.GetArgument("object").varString, "options") == 0)
 		{
@@ -1620,7 +1673,7 @@ void Scene::OnEvent(Event &_event)
 			for(int i = 0; i < skills.size(); i++)
 			{
 				skills[i]->OnEvent(_event);
-				std::printf("Fusion called: %s\n", _event.GetArgument("buttons").varString);
+				//std::printf("Fusion called: %s\n", _event.GetArgument("buttons").varString);
 				if(skills[i]->IsStarted())
 				{/*
 					EventArg skillDeployedEventArg[2];

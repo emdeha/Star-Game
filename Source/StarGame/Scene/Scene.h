@@ -45,6 +45,9 @@
 
 #include "../framework/EventSystem.h"
 
+#include "../AssetLoader/yaml-cpp/yaml.h"
+#include <fstream>
+
 
 struct EnemyStats
 {
@@ -210,6 +213,9 @@ public:
 	void InitTweakableVariables(bool isLoadedFromConfig = false,
 								const std::string &configFileName = "");
 	void LoadAudio(const std::string &configFileName);
+
+	void LoadGame(const std::string &saveGameFileName);
+	void SaveGame(const std::string &saveGameFileName);
 };
 
 

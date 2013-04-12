@@ -264,6 +264,22 @@ layout-save-game:
                 preset-big:
                     position: [ 10, 40 ]
                     text-size: 28
+        control-label-tooltip:
+            control-type: label
+            name: labelHeader
+            text: "Save Game"
+            has-background: false
+            is-visible: true
+            presets:
+                preset-small:
+                    position: [ 10, 720 ]
+                    text-size: 48
+                preset-medium:
+                    position: [ 10, 720 ]
+                    text-size: 48
+                preset-big:
+                    position: [ 10, 720 ]
+                    text-size: 48 # must be 68, but buggy
 layout-load-game:
     background-color: [ 1.0, 1.0, 1.0, 1.0 ]
     is-active: false
@@ -285,6 +301,22 @@ layout-load-game:
                 preset-big:
                     position: [ 10, 40 ]
                     text-size: 28
+        control-label-tooltip:
+            control-type: label
+            name: labelHeader
+            text: "Load Game"
+            has-background: false
+            is-visible: true
+            presets:
+                preset-small:
+                    position: [ 10, 720 ]
+                    text-size: 48
+                preset-medium:
+                    position: [ 10, 720 ]
+                    text-size: 48
+                preset-big:
+                    position: [ 10, 720 ]
+                    text-size: 48 # must be 68, but buggy
 layout-options:
     background-color: [ 1.0, 1.0, 1.0, 1.0 ]
     is-active: false
@@ -306,3 +338,20 @@ layout-options:
                 preset-big:
                     position: [ 10, 40 ]
                     text-size: 28
+        control-label-tooltip:
+            control-type: label
+            name: labelHeader
+            text: "Options"
+            has-background: false
+            is-visible: true
+            presets:
+                preset-small:
+                    position: [ 10, 720 ]
+                    text-size: 48
+                preset-medium:
+                    position: [ 10, 720 ]
+                    text-size: 48
+                preset-big:
+                    position: [ 10, 720 ]
+                    text-size: 48 # must be 68, but buggy
+

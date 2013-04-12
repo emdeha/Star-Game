@@ -1743,8 +1743,11 @@ void Scene::OnEvent(Event &_event)
 			sceneMusic.Stop(CHANNEL_MASTER);
 			sceneMusic.Play(MUSIC_MENU, CHANNEL_MASTER);
 
-			this->GetLayout(LAYOUT_MENU)->GetControl("newGame")->SetPosition(glm::vec2(10, 160));//->SetIsVisible(false);
+			this->GetLayout(LAYOUT_MENU)->GetControl("newGame")->SetPosition(glm::vec2(10, 190));//->SetIsVisible(false);
 			this->GetLayout(LAYOUT_MENU)->GetControl("resumeGame")->SetIsVisible(true);
+			this->GetLayout(LAYOUT_MENU)->GetControl("resumeGame")->SetPosition(glm::vec2(10, 160));
+			this->GetLayout(LAYOUT_MENU)->GetControl("loadGame")->SetPosition(glm::vec2(10, 130));
+			this->GetLayout(LAYOUT_MENU)->GetControl("saveGame")->SetIsVisible(true);
 			
 			StopScene();
 		}

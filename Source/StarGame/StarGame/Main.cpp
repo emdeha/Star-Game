@@ -208,19 +208,21 @@ void HandleMouse()
 
 				scene.OnEvent(leftClickButtonEvent);
 			}
-
+			else
 			if(
 				scene.GetLayout(LAYOUT_MENU)->
 				GetControl("resumeGame")->
 				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
 			  )
 			{
+				std::printf("resume");
+
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("resumeGameButton");
 
 				scene.GetLayout(LAYOUT_MENU)->GetControl("resumeGame")->OnEvent(leftClickButtonEvent);
 				scene.OnEvent(leftClickButtonEvent);
 			}
-
+			else
 			if(
 				scene.GetLayout(LAYOUT_MENU)->
 				GetControl("saveGame")->
@@ -233,19 +235,21 @@ void HandleMouse()
 
 				scene.OnEvent(leftClickButtonEvent);
 			}
-
+			else
 			if(
 				scene.GetLayout(LAYOUT_MENU)->
 				GetControl("loadGame")->
 				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
 			  )
 			{
+				std::printf("load");
+
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("loadGameButton");
 
 				scene.GetLayout(LAYOUT_MENU)->GetControl("loadGame")->OnEvent(leftClickButtonEvent);
 				scene.OnEvent(leftClickButtonEvent);
 			}
-
+			else
 			if(
 				scene.GetLayout(LAYOUT_MENU)->
 				GetControl("options")->
@@ -257,7 +261,7 @@ void HandleMouse()
 				scene.GetLayout(LAYOUT_MENU)->GetControl("options")->OnEvent(leftClickButtonEvent);
 				scene.OnEvent(leftClickButtonEvent);
 			}
-
+			else
 			if(
 				scene.GetLayout(LAYOUT_MENU)->
 				GetControl("quitGame")->

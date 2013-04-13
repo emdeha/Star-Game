@@ -81,6 +81,7 @@ private:
 	std::string textureFileNames[2];
 
 	Utility::Primitives::Sprite3D skillButtons[3];
+	bool buttonIndices[3];
 
 public:
 	SkillUpgradeButtons() {}
@@ -149,6 +150,19 @@ private:
 
 	Utility::Primitives::Sprite3D skillButtons[4];
 
+	struct UpgradedButton
+	{
+		int buttonIndex;
+		TextureTypeSun buttonTextureType;
+
+		UpgradedButton(int newButtonIndex, TextureTypeSun newButtonTextureType)
+		{
+			buttonIndex = newButtonIndex;
+			buttonTextureType = newButtonTextureType;
+		}
+	};
+	std::vector<UpgradedButton> upgradedButtons;
+
 public:
 	SunSkillUpgradeButtons() {}
 	SunSkillUpgradeButtons(float newWidth, float newHeight, float newRadius,
@@ -160,6 +174,9 @@ public:
 	void Draw(glutil::MatrixStack &modelMatrix, const SimpleTextureProgData &textureData);
 
 	void ChangeTexture(TextureTypeSun type, int buttonIndex);
+
+	std::vector<UpgradedButton> GetUpgradedButtons();
+	UpgradedButton GetUpgradedButtonBySkillType(const std::string &skillType);
 
 	bool IsClicked(Utility::Ray mouseRay, int &buttonIndex);
 };

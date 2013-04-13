@@ -65,7 +65,6 @@ namespace Framework
 
 		float fDeltaTime = absCurrTime - m_absPrevTime;
 		m_secAccumTime += fDeltaTime;
-		std::printf("accum: %f; delta: %f\n", m_secAccumTime, fDeltaTime);
 
 		m_absPrevTime = absCurrTime;
 		if(m_eType == TT_SINGLE)

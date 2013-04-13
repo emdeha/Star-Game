@@ -183,7 +183,7 @@ public:
 
 	bool AddSatellite(const std::string &fileName,
 					  glm::vec4 satelliteColor,
-					  SatelliteType type);
+					  SatelliteType type, bool drainResource = true);
 	void AddSkill(const std::shared_ptr<Skill> newSkill);
 
 	bool RemoveSatellite();

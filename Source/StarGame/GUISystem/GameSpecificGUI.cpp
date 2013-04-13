@@ -71,6 +71,10 @@ SkillUpgradeButtons::SkillUpgradeButtons(float newWidth, float newHeight,
 		Utility::Primitives::Sprite3D(glm::vec3(orbitPosition.x - orbitInnerRadius, 0.01f, height / 2.0f), width, height);
 	skillButtons[2] = 
 		Utility::Primitives::Sprite3D(glm::vec3(width / 2.0f, 0.01f, orbitPosition.z + orbitOuterRadius), width, height);
+
+	buttonIndices[0] = false;
+	buttonIndices[1] = false;
+	buttonIndices[2] = false;
 }
 
 void SkillUpgradeButtons::Init()
@@ -186,6 +190,7 @@ void SatelliteOrbit::Draw(glutil::MatrixStack &modelMatrix,
 void SatelliteOrbit::ChangeUpgradeButtonTexture(TextureTypeSat type, int buttonIndex)
 {
 	upgradeButtons.ChangeTexture(type, buttonIndex);
+	upgradeButtons.buttonIndices[buttonIndex] = true;
 }
 
 bool SatelliteOrbit::IsUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex)
@@ -238,6 +243,56 @@ void SunSkillUpgradeButtons::Draw(glutil::MatrixStack &modelMatrix, const Simple
 void SunSkillUpgradeButtons::ChangeTexture(TextureTypeSun type, int buttonIndex)
 {
 	skillButtons[buttonIndex].ChangeTexture(textureFileNames[type]);
+	upgradedButtons.push_back(UpgradedButton(buttonIndex, type));
+}
+
+std::vector<SunSkillUpgradeButtons::UpgradedButton> SunSkillUpgradeButtons::GetUpgradedButtons()
+{
+	return upgradedButtons;
+}
+
+SunSkillUpgradeButtons::UpgradedButton SunSkillUpgradeButtons::GetUpgradedButtonBySkillType(const std::string &skillType)
+{
+	if(skillType == "aoeSkill")
+	{
+		for(int i = 0; i < upgradedButtons.size(); i++)
+		{
+			if(upgradedButtons[i].buttonTextureType == TEXTURE_TYPE_UPGRADE_AOE)
+			{
+				return upgradedButtons[i];
+			}
+		}
+	}
+	else if(skillType == "passiveAoeSkill")
+	{
+		for(int i = 0; i < upgradedButtons.size(); i++)
+		{
+			if(upgradedButtons[i].buttonTextureType == TEXTURE_TYPE_UPGRADE_PASSIVE_AOE)
+			{
+				return upgradedButtons[i];
+			}
+		}
+	}
+	else if(skillType == "sunNovaSkill")
+	{
+		for(int i = 0; i < upgradedButtons.size(); i++)
+		{
+			if(upgradedButtons[i].buttonTextureType == TEXTURE_TYPE_UPGRADE_SUN_NOVA)
+			{
+				return upgradedButtons[i];
+			}
+		}
+	}
+	else if(skillType == "burnSkill")
+	{
+		for(int i = 0; i < upgradedButtons.size(); i++)
+		{
+			if(upgradedButtons[i].buttonTextureType == TEXTURE_TYPE_UPGRADE_BURN)
+			{
+				return upgradedButtons[i];
+			}
+		}
+	}
 }
 
 bool SunSkillUpgradeButtons::IsClicked(Utility::Ray mouseRay, int &buttonIndex)

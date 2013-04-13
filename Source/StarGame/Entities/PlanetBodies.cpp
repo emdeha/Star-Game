@@ -175,6 +175,7 @@ void CelestialBody::InitSatelliteStats()
 
 void CelestialBody::LoadMesh(const std::string &fileName)
 {
+
 	if(!mesh.LoadMesh(fileName))
 	{
 		std::string errorMessage = "cannot load mesh ";
@@ -505,7 +506,7 @@ void CelestialBody::OnEvent(Event &_event)
 
 bool CelestialBody::AddSatellite(const std::string &fileName,
 								 glm::vec4 satelliteColor,
-								 SatelliteType type)
+								 SatelliteType type, bool drainResource)
 {
 	if(satellites.size() >= satelliteCap)
 	{
@@ -513,15 +514,18 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 		// TODO: Print ingame text
 		return false;
 	}
-	if(currentResource < satelliteConstructionCost)
+	if(drainResource)
 	{
-		// EXPECTED
-		// TODO: Print ingame text
-		std::printf("Not enough resource.\n");
-		return false;
-	}
+		if(currentResource < satelliteConstructionCost)
+		{
+			// EXPECTED
+			// TODO: Print ingame text
+			std::printf("Not enough resource.\n");
+			return false;
+		}
 	
-	currentResource -= satelliteConstructionCost; // Maybe an event should be sent.
+		currentResource -= satelliteConstructionCost; // Maybe an event should be sent.
+	}
 
 	ResourceData satResourceData;
 	satResourceData.resourceGainTime = satelliteStats[type].resourceGainTime;

@@ -1,14 +1,15 @@
 satellites:
   satellite0:
-    position:
-      - 2.7485
-      - 0
-      - -0.090693
     type: 0
-  satellite1:
     position:
-      - 2.16443
+      - 2.74267
       - 0
-      - 4.22821
-    type: 1
-matter: 0
+      - -0.200682
+matter: 100
+skills:
+  burnSkill:
+    isResearched: true
+  satChainSkill:
+    isResearched: true
+  sunNovaSkill:
+    isResearched: true

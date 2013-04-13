@@ -391,8 +391,74 @@ void Scene::LoadGame(const std::string &saveGameFileName)
 			{
 				SatelliteType satType = (SatelliteType)satelliteNode->second["type"].as<int>();
 
-				suns[0]->AddSatellite("../data/mesh-files/air_satellite.obj",
-									  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType);
+				switch(satType)
+				{
+				case SATELLITE_AIR:
+					suns[0]->AddSatellite("../data/mesh-files/air_planet.obj",
+										  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType, false);
+					break;
+				case SATELLITE_FIRE:
+					suns[0]->AddSatellite("../data/mesh-files/fire_planet.obj",
+										  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType, false);
+					break;
+				case SATELLITE_EARTH:
+					suns[0]->AddSatellite("../data/mesh-files/earth_planet.obj",
+										  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType, false);
+					break;
+				case SATELLITE_WATER:
+					suns[0]->AddSatellite("../data/mesh-files/water_planet.obj",
+										  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType, false);
+					break;
+				}
+			}
+		}
+		if(savedItemNode->first.as<std::string>() == "skills")
+		{
+			for(YAML::Node::const_iterator skillNode = savedItemNode->second.begin();
+				skillNode != savedItemNode->second.end(); ++skillNode)
+			{
+				std::vector<std::shared_ptr<Skill>> skills = suns[0]->GetAllSkills();
+				for(int i = 0; i < skills.size(); i++)
+				{
+					if(skills[i]->GetSkillType() == "passiveAOESkill" &&
+					   skills[i]->GetSkillType() == skillNode->first.as<std::string>())
+					{
+						skills[i]->isResearched = skillNode->second["isResearched"].as<bool>();						
+						suns[0]->GetSatellite(SATELLITE_AIR)->hoverOrbit.
+						ChangeUpgradeButtonTexture((TextureTypeSat)skillNode->second["textureType"].as<int>(),
+													skillNode->second["buttonIndex"].as<int>());						
+					}
+					else if(skills[i]->GetSkillType() == "satFrostNova" &&
+							skills[i]->GetSkillType() == skillNode->first.as<std::string>())
+					{
+						skills[i]->isResearched = skillNode->second["isResearched"].as<bool>();
+						suns[0]->GetSatellite(SATELLITE_WATER)->hoverOrbit.
+						ChangeUpgradeButtonTexture((TextureTypeSat)skillNode->second["textureType"].as<int>(),
+													skillNode->second["buttonIndex"].as<int>());
+					}
+					else if(skills[i]->GetSkillType() == "satShieldSkill" &&
+							skills[i]->GetSkillType() == skillNode->first.as<std::string>())
+					{
+						skills[i]->isResearched = skillNode->second["isResearched"].as<bool>();
+						suns[0]->GetSatellite(SATELLITE_EARTH)->hoverOrbit.
+						ChangeUpgradeButtonTexture((TextureTypeSat)skillNode->second["textureType"].as<int>(),
+													skillNode->second["buttonIndex"].as<int>());
+					}
+					else if(skills[i]->GetSkillType() == "satChainSkill" &&
+							skills[i]->GetSkillType() == skillNode->first.as<std::string>())
+					{
+						skills[i]->isResearched = skillNode->second["isResearched"].as<bool>();						
+						suns[0]->GetSatellite(SATELLITE_FIRE)->hoverOrbit.
+						ChangeUpgradeButtonTexture((TextureTypeSat)skillNode->second["textureType"].as<int>(),
+													skillNode->second["buttonIndex"].as<int>());
+					}
+					else if(skills[i]->GetSkillType() == skillNode->first.as<std::string>())
+					{
+						skills[i]->isResearched = skillNode->second["isResearched"].as<bool>();
+						suns[0]->sunSkillUpgradeBtns.ChangeTexture((TextureTypeSun)skillNode->second["textureType"].as<int>(),
+																   skillNode->second["buttonIndex"].as<int>());
+					}
+				}
 			}
 		}
 	}
@@ -403,7 +469,6 @@ void Scene::SaveGame(const std::string &saveGameFileName)
 	saveDataNode["matter"] = suns[0]->GetCurrentResource();
 
 	std::vector<std::shared_ptr<CelestialBody>> satellites = suns[0]->GetSatellites();
-
 	for(int i = 0; i < satellites.size(); i++)
 	{
 		std::stringstream satName;
@@ -413,6 +478,43 @@ void Scene::SaveGame(const std::string &saveGameFileName)
 		saveDataNode["satellites"][satName.str()]["position"][0] = satellites[i]->GetPosition().x;
 		saveDataNode["satellites"][satName.str()]["position"][1] = satellites[i]->GetPosition().y;
 		saveDataNode["satellites"][satName.str()]["position"][2] = satellites[i]->GetPosition().z;
+	}
+
+	std::vector<std::shared_ptr<Skill>> skills = suns[0]->GetAllSkills();
+	for(int i = 0; i < skills.size(); i++)
+	{
+		if(skills[i]->IsResearched())
+		{
+			saveDataNode["skills"][skills[i]->GetSkillType()]["isResearched"] = true;
+
+			if(skills[i]->GetSkillType() == "passiveAOESkill")
+			{
+				saveDataNode["skills"][skills[i]->GetSkillType()]["textureType"] = (int)TEXTURE_TYPE_SAT_UPGRADE;
+				saveDataNode["skills"][skills[i]->GetSkillType()]["buttonIndex"] = 2; // later will make it not magic
+			}
+			else if(skills[i]->GetSkillType() == "satFrostNova")
+			{
+				saveDataNode["skills"][skills[i]->GetSkillType()]["textureType"] = (int)TEXTURE_TYPE_SAT_UPGRADE;
+				saveDataNode["skills"][skills[i]->GetSkillType()]["buttonIndex"] = 2; // later will make it not magic
+			}
+			else if(skills[i]->GetSkillType() == "satShieldSkill")
+			{
+				saveDataNode["skills"][skills[i]->GetSkillType()]["textureType"] = (int)TEXTURE_TYPE_SAT_UPGRADE;
+				saveDataNode["skills"][skills[i]->GetSkillType()]["buttonIndex"] = 2; // later will make it not magic
+			}
+			else if(skills[i]->GetSkillType() == "satChainSkill")
+			{
+				saveDataNode["skills"][skills[i]->GetSkillType()]["textureType"] = (int)TEXTURE_TYPE_SAT_UPGRADE;
+				saveDataNode["skills"][skills[i]->GetSkillType()]["buttonIndex"] = 2; // later will make it not magic
+			}
+			else
+			{
+				saveDataNode["skills"][skills[i]->GetSkillType()]["textureType"] = 
+					(int)suns[0]->sunSkillUpgradeBtns.GetUpgradedButtonBySkillType(skills[i]->GetSkillType()).buttonTextureType;
+				saveDataNode["skills"][skills[i]->GetSkillType()]["buttonIndex"] =
+					suns[0]->sunSkillUpgradeBtns.GetUpgradedButtonBySkillType(skills[i]->GetSkillType()).buttonIndex;
+			}
+		}
 	}
 
 	std::ofstream saveFile(saveGameFileName);
@@ -1796,9 +1898,9 @@ void Scene::OnEvent(Event &_event)
 			sceneMusic.Stop(CHANNEL_MASTER);
 			sceneMusic.Play(MUSIC_MENU, CHANNEL_MASTER);
 
-			this->GetLayout(LAYOUT_MENU)->GetControl("newGame")->SetPosition(glm::vec2(10, 190));//->SetIsVisible(false);
+			this->GetLayout(LAYOUT_MENU)->GetControl("newGame")->SetPosition(glm::vec2(10, 220));//->SetIsVisible(false);
 			this->GetLayout(LAYOUT_MENU)->GetControl("resumeGame")->SetIsVisible(true);
-			this->GetLayout(LAYOUT_MENU)->GetControl("resumeGame")->SetPosition(glm::vec2(10, 160));
+			this->GetLayout(LAYOUT_MENU)->GetControl("resumeGame")->SetPosition(glm::vec2(10, 190));
 			this->GetLayout(LAYOUT_MENU)->GetControl("loadGame")->SetPosition(glm::vec2(10, 130));
 			this->GetLayout(LAYOUT_MENU)->GetControl("saveGame")->SetIsVisible(true);
 			

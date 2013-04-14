@@ -1,10 +1,31 @@
+matter: 15
 skills:
-  aoeSkill:
-    textureType: 0
-    buttonIndex: 3
-    isResearched: true
   sunNovaSkill:
-    textureType: 1
     isResearched: true
     buttonIndex: 2
-matter: 200
+    textureType: 1
+  satFrostNova:
+    isResearched: true
+    buttonIndex: 0
+    textureType: 0
+  burnSkill:
+    isResearched: true
+    buttonIndex: 1
+    textureType: 3
+  satShieldSkill:
+    isResearched: true
+    buttonIndex: 0
+    textureType: 0
+satellites:
+  satellite0:
+    type: 2
+    position:
+      - -1.25761
+      - 0
+      - 3.53283
+  satellite1:
+    type: 1
+    position:
+      - 0.420277
+      - 0
+      - -4.73137

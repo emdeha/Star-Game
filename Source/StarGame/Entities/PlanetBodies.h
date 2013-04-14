@@ -150,6 +150,21 @@ private:
 	void InitSatelliteStats();
 
 public:
+	struct SkillButtonClickedData
+	{
+		bool isClicked;
+		int buttonIndex;
+		int skillId;
+
+		SkillButtonClickedData(bool newIsClicked, int newButtonIndex, int newSkillId)
+		{
+			isClicked = newIsClicked;
+			buttonIndex = newButtonIndex;
+			skillId = newSkillId;
+		}
+	};
+
+public:
 	CelestialBody() {}
 	CelestialBody(const CelestialBody &other);
 	~CelestialBody();
@@ -192,7 +207,7 @@ public:
 	void RemoveSatellites();	
 
 	bool IsClicked(Utility::Ray mouseRay);
-	bool IsSkillUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex);
+	SkillButtonClickedData IsSkillUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex);
 	bool IsSatelliteClicked(Utility::Ray mouseRay);
 
 	bool IsSun();

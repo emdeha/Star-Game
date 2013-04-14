@@ -244,15 +244,43 @@ void SunSkillUpgradeButtons::Draw(glutil::MatrixStack &modelMatrix, const Simple
 void SunSkillUpgradeButtons::ChangeTexture(TextureTypeSun type, int buttonIndex)
 {
 	skillButtons[buttonIndex].ChangeTexture(textureFileNames[type]);
-	std::printf(textureFileNames[type].c_str());
 	upgradedButtons.push_back(UpgradedButton(buttonIndex, type));
-
-	std::printf("%i\n", buttonIndex);
 }
 
 std::vector<SunSkillUpgradeButtons::UpgradedButton> SunSkillUpgradeButtons::GetUpgradedButtons()
 {
 	return upgradedButtons;
+}
+
+TextureTypeSun SunSkillUpgradeButtons::GetSkillTextureTypeAtButton(int buttonIndex)
+{
+	// WARN: The following is so bad, it can easily destroy the game permamently...
+	if(buttonIndex == 0)
+	{
+		return TEXTURE_TYPE_UPGRADE_PASSIVE_AOE;
+	}
+	else if(buttonIndex == 1)
+	{
+		return TEXTURE_TYPE_UPGRADE_BURN;
+	}
+	else if(buttonIndex == 2)
+	{
+		return TEXTURE_TYPE_UPGRADE_SUN_NOVA;
+	}
+	else if(buttonIndex == 3)
+	{
+		return TEXTURE_TYPE_UPGRADE_AOE;
+	}
+
+
+	/*
+	for(int i = 0; i < upgradedButtons.size(); i++)
+	{
+		if(upgradedButtons[i].buttonIndex = buttonIndex)
+		{
+			return upgradedButtons[i].buttonTextureType;
+		}
+	}*/
 }
 
 SunSkillUpgradeButtons::UpgradedButton SunSkillUpgradeButtons::GetUpgradedButtonBySkillType(const std::string &skillType)

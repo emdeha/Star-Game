@@ -96,7 +96,9 @@ void HandleMouse()
 				if((*iter)->IsClicked(mouseRay) && (*iter)->GetIsDrawingUpgradeButtons())
 				{
 					int buttonIndex = 0;
-					bool isUpgrBoxClicked = (*iter)->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex);
+					CelestialBody::SkillButtonClickedData buttonClickedData = 
+						(*iter)->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex);
+					bool isUpgrBoxClicked = buttonClickedData.isClicked;
 					if(isUpgrBoxClicked && scene.GetMouse().IsLeftButtonDown())
 					{
 						EventArg upgradeSkillClickedEventArgs[3];
@@ -125,10 +127,12 @@ void HandleMouse()
 			if(scene.GetSun()->IsClicked(mouseRay) && scene.GetSun()->GetIsDrawingUpgradeButtons())
 			{
 				int buttonIndex = 0;
-				bool isUpgrBoxClicked = scene.GetSun()->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex);
+				CelestialBody::SkillButtonClickedData buttonClickedData = 
+					scene.GetSun()->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex);
+				bool isUpgrBoxClicked = buttonClickedData.isClicked;
 				if(isUpgrBoxClicked && scene.GetMouse().IsLeftButtonDown())
 				{
-					EventArg upgradeSkillClickedEventArgs[3];
+					EventArg upgradeSkillClickedEventArgs[4];
 					upgradeSkillClickedEventArgs[0].argType = "what_event";
 					upgradeSkillClickedEventArgs[0].argument.varType = TYPE_STRING;
 					strcpy(upgradeSkillClickedEventArgs[0].argument.varString, "skillUpgr");
@@ -138,7 +142,10 @@ void HandleMouse()
 					upgradeSkillClickedEventArgs[2].argType = "satType";
 					upgradeSkillClickedEventArgs[2].argument.varType = TYPE_INTEGER;
 					upgradeSkillClickedEventArgs[2].argument.varInteger = -1;
-					Event upgradeSkillClickedEvent(3, EVENT_TYPE_OTHER, upgradeSkillClickedEventArgs);
+					upgradeSkillClickedEventArgs[3].argType = "skillIndex";
+					upgradeSkillClickedEventArgs[3].argument.varType = TYPE_INTEGER;
+					upgradeSkillClickedEventArgs[3].argument.varInteger = buttonClickedData.skillId;
+					Event upgradeSkillClickedEvent(4, EVENT_TYPE_OTHER, upgradeSkillClickedEventArgs);
 
 					//(*iter)->OnEvent(upgradeSkillClickedEvent);
 					scene.OnEvent(upgradeSkillClickedEvent);
@@ -382,7 +389,7 @@ void HandleMouse()
 			if((*iter)->IsClicked(mouseRay) && (*iter)->GetIsDrawingUpgradeButtons())
 			{
 				int buttonIndex = 0;
-				bool isUpgrBoxClicked = (*iter)->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex);
+				bool isUpgrBoxClicked = (*iter)->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex).isClicked;
 				if(isUpgrBoxClicked)
 				{
 					EventArg upgradeSkillHoveredEventArgs[3];
@@ -412,7 +419,7 @@ void HandleMouse()
 		if(scene.GetSun()->IsClicked(mouseRay) && scene.GetSun()->GetIsDrawingUpgradeButtons())
 		{
 			int buttonIndex = 0;
-			bool isUpgrBoxClicked = scene.GetSun()->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex);
+			bool isUpgrBoxClicked = scene.GetSun()->IsSkillUpgradeButtonClicked(mouseRay, buttonIndex).isClicked;
 			if(isUpgrBoxClicked)
 			{
 				EventArg upgradeSkillHoveredEventArgs[3];
@@ -763,13 +770,16 @@ void Display()
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
 	{
-		int loops = 0;
-		while(GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
+		if(scene.IsPaused())
 		{
-			scene.UpdateScene();
+			int loops = 0;
+			while(GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
+			{
+				scene.UpdateScene();
 
-			nextGameTick += SKIP_TICKS;
-			loops++;
+				nextGameTick += SKIP_TICKS;
+				loops++;
+			}
 		}
 		scene.RenderCurrentLayout();
 	}

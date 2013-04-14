@@ -477,7 +477,7 @@ void CelestialBody::OnEvent(Event &_event)
 				if(_event.GetArgument("satType").varInteger == -1)
 				{
 					isClicked = true;
-					sunSkillUpgradeBtns.ChangeTexture((TextureTypeSun)_event.GetArgument("index").varInteger,
+					sunSkillUpgradeBtns.ChangeTexture((TextureTypeSun)_event.GetArgument("skillIndex").varInteger,
 													  _event.GetArgument("index").varInteger);
 				}
 				else
@@ -580,7 +580,7 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 																 satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].damageApplyTime_secs, 
 																 satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].duration_secs,
 																 satSkillStats[SKILL_TYPE_SAT_PASSIVE_AOE].range,
-																 "passiveAOESkill",
+																 "satPassiveAOESkill", // WARN: that line is soo dangerous (lalala)
 																 'q', 'q', 'e',
 																 satSkillStats[SKILL_TYPE_PASSIVE_AOE].skillApplyCost,
 																 satSkillStats[SKILL_TYPE_PASSIVE_AOE].skillResearchCost,
@@ -779,14 +779,15 @@ bool CelestialBody::IsClicked(Utility::Ray mouseRay)
 		return false;
 	}
 }
-bool CelestialBody::IsSkillUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex)
+CelestialBody::SkillButtonClickedData CelestialBody::IsSkillUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIndex)
 {
 	if(isSun)
 	{
 		bool isSunUpgrButtonClicked = sunSkillUpgradeBtns.IsClicked(mouseRay, buttonIndex);
 		if(isSunUpgrButtonClicked)
 		{
-			return true;
+			return SkillButtonClickedData(true, buttonIndex, 
+									      (int)sunSkillUpgradeBtns.GetSkillTextureTypeAtButton(buttonIndex));
 		}
 	}
 	else
@@ -794,10 +795,10 @@ bool CelestialBody::IsSkillUpgradeButtonClicked(Utility::Ray mouseRay, int &butt
 		bool isUpgrButtonClicked = hoverOrbit.IsUpgradeButtonClicked(mouseRay, buttonIndex);
 		if(isUpgrButtonClicked)
 		{
-			return true;
+			return SkillButtonClickedData(true, buttonIndex, 0);
 		}
 	}
-	return false;
+	return SkillButtonClickedData(false, -1, -1);
 }
 bool CelestialBody::IsSatelliteClicked(Utility::Ray mouseRay)
 {

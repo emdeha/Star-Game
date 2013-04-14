@@ -209,6 +209,7 @@ public:
 	std::string GetCurrentFusionInputSequence();
 
 	bool HasSuns();
+	bool IsPaused();
 	
 	void InitTweakableVariables(bool isLoadedFromConfig = false,
 								const std::string &configFileName = "");

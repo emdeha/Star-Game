@@ -178,6 +178,7 @@ public:
 	std::vector<UpgradedButton> GetUpgradedButtons();
 	UpgradedButton GetUpgradedButtonBySkillType(const std::string &skillType);
 	TextureTypeSun GetSkillTextureType(const std::string &skillType);
+	TextureTypeSun GetSkillTextureTypeAtButton(int buttonIndex);
 	int GetSkillButtonIndex(const std::string &skillType);
 
 	bool IsClicked(Utility::Ray mouseRay, int &buttonIndex);

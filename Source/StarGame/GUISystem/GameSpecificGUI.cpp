@@ -202,17 +202,18 @@ bool SatelliteOrbit::IsUpgradeButtonClicked(Utility::Ray mouseRay, int &buttonIn
 
 SunSkillUpgradeButtons::SunSkillUpgradeButtons(float newWidth, float newHeight, float newRadius,
 											   glm::vec3 newCenterPosition, 
-											   const std::vector<std::string> &texturesFileNames)
+											   const std::vector<std::string> &newTexturesFileNames)
 {
 	width = newWidth;
 	height = newHeight;
 	radius = newRadius;
 	centerPosition = newCenterPosition;
-	textureFileNames[TEXTURE_TYPE_NO_UPGRADE] = texturesFileNames[TEXTURE_TYPE_NO_UPGRADE];
-	textureFileNames[TEXTURE_TYPE_UPGRADE_AOE] = texturesFileNames[TEXTURE_TYPE_UPGRADE_AOE];
-	textureFileNames[TEXTURE_TYPE_UPGRADE_SUN_NOVA] = texturesFileNames[TEXTURE_TYPE_UPGRADE_SUN_NOVA];
-	textureFileNames[TEXTURE_TYPE_UPGRADE_PASSIVE_AOE] = texturesFileNames[TEXTURE_TYPE_UPGRADE_PASSIVE_AOE];
-	textureFileNames[TEXTURE_TYPE_UPGRADE_BURN] = texturesFileNames[TEXTURE_TYPE_UPGRADE_BURN];
+	textureFileNames.resize(5);
+	textureFileNames[TEXTURE_TYPE_NO_UPGRADE] = newTexturesFileNames[TEXTURE_TYPE_NO_UPGRADE];
+	textureFileNames[TEXTURE_TYPE_UPGRADE_AOE] = newTexturesFileNames[TEXTURE_TYPE_UPGRADE_AOE];
+	textureFileNames[TEXTURE_TYPE_UPGRADE_SUN_NOVA] = newTexturesFileNames[TEXTURE_TYPE_UPGRADE_SUN_NOVA];
+	textureFileNames[TEXTURE_TYPE_UPGRADE_PASSIVE_AOE] = newTexturesFileNames[TEXTURE_TYPE_UPGRADE_PASSIVE_AOE];
+	textureFileNames[TEXTURE_TYPE_UPGRADE_BURN] = newTexturesFileNames[TEXTURE_TYPE_UPGRADE_BURN];
 
 	skillButtons[0] = 
 		Utility::Primitives::Sprite3D(glm::vec3(width / 2.0f, 0.01f, centerPosition.z + 2.5f * radius), width, height);
@@ -243,7 +244,10 @@ void SunSkillUpgradeButtons::Draw(glutil::MatrixStack &modelMatrix, const Simple
 void SunSkillUpgradeButtons::ChangeTexture(TextureTypeSun type, int buttonIndex)
 {
 	skillButtons[buttonIndex].ChangeTexture(textureFileNames[type]);
+	std::printf(textureFileNames[type].c_str());
 	upgradedButtons.push_back(UpgradedButton(buttonIndex, type));
+
+	std::printf("%i\n", buttonIndex);
 }
 
 std::vector<SunSkillUpgradeButtons::UpgradedButton> SunSkillUpgradeButtons::GetUpgradedButtons()
@@ -263,7 +267,7 @@ SunSkillUpgradeButtons::UpgradedButton SunSkillUpgradeButtons::GetUpgradedButton
 			}
 		}
 	}
-	else if(skillType == "passiveAoeSkill")
+	if(skillType == "passiveAOESkill")
 	{
 		for(int i = 0; i < upgradedButtons.size(); i++)
 		{
@@ -273,7 +277,7 @@ SunSkillUpgradeButtons::UpgradedButton SunSkillUpgradeButtons::GetUpgradedButton
 			}
 		}
 	}
-	else if(skillType == "sunNovaSkill")
+	if(skillType == "sunNovaSkill")
 	{
 		for(int i = 0; i < upgradedButtons.size(); i++)
 		{
@@ -283,7 +287,7 @@ SunSkillUpgradeButtons::UpgradedButton SunSkillUpgradeButtons::GetUpgradedButton
 			}
 		}
 	}
-	else if(skillType == "burnSkill")
+	if(skillType == "burnSkill")
 	{
 		for(int i = 0; i < upgradedButtons.size(); i++)
 		{

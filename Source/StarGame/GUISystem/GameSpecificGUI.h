@@ -146,7 +146,7 @@ private:
 	float height;
 	float radius;
 
-	std::string textureFileNames[5];
+	std::vector<std::string> textureFileNames;
 
 	Utility::Primitives::Sprite3D skillButtons[4];
 
@@ -167,7 +167,7 @@ public:
 	SunSkillUpgradeButtons() {}
 	SunSkillUpgradeButtons(float newWidth, float newHeight, float newRadius,
 						   glm::vec3 newCenterPosition,
-						   const std::vector<std::string> &texturesFileNames);
+						   const std::vector<std::string> &newTexturesFileNames);
 
 	void Init();
 
@@ -177,6 +177,8 @@ public:
 
 	std::vector<UpgradedButton> GetUpgradedButtons();
 	UpgradedButton GetUpgradedButtonBySkillType(const std::string &skillType);
+	TextureTypeSun GetSkillTextureType(const std::string &skillType);
+	int GetSkillButtonIndex(const std::string &skillType);
 
 	bool IsClicked(Utility::Ray mouseRay, int &buttonIndex);
 };

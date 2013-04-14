@@ -344,11 +344,16 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 		suns[0]->AddSkill(burnSkill);
 
 		std::vector<std::string> skillTextures;
-		skillTextures.push_back("../data/images/" + skillsStats[SKILL_TYPE_PASSIVE_AOE].skillUpgradedTexture);
-		skillTextures.push_back("../data/images/" + skillsStats[SKILL_TYPE_BURN].skillUpgradedTexture);
-		skillTextures.push_back("../data/images/" + skillsStats[SKILL_TYPE_SUN_NOVA].skillUpgradedTexture);
-		skillTextures.push_back("../data/images/" + skillsStats[SKILL_TYPE_AOE].skillUpgradedTexture);
-		skillTextures.push_back("../data/images/skill-noupgrade.jpg");
+		skillTextures.resize(5);
+		skillTextures[TEXTURE_TYPE_UPGRADE_PASSIVE_AOE] = 
+			"../data/images/" + skillsStats[SKILL_TYPE_PASSIVE_AOE].skillUpgradedTexture;
+		skillTextures[TEXTURE_TYPE_UPGRADE_BURN] = 
+			"../data/images/" + skillsStats[SKILL_TYPE_BURN].skillUpgradedTexture;
+		skillTextures[TEXTURE_TYPE_UPGRADE_SUN_NOVA] = 
+			"../data/images/" + skillsStats[SKILL_TYPE_SUN_NOVA].skillUpgradedTexture;
+		skillTextures[TEXTURE_TYPE_UPGRADE_AOE] = 
+			"../data/images/" + skillsStats[SKILL_TYPE_AOE].skillUpgradedTexture;
+		skillTextures[TEXTURE_TYPE_NO_UPGRADE] = "../data/images/skill-noupgrade.jpg";
 		suns[0]->InitSunSkillUpgradeButtons(skillTextures);
 	}
 	else
@@ -419,9 +424,9 @@ void Scene::LoadGame(const std::string &saveGameFileName)
 			{
 				std::vector<std::shared_ptr<Skill>> skills = suns[0]->GetAllSkills();
 				for(int i = 0; i < skills.size(); i++)
-				{
+				{/*
 					if(skills[i]->GetSkillType() == "passiveAOESkill" &&
-					   skills[i]->GetSkillType() == skillNode->first.as<std::string>())
+					     skills[i]->GetSkillType() == skillNode->first.as<std::string>())
 					{
 						skills[i]->isResearched = skillNode->second["isResearched"].as<bool>();						
 						suns[0]->GetSatellite(SATELLITE_AIR)->hoverOrbit.
@@ -451,8 +456,10 @@ void Scene::LoadGame(const std::string &saveGameFileName)
 						suns[0]->GetSatellite(SATELLITE_FIRE)->hoverOrbit.
 						ChangeUpgradeButtonTexture((TextureTypeSat)skillNode->second["textureType"].as<int>(),
 													skillNode->second["buttonIndex"].as<int>());
-					}
-					else if(skills[i]->GetSkillType() == skillNode->first.as<std::string>())
+					}*/
+
+
+					if(skills[i]->GetSkillType() == skillNode->first.as<std::string>())
 					{
 						skills[i]->isResearched = skillNode->second["isResearched"].as<bool>();
 						suns[0]->sunSkillUpgradeBtns.ChangeTexture((TextureTypeSun)skillNode->second["textureType"].as<int>(),
@@ -479,14 +486,34 @@ void Scene::SaveGame(const std::string &saveGameFileName)
 		saveDataNode["satellites"][satName.str()]["position"][1] = satellites[i]->GetPosition().y;
 		saveDataNode["satellites"][satName.str()]["position"][2] = satellites[i]->GetPosition().z;
 	}
-
+	
 	std::vector<std::shared_ptr<Skill>> skills = suns[0]->GetAllSkills();
 	for(int i = 0; i < skills.size(); i++)
 	{
 		if(skills[i]->IsResearched())
 		{
 			saveDataNode["skills"][skills[i]->GetSkillType()]["isResearched"] = true;
+			
+			saveDataNode["skills"][skills[i]->GetSkillType()]["buttonIndex"] = skills[i]->boxIndexForUpgrade;
+			if(skills[i]->GetSkillType() == "aoeSkill")
+			{
+				saveDataNode["skills"][skills[i]->GetSkillType()]["textureType"] = (int)TEXTURE_TYPE_UPGRADE_AOE;
+			}
+			if(skills[i]->GetSkillType() == "passiveAOESkill")
+			{
+				saveDataNode["skills"][skills[i]->GetSkillType()]["textureType"] = (int)TEXTURE_TYPE_UPGRADE_PASSIVE_AOE;
+			}
+			if(skills[i]->GetSkillType() == "sunNovaSkill")
+			{
+				saveDataNode["skills"][skills[i]->GetSkillType()]["textureType"] = (int)TEXTURE_TYPE_UPGRADE_SUN_NOVA;
+			}
+			if(skills[i]->GetSkillType() == "burnSkill")
+			{
+				saveDataNode["skills"][skills[i]->GetSkillType()]["textureType"] = (int)TEXTURE_TYPE_UPGRADE_BURN;
+			}
 
+			//std::printf("sad: %i\n", int(suns[0]->sunSkillUpgradeBtns.GetUpgradedButtonBySkillType(skills[i]->GetSkillType()).buttonTextureType));
+			/*
 			if(skills[i]->GetSkillType() == "passiveAOESkill")
 			{
 				saveDataNode["skills"][skills[i]->GetSkillType()]["textureType"] = (int)TEXTURE_TYPE_SAT_UPGRADE;
@@ -513,10 +540,10 @@ void Scene::SaveGame(const std::string &saveGameFileName)
 					(int)suns[0]->sunSkillUpgradeBtns.GetUpgradedButtonBySkillType(skills[i]->GetSkillType()).buttonTextureType;
 				saveDataNode["skills"][skills[i]->GetSkillType()]["buttonIndex"] =
 					suns[0]->sunSkillUpgradeBtns.GetUpgradedButtonBySkillType(skills[i]->GetSkillType()).buttonIndex;
-			}
+			}*/
 		}
 	}
-
+	
 	std::ofstream saveFile(saveGameFileName);
 	if(!saveFile.is_open())
 	{
@@ -1566,6 +1593,7 @@ void Scene::OnEvent(Event &_event)
 			this->SetLayout(LAYOUT_IN_GAME, true);
 
 			ResetScene();
+			isPaused = false;
 
 			EventArg inGameEventArg[1];
 			inGameEventArg[0].argType = "command";
@@ -1596,6 +1624,8 @@ void Scene::OnEvent(Event &_event)
 		{
 			this->SetLayout(LAYOUT_LOAD_GAME, true);
 			this->SetLayout(LAYOUT_MENU, false);
+
+			ResetScene();
 
 			LoadGame("../data/saved-games/test.yaml");
 		}

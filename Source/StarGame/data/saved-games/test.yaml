@@ -1,15 +1,10 @@
-satellites:
-  satellite0:
-    type: 0
-    position:
-      - 2.74267
-      - 0
-      - -0.200682
-matter: 100
 skills:
-  burnSkill:
-    isResearched: true
-  satChainSkill:
+  aoeSkill:
+    textureType: 0
+    buttonIndex: 3
     isResearched: true
   sunNovaSkill:
+    textureType: 1
     isResearched: true
+    buttonIndex: 2
+matter: 200

@@ -1,7 +1,14 @@
-skills:
-  sunNovaSkill:
-    textureType: 1
-    isResearched: true
-    buttonIndex: 2
-sunHealth: 39
-matter: 30
+enemies:
+  enemy0:
+    position:
+      - -3.10451
+      - 0
+      - -1.86215
+    type: 1
+    health: 50
+    frontVector:
+      - 0.857561
+      - 0
+      - 0.514383
+matter: 200
+sunHealth: 50

@@ -387,7 +387,7 @@ void Scene::LoadGame(const std::string &saveGameFileName)
 	suns[0]->currentResource = loadDataNode["matter"].as<int>();
 	suns[0]->health = loadDataNode["sunHealth"].as<int>();
 	
-	for(YAML::Node::const_iterator savedItemNode  = loadDataNode.begin();
+	for(YAML::Node::const_iterator savedItemNode = loadDataNode.begin();
 		savedItemNode != loadDataNode.end(); ++savedItemNode)
 	{
 		if(savedItemNode->first.as<std::string>() == "satellites")
@@ -430,7 +430,7 @@ void Scene::LoadGame(const std::string &saveGameFileName)
 		}
 	}
 
-	for(YAML::Node::const_iterator savedItemNode  = loadDataNode.begin();
+	for(YAML::Node::const_iterator savedItemNode = loadDataNode.begin();
 		savedItemNode != loadDataNode.end(); ++savedItemNode)
 	{
 		if(savedItemNode->first.as<std::string>() == "skills")
@@ -485,6 +485,130 @@ void Scene::LoadGame(const std::string &saveGameFileName)
 			}
 		}
 	}
+
+	for(YAML::Node::const_iterator savedItemNode = loadDataNode.begin();
+		savedItemNode != loadDataNode.end(); ++savedItemNode)
+	{
+		if(savedItemNode->first.as<std::string>() == "enemies")
+		{
+			glm::vec3 enemyPosition = glm::vec3(savedItemNode->second["position"][0].as<float>(),
+												savedItemNode->second["position"][1].as<float>(),
+												savedItemNode->second["position"][2].as<float>());
+			glm::vec3 enemyFrontVector = glm::vec3(savedItemNode->second["frontVector"][0].as<float>(),
+												   savedItemNode->second["frontVector"][1].as<float>(),
+												   savedItemNode->second["frontVector"][2].as<float>());
+			int enemyHealth = savedItemNode->second["health"].as<int>();
+
+			switch((EnemyType)savedItemNode->second["type"].as<int>())
+			{
+			case ENEMY_TYPE_SWARM:
+				{
+					std::shared_ptr<Swarm> loadedSwarm = 
+						std::shared_ptr<Swarm>(new Swarm(enemyStats[ENEMY_TYPE_SWARM].swarmersCount,
+														 enemyStats[ENEMY_TYPE_SWARM].swarmersAttackTime_secs,
+														 enemyStats[ENEMY_TYPE_SWARM].damage,
+														 shaderManager.GetBillboardProgDataNoTexture(),
+														 glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), 
+														 glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 
+														 glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
+														 enemyPosition, enemyFrontVector,
+														 enemyStats[ENEMY_TYPE_SWARM].speed,
+														 enemyStats[ENEMY_TYPE_SWARM].lineOfSight, 
+														 enemyHealth,
+														 enemyStats[ENEMY_TYPE_SWARM].resourceGivenOnKill));
+					enemies.push_back(loadedSwarm);
+					break;
+				}
+			case ENEMY_TYPE_SPACESHIP:
+				{
+					std::shared_ptr<Spaceship> loadedSpaceship = 
+						std::shared_ptr<Spaceship>(new Spaceship(enemyStats[ENEMY_TYPE_SPACESHIP].projectileSpeed, 
+																 20,
+																 enemyStats[ENEMY_TYPE_SPACESHIP].damage, 
+																 glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), 
+																 glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+																 glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
+																 enemyPosition, enemyFrontVector, 
+																 enemyStats[ENEMY_TYPE_SPACESHIP].speed, 
+																 enemyStats[ENEMY_TYPE_SPACESHIP].lineOfSight,
+																 enemyHealth, 
+																 enemyStats[ENEMY_TYPE_SPACESHIP].resourceGivenOnKill));
+					loadedSpaceship->LoadMesh("../data/mesh-files/spaceship.obj");
+					loadedSpaceship->LoadProjectileMesh("mesh-files/UnitSphere.xml");
+					enemies.push_back(loadedSpaceship);
+					break;
+				}
+			case ENEMY_TYPE_MOTHERSHIP:
+				{
+					std::shared_ptr<Mothership> loadedMothership =
+						std::shared_ptr<Mothership>(new Mothership(glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), 
+																   glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+																   glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
+																   enemyPosition, enemyFrontVector, 
+																   enemyStats[ENEMY_TYPE_MOTHERSHIP].speed, 
+																   enemyStats[ENEMY_TYPE_MOTHERSHIP].lineOfSight, 
+																   enemyHealth, 
+																   enemyStats[ENEMY_TYPE_MOTHERSHIP].resourceGivenOnKill));
+					loadedMothership->LoadMesh("../data/mesh-files/mothership.obj");
+
+					int deployUnitsCount = 4;
+					loadedMothership->InitDeployUnits("../data/mesh-files/deployed_unit.obj", 
+													enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsCount, 
+													enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsProjSpeed, // WARN: may bug 
+													20, 
+													enemyStats[ENEMY_TYPE_MOTHERSHIP].damage, 
+													glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+													glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
+													enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsSpeed, 
+													enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLineOfSight, 
+													enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLife, 
+													enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsResourceGivenOnKill);
+					enemies.push_back(loadedMothership);
+		
+					std::vector<std::shared_ptr<DeployUnit>> deployUnits = loadedMothership->GetDeployUnits();
+					for(int i = 0; i < deployUnits.size(); i++)
+					{
+						enemies.push_back(deployUnits[i]);
+					}
+					break;
+				}
+			case ENEMY_TYPE_ASTEROID:
+				{
+					std::shared_ptr<Asteroid> loadedAsteroid = 
+						std::shared_ptr<Asteroid>(new Asteroid(enemyStats[ENEMY_TYPE_ASTEROID].damage, 
+															   glm::vec4(0.57, 0.37, 0.26, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+															   glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
+															   enemyPosition, enemyFrontVector, 
+															   enemyStats[ENEMY_TYPE_ASTEROID].speed, 
+															   enemyStats[ENEMY_TYPE_ASTEROID].lineOfSight, 
+															   enemyHealth, 
+															   enemyStats[ENEMY_TYPE_ASTEROID].resourceGivenOnKill));
+					loadedAsteroid->LoadMesh("../data/mesh-files/meteorite.obj");
+					enemies.push_back(loadedAsteroid);
+					break;
+				}
+			case ENEMY_TYPE_FAST_SUICIDE_BOMBER:
+				{
+					std::shared_ptr<FastSuicideBomber> loadedBomber = 
+						std::shared_ptr<FastSuicideBomber>(new FastSuicideBomber(enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].damage, 
+																				 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].fastSuicideBomberChargeSpeed,
+																				 glm::vec4(0.5f, 0.5f, 0.7f, 1.0f), 
+																				 glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+																				 glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
+																				 enemyPosition, enemyFrontVector,
+																				 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].speed,
+																				 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].lineOfSight, 
+																				 enemyHealth, 
+																				 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].resourceGivenOnKill));
+					loadedBomber->LoadMesh("../data/mesh-files/suicide_bomber.obj");
+					enemies.push_back(loadedBomber);
+					break;
+				}
+			default:
+				break;
+			}
+		}
+	}
 }
 void Scene::SaveGame(const std::string &saveGameFileName)
 {
@@ -499,9 +623,11 @@ void Scene::SaveGame(const std::string &saveGameFileName)
 		satName<<"satellite";
 		satName<<i;
 		saveDataNode["satellites"][satName.str()]["type"] = (int)satellites[i]->GetSatelliteType();
+		// WARN: Not needed
 		saveDataNode["satellites"][satName.str()]["position"][0] = satellites[i]->GetPosition().x;
 		saveDataNode["satellites"][satName.str()]["position"][1] = satellites[i]->GetPosition().y;
 		saveDataNode["satellites"][satName.str()]["position"][2] = satellites[i]->GetPosition().z;
+		//
 		saveDataNode["satellites"][satName.str()]["progress"] = satellites[i]->GetProgress();
 		// WARN: Not tested!!!
 		saveDataNode["satellites"][satName.str()]["health"] = satellites[i]->health;
@@ -549,6 +675,24 @@ void Scene::SaveGame(const std::string &saveGameFileName)
 			{
 				saveDataNode["skills"][skills[i]->GetSkillType()]["textureType"] = (int)TEXTURE_TYPE_SAT_UPGRADE;
 			}
+		}
+	}
+
+	for(int i = 0; i < enemies.size(); i++)
+	{
+		if(enemies[i]->GetEnemyType() != ENEMY_TYPE_DEPLOY_UNIT)
+		{
+			std::stringstream enemyName;
+			enemyName<<"enemy";
+			enemyName<<i;
+			saveDataNode["enemies"][enemyName.str()]["type"] = (int)enemies[i]->GetEnemyType();
+			saveDataNode["enemies"][enemyName.str()]["position"][0] = enemies[i]->GetPosition().x;
+			saveDataNode["enemies"][enemyName.str()]["position"][1] = enemies[i]->GetPosition().y;
+			saveDataNode["enemies"][enemyName.str()]["position"][2] = enemies[i]->GetPosition().z;
+			saveDataNode["enemies"][enemyName.str()]["frontVector"][0] = enemies[i]->frontVector.x;
+			saveDataNode["enemies"][enemyName.str()]["frontVector"][1] = enemies[i]->frontVector.y;
+			saveDataNode["enemies"][enemyName.str()]["frontVector"][2] = enemies[i]->frontVector.z;
+			saveDataNode["enemies"][enemyName.str()]["health"] = enemies[i]->health;
 		}
 	}
 	
@@ -738,7 +882,7 @@ void Scene::SpawnEnemies()
 		EnemyType chosenType = EnemyType(rand() % ENEMY_TYPE_COUNT);
 		if(spawnData.initialSpawnTime_secs > spawnData.endSpawnTime_secs)
 		{
-			while(chosenType == ENEMY_TYPE_MOTHERSHIP)
+			while(chosenType == ENEMY_TYPE_MOTHERSHIP || chosenType == ENEMY_TYPE_DEPLOY_UNIT)
 			{
 				chosenType = EnemyType(rand() % ENEMY_TYPE_COUNT);
 			}

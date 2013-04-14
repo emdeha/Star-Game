@@ -48,6 +48,7 @@ enum EnemyType
 {
 	ENEMY_TYPE_SWARM,
 	ENEMY_TYPE_SPACESHIP,
+	ENEMY_TYPE_DEPLOY_UNIT,
 	ENEMY_TYPE_MOTHERSHIP,
 	ENEMY_TYPE_FAST_SUICIDE_BOMBER,
 	ENEMY_TYPE_ASTEROID, // Should the asteroids be randomly spawned on waves, 
@@ -231,6 +232,8 @@ public:
 	virtual void StopAllTimers() {}
 	virtual void StartAllTimers() {}
 
+	virtual EnemyType GetEnemyType() { return ENEMY_TYPE_COUNT; }
+
 	void StartEmittingPain();
 	void StopEmittingPain();
 
@@ -290,6 +293,11 @@ public:
 		}
 	}
 
+	EnemyType GetEnemyType()
+	{
+		return ENEMY_TYPE_SWARM;
+	}
+
 	void StopAllTimers();
 	void StartAllTimers();
 };
@@ -339,6 +347,11 @@ public:
 			projectileDamage = newDamage; 
 		}
 	}
+
+	EnemyType GetEnemyType()
+	{
+		return ENEMY_TYPE_SPACESHIP;
+	}
 };
 
 
@@ -384,6 +397,11 @@ public:
 	void Destroy();
 	bool IsForRejuvenation();
 	void SetPosition(glm::vec3 newPosition);
+	
+	EnemyType GetEnemyType()
+	{
+		return ENEMY_TYPE_DEPLOY_UNIT;
+	}
 };
 
 
@@ -450,6 +468,11 @@ public:
 		}
 	}
 
+	EnemyType GetEnemyType()
+	{
+		return ENEMY_TYPE_MOTHERSHIP;
+	}
+
 	// First way of getting the deployUnits for skill intersection tests.
 	// We get the deploy units, push them to all units and make intersection tests against them.
 	// Or we make that in the beginning.
@@ -500,6 +523,11 @@ public:
 		}
 	}
 	void SetChargeSpeed(int newChargeSpeed) { chargeSpeed = newChargeSpeed; }
+
+	EnemyType GetEnemyType()
+	{
+		return ENEMY_TYPE_FAST_SUICIDE_BOMBER;
+	}
 };
 
 
@@ -542,6 +570,11 @@ public:
 		{
 			damage = newDamage; 
 		}
+	}
+
+	EnemyType GetEnemyType()
+	{
+		return ENEMY_TYPE_ASTEROID;
 	}
 };
 

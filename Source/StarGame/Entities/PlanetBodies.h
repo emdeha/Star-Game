@@ -198,7 +198,9 @@ public:
 
 	bool AddSatellite(const std::string &fileName,
 					  glm::vec4 satelliteColor,
-					  SatelliteType type, bool drainResource = true);
+					  SatelliteType type, bool drainResource = true, 
+					  bool addAtProgress = false, float progress = 0.0f,
+					  bool addHealth = false, int newHealth = 0);
 	void AddSkill(const std::shared_ptr<Skill> newSkill);
 
 	bool RemoveSatellite();
@@ -248,6 +250,9 @@ public:
 
 	void SetParent(CelestialBody *newParent);
 	void SetIsClicked(bool newIsClicked);
+
+	void SetProgress(float progress);
+	float GetProgress();
 
 	void Stop();
 	void Start();

@@ -17,7 +17,7 @@ satHealth:
 health: 50
 enemyDamage:
     enemy-swarm: 5
-    enemy-spaceship: 0 #changed!!!
+    enemy-spaceship: 1 
     enemy-mothership: 1
     enemy-fast-suicide-bomber: 50
     enemy-asteroid: 20

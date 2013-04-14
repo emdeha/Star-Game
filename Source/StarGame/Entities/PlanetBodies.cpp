@@ -506,7 +506,9 @@ void CelestialBody::OnEvent(Event &_event)
 
 bool CelestialBody::AddSatellite(const std::string &fileName,
 								 glm::vec4 satelliteColor,
-								 SatelliteType type, bool drainResource)
+								 SatelliteType type, bool drainResource, 
+								 bool addAtProgress, float progress,
+								 bool addHealth, int newHealth)
 {
 	if(satellites.size() >= satelliteCap)
 	{
@@ -535,6 +537,14 @@ bool CelestialBody::AddSatellite(const std::string &fileName,
 		newSat(new CelestialBody(satelliteStats[type].speed, satelliteStats[type].satelliteOffsetFromSun, satelliteStats[type].diameter,
 								 satelliteStats[type].health, satelliteStats[type].resourceGainTime, satelliteStats[type].resourceGain_perTime,
 								 type, satelliteColor));
+	if(addAtProgress)
+	{
+		newSat->SetProgress(progress);
+	}
+	if(addHealth)
+	{
+		newSat->health = newHealth;
+	}
 	newSat->LoadMesh(fileName);
 	newSat->SetParent(this);
 
@@ -1068,6 +1078,21 @@ void CelestialBody::SetIsClicked(bool newIsClicked)
 	if(!isSun)
 	{
 		isClicked = newIsClicked;
+	}
+}
+
+void CelestialBody::SetProgress(float progress)
+{
+	if(!isSun)
+	{
+		revolutionDuration.Fastforward(progress);
+	}
+}
+float CelestialBody::GetProgress()
+{
+	if(!isSun)
+	{
+		return revolutionDuration.GetProgression();
 	}
 }
 

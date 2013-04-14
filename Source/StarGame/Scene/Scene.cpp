@@ -385,6 +385,7 @@ void Scene::LoadGame(const std::string &saveGameFileName)
 {
 	YAML::Node loadDataNode = YAML::LoadFile(saveGameFileName);
 	suns[0]->currentResource = loadDataNode["matter"].as<int>();
+	suns[0]->health = loadDataNode["sunHealth"].as<int>();
 	
 	for(YAML::Node::const_iterator savedItemNode  = loadDataNode.begin();
 		savedItemNode != loadDataNode.end(); ++savedItemNode)
@@ -395,24 +396,34 @@ void Scene::LoadGame(const std::string &saveGameFileName)
 				satelliteNode != savedItemNode->second.end(); ++satelliteNode)
 			{
 				SatelliteType satType = (SatelliteType)satelliteNode->second["type"].as<int>();
+				float satProgress = satelliteNode->second["progress"].as<float>();
+				int satHealth = satelliteNode->second["health"].as<int>();
 
 				switch(satType)
 				{
 				case SATELLITE_AIR:
 					suns[0]->AddSatellite("../data/mesh-files/air_planet.obj",
-										  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType, false);
+										  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType, false,
+										  true, satProgress,
+										  true, satHealth);
 					break;
 				case SATELLITE_FIRE:
 					suns[0]->AddSatellite("../data/mesh-files/fire_planet.obj",
-										  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType, false);
+										  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType, false,
+										  true, satProgress,
+										  true, satHealth);
 					break;
 				case SATELLITE_EARTH:
 					suns[0]->AddSatellite("../data/mesh-files/earth_planet.obj",
-										  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType, false);
+										  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType, false,
+										  true, satProgress,
+										  true, satHealth);
 					break;
 				case SATELLITE_WATER:
 					suns[0]->AddSatellite("../data/mesh-files/water_planet.obj",
-										  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType, false);
+										  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType, false,
+										  true, satProgress,
+										  true, satHealth);
 					break;
 				}
 			}
@@ -421,35 +432,7 @@ void Scene::LoadGame(const std::string &saveGameFileName)
 
 	for(YAML::Node::const_iterator savedItemNode  = loadDataNode.begin();
 		savedItemNode != loadDataNode.end(); ++savedItemNode)
-	{/*
-		if(savedItemNode->first.as<std::string>() == "satellites")
-		{
-			for(YAML::Node::const_iterator satelliteNode = savedItemNode->second.begin();
-				satelliteNode != savedItemNode->second.end(); ++satelliteNode)
-			{
-				SatelliteType satType = (SatelliteType)satelliteNode->second["type"].as<int>();
-
-				switch(satType)
-				{
-				case SATELLITE_AIR:
-					suns[0]->AddSatellite("../data/mesh-files/air_planet.obj",
-										  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType, false);
-					break;
-				case SATELLITE_FIRE:
-					suns[0]->AddSatellite("../data/mesh-files/fire_planet.obj",
-										  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType, false);
-					break;
-				case SATELLITE_EARTH:
-					suns[0]->AddSatellite("../data/mesh-files/earth_planet.obj",
-										  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType, false);
-					break;
-				case SATELLITE_WATER:
-					suns[0]->AddSatellite("../data/mesh-files/water_planet.obj",
-										  glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), satType, false);
-					break;
-				}
-			}
-		}*/
+	{
 		if(savedItemNode->first.as<std::string>() == "skills")
 		{
 			for(YAML::Node::const_iterator skillNode = savedItemNode->second.begin();
@@ -507,6 +490,7 @@ void Scene::SaveGame(const std::string &saveGameFileName)
 {
 	YAML::Node saveDataNode;
 	saveDataNode["matter"] = suns[0]->GetCurrentResource();
+	saveDataNode["sunHealth"] = suns[0]->GetHealth();
 
 	std::vector<std::shared_ptr<CelestialBody>> satellites = suns[0]->GetSatellites();
 	for(int i = 0; i < satellites.size(); i++)
@@ -518,6 +502,9 @@ void Scene::SaveGame(const std::string &saveGameFileName)
 		saveDataNode["satellites"][satName.str()]["position"][0] = satellites[i]->GetPosition().x;
 		saveDataNode["satellites"][satName.str()]["position"][1] = satellites[i]->GetPosition().y;
 		saveDataNode["satellites"][satName.str()]["position"][2] = satellites[i]->GetPosition().z;
+		saveDataNode["satellites"][satName.str()]["progress"] = satellites[i]->GetProgress();
+		// WARN: Not tested!!!
+		saveDataNode["satellites"][satName.str()]["health"] = satellites[i]->health;
 	}
 	
 	std::vector<std::shared_ptr<Skill>> skills = suns[0]->GetAllSkills();
@@ -562,36 +549,6 @@ void Scene::SaveGame(const std::string &saveGameFileName)
 			{
 				saveDataNode["skills"][skills[i]->GetSkillType()]["textureType"] = (int)TEXTURE_TYPE_SAT_UPGRADE;
 			}
-
-			//std::printf("sad: %i\n", int(suns[0]->sunSkillUpgradeBtns.GetUpgradedButtonBySkillType(skills[i]->GetSkillType()).buttonTextureType));
-			/*
-			if(skills[i]->GetSkillType() == "passiveAOESkill")
-			{
-				saveDataNode["skills"][skills[i]->GetSkillType()]["textureType"] = (int)TEXTURE_TYPE_SAT_UPGRADE;
-				saveDataNode["skills"][skills[i]->GetSkillType()]["buttonIndex"] = 2; // later will make it not magic
-			}
-			else if(skills[i]->GetSkillType() == "satFrostNova")
-			{
-				saveDataNode["skills"][skills[i]->GetSkillType()]["textureType"] = (int)TEXTURE_TYPE_SAT_UPGRADE;
-				saveDataNode["skills"][skills[i]->GetSkillType()]["buttonIndex"] = 2; // later will make it not magic
-			}
-			else if(skills[i]->GetSkillType() == "satShieldSkill")
-			{
-				saveDataNode["skills"][skills[i]->GetSkillType()]["textureType"] = (int)TEXTURE_TYPE_SAT_UPGRADE;
-				saveDataNode["skills"][skills[i]->GetSkillType()]["buttonIndex"] = 2; // later will make it not magic
-			}
-			else if(skills[i]->GetSkillType() == "satChainSkill")
-			{
-				saveDataNode["skills"][skills[i]->GetSkillType()]["textureType"] = (int)TEXTURE_TYPE_SAT_UPGRADE;
-				saveDataNode["skills"][skills[i]->GetSkillType()]["buttonIndex"] = 2; // later will make it not magic
-			}
-			else
-			{
-				saveDataNode["skills"][skills[i]->GetSkillType()]["textureType"] = 
-					(int)suns[0]->sunSkillUpgradeBtns.GetUpgradedButtonBySkillType(skills[i]->GetSkillType()).buttonTextureType;
-				saveDataNode["skills"][skills[i]->GetSkillType()]["buttonIndex"] =
-					suns[0]->sunSkillUpgradeBtns.GetUpgradedButtonBySkillType(skills[i]->GetSkillType()).buttonIndex;
-			}*/
 		}
 	}
 	

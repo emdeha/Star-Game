@@ -264,6 +264,86 @@ layout-save-game:
                 preset-big:
                     position: [ 10, 40 ]
                     text-size: 28
+        control-button-saveslot-1:
+            control-type: button
+            name: saveSlot1
+            text: Empty
+            has-background: false
+            is-visible: true
+            presets:
+                preset-small:
+                    position: [ 10, 600 ]
+                    text-size: 28
+                preset-medium:
+                    position: [ 10, 600 ]
+                    text-size: 28
+                preset-big:
+                    position: [ 10, 600 ]
+                    text-size: 28
+        control-button-saveslot-2:
+            control-type: button
+            name: saveSlot2
+            text: Empty
+            has-background: false
+            is-visible: true
+            presets:
+                preset-small:
+                    position: [ 10, 570 ]
+                    text-size: 28
+                preset-medium:
+                    position: [ 10, 570 ]
+                    text-size: 28
+                preset-big:
+                    position: [ 10, 570 ]
+                    text-size: 28
+        control-button-saveslot-3:
+            control-type: button
+            name: saveSlot3
+            text: Empty
+            has-background: false
+            is-visible: true
+            presets:
+                preset-small:
+                    position: [ 10, 540 ]
+                    text-size: 28
+                preset-medium:
+                    position: [ 10, 540 ]
+                    text-size: 28
+                preset-big:
+                    position: [ 10, 540 ]
+                    text-size: 28
+        control-button-saveslot-4:
+            control-type: button
+            name: saveSlot4
+            text: Empty
+            has-background: false
+            is-visible: true
+            presets:
+                preset-small:
+                    position: [ 10, 510 ]
+                    text-size: 28
+                preset-medium:
+                    position: [ 10, 510 ]
+                    text-size: 28
+                preset-big:
+                    position: [ 10, 510 ]
+                    text-size: 28
+        control-button-saveslot-5:
+            control-type: button
+            name: saveSlot5
+            text: Empty
+            has-background: false
+            is-visible: true
+            presets:
+                preset-small:
+                    position: [ 10, 480 ]
+                    text-size: 28
+                preset-medium:
+                    position: [ 10, 480 ]
+                    text-size: 28
+                preset-big:
+                    position: [ 10, 480 ]
+                    text-size: 28
         control-label-tooltip:
             control-type: label
             name: labelHeader
@@ -354,4 +434,3 @@ layout-options:
                 preset-big:
                     position: [ 10, 720 ]
                     text-size: 48 # must be 68, but buggy
-

@@ -158,6 +158,18 @@ bool Layout::IsSet()
 {
 	return isSet;
 }
+bool Layout::IsControl(const std::string &controlName)
+{
+	for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
+		iter != controls.end(); ++iter)
+	{
+		if((*iter)->GetName() == controlName)
+		{
+			return true;
+		}
+	}
+	return false;
+}
 void Layout::Set(bool newIsSet)
 {
 	isSet = newIsSet;

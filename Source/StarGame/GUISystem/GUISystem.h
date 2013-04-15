@@ -103,6 +103,7 @@ public:
 	LayoutType GetLayoutType();
 
 	bool IsSet();
+	bool IsControl(const std::string &controlName);
 	void Set(bool newIsSet);
 
 	void SetCurrentPreset(LayoutPreset newCurrentPreset);

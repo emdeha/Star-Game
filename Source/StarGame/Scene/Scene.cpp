@@ -491,121 +491,126 @@ void Scene::LoadGame(const std::string &saveGameFileName)
 	{
 		if(savedItemNode->first.as<std::string>() == "enemies")
 		{
-			glm::vec3 enemyPosition = glm::vec3(savedItemNode->second["position"][0].as<float>(),
-												savedItemNode->second["position"][1].as<float>(),
-												savedItemNode->second["position"][2].as<float>());
-			glm::vec3 enemyFrontVector = glm::vec3(savedItemNode->second["frontVector"][0].as<float>(),
-												   savedItemNode->second["frontVector"][1].as<float>(),
-												   savedItemNode->second["frontVector"][2].as<float>());
-			int enemyHealth = savedItemNode->second["health"].as<int>();
-
-			switch((EnemyType)savedItemNode->second["type"].as<int>())
+			for(YAML::Node::const_iterator enemyNode = savedItemNode->second.begin();
+				enemyNode != savedItemNode->second.end(); ++enemyNode)
 			{
-			case ENEMY_TYPE_SWARM:
+				int enemyHealth = enemyNode->second["health"].as<int>();
+				glm::vec3 enemyFrontVector = glm::vec3(enemyNode->second["frontVector"][0].as<float>(),
+													   enemyNode->second["frontVector"][1].as<float>(),
+													   enemyNode->second["frontVector"][2].as<float>());
+				glm::vec3 enemyPosition = glm::vec3(enemyNode->second["position"][0].as<float>(),
+													enemyNode->second["position"][1].as<float>(),
+													enemyNode->second["position"][2].as<float>());
+				EnemyType loadedType = (EnemyType)enemyNode->second["type"].as<int>();
+
+				switch(loadedType)
 				{
-					std::shared_ptr<Swarm> loadedSwarm = 
-						std::shared_ptr<Swarm>(new Swarm(enemyStats[ENEMY_TYPE_SWARM].swarmersCount,
-														 enemyStats[ENEMY_TYPE_SWARM].swarmersAttackTime_secs,
-														 enemyStats[ENEMY_TYPE_SWARM].damage,
-														 shaderManager.GetBillboardProgDataNoTexture(),
-														 glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), 
-														 glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 
-														 glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
-														 enemyPosition, enemyFrontVector,
-														 enemyStats[ENEMY_TYPE_SWARM].speed,
-														 enemyStats[ENEMY_TYPE_SWARM].lineOfSight, 
-														 enemyHealth,
-														 enemyStats[ENEMY_TYPE_SWARM].resourceGivenOnKill));
-					enemies.push_back(loadedSwarm);
-					break;
-				}
-			case ENEMY_TYPE_SPACESHIP:
-				{
-					std::shared_ptr<Spaceship> loadedSpaceship = 
-						std::shared_ptr<Spaceship>(new Spaceship(enemyStats[ENEMY_TYPE_SPACESHIP].projectileSpeed, 
-																 20,
-																 enemyStats[ENEMY_TYPE_SPACESHIP].damage, 
-																 glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), 
-																 glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-																 glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
-																 enemyPosition, enemyFrontVector, 
-																 enemyStats[ENEMY_TYPE_SPACESHIP].speed, 
-																 enemyStats[ENEMY_TYPE_SPACESHIP].lineOfSight,
-																 enemyHealth, 
-																 enemyStats[ENEMY_TYPE_SPACESHIP].resourceGivenOnKill));
-					loadedSpaceship->LoadMesh("../data/mesh-files/spaceship.obj");
-					loadedSpaceship->LoadProjectileMesh("mesh-files/UnitSphere.xml");
-					enemies.push_back(loadedSpaceship);
-					break;
-				}
-			case ENEMY_TYPE_MOTHERSHIP:
-				{
-					std::shared_ptr<Mothership> loadedMothership =
-						std::shared_ptr<Mothership>(new Mothership(glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), 
-																   glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+				case ENEMY_TYPE_SWARM:
+					{
+						std::shared_ptr<Swarm> loadedSwarm = 
+							std::shared_ptr<Swarm>(new Swarm(enemyStats[ENEMY_TYPE_SWARM].swarmersCount,
+															 enemyStats[ENEMY_TYPE_SWARM].swarmersAttackTime_secs,
+															 enemyStats[ENEMY_TYPE_SWARM].damage,
+															 shaderManager.GetBillboardProgDataNoTexture(),
+															 glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), 
+															 glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 
+															 glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
+															 enemyPosition, enemyFrontVector,
+															 enemyStats[ENEMY_TYPE_SWARM].speed,
+															 enemyStats[ENEMY_TYPE_SWARM].lineOfSight, 
+															 enemyHealth,
+															 enemyStats[ENEMY_TYPE_SWARM].resourceGivenOnKill));
+						enemies.push_back(loadedSwarm);
+						break;
+					}
+				case ENEMY_TYPE_SPACESHIP:
+					{
+						std::shared_ptr<Spaceship> loadedSpaceship = 
+							std::shared_ptr<Spaceship>(new Spaceship(enemyStats[ENEMY_TYPE_SPACESHIP].projectileSpeed, 
+																	 20,
+																	 enemyStats[ENEMY_TYPE_SPACESHIP].damage, 
+																	 glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), 
+																	 glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+																	 glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
+																	 enemyPosition, enemyFrontVector, 
+																	 enemyStats[ENEMY_TYPE_SPACESHIP].speed, 
+																	 enemyStats[ENEMY_TYPE_SPACESHIP].lineOfSight,
+																	 enemyHealth, 
+																	 enemyStats[ENEMY_TYPE_SPACESHIP].resourceGivenOnKill));
+						loadedSpaceship->LoadMesh("../data/mesh-files/spaceship.obj");
+						loadedSpaceship->LoadProjectileMesh("mesh-files/UnitSphere.xml");
+						enemies.push_back(loadedSpaceship);
+						break;
+					}
+				case ENEMY_TYPE_MOTHERSHIP:
+					{
+						std::shared_ptr<Mothership> loadedMothership =
+							std::shared_ptr<Mothership>(new Mothership(glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), 
+																	   glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+																	   glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
+																	   enemyPosition, enemyFrontVector, 
+																	   enemyStats[ENEMY_TYPE_MOTHERSHIP].speed, 
+																	   enemyStats[ENEMY_TYPE_MOTHERSHIP].lineOfSight, 
+																	   enemyHealth, 
+																	   enemyStats[ENEMY_TYPE_MOTHERSHIP].resourceGivenOnKill));
+						loadedMothership->LoadMesh("../data/mesh-files/mothership.obj");
+
+						int deployUnitsCount = 4;
+						loadedMothership->InitDeployUnits("../data/mesh-files/deployed_unit.obj", 
+														enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsCount, 
+														enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsProjSpeed, // WARN: may bug 
+														20, 
+														enemyStats[ENEMY_TYPE_MOTHERSHIP].damage, 
+														glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+														glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
+														enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsSpeed, 
+														enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLineOfSight, 
+														enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLife, 
+														enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsResourceGivenOnKill);
+						enemies.push_back(loadedMothership);
+		
+						std::vector<std::shared_ptr<DeployUnit>> deployUnits = loadedMothership->GetDeployUnits();
+						for(int i = 0; i < deployUnits.size(); i++)
+						{
+							enemies.push_back(deployUnits[i]);
+						}
+						break;
+					}
+				case ENEMY_TYPE_ASTEROID:
+					{
+						std::shared_ptr<Asteroid> loadedAsteroid = 
+							std::shared_ptr<Asteroid>(new Asteroid(enemyStats[ENEMY_TYPE_ASTEROID].damage, 
+																   glm::vec4(0.57, 0.37, 0.26, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
 																   glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
 																   enemyPosition, enemyFrontVector, 
-																   enemyStats[ENEMY_TYPE_MOTHERSHIP].speed, 
-																   enemyStats[ENEMY_TYPE_MOTHERSHIP].lineOfSight, 
+																   enemyStats[ENEMY_TYPE_ASTEROID].speed, 
+																   enemyStats[ENEMY_TYPE_ASTEROID].lineOfSight, 
 																   enemyHealth, 
-																   enemyStats[ENEMY_TYPE_MOTHERSHIP].resourceGivenOnKill));
-					loadedMothership->LoadMesh("../data/mesh-files/mothership.obj");
-
-					int deployUnitsCount = 4;
-					loadedMothership->InitDeployUnits("../data/mesh-files/deployed_unit.obj", 
-													enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsCount, 
-													enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsProjSpeed, // WARN: may bug 
-													20, 
-													enemyStats[ENEMY_TYPE_MOTHERSHIP].damage, 
-													glm::vec4(0.21f, 0.42f, 0.34f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-													glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
-													enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsSpeed, 
-													enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLineOfSight, 
-													enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsLife, 
-													enemyStats[ENEMY_TYPE_MOTHERSHIP].deployUnitsResourceGivenOnKill);
-					enemies.push_back(loadedMothership);
-		
-					std::vector<std::shared_ptr<DeployUnit>> deployUnits = loadedMothership->GetDeployUnits();
-					for(int i = 0; i < deployUnits.size(); i++)
-					{
-						enemies.push_back(deployUnits[i]);
+																   enemyStats[ENEMY_TYPE_ASTEROID].resourceGivenOnKill));
+						loadedAsteroid->LoadMesh("../data/mesh-files/meteorite.obj");
+						enemies.push_back(loadedAsteroid);
+						break;
 					}
+				case ENEMY_TYPE_FAST_SUICIDE_BOMBER:
+					{
+						std::shared_ptr<FastSuicideBomber> loadedBomber = 
+							std::shared_ptr<FastSuicideBomber>(new FastSuicideBomber(enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].damage, 
+																					 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].fastSuicideBomberChargeSpeed,
+																					 glm::vec4(0.5f, 0.5f, 0.7f, 1.0f), 
+																					 glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+																					 glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
+																					 enemyPosition, enemyFrontVector,
+																					 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].speed,
+																					 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].lineOfSight, 
+																					 enemyHealth, 
+																					 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].resourceGivenOnKill));
+						loadedBomber->LoadMesh("../data/mesh-files/suicide_bomber.obj");
+						enemies.push_back(loadedBomber);
+						break;
+					}
+				default:
 					break;
 				}
-			case ENEMY_TYPE_ASTEROID:
-				{
-					std::shared_ptr<Asteroid> loadedAsteroid = 
-						std::shared_ptr<Asteroid>(new Asteroid(enemyStats[ENEMY_TYPE_ASTEROID].damage, 
-															   glm::vec4(0.57, 0.37, 0.26, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-															   glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
-															   enemyPosition, enemyFrontVector, 
-															   enemyStats[ENEMY_TYPE_ASTEROID].speed, 
-															   enemyStats[ENEMY_TYPE_ASTEROID].lineOfSight, 
-															   enemyHealth, 
-															   enemyStats[ENEMY_TYPE_ASTEROID].resourceGivenOnKill));
-					loadedAsteroid->LoadMesh("../data/mesh-files/meteorite.obj");
-					enemies.push_back(loadedAsteroid);
-					break;
-				}
-			case ENEMY_TYPE_FAST_SUICIDE_BOMBER:
-				{
-					std::shared_ptr<FastSuicideBomber> loadedBomber = 
-						std::shared_ptr<FastSuicideBomber>(new FastSuicideBomber(enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].damage, 
-																				 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].fastSuicideBomberChargeSpeed,
-																				 glm::vec4(0.5f, 0.5f, 0.7f, 1.0f), 
-																				 glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-																				 glm::vec4(0.5f, 0.7f, 0.0f, 1.0f),
-																				 enemyPosition, enemyFrontVector,
-																				 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].speed,
-																				 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].lineOfSight, 
-																				 enemyHealth, 
-																				 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].resourceGivenOnKill));
-					loadedBomber->LoadMesh("../data/mesh-files/suicide_bomber.obj");
-					enemies.push_back(loadedBomber);
-					break;
-				}
-			default:
-				break;
 			}
 		}
 	}
@@ -1771,16 +1776,91 @@ void Scene::OnEvent(Event &_event)
 			this->SetLayout(LAYOUT_SAVE_GAME, true);
 			this->SetLayout(LAYOUT_MENU, false);
 
-			SaveGame("../data/saved-games/test.yaml");
+			//SaveGame("../data/saved-games/test.yaml");
+		}
+		if(strcmp(_event.GetArgument("object").varString, "saveSlot1") == 0)
+		{
+			if(this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot1")->GetContent() != "saveSlot1")
+			{
+				this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot1")->ChangeText("saveSlot1");
+
+				SaveGame("../data/saved-games/saveSlot1.yaml");
+			}
+		}
+		if(strcmp(_event.GetArgument("object").varString, "saveSlot2") == 0)
+		{
+			if(this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot2")->GetContent() != "saveSlot2")
+			{
+				this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot2")->ChangeText("saveSlot2");
+
+				SaveGame("../data/saved-games/saveSlot2.yaml");
+			}
+		}
+		if(strcmp(_event.GetArgument("object").varString, "saveSlot3") == 0)
+		{
+			if(this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot3")->GetContent() != "saveSlot3")
+			{
+				this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot3")->ChangeText("saveSlot3");
+
+				SaveGame("../data/saved-games/saveSlot3.yaml");
+			}
+		}
+		if(strcmp(_event.GetArgument("object").varString, "saveSlot4") == 0)
+		{
+			if(this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot4")->GetContent() != "saveSlot4")
+			{
+				this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot4")->ChangeText("saveSlot4");
+
+				SaveGame("../data/saved-games/saveSlot4.yaml");
+			}
+		}
+		if(strcmp(_event.GetArgument("object").varString, "saveSlot5") == 0)
+		{
+			if(this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot5")->GetContent() != "saveSlot5")
+			{
+				this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot5")->ChangeText("saveSlot5");
+
+				SaveGame("../data/saved-games/saveSlot5.yaml");
+			}
+		}
+		if(strcmp(_event.GetArgument("object").varString, "loadSlot1") == 0)
+		{
+			LoadGame("../data/saved-games/saveSlot1.yaml");
+			this->SetLayout(LAYOUT_LOAD_GAME, false);
+			this->SetLayout(LAYOUT_IN_GAME, true);
+		}
+		if(strcmp(_event.GetArgument("object").varString, "loadSlot2") == 0)
+		{
+			LoadGame("../data/saved-games/saveSlot2.yaml");
+			this->SetLayout(LAYOUT_LOAD_GAME, false);
+			this->SetLayout(LAYOUT_IN_GAME, true);
+		}
+		if(strcmp(_event.GetArgument("object").varString, "loadSlot3") == 0)
+		{
+			LoadGame("../data/saved-games/saveSlot3.yaml");
+			this->SetLayout(LAYOUT_LOAD_GAME, false);
+			this->SetLayout(LAYOUT_IN_GAME, true);
+		}
+		if(strcmp(_event.GetArgument("object").varString, "loadSlot4") == 0)
+		{
+			LoadGame("../data/saved-games/saveSlot4.yaml");
+			this->SetLayout(LAYOUT_LOAD_GAME, false);
+			this->SetLayout(LAYOUT_IN_GAME, true);
+		}
+		if(strcmp(_event.GetArgument("object").varString, "loadSlot5") == 0)
+		{
+			LoadGame("../data/saved-games/saveSlot5.yaml");
+			this->SetLayout(LAYOUT_LOAD_GAME, false);
+			this->SetLayout(LAYOUT_IN_GAME, true);
 		}
 		if(strcmp(_event.GetArgument("object").varString, "loadGameButton") == 0)
 		{
 			this->SetLayout(LAYOUT_LOAD_GAME, true);
 			this->SetLayout(LAYOUT_MENU, false);
 
-			ResetScene();
+			//ResetScene();
 
-			LoadGame("../data/saved-games/test.yaml");
+			//LoadGame("../data/saved-games/test.yaml");
 		}
 		if(strcmp(_event.GetArgument("object").varString, "options") == 0)
 		{

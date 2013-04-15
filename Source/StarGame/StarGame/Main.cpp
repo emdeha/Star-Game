@@ -37,6 +37,8 @@
 #include "../ParticleEngine/Engine.h"
 #include "../Entities/Skills.h"
 #include "../GUISystem/GameSpecificGUI.h"
+#include "../dirent/dirent.h"
+#include "../framework/ErrorAPI.h"
 
 
 DisplayData displayData;
@@ -171,6 +173,61 @@ void HandleMouse()
 				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("backBtn")->OnEvent(leftClickButtonEvent);
 				scene.OnEvent(leftClickButtonEvent);
 			}
+			if(
+				scene.GetLayout(LAYOUT_LOAD_GAME)->IsControl("saveSlot1") &&
+				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot1")->
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("loadSlot1");
+
+				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot1")->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
+			}
+			if(
+				scene.GetLayout(LAYOUT_LOAD_GAME)->IsControl("saveSlot2") &&
+				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot2")->
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("loadSlot2");
+
+				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot2")->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
+			}
+			if(
+				scene.GetLayout(LAYOUT_LOAD_GAME)->IsControl("saveSlot3") &&
+				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot3")->
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("loadSlot3");
+
+				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot3")->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
+			}
+			if(
+				scene.GetLayout(LAYOUT_LOAD_GAME)->IsControl("saveSlot4") &&
+				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot4")->
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("loadSlot4");
+
+				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot4")->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
+			}
+			if(
+				scene.GetLayout(LAYOUT_LOAD_GAME)->IsControl("saveSlot5") &&
+				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot5")->
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("loadSlot5");
+
+				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot5")->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
+			}
 		}
 		if(scene.IsLayoutOn(LAYOUT_SAVE_GAME))
 		{
@@ -183,6 +240,61 @@ void HandleMouse()
 				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("backButton");
 
 				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl("backBtn")->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
+			}
+			if(
+				scene.GetLayout(LAYOUT_SAVE_GAME)->
+				GetControl("saveSlot1")->
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("saveSlot1");
+
+				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot1")->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
+			}
+			if(
+				scene.GetLayout(LAYOUT_SAVE_GAME)->
+				GetControl("saveSlot2")->
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("saveSlot2");
+
+				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot2")->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
+			}
+			if(
+				scene.GetLayout(LAYOUT_SAVE_GAME)->
+				GetControl("saveSlot3")->
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("saveSlot3");
+
+				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot3")->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
+			}
+			if(
+				scene.GetLayout(LAYOUT_SAVE_GAME)->
+				GetControl("saveSlot4")->
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("saveSlot4");
+
+				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot4")->OnEvent(leftClickButtonEvent);
+				scene.OnEvent(leftClickButtonEvent);
+			}
+			if(
+				scene.GetLayout(LAYOUT_SAVE_GAME)->
+				GetControl("saveSlot5")->
+				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
+			  )
+			{
+				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("saveSlot5");
+
+				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot5")->OnEvent(leftClickButtonEvent);
 				scene.OnEvent(leftClickButtonEvent);
 			}
 		}
@@ -559,6 +671,42 @@ void InitializeGUI()
 	scene.AddLayouts(guiLoader.GetAllLoadedLayouts());
 
 	scene.GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetIsVisible(false);
+
+	// Set buttons text
+	DIR *dir;
+	struct dirent *ent;
+	if ((dir = opendir ("../data/saved-games/")) != NULL) 
+	{
+		glm::vec2 controlPosition = glm::vec2(10, 600);
+		/* print all the files and directories within directory */
+		while ((ent = readdir (dir)) != NULL) 
+		{
+			//printf ("%s\n", ent->d_name);
+			if(ent->d_namlen > 5)
+			{
+				controlPosition.y -= 30.0f;
+				std::vector<std::string> splittedFileName = Utility::SplitString(ent->d_name, '.');
+				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl(splittedFileName[0])->ChangeText(splittedFileName[0]);
+
+				std::shared_ptr<Button> loadEntryButton = 
+					std::shared_ptr<Button>(new Button(LayoutPreset(SMALL),
+													   splittedFileName[0],
+													   splittedFileName[0],
+													   controlPosition,
+													   28, false, true));
+				loadEntryButton->Init("../data/fonts/AGENCYR.TTF", 
+									  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+				loadEntryButton->AddPreset(MEDIUM, 28, controlPosition);
+				loadEntryButton->AddPreset(BIG, 28, controlPosition);
+				scene.GetLayout(LAYOUT_LOAD_GAME)->AddControl(loadEntryButton);
+			}
+		}
+		closedir (dir);
+	} 
+	else 
+	{
+		HandleUnexpectedError("invalid directory", __LINE__, __FILE__);
+	}
 }
 
 void InitializeScene()

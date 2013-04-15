@@ -1,0 +1,11 @@
+satellites:
+  satellite0:
+    position:
+      - 0.773445
+      - 0
+      - 2.63899
+    type: 0
+    progress: 0.363
+    health: 5
+matter: 100
+sunHealth: 50

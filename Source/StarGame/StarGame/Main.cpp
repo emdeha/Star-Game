@@ -48,6 +48,8 @@ Scene scene = Scene(2.2f, 8.0f, 3.0f, 0.5f, 0, 4, 20.0f);
 
 SpriteParticleEmitter testSpriteEmitter;
 
+Control testControl;
+
 
 long long GetCurrentTimeMillis()
 {
@@ -873,8 +875,12 @@ void Init()
 
 	nextGameTick = GetTickCount();
 
-	//testPassiveAoeAnim = PassiveAoeAnimation(glm::vec3(2.0f, 0.0f, -2.0f), 30, 1000, 0.2f, true, 0.001f, 2.0f, 
-	//										 "../data/images/particle.png", "../data/images/aoe_target.png");
+	testControl = 
+		Control("testControl", "Test, Test", glm::vec4(1.0f), glm::vec2(), 48, 
+			    false, true, true, 
+				glm::vec2(50.0f, 50.0f));
+	testControl.Init("../data/fonts/AGENCYR.TTF", 
+					 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 }
 
 bool isEmitterStarted = false;
@@ -930,6 +936,9 @@ void Display()
 			}
 		}
 		scene.RenderCurrentLayout();
+
+		testControl.Draw(scene.GetShaderManager().GetFontProgData(), 
+						 scene.GetShaderManager().GetSimpleNoUBProgData());
 	}
 
 	HandleMouse();
@@ -972,6 +981,8 @@ void Reshape(int width, int height)
 
 	
 	scene.UpdateCurrentLayout(width, height);
+
+	testControl.Update(width, height);
 
 	displayData.windowHeight = height;
 	displayData.windowWidth = width;

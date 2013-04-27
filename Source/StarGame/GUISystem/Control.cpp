@@ -35,7 +35,8 @@ Control::Control()
 
 Control::Control(const std::string &newName, const std::string &newText,
 				 glm::vec4 newFontColor, glm::vec2 newPosition, int newTextSize,
-				 bool newHasBackground, bool newIsVisible, bool newIsUsingPercentage)
+				 bool newHasBackground, bool newIsVisible, bool newIsUsingPercentage,
+				 glm::vec2 newPercentagedPosition)
 {
 	name = newName;
 	text = newText;
@@ -45,6 +46,7 @@ Control::Control(const std::string &newName, const std::string &newText,
 	hasBackground = newHasBackground;
 	isVisible = newIsVisible;
 	isUsingPercentage = newIsUsingPercentage;
+	percentagedPosition = newPercentagedPosition;
 }
 
 void Control::Init(const std::string &fontName,
@@ -75,8 +77,8 @@ void Control::ComputeNewAttributes()
 	
 	if(isUsingPercentage)
 	{
-		position = glm::vec2((position.x / 100) * windowWidth,
-							 (position.y / 100) * windowHeight);
+		position = glm::vec2((percentagedPosition.x / 100) * windowWidth,
+							 (percentagedPosition.y / 100) * windowHeight);
 	}
 
 	if(hasBackground)

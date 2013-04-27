@@ -119,6 +119,7 @@ protected:
 
 	glm::vec4 fontColor;
 	glm::vec2 position;
+	glm::vec2 percentagedPosition;
 	int textSize;
 
 	bool isVisible;
@@ -137,7 +138,8 @@ public:
 
 	Control(const std::string &newName, const std::string &newText,
 			glm::vec4 newFontColor, glm::vec2 newPosition, int newTextSize,
-			bool newHasBackground, bool newIsVisible, bool newIsUsingPercentage);
+			bool newHasBackground, bool newIsVisible, bool newIsUsingPercentage,
+			glm::vec2 newPercentagedPosition = glm::vec2());
 
 	void Init(const std::string &fontName,
 			  int newWindowWidth, int newWindowHeight);

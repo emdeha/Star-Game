@@ -4,6 +4,7 @@ Source/html/
 Source/latex/
 Source/Star Game Profiling/
 Source/Documentation
+Source/Star Game/data/saved-games/
 *.log
 *.tlog
 *.ipch

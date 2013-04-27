@@ -172,7 +172,7 @@ public:
 
 	void AddLayouts(const std::map<LayoutType, std::shared_ptr<Layout>> &newLayouts);
 	void AddLayout(const std::shared_ptr<Layout> newLayout);
-	void AddLayout(LayoutType layoutType, LayoutInfo layoutInfo);
+	void AddLayout(LayoutType layoutType, glm::vec4 layoutBacgkroundColor);
 	std::shared_ptr<Layout> GetLayout(LayoutType layoutType);
 	bool HasLayout(LayoutType layoutType);
 	bool IsLayoutOn(LayoutType layoutType);

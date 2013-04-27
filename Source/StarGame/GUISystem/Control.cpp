@@ -20,8 +20,154 @@
 #include "../framework/ErrorAPI.h"
 
 
-// TODO: Make data-driven
-// TODO: function CalculateMarginsByPercentage();
+Control::Control()
+{
+	name = "";
+	text = "";
+	windowHeight = 0;
+	windowWidth = 0;
+	position = glm::vec2();
+	isActive = false;
+	isVisible = false;
+	isUsingPercentage = false;
+	hasBackground = false;
+}
+
+Control::Control(const std::string &newName, const std::string &newText,
+				 glm::vec4 newFontColor, glm::vec2 newPosition, int newTextSize,
+				 bool newHasBackground, bool newIsVisible, bool newIsUsingPercentage)
+{
+	name = newName;
+	text = newText;
+	fontColor = newFontColor;
+	position = newPosition;
+	textSize = newTextSize;
+	hasBackground = newHasBackground;
+	isVisible = newIsVisible;
+	isUsingPercentage = newIsUsingPercentage;
+}
+
+void Control::Init(const std::string &fontName,
+			       int newWindowWidth, int newWindowHeight)
+{
+	windowWidth = newWindowWidth;
+	windowHeight = newWindowHeight;
+	
+	textToDisplay = Text(fontName.c_str());
+	textToDisplay.Init(windowWidth, windowHeight);
+
+	ComputeNewAttributes();
+	
+	controlSquare = 
+		Utility::Primitives::Square(glm::vec4(1.0f),
+									glm::vec3(position, 0.0f), 
+									0.0f, (float)textSize, true);
+	controlSquare.Init(windowWidth, windowHeight);
+	if(hasBackground)
+	{
+		// ... control sprite init
+	}
+}
+
+void Control::ComputeNewAttributes()
+{
+	textToDisplay.ComputeTextDimensions(text.c_str(), position, textSize);
+	
+	if(isUsingPercentage)
+	{
+		position = glm::vec2((position.x / 100) * windowWidth,
+							 (position.y / 100) * windowHeight);
+	}
+
+	if(hasBackground)
+	{
+		// ... control sprite repositioning
+	}
+	else
+	{
+		glm::vec2 boxMinCorner;
+		glm::vec2 boxMaxCorner;
+
+		boxMinCorner.y = position.y;
+		boxMaxCorner.y = textToDisplay.GetTextMaxHeight();
+		boxMinCorner.x = position.x;
+		boxMaxCorner.x = textToDisplay.GetTextMaxWidth();
+
+		controlSquare.SetPosition(glm::vec3(boxMinCorner, 0.0f));
+		controlSquare.SetHeight(textToDisplay.GetTextMaxHeight());
+		controlSquare.SetWidth(textToDisplay.GetTextMaxWidth());
+	}
+}
+
+void Control::Update(int newWindowWidth, int newWindowHeight)
+{
+	if(isVisible)
+	{
+		windowWidth = newWindowWidth;
+		windowHeight = newWindowHeight;
+
+		textToDisplay.UpdateWindowDimensions(windowWidth, windowHeight);
+
+		ComputeNewAttributes();
+	}
+}
+
+void Control::Draw(const FontProgData &fontData, const SimpleProgData &simpleData)
+{
+	if(isVisible)
+	{
+		if(hasBackground)
+		{
+			glutil::MatrixStack identityMatStack;
+			identityMatStack.SetIdentity();
+
+			controlSquare.Draw(identityMatStack, simpleData);
+		}
+
+		textToDisplay.Print(text.c_str(), fontData, position, fontColor, textSize);	
+	}
+}
+
+void Control::SetPosition(glm::vec2 newPosition, bool newIsUsingPercentage)
+{
+	position = newPosition;
+	isUsingPercentage = newIsUsingPercentage;
+	ComputeNewAttributes();
+}
+
+std::string Control::GetContent()
+{
+	return text;
+}
+bool Control::IsActive()
+{
+	return isActive;
+}
+void Control::Deactivate()
+{
+	isActive = false;
+}
+void Control::SetIsVisible(bool newIsVisible)
+{
+	isVisible = newIsVisible;
+}
+void Control::SetText(const std::string &newText)
+{
+	text = newText;
+}
+std::string Control::GetName()
+{
+	return name;
+}
+
+
+
+
+
+
+
+
+
 
 
 TextControl::TextControl()
@@ -44,7 +190,7 @@ TextControl::TextControl(LayoutPreset newCurrentPreset,
 	text = newText;
 
 	hasBackground = newHasBackground;
-
+	
 	currentPreset = newCurrentPreset;
 
 	presets[currentPreset].position = newPosition;

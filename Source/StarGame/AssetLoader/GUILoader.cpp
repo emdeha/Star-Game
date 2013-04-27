@@ -105,11 +105,8 @@ GUILoader::GUILoader(const std::string &fileName,
 											   guiNode->second["background-color"][3].as<float>());
 			layoutData.layoutIsSet = guiNode->second["is-active"].as<bool>();
 
-			LayoutInfo layoutInfo;
-			layoutInfo.backgroundColor = layoutData.layoutColor;
-
 			std::shared_ptr<Layout> newLayout =
-				std::shared_ptr<Layout>(new Layout(layoutData.layoutType, layoutInfo));
+				std::shared_ptr<Layout>(new Layout(layoutData.layoutType, layoutData.layoutColor));
 			layouts.insert(std::make_pair(layoutData.layoutType, newLayout));
 
 			layouts[layoutData.layoutType]->Set(layoutData.layoutIsSet);

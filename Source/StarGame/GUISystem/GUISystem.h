@@ -59,11 +59,6 @@ enum LayoutPreset
 	PRESETS_COUNT,
 };
 
-struct LayoutInfo
-{
-	glm::vec4 backgroundColor;
-};
-
 class TextControl;
 
 // The window dimensions should later be bound only to the 'Layout' class.
@@ -72,10 +67,9 @@ class Layout
 {
 private:
 	LayoutType layoutType;
-	LayoutInfo layoutInfo;
-
 
 	Utility::Primitives::Sprite backgroundSprite;
+	glm::vec4 backgroundColor;
 
 	std::vector<std::shared_ptr<TextControl>> controls;
 	std::vector<std::shared_ptr<Layout>> subLayouts;
@@ -85,18 +79,19 @@ private:
 
 public:
 	Layout();
-	Layout(LayoutType newLayoutType, LayoutInfo newLayoutInfo);
+	Layout(LayoutType newLayoutType, glm::vec4 newBackgroundColor);
 
 
-	void AddControl(std::shared_ptr<TextControl> newControl);
-	void AddSubLayout(std::shared_ptr<Layout> newSubLayout);
+	void AddControl(const std::shared_ptr<TextControl> newControl);
+	void AddSubLayout(const std::shared_ptr<Layout> newSubLayout);
 
-	void SetBackgroundImage(float width, float height, const std::string &backgroundImageFileName);
-
+	void SetBackgroundImage(float width, float height, 
+							const std::string &backgroundImageFileName);
 
 	std::shared_ptr<TextControl> GetControl(const std::string &controlName);
 
-	void Draw(const FontProgData &fontData, const SimpleProgData &simpleData,
+	void Draw(const FontProgData &fontData, 
+			  const SimpleProgData &simpleData,
 			  const TextureProgData &textureData);
 	void Update(int windowWidth, int windowHeight);
 
@@ -111,14 +106,101 @@ public:
 	
 	std::shared_ptr<TextControl> GetActiveControl();
 	bool HasActiveControl();
-	//std::shared_ptr<TextBox> GetActiveTextBox();
-	//bool HasActiveTextBox();
 };
+
+
+class Control
+{
+protected:
+	Text textToDisplay;
+
+	std::string name;
+	std::string text;
+
+	glm::vec4 fontColor;
+	glm::vec2 position;
+	int textSize;
+
+	bool isVisible;
+	bool isActive;
+	bool isUsingPercentage;
+	bool hasBackground;
+
+	Utility::Primitives::Sprite controlBackground;
+	Utility::Primitives::Square controlSquare; // TODO: Replace with rectangle geometry primitive
+
+	int windowWidth;
+	int windowHeight;
+
+public:
+	Control();
+
+	Control(const std::string &newName, const std::string &newText,
+			glm::vec4 newFontColor, glm::vec2 newPosition, int newTextSize,
+			bool newHasBackground, bool newIsVisible, bool newIsUsingPercentage);
+
+	void Init(const std::string &fontName,
+			  int newWindowWidth, int newWindowHeight);
+
+	std::string GetContent();
+
+	bool IsActive();
+	void Deactivate();
+
+	void SetIsVisible(bool newIsVisible);
+	void SetText(const std::string &newText);
+
+	std::string GetName();
+
+
+	virtual void Draw(const FontProgData &fontData, const SimpleProgData &simpleData);
+	virtual void Draw(const FontProgData &fontData, const TextureProgData &textureData) {}
+
+	virtual void ComputeNewAttributes();
+	virtual void Update(int newWindowWidth, int newWindowHeight);
+
+	virtual bool IsImageBox() { return false; }
+
+	// maybe it is not necessary to be virtual
+	virtual void SetPosition(glm::vec2 newPosition, bool newIsUsingPercentage); 
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 struct PresetAttributes
 {
 	glm::vec2 position;
+	int textSize;
 
 	float topTextMargin_percent;
 	float bottomTextMargin_percent;
@@ -129,11 +211,7 @@ struct PresetAttributes
 	float bottomTextMargin;
 	float leftTextMargin;
 	float rightTextMargin;
-
-	int textSize;
 };
-
-
 
 class TextControl
 {
@@ -158,27 +236,27 @@ protected:
 	bool isActive;
 
 public:
-	TextControl();
+	TextControl(); //v
 
 	TextControl(LayoutPreset newCurrentPreset,
 				const std::string &newName, const std::string &newText,
 				glm::vec2 newPosition, int newTextSize,
-				bool newHasBackground, bool newIsVisible);
+				bool newHasBackground, bool newIsVisible); //v
 
 	TextControl(LayoutPreset newCurrentPreset,
 				const std::string &newName, 
-				glm::vec2 newPosition, bool newIsVisible);
+				glm::vec2 newPosition, bool newIsVisible); //v
 
 	void Init(const std::string &fontName, 
-			  int newWindowWidth, int newWindowHeight);
-	virtual void Init() {};
+			  int newWindowWidth, int newWindowHeight); //v
+	virtual void Init() {}; //v
 
-	virtual void Draw(const FontProgData &fontData, const SimpleProgData &simpleData);
-	virtual void Draw(const FontProgData &fontData, const TextureProgData &textureData) {};
-	virtual void Draw(const TextureProgData &textureData) {}; 
+	virtual void Draw(const FontProgData &fontData, const SimpleProgData &simpleData); //v
+	virtual void Draw(const FontProgData &fontData, const TextureProgData &textureData) {}; //v
+	virtual void Draw(const TextureProgData &textureData) {}; //v
 
-	virtual void ComputeNewAttributes();
-	virtual void Update(int newWindowWidth, int newWindowHeight);
+	virtual void ComputeNewAttributes(); //v
+	virtual void Update(int newWindowWidth, int newWindowHeight); //v
 
 	virtual void OnEvent(Event &_event) = 0;
 
@@ -187,14 +265,14 @@ public:
 	virtual void InputChar(char ch) {}
 	virtual void Clear() {}
 	virtual std::string GetContent() { return ""; }
-	virtual void SetPosition(glm::vec2 newPosition);
-	virtual void SetIsVisible(bool newIsVisible);
-	virtual void ChangeText(const std::string &newText) { text = newText; }
+	virtual void SetPosition(glm::vec2 newPosition); //v
+	virtual void SetIsVisible(bool newIsVisible); //v
+	virtual void ChangeText(const std::string &newText) { text = newText; } //v
 
-	virtual bool IsImageBox() { return false; }
-	virtual bool IsHintBox() { return false; }
-	bool IsActive();
-	void Deactivate();
+	virtual bool IsImageBox() { return false; } //v
+	virtual bool IsHintBox() { return false; } //v
+	bool IsActive(); //v
+	void Deactivate(); //v
 
 public:
 	std::string GetName();

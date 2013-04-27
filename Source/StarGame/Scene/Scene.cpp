@@ -2267,9 +2267,9 @@ void Scene::AddLayout(const std::shared_ptr<Layout> newLayout)
 {
 	sceneLayouts.insert(std::make_pair(newLayout->GetLayoutType(), newLayout));
 }
-void Scene::AddLayout(LayoutType layoutType, LayoutInfo layoutInfo)
+void Scene::AddLayout(LayoutType layoutType, glm::vec4 layoutBackgroundColor)
 {
-	sceneLayouts.insert(std::make_pair(layoutType, std::shared_ptr<Layout>(new Layout(layoutType, layoutInfo))));
+	sceneLayouts.insert(std::make_pair(layoutType, std::shared_ptr<Layout>(new Layout(layoutType, layoutBackgroundColor))));
 }
 std::shared_ptr<Layout> Scene::GetLayout(LayoutType layoutType)
 {

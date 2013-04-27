@@ -24,7 +24,7 @@ Layout::Layout()
 {
 	layoutType = LAYOUT_IN_GAME;
 
-	layoutInfo.backgroundColor = glm::vec4();
+	backgroundColor = glm::vec4();
 
 	controls.resize(0);
 	subLayouts.resize(0);
@@ -32,13 +32,13 @@ Layout::Layout()
 	isSet = false;
 	hasBackground = false;
 
-	backgroundSprite = Utility::Primitives::Sprite(glm::vec3(), layoutInfo.backgroundColor, 0.0f, 0.0f, false); 
+	backgroundSprite = Utility::Primitives::Sprite(glm::vec3(), backgroundColor, 0.0f, 0.0f, false); 
 }
-Layout::Layout(LayoutType newLayoutType, LayoutInfo newLayoutInfo)
+Layout::Layout(LayoutType newLayoutType, glm::vec4 newBackgroundColor)
 {
 	layoutType = newLayoutType;
 
-	layoutInfo = newLayoutInfo;
+	 backgroundColor = newBackgroundColor;
 
 	controls.resize(0);
 	subLayouts.resize(0);
@@ -46,13 +46,13 @@ Layout::Layout(LayoutType newLayoutType, LayoutInfo newLayoutInfo)
 	isSet = true;
 	hasBackground = false;
 
-	backgroundSprite = Utility::Primitives::Sprite(glm::vec3(), layoutInfo.backgroundColor, 0.0f, 0.0f, false); 
+	backgroundSprite = Utility::Primitives::Sprite(glm::vec3(), backgroundColor, 0.0f, 0.0f, false); 
 }
 
-void Layout::Draw(const FontProgData &fontData, const SimpleProgData &simpleData,
+void Layout::Draw(const FontProgData &fontData, 
+				  const SimpleProgData &simpleData,
 				  const TextureProgData &textureData)
 {
-	glm::vec4 backgroundColor = layoutInfo.backgroundColor;
 	glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
 
 	if(hasBackground)
@@ -115,11 +115,11 @@ void Layout::Update(int windowWidth, int windowHeight)
 }
 
 
-void Layout::AddControl(std::shared_ptr<TextControl> newControl)
+void Layout::AddControl(const std::shared_ptr<TextControl> newControl)
 {
 	controls.push_back(newControl);
 }
-void Layout::AddSubLayout(std::shared_ptr<Layout> newSubLayout)
+void Layout::AddSubLayout(const std::shared_ptr<Layout> newSubLayout)
 {
 	subLayouts.push_back(newSubLayout);
 }
@@ -127,7 +127,7 @@ void Layout::AddSubLayout(std::shared_ptr<Layout> newSubLayout)
 void Layout::SetBackgroundImage(float width, float height, const std::string &backgroundImageFileName)
 {
 	backgroundSprite =
-		Utility::Primitives::Sprite(glm::vec3(1280, 768, 0), layoutInfo.backgroundColor, width, height, false);
+		Utility::Primitives::Sprite(glm::vec3(1280, 768, 0), backgroundColor, width, height, false);
 	backgroundSprite.Init(backgroundImageFileName, 1280, 768);
 	hasBackground = true;
 }
@@ -143,7 +143,6 @@ std::shared_ptr<TextControl> Layout::GetControl(const std::string &controlName)
 			return (*iter);
 		}
 	}
-
 	
 	std::string errorMessage = "there is no such control ";
 	errorMessage += controlName;
@@ -205,7 +204,6 @@ void Layout::SetCurrentPreset(LayoutPreset newCurrentPreset)
 		break;
 	}
 }
-
 
 std::shared_ptr<TextControl> Layout::GetActiveControl()
 {

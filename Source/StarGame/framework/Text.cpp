@@ -227,11 +227,11 @@ void Text::ComputeTextDimensions(const char *text, glm::vec2 position, int fontS
 			textMaxWidth = maxVertex.x;
 	}
 
-	textMaxWidth = windowWidth - (finalCoordinates.x + finalCoordinates.z);
-	textMaxHeight = windowHeight - textMaxHeight;
+	textMaxWidth = finalCoordinates.x + finalCoordinates.z;
+	//textMaxHeight = textMaxHeight;
 
-	textMinWidth = windowWidth - textMinWidth;
-	textMinHeight = windowHeight - textMinHeight;
+	//textMinWidth = textMinWidth;
+	//textMinHeight = textMinHeight;
 };
 
 

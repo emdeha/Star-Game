@@ -297,7 +297,8 @@ namespace Utility
 					  int windowWidth = 0, int windowHeight = 0);
 
 			void Draw(glutil::MatrixStack &modelMat, const TextureProgData &textureData);
-			void Update(float newWidth, float newHeight);
+			void Update(float newWidth, float newHeight,
+						glm::vec2 newPosition = glm::vec2());
 
 			void ChangeTexture(const std::string &textureFileName);
 		};

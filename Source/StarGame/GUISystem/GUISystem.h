@@ -118,6 +118,7 @@ protected:
 	std::string text;
 
 	glm::vec4 fontColor;
+	glm::vec4 margins; // margins; x - bottom, y - top, z - left, w - right
 	glm::vec2 position;
 	glm::vec2 percentagedPosition;
 	int textSize;
@@ -137,11 +138,12 @@ public:
 	Control();
 
 	Control(const std::string &newName, const std::string &newText,
-			glm::vec4 newFontColor, glm::vec2 newPosition, int newTextSize,
+			glm::vec4 newFontColor, glm::vec2 newPosition, glm::vec4 newMargins,
+			int newTextSize,
 			bool newHasBackground, bool newIsVisible, bool newIsUsingPercentage,
 			glm::vec2 newPercentagedPosition = glm::vec2());
 
-	void Init(const std::string &fontName,
+	void Init(const std::string &fontName, const std::string &bckgTextureFileName,
 			  int newWindowWidth, int newWindowHeight);
 
 	std::string GetContent();
@@ -155,8 +157,7 @@ public:
 	std::string GetName();
 
 
-	virtual void Draw(const FontProgData &fontData, const SimpleProgData &simpleData);
-	virtual void Draw(const FontProgData &fontData, const TextureProgData &textureData) {}
+	virtual void Draw(const FontProgData &fontData, const TextureProgData &textureData);
 
 	virtual void ComputeNewAttributes();
 	virtual void Update(int newWindowWidth, int newWindowHeight);

@@ -627,12 +627,13 @@ void Utility::Primitives::Sprite::Draw(glutil::MatrixStack &modelMat, const Text
 	glUseProgram(0);
 }
 
-void Utility::Primitives::Sprite::Update(float newWidth, float newHeight)
+void Utility::Primitives::Sprite::Update(float newWidth, float newHeight,
+										 glm::vec2 newPosition)
 {
 	width = newWidth;
 	height = newHeight;
-	position.x = newWidth;
-	position.y = newHeight;
+	position.x = newPosition.x + newWidth;
+	position.y = newPosition.y + newHeight;
 
 	std::vector<float> vertexData;
 

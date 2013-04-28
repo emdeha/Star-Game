@@ -632,8 +632,16 @@ void Utility::Primitives::Sprite::Update(float newWidth, float newHeight,
 {
 	width = newWidth;
 	height = newHeight;
-	position.x = newPosition.x + newWidth;
-	position.y = newPosition.y + newHeight;
+	if(newPosition.x == 0.0f && newPosition.y == 0.0f)
+	{
+		position.x = newWidth;
+		position.y = newHeight;
+	}
+	else
+	{
+		position.x = newPosition.x;
+		position.y = newPosition.y;
+	}
 
 	std::vector<float> vertexData;
 

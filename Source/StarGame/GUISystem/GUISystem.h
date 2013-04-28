@@ -120,6 +120,7 @@ protected:
 	glm::vec4 fontColor;
 	glm::vec4 margins; // margins; x - bottom, y - top, z - left, w - right
 	glm::vec2 position;
+	glm::vec2 textPosition;
 	glm::vec2 percentagedPosition;
 	int textSize;
 

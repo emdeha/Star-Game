@@ -49,6 +49,7 @@ Control::Control(const std::string &newName, const std::string &newText,
 	isUsingPercentage = newIsUsingPercentage;
 	percentagedPosition = newPercentagedPosition;
 	margins = newMargins;
+	textPosition = position;
 }
 
 void Control::Init(const std::string &fontName, const std::string &bckgTextureFileName,
@@ -59,43 +60,31 @@ void Control::Init(const std::string &fontName, const std::string &bckgTextureFi
 	
 	textToDisplay = Text(fontName.c_str());
 	textToDisplay.Init(windowWidth, windowHeight);
-		
-	ComputeNewAttributes();
 
 	controlSquare = 
 		Utility::Primitives::Square(glm::vec4(1.0f),
 									glm::vec3(position, 0.0f), 
 									0.0f, (float)textSize, true);
 	controlSquare.Init(windowWidth, windowHeight);
+	
 	if(hasBackground)
 	{
-		glm::vec2 boxMinCorner;
-		glm::vec2 boxMaxCorner;
-		
-		boxMinCorner.y = windowHeight - position.y + fabsf(textToDisplay.GetTextMinHeight()) + margins.y;
-		boxMaxCorner.y = windowHeight - position.y + textToDisplay.GetTextMaxHeight() + margins.x;
-		boxMinCorner.x = windowWidth - position.x + fabsf(textToDisplay.GetTextMinWidth()) + margins.z;
-		boxMaxCorner.x = windowWidth - position.x + textToDisplay.GetTextMaxWidth() + margins.w;
-
 		controlBackground = 
-			Utility::Primitives::Sprite(glm::vec3(boxMinCorner, 0.0f), 
-										glm::vec4(1.0f), 
-										fabsf(textToDisplay.GetTextMinWidth()) + textToDisplay.GetTextMaxWidth() + margins.w + margins.z, 
-										fabsf(textToDisplay.GetTextMinHeight()) + textToDisplay.GetTextMaxHeight() + margins.x + margins.y, 
-										false);
-		controlBackground.Init(bckgTextureFileName, windowWidth, windowHeight);
+			Utility::Primitives::Sprite(glm::vec3(), glm::vec4(1.0f), 0.0f, 0.0f, false);
+		controlBackground.Init(bckgTextureFileName, newWindowWidth, newWindowHeight);
 	}
+
+	ComputeNewAttributes();	
 }
 
 void Control::ComputeNewAttributes()
-{
-	textToDisplay.ComputeTextDimensions(text.c_str(), position, textSize);
-	
+{	
 	if(isUsingPercentage)
 	{
 		position = glm::vec2((percentagedPosition.x / 100) * windowWidth,
 							 (percentagedPosition.y / 100) * windowHeight);
 	}
+	textToDisplay.ComputeTextDimensions(text.c_str(), textPosition, textSize);
 
 	if(hasBackground)
 	{
@@ -110,9 +99,9 @@ void Control::ComputeNewAttributes()
 		controlSquare.SetPosition(glm::vec3(boxMinCorner, 0.0f));
 		controlSquare.SetHeight(textToDisplay.GetTextMaxHeight() + margins.x);
 		controlSquare.SetWidth(textToDisplay.GetTextMaxWidth() + margins.w);
-
+		
 		controlBackground.Update(fabsf(textToDisplay.GetTextMinWidth()) + textToDisplay.GetTextMaxWidth() + margins.w + margins.z, 
-								 fabsf(textToDisplay.GetTextMinHeight()) + textToDisplay.GetTextMaxHeight() + margins.x + margins.y, 
+				    			 fabsf(textToDisplay.GetTextMinHeight()) + textToDisplay.GetTextMaxHeight() + margins.x + margins.y,
 								 boxMinCorner);
 	}
 	else
@@ -153,7 +142,6 @@ void Control::Draw(const FontProgData &fontData, const TextureProgData &textureD
 			glutil::MatrixStack identityMatStack;
 			identityMatStack.SetIdentity();
 
-			//controlSquare.Draw(identityMatStack, simpleData);
 			controlBackground.Draw(identityMatStack, textureData);
 		}
 

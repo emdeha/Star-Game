@@ -880,7 +880,7 @@ void Init()
 				glm::vec4(1.0f), glm::vec2(), glm::vec4(30, 5, 15, 0),
 				48, 
 			    true, true, true, 
-				glm::vec2(10.0f, 80.0f));
+				glm::vec2(10.0f, 10.0f));
 	testControl.Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
 					 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 }

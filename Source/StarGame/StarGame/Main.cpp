@@ -48,7 +48,7 @@ Scene scene = Scene(2.2f, 8.0f, 3.0f, 0.5f, 0, 4, 20.0f);
 
 SpriteParticleEmitter testSpriteEmitter;
 
-Control testControl;
+//Control testControl;
 
 
 long long GetCurrentTimeMillis()
@@ -874,7 +874,7 @@ void Init()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	nextGameTick = GetTickCount();
-
+	/*
 	testControl = 
 		Control("testControl", "Test, Test", 
 				glm::vec4(1.0f), glm::vec2(), glm::vec4(30, 5, 15, 0),
@@ -882,7 +882,7 @@ void Init()
 			    true, true, true, 
 				glm::vec2(10.0f, 10.0f));
 	testControl.Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
-					 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+					 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));*/
 }
 
 bool isEmitterStarted = false;
@@ -919,9 +919,7 @@ void Display()
 
 		if(isEmitterStarted)
 		{
-			//testPassiveAoeAnim.Update();
-			//testPassiveAoeAnim.Render(modelMatrix, 
-			//	scene.GetShaderManager().GetSpriteParticleProgData(), scene.GetShaderManager().GetSimpleTextureProgData());
+			
 		}
 	}
 	else //if(scene->IsLayoutOn(LAYOUT_MENU))
@@ -939,8 +937,8 @@ void Display()
 		}
 		scene.RenderCurrentLayout();
 
-		testControl.Draw(scene.GetShaderManager().GetFontProgData(), 
-						 scene.GetShaderManager().GetTextureProgData());
+		//testControl.Draw(scene.GetShaderManager().GetFontProgData(), 
+		//				 scene.GetShaderManager().GetTextureProgData());
 	}
 
 	HandleMouse();
@@ -984,7 +982,7 @@ void Reshape(int width, int height)
 	
 	scene.UpdateCurrentLayout(width, height);
 
-	testControl.Update(width, height);
+	//testControl.Update(width, height);
 
 	displayData.windowHeight = height;
 	displayData.windowWidth = width;

@@ -632,7 +632,7 @@ void Utility::Primitives::Sprite::Update(float newWidth, float newHeight,
 {
 	width = newWidth;
 	height = newHeight;
-	if(newPosition.x == 0.0f && newPosition.y == 0.0f)
+	if(newPosition.x <= 0.0f && newPosition.y <= 0.0f)
 	{
 		position.x = newWidth;
 		position.y = newHeight;

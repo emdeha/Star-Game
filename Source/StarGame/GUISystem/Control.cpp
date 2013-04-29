@@ -96,13 +96,14 @@ void Control::ComputeNewAttributes()
 		boxMinCorner.x = windowWidth - position.x + fabsf(textToDisplay.GetTextMinWidth()) + margins.z;
 		boxMaxCorner.x = windowWidth - position.x + textToDisplay.GetTextMaxWidth() + margins.w;
 
-		controlSquare.SetPosition(glm::vec3(boxMinCorner, 0.0f));
-		controlSquare.SetHeight(textToDisplay.GetTextMaxHeight() + margins.x);
-		controlSquare.SetWidth(textToDisplay.GetTextMaxWidth() + margins.w);
+		float width = fabsf(textToDisplay.GetTextMinWidth()) + textToDisplay.GetTextMaxWidth() + margins.w + margins.z;
+		float height = fabsf(textToDisplay.GetTextMinHeight()) + textToDisplay.GetTextMaxHeight() + margins.x + margins.y;
 		
-		controlBackground.Update(fabsf(textToDisplay.GetTextMinWidth()) + textToDisplay.GetTextMaxWidth() + margins.w + margins.z, 
-				    			 fabsf(textToDisplay.GetTextMinHeight()) + textToDisplay.GetTextMaxHeight() + margins.x + margins.y,
-								 boxMinCorner);
+		controlSquare.SetPosition(glm::vec3(boxMinCorner, 0.0f));
+		controlSquare.SetWidth(width);
+		controlSquare.SetHeight(height);
+		
+		controlBackground.Update(width, height, boxMinCorner);
 	}
 	else
 	{
@@ -154,6 +155,30 @@ void Control::SetPosition(glm::vec2 newPosition, bool newIsUsingPercentage)
 	position = newPosition;
 	isUsingPercentage = newIsUsingPercentage;
 	ComputeNewAttributes();
+}
+
+bool Control::IsMouseOn(glm::ivec2 mouseCoordinates_windowSpace)
+{
+	if(isVisible)
+	{
+		//mouseCoordinates_windowSpace.y = windowHeight - mouseCoordinates_windowSpace.y;
+		mouseCoordinates_windowSpace.x = windowWidth - mouseCoordinates_windowSpace.x;
+
+		float maxHeight = controlSquare.GetPosition().y;
+		float maxWidth = controlSquare.GetPosition().x;
+		float minHeight = maxHeight - controlSquare.GetHeight();
+		float minWidth = maxWidth - controlSquare.GetWidth();
+
+		if(mouseCoordinates_windowSpace.y > minHeight &&
+		   mouseCoordinates_windowSpace.x > minWidth &&
+		   mouseCoordinates_windowSpace.y < maxHeight &&
+		   mouseCoordinates_windowSpace.x < maxWidth)
+		{
+			return true;
+		}
+		else return false;
+	}
+	else return false;
 }
 
 std::string Control::GetContent()

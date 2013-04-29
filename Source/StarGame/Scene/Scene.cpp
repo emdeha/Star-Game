@@ -1490,7 +1490,7 @@ void Scene::UpdateScene()
 			itoa(suns[i]->GetCurrentResource(), matter, 10);
 			std::string labelText = "Matter: ";
 			labelText.append(matter);
-			GetLayout(LAYOUT_IN_GAME)->GetControl("labelMatter")->ChangeText(labelText);
+			//GetLayout(LAYOUT_IN_GAME)->GetControl("labelMatter")->ChangeText(labelText);
 		}
 	
 		for(std::vector<std::shared_ptr<Enemy>>::iterator iter = enemies.begin();
@@ -1736,6 +1736,32 @@ void Scene::OnEvent(Event &_event)
 	switch(_event.GetType())
 	{
 	case EVENT_TYPE_ON_CLICK:
+		if(strcmp(_event.GetArgument("object").varString, "all") == 0)
+		{
+			for(std::map<LayoutType, std::shared_ptr<Layout>>::iterator iter = sceneLayouts.begin();
+				iter != sceneLayouts.end(); ++iter)
+			{
+				if(iter->second->IsSet())
+				{
+					glm::ivec2 mouseCoords_windowSpace = 
+						glm::ivec2(_event.GetArgument("coordX").varFloat,
+								   _event.GetArgument("coordY").varFloat);
+					iter->second->HandleClickedControls(_event.GetArgument("rightClicked").varBool,
+														mouseCoords_windowSpace);
+				}
+			}
+			/*
+			if(_event.GetArgument("rightClick").varBool == true)
+			{
+
+			}
+			else
+			{
+
+			}
+			*/
+		}
+
 		if(strcmp(_event.GetArgument("object").varString, "sun") == 0)
 		{
 			sceneMusic.Play(MUSIC_ON_SUN_CLICK, CHANNEL_INTERACTION);
@@ -1777,7 +1803,7 @@ void Scene::OnEvent(Event &_event)
 			this->SetLayout(LAYOUT_MENU, false);
 
 			//SaveGame("../data/saved-games/test.yaml");
-		}
+		}/*
 		if(strcmp(_event.GetArgument("object").varString, "saveSlot1") == 0)
 		{
 			if(this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot1")->GetContent() != "saveSlot1")
@@ -1970,7 +1996,7 @@ void Scene::OnEvent(Event &_event)
 					}
 				}
 			}
-		}
+		}*/
 		break;
 	case EVENT_TYPE_SPACE_BTN_CLICK:
 		if(strcmp(_event.GetArgument("command").varString, "playBackgroundMusic") == 0)
@@ -2077,7 +2103,7 @@ void Scene::OnEvent(Event &_event)
 				}
 			}
 		}
-
+		/*
 		if(strcmp(_event.GetArgument("what_event").varString, "skillHov") == 0 && !isPaused)
 		{
 			if(IsLayoutOn(LAYOUT_IN_GAME))
@@ -2099,7 +2125,7 @@ void Scene::OnEvent(Event &_event)
 			}
 			//std::printf("skill hov");
 		}
-		
+		*/
 		if(strcmp(_event.GetArgument("what_event").varString, "skillUpgr") == 0 && !isPaused)
 		{
 			if(_event.GetArgument("satType").varInteger == -1)
@@ -2152,7 +2178,7 @@ void Scene::OnEvent(Event &_event)
 			}
 
 			//std::printf("%i\n", _event.GetArgument("index").varInteger);
-		}
+		}/*
 		if(strcmp(_event.GetArgument("what_event").varString, "pauseGame") == 0)
 		{
 			this->SetLayout(LAYOUT_MENU, true);
@@ -2168,7 +2194,7 @@ void Scene::OnEvent(Event &_event)
 			this->GetLayout(LAYOUT_MENU)->GetControl("saveGame")->SetIsVisible(true);
 			
 			StopScene();
-		}
+		}*/
 		break;
 	default:
 		// ERR: Invalid event type when spawning sats

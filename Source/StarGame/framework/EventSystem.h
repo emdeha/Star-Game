@@ -20,6 +20,9 @@
 
 
 #include <string>
+#include "glm\glm.hpp"
+//#include <memory>
+//#include <vector>
 
 
 enum EventType
@@ -92,33 +95,64 @@ public:
 	EventType GetType();
 };
 
+/*
+class Scene;
+class EventDetector
+{
+private:
+	std::unique_ptr<Scene> detectorScene;
+
+	std::vector<EventArg> eventData;
+
+public:
+	EventDetector();
+
+	void DetectClick();
+	void PropagateEvents();
+	void SetScene(const Scene *newScene);
+};
+*/
 
 class StockEvents
 {
 public:
-	static Event EventOnRightClick(const char *objectName)
+	static Event EventOnRightClick(const char *objectName,
+								   glm::ivec2 mouseCoordinates_windowSpace = glm::ivec2())
 	{
-		EventArg rightClickEventArg[2];
+		EventArg rightClickEventArg[4];
 		rightClickEventArg[0].argType = "rightClick";
 		rightClickEventArg[0].argument.varType = TYPE_BOOL;
 		rightClickEventArg[0].argument.varBool = true; 
-		rightClickEventArg[1].argType = "object";
-		rightClickEventArg[1].argument.varType = TYPE_STRING;
-		strcpy_s(rightClickEventArg[1].argument.varString, objectName);
+		rightClickEventArg[1].argType = "coordX";
+		rightClickEventArg[1].argument.varType = TYPE_FLOAT;
+		rightClickEventArg[1].argument.varFloat = mouseCoordinates_windowSpace.x;
+		rightClickEventArg[2].argType = "coordY";
+		rightClickEventArg[2].argument.varType = TYPE_FLOAT;
+		rightClickEventArg[2].argument.varFloat = mouseCoordinates_windowSpace.y;
+		rightClickEventArg[3].argType = "object";
+		rightClickEventArg[3].argument.varType = TYPE_STRING;
+		strcpy_s(rightClickEventArg[3].argument.varString, objectName);
 
-		return Event(2, EVENT_TYPE_ON_CLICK, rightClickEventArg);
+		return Event(4, EVENT_TYPE_ON_CLICK, rightClickEventArg);
 	}
-	static Event EventOnLeftClick(const char *objectName)
+	static Event EventOnLeftClick(const char *objectName,	
+								  glm::ivec2 mouseCoordinates_windowSpace = glm::ivec2())
 	{
-		EventArg rightClickEventArg[2];
+		EventArg rightClickEventArg[4];
 		rightClickEventArg[0].argType = "rightClick";
 		rightClickEventArg[0].argument.varType = TYPE_BOOL;
 		rightClickEventArg[0].argument.varBool = false; 
-		rightClickEventArg[1].argType = "object";
-		rightClickEventArg[1].argument.varType = TYPE_STRING;
-		strcpy_s(rightClickEventArg[1].argument.varString, objectName);
+		rightClickEventArg[1].argType = "coordX";
+		rightClickEventArg[1].argument.varType = TYPE_FLOAT;
+		rightClickEventArg[1].argument.varFloat = mouseCoordinates_windowSpace.x;
+		rightClickEventArg[2].argType = "coordY";
+		rightClickEventArg[2].argument.varType = TYPE_FLOAT;
+		rightClickEventArg[2].argument.varFloat = mouseCoordinates_windowSpace.y;
+		rightClickEventArg[3].argType = "object";
+		rightClickEventArg[3].argument.varType = TYPE_STRING;
+		strcpy_s(rightClickEventArg[3].argument.varString, objectName);
 
-		return Event(2, EVENT_TYPE_ON_CLICK, rightClickEventArg);
+		return Event(4, EVENT_TYPE_ON_CLICK, rightClickEventArg);
 	}
 
 	static Event EventOnHover()

@@ -59,7 +59,7 @@ GUILoader::GUILoader(const std::string &fileName,
 					 int windowWidth, int windowHeight)
 {
 	// TODO: Add font loading
-
+	/*
 	std::string fontsDir = "";
 	std::string texturesDir = "";
 	std::string defaultFont = "";
@@ -322,7 +322,7 @@ GUILoader::GUILoader(const std::string &fileName,
 				}
 			}
 		}
-	}
+	}*/
 }
 
 std::shared_ptr<Layout> GUILoader::GetLayout(LayoutType layoutType)

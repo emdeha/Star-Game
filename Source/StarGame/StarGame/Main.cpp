@@ -70,6 +70,21 @@ void HandleMouse()
 									windowWidth, windowHeight);
 
 	if(scene.GetMouse().IsRightButtonDown())
+	{
+		Event rightClickEvent = StockEvents::EventOnRightClick("all", 
+															   scene.GetMouse().GetCurrentPosition());
+
+		scene.OnEvent(rightClickEvent);
+	}
+	if(scene.GetMouse().IsLeftButtonDown())
+	{
+		Event leftClickEvent = StockEvents::EventOnLeftClick("all",
+															 scene.GetMouse().GetCurrentPosition());
+
+		scene.OnEvent(leftClickEvent);
+	}
+
+	if(scene.GetMouse().IsRightButtonDown())
 	{		
 		if(scene.HasSuns())
 		{
@@ -161,7 +176,7 @@ void HandleMouse()
 				//scene.OnEvent(sunHoveredEvent);
 			}
 		}
-
+		/*
 		if(scene.IsLayoutOn(LAYOUT_LOAD_GAME))
 		{
 			if(
@@ -396,7 +411,7 @@ void HandleMouse()
 				scene.OnEvent(leftClickButtonEvent);
 			}
 		}
-
+		*/
 		if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 		{
 			if(scene.HasSuns())
@@ -422,7 +437,7 @@ void HandleMouse()
 					}
 				}
 			}
-
+			/*
 			if(scene.GetLayout(LAYOUT_IN_GAME)->GetControl("varInput")->
 			   IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
 			  )
@@ -449,7 +464,7 @@ void HandleMouse()
 				scene.GetLayout(LAYOUT_IN_GAME)->GetControl("applyInput")->OnEvent(leftClickButtonEvent);
 
 				scene.OnEvent(leftClickButtonEvent);
-			}
+			}*/
 		}
 	}
 
@@ -667,10 +682,34 @@ FusionHint hintBox;
 
 void InitializeGUI()
 {
-	GUILoader guiLoader("../data/loader-files/gui-config.yaml", 
-						glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	scene.AddLayout(LAYOUT_MENU, glm::vec4(0.5f, 0.6f, 0.0f, 1.0f));
 
-	scene.AddLayouts(guiLoader.GetAllLoadedLayouts());
+	std::shared_ptr<Control> testControl = 
+		std::shared_ptr<Control>(new Control("testControl", "Test, Test", 
+											 glm::vec4(1.0f), glm::vec2(), glm::vec4(30, 5, 15, 0),
+											 48, 
+											 true, true, true, 
+											 glm::vec2(10.0f, 10.0f)));
+	testControl->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
+					  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
+	std::shared_ptr<Control> testControlTwo =
+		std::shared_ptr<Control>(new Control("testControlTwo", "sad sad",
+											 glm::vec4(1.0f), glm::vec2(), glm::vec4(40, 40, 20, 20),
+											 28,
+											 true, true, true,
+											 glm::vec2(60.0f, 80.0f)));
+	testControlTwo->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
+						 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
+	scene.GetLayout(LAYOUT_MENU)->AddControl(testControl);
+	scene.GetLayout(LAYOUT_MENU)->AddControl(testControlTwo);
+
+	/*
+	//GUILoader guiLoader("../data/loader-files/gui-config.yaml", 
+	//					glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
+	//scene.AddLayouts(guiLoader.GetAllLoadedLayouts());
 
 	scene.GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetIsVisible(false);
 
@@ -680,7 +719,7 @@ void InitializeGUI()
 	if ((dir = opendir ("../data/saved-games/")) != NULL) 
 	{
 		glm::vec2 controlPosition = glm::vec2(10, 600);
-		/* print all the files and directories within directory */
+		// print all the files and directories within directory 
 		while ((ent = readdir (dir)) != NULL) 
 		{
 			//printf ("%s\n", ent->d_name);
@@ -708,7 +747,7 @@ void InitializeGUI()
 	else 
 	{
 		HandleUnexpectedError("invalid directory", __LINE__, __FILE__);
-	}
+	}*/
 }
 
 void InitializeScene()
@@ -992,7 +1031,7 @@ void Reshape(int width, int height)
 }
 
 void Keyboard(unsigned char key, int x, int y)
-{
+{/*
 	// This needs to be passed as an event.
 	if(scene.IsLayoutOn(LAYOUT_IN_GAME) && 
 	   scene.GetLayout(LAYOUT_IN_GAME)->HasActiveControl())
@@ -1000,7 +1039,7 @@ void Keyboard(unsigned char key, int x, int y)
 		scene.GetLayout(LAYOUT_IN_GAME)->GetActiveControl()->InputChar(key);
 		return;
 	}
-
+	*/
 	switch (key)
 	{
 	/*
@@ -1027,7 +1066,7 @@ void Keyboard(unsigned char key, int x, int y)
 		isEmitterStarted = true;
 		break;
 	}
-
+	/*
 	if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 	{
 		Event returnedFusionEvent = StockEvents::EmptyEvent();
@@ -1052,7 +1091,7 @@ void Keyboard(unsigned char key, int x, int y)
 				scene.GetLayout(LAYOUT_IN_GAME)->GetControl("skillHint")->OnEvent(showHintEvent);
 			}
 		}
-	}
+	}*/
 
 	glutPostRedisplay();
 }

@@ -60,6 +60,7 @@ enum LayoutPreset
 };
 
 class TextControl;
+class Control;
 
 // The window dimensions should later be bound only to the 'Layout' class.
 
@@ -71,7 +72,8 @@ private:
 	Utility::Primitives::Sprite backgroundSprite;
 	glm::vec4 backgroundColor;
 
-	std::vector<std::shared_ptr<TextControl>> controls;
+	//std::vector<std::shared_ptr<TextControl>> controls;
+	std::vector<std::shared_ptr<Control>> controls;
 	std::vector<std::shared_ptr<Layout>> subLayouts;
 
 	bool isSet;
@@ -82,18 +84,23 @@ public:
 	Layout(LayoutType newLayoutType, glm::vec4 newBackgroundColor);
 
 
-	void AddControl(const std::shared_ptr<TextControl> newControl);
+	//void AddControl(const std::shared_ptr<TextControl> newControl);
+	void AddControl(const std::shared_ptr<Control> newControl);
 	void AddSubLayout(const std::shared_ptr<Layout> newSubLayout);
 
 	void SetBackgroundImage(float width, float height, 
 							const std::string &backgroundImageFileName);
 
-	std::shared_ptr<TextControl> GetControl(const std::string &controlName);
+	//std::shared_ptr<TextControl> GetControl(const std::string &controlName);
+	std::shared_ptr<Control> GetControl(const std::string &controlName);
 
 	void Draw(const FontProgData &fontData, 
 			  const SimpleProgData &simpleData,
 			  const TextureProgData &textureData);
 	void Update(int windowWidth, int windowHeight);
+
+	void HandleClickedControls(bool isRightButtonclicked,
+							   glm::ivec2 mouseCoordinates_windowSpace);
 
 	LayoutType GetLayoutType();
 
@@ -104,7 +111,8 @@ public:
 	void SetCurrentPreset(LayoutPreset newCurrentPreset);
 
 	
-	std::shared_ptr<TextControl> GetActiveControl();
+	//std::shared_ptr<TextControl> GetActiveControl();
+	std::shared_ptr<Control> GetActiveControl();
 	bool HasActiveControl();
 };
 
@@ -156,6 +164,8 @@ public:
 	void SetText(const std::string &newText);
 
 	std::string GetName();
+
+	bool IsMouseOn(glm::ivec2 mouseCoordinates_windowSpace);
 
 
 	virtual void Draw(const FontProgData &fontData, const TextureProgData &textureData);

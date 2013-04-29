@@ -68,10 +68,10 @@ void Layout::Draw(const FontProgData &fontData,
 		glDisable(GL_BLEND);
 	}
 
-	for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
+	for(std::vector<std::shared_ptr</*TextControl*/Control>>::iterator iter = controls.begin();
 		iter != controls.end(); ++iter)
 	{
-		if((*iter)->IsImageBox())
+		/*if((*iter)->IsImageBox())
 		{
 			(*iter)->Draw(textureData);
 		}
@@ -80,9 +80,9 @@ void Layout::Draw(const FontProgData &fontData,
 			(*iter)->Draw(fontData, textureData);
 		}
 		else
-		{
-			(*iter)->Draw(fontData, simpleData);
-		}
+		{*/
+			(*iter)->Draw(fontData, textureData);//simpleData);
+		//}
 	}
 	for(std::vector<std::shared_ptr<Layout>>::iterator iter = subLayouts.begin();
 		iter != subLayouts.end();
@@ -97,7 +97,7 @@ void Layout::Draw(const FontProgData &fontData,
 
 void Layout::Update(int windowWidth, int windowHeight)
 {
-	for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
+	for(std::vector<std::shared_ptr<Control/*TextControl*/>>::iterator iter = controls.begin();
 		iter != controls.end(); ++iter)
 	{
 		(*iter)->Update(windowWidth, windowHeight);
@@ -114,8 +114,21 @@ void Layout::Update(int windowWidth, int windowHeight)
 	}
 }
 
+void Layout::HandleClickedControls(bool isRightButtonClicked,
+								   glm::ivec2 mouseCoordinates_windowSpace)
+{
+	for(std::vector<std::shared_ptr<Control>>::iterator control = controls.begin();
+		control != controls.end(); ++control)
+	{
+		if((*control)->IsMouseOn(mouseCoordinates_windowSpace))
+		{
+			std::printf("Clicked %s\n", (*control)->GetName().c_str());	
+		}
+	}
+}
 
-void Layout::AddControl(const std::shared_ptr<TextControl> newControl)
+//void Layout::AddControl(const std::shared_ptr<TextControl> newControl)
+void Layout::AddControl(const std::shared_ptr<Control> newControl)
 {
 	controls.push_back(newControl);
 }
@@ -133,9 +146,10 @@ void Layout::SetBackgroundImage(float width, float height, const std::string &ba
 }
 
 
-std::shared_ptr<TextControl> Layout::GetControl(const std::string &controlName)
+//std::shared_ptr<TextControl> Layout::GetControl(const std::string &controlName)
+std::shared_ptr<Control> Layout::GetControl(const std::string &controlName)
 {
-	for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
+	for(std::vector<std::shared_ptr<Control/*TextControl*/>>::iterator iter = controls.begin();
 		iter != controls.end(); ++iter)
 	{
 		if((*iter)->GetName() == controlName)
@@ -159,7 +173,7 @@ bool Layout::IsSet()
 }
 bool Layout::IsControl(const std::string &controlName)
 {
-	for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
+	for(std::vector<std::shared_ptr</*TextControl*/Control>>::iterator iter = controls.begin();
 		iter != controls.end(); ++iter)
 	{
 		if((*iter)->GetName() == controlName)
@@ -176,6 +190,7 @@ void Layout::Set(bool newIsSet)
 
 void Layout::SetCurrentPreset(LayoutPreset newCurrentPreset)
 {
+	/*
 	switch(newCurrentPreset)
 	{
 	case SMALL: 
@@ -203,11 +218,13 @@ void Layout::SetCurrentPreset(LayoutPreset newCurrentPreset)
 		HandleUnexpectedError("invalid layout preset", __LINE__, __FILE__);
 		break;
 	}
+	*/
 }
 
-std::shared_ptr<TextControl> Layout::GetActiveControl()
+//std::shared_ptr<TextControl> Layout::GetActiveControl()
+std::shared_ptr<Control> Layout::GetActiveControl()
 {
-	for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
+	for(std::vector<std::shared_ptr</*TextControl*/Control>>::iterator iter = controls.begin();
 		iter != controls.end(); ++iter)
 	{
 		if((*iter)->IsActive())
@@ -219,7 +236,7 @@ std::shared_ptr<TextControl> Layout::GetActiveControl()
 
 bool Layout::HasActiveControl()
 {
-	for(std::vector<std::shared_ptr<TextControl>>::iterator iter = controls.begin();
+	for(std::vector<std::shared_ptr</*TextControl*/Control>>::iterator iter = controls.begin();
 		iter != controls.end(); ++iter)
 	{
 		if((*iter)->IsActive())

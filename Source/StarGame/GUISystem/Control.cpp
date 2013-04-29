@@ -110,10 +110,10 @@ void Control::ComputeNewAttributes()
 		glm::vec2 boxMinCorner;
 		glm::vec2 boxMaxCorner;
 
-		boxMinCorner.y = position.y;
-		boxMaxCorner.y = textToDisplay.GetTextMaxHeight();
-		boxMinCorner.x = position.x;
-		boxMaxCorner.x = textToDisplay.GetTextMaxWidth();
+		boxMinCorner.y = windowHeight - position.y;
+		boxMaxCorner.y = windowHeight - textToDisplay.GetTextMaxHeight();
+		boxMinCorner.x = windowWidth - position.x;
+		boxMaxCorner.x = windowWidth - textToDisplay.GetTextMaxWidth();
 
 		controlSquare.SetPosition(glm::vec3(boxMinCorner, 0.0f));
 		controlSquare.SetHeight(textToDisplay.GetTextMaxHeight());
@@ -161,7 +161,6 @@ bool Control::IsMouseOn(glm::ivec2 mouseCoordinates_windowSpace)
 {
 	if(isVisible)
 	{
-		//mouseCoordinates_windowSpace.y = windowHeight - mouseCoordinates_windowSpace.y;
 		mouseCoordinates_windowSpace.x = windowWidth - mouseCoordinates_windowSpace.x;
 
 		float maxHeight = controlSquare.GetPosition().y;

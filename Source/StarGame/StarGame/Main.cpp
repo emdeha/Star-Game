@@ -697,7 +697,7 @@ void InitializeGUI()
 		std::shared_ptr<Control>(new Control("testControlTwo", "sad sad",
 											 glm::vec4(1.0f), glm::vec2(), glm::vec4(40, 40, 20, 20),
 											 28,
-											 true, true, true,
+											 false, true, true,
 											 glm::vec2(60.0f, 80.0f)));
 	testControlTwo->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
 						 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));

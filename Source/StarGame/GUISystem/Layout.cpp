@@ -127,6 +127,18 @@ void Layout::HandleClickedControls(bool isRightButtonClicked,
 	}
 }
 
+std::shared_ptr<Control> Layout::GetClickedControl(glm::ivec2 mouseCoordinates_windowSpace)
+{
+	for(std::vector<std::shared_ptr<Control>>::iterator control = controls.begin();
+		control != controls.end(); ++control)
+	{
+		if((*control)->IsMouseOn(mouseCoordinates_windowSpace))
+		{
+			return (*control);
+		}
+	}
+}
+
 //void Layout::AddControl(const std::shared_ptr<TextControl> newControl)
 void Layout::AddControl(const std::shared_ptr<Control> newControl)
 {

@@ -750,6 +750,11 @@ void InitializeGUI()
 	}*/
 }
 
+void TestEventHandler(Scene &scene, Control *control)
+{
+	std::printf("Hit control: %s\n", control->GetName().c_str());
+}
+
 void InitializeScene()
 {
 	Mouse userMouse;
@@ -820,6 +825,9 @@ void InitializeScene()
 	Event inMenuEvent = Event(1, EVENT_TYPE_OTHER, inMenuEventArg);
 
 	scene.OnEvent(inMenuEvent);
+
+
+	scene.AddEventHandler("test", TestEventHandler);
 }
 
 

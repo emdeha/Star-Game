@@ -101,6 +101,7 @@ public:
 
 	void HandleClickedControls(bool isRightButtonclicked,
 							   glm::ivec2 mouseCoordinates_windowSpace);
+	std::shared_ptr<Control> GetClickedControl(glm::ivec2 mouseCoordinates_windowSpace);
 
 	LayoutType GetLayoutType();
 

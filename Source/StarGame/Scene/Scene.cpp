@@ -1743,11 +1743,16 @@ void Scene::OnEvent(Event &_event)
 			{
 				if(iter->second->IsSet())
 				{
+					
 					glm::ivec2 mouseCoords_windowSpace = 
 						glm::ivec2(_event.GetArgument("coordX").varFloat,
 								   _event.GetArgument("coordY").varFloat);
+					/*
 					iter->second->HandleClickedControls(_event.GetArgument("rightClicked").varBool,
 														mouseCoords_windowSpace);
+					*/
+					Scene &scene = *this;
+					this->CallEventHandler("test", scene, iter->second->GetClickedControl(mouseCoords_windowSpace).get());
 				}
 			}
 			/*
@@ -2285,6 +2290,22 @@ void Scene::AddEnemy(const std::shared_ptr<Enemy> newEnemy)
 	enemies.push_back(newEnemy);
 }
 
+void Scene::AddEventHandler(const std::string &name, EventHandlerFunction handler)
+{
+	eventHandlers.push_back(std::make_pair(name, handler));
+}
+void Scene::CallEventHandler(const std::string &name, Scene &scene, Control *control)
+{
+	for(std::vector<std::pair<std::string, EventHandlerFunction>>::iterator handler = eventHandlers.begin();
+		handler != eventHandlers.end(); ++handler)
+	{
+		if((*handler).first == name)
+		{
+			(*handler).second(scene, control);
+		}
+	}
+}
+
 void Scene::AddLayouts(const std::map<LayoutType, std::shared_ptr<Layout>> &newLayouts)
 {
 	sceneLayouts.insert(newLayouts.begin(), newLayouts.end());
@@ -2577,3 +2598,10 @@ bool Scene::IsPaused()
 {
 	return isPaused;
 }
+
+/*
+void HandleTestEvent::HandleEvent(Scene &scene, Control *control)
+{
+	std::printf("has suns: %i", (int)scene.HasSuns());
+	std::printf("Handled control with name: %s\n", control->GetName().c_str());
+}*/

@@ -181,7 +181,22 @@ public:
 };
 
 
+class Button : public Control
+{
+public: 
+	Button() : Control() {}
 
+	Button(const std::string &newName, const std::string &newText,
+		   glm::vec4 newFontColor, glm::vec2 newPosition, glm::vec4 newMargins,
+		   int newTextSize,
+		   bool newHasBackground, bool newIsVisible, bool newIsUsingPercentage,
+		   glm::vec2 newPercentagedPosition = glm::vec2()) 
+		   : Control(newName, newText,
+					 newFontColor, newPosition, newMargins,
+					 newTextSize, 
+					 newHasBackground, newIsVisible, newIsUsingPercentage,
+					 newPercentagedPosition) {};
+};
 
 
 
@@ -436,7 +451,7 @@ public:
 	}
 };
 
-
+/*
 class Button : public TextControl
 {
 public:
@@ -453,7 +468,7 @@ public:
 
 	void OnEvent(Event &_event);
 };
-
+*/
 
 class Label : public TextControl
 {

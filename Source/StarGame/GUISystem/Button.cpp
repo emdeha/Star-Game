@@ -20,6 +20,7 @@
 #include "../framework/ErrorAPI.h"
 
 
+/*
 void Button::OnEvent(Event &_event)
 {
 	switch(_event.GetType())
@@ -32,3 +33,4 @@ void Button::OnEvent(Event &_event)
 		break;
 	}
 }
+*/

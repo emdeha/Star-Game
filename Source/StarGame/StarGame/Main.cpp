@@ -684,26 +684,26 @@ void InitializeGUI()
 {
 	scene.AddLayout(LAYOUT_MENU, glm::vec4(0.5f, 0.6f, 0.0f, 1.0f));
 
-	std::shared_ptr<Control> testControl = 
-		std::shared_ptr<Control>(new Control("testControl", "Test, Test", 
+	std::shared_ptr<Button> testButton = 
+		std::shared_ptr<Button>(new Button("testControl", "Test, Test", 
 											 glm::vec4(1.0f), glm::vec2(), glm::vec4(30, 5, 15, 0),
 											 48, 
 											 true, true, true, 
 											 glm::vec2(10.0f, 10.0f)));
-	testControl->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
+	testButton->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
 					  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
-	std::shared_ptr<Control> testControlTwo =
-		std::shared_ptr<Control>(new Control("testControlTwo", "sad sad",
+	std::shared_ptr<Button> testButtonTwo =
+		std::shared_ptr<Button>(new Button("testControlTwo", "sad sad",
 											 glm::vec4(1.0f), glm::vec2(), glm::vec4(40, 40, 20, 20),
 											 28,
 											 false, true, true,
 											 glm::vec2(60.0f, 80.0f)));
-	testControlTwo->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
+	testButtonTwo->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
 						 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
-	scene.GetLayout(LAYOUT_MENU)->AddControl(testControl);
-	scene.GetLayout(LAYOUT_MENU)->AddControl(testControlTwo);
+	scene.GetLayout(LAYOUT_MENU)->AddControl(testButton);
+	scene.GetLayout(LAYOUT_MENU)->AddControl(testButtonTwo);
 
 	/*
 	//GUILoader guiLoader("../data/loader-files/gui-config.yaml", 

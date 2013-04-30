@@ -61,12 +61,16 @@ enum LayoutPreset
 
 class TextControl;
 class Control;
+class Scene;
 
 // The window dimensions should later be bound only to the 'Layout' class.
 
 class Layout
 {
 private:
+	typedef void (*EventHandlerFunction)(Scene &, Control *);
+	std::vector<std::pair<std::string, EventHandlerFunction>> eventHandlers;
+
 	LayoutType layoutType;
 
 	Utility::Primitives::Sprite backgroundSprite;
@@ -87,6 +91,8 @@ public:
 	//void AddControl(const std::shared_ptr<TextControl> newControl);
 	void AddControl(const std::shared_ptr<Control> newControl);
 	void AddSubLayout(const std::shared_ptr<Layout> newSubLayout);
+	void AddEventHandler(const std::string &name, EventHandlerFunction handler);
+	void CallEventHandler(const std::string &name, Scene &scene, Control *control);
 
 	void SetBackgroundImage(float width, float height, 
 							const std::string &backgroundImageFileName);
@@ -100,7 +106,8 @@ public:
 	void Update(int windowWidth, int windowHeight);
 
 	void HandleClickedControls(bool isRightButtonclicked,
-							   glm::ivec2 mouseCoordinates_windowSpace);
+							   glm::ivec2 mouseCoordinates_windowSpace,
+							   Scene &scene);
 	std::shared_ptr<Control> GetClickedControl(glm::ivec2 mouseCoordinates_windowSpace);
 
 	LayoutType GetLayoutType();
@@ -178,6 +185,8 @@ public:
 
 	// maybe it is not necessary to be virtual
 	virtual void SetPosition(glm::vec2 newPosition, bool newIsUsingPercentage); 
+
+	virtual std::string GetType() { return ""; }
 };
 
 
@@ -196,10 +205,29 @@ public:
 					 newTextSize, 
 					 newHasBackground, newIsVisible, newIsUsingPercentage,
 					 newPercentagedPosition) {};
+
+	std::string GetType();
 };
 
 
+class Label : public Control
+{
+public:
+	Label() : Control() {}
 
+	Label(const std::string &newName, const std::string &newText,
+		  glm::vec4 newFontColor, glm::vec2 newPosition, glm::vec4 newMargins,
+		  int newTextSize,
+		  bool newHasBackground, bool newIsVisible, bool newIsUsingPercentage,
+		  glm::vec2 newPercentagedPosition = glm::vec2()) 
+		   : Control(newName, newText,
+					 newFontColor, newPosition, newMargins,
+					 newTextSize, 
+					 newHasBackground, newIsVisible, newIsUsingPercentage,
+					 newPercentagedPosition) {};
+
+	std::string GetType();
+};
 
 
 
@@ -469,7 +497,7 @@ public:
 	void OnEvent(Event &_event);
 };
 */
-
+/*
 class Label : public TextControl
 {
 public:
@@ -486,7 +514,7 @@ public:
 
 	void OnEvent(Event &_event);
 };
-
+*/
 
 class TextBox : public TextControl
 {

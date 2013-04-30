@@ -88,10 +88,11 @@ struct SpawnData
 /// \brief This class updates, renders and maintains the game world.
 class Scene
 {
-private:
+private:	
 	typedef void (*EventHandlerFunction)(Scene &, Control *);
+	/*
 	std::vector<std::pair<std::string, EventHandlerFunction>> eventHandlers;
-
+	*/
 
 	std::vector<SunLight> lights; ///< Holds the world's lights.
 
@@ -174,9 +175,11 @@ public:
 	
 	void AddEnemy(const std::shared_ptr<Enemy> newEnemy);
 
-	void AddEventHandler(const std::string &name, EventHandlerFunction handler);
-	void CallEventHandler(const std::string &name, Scene &scene, Control *control);
-
+	
+	void AddEventHandler(const std::string &name, LayoutType layoutToAddTo, EventHandlerFunction handler);
+	void CallEventHandler(const std::string &name, LayoutType layoutToCallIt, Scene &scene, Control *control);
+	
+	
 	void AddLayouts(const std::map<LayoutType, std::shared_ptr<Layout>> &newLayouts);
 	void AddLayout(const std::shared_ptr<Layout> newLayout);
 	void AddLayout(LayoutType layoutType, glm::vec4 layoutBacgkroundColor);

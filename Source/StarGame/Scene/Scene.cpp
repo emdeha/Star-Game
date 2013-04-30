@@ -1747,12 +1747,18 @@ void Scene::OnEvent(Event &_event)
 					glm::ivec2 mouseCoords_windowSpace = 
 						glm::ivec2(_event.GetArgument("coordX").varFloat,
 								   _event.GetArgument("coordY").varFloat);
-					/*
+					
 					iter->second->HandleClickedControls(_event.GetArgument("rightClicked").varBool,
-														mouseCoords_windowSpace);
-					*/
-					Scene &scene = *this;
-					this->CallEventHandler("test", scene, iter->second->GetClickedControl(mouseCoords_windowSpace).get());
+														mouseCoords_windowSpace,
+														*this);
+					
+					/*
+					std::shared_ptr<Control> clickedControl = iter->second->GetClickedControl(mouseCoords_windowSpace);
+					if(clickedControl->GetType() != "Label" && clickedControl != nullptr)
+					{
+						Scene &scene = *this;
+						this->CallEventHandler("test", scene, clickedControl.get());
+					}*/
 				}
 			}
 			/*
@@ -2290,12 +2296,16 @@ void Scene::AddEnemy(const std::shared_ptr<Enemy> newEnemy)
 	enemies.push_back(newEnemy);
 }
 
-void Scene::AddEventHandler(const std::string &name, EventHandlerFunction handler)
+
+void Scene::AddEventHandler(const std::string &name, LayoutType layoutToAddTo, EventHandlerFunction handler)
 {
-	eventHandlers.push_back(std::make_pair(name, handler));
+	GetLayout(layoutToAddTo)->AddEventHandler(name, handler);
+	//eventHandlers.push_back(std::make_pair(name, handler));
 }
-void Scene::CallEventHandler(const std::string &name, Scene &scene, Control *control)
+void Scene::CallEventHandler(const std::string &name, LayoutType layoutToCallIt, Scene &scene, Control *control)
 {
+	GetLayout(layoutToCallIt)->CallEventHandler(name, scene, control);
+	/*
 	for(std::vector<std::pair<std::string, EventHandlerFunction>>::iterator handler = eventHandlers.begin();
 		handler != eventHandlers.end(); ++handler)
 	{
@@ -2304,7 +2314,9 @@ void Scene::CallEventHandler(const std::string &name, Scene &scene, Control *con
 			(*handler).second(scene, control);
 		}
 	}
+	*/
 }
+
 
 void Scene::AddLayouts(const std::map<LayoutType, std::shared_ptr<Layout>> &newLayouts)
 {

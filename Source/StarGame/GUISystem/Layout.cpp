@@ -115,14 +115,32 @@ void Layout::Update(int windowWidth, int windowHeight)
 }
 
 void Layout::HandleClickedControls(bool isRightButtonClicked,
-								   glm::ivec2 mouseCoordinates_windowSpace)
+								   glm::ivec2 mouseCoordinates_windowSpace,
+								   Scene &scene)
 {
 	for(std::vector<std::shared_ptr<Control>>::iterator control = controls.begin();
 		control != controls.end(); ++control)
 	{
-		if((*control)->IsMouseOn(mouseCoordinates_windowSpace))
+		if((*control)->IsMouseOn(mouseCoordinates_windowSpace) && (*control)->GetType() != "Label")
 		{
-			std::printf("Clicked %s\n", (*control)->GetName().c_str());	
+			CallEventHandler("test", scene, (*control).get());
+			//std::printf("Clicked %s\n", (*control)->GetName().c_str());	
+		}
+	}
+}
+
+void Layout::AddEventHandler(const std::string &name, EventHandlerFunction handler)
+{
+	eventHandlers.push_back(std::make_pair(name, handler));
+}
+void Layout::CallEventHandler(const std::string &name, Scene &scene, Control *control)
+{
+	for(std::vector<std::pair<std::string, EventHandlerFunction>>::iterator handler = eventHandlers.begin();
+		handler != eventHandlers.end(); ++handler)
+	{
+		if((*handler).first == name)
+		{
+			(*handler).second(scene, control);
 		}
 	}
 }
@@ -137,6 +155,7 @@ std::shared_ptr<Control> Layout::GetClickedControl(glm::ivec2 mouseCoordinates_w
 			return (*control);
 		}
 	}
+	return nullptr;
 }
 
 //void Layout::AddControl(const std::shared_ptr<TextControl> newControl)

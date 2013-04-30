@@ -20,6 +20,10 @@
 #include "../framework/ErrorAPI.h"
 
 
+std::string Button::GetType()
+{
+	return "Button";
+}
 /*
 void Button::OnEvent(Event &_event)
 {

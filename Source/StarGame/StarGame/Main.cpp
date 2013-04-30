@@ -702,8 +702,18 @@ void InitializeGUI()
 	testButtonTwo->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
 						 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
+	std::shared_ptr<Label> testLabel =
+		std::shared_ptr<Label>(new Label("testLabel", "I am a label...", 
+										 glm::vec4(1.0f), glm::vec2(), glm::vec4(3, 3, 3, 3),
+										 68,
+										 true, true, true, 
+										 glm::vec2(50.0f, 50.0f)));
+	testLabel->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
+					glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
 	scene.GetLayout(LAYOUT_MENU)->AddControl(testButton);
 	scene.GetLayout(LAYOUT_MENU)->AddControl(testButtonTwo);
+	scene.GetLayout(LAYOUT_MENU)->AddControl(testLabel);
 
 	/*
 	//GUILoader guiLoader("../data/loader-files/gui-config.yaml", 
@@ -827,7 +837,7 @@ void InitializeScene()
 	scene.OnEvent(inMenuEvent);
 
 
-	scene.AddEventHandler("test", TestEventHandler);
+	scene.AddEventHandler("test", LAYOUT_MENU, TestEventHandler);
 }
 
 

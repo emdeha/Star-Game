@@ -711,9 +711,20 @@ void InitializeGUI()
 	testLabel->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
 					glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
+	std::shared_ptr<TextBox> testTextBox =
+		std::shared_ptr<TextBox>(new TextBox(50.0f, 5, 
+											 "testTextBox", "", 
+											 glm::vec4(1.0f), glm::vec2(), glm::vec4(10, 10, 10, 10),
+											 28,
+											 true, true, true,
+											 glm::vec2(50.0f, 10.0f)));
+	testTextBox->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
+					  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
 	scene.GetLayout(LAYOUT_MENU)->AddControl(testButton);
 	scene.GetLayout(LAYOUT_MENU)->AddControl(testButtonTwo);
 	scene.GetLayout(LAYOUT_MENU)->AddControl(testLabel);
+	scene.GetLayout(LAYOUT_MENU)->AddControl(testTextBox);
 
 	/*
 	//GUILoader guiLoader("../data/loader-files/gui-config.yaml", 
@@ -763,6 +774,11 @@ void InitializeGUI()
 void TestEventHandler(Scene &scene, Control *control)
 {
 	std::printf("Hit control: %s\n", control->GetName().c_str());
+}
+
+void ControlActivationEventHandler(Scene &scene, Control *control)
+{
+	control->SetIsActive(true);
 }
 
 void InitializeScene()
@@ -838,6 +854,7 @@ void InitializeScene()
 
 
 	scene.AddEventHandler("test", LAYOUT_MENU, TestEventHandler);
+	scene.AddEventHandler("controlActivation", LAYOUT_MENU, ControlActivationEventHandler);
 }
 
 
@@ -1058,6 +1075,15 @@ void Keyboard(unsigned char key, int x, int y)
 		return;
 	}
 	*/
+	bool isLayoutOn = scene.IsLayoutOn(LAYOUT_MENU);
+	bool hasActiveControl = scene.GetLayout(LAYOUT_MENU)->HasActiveControl();
+	if(scene.IsLayoutOn(LAYOUT_MENU) &&
+	   scene.GetLayout(LAYOUT_MENU)->HasActiveControl())
+	{
+		scene.GetLayout(LAYOUT_MENU)->GetActiveControl()->InputChar(key);
+		return;
+	}
+
 	switch (key)
 	{
 	/*

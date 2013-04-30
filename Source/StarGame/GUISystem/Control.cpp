@@ -41,12 +41,14 @@ Control::Control(const std::string &newName, const std::string &newText,
 {
 	name = newName;
 	text = newText;
+	visibleText = text;
 	fontColor = newFontColor;
 	position = newPosition;
 	textSize = newTextSize;
 	hasBackground = newHasBackground;
 	isVisible = newIsVisible;
 	isUsingPercentage = newIsUsingPercentage;
+	isActive = false;
 	percentagedPosition = newPercentagedPosition;
 	margins = newMargins;
 	textPosition = position;
@@ -146,7 +148,7 @@ void Control::Draw(const FontProgData &fontData, const TextureProgData &textureD
 			controlBackground.Draw(identityMatStack, textureData);
 		}
 
-		textToDisplay.Print(text.c_str(), fontData, position, fontColor, textSize);	
+		textToDisplay.Print(visibleText.c_str()/*text.c_str()*/, fontData, position, fontColor, textSize);	
 	}
 }
 
@@ -180,6 +182,12 @@ bool Control::IsMouseOn(glm::ivec2 mouseCoordinates_windowSpace)
 	else return false;
 }
 
+void Control::ClearContent()
+{
+	text = "";
+	visibleText = "";
+}
+
 std::string Control::GetContent()
 {
 	return text;
@@ -188,9 +196,9 @@ bool Control::IsActive()
 {
 	return isActive;
 }
-void Control::Deactivate()
+void Control::SetIsActive(bool newIsActive)
 {
-	isActive = false;
+	isActive = newIsActive;
 }
 void Control::SetIsVisible(bool newIsVisible)
 {

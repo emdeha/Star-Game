@@ -19,7 +19,118 @@
 #include "GUISystem.h"
 #include "../framework/ErrorAPI.h"
 
+/*
+void TextBox::Draw(const FontProgData &fontData, const TextureProgData &textureData)
+{
+	if(isVisible)
+	{
+		if(hasBackground)
+		{
+			glutil::MatrixStack identityMatStack;
+			identityMatStack.SetIdentity();
 
+			controlBackground.Draw(identityMatStack, textureData);
+		}
+
+		textToDisplay.Print(visibleText.c_str(), fontData, position, fontColor, textSize);	
+	}
+}
+*/
+
+void TextBox::ComputeNewAttributes()
+{
+	if(isUsingPercentage)
+	{
+		position = glm::vec2((percentagedPosition.x / 100) * windowWidth,
+							 (percentagedPosition.y / 100) * windowHeight);
+	}
+	textToDisplay.ComputeTextDimensions("|", position, textSize);
+
+	if(hasBackground)
+	{
+		glm::vec2 boxMinCorner;
+		glm::vec2 boxMaxCorner;
+
+		boxMinCorner.y = windowHeight - position.y + margins.y;
+		boxMaxCorner.y = windowHeight - position.y + textToDisplay.GetTextMaxHeight() + margins.x;
+		boxMinCorner.x = windowWidth - position.x + margins.z;
+		boxMaxCorner.x = windowWidth - position.x + maxWidth + margins.w;
+
+		float width = fabsf(textToDisplay.GetTextMinWidth()) + maxWidth + margins.w + margins.z;
+		float height = fabsf(textToDisplay.GetTextMinHeight()) + textToDisplay.GetTextMaxHeight() + margins.x + margins.y;
+		
+		controlSquare.SetPosition(glm::vec3(boxMinCorner, 0.0f));
+		controlSquare.SetWidth(maxWidth);
+		controlSquare.SetHeight(textToDisplay.GetTextMaxHeight());
+		
+		controlBackground.Update(maxWidth, textToDisplay.GetTextMaxHeight(), boxMinCorner);
+	}
+	else
+	{
+		glm::vec2 boxMinCorner;
+		glm::vec2 boxMaxCorner;
+
+		boxMinCorner.y = windowHeight - position.y;
+		boxMaxCorner.y = windowHeight - textToDisplay.GetTextMaxHeight();
+		boxMinCorner.x = windowWidth - position.x;
+		boxMaxCorner.x = windowWidth - textToDisplay.GetTextMaxWidth();
+
+		controlSquare.SetPosition(glm::vec3(boxMinCorner, 0.0f));
+		controlSquare.SetHeight(textToDisplay.GetTextMaxHeight());
+		controlSquare.SetWidth(textToDisplay.GetTextMaxWidth());
+	}
+}
+
+void TextBox::InputChar(char ch)
+{
+	// 8 represents the ASCII code of BACKSPACE
+	if((int)ch == 8)
+	{
+		text.pop_back();
+	}
+	else
+	{
+		text += ch;
+	}
+	
+	// 13 represents the ASCII code of ENTER
+	//if((int)ch == 133)
+	//{
+
+	//}
+	
+
+	if((int)text.length() > maxNumberChars)
+	{
+		if((int)ch != 8)
+		{
+			for(int i = 0; i < maxNumberChars - 1; i++)
+			{
+				visibleText[i] = visibleText[i + 1];
+			}
+			visibleText[maxNumberChars - 1] = ch;
+		}
+		else
+		{
+			for(int i = maxNumberChars - 1; i >= 1; i--)
+			{
+				visibleText[i] = visibleText[i - 1];
+			}			
+			visibleText[0] = text[text.length() - maxNumberChars];
+		}
+	}
+	else
+	{
+		visibleText = text;
+	}
+}
+
+std::string TextBox::GetType()
+{
+	return "TextBox";
+}
+
+/*
 void TextBox::Draw(const FontProgData &fontData, const SimpleProgData &simpleData)
 {
 	if(hasBackground)
@@ -87,13 +198,13 @@ void TextBox::InputChar(char ch)
 	{
 		text += ch;
 	}
-	/*
+	
 	// 13 represents the ASCII code of ENTER
-	if((int)ch == 133)
-	{
+	//if((int)ch == 133)
+	//{
 
-	}
-	*/
+	//}
+	
 
 	if((int)text.length() > maxNumberChars)
 	{
@@ -174,3 +285,4 @@ bool TextBox::IsMouseOn(glm::vec2 mouseCoordinates_windowSpace)
 		else return false;
 	}
 }
+*/

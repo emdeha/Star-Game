@@ -132,6 +132,7 @@ protected:
 
 	std::string name;
 	std::string text;
+	std::string visibleText;
 
 	glm::vec4 fontColor;
 	glm::vec4 margins; // margins; x - bottom, y - top, z - left, w - right
@@ -166,14 +167,16 @@ public:
 	std::string GetContent();
 
 	bool IsActive();
-	void Deactivate();
 
 	void SetIsVisible(bool newIsVisible);
 	void SetText(const std::string &newText);
+	void SetIsActive(bool newIsActive);
 
 	std::string GetName();
 
 	bool IsMouseOn(glm::ivec2 mouseCoordinates_windowSpace);
+
+	void ClearContent();
 
 
 	virtual void Draw(const FontProgData &fontData, const TextureProgData &textureData);
@@ -187,6 +190,9 @@ public:
 	virtual void SetPosition(glm::vec2 newPosition, bool newIsUsingPercentage); 
 
 	virtual std::string GetType() { return ""; }
+
+	virtual void InputChar(char ch) {}
+	//virtual void Clear() {}
 };
 
 
@@ -229,7 +235,45 @@ public:
 	std::string GetType();
 };
 
+class TextBox : public Control
+{
+private:
+	//std::string visibleText;
+	int maxNumberChars; // TODO: width limiter
+	float maxWidth;
 
+public:
+	TextBox() : Control()
+	{
+		//visibleText = "";
+	}
+	TextBox(float newMaxWidth, int newMaxNumberChars,
+		    const std::string &newName, const std::string &newText,
+		    glm::vec4 newFontColor, glm::vec2 newPosition, glm::vec4 newMargins,
+		    int newTextSize,
+		    bool newHasBackground, bool newIsVisible, bool newIsUsingPercentage,
+		    glm::vec2 newPercentagedPosition = glm::vec2()) 
+		    : Control(newName, newText,
+					  newFontColor, newPosition, newMargins,
+					  newTextSize, 
+					  newHasBackground, newIsVisible, newIsUsingPercentage,
+					  newPercentagedPosition) 
+	{
+		//visibleText = "";
+		maxWidth = newMaxWidth;
+		maxNumberChars = newMaxNumberChars;
+
+		controlSquare.SetWidth(maxWidth);
+	}
+
+	//void Draw(const FontProgData &fontData, const TextureProgData &textureData);
+
+	void ComputeNewAttributes();
+
+	void InputChar(char ch);
+	//void Clear();
+	std::string GetType();
+};
 
 
 
@@ -515,7 +559,7 @@ public:
 	void OnEvent(Event &_event);
 };
 */
-
+/*
 class TextBox : public TextControl
 {
 private:
@@ -564,5 +608,6 @@ public:
 
 	bool IsMouseOn(glm::vec2 mouseCoordinates_windowSpace);
 };
+*/
 
 #endif

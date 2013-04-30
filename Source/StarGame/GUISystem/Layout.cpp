@@ -123,7 +123,7 @@ void Layout::HandleClickedControls(bool isRightButtonClicked,
 	{
 		if((*control)->IsMouseOn(mouseCoordinates_windowSpace) && (*control)->GetType() != "Label")
 		{
-			CallEventHandler("test", scene, (*control).get());
+			CallEventHandler("controlActivation", scene, (*control).get());
 			//std::printf("Clicked %s\n", (*control)->GetName().c_str());	
 		}
 	}

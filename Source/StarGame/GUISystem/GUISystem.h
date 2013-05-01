@@ -108,6 +108,7 @@ public:
 	void HandleClickedControls(bool isRightButtonclicked,
 							   glm::ivec2 mouseCoordinates_windowSpace,
 							   Scene &scene);
+	void HandleKeyPress(Scene &scene, const std::string &controlName = "");
 	std::shared_ptr<Control> GetClickedControl(glm::ivec2 mouseCoordinates_windowSpace);
 
 	LayoutType GetLayoutType();
@@ -239,17 +240,13 @@ public:
 class TextBox : public Control
 {
 private:
-	//std::string visibleText;
-	int maxNumberChars; // TODO: width limiter
-	int initialNumberChars;
 	float maxWidth;
 
 public:
 	TextBox() : Control()
 	{
-		//visibleText = "";
 	}
-	TextBox(float newMaxWidth, int newMaxNumberChars,
+	TextBox(float newMaxWidth,
 		    const std::string &newName, const std::string &newText,
 		    glm::vec4 newFontColor, glm::vec2 newPosition, glm::vec4 newMargins,
 		    int newTextSize,
@@ -261,20 +258,14 @@ public:
 					  newHasBackground, newIsVisible, newIsUsingPercentage,
 					  newPercentagedPosition) 
 	{
-		//visibleText = "";
 		maxWidth = newMaxWidth;
-		maxNumberChars = newMaxNumberChars;
-		initialNumberChars = maxNumberChars;
 
 		controlSquare.SetWidth(maxWidth);
 	}
 
-	//void Draw(const FontProgData &fontData, const TextureProgData &textureData);
-
 	void ComputeNewAttributes();
 
 	void InputChar(char ch);
-	//void Clear();
 	std::string GetType();
 };
 

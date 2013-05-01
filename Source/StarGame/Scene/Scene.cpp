@@ -1735,6 +1735,19 @@ void Scene::OnEvent(Event &_event)
 {
 	switch(_event.GetType())
 	{
+	case EVENT_TYPE_BUTTON_PRESSED:
+		if(strcmp(_event.GetArgument("object").varString, "testTextBox") == 0)
+		{
+			for(std::map<LayoutType, std::shared_ptr<Layout>>::iterator iter = sceneLayouts.begin();
+				iter != sceneLayouts.end(); ++iter)
+			{
+				if(iter->second->IsSet())
+				{
+					iter->second->HandleKeyPress(*this);
+				}
+			}
+		}
+		break;
 	case EVENT_TYPE_ON_CLICK:
 		if(strcmp(_event.GetArgument("object").varString, "all") == 0)
 		{
@@ -1751,26 +1764,8 @@ void Scene::OnEvent(Event &_event)
 					iter->second->HandleClickedControls(_event.GetArgument("rightClicked").varBool,
 														mouseCoords_windowSpace,
 														*this);
-					
-					/*
-					std::shared_ptr<Control> clickedControl = iter->second->GetClickedControl(mouseCoords_windowSpace);
-					if(clickedControl->GetType() != "Label" && clickedControl != nullptr)
-					{
-						Scene &scene = *this;
-						this->CallEventHandler("test", scene, clickedControl.get());
-					}*/
 				}
 			}
-			/*
-			if(_event.GetArgument("rightClick").varBool == true)
-			{
-
-			}
-			else
-			{
-
-			}
-			*/
 		}
 
 		if(strcmp(_event.GetArgument("object").varString, "sun") == 0)

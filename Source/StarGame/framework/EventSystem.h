@@ -35,6 +35,7 @@ enum EventType
 	EVENT_TYPE_ON_HOVER,
 	EVENT_TYPE_SPACE_BTN_CLICK,
 	EVENT_TYPE_UNCLICK,
+	EVENT_TYPE_BUTTON_PRESSED,
 
 	EVENT_TYPE_SHOT_FIRED, 
 	EVENT_TYPE_ATTACKED,
@@ -153,6 +154,19 @@ public:
 		strcpy_s(rightClickEventArg[3].argument.varString, objectName);
 
 		return Event(4, EVENT_TYPE_ON_CLICK, rightClickEventArg);
+	}
+
+	static Event EventOnButtonPressed(char button, const char *objectName)
+	{
+		EventArg buttonPressedEventArg[2];
+		buttonPressedEventArg[0].argType = "button";
+		buttonPressedEventArg[0].argument.varType = TYPE_INTEGER;
+		buttonPressedEventArg[0].argument.varInteger = (int)button;
+		buttonPressedEventArg[1].argType = "object";
+		buttonPressedEventArg[1].argument.varType = TYPE_STRING;
+		strcpy_s(buttonPressedEventArg[1].argument.varString, objectName);
+
+		return Event(2, EVENT_TYPE_BUTTON_PRESSED, buttonPressedEventArg);
 	}
 
 	static Event EventOnHover()

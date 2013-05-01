@@ -712,7 +712,7 @@ void InitializeGUI()
 					glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	std::shared_ptr<TextBox> testTextBox =
-		std::shared_ptr<TextBox>(new TextBox(350.0f, 5, 
+		std::shared_ptr<TextBox>(new TextBox(350.0f,  
 											 "testTextBox", "", 
 											 glm::vec4(1.0f), glm::vec2(), glm::vec4(10, 10, 10, 10),
 											 28,
@@ -722,7 +722,7 @@ void InitializeGUI()
 					  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	std::shared_ptr<TextBox> testTextBoxTwo = 
-		std::shared_ptr<TextBox>(new TextBox(150.0f, 5, 
+		std::shared_ptr<TextBox>(new TextBox(150.0f,  
 											 "testTextBox", "", 
 											 glm::vec4(1.0f), glm::vec2(), glm::vec4(10, 10, 10, 10),
 											 28,
@@ -791,6 +791,11 @@ void ControlActivationEventHandler(Scene &scene, Control *control)
 {
 	scene.GetLayout(LAYOUT_MENU)->DeactivateAllControls();
 	control->SetIsActive(true);
+}
+
+void OnTextBoxEnterPressEventHandler(Scene &scene, Control *control)
+{
+	std::printf("Text: %s\n", control->GetContent().c_str());
 }
 
 void InitializeScene()
@@ -867,6 +872,7 @@ void InitializeScene()
 
 	scene.AddEventHandler("test", LAYOUT_MENU, TestEventHandler);
 	scene.AddEventHandler("controlActivation", LAYOUT_MENU, ControlActivationEventHandler);
+	scene.AddEventHandler("controlOnEnter", LAYOUT_MENU, OnTextBoxEnterPressEventHandler);
 }
 
 
@@ -1087,16 +1093,23 @@ void Keyboard(unsigned char key, int x, int y)
 		return;
 	}
 	*/
-	bool isLayoutOn = scene.IsLayoutOn(LAYOUT_MENU);
-	bool hasActiveControl = scene.GetLayout(LAYOUT_MENU)->HasActiveControl();
 	if(scene.IsLayoutOn(LAYOUT_MENU) &&
 	   scene.GetLayout(LAYOUT_MENU)->HasActiveControl())
 	{
+		if((int)key == 13)
+		{
+			Event buttonPressedEvent = 
+				StockEvents::EventOnButtonPressed(
+					key, scene.GetLayout(LAYOUT_MENU)->GetActiveControl()->GetName().c_str());
+
+			scene.OnEvent(buttonPressedEvent);
+			return;
+		}
 		scene.GetLayout(LAYOUT_MENU)->GetActiveControl()->InputChar(key);
 		return;
 	}
 
-	switch (key)
+	switch(key)
 	{
 	/*
 	// exit the game

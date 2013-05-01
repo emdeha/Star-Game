@@ -129,6 +129,18 @@ void Layout::HandleClickedControls(bool isRightButtonClicked,
 	}
 }
 
+void Layout::HandleKeyPress(Scene &scene, const std::string &controlName)
+{
+	for(std::vector<std::shared_ptr<Control>>::iterator control = controls.begin();
+		control != controls.end(); ++control)
+	{
+		if((*control)->GetName() == controlName || controlName == "")
+		{
+			CallEventHandler("controlOnEnter", scene, (*control).get());
+		}
+	}
+}
+
 void Layout::AddEventHandler(const std::string &name, EventHandlerFunction handler)
 {
 	eventHandlers.push_back(std::make_pair(name, handler));

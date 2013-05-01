@@ -19,23 +19,6 @@
 #include "GUISystem.h"
 #include "../framework/ErrorAPI.h"
 
-/*
-void TextBox::Draw(const FontProgData &fontData, const TextureProgData &textureData)
-{
-	if(isVisible)
-	{
-		if(hasBackground)
-		{
-			glutil::MatrixStack identityMatStack;
-			identityMatStack.SetIdentity();
-
-			controlBackground.Draw(identityMatStack, textureData);
-		}
-
-		textToDisplay.Print(visibleText.c_str(), fontData, position, fontColor, textSize);	
-	}
-}
-*/
 
 void TextBox::ComputeNewAttributes()
 {
@@ -87,10 +70,24 @@ void TextBox::InputChar(char ch)
 	if((int)ch == 8)
 	{
 		text.pop_back();
+		int newTextLength = text.length() - visibleText.length();
+		if(newTextLength >= 0)
+		{
+			for(int i = visibleText.length() - 1; i >= 1; i--)
+			{
+				visibleText[i] = visibleText[i - 1];
+			}
+			visibleText[0] = text[newTextLength];
+		}
+		else
+		{
+			visibleText.pop_back();
+		}
 	}
 	else
 	{
 		text += ch;
+		visibleText.push_back(ch);
 	}
 	
 	// 13 represents the ASCII code of ENTER
@@ -99,29 +96,15 @@ void TextBox::InputChar(char ch)
 
 	//}
 	
+	textToDisplay.ComputeTextDimensions(visibleText.c_str(), textPosition, textSize);
+	float width = fabsf(textToDisplay.GetTextMinWidth()) + textToDisplay.GetTextMaxWidth() + margins.w + margins.z;
 
-	if((int)text.length() > maxNumberChars)
+	while(width > maxWidth && (int)ch != 8)
 	{
-		if((int)ch != 8)
-		{
-			for(int i = 0; i < maxNumberChars - 1; i++)
-			{
-				visibleText[i] = visibleText[i + 1];
-			}
-			visibleText[maxNumberChars - 1] = ch;
-		}
-		else
-		{
-			for(int i = maxNumberChars - 1; i >= 1; i--)
-			{
-				visibleText[i] = visibleText[i - 1];
-			}			
-			visibleText[0] = text[text.length() - maxNumberChars];
-		}
-	}
-	else
-	{
-		visibleText = text;
+		textToDisplay.ComputeTextDimensions(visibleText.c_str(), textPosition, textSize);
+		width = fabsf(textToDisplay.GetTextMinWidth()) + textToDisplay.GetTextMaxWidth() + margins.w + margins.z;
+		
+		visibleText.erase(visibleText.begin());
 	}
 }
 

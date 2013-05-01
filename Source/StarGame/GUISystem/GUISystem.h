@@ -240,6 +240,7 @@ class TextBox : public Control
 private:
 	//std::string visibleText;
 	int maxNumberChars; // TODO: width limiter
+	int initialNumberChars;
 	float maxWidth;
 
 public:
@@ -262,6 +263,7 @@ public:
 		//visibleText = "";
 		maxWidth = newMaxWidth;
 		maxNumberChars = newMaxNumberChars;
+		initialNumberChars = maxNumberChars;
 
 		controlSquare.SetWidth(maxWidth);
 	}

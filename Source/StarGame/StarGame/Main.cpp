@@ -712,19 +712,30 @@ void InitializeGUI()
 					glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	std::shared_ptr<TextBox> testTextBox =
+		std::shared_ptr<TextBox>(new TextBox(350.0f, 5, 
+											 "testTextBox", "", 
+											 glm::vec4(1.0f), glm::vec2(), glm::vec4(10, 10, 10, 10),
+											 28,
+											 true, true, true,
+											 glm::vec2(30.0f, 10.0f)));
+	testTextBox->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
+					  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
+	std::shared_ptr<TextBox> testTextBoxTwo = 
 		std::shared_ptr<TextBox>(new TextBox(150.0f, 5, 
 											 "testTextBox", "", 
 											 glm::vec4(1.0f), glm::vec2(), glm::vec4(10, 10, 10, 10),
-											 68,
+											 28,
 											 true, true, true,
-											 glm::vec2(50.0f, 10.0f)));
-	testTextBox->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
-					  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+											 glm::vec2(30.0f, 30.0f)));
+	testTextBoxTwo->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
+					     glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	scene.GetLayout(LAYOUT_MENU)->AddControl(testButton);
 	scene.GetLayout(LAYOUT_MENU)->AddControl(testButtonTwo);
 	scene.GetLayout(LAYOUT_MENU)->AddControl(testLabel);
 	scene.GetLayout(LAYOUT_MENU)->AddControl(testTextBox);
+	scene.GetLayout(LAYOUT_MENU)->AddControl(testTextBoxTwo);
 
 	/*
 	//GUILoader guiLoader("../data/loader-files/gui-config.yaml", 

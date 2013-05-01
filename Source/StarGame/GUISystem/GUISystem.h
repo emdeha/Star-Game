@@ -111,6 +111,7 @@ public:
 	std::shared_ptr<Control> GetClickedControl(glm::ivec2 mouseCoordinates_windowSpace);
 
 	LayoutType GetLayoutType();
+	void DeactivateAllControls();
 
 	bool IsSet();
 	bool IsControl(const std::string &controlName);

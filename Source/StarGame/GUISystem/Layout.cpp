@@ -219,6 +219,15 @@ void Layout::Set(bool newIsSet)
 	isSet = newIsSet;
 }
 
+void Layout::DeactivateAllControls()
+{
+	for(std::vector<std::shared_ptr</*TextControl*/Control>>::iterator iter = controls.begin();
+		iter != controls.end(); ++iter)
+	{
+		(*iter)->SetIsActive(false);
+	}
+}
+
 void Layout::SetCurrentPreset(LayoutPreset newCurrentPreset)
 {
 	/*

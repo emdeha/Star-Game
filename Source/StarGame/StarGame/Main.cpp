@@ -789,6 +789,7 @@ void TestEventHandler(Scene &scene, Control *control)
 
 void ControlActivationEventHandler(Scene &scene, Control *control)
 {
+	scene.GetLayout(LAYOUT_MENU)->DeactivateAllControls();
 	control->SetIsActive(true);
 }
 

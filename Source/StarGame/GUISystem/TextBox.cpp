@@ -44,26 +44,26 @@ void TextBox::ComputeNewAttributes()
 		position = glm::vec2((percentagedPosition.x / 100) * windowWidth,
 							 (percentagedPosition.y / 100) * windowHeight);
 	}
-	textToDisplay.ComputeTextDimensions("|", position, textSize);
+	textToDisplay.ComputeTextDimensions("|", textPosition, textSize);
 
 	if(hasBackground)
 	{
 		glm::vec2 boxMinCorner;
 		glm::vec2 boxMaxCorner;
 
-		boxMinCorner.y = windowHeight - position.y + margins.y;
+		boxMinCorner.y = windowHeight - position.y + fabsf(textToDisplay.GetTextMinHeight()) + margins.y;
 		boxMaxCorner.y = windowHeight - position.y + textToDisplay.GetTextMaxHeight() + margins.x;
-		boxMinCorner.x = windowWidth - position.x + margins.z;
-		boxMaxCorner.x = windowWidth - position.x + maxWidth + margins.w;
+		boxMinCorner.x = windowWidth - position.x + fabsf(textToDisplay.GetTextMinWidth()) + margins.z;
+		boxMaxCorner.x = windowWidth - position.x + textToDisplay.GetTextMaxWidth() + margins.w;
 
-		float width = fabsf(textToDisplay.GetTextMinWidth()) + maxWidth + margins.w + margins.z;
+		float width = fabsf(textToDisplay.GetTextMinWidth()) + textToDisplay.GetTextMaxWidth() + margins.w + margins.z;
 		float height = fabsf(textToDisplay.GetTextMinHeight()) + textToDisplay.GetTextMaxHeight() + margins.x + margins.y;
 		
 		controlSquare.SetPosition(glm::vec3(boxMinCorner, 0.0f));
-		controlSquare.SetWidth(maxWidth);
-		controlSquare.SetHeight(textToDisplay.GetTextMaxHeight());
+		controlSquare.SetWidth(maxWidth + margins.w);
+		controlSquare.SetHeight(height);
 		
-		controlBackground.Update(maxWidth, textToDisplay.GetTextMaxHeight(), boxMinCorner);
+		controlBackground.Update(maxWidth + margins.w, height, boxMinCorner);
 	}
 	else
 	{
@@ -77,7 +77,7 @@ void TextBox::ComputeNewAttributes()
 
 		controlSquare.SetPosition(glm::vec3(boxMinCorner, 0.0f));
 		controlSquare.SetHeight(textToDisplay.GetTextMaxHeight());
-		controlSquare.SetWidth(textToDisplay.GetTextMaxWidth());
+		controlSquare.SetWidth(maxWidth);
 	}
 }
 

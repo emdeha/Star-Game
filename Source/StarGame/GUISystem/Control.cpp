@@ -76,7 +76,7 @@ void Control::Init(const std::string &fontName, const std::string &bckgTextureFi
 		controlBackground.Init(bckgTextureFileName, newWindowWidth, newWindowHeight);
 	}
 
-	ComputeNewAttributes();	
+	ComputeNewAttributes();
 }
 
 void Control::ComputeNewAttributes()

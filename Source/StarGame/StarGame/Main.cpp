@@ -712,10 +712,10 @@ void InitializeGUI()
 					glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	std::shared_ptr<TextBox> testTextBox =
-		std::shared_ptr<TextBox>(new TextBox(50.0f, 5, 
+		std::shared_ptr<TextBox>(new TextBox(150.0f, 5, 
 											 "testTextBox", "", 
 											 glm::vec4(1.0f), glm::vec2(), glm::vec4(10, 10, 10, 10),
-											 28,
+											 68,
 											 true, true, true,
 											 glm::vec2(50.0f, 10.0f)));
 	testTextBox->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",

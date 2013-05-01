@@ -678,12 +678,10 @@ void InitializePrograms()
 	scene.GetShaderManager().LoadSpriteParticleProgData("shaders/SpriteParticleShader.vert", "shaders/SpriteParticleShader.frag");
 }
 
-FusionHint hintBox;
-
 void InitializeGUI()
 {
 	scene.AddLayout(LAYOUT_MENU, glm::vec4(0.5f, 0.6f, 0.0f, 1.0f));
-
+	/*
 	std::shared_ptr<Button> testButton = 
 		std::shared_ptr<Button>(new Button("testControl", "Test, Test", 
 											 glm::vec4(1.0f), glm::vec2(), glm::vec4(30, 5, 15, 0),
@@ -730,12 +728,22 @@ void InitializeGUI()
 											 glm::vec2(30.0f, 30.0f)));
 	testTextBoxTwo->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
 					     glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	*/
+	std::shared_ptr<ImageBox> testImageBox =
+		std::shared_ptr<ImageBox>(new ImageBox(150.0f, 150.0f,
+											   "testImageBox", "",
+											   glm::vec4(1.0f), glm::vec2(), glm::vec4(0.0f),
+											   0, true, true, true, 
+											   glm::vec2(50.0f, 50.0f)));
+	testImageBox->Init("../data/images/fusion-e.jpg",
+					   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
-	scene.GetLayout(LAYOUT_MENU)->AddControl(testButton);
+	/*scene.GetLayout(LAYOUT_MENU)->AddControl(testButton);
 	scene.GetLayout(LAYOUT_MENU)->AddControl(testButtonTwo);
 	scene.GetLayout(LAYOUT_MENU)->AddControl(testLabel);
 	scene.GetLayout(LAYOUT_MENU)->AddControl(testTextBox);
-	scene.GetLayout(LAYOUT_MENU)->AddControl(testTextBoxTwo);
+	scene.GetLayout(LAYOUT_MENU)->AddControl(testTextBoxTwo);*/
+	scene.GetLayout(LAYOUT_MENU)->AddControl(testImageBox);
 
 	/*
 	//GUILoader guiLoader("../data/loader-files/gui-config.yaml", 

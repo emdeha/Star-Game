@@ -259,7 +259,6 @@ public:
 					  newPercentagedPosition) 
 	{
 		maxWidth = newMaxWidth;
-
 		controlSquare.SetWidth(maxWidth);
 	}
 
@@ -269,7 +268,47 @@ public:
 	std::string GetType();
 };
 
+class ImageBox : public Control
+{
+private:
+	float width;
+	float height;
 
+	Utility::Primitives::Sprite image;
+
+public:
+	ImageBox() : Control()
+	{
+		width = 0;
+		height = 0;
+	}
+	ImageBox(float newWidth, float newHeight,
+			 const std::string &newName, const std::string &newText,
+		     glm::vec4 newFontColor, glm::vec2 newPosition, glm::vec4 newMargins,
+		     int newTextSize,
+		     bool newHasBackground, bool newIsVisible, bool newIsUsingPercentage,
+		     glm::vec2 newPercentagedPosition = glm::vec2()) 
+		     : Control(newName, newText,
+					   newFontColor, newPosition, newMargins,
+					   newTextSize, 
+					   newHasBackground, newIsVisible, newIsUsingPercentage,
+					   newPercentagedPosition) 
+	{
+		width = newWidth;
+		height = newHeight;
+	}
+
+	void Init(const std::string &imageFileName, 
+			  int windowWidth, int windowHeight);
+
+	void ComputeNewAttributes();
+
+	void Update(int newWindowWidth, int newWindowHeight);
+	// Adding the font data for later usage.
+	void Draw(const FontProgData &fontData, const TextureProgData &textureData);
+
+	std::string GetType();
+};
 
 
 
@@ -383,7 +422,7 @@ public:
 	void SetPreset(LayoutPreset newCurrentPreset);
 };
 
-
+/*
 class ImageBox : public TextControl
 {
 private:

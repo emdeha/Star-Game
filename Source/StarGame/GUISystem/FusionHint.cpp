@@ -19,7 +19,7 @@
 #include "GUISystem.h"
 #include "../framework/ErrorAPI.h"
 
-
+/*
 void FusionHint::Init()
 {
 	boxSprite.Init(skillTextures[0]);
@@ -112,4 +112,4 @@ void FusionHint::SetDescriptions(std::vector<std::string> descriptions)
 	{
 		skillDescriptions.push_back(descriptions[i]);
 	}
-}
+}*/

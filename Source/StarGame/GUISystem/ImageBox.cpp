@@ -20,6 +20,58 @@
 #include "../framework/ErrorAPI.h"
 
 
+void ImageBox::Init(const std::string &imageFileName,
+					int windowWidth, int windowHeight)
+{
+	if(isUsingPercentage)
+	{
+		position = glm::vec2((percentagedPosition.x / 100) * windowWidth,
+								(percentagedPosition.y / 100) * windowHeight);
+	}
+
+	image = 
+		Utility::Primitives::Sprite(glm::vec3(position, 0.0f),
+									glm::vec4(1.0f), width, height, false);
+	image.Init(imageFileName);
+}
+
+void ImageBox::ComputeNewAttributes()
+{
+	if(isUsingPercentage)
+	{
+		position = glm::vec2((percentagedPosition.x / 100) * windowWidth,
+								(percentagedPosition.y / 100) * windowHeight);
+	}
+	image.Update(width, height, position);
+}
+
+void ImageBox::Update(int newWindowWidth, int newWindowHeight)
+{
+	windowWidth = newWindowWidth;
+	windowHeight = newWindowHeight;
+
+	ComputeNewAttributes();
+}
+
+void ImageBox::Draw(const FontProgData &fontData, const TextureProgData &textureData)
+{
+	glutil::MatrixStack identityMat;
+	identityMat.SetIdentity();
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	image.Draw(identityMat, textureData);
+
+	glDisable(GL_BLEND);
+}
+
+std::string ImageBox::GetType()
+{
+	return "ImageBox";
+}
+
+/*
 void ImageBox::Init()
 {
 	boxSprite.Init(fusionTextures[0]);
@@ -100,4 +152,4 @@ void ImageBox::SetTextures(std::string textures[])
 	{
 		fusionTextures[i] = textures[i];
 	}
-}
+}*/

@@ -27,7 +27,7 @@ void TextBox::ComputeNewAttributes()
 		position = glm::vec2((percentagedPosition.x / 100) * windowWidth,
 							 (percentagedPosition.y / 100) * windowHeight);
 	}
-	textToDisplay.ComputeTextDimensions("|", textPosition, textSize);
+	textToDisplay.ComputeTextDimensions("|", glm::vec2(), textSize);
 
 	if(hasBackground)
 	{
@@ -96,12 +96,12 @@ void TextBox::InputChar(char ch)
 
 	//}
 	
-	textToDisplay.ComputeTextDimensions(visibleText.c_str(), textPosition, textSize);
+	textToDisplay.ComputeTextDimensions(visibleText.c_str(), glm::vec2(), textSize);
 	float width = fabsf(textToDisplay.GetTextMinWidth()) + textToDisplay.GetTextMaxWidth() + margins.w + margins.z;
 
 	while(width > maxWidth && (int)ch != 8)
 	{
-		textToDisplay.ComputeTextDimensions(visibleText.c_str(), textPosition, textSize);
+		textToDisplay.ComputeTextDimensions(visibleText.c_str(), glm::vec2(), textSize);
 		width = fabsf(textToDisplay.GetTextMinWidth()) + textToDisplay.GetTextMaxWidth() + margins.w + margins.z;
 		
 		visibleText.erase(visibleText.begin());

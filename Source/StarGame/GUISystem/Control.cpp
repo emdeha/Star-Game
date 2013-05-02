@@ -51,7 +51,6 @@ Control::Control(const std::string &newName, const std::string &newText,
 	isActive = false;
 	percentagedPosition = newPercentagedPosition;
 	margins = newMargins;
-	textPosition = position;
 }
 
 void Control::Init(const std::string &fontName, const std::string &bckgTextureFileName,
@@ -86,7 +85,7 @@ void Control::ComputeNewAttributes()
 		position = glm::vec2((percentagedPosition.x / 100) * windowWidth,
 							 (percentagedPosition.y / 100) * windowHeight);
 	}
-	textToDisplay.ComputeTextDimensions(text.c_str(), textPosition, textSize);
+	textToDisplay.ComputeTextDimensions(text.c_str(), glm::vec2(), textSize);
 
 	if(hasBackground)
 	{

@@ -4,7 +4,7 @@ details:
     default-font: AGENCYR.TTF
 layout-menu:
     background-color: [ 1.0, 1.0, 1.0, 1.0 ]
-    is-active: false
+    is-active: true
     background-image: "background.png"
     controls:
         control-button-new:
@@ -169,7 +169,7 @@ layout-load-game:
             text-size: 48 
 layout-options:
     background-color: [ 1.0, 1.0, 1.0, 1.0 ]
-    is-active: true
+    is-active: false
     background-image: "background.png"
     controls:
         control-button-back:

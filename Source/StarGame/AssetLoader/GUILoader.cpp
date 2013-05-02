@@ -140,7 +140,8 @@ GUILoader::GUILoader(const std::string &fileName,
 															control->second["margins"][1].as<float>(),
 															control->second["margins"][2].as<float>(),
 															control->second["margins"][3].as<float>());
-							controlData.backgroundImage = control->second["background-image"].as<std::string>();
+							controlData.backgroundImage = texturesDir;
+							controlData.backgroundImage += control->second["background-image"].as<std::string>();
 						}
 						controlData.percentagedPosition = glm::vec2();
 						controlData.position = glm::vec2();
@@ -187,7 +188,8 @@ GUILoader::GUILoader(const std::string &fileName,
 															control->second["margins"][1].as<float>(),
 															control->second["margins"][2].as<float>(),
 															control->second["margins"][3].as<float>());
-							controlData.backgroundImage = control->second["background-image"].as<std::string>();
+							controlData.backgroundImage = texturesDir;
+							controlData.backgroundImage += control->second["background-image"].as<std::string>();
 						}
 						controlData.percentagedPosition = glm::vec2();
 						controlData.position = glm::vec2();

@@ -14,8 +14,8 @@ layout-menu:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 130 ]
+            is-using-percentage: true
+            percentaged-pos: [ 1, 17 ]
             text-size: 28
         control-button-resume:
             control-type: button
@@ -24,8 +24,8 @@ layout-menu:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: false
-            is-using-percentage: false
-            position: [ 10, 130 ]
+            is-using-percentage: true
+            percentaged-pos: [ 1, 17 ]
             text-size: 28
         control-button-save:
             control-type: button
@@ -34,8 +34,8 @@ layout-menu:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: false
-            is-using-percentage: false
-            position: [ 10, 100 ]
+            is-using-percentage: true
+            percentaged-pos: [ 1, 13 ]
             text-size: 28
         control-button-load:
             control-type: button
@@ -44,8 +44,8 @@ layout-menu:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 100 ]
+            is-using-percentage: true
+            percentaged-pos: [ 1, 13 ]
             text-size: 28
         control-button-options:
             control-type: button
@@ -54,8 +54,8 @@ layout-menu:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 70 ]
+            is-using-percentage: true
+            percentaged-pos: [ 1, 9 ]
             text-size: 28
         control-button-quit:
             control-type: button
@@ -64,8 +64,8 @@ layout-menu:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 40 ]
+            is-using-percentage: true
+            percentaged-pos: [ 1, 5 ]
             text-size: 28
 layout-save-game:
     background-color: [ 1.0, 1.0, 1.0, 1.0 ]
@@ -79,8 +79,8 @@ layout-save-game:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 40 ]
+            is-using-percentage: true
+            percentaged-pos: [ 1, 5 ]
             text-size: 28
         control-button-saveslot-1:
             control-type: button
@@ -89,8 +89,8 @@ layout-save-game:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 600 ]
+            is-using-percentage: true
+            percentaged-pos: [ 1, 78 ]
             text-size: 28
         control-button-saveslot-2:
             control-type: button
@@ -99,8 +99,8 @@ layout-save-game:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 570 ]
+            is-using-percentage: true
+            percentaged-pos: [ 1, 74 ]
             text-size: 28
         control-button-saveslot-3:
             control-type: button
@@ -109,8 +109,8 @@ layout-save-game:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 540 ]
+            is-using-percentage: true
+            percentaged-pos: [ 1, 70 ]
             text-size: 28
         control-button-saveslot-4:
             control-type: button
@@ -119,8 +119,8 @@ layout-save-game:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 510 ]
+            is-using-percentage: true
+            percentaged-pos: [ 1, 66 ]
             text-size: 28
         control-button-saveslot-5:
             control-type: button
@@ -129,8 +129,8 @@ layout-save-game:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 480 ]
+            is-using-percentage: true 
+            percentaged-pos: [ 1, 62 ]
             text-size: 28
         control-label-tooltip:
             control-type: label
@@ -139,8 +139,8 @@ layout-save-game:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 720 ]
+            is-using-percentage: true
+            percentaged-pos: [ 1, 94 ]
             text-size: 48
 layout-load-game:
     background-color: [ 1.0, 1.0, 1.0, 1.0 ]
@@ -154,8 +154,8 @@ layout-load-game:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 40 ]
+            is-using-percentage: true
+            percentaged-pos: [ 1, 5 ]
             text-size: 28
         control-label-tooltip:
             control-type: label
@@ -164,12 +164,12 @@ layout-load-game:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 720 ]
+            is-using-percentage: true
+            percentaged-pos: [ 1, 93 ]
             text-size: 48 
 layout-options:
     background-color: [ 1.0, 1.0, 1.0, 1.0 ]
-    is-active: false
+    is-active: true
     background-image: "background.png"
     controls:
         control-button-back:
@@ -179,8 +179,8 @@ layout-options:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 40 ]
+            is-using-percentage: true
+            percentaged-pos: [ 1, 5 ]
             text-size: 28
         control-label-tooltip:
             control-type: label
@@ -189,12 +189,12 @@ layout-options:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 720 ]
+            is-using-percentage: true
+            percentaged-pos: [ 1, 93 ]
             text-size: 48
 layout-game:
     background-color: [ 0.0, 0.0, 0.0, 1.0 ]
-    is-active: true
+    is-active: false
     controls:
         control-label-matter:
             control-type: label

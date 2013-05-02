@@ -680,79 +680,13 @@ void InitializePrograms()
 
 void InitializeGUI()
 {
-	//scene.AddLayout(LAYOUT_MENU, glm::vec4(0.5f, 0.6f, 0.0f, 1.0f));
-	/*
-	std::shared_ptr<Button> testButton = 
-		std::shared_ptr<Button>(new Button("testControl", "Test, Test", 
-											 glm::vec4(1.0f), glm::vec2(), glm::vec4(30, 5, 15, 0),
-											 48, 
-											 true, true, true, 
-											 glm::vec2(10.0f, 10.0f)));
-	testButton->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
-					  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-
-	std::shared_ptr<Button> testButtonTwo =
-		std::shared_ptr<Button>(new Button("testControlTwo", "sad sad",
-											 glm::vec4(1.0f), glm::vec2(), glm::vec4(40, 40, 20, 20),
-											 28,
-											 false, true, true,
-											 glm::vec2(60.0f, 80.0f)));
-	testButtonTwo->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
-						 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-
-	std::shared_ptr<Label> testLabel =
-		std::shared_ptr<Label>(new Label("testLabel", "I am a label...", 
-										 glm::vec4(1.0f), glm::vec2(), glm::vec4(3, 3, 3, 3),
-										 68,
-										 true, true, true, 
-										 glm::vec2(50.0f, 50.0f)));
-	testLabel->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
-					glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-
-	std::shared_ptr<TextBox> testTextBox =
-		std::shared_ptr<TextBox>(new TextBox(350.0f,  
-											 "testTextBox", "", 
-											 glm::vec4(1.0f), glm::vec2(), glm::vec4(10, 10, 10, 10),
-											 28,
-											 true, true, true,
-											 glm::vec2(30.0f, 10.0f)));
-	testTextBox->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
-					  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-
-	std::shared_ptr<TextBox> testTextBoxTwo = 
-		std::shared_ptr<TextBox>(new TextBox(150.0f,  
-											 "testTextBox", "", 
-											 glm::vec4(1.0f), glm::vec2(), glm::vec4(10, 10, 10, 10),
-											 28,
-											 true, true, true,
-											 glm::vec2(30.0f, 30.0f)));
-	testTextBoxTwo->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
-					     glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-	
-	std::shared_ptr<ImageBox> testImageBox =
-		std::shared_ptr<ImageBox>(new ImageBox(150.0f, 150.0f,
-											   "testImageBox", "",
-											   glm::vec4(1.0f), glm::vec2(), glm::vec4(0.0f),
-											   0, true, true, true, 
-											   glm::vec2(50.0f, 50.0f)));
-	testImageBox->Init("../data/images/fusion-e.jpg",
-					   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));*/
-
-	/*scene.GetLayout(LAYOUT_MENU)->AddControl(testButton);
-	scene.GetLayout(LAYOUT_MENU)->AddControl(testButtonTwo);
-	scene.GetLayout(LAYOUT_MENU)->AddControl(testLabel);
-	scene.GetLayout(LAYOUT_MENU)->AddControl(testTextBox);
-	scene.GetLayout(LAYOUT_MENU)->AddControl(testTextBoxTwo);
-	scene.GetLayout(LAYOUT_MENU)->AddControl(testImageBox);*/
-
-	
 	GUILoader guiLoader("../data/loader-files/test-gui.yaml", 
 						glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
 	scene.AddLayouts(guiLoader.GetAllLoadedLayouts());
-	/*
+	
 	scene.GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetIsVisible(false);
-	/*
+	
 	// Set buttons text
 	DIR *dir;
 	struct dirent *ent;
@@ -767,18 +701,17 @@ void InitializeGUI()
 			{
 				controlPosition.y -= 30.0f;
 				std::vector<std::string> splittedFileName = Utility::SplitString(ent->d_name, '.');
-				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl(splittedFileName[0])->ChangeText(splittedFileName[0]);
+				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl(splittedFileName[0])->SetText(splittedFileName[0]);
 
 				std::shared_ptr<Button> loadEntryButton = 
-					std::shared_ptr<Button>(new Button(LayoutPreset(SMALL),
-													   splittedFileName[0],
-													   splittedFileName[0],
-													   controlPosition,
-													   28, false, true));
-				loadEntryButton->Init("../data/fonts/AGENCYR.TTF", 
+					std::shared_ptr<Button>(new Button(splittedFileName[0], splittedFileName[0],
+													   glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
+													   controlPosition, glm::vec4(),
+													   28,
+													   false, true, false,
+													   glm::vec2()));
+				loadEntryButton->Init("../data/fonts/AGENCYR.TTF", "",
 									  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-				loadEntryButton->AddPreset(MEDIUM, 28, controlPosition);
-				loadEntryButton->AddPreset(BIG, 28, controlPosition);
 				scene.GetLayout(LAYOUT_LOAD_GAME)->AddControl(loadEntryButton);
 			}
 		}
@@ -787,17 +720,13 @@ void InitializeGUI()
 	else 
 	{
 		HandleUnexpectedError("invalid directory", __LINE__, __FILE__);
-	}*/
-}
-
-void TestEventHandler(Scene &scene, Control *control)
-{
-	std::printf("Hit control: %s\n", control->GetName().c_str());
+	}
 }
 
 void ControlActivationEventHandler(Scene &scene, Control *control)
 {
 	scene.GetLayout(LAYOUT_MENU)->DeactivateAllControls();
+	scene.GetLayout(LAYOUT_IN_GAME)->DeactivateAllControls();
 	control->SetIsActive(true);
 }
 
@@ -877,10 +806,9 @@ void InitializeScene()
 
 	scene.OnEvent(inMenuEvent);
 
-
-	scene.AddEventHandler("test", LAYOUT_MENU, TestEventHandler);
-	scene.AddEventHandler("controlActivation", LAYOUT_MENU, ControlActivationEventHandler);
-	scene.AddEventHandler("controlOnEnter", LAYOUT_MENU, OnTextBoxEnterPressEventHandler);
+	
+	scene.AddEventHandler("controlActivation", LAYOUT_ALL, ControlActivationEventHandler);
+	scene.AddEventHandler("controlOnEnter", LAYOUT_ALL, OnTextBoxEnterPressEventHandler);
 }
 
 
@@ -974,15 +902,6 @@ void Init()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	nextGameTick = GetTickCount();
-	/*
-	testControl = 
-		Control("testControl", "Test, Test", 
-				glm::vec4(1.0f), glm::vec2(), glm::vec4(30, 5, 15, 0),
-				48, 
-			    true, true, true, 
-				glm::vec2(10.0f, 10.0f));
-	testControl.Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
-					 glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));*/
 }
 
 bool isEmitterStarted = false;
@@ -1036,9 +955,6 @@ void Display()
 			}
 		}
 		scene.RenderCurrentLayout();
-
-		//testControl.Draw(scene.GetShaderManager().GetFontProgData(), 
-		//				 scene.GetShaderManager().GetTextureProgData());
 	}
 
 	HandleMouse();
@@ -1082,8 +998,6 @@ void Reshape(int width, int height)
 	
 	scene.UpdateCurrentLayout(width, height);
 
-	//testControl.Update(width, height);
-
 	displayData.windowHeight = height;
 	displayData.windowWidth = width;
 
@@ -1092,28 +1006,20 @@ void Reshape(int width, int height)
 }
 
 void Keyboard(unsigned char key, int x, int y)
-{/*
-	// This needs to be passed as an event.
-	if(scene.IsLayoutOn(LAYOUT_IN_GAME) && 
+{
+	if(scene.IsLayoutOn(LAYOUT_IN_GAME) &&
 	   scene.GetLayout(LAYOUT_IN_GAME)->HasActiveControl())
-	{
-		scene.GetLayout(LAYOUT_IN_GAME)->GetActiveControl()->InputChar(key);
-		return;
-	}
-	*/
-	if(scene.IsLayoutOn(LAYOUT_MENU) &&
-	   scene.GetLayout(LAYOUT_MENU)->HasActiveControl())
 	{
 		if((int)key == 13)
 		{
 			Event buttonPressedEvent = 
 				StockEvents::EventOnButtonPressed(
-					key, scene.GetLayout(LAYOUT_MENU)->GetActiveControl()->GetName().c_str());
-
+					key, scene.GetLayout(LAYOUT_IN_GAME)->GetActiveControl()->GetName().c_str());
 			scene.OnEvent(buttonPressedEvent);
+			scene.GetLayout(LAYOUT_IN_GAME)->GetActiveControl()->ClearContent();
 			return;
 		}
-		scene.GetLayout(LAYOUT_MENU)->GetActiveControl()->InputChar(key);
+		scene.GetLayout(LAYOUT_IN_GAME)->GetActiveControl()->InputChar(key);
 		return;
 	}
 

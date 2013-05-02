@@ -206,6 +206,7 @@ void Control::SetIsVisible(bool newIsVisible)
 void Control::SetText(const std::string &newText)
 {
 	text = newText;
+	visibleText = text;
 }
 std::string Control::GetName()
 {

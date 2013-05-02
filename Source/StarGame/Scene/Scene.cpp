@@ -1736,14 +1736,14 @@ void Scene::OnEvent(Event &_event)
 	switch(_event.GetType())
 	{
 	case EVENT_TYPE_BUTTON_PRESSED:
-		if(strcmp(_event.GetArgument("object").varString, "testTextBox") == 0)
+		if(strcmp(_event.GetArgument("object").varString, "varInput") == 0)
 		{
 			for(std::map<LayoutType, std::shared_ptr<Layout>>::iterator iter = sceneLayouts.begin();
 				iter != sceneLayouts.end(); ++iter)
 			{
 				if(iter->second->IsSet())
 				{
-					iter->second->HandleKeyPress(*this);
+					iter->second->HandleKeyPress(*this, "varInput");
 				}
 			}
 		}
@@ -2294,7 +2294,18 @@ void Scene::AddEnemy(const std::shared_ptr<Enemy> newEnemy)
 
 void Scene::AddEventHandler(const std::string &name, LayoutType layoutToAddTo, EventHandlerFunction handler)
 {
-	GetLayout(layoutToAddTo)->AddEventHandler(name, handler);
+	if(layoutToAddTo == LayoutType::LAYOUT_ALL)
+	{
+		GetLayout(LAYOUT_IN_GAME)->AddEventHandler(name, handler);
+		GetLayout(LAYOUT_LOAD_GAME)->AddEventHandler(name, handler);
+		GetLayout(LAYOUT_MENU)->AddEventHandler(name, handler);
+		GetLayout(LAYOUT_SAVE_GAME)->AddEventHandler(name, handler);
+		GetLayout(LAYOUT_OPTIONS)->AddEventHandler(name, handler);
+	}
+	else
+	{
+		GetLayout(layoutToAddTo)->AddEventHandler(name, handler);
+	}
 	//eventHandlers.push_back(std::make_pair(name, handler));
 }
 void Scene::CallEventHandler(const std::string &name, LayoutType layoutToCallIt, Scene &scene, Control *control)

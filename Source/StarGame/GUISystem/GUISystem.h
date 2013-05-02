@@ -48,6 +48,7 @@ enum LayoutType
 	LAYOUT_OPTIONS,
 
 	LAYOUT_OTHER,
+	LAYOUT_ALL,
 };
 
 enum LayoutPreset

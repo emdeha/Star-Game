@@ -4,5 +4,237 @@ details:
     default-font: AGENCYR.TTF
 layout-menu:
     background-color: [ 1.0, 1.0, 1.0, 1.0 ]
-    is-active: true
+    is-active: false
     background-image: "background.png"
+    controls:
+        control-button-new:
+            control-type: button
+            name: newGame
+            text: New Game
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 10, 130 ]
+            text-size: 28
+        control-button-resume:
+            control-type: button
+            name: resumeGame
+            text: Resume Game
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: false
+            is-using-percentage: false
+            position: [ 10, 130 ]
+            text-size: 28
+        control-button-save:
+            control-type: button
+            name: saveGame
+            text: Save Game
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: false
+            is-using-percentage: false
+            position: [ 10, 100 ]
+            text-size: 28
+        control-button-load:
+            control-type: button
+            name: loadGame
+            text: Load Game
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 10, 100 ]
+            text-size: 28
+        control-button-options:
+            control-type: button
+            name: options
+            text: Options
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 10, 70 ]
+            text-size: 28
+        control-button-quit:
+            control-type: button
+            name: quitGame 
+            text: Quit 
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 10, 40 ]
+            text-size: 28
+layout-save-game:
+    background-color: [ 1.0, 1.0, 1.0, 1.0 ]
+    is-active: false
+    background-image: "background.png"
+    controls:
+        control-button-back:
+            control-type: button
+            name: backBtn
+            text: Back to Main
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 10, 40 ]
+            text-size: 28
+        control-button-saveslot-1:
+            control-type: button
+            name: saveSlot1
+            text: Empty
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 10, 600 ]
+            text-size: 28
+        control-button-saveslot-2:
+            control-type: button
+            name: saveSlot2
+            text: Empty
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 10, 570 ]
+            text-size: 28
+        control-button-saveslot-3:
+            control-type: button
+            name: saveSlot3
+            text: Empty
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 10, 540 ]
+            text-size: 28
+        control-button-saveslot-4:
+            control-type: button
+            name: saveSlot4
+            text: Empty
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 10, 510 ]
+            text-size: 28
+        control-button-saveslot-5:
+            control-type: button
+            name: saveSlot5
+            text: Empty
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 10, 480 ]
+            text-size: 28
+        control-label-tooltip:
+            control-type: label
+            name: labelHeader
+            text: Save Game
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 10, 720 ]
+            text-size: 48
+layout-load-game:
+    background-color: [ 1.0, 1.0, 1.0, 1.0 ]
+    is-active: false
+    background-image: "background.png"
+    controls:
+        control-button-back:
+            control-type: button
+            name: backBtn
+            text: Back to Main
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 10, 40 ]
+            text-size: 28
+        control-label-tooltip:
+            control-type: label
+            name: labelHeader
+            text: "Load Game"
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 10, 720 ]
+            text-size: 48 
+layout-options:
+    background-color: [ 1.0, 1.0, 1.0, 1.0 ]
+    is-active: false
+    background-image: "background.png"
+    controls:
+        control-button-back:
+            control-type: button
+            name: backBtn
+            text: Back to Main
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 10, 40 ]
+            text-size: 28
+        control-label-tooltip:
+            control-type: label
+            name: labelHeader
+            text: Options
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 10, 720 ]
+            text-size: 48
+layout-game:
+    background-color: [ 0.0, 0.0, 0.0, 1.0 ]
+    is-active: true
+    controls:
+        control-label-matter:
+            control-type: label
+            name: labelMatter
+            text: "Matter:"
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 2, 95 ]
+            text-size: 28
+        control-label-tooltip:
+            control-type: label
+            name: labelToolTip
+            text: ""
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 0, 0 ]
+            text-size: 28 
+        control-textbox-varinput:
+            control-type: textBox
+            name: varInput
+            width: 200
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: true
+            is-visible: true
+            is-using-percentage: true
+            margins: [ 5, 5, 5, 5 ]
+            background-image: "fusion-empty.jpg"
+            percentaged-pos: [ 78, 95 ]
+            text-size: 28
+        control-button-apply:
+            control-type: button
+            name: applyInput
+            text: Apply
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 95, 95 ]
+            text-size: 28

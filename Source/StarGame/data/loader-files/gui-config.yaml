@@ -14,7 +14,7 @@ layout-game:
             has-background: false
             is-visible: true
             is-using-percentage: true
-            percentaged-position: [ 10, 90 ]
+            percentaged-pos: [ 10, 90 ]
             text-size: 28
         control-label-tooltip:
             control-type: label
@@ -194,7 +194,7 @@ layout-save-game:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: true
+            is-using-percentage: false
             position: [ 10, 40 ]
             text-size: 28
         control-button-saveslot-1:

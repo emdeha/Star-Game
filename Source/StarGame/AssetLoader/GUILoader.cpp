@@ -301,7 +301,8 @@ GUILoader::GUILoader(const std::string &fileName,
 					else if(control->second["control-type"].as<std::string>() == "textBox")
 					{
 						controlData.name = control->second["name"].as<std::string>();
-						controlData.text = control->second["text"].as<std::string>();
+						//controlData.text = control->second["text"].as<std::string>();
+						controlData.text = "";
 						controlData.hasBackground = control->second["has-background"].as<bool>();
 						controlData.isVisible = control->second["is-visible"].as<bool>();
 						controlData.isUsingPercentage = control->second["is-using-percentage"].as<bool>();
@@ -318,7 +319,8 @@ GUILoader::GUILoader(const std::string &fileName,
 															control->second["margins"][1].as<float>(),
 															control->second["margins"][2].as<float>(),
 															control->second["margins"][3].as<float>());
-							controlData.backgroundImage = control->second["background-image"].as<std::string>();
+							controlData.backgroundImage = texturesDir;
+							controlData.backgroundImage += control->second["background-image"].as<std::string>();
 						}
 						controlData.percentagedPosition = glm::vec2();
 						controlData.position = glm::vec2();

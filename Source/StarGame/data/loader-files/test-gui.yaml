@@ -1,0 +1,8 @@
+details:
+    fonts-dir: "../data/fonts/"
+    textures-dir: "../data/images/"
+    default-font: AGENCYR.TTF
+layout-menu:
+    background-color: [ 1.0, 1.0, 1.0, 1.0 ]
+    is-active: true
+    background-image: "background.png"

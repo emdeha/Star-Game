@@ -9,35 +9,23 @@ layout-game:
         control-label-matter:
             control-type: label
             name: labelMatter
-            text: "Matter:"
+            text: Matter:
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 10, 738 ]
-                    text-size: 28
-                preset-medium:
-                    position: [ 10, 738 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 10, 738 ]
-                    text-size: 28 # must be 68, but buggy 
+            is-using-percentage: true
+            percentaged-position: [ 10, 90 ]
+            text-size: 28
         control-label-tooltip:
             control-type: label
             name: labelToolTip
             text: ""
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 0, 0 ]
-                    text-size: 28
-                preset-medium:
-                    position: [ 0, 0 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 0, 0 ]
-                    text-size: 28 # must be 68, but buggy
+            is-using-percentage: false
+            position: [ 0, 0 ]
+            text-size: 28 
         control-imagebox-fusone:
             control-type: imageBox
             name: fusionOne
@@ -113,35 +101,22 @@ layout-game:
             control-type: textBox
             name: varInput
             width: 200
-            char-width: 15
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 1020, 728 ]
-                    text-size: 28
-                preset-medium:
-                    position: [ 1020, 728 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 1020, 728 ]
-                    text-size: 28
+            is-using-percentage: false
+            position: [ 1020, 728 ]
+            text-size: 28
         control-button-apply:
             control-type: button
             name: applyInput
             text: Apply
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 1230, 728 ]
-                    text-size: 28
-                preset-medium:
-                    position: [ 1230, 728 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 1230, 728 ]
-                    text-size: 28
+            is-using-percentage: false
+            position: [ 1230, 728 ]
+            text-size: 28
 layout-menu:
     background-color: [ 1.0, 1.0, 1.0, 1.0 ]
     background-image: "background.png"
@@ -151,98 +126,62 @@ layout-menu:
             control-type: button
             name: newGame
             text: New Game
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 10, 130 ]
-                    text-size: 28
-                preset-medium:
-                    position: [ 10, 130 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 10, 130 ]
-                    text-size: 28
+            is-using-percentage: false 
+            position: [ 10, 130 ]
+            text-size: 28
         control-button-resume:
             control-type: button
             name: resumeGame
             text: Resume Game
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: false
-            presets:
-                preset-small: 
-                    position: [ 10, 130 ]
-                    text-size: 28
-                preset-medium: 
-                    position: [ 10, 130 ]
-                    text-size: 28
-                preset-big: 
-                    position: [ 10, 130 ]
-                    text-size: 28
+            is-using-percentage: false
+            position: [ 10, 130 ]
+            text-size: 28
         control-button-save:
             control-type: button
             name: saveGame
             text: Save Game
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: false
-            presets:
-                preset-small:
-                    position: [ 10, 100 ]
-                    text-size: 28
-                preset-medium:
-                    position: [ 10, 100 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 10, 100 ]
-                    text-size: 28
+            is-using-percentage: false
+            position: [ 10, 100 ]
+            text-size: 28
         control-button-load:
             control-type: button
             name: loadGame
             text: Load Game
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 10, 100 ]
-                    text-size: 28
-                preset-medium:
-                    position: [ 10, 100 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 10, 100 ]
-                    text-size: 28
+            is-using-percentage: false
+            position: [ 10, 100 ]
+            text-size: 28
         control-button-options:
             control-type: button
             name: options
             text: Options
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 10, 70 ]
-                    text-size: 28
-                preset-medium:
-                    position: [ 10, 70 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 10, 70 ]
-                    text-size: 28
+            is-using-percentage: false
+            position: [ 10, 70 ]
+            text-size: 28
         control-button-quit:
             control-type: button
             name: quitGame 
             text: Quit 
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 10, 40 ]
-                    text-size: 28   
-                preset-medium:
-                    position: [ 10, 40 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 10, 40 ]
-                    text-size: 28
+            is-using-percentage: false
+            position: [ 10, 40 ]
+            text-size: 28   
 layout-save-game:
     background-color: [ 1.0, 1.0, 1.0, 1.0 ]
     is-active: false
@@ -252,114 +191,72 @@ layout-save-game:
             control-type: button
             name: backBtn
             text: Back to Main
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 10, 40 ]
-                    text-size: 28   
-                preset-medium:
-                    position: [ 10, 40 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 10, 40 ]
-                    text-size: 28
+            is-using-percentage: true
+            position: [ 10, 40 ]
+            text-size: 28
         control-button-saveslot-1:
             control-type: button
             name: saveSlot1
             text: Empty
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 10, 600 ]
-                    text-size: 28
-                preset-medium:
-                    position: [ 10, 600 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 10, 600 ]
-                    text-size: 28
+            is-using-percentage: false
+            position: [ 10, 600 ]
+            text-size: 28
         control-button-saveslot-2:
             control-type: button
             name: saveSlot2
             text: Empty
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 10, 570 ]
-                    text-size: 28
-                preset-medium:
-                    position: [ 10, 570 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 10, 570 ]
-                    text-size: 28
+            is-using-percentage: false
+            position: [ 10, 570 ]
+            text-size: 28
         control-button-saveslot-3:
             control-type: button
             name: saveSlot3
             text: Empty
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 10, 540 ]
-                    text-size: 28
-                preset-medium:
-                    position: [ 10, 540 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 10, 540 ]
-                    text-size: 28
+            is-using-percentage: false
+            position: [ 10, 540 ]
+            text-size: 28
         control-button-saveslot-4:
             control-type: button
             name: saveSlot4
             text: Empty
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 10, 510 ]
-                    text-size: 28
-                preset-medium:
-                    position: [ 10, 510 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 10, 510 ]
-                    text-size: 28
+            is-using-percentage: false
+            position: [ 10, 510 ]
+            text-size: 28
         control-button-saveslot-5:
             control-type: button
             name: saveSlot5
             text: Empty
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 10, 480 ]
-                    text-size: 28
-                preset-medium:
-                    position: [ 10, 480 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 10, 480 ]
-                    text-size: 28
+            is-using-percentage: false
+            position: [ 10, 480 ]
+            text-size: 28
         control-label-tooltip:
             control-type: label
             name: labelHeader
-            text: "Save Game"
+            text: Save Game
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 10, 720 ]
-                    text-size: 48
-                preset-medium:
-                    position: [ 10, 720 ]
-                    text-size: 48
-                preset-big:
-                    position: [ 10, 720 ]
-                    text-size: 48 # must be 68, but buggy
+            is-using-percentage: false
+            position: [ 10, 720 ]
+            text-size: 48
 layout-load-game:
     background-color: [ 1.0, 1.0, 1.0, 1.0 ]
     is-active: false
@@ -369,34 +266,22 @@ layout-load-game:
             control-type: button
             name: backBtn
             text: Back to Main
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 10, 40 ]
-                    text-size: 28   
-                preset-medium:
-                    position: [ 10, 40 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 10, 40 ]
-                    text-size: 28
+            is-using-percentage: false
+            position: [ 10, 40 ]
+            text-size: 28
         control-label-tooltip:
             control-type: label
             name: labelHeader
             text: "Load Game"
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 10, 720 ]
-                    text-size: 48
-                preset-medium:
-                    position: [ 10, 720 ]
-                    text-size: 48
-                preset-big:
-                    position: [ 10, 720 ]
-                    text-size: 48 # must be 68, but buggy
+            is-using-percentage: false
+            position: [ 10, 720 ]
+            text-size: 48 
 layout-options:
     background-color: [ 1.0, 1.0, 1.0, 1.0 ]
     is-active: false
@@ -406,31 +291,19 @@ layout-options:
             control-type: button
             name: backBtn
             text: Back to Main
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 10, 40 ]
-                    text-size: 28   
-                preset-medium:
-                    position: [ 10, 40 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 10, 40 ]
-                    text-size: 28
+            is-using-percentage: false
+            position: [ 10, 40 ]
+            text-size: 28
         control-label-tooltip:
             control-type: label
             name: labelHeader
-            text: "Options"
+            text: Options
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 10, 720 ]
-                    text-size: 48
-                preset-medium:
-                    position: [ 10, 720 ]
-                    text-size: 48
-                preset-big:
-                    position: [ 10, 720 ]
-                    text-size: 48 # must be 68, but buggy
+            is-using-percentage: false
+            position: [ 10, 720 ]
+            text-size: 48 

@@ -32,24 +32,24 @@ struct LayoutData
 
 struct ControlData
 {
-	char controlName[30];
-	char controlText[30]; 
-	int controlHasBackground;
-	bool controlIsVisible;
-	
-	PresetAttributes controlPresets[3];
+	std::string name;
+	std::string text; 
+	std::string backgroundImage;
 
+	glm::vec4 fontColor;
+	glm::vec4 margins;
+	glm::vec2 position;
+	glm::vec2 percentagedPosition;
+	int textSize;
+
+	bool hasBackground;
+	bool isVisible;
+	bool isUsingPercentage;
+		
 	float textBoxWidth;
-	int textBoxCharWidth;
 
 	float imageBoxWidth;
 	float imageBoxHeight;
-
-	int imageBoxIndex; /// this is only needed for the fusion. should refactor
-
-	std::string fusionTextures[4];
-	std::vector<std::string> skillTextures;
-	std::vector<std::string> skillDescriptions;
 
 	LayoutType toLayout;
 };
@@ -58,8 +58,6 @@ struct ControlData
 GUILoader::GUILoader(const std::string &fileName,
 					 int windowWidth, int windowHeight)
 {
-	// TODO: Add font loading
-	/*
 	std::string fontsDir = "";
 	std::string texturesDir = "";
 	std::string defaultFont = "";
@@ -125,81 +123,101 @@ GUILoader::GUILoader(const std::string &fileName,
 				{
 					if(control->second["control-type"].as<std::string>() == "label")
 					{					
-						strcpy(controlData.controlName, control->second["name"].as<std::string>().c_str());
-						strcpy(controlData.controlText, control->second["text"].as<std::string>().c_str());
-						controlData.controlHasBackground = control->second["has-background"].as<bool>();
-						controlData.controlIsVisible = control->second["is-visible"].as<bool>();
-
-						int presetID = 0;
-						for(YAML::Node::const_iterator preset = control->second["presets"].begin();
-							preset != control->second["presets"].end(); ++preset)
+						controlData.name = control->second["name"].as<std::string>();
+						controlData.text = control->second["text"].as<std::string>();
+						controlData.hasBackground = control->second["has-background"].as<bool>();
+						controlData.isVisible = control->second["is-visible"].as<bool>();
+						controlData.isUsingPercentage = control->second["is-using-percentage"].as<bool>();
+						controlData.fontColor = glm::vec4(control->second["font-color"][0].as<float>(),
+														  control->second["font-color"][1].as<float>(),
+														  control->second["font-color"][2].as<float>(),
+														  control->second["font-color"][3].as<float>());
+						controlData.textSize = control->second["text-size"].as<int>();
+						controlData.backgroundImage = "";
+						if(controlData.hasBackground)
 						{
-							controlData.controlPresets[presetID].position = glm::vec2(preset->second["position"][0].as<int>(),
-																					  preset->second["position"][1].as<int>());
-							controlData.controlPresets[presetID].textSize = preset->second["text-size"].as<int>();
-						
-							presetID++;
+							controlData.margins = glm::vec4(control->second["margins"][0].as<float>(),
+															control->second["margins"][1].as<float>(),
+															control->second["margins"][2].as<float>(),
+															control->second["margins"][3].as<float>());
+							controlData.backgroundImage = control->second["background-image"].as<std::string>();
+						}
+						controlData.percentagedPosition = glm::vec2();
+						controlData.position = glm::vec2();
+						if(controlData.isUsingPercentage)
+						{
+							controlData.percentagedPosition = 
+								glm::vec2(control->second["percentaged-pos"][0].as<float>(),
+										  control->second["percentaged-pos"][1].as<float>());
+						}
+						else
+						{
+							controlData.position = glm::vec2(control->second["position"][0].as<float>(),
+															 control->second["position"][1].as<float>());
 						}
 
-						std::shared_ptr<Label> label = 
-							std::shared_ptr<Label>(new Label(LayoutPreset(SMALL),
-															 controlData.controlName, 
-															 controlData.controlText,
-															 controlData.controlPresets[SMALL].position,
-															 controlData.controlPresets[SMALL].textSize,
-															 controlData.controlHasBackground,
-															 controlData.controlIsVisible));
-						label->Init(fontsDir + defaultFont, windowWidth, windowHeight);
-
-						label->AddPreset(MEDIUM, 
-										 controlData.controlPresets[MEDIUM].textSize,
-										 controlData.controlPresets[MEDIUM].position);
-						label->AddPreset(BIG, 
-										 controlData.controlPresets[BIG].textSize,
-										 controlData.controlPresets[BIG].position);
+						std::shared_ptr<Label> label =
+							std::shared_ptr<Label>(new Label(controlData.name, controlData.text,
+															 controlData.fontColor, controlData.position,
+															 controlData.margins, controlData.textSize,
+															 controlData.hasBackground, controlData.isVisible,
+															 controlData.isUsingPercentage, 
+															 controlData.percentagedPosition));
+						label->Init(fontsDir + defaultFont, controlData.backgroundImage,
+									windowWidth, windowHeight);
 
 						newLayout->AddControl(label);
 					}
 					else if(control->second["control-type"].as<std::string>() == "button")
 					{
-						strcpy(controlData.controlName, control->second["name"].as<std::string>().c_str());
-						strcpy(controlData.controlText, control->second["text"].as<std::string>().c_str());
-						controlData.controlHasBackground = control->second["has-background"].as<bool>();
-						controlData.controlIsVisible = control->second["is-visible"].as<bool>();
-
-						int presetID = 0;
-						for(YAML::Node::const_iterator preset = control->second["presets"].begin();
-							preset != control->second["presets"].end(); ++preset)
+						controlData.name = control->second["name"].as<std::string>();
+						controlData.text = control->second["text"].as<std::string>();
+						controlData.hasBackground = control->second["has-background"].as<bool>();
+						controlData.isVisible = control->second["is-visible"].as<bool>();
+						controlData.isUsingPercentage = control->second["is-using-percentage"].as<bool>();
+						controlData.fontColor = glm::vec4(control->second["font-color"][0].as<float>(),
+														  control->second["font-color"][1].as<float>(),
+														  control->second["font-color"][2].as<float>(),
+														  control->second["font-color"][3].as<float>());
+						controlData.textSize = control->second["text-size"].as<int>();
+						controlData.backgroundImage = "";
+						if(controlData.hasBackground)
 						{
-							controlData.controlPresets[presetID].position = glm::vec2(preset->second["position"][0].as<int>(),
-																					  preset->second["position"][1].as<int>());
-							controlData.controlPresets[presetID].textSize = preset->second["text-size"].as<int>();
-
-							presetID++;
+							controlData.margins = glm::vec4(control->second["margins"][0].as<float>(),
+															control->second["margins"][1].as<float>(),
+															control->second["margins"][2].as<float>(),
+															control->second["margins"][3].as<float>());
+							controlData.backgroundImage = control->second["background-image"].as<std::string>();
+						}
+						controlData.percentagedPosition = glm::vec2();
+						controlData.position = glm::vec2();
+						if(controlData.isUsingPercentage)
+						{
+							controlData.percentagedPosition = 
+								glm::vec2(control->second["percentaged-pos"][0].as<float>(),
+										  control->second["percentaged-pos"][1].as<float>());
+						}
+						else
+						{
+							controlData.position = glm::vec2(control->second["position"][0].as<float>(),
+															 control->second["position"][1].as<float>());
 						}
 
 						std::shared_ptr<Button> button = 
-							std::shared_ptr<Button>(new Button(LayoutPreset(SMALL),
-															   controlData.controlName, 
-															   controlData.controlText,
-															   controlData.controlPresets[SMALL].position,
-															   controlData.controlPresets[SMALL].textSize,
-															   controlData.controlHasBackground,
-															   controlData.controlIsVisible));
-						button->Init(fontsDir + defaultFont, windowWidth, windowHeight);
-					
-						button->AddPreset(MEDIUM, 
-										  controlData.controlPresets[MEDIUM].textSize,
-										  controlData.controlPresets[MEDIUM].position);
-						button->AddPreset(BIG, 
-										  controlData.controlPresets[BIG].textSize,
-										  controlData.controlPresets[BIG].position);
+							std::shared_ptr<Button>(new Button(controlData.name, controlData.text,
+															   controlData.fontColor, controlData.position,
+															   controlData.margins, controlData.textSize,
+															   controlData.hasBackground, controlData.isVisible,
+															   controlData.isUsingPercentage, 
+															   controlData.percentagedPosition));
+						button->Init(fontsDir + defaultFont, controlData.backgroundImage,
+								     windowWidth, windowHeight);
 
 						newLayout->AddControl(button);
 					}
 					else if(control->second["control-type"].as<std::string>() == "imageBox")
 					{
-						strcpy(controlData.controlName, control->second["name"].as<std::string>().c_str());
+						/*strcpy(controlData.controlName, control->second["name"].as<std::string>().c_str());
 						controlData.imageBoxHeight = control->second["height"].as<int>();
 						controlData.imageBoxWidth = control->second["width"].as<int>();
 						controlData.imageBoxIndex = control->second["index"].as<int>();
@@ -233,11 +251,11 @@ GUILoader::GUILoader(const std::string &fileName,
 						imageBox->Init();
 						imageBox->AddPreset(MEDIUM, controlData.controlPresets[MEDIUM].position);
 						imageBox->AddPreset(BIG, controlData.controlPresets[BIG].position);
-						newLayout->AddControl(imageBox);
+						newLayout->AddControl(imageBox);*/
 					}
 					else if(control->second["control-type"].as<std::string>() == "hintBox")
 					{
-						strcpy(controlData.controlName, control->second["name"].as<std::string>().c_str());
+						/*strcpy(controlData.controlName, control->second["name"].as<std::string>().c_str());
 						controlData.imageBoxHeight = control->second["height"].as<int>();
 						controlData.imageBoxWidth = control->second["width"].as<int>();
 						controlData.controlIsVisible = control->second["is-visible"].as<bool>();
@@ -278,51 +296,61 @@ GUILoader::GUILoader(const std::string &fileName,
 						hintBox->Init();
 						hintBox->AddPreset(MEDIUM, controlData.controlPresets[MEDIUM].position);
 						hintBox->AddPreset(BIG, controlData.controlPresets[BIG].position);
-						newLayout->AddControl(hintBox);
+						newLayout->AddControl(hintBox);*/
 					}
 					else if(control->second["control-type"].as<std::string>() == "textBox")
 					{
-						strcpy(controlData.controlName, control->second["name"].as<std::string>().c_str());
-						controlData.textBoxWidth = control->second["width"].as<int>();
-						controlData.textBoxCharWidth = control->second["char-width"].as<int>();
-						controlData.controlHasBackground = control->second["has-background"].as<bool>();
-						controlData.controlIsVisible = control->second["is-visible"].as<bool>();
-
-						int presetID = 0;
-						for(YAML::Node::const_iterator preset = control->second["presets"].begin();
-							preset != control->second["presets"].end(); ++preset)
+						controlData.name = control->second["name"].as<std::string>();
+						controlData.text = control->second["text"].as<std::string>();
+						controlData.hasBackground = control->second["has-background"].as<bool>();
+						controlData.isVisible = control->second["is-visible"].as<bool>();
+						controlData.isUsingPercentage = control->second["is-using-percentage"].as<bool>();
+						controlData.fontColor = glm::vec4(control->second["font-color"][0].as<float>(),
+														  control->second["font-color"][1].as<float>(),
+														  control->second["font-color"][2].as<float>(),
+														  control->second["font-color"][3].as<float>());
+						controlData.textSize = control->second["text-size"].as<int>();
+						controlData.textBoxWidth = control->second["width"].as<float>();
+						controlData.backgroundImage = "";
+						if(controlData.hasBackground)
 						{
-							controlData.controlPresets[presetID].position = glm::vec2(preset->second["position"][0].as<int>(),
-																					  preset->second["position"][1].as<int>());
-							controlData.controlPresets[presetID].textSize = preset->second["text-size"].as<int>();
-
-							presetID++;
+							controlData.margins = glm::vec4(control->second["margins"][0].as<float>(),
+															control->second["margins"][1].as<float>(),
+															control->second["margins"][2].as<float>(),
+															control->second["margins"][3].as<float>());
+							controlData.backgroundImage = control->second["background-image"].as<std::string>();
+						}
+						controlData.percentagedPosition = glm::vec2();
+						controlData.position = glm::vec2();
+						if(controlData.isUsingPercentage)
+						{
+							controlData.percentagedPosition = 
+								glm::vec2(control->second["percentaged-pos"][0].as<float>(),
+										  control->second["percentaged-pos"][1].as<float>());
+						}
+						else
+						{
+							controlData.position = glm::vec2(control->second["position"][0].as<float>(),
+															 control->second["position"][1].as<float>());
 						}
 
-						std::shared_ptr<TextBox> textBox =
+						std::shared_ptr<TextBox> textBox = 
 							std::shared_ptr<TextBox>(new TextBox(controlData.textBoxWidth,
-																 controlData.textBoxCharWidth,
-																 LayoutPreset(SMALL),
-																 controlData.controlName, "",
-																 controlData.controlPresets[SMALL].position,
-																 controlData.controlPresets[SMALL].textSize,
-																 controlData.controlHasBackground, 
-																 controlData.controlIsVisible));
-						textBox->Init(fontsDir + defaultFont, windowWidth, windowHeight);
-
-						textBox->AddPreset(MEDIUM, 
-										   controlData.controlPresets[MEDIUM].textSize,
-										   controlData.controlPresets[MEDIUM].position);
-						textBox->AddPreset(BIG, 
-										   controlData.controlPresets[BIG].textSize,
-										   controlData.controlPresets[BIG].position);
+																 controlData.name, controlData.text,
+															     controlData.fontColor, controlData.position,
+															     controlData.margins, controlData.textSize,
+															     controlData.hasBackground, controlData.isVisible,
+															     controlData.isUsingPercentage, 
+															     controlData.percentagedPosition));
+						textBox->Init(fontsDir + defaultFont, controlData.backgroundImage,
+								      windowWidth, windowHeight);
 
 						newLayout->AddControl(textBox);
 					}
 				}
 			}
 		}
-	}*/
+	}
 }
 
 std::shared_ptr<Layout> GUILoader::GetLayout(LayoutType layoutType)

@@ -680,7 +680,7 @@ void InitializePrograms()
 
 void InitializeGUI()
 {
-	scene.AddLayout(LAYOUT_MENU, glm::vec4(0.5f, 0.6f, 0.0f, 1.0f));
+	//scene.AddLayout(LAYOUT_MENU, glm::vec4(0.5f, 0.6f, 0.0f, 1.0f));
 	/*
 	std::shared_ptr<Button> testButton = 
 		std::shared_ptr<Button>(new Button("testControl", "Test, Test", 
@@ -728,7 +728,7 @@ void InitializeGUI()
 											 glm::vec2(30.0f, 30.0f)));
 	testTextBoxTwo->Init("../data/fonts/AGENCYR.TTF", "../data/images/fusion-empty.jpg",
 					     glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-	*/
+	
 	std::shared_ptr<ImageBox> testImageBox =
 		std::shared_ptr<ImageBox>(new ImageBox(150.0f, 150.0f,
 											   "testImageBox", "",
@@ -736,23 +736,23 @@ void InitializeGUI()
 											   0, true, true, true, 
 											   glm::vec2(50.0f, 50.0f)));
 	testImageBox->Init("../data/images/fusion-e.jpg",
-					   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+					   glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));*/
 
 	/*scene.GetLayout(LAYOUT_MENU)->AddControl(testButton);
 	scene.GetLayout(LAYOUT_MENU)->AddControl(testButtonTwo);
 	scene.GetLayout(LAYOUT_MENU)->AddControl(testLabel);
 	scene.GetLayout(LAYOUT_MENU)->AddControl(testTextBox);
-	scene.GetLayout(LAYOUT_MENU)->AddControl(testTextBoxTwo);*/
-	scene.GetLayout(LAYOUT_MENU)->AddControl(testImageBox);
+	scene.GetLayout(LAYOUT_MENU)->AddControl(testTextBoxTwo);
+	scene.GetLayout(LAYOUT_MENU)->AddControl(testImageBox);*/
 
+	
+	GUILoader guiLoader("../data/loader-files/test-gui.yaml", 
+						glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
+	scene.AddLayouts(guiLoader.GetAllLoadedLayouts());
 	/*
-	//GUILoader guiLoader("../data/loader-files/gui-config.yaml", 
-	//					glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-
-	//scene.AddLayouts(guiLoader.GetAllLoadedLayouts());
-
 	scene.GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetIsVisible(false);
-
+	/*
 	// Set buttons text
 	DIR *dir;
 	struct dirent *ent;

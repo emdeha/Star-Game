@@ -175,7 +175,8 @@ public:
 	void AddEnemy(const std::shared_ptr<Enemy> newEnemy);
 
 	
-	void AddEventHandler(const std::string &name, const std::string &controlName, const std::string &controlType,
+	void AddEventHandler(const std::string &name, const std::string &eventType, 
+						 const std::string &controlName, const std::string &controlType,
 						 LayoutType layoutToAddTo, EventHandlerFunction handler);
 	void CallEventHandler(const std::string &name, LayoutType layoutToCallIt, Scene &scene, Control *control);
 	

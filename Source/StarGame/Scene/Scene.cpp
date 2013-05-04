@@ -704,7 +704,7 @@ void Scene::SaveGame(const std::string &saveGameFileName)
 	std::ofstream saveFile(saveGameFileName);
 	if(!saveFile.is_open())
 	{
-		HandleUnexpectedError("Sad file", __LINE__, __FILE__);
+		HandleUnexpectedError("Cannot open the file", __LINE__, __FILE__);
 		return;
 	}
 	saveFile << saveDataNode;
@@ -1736,14 +1736,14 @@ void Scene::OnEvent(Event &_event)
 	switch(_event.GetType())
 	{
 	case EVENT_TYPE_BUTTON_PRESSED:
-		if(strcmp(_event.GetArgument("object").varString, "varInput") == 0)
+		if(strcmp(_event.GetArgument("object").varString, "all") == 0)
 		{
 			for(std::map<LayoutType, std::shared_ptr<Layout>>::iterator iter = sceneLayouts.begin();
 				iter != sceneLayouts.end(); ++iter)
 			{
 				if(iter->second->IsSet())
 				{
-					iter->second->HandleKeyPress(*this, "varInput");
+					iter->second->HandleKeyPress(*this);
 				}
 			}
 		}
@@ -2292,20 +2292,21 @@ void Scene::AddEnemy(const std::shared_ptr<Enemy> newEnemy)
 }
 
 
-void Scene::AddEventHandler(const std::string &name, const std::string &controlName, const std::string &controlType,
+void Scene::AddEventHandler(const std::string &name, const std::string &eventType, 
+							const std::string &controlName, const std::string &controlType,
 							LayoutType layoutToAddTo, EventHandlerFunction handler)
 {
 	if(layoutToAddTo == LayoutType::LAYOUT_ALL)
 	{
-		GetLayout(LAYOUT_IN_GAME)->AddEventHandler(name, controlName, controlType, handler);
-		GetLayout(LAYOUT_LOAD_GAME)->AddEventHandler(name, controlName, controlType, handler);
-		GetLayout(LAYOUT_MENU)->AddEventHandler(name, controlName, controlType, handler);
-		GetLayout(LAYOUT_SAVE_GAME)->AddEventHandler(name, controlName, controlType, handler);
-		GetLayout(LAYOUT_OPTIONS)->AddEventHandler(name, controlName, controlType, handler);
+		GetLayout(LAYOUT_IN_GAME)->AddEventHandler(name, eventType, controlName, controlType, handler);
+		GetLayout(LAYOUT_LOAD_GAME)->AddEventHandler(name, eventType, controlName, controlType, handler);
+		GetLayout(LAYOUT_MENU)->AddEventHandler(name, eventType, controlName, controlType, handler);
+		GetLayout(LAYOUT_SAVE_GAME)->AddEventHandler(name, eventType, controlName, controlType, handler);
+		GetLayout(LAYOUT_OPTIONS)->AddEventHandler(name, eventType, controlName, controlType, handler);
 	}
 	else
 	{
-		GetLayout(layoutToAddTo)->AddEventHandler(name, controlName, controlType, handler);
+		GetLayout(layoutToAddTo)->AddEventHandler(name, eventType, controlName, controlType, handler);
 	}
 	//eventHandlers.push_back(std::make_pair(name, handler));
 }

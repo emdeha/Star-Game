@@ -707,8 +707,10 @@ void InitializeGUI()
 				std::vector<std::string> splittedFileName = Utility::SplitString(ent->d_name, '.');
 				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl(controlName)->SetText(splittedFileName[0]);
 
+				std::string loadSlotName = "loadSlot";
+				loadSlotName += (char)(i + 48);
 				std::shared_ptr<Button> loadEntryButton = 
-					std::shared_ptr<Button>(new Button(splittedFileName[0], splittedFileName[0],
+					std::shared_ptr<Button>(new Button(loadSlotName, splittedFileName[0],
 													   glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
 													   controlPosition, glm::vec4(),
 													   28,
@@ -816,6 +818,22 @@ void OnSaveSlotClickedEventHandler(Scene &scene, Control *control)
 		scene.SaveGame("../data/saved-games/" + currentDateTime + ".yaml");
 	}
 }
+void OnLoadSlotClickedEventHandler(Scene &scene, Control *control)
+{
+	scene.LoadGame("../data/saved-games/" + control->GetContent() + ".yaml");
+	scene.SetLayout(LAYOUT_LOAD_GAME, false);
+	scene.SetLayout(LAYOUT_IN_GAME, true);
+}
+void OnVarInputEnterPressEventHandler(Scene &scene, Control *control)
+{
+	if(scene.HasSuns())
+	{
+		scene.ProcessVariablesTweak(control->GetContent());
+	}
+
+	control->ClearContent();
+	control->SetIsActive(false);
+}
 
 void InitializeScene()
 {
@@ -888,35 +906,49 @@ void InitializeScene()
 
 	scene.OnEvent(inMenuEvent);
 	
-	scene.AddEventHandler("onNewGameClickedEventHandler", "newGame", "",
+	scene.AddEventHandler("onNewGameClickedEventHandler", "onClick", "newGame", "",
 						  LAYOUT_MENU, OnNewGameClickEventHandler);
-	scene.AddEventHandler("onResumeGameClickedEventHandler", "resumeGame", "", 
+	scene.AddEventHandler("onResumeGameClickedEventHandler", "onClick", "resumeGame", "", 
 						  LAYOUT_MENU, OnResumeGameClickEventHandler);
-	scene.AddEventHandler("onSaveGameClickedEventHandler", "saveGame", "", 
+	scene.AddEventHandler("onSaveGameClickedEventHandler", "onClick", "saveGame", "", 
 						  LAYOUT_MENU, OnSaveGameClickedEventHandler);
-	scene.AddEventHandler("onLoadGameClickedEventHandler", "loadGame", "", 
+	scene.AddEventHandler("onLoadGameClickedEventHandler", "onClick", "loadGame", "", 
 						  LAYOUT_MENU, OnLoadGameClickedEventHandler);
-	scene.AddEventHandler("onOptionsClickedEventHandler", "options", "", 
+	scene.AddEventHandler("onOptionsClickedEventHandler", "onClick", "options", "", 
 						  LAYOUT_MENU, OnOptionsClickedEventHandler);
-	scene.AddEventHandler("onBackButtonClickedEventHandler", "backBtn", "", 
+	scene.AddEventHandler("onBackButtonClickedEventHandler", "onClick", "backBtn", "", 
 						  LAYOUT_ALL, OnBackButtonClickedEventHandler);
-	scene.AddEventHandler("onApplyInputClickedEventHandler", "applyInput", "", 
+	scene.AddEventHandler("onApplyInputClickedEventHandler", "onClick", "applyInput", "", 
 						  LAYOUT_IN_GAME, OnApplyInputClickedEventHandler);
-	scene.AddEventHandler("onQuitClickedEventHandler", "quitGame", "", 
+	scene.AddEventHandler("onQuitClickedEventHandler", "onClick", "quitGame", "", 
 						  LAYOUT_MENU, OnQuitClickedEventHandler);
-	scene.AddEventHandler("onTextBoxClickedEventHandler", "", "TextBox", 
+	scene.AddEventHandler("onTextBoxClickedEventHandler", "onClick", "", "TextBox", 
 						  LAYOUT_ALL, OnTextBoxClickedEventHandler);
 
-	scene.AddEventHandler("onSaveSlotOneClickedEventHandler", "saveSlot1", "", 
+	scene.AddEventHandler("onSaveSlotOneClickedEventHandler", "onClick", "saveSlot1", "", 
 						  LAYOUT_SAVE_GAME, OnSaveSlotClickedEventHandler);
-	scene.AddEventHandler("onSaveSlotOneClickedEventHandler", "saveSlot2", "", 
+	scene.AddEventHandler("onSaveSlotTwoClickedEventHandler", "onClick", "saveSlot2", "", 
 						  LAYOUT_SAVE_GAME, OnSaveSlotClickedEventHandler);
-	scene.AddEventHandler("onSaveSlotOneClickedEventHandler", "saveSlot3", "", 
+	scene.AddEventHandler("onSaveSlotThreeClickedEventHandler", "onClick", "saveSlot3", "", 
 						  LAYOUT_SAVE_GAME, OnSaveSlotClickedEventHandler);
-	scene.AddEventHandler("onSaveSlotOneClickedEventHandler", "saveSlot4", "", 
+	scene.AddEventHandler("onSaveSlotFourClickedEventHandler", "onClick", "saveSlot4", "", 
 						  LAYOUT_SAVE_GAME, OnSaveSlotClickedEventHandler);
-	scene.AddEventHandler("onSaveSlotOneClickedEventHandler", "saveSlot5", "", 
+	scene.AddEventHandler("onSaveSlotFiveClickedEventHandler", "onClick", "saveSlot5", "", 
 						  LAYOUT_SAVE_GAME, OnSaveSlotClickedEventHandler);
+
+	scene.AddEventHandler("onLoadSlotOneClickedEventHandler", "onClick", "loadSlot1", "",
+						  LAYOUT_LOAD_GAME, OnLoadSlotClickedEventHandler);
+	scene.AddEventHandler("onLoadSlotTwoClickedEventHandler", "onClick", "loadSlot2", "",
+						  LAYOUT_LOAD_GAME, OnLoadSlotClickedEventHandler);
+	scene.AddEventHandler("onLoadSlotThreeClickedEventHandler", "onClick", "loadSlot3", "",
+						  LAYOUT_LOAD_GAME, OnLoadSlotClickedEventHandler);
+	scene.AddEventHandler("onLoadSlotFourClickedEventHandler", "onClick", "loadSlot4", "",
+						  LAYOUT_LOAD_GAME, OnLoadSlotClickedEventHandler);
+	scene.AddEventHandler("onLoadSlotFiveClickedEventHandler", "onClick", "loadSlot5", "",
+						  LAYOUT_LOAD_GAME, OnLoadSlotClickedEventHandler);
+
+	scene.AddEventHandler("onVarInputEnterPressEventHandler", "onEnterPress", "varInput", "",
+						  LAYOUT_IN_GAME, OnVarInputEnterPressEventHandler);
 }
 
 
@@ -1121,10 +1153,9 @@ void Keyboard(unsigned char key, int x, int y)
 		if((int)key == 13)
 		{
 			Event buttonPressedEvent = 
-				StockEvents::EventOnButtonPressed(
-					key, scene.GetLayout(LAYOUT_IN_GAME)->GetActiveControl()->GetName().c_str());
+				StockEvents::EventOnButtonPressed(key, "all");
 			scene.OnEvent(buttonPressedEvent);
-			scene.GetLayout(LAYOUT_IN_GAME)->GetActiveControl()->ClearContent();
+			//scene.GetLayout(LAYOUT_IN_GAME)->GetActiveControl()->ClearContent();
 			return;
 		}
 		scene.GetLayout(LAYOUT_IN_GAME)->GetActiveControl()->InputChar(key);

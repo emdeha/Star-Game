@@ -24,6 +24,8 @@ Control::Control()
 {
 	name = "";
 	text = "";
+	onClickEventName = "";
+	onEnterPressEventName = "";
 	windowHeight = 0;
 	windowWidth = 0;
 	position = glm::vec2();
@@ -41,6 +43,8 @@ Control::Control(const std::string &newName, const std::string &newText,
 {
 	name = newName;
 	text = newText;
+	onClickEventName = "";
+	onEnterPressEventName = "";
 	visibleText = text;
 	fontColor = newFontColor;
 	position = newPosition;
@@ -155,9 +159,17 @@ void Control::SubscribeForEvent(const std::string &eventName)
 {
 	onClickEventName = eventName;
 }
+void Control::SubscribeForEnterPressEvent(const std::string &eventName)
+{
+	onEnterPressEventName = eventName;
+}
 std::string Control::GetSubscribedEvent()
 {
 	return onClickEventName;
+}
+std::string Control::GetSubscribedEnterPressEvent()
+{
+	return onEnterPressEventName;
 }
 
 void Control::SetPosition(glm::vec2 newPosition, bool newIsUsingPercentage)

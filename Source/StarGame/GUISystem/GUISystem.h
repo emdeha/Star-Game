@@ -92,7 +92,8 @@ public:
 	//void AddControl(const std::shared_ptr<TextControl> newControl);
 	void AddControl(const std::shared_ptr<Control> newControl);
 	void AddSubLayout(const std::shared_ptr<Layout> newSubLayout);
-	void AddEventHandler(const std::string &name, const std::string &controlName, const std::string &controlType,
+	void AddEventHandler(const std::string &name, const std::string &eventType, 
+						 const std::string &controlName, const std::string &controlType,
 						 EventHandlerFunction handler);
 	void CallEventHandler(const std::string &name, Scene &scene, Control *control);
 
@@ -110,7 +111,7 @@ public:
 	void HandleClickedControls(bool isRightButtonclicked,
 							   glm::ivec2 mouseCoordinates_windowSpace,
 							   Scene &scene);
-	void HandleKeyPress(Scene &scene, const std::string &controlName = "");
+	void HandleKeyPress(Scene &scene);
 	std::shared_ptr<Control> GetClickedControl(glm::ivec2 mouseCoordinates_windowSpace);
 
 	LayoutType GetLayoutType();
@@ -139,6 +140,7 @@ protected:
 	std::string visibleText;
 
 	std::string onClickEventName;
+	std::string onEnterPressEventName;
 	// add other event names
 
 	glm::vec4 fontColor;
@@ -185,7 +187,9 @@ public:
 	void ClearContent();
 
 	void SubscribeForEvent(const std::string &eventName);
+	void SubscribeForEnterPressEvent(const std::string &eventName);
 	std::string GetSubscribedEvent();
+	std::string GetSubscribedEnterPressEvent();
 
 
 	virtual void Draw(const FontProgData &fontData, const TextureProgData &textureData);

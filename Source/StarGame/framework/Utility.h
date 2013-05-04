@@ -52,6 +52,8 @@ namespace Utility
 	// TODO: Implement.
 	void CalculateFPS();
 
+	const std::string GetCurrentDateTimeAsString(const std::string &formatString);
+
 	int GetFibonacciNumber(int whichNumber);
 
 	std::vector<std::string> SplitString(const std::string &str, char delim);

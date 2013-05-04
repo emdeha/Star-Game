@@ -690,6 +690,7 @@ void InitializeGUI()
 	// Set buttons text
 	DIR *dir;
 	struct dirent *ent;
+	int i = 0;
 	if ((dir = opendir ("../data/saved-games/")) != NULL) 
 	{
 		glm::vec2 controlPosition = glm::vec2(10, 600);
@@ -699,9 +700,12 @@ void InitializeGUI()
 			//printf ("%s\n", ent->d_name);
 			if(ent->d_namlen > 5)
 			{
+				i++;
+				std::string controlName = "saveSlot";
+				controlName += (char)(i + 48); // converting number to its char
 				controlPosition.y -= 30.0f;
 				std::vector<std::string> splittedFileName = Utility::SplitString(ent->d_name, '.');
-				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl(splittedFileName[0])->SetText(splittedFileName[0]);
+				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl(controlName)->SetText(splittedFileName[0]);
 
 				std::shared_ptr<Button> loadEntryButton = 
 					std::shared_ptr<Button>(new Button(splittedFileName[0], splittedFileName[0],
@@ -803,6 +807,15 @@ void OnQuitClickedEventHandler(Scene &scene, Control *control)
 	// Add clean-up if necessary.
 	exit(EXIT_SUCCESS);
 }
+void OnSaveSlotClickedEventHandler(Scene &scene, Control *control)
+{
+	if(control->GetContent() == "Empty")
+	{
+		std::string currentDateTime = Utility::GetCurrentDateTimeAsString("%Y-%m-%d-%H-%M-%S");
+		control->SetText(currentDateTime);
+		scene.SaveGame("../data/saved-games/" + currentDateTime + ".yaml");
+	}
+}
 
 void InitializeScene()
 {
@@ -893,8 +906,17 @@ void InitializeScene()
 						  LAYOUT_MENU, OnQuitClickedEventHandler);
 	scene.AddEventHandler("onTextBoxClickedEventHandler", "", "TextBox", 
 						  LAYOUT_ALL, OnTextBoxClickedEventHandler);
-	//scene.AddEventHandler("controlActivation", LAYOUT_ALL, ControlActivationEventHandler);
-	//scene.AddEventHandler("controlOnEnter", LAYOUT_ALL, OnTextBoxEnterPressEventHandler);
+
+	scene.AddEventHandler("onSaveSlotOneClickedEventHandler", "saveSlot1", "", 
+						  LAYOUT_SAVE_GAME, OnSaveSlotClickedEventHandler);
+	scene.AddEventHandler("onSaveSlotOneClickedEventHandler", "saveSlot2", "", 
+						  LAYOUT_SAVE_GAME, OnSaveSlotClickedEventHandler);
+	scene.AddEventHandler("onSaveSlotOneClickedEventHandler", "saveSlot3", "", 
+						  LAYOUT_SAVE_GAME, OnSaveSlotClickedEventHandler);
+	scene.AddEventHandler("onSaveSlotOneClickedEventHandler", "saveSlot4", "", 
+						  LAYOUT_SAVE_GAME, OnSaveSlotClickedEventHandler);
+	scene.AddEventHandler("onSaveSlotOneClickedEventHandler", "saveSlot5", "", 
+						  LAYOUT_SAVE_GAME, OnSaveSlotClickedEventHandler);
 }
 
 

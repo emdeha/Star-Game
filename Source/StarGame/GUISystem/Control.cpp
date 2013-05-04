@@ -162,8 +162,15 @@ std::string Control::GetSubscribedEvent()
 
 void Control::SetPosition(glm::vec2 newPosition, bool newIsUsingPercentage)
 {
-	position = newPosition;
 	isUsingPercentage = newIsUsingPercentage;
+	if(isUsingPercentage)
+	{
+		percentagedPosition = newPosition;
+	}
+	else
+	{
+		position = newPosition;
+	}
 	ComputeNewAttributes();
 }
 

@@ -1,0 +1,7 @@
+skills:
+  passiveAOESkill:
+    isResearched: true
+    buttonIndex: 0
+    textureType: 2
+matter: 200
+sunHealth: 50

@@ -1,0 +1,7 @@
+matter: 200
+sunHealth: 50
+skills:
+  aoeSkill:
+    isResearched: true
+    buttonIndex: 3
+    textureType: 0

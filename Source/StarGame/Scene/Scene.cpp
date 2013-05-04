@@ -2184,7 +2184,7 @@ void Scene::OnEvent(Event &_event)
 			}
 
 			//std::printf("%i\n", _event.GetArgument("index").varInteger);
-		}/*
+		}
 		if(strcmp(_event.GetArgument("what_event").varString, "pauseGame") == 0)
 		{
 			this->SetLayout(LAYOUT_MENU, true);
@@ -2193,14 +2193,14 @@ void Scene::OnEvent(Event &_event)
 			sceneMusic.Stop(CHANNEL_MASTER);
 			sceneMusic.Play(MUSIC_MENU, CHANNEL_MASTER);
 
-			this->GetLayout(LAYOUT_MENU)->GetControl("newGame")->SetPosition(glm::vec2(10, 220));//->SetIsVisible(false);
+			this->GetLayout(LAYOUT_MENU)->GetControl("newGame")->SetPosition(glm::vec2(1, 29), true);
 			this->GetLayout(LAYOUT_MENU)->GetControl("resumeGame")->SetIsVisible(true);
-			this->GetLayout(LAYOUT_MENU)->GetControl("resumeGame")->SetPosition(glm::vec2(10, 190));
-			this->GetLayout(LAYOUT_MENU)->GetControl("loadGame")->SetPosition(glm::vec2(10, 130));
+			this->GetLayout(LAYOUT_MENU)->GetControl("resumeGame")->SetPosition(glm::vec2(1, 25), true);
+			this->GetLayout(LAYOUT_MENU)->GetControl("loadGame")->SetPosition(glm::vec2(1, 17), true);
 			this->GetLayout(LAYOUT_MENU)->GetControl("saveGame")->SetIsVisible(true);
 			
 			StopScene();
-		}*/
+		}
 		break;
 	default:
 		// ERR: Invalid event type when spawning sats

@@ -18,6 +18,8 @@
 #include "Utility.h"
 #include "../framework/ErrorAPI.h"
 #include <sstream>
+#include <time.h>
+#include <string>
 
 #define PI 3.14159f
 #define EPSILON 0.000001
@@ -34,6 +36,17 @@ glm::vec4 Utility::CorrectGamma(const glm::vec4 &inputColor, float gamma)
 	return outputColor;
 }
 
+const std::string Utility::GetCurrentDateTimeAsString(const std::string &formatString)
+{
+	time_t now = time(0);
+	struct tm tstruct;
+	char buff[80];
+	tstruct = *localtime(&now);
+	
+	strftime(buff, sizeof(buff), formatString.c_str(), &tstruct);
+
+	return buff;
+}
 
 void Utility::CalculateFPS()
 {

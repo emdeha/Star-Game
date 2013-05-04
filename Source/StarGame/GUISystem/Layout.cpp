@@ -141,13 +141,21 @@ void Layout::HandleKeyPress(Scene &scene, const std::string &controlName)
 	}
 }
 
-void Layout::AddEventHandler(const std::string &name, const std::string &controlName, EventHandlerFunction handler)
+void Layout::AddEventHandler(const std::string &name, const std::string &controlName, const std::string &controlType, 
+							 EventHandlerFunction handler)
 {
 	eventHandlers.push_back(std::make_pair(name, handler));
 	for(std::vector<std::shared_ptr<Control>>::iterator control = controls.begin();
 		control != controls.end(); ++control)
 	{
-		if((*control)->GetName() == controlName || controlName == "")
+		if(controlType != "")
+		{
+			if((*control)->GetType() == controlType)
+			{
+				(*control)->SubscribeForEvent(name);
+			}
+		}
+		else if((*control)->GetName() == controlName || controlName == "")
 		{
 			(*control)->SubscribeForEvent(name);
 		}

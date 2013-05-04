@@ -734,7 +734,12 @@ void OnTextBoxEnterPressEventHandler(Scene &scene, Control *control)
 {
 	std::printf("Text: %s\n", control->GetContent().c_str());
 }*/
-
+void OnTextBoxClickedEventHandler(Scene &scene, Control *control)
+{
+	scene.GetLayout(LAYOUT_MENU)->DeactivateAllControls();
+	scene.GetLayout(LAYOUT_IN_GAME)->DeactivateAllControls();
+	control->SetIsActive(true);
+}
 void OnNewGameClickEventHandler(Scene &scene, Control *control)
 {
 	scene.SetLayout(LAYOUT_MENU, false);
@@ -870,14 +875,24 @@ void InitializeScene()
 
 	scene.OnEvent(inMenuEvent);
 	
-	scene.AddEventHandler("onNewGameClickedEventHandler", "newGame", LAYOUT_MENU, OnNewGameClickEventHandler);
-	scene.AddEventHandler("onResumeGameClickedEventHandler", "resumeGame", LAYOUT_MENU, OnResumeGameClickEventHandler);
-	scene.AddEventHandler("onSaveGameClickedEventHandler", "saveGame", LAYOUT_MENU, OnSaveGameClickedEventHandler);
-	scene.AddEventHandler("onLoadGameClickedEventHandler", "loadGame", LAYOUT_MENU, OnLoadGameClickedEventHandler);
-	scene.AddEventHandler("onOptionsClickedEventHandler", "options", LAYOUT_MENU, OnOptionsClickedEventHandler);
-	scene.AddEventHandler("onBackButtonClickedEventHandler", "backBtn", LAYOUT_ALL, OnBackButtonClickedEventHandler);
-	scene.AddEventHandler("onApplyInputClickedEventHandler", "applyInput", LAYOUT_IN_GAME, OnApplyInputClickedEventHandler);
-	scene.AddEventHandler("onQuitClickedEventHandler", "quitGame", LAYOUT_MENU, OnQuitClickedEventHandler);
+	scene.AddEventHandler("onNewGameClickedEventHandler", "newGame", "",
+						  LAYOUT_MENU, OnNewGameClickEventHandler);
+	scene.AddEventHandler("onResumeGameClickedEventHandler", "resumeGame", "", 
+						  LAYOUT_MENU, OnResumeGameClickEventHandler);
+	scene.AddEventHandler("onSaveGameClickedEventHandler", "saveGame", "", 
+						  LAYOUT_MENU, OnSaveGameClickedEventHandler);
+	scene.AddEventHandler("onLoadGameClickedEventHandler", "loadGame", "", 
+						  LAYOUT_MENU, OnLoadGameClickedEventHandler);
+	scene.AddEventHandler("onOptionsClickedEventHandler", "options", "", 
+						  LAYOUT_MENU, OnOptionsClickedEventHandler);
+	scene.AddEventHandler("onBackButtonClickedEventHandler", "backBtn", "", 
+						  LAYOUT_ALL, OnBackButtonClickedEventHandler);
+	scene.AddEventHandler("onApplyInputClickedEventHandler", "applyInput", "", 
+						  LAYOUT_IN_GAME, OnApplyInputClickedEventHandler);
+	scene.AddEventHandler("onQuitClickedEventHandler", "quitGame", "", 
+						  LAYOUT_MENU, OnQuitClickedEventHandler);
+	scene.AddEventHandler("onTextBoxClickedEventHandler", "", "TextBox", 
+						  LAYOUT_ALL, OnTextBoxClickedEventHandler);
 	//scene.AddEventHandler("controlActivation", LAYOUT_ALL, ControlActivationEventHandler);
 	//scene.AddEventHandler("controlOnEnter", LAYOUT_ALL, OnTextBoxEnterPressEventHandler);
 }

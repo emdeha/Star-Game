@@ -92,7 +92,8 @@ public:
 	//void AddControl(const std::shared_ptr<TextControl> newControl);
 	void AddControl(const std::shared_ptr<Control> newControl);
 	void AddSubLayout(const std::shared_ptr<Layout> newSubLayout);
-	void AddEventHandler(const std::string &name, const std::string &controlName, EventHandlerFunction handler);
+	void AddEventHandler(const std::string &name, const std::string &controlName, const std::string &controlType,
+						 EventHandlerFunction handler);
 	void CallEventHandler(const std::string &name, Scene &scene, Control *control);
 
 	void SetBackgroundImage(float width, float height, 

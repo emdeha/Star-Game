@@ -2292,20 +2292,20 @@ void Scene::AddEnemy(const std::shared_ptr<Enemy> newEnemy)
 }
 
 
-void Scene::AddEventHandler(const std::string &name, const std::string &controlName, 
+void Scene::AddEventHandler(const std::string &name, const std::string &controlName, const std::string &controlType,
 							LayoutType layoutToAddTo, EventHandlerFunction handler)
 {
 	if(layoutToAddTo == LayoutType::LAYOUT_ALL)
 	{
-		GetLayout(LAYOUT_IN_GAME)->AddEventHandler(name, controlName, handler);
-		GetLayout(LAYOUT_LOAD_GAME)->AddEventHandler(name, controlName, handler);
-		GetLayout(LAYOUT_MENU)->AddEventHandler(name, controlName, handler);
-		GetLayout(LAYOUT_SAVE_GAME)->AddEventHandler(name, controlName, handler);
-		GetLayout(LAYOUT_OPTIONS)->AddEventHandler(name, controlName, handler);
+		GetLayout(LAYOUT_IN_GAME)->AddEventHandler(name, controlName, controlType, handler);
+		GetLayout(LAYOUT_LOAD_GAME)->AddEventHandler(name, controlName, controlType, handler);
+		GetLayout(LAYOUT_MENU)->AddEventHandler(name, controlName, controlType, handler);
+		GetLayout(LAYOUT_SAVE_GAME)->AddEventHandler(name, controlName, controlType, handler);
+		GetLayout(LAYOUT_OPTIONS)->AddEventHandler(name, controlName, controlType, handler);
 	}
 	else
 	{
-		GetLayout(layoutToAddTo)->AddEventHandler(name, controlName, handler);
+		GetLayout(layoutToAddTo)->AddEventHandler(name, controlName, controlType, handler);
 	}
 	//eventHandlers.push_back(std::make_pair(name, handler));
 }

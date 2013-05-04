@@ -92,7 +92,7 @@ public:
 	//void AddControl(const std::shared_ptr<TextControl> newControl);
 	void AddControl(const std::shared_ptr<Control> newControl);
 	void AddSubLayout(const std::shared_ptr<Layout> newSubLayout);
-	void AddEventHandler(const std::string &name, EventHandlerFunction handler);
+	void AddEventHandler(const std::string &name, const std::string &controlName, EventHandlerFunction handler);
 	void CallEventHandler(const std::string &name, Scene &scene, Control *control);
 
 	void SetBackgroundImage(float width, float height, 
@@ -137,6 +137,9 @@ protected:
 	std::string text;
 	std::string visibleText;
 
+	std::string onClickEventName;
+	// add other event names
+
 	glm::vec4 fontColor;
 	glm::vec4 margins; // margins; x - bottom, y - top, z - left, w - right
 	glm::vec2 position;
@@ -179,6 +182,9 @@ public:
 	bool IsMouseOn(glm::ivec2 mouseCoordinates_windowSpace);
 
 	void ClearContent();
+
+	void SubscribeForEvent(const std::string &eventName);
+	std::string GetSubscribedEvent();
 
 
 	virtual void Draw(const FontProgData &fontData, const TextureProgData &textureData);

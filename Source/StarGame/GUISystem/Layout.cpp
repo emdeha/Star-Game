@@ -123,7 +123,7 @@ void Layout::HandleClickedControls(bool isRightButtonClicked,
 	{
 		if((*control)->IsMouseOn(mouseCoordinates_windowSpace) && (*control)->GetType() != "Label")
 		{
-			CallEventHandler("controlActivation", scene, (*control).get());
+			CallEventHandler((*control)->GetSubscribedEvent(), scene, (*control).get());
 			//std::printf("Clicked %s\n", (*control)->GetName().c_str());	
 		}
 	}
@@ -141,9 +141,17 @@ void Layout::HandleKeyPress(Scene &scene, const std::string &controlName)
 	}
 }
 
-void Layout::AddEventHandler(const std::string &name, EventHandlerFunction handler)
+void Layout::AddEventHandler(const std::string &name, const std::string &controlName, EventHandlerFunction handler)
 {
 	eventHandlers.push_back(std::make_pair(name, handler));
+	for(std::vector<std::shared_ptr<Control>>::iterator control = controls.begin();
+		control != controls.end(); ++control)
+	{
+		if((*control)->GetName() == controlName || controlName == "")
+		{
+			(*control)->SubscribeForEvent(name);
+		}
+	}
 }
 void Layout::CallEventHandler(const std::string &name, Scene &scene, Control *control)
 {

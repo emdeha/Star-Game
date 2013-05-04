@@ -151,6 +151,15 @@ void Control::Draw(const FontProgData &fontData, const TextureProgData &textureD
 	}
 }
 
+void Control::SubscribeForEvent(const std::string &eventName)
+{
+	onClickEventName = eventName;
+}
+std::string Control::GetSubscribedEvent()
+{
+	return onClickEventName;
+}
+
 void Control::SetPosition(glm::vec2 newPosition, bool newIsUsingPercentage)
 {
 	position = newPosition;

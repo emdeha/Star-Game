@@ -722,7 +722,7 @@ void InitializeGUI()
 		HandleUnexpectedError("invalid directory", __LINE__, __FILE__);
 	}
 }
-
+/*
 void ControlActivationEventHandler(Scene &scene, Control *control)
 {
 	scene.GetLayout(LAYOUT_MENU)->DeactivateAllControls();
@@ -733,6 +733,11 @@ void ControlActivationEventHandler(Scene &scene, Control *control)
 void OnTextBoxEnterPressEventHandler(Scene &scene, Control *control)
 {
 	std::printf("Text: %s\n", control->GetContent().c_str());
+}*/
+
+void OnNewGameClickEventHandler(Scene &scene, Control *control)
+{
+	std::printf(control->GetName().c_str());
 }
 
 void InitializeScene()
@@ -806,9 +811,9 @@ void InitializeScene()
 
 	scene.OnEvent(inMenuEvent);
 
-	
-	scene.AddEventHandler("controlActivation", LAYOUT_ALL, ControlActivationEventHandler);
-	scene.AddEventHandler("controlOnEnter", LAYOUT_ALL, OnTextBoxEnterPressEventHandler);
+	scene.AddEventHandler("onNewGameClickedEventHandler", "newGame", LAYOUT_MENU, OnNewGameClickEventHandler);
+	//scene.AddEventHandler("controlActivation", LAYOUT_ALL, ControlActivationEventHandler);
+	//scene.AddEventHandler("controlOnEnter", LAYOUT_ALL, OnTextBoxEnterPressEventHandler);
 }
 
 

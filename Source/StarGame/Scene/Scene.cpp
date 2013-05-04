@@ -1776,7 +1776,7 @@ void Scene::OnEvent(Event &_event)
 		{
 			this->SetLayout(LAYOUT_MENU, true);
 			this->SetLayout(LAYOUT_IN_GAME, false);
-		}
+		}/*
 		if(strcmp(_event.GetArgument("object").varString, "newGameButton") == 0)
 		{
 			this->SetLayout(LAYOUT_MENU, false);
@@ -1809,7 +1809,7 @@ void Scene::OnEvent(Event &_event)
 			this->SetLayout(LAYOUT_MENU, false);
 
 			//SaveGame("../data/saved-games/test.yaml");
-		}/*
+		}*//*
 		if(strcmp(_event.GetArgument("object").varString, "saveSlot1") == 0)
 		{
 			if(this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot1")->GetContent() != "saveSlot1")
@@ -1906,7 +1906,7 @@ void Scene::OnEvent(Event &_event)
 			this->SetLayout(LAYOUT_LOAD_GAME, false);
 			this->SetLayout(LAYOUT_SAVE_GAME, false);
 			this->SetLayout(LAYOUT_OPTIONS, false);
-		}
+		}/*
 		if(strcmp(_event.GetArgument("object").varString, "printCmd") == 0)
 		{
 			std::printf("%s", 
@@ -2392,6 +2392,14 @@ void Scene::SetLayout(LayoutType layoutType, bool isSet)
 	{
 		sceneLayouts[layoutType]->Set(isSet);
 	}
+	else if(layoutType == LAYOUT_ALL)
+	{
+		for(std::map<LayoutType, std::shared_ptr<Layout>>::iterator _layout = sceneLayouts.begin();
+			_layout != sceneLayouts.end(); ++_layout)
+		{
+			_layout->second->Set(isSet);
+		}
+	}
 	else
 	{
 		std::string errorMessage = "no such layout ";
@@ -2448,9 +2456,13 @@ void Scene::SetDisplayData(const DisplayData &newDisplayData)
 	currentDisplayData.zNear = newDisplayData.zNear;
 }
 
-void Scene::PlayMusic(SoundType soundType)
+void Scene::PlayMusic(SoundType soundType, ChannelType channel)
 {
-	sceneMusic.Play(soundType);
+	sceneMusic.Play(soundType, channel);
+}
+void Scene::StopMusic(ChannelType channel)
+{
+	sceneMusic.Stop(channel);
 }
 
 void Scene::SetTopDownCamera(const TopDownCamera &newCamera)
@@ -2616,6 +2628,10 @@ bool Scene::HasSuns()
 bool Scene::IsPaused()
 {
 	return isPaused;
+}
+void Scene::SetPause(bool newIsPaused)
+{
+	isPaused = newIsPaused;
 }
 
 /*

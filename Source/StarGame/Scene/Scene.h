@@ -131,7 +131,6 @@ private:
 	void SpawnMothership();
 	void SpawnEnemies();
 
-	void ProcessVariablesTweak(const std::string &command);
 	void SaveVariablesTweak();
 
 	void InitEnemyStats();
@@ -198,7 +197,8 @@ public:
 
 	void SetExplosion(const ExplosionEmitter &newExplosionEmitter);
 
-	void PlayMusic(SoundType soundType);
+	void PlayMusic(SoundType soundType, ChannelType channel);
+	void StopMusic(ChannelType channel);
 
 	void SetTopDownCamera(const TopDownCamera &newCamera);
 	void SetMouse(const Mouse &newMouse);
@@ -221,6 +221,7 @@ public:
 
 	bool HasSuns();
 	bool IsPaused();
+	void SetPause(bool newIsPaused);
 	
 	void InitTweakableVariables(bool isLoadedFromConfig = false,
 								const std::string &configFileName = "");
@@ -228,6 +229,8 @@ public:
 
 	void LoadGame(const std::string &saveGameFileName);
 	void SaveGame(const std::string &saveGameFileName);
+
+	void ProcessVariablesTweak(const std::string &command);
 };
 
 

@@ -737,7 +737,66 @@ void OnTextBoxEnterPressEventHandler(Scene &scene, Control *control)
 
 void OnNewGameClickEventHandler(Scene &scene, Control *control)
 {
-	std::printf(control->GetName().c_str());
+	scene.SetLayout(LAYOUT_MENU, false);
+	scene.SetLayout(LAYOUT_IN_GAME, true);
+
+	scene.ResetScene();
+	scene.SetPause(false);
+
+	EventArg inGameEventArg[1];
+	inGameEventArg[0].argType = "command";
+	inGameEventArg[0].argument.varType = TYPE_STRING;
+	strcpy(inGameEventArg[0].argument.varString, "playBackgroundMusic");
+	Event inGameEvent = Event(1, EVENT_TYPE_OTHER, inGameEventArg);
+
+	scene.OnEvent(inGameEvent);
+}
+void OnResumeGameClickEventHandler(Scene &scene, Control *control)
+{
+	scene.SetLayout(LAYOUT_MENU, false);
+	scene.SetLayout(LAYOUT_IN_GAME, true);
+
+	//scene.sceneMusic.Stop(CHANNEL_MASTER);
+	//scene.sceneMusic.Play(MUSIC_BACKGROUND, CHANNEL_MASTER);
+	scene.StopMusic(CHANNEL_MASTER);
+	scene.PlayMusic(MUSIC_BACKGROUND, CHANNEL_MASTER);
+
+	scene.StartScene();
+}
+void OnSaveGameClickedEventHandler(Scene &scene, Control *control)
+{
+	scene.SetLayout(LAYOUT_SAVE_GAME, true);
+	scene.SetLayout(LAYOUT_MENU, false);
+}
+void OnLoadGameClickedEventHandler(Scene &scene, Control *control)
+{
+	scene.SetLayout(LAYOUT_LOAD_GAME, true);
+	scene.SetLayout(LAYOUT_MENU, false);
+}
+void OnOptionsClickedEventHandler(Scene &scene, Control *control)
+{
+	scene.SetLayout(LAYOUT_OPTIONS, true);
+	scene.SetLayout(LAYOUT_MENU, false);
+}
+void OnBackButtonClickedEventHandler(Scene &scene, Control *control)
+{
+	scene.SetLayout(LAYOUT_ALL, false);
+	scene.SetLayout(LAYOUT_MENU, true);
+}
+void OnApplyInputClickedEventHandler(Scene &scene, Control *control)
+{
+	if(scene.HasSuns())
+	{
+		scene.ProcessVariablesTweak(scene.GetLayout(LAYOUT_IN_GAME)->GetControl("varInput")->GetContent());
+	}
+
+	scene.GetLayout(LAYOUT_IN_GAME)->GetControl("varInput")->ClearContent();
+	scene.GetLayout(LAYOUT_IN_GAME)->GetControl("varInput")->SetIsActive(false);
+}
+void OnQuitClickedEventHandler(Scene &scene, Control *control)
+{
+	// Add clean-up if necessary.
+	exit(EXIT_SUCCESS);
 }
 
 void InitializeScene()
@@ -810,8 +869,15 @@ void InitializeScene()
 	Event inMenuEvent = Event(1, EVENT_TYPE_OTHER, inMenuEventArg);
 
 	scene.OnEvent(inMenuEvent);
-
+	
 	scene.AddEventHandler("onNewGameClickedEventHandler", "newGame", LAYOUT_MENU, OnNewGameClickEventHandler);
+	scene.AddEventHandler("onResumeGameClickedEventHandler", "resumeGame", LAYOUT_MENU, OnResumeGameClickEventHandler);
+	scene.AddEventHandler("onSaveGameClickedEventHandler", "saveGame", LAYOUT_MENU, OnSaveGameClickedEventHandler);
+	scene.AddEventHandler("onLoadGameClickedEventHandler", "loadGame", LAYOUT_MENU, OnLoadGameClickedEventHandler);
+	scene.AddEventHandler("onOptionsClickedEventHandler", "options", LAYOUT_MENU, OnOptionsClickedEventHandler);
+	scene.AddEventHandler("onBackButtonClickedEventHandler", "backBtn", LAYOUT_ALL, OnBackButtonClickedEventHandler);
+	scene.AddEventHandler("onApplyInputClickedEventHandler", "applyInput", LAYOUT_IN_GAME, OnApplyInputClickedEventHandler);
+	scene.AddEventHandler("onQuitClickedEventHandler", "quitGame", LAYOUT_MENU, OnQuitClickedEventHandler);
 	//scene.AddEventHandler("controlActivation", LAYOUT_ALL, ControlActivationEventHandler);
 	//scene.AddEventHandler("controlOnEnter", LAYOUT_ALL, OnTextBoxEnterPressEventHandler);
 }

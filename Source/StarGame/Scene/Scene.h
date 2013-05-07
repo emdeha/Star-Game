@@ -90,9 +90,6 @@ class Scene
 {
 private:	
 	typedef void (*EventHandlerFunction)(Scene &, Control *);
-	/*
-	std::vector<std::pair<std::string, EventHandlerFunction>> eventHandlers;
-	*/
 
 	std::vector<SunLight> lights; ///< Holds the world's lights.
 
@@ -233,20 +230,6 @@ public:
 
 	void ProcessVariablesTweak(const std::string &command);
 };
-
-
-/*
-class EventHandler
-{
-public:
-	virtual void HandleEvent(Scene &scene, Control *control) = 0;
-};
-
-class HandleTestEvent : public EventHandler
-{
-public:
-	void HandleEvent(Scene &scene, Control *control);
-};*/
 
 
 #endif

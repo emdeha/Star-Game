@@ -46,11 +46,6 @@ DisplayData displayData;
 Scene scene = Scene(2.2f, 8.0f, 3.0f, 0.5f, 0, 4, 20.0f);
 
 
-SpriteParticleEmitter testSpriteEmitter;
-
-//Control testControl;
-
-
 long long GetCurrentTimeMillis()
 {
 	return time(0) * 1000;
@@ -176,242 +171,7 @@ void HandleMouse()
 				//scene.OnEvent(sunHoveredEvent);
 			}
 		}
-		/*
-		if(scene.IsLayoutOn(LAYOUT_LOAD_GAME))
-		{
-			if(
-				scene.GetLayout(LAYOUT_LOAD_GAME)->
-				GetControl("backBtn")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("backButton");
-
-				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("backBtn")->OnEvent(leftClickButtonEvent);
-				scene.OnEvent(leftClickButtonEvent);
-			}
-			if(
-				scene.GetLayout(LAYOUT_LOAD_GAME)->IsControl("saveSlot1") &&
-				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot1")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("loadSlot1");
-
-				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot1")->OnEvent(leftClickButtonEvent);
-				scene.OnEvent(leftClickButtonEvent);
-			}
-			if(
-				scene.GetLayout(LAYOUT_LOAD_GAME)->IsControl("saveSlot2") &&
-				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot2")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("loadSlot2");
-
-				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot2")->OnEvent(leftClickButtonEvent);
-				scene.OnEvent(leftClickButtonEvent);
-			}
-			if(
-				scene.GetLayout(LAYOUT_LOAD_GAME)->IsControl("saveSlot3") &&
-				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot3")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("loadSlot3");
-
-				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot3")->OnEvent(leftClickButtonEvent);
-				scene.OnEvent(leftClickButtonEvent);
-			}
-			if(
-				scene.GetLayout(LAYOUT_LOAD_GAME)->IsControl("saveSlot4") &&
-				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot4")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("loadSlot4");
-
-				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot4")->OnEvent(leftClickButtonEvent);
-				scene.OnEvent(leftClickButtonEvent);
-			}
-			if(
-				scene.GetLayout(LAYOUT_LOAD_GAME)->IsControl("saveSlot5") &&
-				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot5")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("loadSlot5");
-
-				scene.GetLayout(LAYOUT_LOAD_GAME)->GetControl("saveSlot5")->OnEvent(leftClickButtonEvent);
-				scene.OnEvent(leftClickButtonEvent);
-			}
-		}
-		if(scene.IsLayoutOn(LAYOUT_SAVE_GAME))
-		{
-			if(
-				scene.GetLayout(LAYOUT_SAVE_GAME)->
-				GetControl("backBtn")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("backButton");
-
-				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl("backBtn")->OnEvent(leftClickButtonEvent);
-				scene.OnEvent(leftClickButtonEvent);
-			}
-			if(
-				scene.GetLayout(LAYOUT_SAVE_GAME)->
-				GetControl("saveSlot1")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("saveSlot1");
-
-				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot1")->OnEvent(leftClickButtonEvent);
-				scene.OnEvent(leftClickButtonEvent);
-			}
-			if(
-				scene.GetLayout(LAYOUT_SAVE_GAME)->
-				GetControl("saveSlot2")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("saveSlot2");
-
-				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot2")->OnEvent(leftClickButtonEvent);
-				scene.OnEvent(leftClickButtonEvent);
-			}
-			if(
-				scene.GetLayout(LAYOUT_SAVE_GAME)->
-				GetControl("saveSlot3")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("saveSlot3");
-
-				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot3")->OnEvent(leftClickButtonEvent);
-				scene.OnEvent(leftClickButtonEvent);
-			}
-			if(
-				scene.GetLayout(LAYOUT_SAVE_GAME)->
-				GetControl("saveSlot4")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("saveSlot4");
-
-				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot4")->OnEvent(leftClickButtonEvent);
-				scene.OnEvent(leftClickButtonEvent);
-			}
-			if(
-				scene.GetLayout(LAYOUT_SAVE_GAME)->
-				GetControl("saveSlot5")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("saveSlot5");
-
-				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot5")->OnEvent(leftClickButtonEvent);
-				scene.OnEvent(leftClickButtonEvent);
-			}
-		}
-		if(scene.IsLayoutOn(LAYOUT_OPTIONS))
-		{
-			if(
-				scene.GetLayout(LAYOUT_OPTIONS)->
-				GetControl("backBtn")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("backButton");
-
-				scene.GetLayout(LAYOUT_OPTIONS)->GetControl("backBtn")->OnEvent(leftClickButtonEvent);
-				scene.OnEvent(leftClickButtonEvent);
-			}
-		}
-
-		if(scene.IsLayoutOn(LAYOUT_MENU))
-		{
-			if(
-				scene.GetLayout(LAYOUT_MENU)->
-				GetControl("newGame")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("newGameButton");
-
-				scene.GetLayout(LAYOUT_MENU)->GetControl("newGame")->OnEvent(leftClickButtonEvent);
-
-				scene.OnEvent(leftClickButtonEvent);
-			}
-			else
-			if(
-				scene.GetLayout(LAYOUT_MENU)->
-				GetControl("resumeGame")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				std::printf("resume");
-
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("resumeGameButton");
-
-				scene.GetLayout(LAYOUT_MENU)->GetControl("resumeGame")->OnEvent(leftClickButtonEvent);
-				scene.OnEvent(leftClickButtonEvent);
-			}
-			else
-			if(
-				scene.GetLayout(LAYOUT_MENU)->
-				GetControl("saveGame")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("saveGameButton");
-
-				scene.GetLayout(LAYOUT_MENU)->GetControl("saveGame")->OnEvent(leftClickButtonEvent);
-
-				scene.OnEvent(leftClickButtonEvent);
-			}
-			else
-			if(
-				scene.GetLayout(LAYOUT_MENU)->
-				GetControl("loadGame")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				std::printf("load");
-
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("loadGameButton");
-
-				scene.GetLayout(LAYOUT_MENU)->GetControl("loadGame")->OnEvent(leftClickButtonEvent);
-				scene.OnEvent(leftClickButtonEvent);
-			}
-			else
-			if(
-				scene.GetLayout(LAYOUT_MENU)->
-				GetControl("options")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("options");
-
-				scene.GetLayout(LAYOUT_MENU)->GetControl("options")->OnEvent(leftClickButtonEvent);
-				scene.OnEvent(leftClickButtonEvent);
-			}
-			else
-			if(
-				scene.GetLayout(LAYOUT_MENU)->
-				GetControl("quitGame")->
-				IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("quitGameButton");
-
-				scene.GetLayout(LAYOUT_MENU)->GetControl("quitGame")->OnEvent(leftClickButtonEvent);
-
-				scene.OnEvent(leftClickButtonEvent);
-			}
-		}
-		*/
+		
 		if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 		{
 			if(scene.HasSuns())
@@ -437,34 +197,6 @@ void HandleMouse()
 					}
 				}
 			}
-			/*
-			if(scene.GetLayout(LAYOUT_IN_GAME)->GetControl("varInput")->
-			   IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickTextBoxEvent = StockEvents::EventOnLeftClick("varInput");
-
-				scene.GetLayout(LAYOUT_IN_GAME)->GetControl("varInput")->OnEvent(leftClickTextBoxEvent);
-
-				if(scene.GetLayout(LAYOUT_IN_GAME)->GetControl("varInput") !=
-				   scene.GetLayout(LAYOUT_IN_GAME)->GetActiveControl())
-				{
-					Event unclickEvent = Event(EVENT_TYPE_UNCLICK);
-					scene.GetLayout(LAYOUT_MENU)->GetActiveControl()->OnEvent(unclickEvent);
-				}
-			}
-
-			if(scene.GetLayout(LAYOUT_IN_GAME)->
-			   GetControl("applyInput")->
-			   IsMouseOn(glm::vec2(scene.GetMouse().GetCurrentPosition()))
-			  )
-			{
-				Event leftClickButtonEvent = StockEvents::EventOnLeftClick("applyInput");
-
-				scene.GetLayout(LAYOUT_IN_GAME)->GetControl("applyInput")->OnEvent(leftClickButtonEvent);
-
-				scene.OnEvent(leftClickButtonEvent);
-			}*/
 		}
 	}
 
@@ -728,18 +460,7 @@ void InitializeGUI()
 		HandleUnexpectedError("invalid directory", __LINE__, __FILE__);
 	}
 }
-/*
-void ControlActivationEventHandler(Scene &scene, Control *control)
-{
-	scene.GetLayout(LAYOUT_MENU)->DeactivateAllControls();
-	scene.GetLayout(LAYOUT_IN_GAME)->DeactivateAllControls();
-	control->SetIsActive(true);
-}
 
-void OnTextBoxEnterPressEventHandler(Scene &scene, Control *control)
-{
-	std::printf("Text: %s\n", control->GetContent().c_str());
-}*/
 void OnTextBoxClickedEventHandler(Scene &scene, Control *control)
 {
 	scene.GetLayout(LAYOUT_MENU)->DeactivateAllControls();
@@ -1188,7 +909,6 @@ void Keyboard(unsigned char key, int x, int y)
 			Event buttonPressedEvent = 
 				StockEvents::EventOnButtonPressed(key, "all");
 			scene.OnEvent(buttonPressedEvent);
-			//scene.GetLayout(LAYOUT_IN_GAME)->GetActiveControl()->ClearContent();
 			return;
 		}
 		scene.GetLayout(LAYOUT_IN_GAME)->GetActiveControl()->InputChar(key);
@@ -1246,7 +966,7 @@ void Keyboard(unsigned char key, int x, int y)
 				showHintEventArgs[1].argument.varInteger = 
 					scene.GetSkillTypeByFusionCombination(currentInputSequence[0], currentInputSequence[1], currentInputSequence[2]);
 				Event showHintEvent(2, EVENT_TYPE_OTHER, showHintEventArgs);
-				scene./*GetLayout(LAYOUT_IN_GAME)->GetControl("skillHint")->*/OnEvent(showHintEvent);
+				scene.OnEvent(showHintEvent);
 			}
 		}
 	}

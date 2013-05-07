@@ -71,18 +71,7 @@ void Layout::Draw(const FontProgData &fontData,
 	for(std::vector<std::shared_ptr</*TextControl*/Control>>::iterator iter = controls.begin();
 		iter != controls.end(); ++iter)
 	{
-		/*if((*iter)->IsImageBox())
-		{
-			(*iter)->Draw(textureData);
-		}
-		else if((*iter)->IsHintBox())
-		{
-			(*iter)->Draw(fontData, textureData);
-		}
-		else
-		{*/
-			(*iter)->Draw(fontData, textureData);//simpleData);
-		//}
+		(*iter)->Draw(fontData, textureData);
 	}
 	for(std::vector<std::shared_ptr<Layout>>::iterator iter = subLayouts.begin();
 		iter != subLayouts.end();
@@ -124,7 +113,6 @@ void Layout::HandleClickedControls(bool isRightButtonClicked,
 		if((*control)->IsMouseOn(mouseCoordinates_windowSpace) && (*control)->GetType() != "Label")
 		{
 			CallEventHandler((*control)->GetSubscribedEvent(), scene, (*control).get());
-			//std::printf("Clicked %s\n", (*control)->GetName().c_str());	
 		}
 	}
 }
@@ -206,7 +194,6 @@ std::shared_ptr<Control> Layout::GetClickedControl(glm::ivec2 mouseCoordinates_w
 	return nullptr;
 }
 
-//void Layout::AddControl(const std::shared_ptr<TextControl> newControl)
 void Layout::AddControl(const std::shared_ptr<Control> newControl)
 {
 	controls.push_back(newControl);
@@ -224,8 +211,6 @@ void Layout::SetBackgroundImage(float width, float height, const std::string &ba
 	hasBackground = true;
 }
 
-
-//std::shared_ptr<TextControl> Layout::GetControl(const std::string &controlName)
 std::shared_ptr<Control> Layout::GetControl(const std::string &controlName)
 {
 	for(std::vector<std::shared_ptr<Control/*TextControl*/>>::iterator iter = controls.begin();
@@ -309,7 +294,6 @@ void Layout::SetCurrentPreset(LayoutPreset newCurrentPreset)
 	*/
 }
 
-//std::shared_ptr<TextControl> Layout::GetActiveControl()
 std::shared_ptr<Control> Layout::GetActiveControl()
 {
 	for(std::vector<std::shared_ptr</*TextControl*/Control>>::iterator iter = controls.begin();

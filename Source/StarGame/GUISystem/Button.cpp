@@ -24,17 +24,3 @@ std::string Button::GetType()
 {
 	return "Button";
 }
-/*
-void Button::OnEvent(Event &_event)
-{
-	switch(_event.GetType())
-	{
-	case EVENT_TYPE_ON_CLICK:
-		std::printf("Button \'%s\' clicked\n", this->name.c_str());
-		break;
-	default:
-		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
-		break;
-	}
-}
-*/

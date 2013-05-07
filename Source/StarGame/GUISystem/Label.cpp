@@ -23,12 +23,3 @@ std::string Label::GetType()
 {
 	return "Label";
 }
-/*
-void Label::OnEvent(Event &_event)
-{
-	switch(_event.GetType())
-	{
-
-	}
-}
-*/

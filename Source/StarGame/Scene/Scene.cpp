@@ -1772,163 +1772,6 @@ void Scene::OnEvent(Event &_event)
 		{
 			sceneMusic.Play(MUSIC_ON_SUN_CLICK, CHANNEL_INTERACTION);
 		}
-		if(strcmp(_event.GetArgument("object").varString, "exitButton") == 0)
-		{
-			this->SetLayout(LAYOUT_MENU, true);
-			this->SetLayout(LAYOUT_IN_GAME, false);
-		}/*
-		if(strcmp(_event.GetArgument("object").varString, "newGameButton") == 0)
-		{
-			this->SetLayout(LAYOUT_MENU, false);
-			this->SetLayout(LAYOUT_IN_GAME, true);
-
-			ResetScene();
-			isPaused = false;
-
-			EventArg inGameEventArg[1];
-			inGameEventArg[0].argType = "command";
-			inGameEventArg[0].argument.varType = TYPE_STRING;
-			strcpy(inGameEventArg[0].argument.varString, "playBackgroundMusic");
-			Event inGameEvent = Event(1, EVENT_TYPE_OTHER, inGameEventArg);
-
-			OnEvent(inGameEvent);
-		}
-		if(strcmp(_event.GetArgument("object").varString, "resumeGameButton") == 0)
-		{
-			this->SetLayout(LAYOUT_MENU, false);
-			this->SetLayout(LAYOUT_IN_GAME, true);
-
-			sceneMusic.Stop(CHANNEL_MASTER);
-			sceneMusic.Play(MUSIC_BACKGROUND, CHANNEL_MASTER);
-
-			StartScene();
-		}
-		if(strcmp(_event.GetArgument("object").varString, "saveGameButton") == 0)
-		{
-			this->SetLayout(LAYOUT_SAVE_GAME, true);
-			this->SetLayout(LAYOUT_MENU, false);
-
-			//SaveGame("../data/saved-games/test.yaml");
-		}*//*
-		if(strcmp(_event.GetArgument("object").varString, "saveSlot1") == 0)
-		{
-			if(this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot1")->GetContent() != "saveSlot1")
-			{
-				this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot1")->ChangeText("saveSlot1");
-
-				SaveGame("../data/saved-games/saveSlot1.yaml");
-			}
-		}
-		if(strcmp(_event.GetArgument("object").varString, "saveSlot2") == 0)
-		{
-			if(this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot2")->GetContent() != "saveSlot2")
-			{
-				this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot2")->ChangeText("saveSlot2");
-
-				SaveGame("../data/saved-games/saveSlot2.yaml");
-			}
-		}
-		if(strcmp(_event.GetArgument("object").varString, "saveSlot3") == 0)
-		{
-			if(this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot3")->GetContent() != "saveSlot3")
-			{
-				this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot3")->ChangeText("saveSlot3");
-
-				SaveGame("../data/saved-games/saveSlot3.yaml");
-			}
-		}
-		if(strcmp(_event.GetArgument("object").varString, "saveSlot4") == 0)
-		{
-			if(this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot4")->GetContent() != "saveSlot4")
-			{
-				this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot4")->ChangeText("saveSlot4");
-
-				SaveGame("../data/saved-games/saveSlot4.yaml");
-			}
-		}
-		if(strcmp(_event.GetArgument("object").varString, "saveSlot5") == 0)
-		{
-			if(this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot5")->GetContent() != "saveSlot5")
-			{
-				this->GetLayout(LAYOUT_SAVE_GAME)->GetControl("saveSlot5")->ChangeText("saveSlot5");
-
-				SaveGame("../data/saved-games/saveSlot5.yaml");
-			}
-		}
-		if(strcmp(_event.GetArgument("object").varString, "loadSlot1") == 0)
-		{
-			LoadGame("../data/saved-games/saveSlot1.yaml");
-			this->SetLayout(LAYOUT_LOAD_GAME, false);
-			this->SetLayout(LAYOUT_IN_GAME, true);
-		}
-		if(strcmp(_event.GetArgument("object").varString, "loadSlot2") == 0)
-		{
-			LoadGame("../data/saved-games/saveSlot2.yaml");
-			this->SetLayout(LAYOUT_LOAD_GAME, false);
-			this->SetLayout(LAYOUT_IN_GAME, true);
-		}
-		if(strcmp(_event.GetArgument("object").varString, "loadSlot3") == 0)
-		{
-			LoadGame("../data/saved-games/saveSlot3.yaml");
-			this->SetLayout(LAYOUT_LOAD_GAME, false);
-			this->SetLayout(LAYOUT_IN_GAME, true);
-		}
-		if(strcmp(_event.GetArgument("object").varString, "loadSlot4") == 0)
-		{
-			LoadGame("../data/saved-games/saveSlot4.yaml");
-			this->SetLayout(LAYOUT_LOAD_GAME, false);
-			this->SetLayout(LAYOUT_IN_GAME, true);
-		}
-		if(strcmp(_event.GetArgument("object").varString, "loadSlot5") == 0)
-		{
-			LoadGame("../data/saved-games/saveSlot5.yaml");
-			this->SetLayout(LAYOUT_LOAD_GAME, false);
-			this->SetLayout(LAYOUT_IN_GAME, true);
-		}
-		if(strcmp(_event.GetArgument("object").varString, "loadGameButton") == 0)
-		{
-			this->SetLayout(LAYOUT_LOAD_GAME, true);
-			this->SetLayout(LAYOUT_MENU, false);
-
-			//ResetScene();
-
-			//LoadGame("../data/saved-games/test.yaml");
-		}
-		if(strcmp(_event.GetArgument("object").varString, "options") == 0)
-		{
-			this->SetLayout(LAYOUT_OPTIONS, true);
-			this->SetLayout(LAYOUT_MENU, false);
-		}
-		if(strcmp(_event.GetArgument("object").varString, "backButton") == 0)
-		{
-			this->SetLayout(LAYOUT_MENU, true);
-			// TODO: Set layout should deset all other layouts
-			this->SetLayout(LAYOUT_LOAD_GAME, false);
-			this->SetLayout(LAYOUT_SAVE_GAME, false);
-			this->SetLayout(LAYOUT_OPTIONS, false);
-		}/*
-		if(strcmp(_event.GetArgument("object").varString, "printCmd") == 0)
-		{
-			std::printf("%s", 
-				this->GetLayout(LAYOUT_MENU)->GetControl("sample")->GetContent().c_str());
-			
-			this->GetLayout(LAYOUT_MENU)->GetControl("sample")->Clear();
-		}
-		if(strcmp(_event.GetArgument("object").varString, "applyInput") == 0)
-		{
-			if(!suns.empty())
-			{
-				ProcessVariablesTweak(this->GetLayout(LAYOUT_IN_GAME)->GetControl("varInput")->GetContent());
-			}
-
-			this->GetLayout(LAYOUT_IN_GAME)->GetControl("varInput")->Clear();
-			this->GetLayout(LAYOUT_IN_GAME)->GetControl("varInput")->Deactivate();
-		}
-		if(strcmp(_event.GetArgument("object").varString, "quitGameButton") == 0)
-		{
-			// Add clean-up if necessary.
-			exit(EXIT_SUCCESS);
-		}*/
 		if(strcmp(_event.GetArgument("object").varString, "deploySkill") == 0 && !isPaused)
 		{
 			if(!suns.empty())
@@ -2065,12 +1908,16 @@ void Scene::OnEvent(Event &_event)
 		{
 			sceneMusic.Play(MUSIC_FUSION, CHANNEL_GAME); // TODO: The channel should correspond to the music
 
+			GetLayout(LAYOUT_IN_GAME)->GetControl("fusOne")->SetTexture("../data/images/fusion-empty.jpg");
+			GetLayout(LAYOUT_IN_GAME)->GetControl("fusTwo")->SetTexture("../data/images/fusion-empty.jpg");
+			GetLayout(LAYOUT_IN_GAME)->GetControl("fusThree")->SetTexture("../data/images/fusion-empty.jpg");
+
 			if(strcmp(_event.GetArgument("buttons").varString, 
 					  sceneFusionInput.GetSequenceButtons("fireSatellite").c_str()) == 0)
 			{
 				if(HasSuns())
 				{
-					suns[0]->AddSatellite(/*"mesh-files/UnitSphere.xml"*/"../data/mesh-files/fire_planet.obj", 
+					suns[0]->AddSatellite("../data/mesh-files/fire_planet.obj", 
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
 										  SatelliteType(SATELLITE_FIRE));
 				}
@@ -2080,7 +1927,7 @@ void Scene::OnEvent(Event &_event)
 			{
 				if(HasSuns())
 				{
-					suns[0]->AddSatellite(/*"mesh-files/UnitSphere.xml"*/"../data/mesh-files/water_planet.obj", 
+					suns[0]->AddSatellite("../data/mesh-files/water_planet.obj", 
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
 										  SatelliteType(SATELLITE_WATER));
 				}
@@ -2090,7 +1937,7 @@ void Scene::OnEvent(Event &_event)
 			{
 				if(HasSuns())
 				{
-					suns[0]->AddSatellite(/*"mesh-files/UnitSphere.xml"*/"../data/mesh-files/earth_planet.obj", 
+					suns[0]->AddSatellite("../data/mesh-files/earth_planet.obj", 
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
 										  SatelliteType(SATELLITE_EARTH));
 				}
@@ -2100,7 +1947,7 @@ void Scene::OnEvent(Event &_event)
 			{
 				if(HasSuns())
 				{
-					suns[0]->AddSatellite(/*"mesh-files/UnitSphere.xml"*/"../data/mesh-files/air_planet.obj",
+					suns[0]->AddSatellite("../data/mesh-files/air_planet.obj",
 										  glm::vec4(0.5f, 0.5f, 0.5f, 1.0f),
 										  SatelliteType(SATELLITE_AIR));
 				}
@@ -2222,8 +2069,6 @@ void Scene::OnEvent(Event &_event)
 					}
 				}
 			}
-
-			//std::printf("%i\n", _event.GetArgument("index").varInteger);
 		}
 		if(strcmp(_event.GetArgument("what_event").varString, "pauseGame") == 0)
 		{
@@ -2663,10 +2508,3 @@ void Scene::SetPause(bool newIsPaused)
 {
 	isPaused = newIsPaused;
 }
-
-/*
-void HandleTestEvent::HandleEvent(Scene &scene, Control *control)
-{
-	std::printf("has suns: %i", (int)scene.HasSuns());
-	std::printf("Handled control with name: %s\n", control->GetName().c_str());
-}*/

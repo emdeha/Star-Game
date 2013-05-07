@@ -265,4 +265,22 @@ layout-game:
             width: 50
             height: 50
             image: "fusion-empty.jpg"
-
+        control-imagebox-fushint:
+            control-type: imageBox
+            name: fusHint
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 52.5, 89 ]
+            width: 50
+            height: 50
+            image: "fusion-empty.jpg"
+        control-label-fushint:
+            control-type: label
+            name: labelFusHint
+            text: "Not a combination"
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true   
+            percentaged-pos: [ 53, 13 ] 
+            text-size: 28 

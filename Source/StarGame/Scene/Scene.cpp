@@ -1928,7 +1928,7 @@ void Scene::OnEvent(Event &_event)
 		{
 			// Add clean-up if necessary.
 			exit(EXIT_SUCCESS);
-		}
+		}*/
 		if(strcmp(_event.GetArgument("object").varString, "deploySkill") == 0 && !isPaused)
 		{
 			if(!suns.empty())
@@ -2002,7 +2002,7 @@ void Scene::OnEvent(Event &_event)
 					}
 				}
 			}
-		}*/
+		}
 		break;
 	case EVENT_TYPE_SPACE_BTN_CLICK:
 		if(strcmp(_event.GetArgument("command").varString, "playBackgroundMusic") == 0)
@@ -2021,30 +2021,43 @@ void Scene::OnEvent(Event &_event)
 			sceneMusic.Stop(CHANNEL_MASTER);
 			sceneMusic.Play(MUSIC_BACKGROUND, CHANNEL_MASTER); // TODO: The channel should correspond to the music
 		}
+		if(strcmp(_event.GetArgument("what_event").varString, "show_skill") == 0 && !isPaused)
+		{
+			if(IsLayoutOn(LAYOUT_IN_GAME))
+			{
+				if(_event.GetArgument("skillIndex").varInteger == -1)
+				{
+					GetLayout(LAYOUT_IN_GAME)->GetControl("fusHint")->SetTexture("../data/images/fusion-empty.jpg");
+					GetLayout(LAYOUT_IN_GAME)->GetControl("labelFusHint")->SetText("Not a combination");
+				}
+				else
+				{
+					GetLayout(LAYOUT_IN_GAME)->GetControl("fusHint")->SetTexture("../data/images/skill-sun-nova.jpg");
+					GetLayout(LAYOUT_IN_GAME)->GetControl("labelFusHint")->SetText("Active skill");
+				}
+			}
+		}
 		if(strcmp(_event.GetArgument("what_event").varString, "fusion_button") == 0 && !isPaused)
 		{
-			if(HasLayout(LAYOUT_IN_GAME))
+			if(IsLayoutOn(LAYOUT_IN_GAME))
 			{
-				if(GetLayout(LAYOUT_IN_GAME)->IsSet())
+				if(_event.GetArgument("button_pos").varInteger == 1)
 				{
-					if(_event.GetArgument("button_pos").varInteger == 1)
-					{
-						GetLayout(LAYOUT_IN_GAME)->
-							HandleKeyPress(*this, _event.GetArgument("what_button").varString[0],
-										   "fusThree");
-					}
-					else if(_event.GetArgument("button_pos").varInteger == 2)
-					{
-						GetLayout(LAYOUT_IN_GAME)->
-							HandleKeyPress(*this, _event.GetArgument("what_button").varString[0],
-										   "fusTwo");
-					}
-					else if(_event.GetArgument("button_pos").varInteger == 3)
-					{
-						GetLayout(LAYOUT_IN_GAME)->
-							HandleKeyPress(*this, _event.GetArgument("what_button").varString[0],
-										   "fusOne");
-					}
+					GetLayout(LAYOUT_IN_GAME)->
+						HandleKeyPress(*this, _event.GetArgument("what_button").varString[0],
+										"fusThree");
+				}
+				else if(_event.GetArgument("button_pos").varInteger == 2)
+				{
+					GetLayout(LAYOUT_IN_GAME)->
+						HandleKeyPress(*this, _event.GetArgument("what_button").varString[0],
+										"fusTwo");
+				}
+				else if(_event.GetArgument("button_pos").varInteger == 3)
+				{
+					GetLayout(LAYOUT_IN_GAME)->
+						HandleKeyPress(*this, _event.GetArgument("what_button").varString[0],
+										"fusOne");
 				}
 			}
 		}

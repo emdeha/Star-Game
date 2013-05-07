@@ -1217,24 +1217,6 @@ void Keyboard(unsigned char key, int x, int y)
 			scene.OnEvent(escapeHitEvent);
 		}
 		break;
-	/*case 'q':
-		{
-			Event buttonPressedEvent = StockEvents::EventOnButtonPressed(key, "all");
-			scene.OnEvent(buttonPressedEvent);
-		}
-		break;
-	case 'w':
-		{
-			Event buttonPressedEvent = StockEvents::EventOnButtonPressed(key, "all");
-			scene.OnEvent(buttonPressedEvent);
-		}
-		break;
-	case 'e':
-		{
-			Event buttonPressedEvent = StockEvents::EventOnButtonPressed(key, "all");
-			scene.OnEvent(buttonPressedEvent);
-		}
-		break;*/
 	case 32:
 		isEmitterStarted = true;
 		break;
@@ -1246,11 +1228,6 @@ void Keyboard(unsigned char key, int x, int y)
 		scene.UpdateFusion(key, returnedFusionEvent);
 		if(returnedFusionEvent.GetType() != StockEvents::EmptyEvent().GetType())
 		{
-			/*
-			scene.GetLayout(LAYOUT_IN_GAME)->GetControl("fusionOne")->OnEvent(returnedFusionEvent);
-			scene.GetLayout(LAYOUT_IN_GAME)->GetControl("fusionTwo")->OnEvent(returnedFusionEvent);
-			scene.GetLayout(LAYOUT_IN_GAME)->GetControl("fusionThree")->OnEvent(returnedFusionEvent);
-			*/
 			if(strcmp(returnedFusionEvent.GetArgument("what_event").varString, "fusion_button") == 0)
 			{
 				scene.OnEvent(returnedFusionEvent);
@@ -1269,7 +1246,7 @@ void Keyboard(unsigned char key, int x, int y)
 				showHintEventArgs[1].argument.varInteger = 
 					scene.GetSkillTypeByFusionCombination(currentInputSequence[0], currentInputSequence[1], currentInputSequence[2]);
 				Event showHintEvent(2, EVENT_TYPE_OTHER, showHintEventArgs);
-				//scene.GetLayout(LAYOUT_IN_GAME)->GetControl("skillHint")->OnEvent(showHintEvent);
+				scene./*GetLayout(LAYOUT_IN_GAME)->GetControl("skillHint")->*/OnEvent(showHintEvent);
 			}
 		}
 	}

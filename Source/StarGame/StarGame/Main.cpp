@@ -838,6 +838,14 @@ void OnQPressEventHandler(Scene &scene, Control *control)
 {
 	control->SetTexture("../data/images/fusion-catalyst.jpg");
 }
+void OnEPressEventHandler(Scene &scene, Control *control)
+{
+	control->SetTexture("../data/images/fusion-ectoplasm.jpg");
+}
+void OnWPressEventHandler(Scene &scene, Control *control)
+{
+	control->SetTexture("../data/images/fusion-matter.jpg");
+}
 
 void InitializeScene()
 {
@@ -951,10 +959,29 @@ void InitializeScene()
 	scene.AddEventHandler("onLoadSlotFiveClickedEventHandler", "onClick", "loadSlot5", "",
 						  LAYOUT_LOAD_GAME, OnLoadSlotClickedEventHandler);
 
-	scene.AddEventHandler("onVarInputEnterPressEventHandler", "onEnterPress", "varInput", "",
-						  LAYOUT_IN_GAME, OnVarInputEnterPressEventHandler);
-	scene.AddEventHandler("onQPressEventHandler", "onQPress", "fusionOne", "",
-						  LAYOUT_IN_GAME, OnQPressEventHandler);
+	scene.AddEventHandler("onVarInputEnterPressEventHandler", "onKeyPress", "varInput", "",
+						  LAYOUT_IN_GAME, OnVarInputEnterPressEventHandler, (char)13);
+
+	scene.AddEventHandler("onQPressEventHandler", "onKeyPress", "fusThree", "",
+						  LAYOUT_IN_GAME, OnQPressEventHandler, 'q');
+	scene.AddEventHandler("onWPressEventHandler", "onKeyPress", "fusThree", "",
+						  LAYOUT_IN_GAME, OnWPressEventHandler, 'w');
+	scene.AddEventHandler("onEPressEventHandler", "onKeyPress", "fusThree", "",
+						  LAYOUT_IN_GAME, OnEPressEventHandler, 'e');
+
+	scene.AddEventHandler("onQPressEventHandler", "onKeyPress", "fusTwo", "",
+						  LAYOUT_IN_GAME, OnQPressEventHandler, 'q');
+	scene.AddEventHandler("onWPressEventHandler", "onKeyPress", "fusTwo", "",
+						  LAYOUT_IN_GAME, OnWPressEventHandler, 'w');
+	scene.AddEventHandler("onEPressEventHandler", "onKeyPress", "fusTwo", "",
+						  LAYOUT_IN_GAME, OnEPressEventHandler, 'e');
+
+	scene.AddEventHandler("onQPressEventHandler", "onKeyPress", "fusOne", "",
+						  LAYOUT_IN_GAME, OnQPressEventHandler, 'q');
+	scene.AddEventHandler("onWPressEventHandler", "onKeyPress", "fusOne", "",
+						  LAYOUT_IN_GAME, OnWPressEventHandler, 'w');
+	scene.AddEventHandler("onEPressEventHandler", "onKeyPress", "fusOne", "",
+						  LAYOUT_IN_GAME, OnEPressEventHandler, 'e');
 }
 
 
@@ -1188,6 +1215,24 @@ void Keyboard(unsigned char key, int x, int y)
 			Event escapeHitEvent = Event(1, EVENT_TYPE_OTHER, escapeHitEventArg);
 
 			scene.OnEvent(escapeHitEvent);
+		}
+		break;
+	case 'q':
+		{
+			Event buttonPressedEvent = StockEvents::EventOnButtonPressed(key, "all");
+			scene.OnEvent(buttonPressedEvent);
+		}
+		break;
+	case 'w':
+		{
+			Event buttonPressedEvent = StockEvents::EventOnButtonPressed(key, "all");
+			scene.OnEvent(buttonPressedEvent);
+		}
+		break;
+	case 'e':
+		{
+			Event buttonPressedEvent = StockEvents::EventOnButtonPressed(key, "all");
+			scene.OnEvent(buttonPressedEvent);
 		}
 		break;
 	case 32:

@@ -94,7 +94,7 @@ public:
 	void AddSubLayout(const std::shared_ptr<Layout> newSubLayout);
 	void AddEventHandler(const std::string &name, const std::string &eventType, 
 						 const std::string &controlName, const std::string &controlType,
-						 EventHandlerFunction handler);
+						 EventHandlerFunction handler, char key = ' ');
 	void CallEventHandler(const std::string &name, Scene &scene, Control *control);
 
 	void SetBackgroundImage(float width, float height, 
@@ -111,7 +111,7 @@ public:
 	void HandleClickedControls(bool isRightButtonclicked,
 							   glm::ivec2 mouseCoordinates_windowSpace,
 							   Scene &scene);
-	void HandleKeyPress(Scene &scene);
+	void HandleKeyPress(Scene &scene, char key);
 	std::shared_ptr<Control> GetClickedControl(glm::ivec2 mouseCoordinates_windowSpace);
 
 	LayoutType GetLayoutType();
@@ -140,7 +140,7 @@ protected:
 	std::string visibleText;
 
 	std::string onClickEventName;
-	std::string onEnterPressEventName;
+	std::vector<std::string> onKeyPressEventName;
 	// add other event names
 
 	glm::vec4 fontColor;
@@ -187,9 +187,9 @@ public:
 	void ClearContent();
 
 	void SubscribeForEvent(const std::string &eventName);
-	void SubscribeForEnterPressEvent(const std::string &eventName);
+	void SubscribeForKeyPressEvent(const std::string &eventName, char key);
 	std::string GetSubscribedEvent();
-	std::string GetSubscribedEnterPressEvent();
+	std::string GetSubscribedKeyPressEvent(char key);
 
 
 	virtual void Draw(const FontProgData &fontData, const TextureProgData &textureData);

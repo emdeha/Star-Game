@@ -129,18 +129,18 @@ void Layout::HandleClickedControls(bool isRightButtonClicked,
 	}
 }
 
-void Layout::HandleKeyPress(Scene &scene)
+void Layout::HandleKeyPress(Scene &scene, char key)
 {
 	for(std::vector<std::shared_ptr<Control>>::iterator control = controls.begin();
 		control != controls.end(); ++control)
 	{
-		CallEventHandler((*control)->GetSubscribedEnterPressEvent(), scene, (*control).get());
+		CallEventHandler((*control)->GetSubscribedKeyPressEvent(key), scene, (*control).get());
 	}
 }
 
 void Layout::AddEventHandler(const std::string &name, const std::string &eventType, 
 							 const std::string &controlName, const std::string &controlType, 
-							 EventHandlerFunction handler)
+							 EventHandlerFunction handler, char key)
 {
 	eventHandlers.push_back(std::make_pair(name, handler));
 	for(std::vector<std::shared_ptr<Control>>::iterator control = controls.begin();
@@ -154,9 +154,9 @@ void Layout::AddEventHandler(const std::string &name, const std::string &eventTy
 				{
 					(*control)->SubscribeForEvent(name);
 				}
-				else if(eventType == "onEnterPress")
+				else if(eventType == "onKeyPress")
 				{
-					(*control)->SubscribeForEnterPressEvent(name);
+					(*control)->SubscribeForKeyPressEvent(name, key);
 				}
 			}
 		}
@@ -166,9 +166,9 @@ void Layout::AddEventHandler(const std::string &name, const std::string &eventTy
 			{
 				(*control)->SubscribeForEvent(name);
 			}
-			else if(eventType == "onEnterPress")
+			else if(eventType == "onKeyPress")
 			{
-				(*control)->SubscribeForEnterPressEvent(name);
+				(*control)->SubscribeForKeyPressEvent(name, key);
 			}
 		}
 	}

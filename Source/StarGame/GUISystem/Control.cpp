@@ -19,13 +19,15 @@
 #include "GUISystem.h"
 #include "../framework/ErrorAPI.h"
 
+#define ASCII_CHAR_TABLE_SIZE 255
+
 
 Control::Control()
 {
 	name = "";
 	text = "";
 	onClickEventName = "";
-	onEnterPressEventName = "";
+	onKeyPressEventName.resize(ASCII_CHAR_TABLE_SIZE);
 	windowHeight = 0;
 	windowWidth = 0;
 	position = glm::vec2();
@@ -44,7 +46,7 @@ Control::Control(const std::string &newName, const std::string &newText,
 	name = newName;
 	text = newText;
 	onClickEventName = "";
-	onEnterPressEventName = "";
+	onKeyPressEventName.resize(ASCII_CHAR_TABLE_SIZE);
 	visibleText = text;
 	fontColor = newFontColor;
 	position = newPosition;
@@ -159,17 +161,17 @@ void Control::SubscribeForEvent(const std::string &eventName)
 {
 	onClickEventName = eventName;
 }
-void Control::SubscribeForEnterPressEvent(const std::string &eventName)
+void Control::SubscribeForKeyPressEvent(const std::string &eventName, char key)
 {
-	onEnterPressEventName = eventName;
+	onKeyPressEventName[(int)key] = eventName;
 }
 std::string Control::GetSubscribedEvent()
 {
 	return onClickEventName;
 }
-std::string Control::GetSubscribedEnterPressEvent()
+std::string Control::GetSubscribedKeyPressEvent(char key)
 {
-	return onEnterPressEventName;
+	return onKeyPressEventName[(int)key];
 }
 
 void Control::SetPosition(glm::vec2 newPosition, bool newIsUsingPercentage)

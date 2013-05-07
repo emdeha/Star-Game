@@ -1743,7 +1743,7 @@ void Scene::OnEvent(Event &_event)
 			{
 				if(iter->second->IsSet())
 				{
-					iter->second->HandleKeyPress(*this);
+					iter->second->HandleKeyPress(*this, (char)_event.GetArgument("button").varInteger);
 				}
 			}
 		}
@@ -2294,19 +2294,19 @@ void Scene::AddEnemy(const std::shared_ptr<Enemy> newEnemy)
 
 void Scene::AddEventHandler(const std::string &name, const std::string &eventType, 
 							const std::string &controlName, const std::string &controlType,
-							LayoutType layoutToAddTo, EventHandlerFunction handler)
+							LayoutType layoutToAddTo, EventHandlerFunction handler, char key)
 {
 	if(layoutToAddTo == LayoutType::LAYOUT_ALL)
 	{
-		GetLayout(LAYOUT_IN_GAME)->AddEventHandler(name, eventType, controlName, controlType, handler);
-		GetLayout(LAYOUT_LOAD_GAME)->AddEventHandler(name, eventType, controlName, controlType, handler);
-		GetLayout(LAYOUT_MENU)->AddEventHandler(name, eventType, controlName, controlType, handler);
-		GetLayout(LAYOUT_SAVE_GAME)->AddEventHandler(name, eventType, controlName, controlType, handler);
-		GetLayout(LAYOUT_OPTIONS)->AddEventHandler(name, eventType, controlName, controlType, handler);
+		GetLayout(LAYOUT_IN_GAME)->AddEventHandler(name, eventType, controlName, controlType, handler, key);
+		GetLayout(LAYOUT_LOAD_GAME)->AddEventHandler(name, eventType, controlName, controlType, handler, key);
+		GetLayout(LAYOUT_MENU)->AddEventHandler(name, eventType, controlName, controlType, handler, key);
+		GetLayout(LAYOUT_SAVE_GAME)->AddEventHandler(name, eventType, controlName, controlType, handler, key);
+		GetLayout(LAYOUT_OPTIONS)->AddEventHandler(name, eventType, controlName, controlType, handler, key);
 	}
 	else
 	{
-		GetLayout(layoutToAddTo)->AddEventHandler(name, eventType, controlName, controlType, handler);
+		GetLayout(layoutToAddTo)->AddEventHandler(name, eventType, controlName, controlType, handler, key);
 	}
 }
 void Scene::CallEventHandler(const std::string &name, LayoutType layoutToCallIt, Scene &scene, Control *control)

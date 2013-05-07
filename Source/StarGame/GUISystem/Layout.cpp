@@ -129,12 +129,20 @@ void Layout::HandleClickedControls(bool isRightButtonClicked,
 	}
 }
 
-void Layout::HandleKeyPress(Scene &scene, char key)
+void Layout::HandleKeyPress(Scene &scene, char key, const std::string &explicitControlName)
 {
-	for(std::vector<std::shared_ptr<Control>>::iterator control = controls.begin();
-		control != controls.end(); ++control)
+	if(explicitControlName != "")
 	{
-		CallEventHandler((*control)->GetSubscribedKeyPressEvent(key), scene, (*control).get());
+		CallEventHandler(GetControl(explicitControlName)->GetSubscribedKeyPressEvent(key), scene, 
+						 GetControl(explicitControlName).get());
+	}
+	else
+	{
+		for(std::vector<std::shared_ptr<Control>>::iterator control = controls.begin();
+			control != controls.end(); ++control)
+		{
+			CallEventHandler((*control)->GetSubscribedKeyPressEvent(key), scene, (*control).get());
+		}
 	}
 }
 

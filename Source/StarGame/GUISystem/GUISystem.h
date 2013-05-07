@@ -111,7 +111,7 @@ public:
 	void HandleClickedControls(bool isRightButtonclicked,
 							   glm::ivec2 mouseCoordinates_windowSpace,
 							   Scene &scene);
-	void HandleKeyPress(Scene &scene, char key);
+	void HandleKeyPress(Scene &scene, char key, const std::string &explicitControlName = "");
 	std::shared_ptr<Control> GetClickedControl(glm::ivec2 mouseCoordinates_windowSpace);
 
 	LayoutType GetLayoutType();

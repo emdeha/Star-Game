@@ -2021,6 +2021,33 @@ void Scene::OnEvent(Event &_event)
 			sceneMusic.Stop(CHANNEL_MASTER);
 			sceneMusic.Play(MUSIC_BACKGROUND, CHANNEL_MASTER); // TODO: The channel should correspond to the music
 		}
+		if(strcmp(_event.GetArgument("what_event").varString, "fusion_button") == 0 && !isPaused)
+		{
+			if(HasLayout(LAYOUT_IN_GAME))
+			{
+				if(GetLayout(LAYOUT_IN_GAME)->IsSet())
+				{
+					if(_event.GetArgument("button_pos").varInteger == 1)
+					{
+						GetLayout(LAYOUT_IN_GAME)->
+							HandleKeyPress(*this, _event.GetArgument("what_button").varString[0],
+										   "fusThree");
+					}
+					else if(_event.GetArgument("button_pos").varInteger == 2)
+					{
+						GetLayout(LAYOUT_IN_GAME)->
+							HandleKeyPress(*this, _event.GetArgument("what_button").varString[0],
+										   "fusTwo");
+					}
+					else if(_event.GetArgument("button_pos").varInteger == 3)
+					{
+						GetLayout(LAYOUT_IN_GAME)->
+							HandleKeyPress(*this, _event.GetArgument("what_button").varString[0],
+										   "fusOne");
+					}
+				}
+			}
+		}
 		if(strcmp(_event.GetArgument("what_event").varString, "fusion_seq") == 0 && !isPaused)
 		{
 			sceneMusic.Play(MUSIC_FUSION, CHANNEL_GAME); // TODO: The channel should correspond to the music

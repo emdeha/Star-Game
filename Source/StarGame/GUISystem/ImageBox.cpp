@@ -66,6 +66,11 @@ void ImageBox::Draw(const FontProgData &fontData, const TextureProgData &texture
 	glDisable(GL_BLEND);
 }
 
+void ImageBox::SetTexture(const std::string &textureName)
+{
+	image.ChangeTexture(textureName);
+}
+
 std::string ImageBox::GetType()
 {
 	return "ImageBox";

@@ -238,3 +238,31 @@ layout-game:
             is-using-percentage: true
             percentaged-pos: [ 95, 95 ]
             text-size: 28
+        control-imagebox-fusone:
+            control-type: imageBox
+            name: fusOne
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 48, 96 ]
+            width: 50
+            height: 50
+            image: "fusion-empty.jpg"
+        control-imagebox-fustwo:
+            control-type: imageBox
+            name: fusTwo
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 52.5, 96 ]
+            width: 50
+            height: 50
+            image: "fusion-empty.jpg"
+        control-imagebox-fusthree:
+            control-type: imageBox
+            name: fusThree
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 57, 96 ]
+            width: 50
+            height: 50
+            image: "fusion-empty.jpg"
+

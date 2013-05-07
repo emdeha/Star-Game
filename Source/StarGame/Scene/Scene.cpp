@@ -1490,7 +1490,7 @@ void Scene::UpdateScene()
 			itoa(suns[i]->GetCurrentResource(), matter, 10);
 			std::string labelText = "Matter: ";
 			labelText.append(matter);
-			//GetLayout(LAYOUT_IN_GAME)->GetControl("labelMatter")->ChangeText(labelText);
+			GetLayout(LAYOUT_IN_GAME)->GetControl("labelMatter")->SetText(labelText);
 		}
 	
 		for(std::vector<std::shared_ptr<Enemy>>::iterator iter = enemies.begin();
@@ -2109,7 +2109,7 @@ void Scene::OnEvent(Event &_event)
 				}
 			}
 		}
-		/*
+		
 		if(strcmp(_event.GetArgument("what_event").varString, "skillHov") == 0 && !isPaused)
 		{
 			if(IsLayoutOn(LAYOUT_IN_GAME))
@@ -2125,13 +2125,13 @@ void Scene::OnEvent(Event &_event)
 					glm::vec2(sceneMouse.GetCurrentPosition().x, 
 							  currentDisplayData.windowHeight - sceneMouse.GetCurrentPosition().y);
 
-				GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetPosition(mousePosition);
-				GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->ChangeText(toolTipText);
+				GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetPosition(mousePosition, false);
+				GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetText(toolTipText);
 				GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetIsVisible(true);
 			}
 			//std::printf("skill hov");
 		}
-		*/
+		
 		if(strcmp(_event.GetArgument("what_event").varString, "skillUpgr") == 0 && !isPaused)
 		{
 			if(_event.GetArgument("satType").varInteger == -1)
@@ -2308,21 +2308,10 @@ void Scene::AddEventHandler(const std::string &name, const std::string &eventTyp
 	{
 		GetLayout(layoutToAddTo)->AddEventHandler(name, eventType, controlName, controlType, handler);
 	}
-	//eventHandlers.push_back(std::make_pair(name, handler));
 }
 void Scene::CallEventHandler(const std::string &name, LayoutType layoutToCallIt, Scene &scene, Control *control)
 {
 	GetLayout(layoutToCallIt)->CallEventHandler(name, scene, control);
-	/*
-	for(std::vector<std::pair<std::string, EventHandlerFunction>>::iterator handler = eventHandlers.begin();
-		handler != eventHandlers.end(); ++handler)
-	{
-		if((*handler).first == name)
-		{
-			(*handler).second(scene, control);
-		}
-	}
-	*/
 }
 
 

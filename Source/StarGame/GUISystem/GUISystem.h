@@ -202,6 +202,9 @@ public:
 	// maybe it is not necessary to be virtual
 	virtual void SetPosition(glm::vec2 newPosition, bool newIsUsingPercentage); 
 
+	// TODO: Only for ImageBox, maybe there's a better design decision
+	virtual void SetTexture(const std::string &textureName) { }
+
 	virtual std::string GetType() { return ""; }
 
 	virtual void InputChar(char ch) {}
@@ -317,6 +320,8 @@ public:
 	void Update(int newWindowWidth, int newWindowHeight);
 	// Adding the font data for later usage.
 	void Draw(const FontProgData &fontData, const TextureProgData &textureData);
+
+	void SetTexture(const std::string &textureName);
 
 	std::string GetType();
 };

@@ -834,6 +834,10 @@ void OnVarInputEnterPressEventHandler(Scene &scene, Control *control)
 	control->ClearContent();
 	control->SetIsActive(false);
 }
+void OnQPressEventHandler(Scene &scene, Control *control)
+{
+	control->SetTexture("../data/images/fusion-catalyst.jpg");
+}
 
 void InitializeScene()
 {
@@ -949,6 +953,8 @@ void InitializeScene()
 
 	scene.AddEventHandler("onVarInputEnterPressEventHandler", "onEnterPress", "varInput", "",
 						  LAYOUT_IN_GAME, OnVarInputEnterPressEventHandler);
+	scene.AddEventHandler("onQPressEventHandler", "onQPress", "fusionOne", "",
+						  LAYOUT_IN_GAME, OnQPressEventHandler);
 }
 
 

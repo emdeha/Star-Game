@@ -219,6 +219,56 @@ GUILoader::GUILoader(const std::string &fileName,
 					}
 					else if(control->second["control-type"].as<std::string>() == "imageBox")
 					{
+						controlData.name = control->second["name"].as<std::string>();
+						//controlData.text = control->second["text"].as<std::string>();
+					    //controlData.hasBackground = control->second["has-background"].as<bool>();
+						controlData.isVisible = control->second["is-visible"].as<bool>();
+						controlData.isUsingPercentage = control->second["is-using-percentage"].as<bool>();
+						//controlData.fontColor = glm::vec4(control->second["font-color"][0].as<float>(),
+						//		    						control->second["font-color"][1].as<float>(),
+						//								    control->second["font-color"][2].as<float>(),
+						//								    control->second["font-color"][3].as<float>());
+						//controlData.textSize = control->second["text-size"].as<int>();
+						//controlData.backgroundImage = "";
+						//if(controlData.hasBackground)
+						//{
+						//	controlData.margins = glm::vec4(control->second["margins"][0].as<float>(),
+						//									control->second["margins"][1].as<float>(),
+						//									control->second["margins"][2].as<float>(),
+						//									control->second["margins"][3].as<float>());
+						//	controlData.backgroundImage = texturesDir;
+						//	controlData.backgroundImage += control->second["background-image"].as<std::string>();
+						//}
+						controlData.imageBoxHeight = control->second["height"].as<float>();
+						controlData.imageBoxWidth = control->second["width"].as<float>();
+						controlData.backgroundImage = texturesDir;
+						controlData.backgroundImage += control->second["image"].as<std::string>();
+						controlData.percentagedPosition = glm::vec2();
+						controlData.position = glm::vec2();
+						if(controlData.isUsingPercentage)
+						{
+							controlData.percentagedPosition = 
+								glm::vec2(control->second["percentaged-pos"][0].as<float>(),
+										  control->second["percentaged-pos"][1].as<float>());
+						}
+						else
+						{
+							controlData.position = glm::vec2(control->second["position"][0].as<float>(),
+															 control->second["position"][1].as<float>());
+						}
+
+						std::shared_ptr<ImageBox> imageBox = 
+							std::shared_ptr<ImageBox>(new ImageBox(controlData.imageBoxWidth, controlData.imageBoxHeight,
+																   controlData.name, controlData.text,
+																   controlData.fontColor, controlData.position,
+																   controlData.margins, controlData.textSize,
+																   controlData.hasBackground, controlData.isVisible,
+																   controlData.isUsingPercentage, 
+																   controlData.percentagedPosition));
+						imageBox->Init(controlData.backgroundImage, windowWidth, windowHeight);
+
+						newLayout->AddControl(imageBox);
+
 						/*strcpy(controlData.controlName, control->second["name"].as<std::string>().c_str());
 						controlData.imageBoxHeight = control->second["height"].as<int>();
 						controlData.imageBoxWidth = control->second["width"].as<int>();

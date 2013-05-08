@@ -1299,6 +1299,8 @@ void FastSuicideBomber::UpdateAI(CelestialBody &sun)
 
 		float distanceBetweenPlanetAndBomber = glm::length(vectorFromPlanetToBomber);
 
+		//std::printf("%f - %f\n", distanceBetweenPlanetAndBomber, lineOfSight);
+
 		if(distanceBetweenPlanetAndBomber < lineOfSight)
 		{
 			currentState = STATE_ATTACK;

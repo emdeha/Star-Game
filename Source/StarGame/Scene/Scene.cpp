@@ -383,8 +383,6 @@ void Scene::LoadAudio(const std::string &configFileName)
 
 void Scene::LoadGame(const std::string &saveGameFileName)
 {
-	//this->ResetScene();
-
 	YAML::Node loadDataNode = YAML::LoadFile(saveGameFileName);
 	suns[0]->currentResource = loadDataNode["matter"].as<int>();
 	suns[0]->health = loadDataNode["sunHealth"].as<int>();
@@ -797,7 +795,7 @@ void Scene::SpawnFastSuicideBomber()
 																 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].health, 
 																 enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].resourceGivenOnKill));
 	randBomber->LoadMesh("../data/mesh-files/suicide_bomber.obj");
-
+	std::printf("%f\n", enemyStats[ENEMY_TYPE_FAST_SUICIDE_BOMBER].lineOfSight);
 	enemies.push_back(randBomber);
 }
 void Scene::SpawnAsteroid()

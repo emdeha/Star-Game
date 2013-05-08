@@ -48,12 +48,13 @@ enum EnemyType
 {
 	ENEMY_TYPE_SWARM,
 	ENEMY_TYPE_SPACESHIP,
-	ENEMY_TYPE_DEPLOY_UNIT,
 	ENEMY_TYPE_MOTHERSHIP,
 	ENEMY_TYPE_FAST_SUICIDE_BOMBER,
 	ENEMY_TYPE_ASTEROID, // Should the asteroids be randomly spawned on waves, 
 						 // or should they act like background?
-
+						 
+	ENEMY_TYPE_DEPLOY_UNIT, // --> WARN: Should be kept here, otherwise it will break the stats loading.
+							// --> That needs to be refactored.
 	ENEMY_TYPE_COUNT,
 };
 

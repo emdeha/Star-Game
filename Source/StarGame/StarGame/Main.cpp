@@ -540,10 +540,17 @@ void OnSaveSlotClickedEventHandler(Scene &scene, Control *control)
 	}
 }
 void OnLoadSlotClickedEventHandler(Scene &scene, Control *control)
-{
+{	
+	scene.ResetScene();
+
 	scene.LoadGame("../data/saved-games/" + control->GetContent() + ".yaml");
 	scene.SetLayout(LAYOUT_LOAD_GAME, false);
 	scene.SetLayout(LAYOUT_IN_GAME, true);
+
+	scene.StopMusic(CHANNEL_MASTER);
+	scene.PlayMusic(MUSIC_BACKGROUND, CHANNEL_MASTER);
+
+	scene.StartScene();
 }
 void OnVarInputEnterPressEventHandler(Scene &scene, Control *control)
 {

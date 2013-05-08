@@ -383,6 +383,8 @@ void Scene::LoadAudio(const std::string &configFileName)
 
 void Scene::LoadGame(const std::string &saveGameFileName)
 {
+	//this->ResetScene();
+
 	YAML::Node loadDataNode = YAML::LoadFile(saveGameFileName);
 	suns[0]->currentResource = loadDataNode["matter"].as<int>();
 	suns[0]->health = loadDataNode["sunHealth"].as<int>();

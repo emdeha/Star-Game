@@ -1,0 +1,76 @@
+satellites:
+  satellite0:
+    type: 0
+    position:
+      - -0.633583
+      - 0
+      - 2.67602
+    progress: 7.704
+    health: 5
+matter: 40
+sunHealth: 50
+enemies:
+  enemy0:
+    type: 4
+    position:
+      - -7.75769
+      - 0
+      - 1.81368
+    frontVector:
+      - 0.973742
+      - 0
+      - -0.227653
+    health: 50
+  enemy1:
+    type: 4
+    position:
+      - 7.69971
+      - 0
+      - -9.11107
+    frontVector:
+      - -0.64547
+      - 0
+      - 0.763786
+    health: 50
+  enemy4:
+    health: 50
+    type: 4
+    position:
+      - 2.62758
+      - 0
+      - -12.0086
+    frontVector:
+      - -0.213752
+      - 0
+      - 0.976888
+  enemy3:
+    health: 50
+    type: 4
+    position:
+      - -0.541461
+      - 0
+      - 8.4397
+    frontVector:
+      - 0.0640248
+      - 0
+      - -0.997948
+  enemy2:
+    health: 50
+    type: 4
+    position:
+      - -7.34809
+      - 0
+      - -2.47392
+    frontVector:
+      - 0.947729
+      - 0
+      - 0.319076
+skills:
+  sunNovaSkill:
+    isResearched: true
+    buttonIndex: 2
+    textureType: 1
+  satChainSkill:
+    buttonIndex: 0
+    textureType: 0
+    isResearched: true

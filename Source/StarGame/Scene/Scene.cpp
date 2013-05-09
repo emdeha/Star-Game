@@ -1875,8 +1875,58 @@ void Scene::OnEvent(Event &_event)
 				}
 				else
 				{
-					GetLayout(LAYOUT_IN_GAME)->GetControl("fusHint")->SetTexture("../data/images/skill-sun-nova.jpg");
-					GetLayout(LAYOUT_IN_GAME)->GetControl("labelFusHint")->SetText("Active skill");
+					std::string text = "";
+					std::string imagePath = "../data/images/";
+					SkillType selectedSkill = (SkillType)_event.GetArgument("skillIndex").varInteger;
+					switch(selectedSkill)
+					{
+					case SkillType::SKILL_TYPE_AOE:
+						text = "Skill AoE";
+						imagePath += "skill-sun-aoe.jpg";
+						break;
+					case SkillType::SKILL_TYPE_BURN:
+						text = "Skill Burn";
+						imagePath += "skill-sun-burn.jpg";
+						break;
+					case SkillType::SKILL_TYPE_PASSIVE_AOE:
+						text = "Skill Passive AoE";
+						imagePath += "skill-sun-passive-aoe.jpg";
+						break;
+					case SkillType::SKILL_TYPE_SAT_FROSTNOVA:
+						text = "Skill Satellite FrostNova";
+						imagePath += "skill-sat-freeze.jpg";
+						break;
+					case SkillType::SKILL_TYPE_SAT_PASSIVE_AOE:
+						text = "Skill SatellitePassive AoE";
+						imagePath += "skill-sat-passive-aoe.jpg";
+						break;
+					case SkillType::SKILL_TYPE_SAT_SHIELD:
+						text = "Skill Satellite Shield";
+						imagePath += "skill-sat-shield.jpg";
+						break;
+					case SkillType::SKILL_TYPE_SUN_NOVA:
+						text = "Skill Sun Nova";
+						imagePath += "skill-sun-nova.jpg";
+						break;
+					case SkillType::SKILL_TYPE_AIR_SAT:
+						text = "Spawn Air Satellite";
+						imagePath += "air_planet.jpg";
+						break;
+					case SkillType::SKILL_TYPE_FIRE_SAT:
+						text = "Spawn Fire Satellite";
+						imagePath += "fire_planet.jpg";
+						break;
+					case SkillType::SKILL_TYPE_EARTH_SAT:
+						text = "Spawn Earth Satellite";
+						imagePath += "earth_planet.jpg";
+						break;
+					case SkillType::SKILL_TYPE_WATER_SAT:
+						text = "Spawn Water Satellite";
+						imagePath += "air_planet.jpg";
+						break;
+					}
+					GetLayout(LAYOUT_IN_GAME)->GetControl("fusHint")->SetTexture(imagePath);
+					GetLayout(LAYOUT_IN_GAME)->GetControl("labelFusHint")->SetText(text);
 				}
 			}
 		}
@@ -2430,6 +2480,22 @@ SkillType Scene::GetSkillTypeByFusionCombination(char fusionA, char fusionB, cha
 	if(skillName == "burnSkill")
 	{
 		return SkillType::SKILL_TYPE_BURN;
+	}
+	if(skillName == "fireSatellite")
+	{
+		return SkillType::SKILL_TYPE_FIRE_SAT;
+	}
+	if(skillName == "earthSatellite")
+	{
+		return SkillType::SKILL_TYPE_EARTH_SAT;
+	}
+	if(skillName == "airSatellite")
+	{
+		return SkillType::SKILL_TYPE_AIR_SAT;
+	}
+	if(skillName == "waterSatellite")
+	{
+		return SkillType::SKILL_TYPE_WATER_SAT;
 	}
 
 	return SkillType(-1);

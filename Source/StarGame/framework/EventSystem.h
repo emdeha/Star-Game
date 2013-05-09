@@ -21,8 +21,6 @@
 
 #include <string>
 #include "glm\glm.hpp"
-//#include <memory>
-//#include <vector>
 
 
 enum EventType
@@ -96,23 +94,6 @@ public:
 	EventType GetType();
 };
 
-/*
-class Scene;
-class EventDetector
-{
-private:
-	std::unique_ptr<Scene> detectorScene;
-
-	std::vector<EventArg> eventData;
-
-public:
-	EventDetector();
-
-	void DetectClick();
-	void PropagateEvents();
-	void SetScene(const Scene *newScene);
-};
-*/
 
 class StockEvents
 {
@@ -172,6 +153,23 @@ public:
 	static Event EventOnHover()
 	{
 		return Event(EVENT_TYPE_ON_HOVER);
+	}
+
+	static Event EventOnHover(const char *objectName,	
+							  glm::ivec2 mouseCoordinates_windowSpace = glm::ivec2())
+	{
+		EventArg hoveredEventArg[3];
+		hoveredEventArg[0].argType = "coordX";
+		hoveredEventArg[0].argument.varType = TYPE_FLOAT;
+		hoveredEventArg[0].argument.varFloat = mouseCoordinates_windowSpace.x;
+		hoveredEventArg[1].argType = "coordY";
+		hoveredEventArg[1].argument.varType = TYPE_FLOAT;
+		hoveredEventArg[1].argument.varFloat = mouseCoordinates_windowSpace.y;
+		hoveredEventArg[2].argType = "object";
+		hoveredEventArg[2].argument.varType = TYPE_STRING;
+		strcpy_s(hoveredEventArg[2].argument.varString, objectName);
+
+		return Event(3, EVENT_TYPE_ON_HOVER, hoveredEventArg);
 	}
 
 	static Event EmptyEvent()

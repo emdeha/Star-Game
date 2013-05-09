@@ -64,6 +64,9 @@ void HandleMouse()
 									cameraPosition, 
 									windowWidth, windowHeight);
 
+	Event mouseActive = StockEvents::EventOnHover("all", scene.GetMouse().GetCurrentPosition());
+	scene.OnEvent(mouseActive);
+
 	if(scene.GetMouse().IsRightButtonDown())
 	{
 		Event rightClickEvent = StockEvents::EventOnRightClick("all", 

@@ -205,7 +205,6 @@ public:
 	virtual std::string GetType() { return ""; }
 
 	virtual void InputChar(char ch) {}
-	//virtual void Clear() {}
 };
 
 

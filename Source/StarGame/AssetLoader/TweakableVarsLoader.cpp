@@ -1004,6 +1004,116 @@ TweakableVarsLoader::TweakableVarsLoader(const std::string &fileName)
 				}
 			}
 		}
+		else if(command == "skillHintText")
+		{
+			for(YAML::Node::const_iterator skillType = tweak->second.begin();
+				skillType != tweak->second.end(); ++skillType)
+			{
+				if(skillType->first.as<std::string>() == "skill-passive-aoe")
+				{
+					PushString(command, skillType->second.as<std::string>(), 0);
+				}
+				else if(skillType->first.as<std::string>() == "skill-aoe")
+				{
+					PushString(command, skillType->second.as<std::string>(), 1);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sun-nova")
+				{
+					PushString(command, skillType->second.as<std::string>(), 2);
+				}
+				else if(skillType->first.as<std::string>() == "skill-burn")
+				{
+					PushString(command, skillType->second.as<std::string>(), 3);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-passive-aoe")
+				{
+					PushString(command, skillType->second.as<std::string>(), 4);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-chain")
+				{
+					PushString(command, skillType->second.as<std::string>(), 5);
+				}
+				else if(skillType->first.as<std::string>() == "skill-frost-nova")
+				{
+					PushString(command, skillType->second.as<std::string>(), 6);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-shield")
+				{
+					PushString(command, skillType->second.as<std::string>(), 7);
+				}
+				else if(skillType->first.as<std::string>() == "skill-fire-sat")
+				{
+					PushString(command, skillType->second.as<std::string>(), 8);
+				}
+				else if(skillType->first.as<std::string>() == "skill-earth-sat")
+				{
+					PushString(command, skillType->second.as<std::string>(), 9);
+				}
+				else if(skillType->first.as<std::string>() == "skill-water-sat")
+				{
+					PushString(command, skillType->second.as<std::string>(), 10);
+				}
+				else if(skillType->first.as<std::string>() == "skill-air-sat")
+				{
+					PushString(command, skillType->second.as<std::string>(), 11);
+				}
+			}
+		}
+		else if(command == "skillHintImage")
+		{
+			for(YAML::Node::const_iterator skillType = tweak->second.begin();
+				skillType != tweak->second.end(); ++skillType)
+			{
+				if(skillType->first.as<std::string>() == "skill-passive-aoe")
+				{
+					PushString(command, skillType->second.as<std::string>(), 0);
+				}
+				else if(skillType->first.as<std::string>() == "skill-aoe")
+				{
+					PushString(command, skillType->second.as<std::string>(), 1);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sun-nova")
+				{
+					PushString(command, skillType->second.as<std::string>(), 2);
+				}
+				else if(skillType->first.as<std::string>() == "skill-burn")
+				{
+					PushString(command, skillType->second.as<std::string>(), 3);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-passive-aoe")
+				{
+					PushString(command, skillType->second.as<std::string>(), 4);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-chain")
+				{
+					PushString(command, skillType->second.as<std::string>(), 5);
+				}
+				else if(skillType->first.as<std::string>() == "skill-frost-nova")
+				{
+					PushString(command, skillType->second.as<std::string>(), 6);
+				}
+				else if(skillType->first.as<std::string>() == "skill-sat-shield")
+				{
+					PushString(command, skillType->second.as<std::string>(), 7);
+				}
+				else if(skillType->first.as<std::string>() == "skill-fire-sat")
+				{
+					PushString(command, skillType->second.as<std::string>(), 8);
+				}
+				else if(skillType->first.as<std::string>() == "skill-earth-sat")
+				{
+					PushString(command, skillType->second.as<std::string>(), 9);
+				}
+				else if(skillType->first.as<std::string>() == "skill-water-sat")
+				{
+					PushString(command, skillType->second.as<std::string>(), 10);
+				}
+				else if(skillType->first.as<std::string>() == "skill-air-sat")
+				{
+					PushString(command, skillType->second.as<std::string>(), 11);
+				}
+			}
+		}
 	}
 }
 

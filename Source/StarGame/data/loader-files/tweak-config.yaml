@@ -149,3 +149,27 @@ skillResearchCost:
     skill-sat-chain: 0
     skill-frost-nova: 0
     skill-sat-shield: 0
+skillHintText:
+    skill-aoe: "Skill AoE"
+    skill-burn: "Skill Burn"
+    skill-passive-aoe: "Skill Passive AoE"
+    skill-frost-nova: "Skill Satellite Frost Nova" 
+    skill-sat-passive-aoe: "Skill Satellite Passive AoE"
+    skill-sat-shield: "Skill Satellite Shield"
+    skill-sun-nova: "Skill Sun Nova"
+    skill-fire-sat: "Spawn Fire Satellite"
+    skill-air-sat: "Spawn Air Satellite" 
+    skill-earth-sat: "Spawn Earth Satellite"
+    skill-water-sat: "Spawn Water Satellite"
+skillHintImage:
+    skill-aoe: "skill-sun-aoe.jpg"
+    skill-burn: "skill-sun-burn.jpg"
+    skill-passive-aoe: "skill-sun-passive-aoe.jpg"
+    skill-frost-nova: "skill-sat-freeze.jpg" 
+    skill-sat-passive-aoe: "skill-sat-passive-aoe.jpg"
+    skill-sat-shield: "skill-sat-shield.jpg"
+    skill-sun-nova: "skill-sun-nova.jpg"
+    skill-fire-sat: "fire_planet.jpg"
+    skill-air-sat: "air_planet.jpg" 
+    skill-earth-sat: "earth_planet.jpg"
+    skill-water-sat: "water_planet.jpg"

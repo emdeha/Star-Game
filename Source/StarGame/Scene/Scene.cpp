@@ -267,7 +267,7 @@ void Scene::InitTweakableVariables(bool isLoadedFromConfig, const std::string &c
 			std::ostringstream ss;
 			if(iter->second.itemIndex != -1)
 			{
-				char indexToChar[2];
+				char indexToChar[3];
 				itoa(iter->second.itemIndex, indexToChar, 10);
 				command.append(indexToChar);
 				command.append(" ");
@@ -1282,6 +1282,20 @@ void Scene::ProcessVariablesTweak(const std::string &command)
 			int skillResearchCost = atoi(splittedCommand[2].c_str());
 			skillsStats[skillType].skillResearchCost = skillResearchCost;
 		}
+		if(strcmp(cmd.c_str(), "skillHintText") == 0)
+		{
+			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
+			skillsStats[skillType].skillHintText = "";
+			for(int i = 2; i < splittedCommand.size(); i++)
+			{
+				skillsStats[skillType].skillHintText += splittedCommand[i] + " ";
+			}
+		}
+		if(strcmp(cmd.c_str(), "skillHintImage") == 0)
+		{
+			SkillType skillType = SkillType(atoi(splittedCommand[1].c_str()));
+			skillsStats[skillType].skillHintImage = splittedCommand[2] + " ";
+		}
 		if(strcmp(cmd.c_str(), "spawnMothership") == 0)
 		{
 			SpawnMothership();
@@ -1875,58 +1889,12 @@ void Scene::OnEvent(Event &_event)
 				}
 				else
 				{
-					std::string text = "";
 					std::string imagePath = "../data/images/";
 					SkillType selectedSkill = (SkillType)_event.GetArgument("skillIndex").varInteger;
-					switch(selectedSkill)
-					{
-					case SkillType::SKILL_TYPE_AOE:
-						text = "Skill AoE";
-						imagePath += "skill-sun-aoe.jpg";
-						break;
-					case SkillType::SKILL_TYPE_BURN:
-						text = "Skill Burn";
-						imagePath += "skill-sun-burn.jpg";
-						break;
-					case SkillType::SKILL_TYPE_PASSIVE_AOE:
-						text = "Skill Passive AoE";
-						imagePath += "skill-sun-passive-aoe.jpg";
-						break;
-					case SkillType::SKILL_TYPE_SAT_FROSTNOVA:
-						text = "Skill Satellite FrostNova";
-						imagePath += "skill-sat-freeze.jpg";
-						break;
-					case SkillType::SKILL_TYPE_SAT_PASSIVE_AOE:
-						text = "Skill SatellitePassive AoE";
-						imagePath += "skill-sat-passive-aoe.jpg";
-						break;
-					case SkillType::SKILL_TYPE_SAT_SHIELD:
-						text = "Skill Satellite Shield";
-						imagePath += "skill-sat-shield.jpg";
-						break;
-					case SkillType::SKILL_TYPE_SUN_NOVA:
-						text = "Skill Sun Nova";
-						imagePath += "skill-sun-nova.jpg";
-						break;
-					case SkillType::SKILL_TYPE_AIR_SAT:
-						text = "Spawn Air Satellite";
-						imagePath += "air_planet.jpg";
-						break;
-					case SkillType::SKILL_TYPE_FIRE_SAT:
-						text = "Spawn Fire Satellite";
-						imagePath += "fire_planet.jpg";
-						break;
-					case SkillType::SKILL_TYPE_EARTH_SAT:
-						text = "Spawn Earth Satellite";
-						imagePath += "earth_planet.jpg";
-						break;
-					case SkillType::SKILL_TYPE_WATER_SAT:
-						text = "Spawn Water Satellite";
-						imagePath += "air_planet.jpg";
-						break;
-					}
+					imagePath += skillsStats[selectedSkill].skillHintImage;
+
 					GetLayout(LAYOUT_IN_GAME)->GetControl("fusHint")->SetTexture(imagePath);
-					GetLayout(LAYOUT_IN_GAME)->GetControl("labelFusHint")->SetText(text);
+					GetLayout(LAYOUT_IN_GAME)->GetControl("labelFusHint")->SetText(skillsStats[selectedSkill].skillHintText);
 				}
 			}
 		}

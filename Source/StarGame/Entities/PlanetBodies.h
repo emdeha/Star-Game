@@ -89,6 +89,8 @@ struct SkillsStats
 	SatelliteType forWhichSatellite;
 	std::string skillUpgradedTexture;
 	std::string skillToolTipText;
+	std::string skillHintText;
+	std::string skillHintImage;
 };
 
 

@@ -36,7 +36,7 @@ Text::Text(const char *fontName/*, const char *fontName_bold*/)
 
 	if(FT_New_Face(ft, fontName, 0, &fontFace))
 	{
-		std::string errorMessage = "could not open font file";
+		std::string errorMessage = "could not open font file ";
 		errorMessage += fontName;
 		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 		//std::printf("Could not open font file.\n");

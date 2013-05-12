@@ -37,6 +37,8 @@ Control::Control()
 	isUsingPercentage = false;
 	hasBackground = false;
 	isHovered = false;
+	hasHoveredSoon = false;
+	hasUnhoveredSoon = true;
 
 	onHoverProps.text = "";
 	onHoverProps.backgroundImage = "";
@@ -65,6 +67,8 @@ Control::Control(const std::string &newName, const std::string &newText,
 	isUsingPercentage = newIsUsingPercentage;
 	isActive = false;
 	isHovered = false;
+	hasHoveredSoon = false;
+	hasUnhoveredSoon = true;
 	percentagedPosition = newPercentagedPosition;
 	margins = newMargins;
 
@@ -74,12 +78,14 @@ Control::Control(const std::string &newName, const std::string &newText,
 	onHoverProps.textColor = newOnHoverProps.textColor;
 }
 
-void Control::Init(const std::string &fontName, const std::string &bckgTextureFileName,
+void Control::Init(const std::string &newFontName, const std::string &bckgTextureFileName,
 			       int newWindowWidth, int newWindowHeight)
 {
 	windowWidth = newWindowWidth;
 	windowHeight = newWindowHeight;
 	
+	fontName = newFontName;
+
 	textToDisplay = Text(fontName.c_str());
 	textToDisplay.Init(windowWidth, windowHeight);
 
@@ -170,10 +176,26 @@ void Control::Draw(const FontProgData &fontData, const TextureProgData &textureD
 
 		if(!isHovered)
 		{
+			if(!hasUnhoveredSoon)
+			{
+				textToDisplay = Text(fontName.c_str());
+				textToDisplay.Init(windowWidth, windowHeight);
+				hasHoveredSoon = false;
+				hasUnhoveredSoon = true;
+			}
+
 			textToDisplay.Print(visibleText.c_str(), fontData, position, fontColor, textSize);	
 		}
 		else
 		{
+			if(!hasHoveredSoon)
+			{
+				textToDisplay = Text(onHoverProps.font.c_str());
+				textToDisplay.Init(windowWidth, windowHeight);
+				hasHoveredSoon = true;
+				hasUnhoveredSoon = false;
+			}
+
 			std::string textToPrint = "";
 			if(onHoverProps.text == "")
 			{

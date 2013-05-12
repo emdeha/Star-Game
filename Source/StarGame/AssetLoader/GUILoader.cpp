@@ -76,6 +76,34 @@ GUILoader::GUILoader(const std::string &fileName,
 	fontsDir = guiData["details"]["fonts-dir"].as<std::string>();
 	texturesDir = guiData["details"]["textures-dir"].as<std::string>();
 	defaultFont = guiData["details"]["default-font"].as<std::string>();
+	
+	ControlData controlData;
+	if(guiData["details"]["global-on-hover"])
+	{
+		for(YAML::Node::const_iterator onHoverProp = guiData["details"]["global-on-hover"].begin();
+			onHoverProp != guiData["details"]["global-on-hover"].end(); ++onHoverProp)
+		{
+			if(onHoverProp->first.as<std::string>() == "background-image")
+			{
+				controlData.onHoverBackgroundImage = onHoverProp->second.as<std::string>();
+			}
+			if(onHoverProp->first.as<std::string>() == "font-color")
+			{
+				controlData.onHoverFontColor = glm::vec4(onHoverProp->second[0].as<float>(),
+														 onHoverProp->second[1].as<float>(),
+														 onHoverProp->second[2].as<float>(),
+														 onHoverProp->second[3].as<float>());
+			}
+			if(onHoverProp->first.as<std::string>() == "font")
+			{
+				controlData.onHoverFont = fontsDir + onHoverProp->second.as<std::string>();
+			}
+			if(onHoverProp->first.as<std::string>() == "text")
+			{
+				controlData.onHoverText = onHoverProp->second.as<std::string>();
+			}
+		}
+	}
 
 	for(YAML::Node::const_iterator guiNode = guiData.begin();
 		guiNode != guiData.end(); ++guiNode)
@@ -119,35 +147,6 @@ GUILoader::GUILoader(const std::string &fileName,
 				layoutData.layoutBackgroundImageFileName = texturesDir;
 				layoutData.layoutBackgroundImageFileName += guiNode->second["background-image"].as<std::string>();
 				layouts[layoutData.layoutType]->SetBackgroundImage(1280, 768, layoutData.layoutBackgroundImageFileName);
-			}
-
-			ControlData controlData;
-
-			if(guiNode->second["global-on-hover"])
-			{
-				for(YAML::Node::const_iterator onHoverProp = guiNode->second["global-on-hover"].begin();
-					onHoverProp != guiNode->second["global-on-hover"].end(); ++onHoverProp)
-				{
-					if(onHoverProp->first.as<std::string>() == "background-image")
-					{
-						controlData.onHoverBackgroundImage = onHoverProp->second.as<std::string>();
-					}
-					if(onHoverProp->first.as<std::string>() == "font-color")
-					{
-						controlData.onHoverFontColor = glm::vec4(onHoverProp->second[0].as<float>(),
-																 onHoverProp->second[1].as<float>(),
-																 onHoverProp->second[2].as<float>(),
-																 onHoverProp->second[3].as<float>());
-					}
-					if(onHoverProp->first.as<std::string>() == "font")
-					{
-						controlData.onHoverFont = onHoverProp->second.as<std::string>();
-					}
-					if(onHoverProp->first.as<std::string>() == "text")
-					{
-						controlData.onHoverText = onHoverProp->second.as<std::string>();
-					}
-				}
 			}
 
 			if(guiNode->second["controls"])

@@ -144,6 +144,7 @@ protected:
 	std::string name;
 	std::string text;
 	std::string visibleText;
+	std::string fontName;
 
 	std::string onClickEventName;
 	std::string onHoverEventName;
@@ -161,6 +162,8 @@ protected:
 	bool isUsingPercentage;
 	bool hasBackground;
 	bool isHovered;
+	bool hasHoveredSoon;
+	bool hasUnhoveredSoon;
 
 	Utility::Primitives::Sprite controlBackground;
 	Utility::Primitives::Square controlSquare; // TODO: Replace with rectangle geometry primitive
@@ -180,7 +183,7 @@ public:
 			HoveredProperties newOnHoverProps,
 			glm::vec2 newPercentagedPosition = glm::vec2());
 
-	void Init(const std::string &fontName, const std::string &bckgTextureFileName,
+	void Init(const std::string &newFontName, const std::string &bckgTextureFileName,
 			  int newWindowWidth, int newWindowHeight);
 
 	std::string GetContent();

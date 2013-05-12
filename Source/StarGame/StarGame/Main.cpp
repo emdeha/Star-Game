@@ -442,6 +442,12 @@ void InitializeGUI()
 				std::vector<std::string> splittedFileName = Utility::SplitString(ent->d_name, '.');
 				scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl(controlName)->SetText(splittedFileName[0]);
 
+				HoveredProperties onHoverProps;
+				onHoverProps.backgroundImage = "";
+				onHoverProps.font = "";
+				onHoverProps.text = "";
+				onHoverProps.textColor = glm::vec4(1.0f);
+
 				std::string loadSlotName = "loadSlot";
 				loadSlotName += (char)(i + 48);
 				std::shared_ptr<Button> loadEntryButton = 
@@ -450,6 +456,7 @@ void InitializeGUI()
 													   controlPosition, glm::vec4(),
 													   28,
 													   false, true, false,
+													   onHoverProps,
 													   glm::vec2()));
 				loadEntryButton->Init("../data/fonts/AGENCYR.TTF", "",
 									  glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
@@ -698,7 +705,7 @@ void InitializeScene()
 						  LAYOUT_IN_GAME, OnVarInputEnterPressEventHandler, (char)13);
 
 	scene.AddEventHandler("onHoverEventHandler", "onHover", "", "Button", 
-						  LAYOUT_MENU, OnHoverEventHandler);
+						  LAYOUT_ALL, OnHoverEventHandler);
 
 	scene.AddEventHandler("onQPressEventHandler", "onKeyPress", "fusThree", "",
 						  LAYOUT_IN_GAME, OnQPressEventHandler, 'q');

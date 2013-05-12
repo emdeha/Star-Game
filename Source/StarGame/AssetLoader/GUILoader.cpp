@@ -52,6 +52,12 @@ struct ControlData
 	float imageBoxHeight;
 
 	LayoutType toLayout;
+
+
+	std::string onHoverText;
+	std::string onHoverFont;
+	std::string onHoverBackgroundImage;
+	glm::vec4 onHoverFontColor;
 };
 
 
@@ -115,9 +121,37 @@ GUILoader::GUILoader(const std::string &fileName,
 				layouts[layoutData.layoutType]->SetBackgroundImage(1280, 768, layoutData.layoutBackgroundImageFileName);
 			}
 
+			ControlData controlData;
+
+			if(guiNode->second["global-on-hover"])
+			{
+				for(YAML::Node::const_iterator onHoverProp = guiNode->second["global-on-hover"].begin();
+					onHoverProp != guiNode->second["global-on-hover"].end(); ++onHoverProp)
+				{
+					if(onHoverProp->first.as<std::string>() == "background-image")
+					{
+						controlData.onHoverBackgroundImage = onHoverProp->second.as<std::string>();
+					}
+					if(onHoverProp->first.as<std::string>() == "font-color")
+					{
+						controlData.onHoverFontColor = glm::vec4(onHoverProp->second[0].as<float>(),
+																 onHoverProp->second[1].as<float>(),
+																 onHoverProp->second[2].as<float>(),
+																 onHoverProp->second[3].as<float>());
+					}
+					if(onHoverProp->first.as<std::string>() == "font")
+					{
+						controlData.onHoverFont = onHoverProp->second.as<std::string>();
+					}
+					if(onHoverProp->first.as<std::string>() == "text")
+					{
+						controlData.onHoverText = onHoverProp->second.as<std::string>();
+					}
+				}
+			}
+
 			if(guiNode->second["controls"])
 			{
-				ControlData controlData;
 				for(YAML::Node::const_iterator control = guiNode->second["controls"].begin();
 					control != guiNode->second["controls"].end(); ++control)
 				{
@@ -157,12 +191,19 @@ GUILoader::GUILoader(const std::string &fileName,
 															 control->second["position"][1].as<float>());
 						}
 
+						HoveredProperties newHoveredProps;
+						newHoveredProps.backgroundImage = controlData.onHoverBackgroundImage;
+						newHoveredProps.text = controlData.onHoverText;
+						newHoveredProps.textColor = controlData.onHoverFontColor;
+						newHoveredProps.font = controlData.onHoverFont;
+
 						std::shared_ptr<Label> label =
 							std::shared_ptr<Label>(new Label(controlData.name, controlData.text,
 															 controlData.fontColor, controlData.position,
 															 controlData.margins, controlData.textSize,
 															 controlData.hasBackground, controlData.isVisible,
 															 controlData.isUsingPercentage, 
+															 newHoveredProps,
 															 controlData.percentagedPosition));
 						label->Init(fontsDir + defaultFont, controlData.backgroundImage,
 									windowWidth, windowHeight);
@@ -205,12 +246,19 @@ GUILoader::GUILoader(const std::string &fileName,
 															 control->second["position"][1].as<float>());
 						}
 
+						HoveredProperties newHoveredProps;
+						newHoveredProps.backgroundImage = controlData.onHoverBackgroundImage;
+						newHoveredProps.text = controlData.onHoverText;
+						newHoveredProps.textColor = controlData.onHoverFontColor;
+						newHoveredProps.font = controlData.onHoverFont;
+
 						std::shared_ptr<Button> button = 
 							std::shared_ptr<Button>(new Button(controlData.name, controlData.text,
 															   controlData.fontColor, controlData.position,
 															   controlData.margins, controlData.textSize,
 															   controlData.hasBackground, controlData.isVisible,
 															   controlData.isUsingPercentage, 
+															   newHoveredProps,
 															   controlData.percentagedPosition));
 						button->Init(fontsDir + defaultFont, controlData.backgroundImage,
 								     windowWidth, windowHeight);
@@ -257,6 +305,12 @@ GUILoader::GUILoader(const std::string &fileName,
 															 control->second["position"][1].as<float>());
 						}
 
+						HoveredProperties newHoveredProps;
+						newHoveredProps.backgroundImage = controlData.onHoverBackgroundImage;
+						newHoveredProps.text = controlData.onHoverText;
+						newHoveredProps.textColor = controlData.onHoverFontColor;
+						newHoveredProps.font = controlData.onHoverFont;
+
 						std::shared_ptr<ImageBox> imageBox = 
 							std::shared_ptr<ImageBox>(new ImageBox(controlData.imageBoxWidth, controlData.imageBoxHeight,
 																   controlData.name, controlData.text,
@@ -264,6 +318,7 @@ GUILoader::GUILoader(const std::string &fileName,
 																   controlData.margins, controlData.textSize,
 																   controlData.hasBackground, controlData.isVisible,
 																   controlData.isUsingPercentage, 
+																   newHoveredProps,
 																   controlData.percentagedPosition));
 						imageBox->Init(controlData.backgroundImage, windowWidth, windowHeight);
 
@@ -307,6 +362,12 @@ GUILoader::GUILoader(const std::string &fileName,
 															 control->second["position"][1].as<float>());
 						}
 
+						HoveredProperties newHoveredProps;
+						newHoveredProps.backgroundImage = controlData.onHoverBackgroundImage;
+						newHoveredProps.text = controlData.onHoverText;
+						newHoveredProps.textColor = controlData.onHoverFontColor;
+						newHoveredProps.font = controlData.onHoverFont;
+
 						std::shared_ptr<TextBox> textBox = 
 							std::shared_ptr<TextBox>(new TextBox(controlData.textBoxWidth,
 																 controlData.name, controlData.text,
@@ -314,6 +375,7 @@ GUILoader::GUILoader(const std::string &fileName,
 															     controlData.margins, controlData.textSize,
 															     controlData.hasBackground, controlData.isVisible,
 															     controlData.isUsingPercentage, 
+																 newHoveredProps,
 															     controlData.percentagedPosition));
 						textBox->Init(fontsDir + defaultFont, controlData.backgroundImage,
 								      windowWidth, windowHeight);

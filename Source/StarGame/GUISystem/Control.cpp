@@ -38,13 +38,17 @@ Control::Control()
 	hasBackground = false;
 	isHovered = false;
 
-	onHoverProps.text = "Hovered";
+	onHoverProps.text = "";
+	onHoverProps.backgroundImage = "";
+	onHoverProps.font = "";
+	onHoverProps.textColor = glm::vec4(1.0f);
 }
 
 Control::Control(const std::string &newName, const std::string &newText,
 				 glm::vec4 newFontColor, glm::vec2 newPosition, glm::vec4 newMargins,
 				 int newTextSize,
 				 bool newHasBackground, bool newIsVisible, bool newIsUsingPercentage,
+				 HoveredProperties newOnHoverProps,
 				 glm::vec2 newPercentagedPosition)
 {
 	name = newName;
@@ -64,7 +68,10 @@ Control::Control(const std::string &newName, const std::string &newText,
 	percentagedPosition = newPercentagedPosition;
 	margins = newMargins;
 
-	onHoverProps.text = "Hovered";
+	onHoverProps.text = newOnHoverProps.text;
+	onHoverProps.backgroundImage = newOnHoverProps.backgroundImage;
+	onHoverProps.font = newOnHoverProps.font;
+	onHoverProps.textColor = newOnHoverProps.textColor;
 }
 
 void Control::Init(const std::string &fontName, const std::string &bckgTextureFileName,
@@ -167,7 +174,17 @@ void Control::Draw(const FontProgData &fontData, const TextureProgData &textureD
 		}
 		else
 		{
-			textToDisplay.Print(onHoverProps.text.c_str(), fontData, position, fontColor, textSize); 
+			std::string textToPrint = "";
+			if(onHoverProps.text == "")
+			{
+				textToPrint = visibleText;
+			}
+			else
+			{
+				textToPrint = onHoverProps.text;
+			}
+			textToDisplay.Print(textToPrint.c_str(), fontData, position, 
+								onHoverProps.textColor, textSize); 
 		}
 	}
 }

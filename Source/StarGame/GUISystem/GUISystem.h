@@ -127,6 +127,14 @@ public:
 	bool HasActiveControl();
 };
 
+struct HoveredProperties
+{
+	std::string font;
+	std::string backgroundImage;
+	std::string text;
+
+	glm::vec4 textColor;
+};
 
 class Control
 {
@@ -160,15 +168,6 @@ protected:
 	int windowWidth;
 	int windowHeight;
 
-	struct HoveredProperties
-	{
-		std::string font;
-		std::string backgroundImage;
-		std::string text;
-
-		glm::vec4 textColor;
-	};
-
 	HoveredProperties onHoverProps;
 
 public:
@@ -178,6 +177,7 @@ public:
 			glm::vec4 newFontColor, glm::vec2 newPosition, glm::vec4 newMargins,
 			int newTextSize,
 			bool newHasBackground, bool newIsVisible, bool newIsUsingPercentage,
+			HoveredProperties newOnHoverProps,
 			glm::vec2 newPercentagedPosition = glm::vec2());
 
 	void Init(const std::string &fontName, const std::string &bckgTextureFileName,
@@ -235,11 +235,13 @@ public:
 		   glm::vec4 newFontColor, glm::vec2 newPosition, glm::vec4 newMargins,
 		   int newTextSize,
 		   bool newHasBackground, bool newIsVisible, bool newIsUsingPercentage,
+		   HoveredProperties newOnHoverProps,
 		   glm::vec2 newPercentagedPosition = glm::vec2()) 
 		   : Control(newName, newText,
 					 newFontColor, newPosition, newMargins,
 					 newTextSize, 
 					 newHasBackground, newIsVisible, newIsUsingPercentage,
+				     newOnHoverProps,
 					 newPercentagedPosition) {};
 
 	std::string GetType();
@@ -255,11 +257,13 @@ public:
 		  glm::vec4 newFontColor, glm::vec2 newPosition, glm::vec4 newMargins,
 		  int newTextSize,
 		  bool newHasBackground, bool newIsVisible, bool newIsUsingPercentage,
+		  HoveredProperties newOnHoverProps,
 		  glm::vec2 newPercentagedPosition = glm::vec2()) 
 		   : Control(newName, newText,
 					 newFontColor, newPosition, newMargins,
 					 newTextSize, 
 					 newHasBackground, newIsVisible, newIsUsingPercentage,
+					 newOnHoverProps,
 					 newPercentagedPosition) {};
 
 	std::string GetType();
@@ -279,11 +283,13 @@ public:
 		    glm::vec4 newFontColor, glm::vec2 newPosition, glm::vec4 newMargins,
 		    int newTextSize,
 		    bool newHasBackground, bool newIsVisible, bool newIsUsingPercentage,
+			HoveredProperties newOnHoverProps,
 		    glm::vec2 newPercentagedPosition = glm::vec2()) 
 		    : Control(newName, newText,
 					  newFontColor, newPosition, newMargins,
 					  newTextSize, 
 					  newHasBackground, newIsVisible, newIsUsingPercentage,
+					  newOnHoverProps,
 					  newPercentagedPosition) 
 	{
 		maxWidth = newMaxWidth;
@@ -315,11 +321,13 @@ public:
 		     glm::vec4 newFontColor, glm::vec2 newPosition, glm::vec4 newMargins,
 		     int newTextSize,
 		     bool newHasBackground, bool newIsVisible, bool newIsUsingPercentage,
+			 HoveredProperties newOnHoverProps,
 		     glm::vec2 newPercentagedPosition = glm::vec2()) 
 		     : Control(newName, newText,
 					   newFontColor, newPosition, newMargins,
 					   newTextSize, 
 					   newHasBackground, newIsVisible, newIsUsingPercentage,
+					   newOnHoverProps,
 					   newPercentagedPosition) 
 	{
 		width = newWidth;

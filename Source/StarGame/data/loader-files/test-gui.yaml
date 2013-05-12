@@ -6,6 +6,9 @@ layout-menu:
     background-color: [ 1.0, 1.0, 1.0, 1.0 ]
     is-active: true
     background-image: "background.png"
+    global-on-hover:
+        font: AGENCYB.TTF
+        font-color: [ 1.0, 0.0, 0.0, 1.0 ]
     controls:
         control-button-new:
             control-type: button

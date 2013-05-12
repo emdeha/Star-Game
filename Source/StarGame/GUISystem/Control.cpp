@@ -27,6 +27,7 @@ Control::Control()
 	name = "";
 	text = "";
 	onClickEventName = "";
+	onHoverEventName = "";
 	onKeyPressEventName.resize(ASCII_CHAR_TABLE_SIZE);
 	windowHeight = 0;
 	windowWidth = 0;
@@ -35,6 +36,9 @@ Control::Control()
 	isVisible = false;
 	isUsingPercentage = false;
 	hasBackground = false;
+	isHovered = false;
+
+	onHoverProps.text = "Hovered";
 }
 
 Control::Control(const std::string &newName, const std::string &newText,
@@ -46,6 +50,7 @@ Control::Control(const std::string &newName, const std::string &newText,
 	name = newName;
 	text = newText;
 	onClickEventName = "";
+	onHoverEventName = "";
 	onKeyPressEventName.resize(ASCII_CHAR_TABLE_SIZE);
 	visibleText = text;
 	fontColor = newFontColor;
@@ -55,8 +60,11 @@ Control::Control(const std::string &newName, const std::string &newText,
 	isVisible = newIsVisible;
 	isUsingPercentage = newIsUsingPercentage;
 	isActive = false;
+	isHovered = false;
 	percentagedPosition = newPercentagedPosition;
 	margins = newMargins;
+
+	onHoverProps.text = "Hovered";
 }
 
 void Control::Init(const std::string &fontName, const std::string &bckgTextureFileName,
@@ -153,13 +161,24 @@ void Control::Draw(const FontProgData &fontData, const TextureProgData &textureD
 			controlBackground.Draw(identityMatStack, textureData);
 		}
 
-		textToDisplay.Print(visibleText.c_str()/*text.c_str()*/, fontData, position, fontColor, textSize);	
+		if(!isHovered)
+		{
+			textToDisplay.Print(visibleText.c_str(), fontData, position, fontColor, textSize);	
+		}
+		else
+		{
+			textToDisplay.Print(onHoverProps.text.c_str(), fontData, position, fontColor, textSize); 
+		}
 	}
 }
 
 void Control::SubscribeForEvent(const std::string &eventName)
 {
 	onClickEventName = eventName;
+}
+void Control::SubscribeForHoverEvent(const std::string &eventName)
+{
+	onHoverEventName = eventName;
 }
 void Control::SubscribeForKeyPressEvent(const std::string &eventName, char key)
 {
@@ -169,9 +188,18 @@ std::string Control::GetSubscribedEvent()
 {
 	return onClickEventName;
 }
+std::string Control::GetSubscribedHoverEvent()
+{
+	return onHoverEventName;
+}
 std::string Control::GetSubscribedKeyPressEvent(char key)
 {
 	return onKeyPressEventName[(int)key];
+}
+
+void Control::SetIsHovered(bool newIsHovered)
+{
+	isHovered = newIsHovered;
 }
 
 void Control::SetPosition(glm::vec2 newPosition, bool newIsUsingPercentage)

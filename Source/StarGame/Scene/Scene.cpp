@@ -1762,6 +1762,21 @@ void Scene::OnEvent(Event &_event)
 			}
 		}
 		break;
+	case EVENT_TYPE_ON_HOVER:
+		{
+			for(std::map<LayoutType, std::shared_ptr<Layout>>::iterator iter = sceneLayouts.begin();
+				iter != sceneLayouts.end(); ++iter)
+			{
+				if(iter->second->IsSet())
+				{
+					glm::ivec2 mouseCoords_windowSpace = glm::ivec2(_event.GetArgument("coordX").varFloat,
+																	_event.GetArgument("coordY").varFloat);
+
+					iter->second->HandleHoveredControls(mouseCoords_windowSpace, *this);
+				}
+			}
+		}
+		break;
 	case EVENT_TYPE_ON_CLICK:
 		if(strcmp(_event.GetArgument("object").varString, "all") == 0)
 		{
@@ -1769,15 +1784,12 @@ void Scene::OnEvent(Event &_event)
 				iter != sceneLayouts.end(); ++iter)
 			{
 				if(iter->second->IsSet())
-				{
-					
-					glm::ivec2 mouseCoords_windowSpace = 
-						glm::ivec2(_event.GetArgument("coordX").varFloat,
-								   _event.GetArgument("coordY").varFloat);
+				{					
+					glm::ivec2 mouseCoords_windowSpace = glm::ivec2(_event.GetArgument("coordX").varFloat,
+																	_event.GetArgument("coordY").varFloat);
 					
 					iter->second->HandleClickedControls(_event.GetArgument("rightClicked").varBool,
-														mouseCoords_windowSpace,
-														*this);
+														mouseCoords_windowSpace, *this);
 				}
 			}
 		}

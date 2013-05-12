@@ -577,6 +577,10 @@ void OnWPressEventHandler(Scene &scene, Control *control)
 {
 	control->SetTexture("../data/images/fusion-matter.jpg");
 }
+void OnHoverEventHandler(Scene &scene, Control *control)
+{
+	control->SetIsHovered(true);
+}
 
 void InitializeScene()
 {
@@ -692,6 +696,9 @@ void InitializeScene()
 
 	scene.AddEventHandler("onVarInputEnterPressEventHandler", "onKeyPress", "varInput", "",
 						  LAYOUT_IN_GAME, OnVarInputEnterPressEventHandler, (char)13);
+
+	scene.AddEventHandler("onHoverEventHandler", "onHover", "", "Button", 
+						  LAYOUT_MENU, OnHoverEventHandler);
 
 	scene.AddEventHandler("onQPressEventHandler", "onKeyPress", "fusThree", "",
 						  LAYOUT_IN_GAME, OnQPressEventHandler, 'q');

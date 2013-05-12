@@ -109,6 +109,7 @@ public:
 	void HandleClickedControls(bool isRightButtonclicked,
 							   glm::ivec2 mouseCoordinates_windowSpace,
 							   Scene &scene);
+	void HandleHoveredControls(glm::ivec2 mouseCoordinates_windowSpace, Scene &scene);
 	void HandleKeyPress(Scene &scene, char key, const std::string &explicitControlName = "");
 	std::shared_ptr<Control> GetClickedControl(glm::ivec2 mouseCoordinates_windowSpace);
 
@@ -137,6 +138,7 @@ protected:
 	std::string visibleText;
 
 	std::string onClickEventName;
+	std::string onHoverEventName;
 	std::vector<std::string> onKeyPressEventName;
 	// add other event names
 
@@ -150,12 +152,24 @@ protected:
 	bool isActive;
 	bool isUsingPercentage;
 	bool hasBackground;
+	bool isHovered;
 
 	Utility::Primitives::Sprite controlBackground;
 	Utility::Primitives::Square controlSquare; // TODO: Replace with rectangle geometry primitive
 
 	int windowWidth;
 	int windowHeight;
+
+	struct HoveredProperties
+	{
+		std::string font;
+		std::string backgroundImage;
+		std::string text;
+
+		glm::vec4 textColor;
+	};
+
+	HoveredProperties onHoverProps;
 
 public:
 	Control();
@@ -184,9 +198,13 @@ public:
 	void ClearContent();
 
 	void SubscribeForEvent(const std::string &eventName);
+	void SubscribeForHoverEvent(const std::string &eventName);
 	void SubscribeForKeyPressEvent(const std::string &eventName, char key);
 	std::string GetSubscribedEvent();
+	std::string GetSubscribedHoverEvent();
 	std::string GetSubscribedKeyPressEvent(char key);
+
+	void SetIsHovered(bool newIsHovered);
 
 
 	virtual void Draw(const FontProgData &fontData, const TextureProgData &textureData);

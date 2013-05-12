@@ -117,6 +117,22 @@ void Layout::HandleClickedControls(bool isRightButtonClicked,
 	}
 }
 
+void Layout::HandleHoveredControls(glm::ivec2 mouseCoordinates_windowSpace, Scene &scene)
+{
+	for(std::vector<std::shared_ptr<Control>>::iterator control = controls.begin();
+		control != controls.end(); ++control)
+	{
+		if((*control)->IsMouseOn(mouseCoordinates_windowSpace) && (*control)->GetType() != "Label")
+		{
+			CallEventHandler((*control)->GetSubscribedHoverEvent(), scene, (*control).get());
+		}
+		else
+		{
+			(*control)->SetIsHovered(false);
+		}
+	}
+}
+
 void Layout::HandleKeyPress(Scene &scene, char key, const std::string &explicitControlName)
 {
 	if(explicitControlName != "")
@@ -150,6 +166,10 @@ void Layout::AddEventHandler(const std::string &name, const std::string &eventTy
 				{
 					(*control)->SubscribeForEvent(name);
 				}
+				else if(eventType == "onHover")
+				{
+					(*control)->SubscribeForHoverEvent(name);
+				}
 				else if(eventType == "onKeyPress")
 				{
 					(*control)->SubscribeForKeyPressEvent(name, key);
@@ -161,6 +181,10 @@ void Layout::AddEventHandler(const std::string &name, const std::string &eventTy
 			if(eventType == "onClick")
 			{
 				(*control)->SubscribeForEvent(name);
+			}
+			else if(eventType == "onHover")
+			{
+				(*control)->SubscribeForHoverEvent(name);
 			}
 			else if(eventType == "onKeyPress")
 			{

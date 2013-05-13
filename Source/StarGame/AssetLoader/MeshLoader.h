@@ -41,60 +41,60 @@
 
 struct Vertex
 {
-	glm::vec3 position;
-	glm::vec2 textureCoordinate;
-	glm::vec3 normal;
+    glm::vec3 position;
+    glm::vec2 textureCoordinate;
+    glm::vec3 normal;
 
-	Vertex() {};
+    Vertex() {};
 
-	Vertex(const glm::vec3 &newPosition,
-		   const glm::vec2 &newTextureCoordinate,
-		   const glm::vec3 &newNormal)
-	{
-		position = newPosition;
-		textureCoordinate = newTextureCoordinate;
-		normal = newNormal;
-	}
+    Vertex(const glm::vec3 &newPosition,
+           const glm::vec2 &newTextureCoordinate,
+           const glm::vec3 &newNormal)
+    {
+        position = newPosition;
+        textureCoordinate = newTextureCoordinate;
+        normal = newNormal;
+    }
 };
 
 
 class Mesh
 {
 private:
-	bool InitFromScene(const aiScene *scene, const std::string &fileName);
-	void InitMesh(unsigned int index, const aiMesh *mesh);
-	bool InitMaterials(const aiScene *scene, const std::string &fileName);
+    bool InitFromScene(const aiScene *scene, const std::string &fileName);
+    void InitMesh(unsigned int index, const aiMesh *mesh);
+    bool InitMaterials(const aiScene *scene, const std::string &fileName);
 
-	struct MeshEntry
-	{
-		MeshEntry();
-		~MeshEntry();
+    struct MeshEntry
+    {
+        MeshEntry();
+        ~MeshEntry();
 
-		void Init(const std::vector<Vertex> &vertices,
-				  const std::vector<unsigned int> &indices);
+        void Init(const std::vector<Vertex> &vertices,
+                  const std::vector<unsigned int> &indices);
 
-		GLuint vertexBufferObject;
-		GLuint indexBufferObject;
-		//GLuint vao;
-		unsigned int indicesCount;
-		unsigned int materialIndex;
-	};
+        GLuint vertexBufferObject;
+        GLuint indexBufferObject;
+        //GLuint vao;
+        unsigned int indicesCount;
+        unsigned int materialIndex;
+    };
 
-	GLuint vao;
-	int materialBlockSize;
-	GLuint materialUniformBuffer;
+    GLuint vao;
+    int materialBlockSize;
+    GLuint materialUniformBuffer;
 
-	std::vector<MeshEntry> entries;
-	std::vector<std::shared_ptr<Texture2D>> textures;
+    std::vector<MeshEntry> entries;
+    std::vector<std::shared_ptr<Texture2D>> textures;
 
 public:
-	Mesh();
+    Mesh();
 
-	bool LoadMesh(const std::string &fileName);
-	void LoadLight(const glm::vec4 &diffuseColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	void Render(glutil::MatrixStack &modelMatrix, const SimpleTextureProgData &progData);
-	void Render(glutil::MatrixStack &modelMatrix, const LitTextureProgData &progData,
-				int materialBlockIndex);
+    bool LoadMesh(const std::string &fileName);
+    void LoadLight(const glm::vec4 &diffuseColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    void Render(glutil::MatrixStack &modelMatrix, const SimpleTextureProgData &progData);
+    void Render(glutil::MatrixStack &modelMatrix, const LitTextureProgData &progData,
+                int materialBlockIndex);
 };
 
 #endif

@@ -336,6 +336,47 @@ namespace Utility
 		};
 
 
+
+		class ComplexSprite
+        {
+        private:
+			glm::vec4 color;
+			glm::vec3 position;
+
+			float width;
+			float height;
+
+			GLuint vertexBO;
+			GLuint indexBO;
+			GLuint textureCoordsBO;
+			GLuint vao;
+
+			std::shared_ptr<Texture2D> leftTexture;
+			std::shared_ptr<Texture2D> rightTexture;
+			std::shared_ptr<Texture2D> middleTexture;
+
+			bool isCoordinateSystemBottomLeft;
+
+        public:
+            ComplexSprite() {}
+			ComplexSprite(glm::vec3 newPosition, glm::vec4 newColor,
+						  float newWidth, float newHeight, 
+						  bool newIsCoordinateSystemBottomLeft);
+
+			void Init(const std::string &leftTextureFileName,
+					  const std::string &rightTextureFileName,
+					  const std::string &middleTextureFileName,
+					  int windowWidth = 0, int windowHeight = 0);
+
+			void Draw(glutil::MatrixStack &modelMat, const TextureProgData &textureData);
+			void Update(float newWidth, float newHeight,
+						glm::vec2 newPosition = glm::vec2(-1.0f, -1.0f));
+
+			void ChangeTexture(const std::string &leftTextureFileName,
+							   const std::string &rightTextureFileName,
+							   const std::string &middleTextureFileName);
+        };
+
 		class SpriteArray
 		{	
 		private:

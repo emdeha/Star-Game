@@ -30,16 +30,16 @@
 class GUILoader
 {
 private:
-	std::map<LayoutType, std::shared_ptr<Layout>> layouts;
+    std::map<LayoutType, std::shared_ptr<Layout>> layouts;
 
 public:
-	GUILoader() { layouts.clear(); }
+    GUILoader() { layouts.clear(); }
 
-	GUILoader(const std::string &fileName,
-			  int windowWidth, int windowHeight);
+    GUILoader(const std::string &fileName,
+              int windowWidth, int windowHeight);
 
-	std::shared_ptr<Layout> GetLayout(LayoutType layoutType);
-	const std::map<LayoutType, std::shared_ptr<Layout>> &GetAllLoadedLayouts();
+    std::shared_ptr<Layout> GetLayout(LayoutType layoutType);
+    const std::map<LayoutType, std::shared_ptr<Layout>> &GetAllLoadedLayouts();
 };
 
 

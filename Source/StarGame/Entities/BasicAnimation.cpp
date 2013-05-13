@@ -25,418 +25,418 @@
 
 
 static void GenerateUniformBuffers(int &materialBlockSize, 
-								   glm::vec4 diffuseColor,
-								   GLuint &materialUniformBuffer)
+                                   glm::vec4 diffuseColor,
+                                   GLuint &materialUniformBuffer)
 {
-	MaterialBlock material;
-	material.diffuseColor = diffuseColor;
-	material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
-	material.shininessFactor = 0.3f;
+    MaterialBlock material;
+    material.diffuseColor = diffuseColor;
+    material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
+    material.shininessFactor = 0.3f;
 
 
-	int uniformBufferAlignSize = 0;
- 	glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignSize);
+    int uniformBufferAlignSize = 0;
+    glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignSize);
 
-	materialBlockSize = sizeof(MaterialBlock);
-	materialBlockSize += uniformBufferAlignSize -
-		(materialBlockSize % uniformBufferAlignSize);
+    materialBlockSize = sizeof(MaterialBlock);
+    materialBlockSize += uniformBufferAlignSize -
+        (materialBlockSize % uniformBufferAlignSize);
 
-	
-	glGenBuffers(1, &materialUniformBuffer);
-	glBindBuffer(GL_UNIFORM_BUFFER, materialUniformBuffer);
-	glBufferData(GL_UNIFORM_BUFFER, materialBlockSize, &material, GL_STATIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    
+    glGenBuffers(1, &materialUniformBuffer);
+    glBindBuffer(GL_UNIFORM_BUFFER, materialUniformBuffer);
+    glBufferData(GL_UNIFORM_BUFFER, materialBlockSize, &material, GL_STATIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 
 AnimationBody::AnimationBody(const AnimationBody &other)
 {
-	this->materialBlockSize = other.materialBlockSize;
-	this->materialUniformBuffer = other.materialUniformBuffer;
-	this->mesh(other.mesh.get());
+    this->materialBlockSize = other.materialBlockSize;
+    this->materialUniformBuffer = other.materialUniformBuffer;
+    this->mesh(other.mesh.get());
 }
 
 AnimationBody AnimationBody::operator=(const AnimationBody &other)
 {
-	this->materialBlockSize = other.materialBlockSize;
-	this->materialUniformBuffer = other.materialUniformBuffer;
-	this->mesh(other.mesh.get());
+    this->materialBlockSize = other.materialBlockSize;
+    this->materialUniformBuffer = other.materialUniformBuffer;
+    this->mesh(other.mesh.get());
 
-	return *this;
+    return *this;
 }
 
 AnimationBody::AnimationBody(const std::string &meshFileName)
 {
-	// TODO: Change mesh
-	// TODO: Error checking
-	try
-	{
-		mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFileName));
-	}
-	catch(std::exception &except)
-	{
-		printf("%s\n", except.what());
-		throw;
-	}
+    // TODO: Change mesh
+    // TODO: Error checking
+    try
+    {
+        mesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFileName));
+    }
+    catch(std::exception &except)
+    {
+        printf("%s\n", except.what());
+        throw;
+    }
 
-	GenerateUniformBuffers(materialBlockSize, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), materialUniformBuffer);
+    GenerateUniformBuffers(materialBlockSize, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), materialUniformBuffer);
 }
 
 
 OrbitingAnimationBody::OrbitingAnimationBody(glm::vec3 newCenter, float newOffsetFromCenter, 
-											 int rotationSpeed, 
-											 const std::string &meshFileName)
-											 : AnimationBody(meshFileName)
+                                             int rotationSpeed, 
+                                             const std::string &meshFileName)
+                                             : AnimationBody(meshFileName)
 {
-	center = newCenter;
-	offsetFromCenter = newOffsetFromCenter;
-	revolutionDuration = Framework::Timer(Framework::Timer::TT_LOOP, rotationSpeed);
+    center = newCenter;
+    offsetFromCenter = newOffsetFromCenter;
+    revolutionDuration = Framework::Timer(Framework::Timer::TT_LOOP, rotationSpeed);
 }
 
 void OrbitingAnimationBody::Update()
 {
-	revolutionDuration.Update();
+    revolutionDuration.Update();
 
-	float currentTimeThroughLoop = revolutionDuration.GetAlpha();
-	
-	position.x = sinf(currentTimeThroughLoop * (2.0f * PI)) * offsetFromCenter;
-	position.z = cosf(currentTimeThroughLoop * (2.0f * PI)) * offsetFromCenter;
+    float currentTimeThroughLoop = revolutionDuration.GetAlpha();
+    
+    position.x = sinf(currentTimeThroughLoop * (2.0f * PI)) * offsetFromCenter;
+    position.z = cosf(currentTimeThroughLoop * (2.0f * PI)) * offsetFromCenter;
 }
 
 void OrbitingAnimationBody::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex,
-								   const LitProgData &progData)
+                                   const LitProgData &progData)
 {
-	{
-		glutil::PushStack push(modelMatrix);
-		modelMatrix.Translate(position);
-		modelMatrix.Scale(0.2f);
+    {
+        glutil::PushStack push(modelMatrix);
+        modelMatrix.Translate(position);
+        modelMatrix.Scale(0.2f);
 
-		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer, 0, sizeof(MaterialBlock));
+        glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer, 0, sizeof(MaterialBlock));
 
-		glm::mat3 normMatrix(modelMatrix.Top());
-		normMatrix = glm::transpose(glm::inverse(normMatrix));
+        glm::mat3 normMatrix(modelMatrix.Top());
+        normMatrix = glm::transpose(glm::inverse(normMatrix));
 
-		glUseProgram(progData.theProgram);
-		glUniformMatrix4fv(progData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-		glUniformMatrix3fv(progData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+        glUseProgram(progData.theProgram);
+        glUniformMatrix4fv(progData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+        glUniformMatrix3fv(progData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
 
-		mesh->Render("lit");
+        mesh->Render("lit");
 
-		glUseProgram(0);
+        glUseProgram(0);
 
-		glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
-	}
+        glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
+    }
 }
 
 void Animation::AddAnimationBody(const std::shared_ptr<AnimationBody> newAnimationBody)
 {
-	animationBodies.push_back(newAnimationBody);
+    animationBodies.push_back(newAnimationBody);
 }
 
 void Animation::Update()
 {
-	for(int animBody = 0; animBody < animationBodies.size(); animBody++)
-	{
-		animationBodies[animBody]->Update();
-	}
+    for(int animBody = 0; animBody < animationBodies.size(); animBody++)
+    {
+        animationBodies[animBody]->Update();
+    }
 }
 
 void Animation::Render(glutil::MatrixStack &modelMatrix, int materialBlockIndex, const LitProgData &progData)
 {
-	for(int animBody = 0; animBody < animationBodies.size(); animBody++)
-	{
-		animationBodies[animBody]->Render(modelMatrix, materialBlockIndex, progData);
-	}
+    for(int animBody = 0; animBody < animationBodies.size(); animBody++)
+    {
+        animationBodies[animBody]->Render(modelMatrix, materialBlockIndex, progData);
+    }
 }
 
 
 ParticleAnimation::ParticleAnimation(glm::vec3 newPosition, int newParticleCount,
-									 int newParticleLifeTime, float newSize, bool isLooping,
-									 float newVelocityMultiplier, 
-									 const std::string &textureFileName)
+                                     int newParticleLifeTime, float newSize, bool isLooping,
+                                     float newVelocityMultiplier, 
+                                     const std::string &textureFileName)
 {
-	burnAnim = 
-		SpriteParticleEmitter(newPosition, newParticleCount, newParticleLifeTime, newSize, isLooping, newVelocityMultiplier, textureFileName);
-	burnAnim.Init();
+    burnAnim = 
+        SpriteParticleEmitter(newPosition, newParticleCount, newParticleLifeTime, newSize, isLooping, newVelocityMultiplier, textureFileName);
+    burnAnim.Init();
 }
 
 void ParticleAnimation::Update()
 {
-	burnAnim.Update();
+    burnAnim.Update();
 }
 
 void ParticleAnimation::Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteParticleProgData)
 {
-	burnAnim.Render(modelMatrix, spriteParticleProgData);
+    burnAnim.Render(modelMatrix, spriteParticleProgData);
 }
 
 void ParticleAnimation::SetPosition(glm::vec3 newPosition)
 {
-	burnAnim.SetPosition(newPosition);
+    burnAnim.SetPosition(newPosition);
 }
 
 bool ParticleAnimation::IsEnded()
 {
-	return burnAnim.IsDead();
+    return burnAnim.IsDead();
 }
 bool ParticleAnimation::IsActive()
 {
-	return burnAnim.IsActive();
+    return burnAnim.IsActive();
 }
 void ParticleAnimation::Activate()
 {
-	burnAnim.Activate();
+    burnAnim.Activate();
 }
 
 void ParticleAnimation::Reset()
 {
-	burnAnim.Init();
+    burnAnim.Init();
 }
 
 
 AoEAnimation::AoEAnimation(glm::vec3 position, 
-						   float newAnimDuration_secs,
-						   int explosionParticlesCount, int meteoriteParticlesCount,
-						   int explosionParticlesLifeTime,
-						   float explosionParticlesSize, float meteoriteParticlesSize, 
-						   float meteoriteSpreadRadius,
-						   float explosionParticleVelocityMultiplier,
-						   float meteoriteVelocityMultiplier,
-						   const std::string &explosionParticlesTextureFileName,
-						   const std::string &meteoriteParticlesTextureFileName)
+                           float newAnimDuration_secs,
+                           int explosionParticlesCount, int meteoriteParticlesCount,
+                           int explosionParticlesLifeTime,
+                           float explosionParticlesSize, float meteoriteParticlesSize, 
+                           float meteoriteSpreadRadius,
+                           float explosionParticleVelocityMultiplier,
+                           float meteoriteVelocityMultiplier,
+                           const std::string &explosionParticlesTextureFileName,
+                           const std::string &meteoriteParticlesTextureFileName)
 {
-	meteoriteRain = MeteoriteEmitter(position, explosionParticlesCount, meteoriteParticlesCount,
-									 explosionParticlesLifeTime, explosionParticlesSize, meteoriteParticlesSize,
-									 meteoriteSpreadRadius, explosionParticleVelocityMultiplier,
-									 meteoriteVelocityMultiplier,
-									 explosionParticlesTextureFileName, meteoriteParticlesTextureFileName);
-	meteoriteRain.Init();
+    meteoriteRain = MeteoriteEmitter(position, explosionParticlesCount, meteoriteParticlesCount,
+                                     explosionParticlesLifeTime, explosionParticlesSize, meteoriteParticlesSize,
+                                     meteoriteSpreadRadius, explosionParticleVelocityMultiplier,
+                                     meteoriteVelocityMultiplier,
+                                     explosionParticlesTextureFileName, meteoriteParticlesTextureFileName);
+    meteoriteRain.Init();
 
-	animDuration_secs = newAnimDuration_secs;
-	animTimer = Framework::Timer(Framework::Timer::TT_SINGLE, animDuration_secs);
+    animDuration_secs = newAnimDuration_secs;
+    animTimer = Framework::Timer(Framework::Timer::TT_SINGLE, animDuration_secs);
 }
 
 void AoEAnimation::Update()
 {
-	if(!animTimer.Update())
-	{
-		meteoriteRain.Update();
-	}
+    if(!animTimer.Update())
+    {
+        meteoriteRain.Update();
+    }
 }
 
 void AoEAnimation::Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteParticleProgData)
 {
-	if(animTimer.GetProgression() < animTimer.GetDuration())
-	{
-		meteoriteRain.Render(modelMatrix, spriteParticleProgData);
-	}
+    if(animTimer.GetProgression() < animTimer.GetDuration())
+    {
+        meteoriteRain.Render(modelMatrix, spriteParticleProgData);
+    }
 }
 
 void AoEAnimation::Restart()
 {
-	animTimer.Reset();
+    animTimer.Reset();
 }
 
 bool AoEAnimation::IsEnded()
 {
-	return animTimer.GetProgression() >= animTimer.GetDuration();
+    return animTimer.GetProgression() >= animTimer.GetDuration();
 }
 
 
 FrostNovaAnimation::FrostNovaAnimation(glm::vec3 position, 
-									   float particleSize, float spreadRadius, float particleSpeed,
-									   int particleCount, const std::string &particleTextureFileName)
+                                       float particleSize, float spreadRadius, float particleSpeed,
+                                       int particleCount, const std::string &particleTextureFileName)
 {
-	frostSpikes = RadialEmitter(position, particleSize, spreadRadius, particleSpeed, particleCount, 
-								particleTextureFileName);
-	frostSpikes.Init();
+    frostSpikes = RadialEmitter(position, particleSize, spreadRadius, particleSpeed, particleCount, 
+                                particleTextureFileName);
+    frostSpikes.Init();
 }
 
 void FrostNovaAnimation::Update()
 {
-	frostSpikes.Update();
+    frostSpikes.Update();
 }
 
 void FrostNovaAnimation::Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteParticleProgData)
 {
-	frostSpikes.Render(modelMatrix, spriteParticleProgData);
+    frostSpikes.Render(modelMatrix, spriteParticleProgData);
 }
 
 void FrostNovaAnimation::Restart()
 {
-	frostSpikes.Init();
+    frostSpikes.Init();
 }
 
 bool FrostNovaAnimation::IsEnded()
 {
-	return frostSpikes.IsDead();
+    return frostSpikes.IsDead();
 }
 
 
 NovaAnimation::NovaAnimation(glm::vec3 position, glm::vec4 color,
-								   float particleSize, float spreadRadius, float particleSpeed,
-								   int particleCount, const std::string &particleTextureFileName)
+                                   float particleSize, float spreadRadius, float particleSpeed,
+                                   int particleCount, const std::string &particleTextureFileName)
 {
-	novaCircleEmitter = RadialEmitter(position, particleSize, spreadRadius, particleSpeed, particleCount, 
-									  particleTextureFileName, color);
-	novaCircleEmitter.Init();
+    novaCircleEmitter = RadialEmitter(position, particleSize, spreadRadius, particleSpeed, particleCount, 
+                                      particleTextureFileName, color);
+    novaCircleEmitter.Init();
 }
 
 void NovaAnimation::Update()
 {
-	novaCircleEmitter.Update();
+    novaCircleEmitter.Update();
 }
 
 void NovaAnimation::Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteParticleProgData)
 {
-	novaCircleEmitter.Render(modelMatrix, spriteParticleProgData);
+    novaCircleEmitter.Render(modelMatrix, spriteParticleProgData);
 }
 
 void NovaAnimation::Restart()
 {
-	novaCircleEmitter.Init();
+    novaCircleEmitter.Init();
 }
 
 bool NovaAnimation::IsEnded()
 {
-	return novaCircleEmitter.IsDead();
+    return novaCircleEmitter.IsDead();
 }
 
 
 PassiveAoeAnimation::PassiveAoeAnimation(glm::vec3 position, int particleCount,
-										 int particleLifeTime, float particleSize, bool isParticleLooping,
-										 float particleVelocityMultiplier, float skillRadiusSize,
-										 const std::string &particleTextureFileName, const std::string &skillRadiusTextureFileName)
+                                         int particleLifeTime, float particleSize, bool isParticleLooping,
+                                         float particleVelocityMultiplier, float skillRadiusSize,
+                                         const std::string &particleTextureFileName, const std::string &skillRadiusTextureFileName)
 {
-	/*lifeDrainAnimsSize = 10;
-	for(int i = 0; i < lifeDrainAnimsSize; i++)
-	{
-		lifeDrainAnims.push_back(ParticleAnimation(position, particleCount, particleLifeTime, particleSize, 
-												   isParticleLooping, particleVelocityMultiplier,
-												   particleTextureFileName));
-	}*/
+    /*lifeDrainAnimsSize = 10;
+    for(int i = 0; i < lifeDrainAnimsSize; i++)
+    {
+        lifeDrainAnims.push_back(ParticleAnimation(position, particleCount, particleLifeTime, particleSize, 
+                                                   isParticleLooping, particleVelocityMultiplier,
+                                                   particleTextureFileName));
+    }*/
 
-	inputAnimData.particleCount = particleCount;
-	inputAnimData.position = position;
-	inputAnimData.particleLifeTime = particleLifeTime;
-	inputAnimData.particleSize = particleSize;
-	inputAnimData.isParticleLooping = isParticleLooping;
-	inputAnimData.particleVelocityMultiplier = particleVelocityMultiplier;
-	inputAnimData.particleTextureFileName = particleTextureFileName;
+    inputAnimData.particleCount = particleCount;
+    inputAnimData.position = position;
+    inputAnimData.particleLifeTime = particleLifeTime;
+    inputAnimData.particleSize = particleSize;
+    inputAnimData.isParticleLooping = isParticleLooping;
+    inputAnimData.particleVelocityMultiplier = particleVelocityMultiplier;
+    inputAnimData.particleTextureFileName = particleTextureFileName;
 
-	skillRadiusSprite = Utility::Primitives::Sprite3D(position, skillRadiusSize, skillRadiusSize);
-	skillRadiusSprite.Init(skillRadiusTextureFileName);
+    skillRadiusSprite = Utility::Primitives::Sprite3D(position, skillRadiusSize, skillRadiusSize);
+    skillRadiusSprite.Init(skillRadiusTextureFileName);
 }
 
 void PassiveAoeAnimation::Init()
 {
-	/*for(int i = 0; i < 6; i++)
-	{
-		//lifeDrainAnims.push_back(SpriteParticleEmitter(inputAnimData.position, inputAnimData.particleCount, 
-													   inputAnimData.particleLifeTime, inputAnimData.particleSize, 
-												       inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
-												       inputAnimData.particleTextureFileName));
-		//lifeDrainAnims.back().Init();
-		//lifeDrainAnims.push_back(ParticleAnimation(inputAnimData.position, inputAnimData.particleCount, 
-		//										   inputAnimData.particleLifeTime, inputAnimData.particleSize, 
-		///										   inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
-		//										   inputAnimData.particleTextureFileName));
-	}*/
+    /*for(int i = 0; i < 6; i++)
+    {
+        //lifeDrainAnims.push_back(SpriteParticleEmitter(inputAnimData.position, inputAnimData.particleCount, 
+                                                       inputAnimData.particleLifeTime, inputAnimData.particleSize, 
+                                                       inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
+                                                       inputAnimData.particleTextureFileName));
+        //lifeDrainAnims.back().Init();
+        //lifeDrainAnims.push_back(ParticleAnimation(inputAnimData.position, inputAnimData.particleCount, 
+        //										   inputAnimData.particleLifeTime, inputAnimData.particleSize, 
+        ///										   inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
+        //										   inputAnimData.particleTextureFileName));
+    }*/
 }
 
 void PassiveAoeAnimation::Update()
 {
-	/*for(int i = 0; i < lifeDrainAnims.size(); i++)
-	{
-		if(lifeDrainAnims[i].IsActive())
-		{
-			lifeDrainAnims[i].Update();
-		}
-	}*/
+    /*for(int i = 0; i < lifeDrainAnims.size(); i++)
+    {
+        if(lifeDrainAnims[i].IsActive())
+        {
+            lifeDrainAnims[i].Update();
+        }
+    }*/
 }
 
 void PassiveAoeAnimation::Render(glutil::MatrixStack &modelMatrix, 
-								 const SpriteParticleProgData &spriteParticleProgData,
-								 const SimpleTextureProgData &simpleTextureProgData)
+                                 const SpriteParticleProgData &spriteParticleProgData,
+                                 const SimpleTextureProgData &simpleTextureProgData)
 {
-	/*for(int i = 0; i < lifeDrainAnims.size(); i++)
-	{
-		if(lifeDrainAnims[i].IsActive())
-		{
-			lifeDrainAnims[i].Render(modelMatrix, spriteParticleProgData);
-		}
-	}*/
+    /*for(int i = 0; i < lifeDrainAnims.size(); i++)
+    {
+        if(lifeDrainAnims[i].IsActive())
+        {
+            lifeDrainAnims[i].Render(modelMatrix, spriteParticleProgData);
+        }
+    }*/
 
-	skillRadiusSprite.Draw(modelMatrix, simpleTextureProgData);
+    skillRadiusSprite.Draw(modelMatrix, simpleTextureProgData);
 }
 
 void PassiveAoeAnimation::SetFreeParticleAnimPosition(glm::vec3 newPosition)
 {
-	/*for(int i = 0; i < lifeDrainAnims.size(); i++)
-	{
-		if(!lifeDrainAnims[i].IsActive())
-		{
-			lifeDrainAnims[i].SetPosition(newPosition);
-			lifeDrainAnims[i].Activate();
-			return;
-		}
-	}
-	
-	lifeDrainAnims.push_back(SpriteParticleEmitter(newPosition, inputAnimData.particleCount, 
-											   inputAnimData.particleLifeTime, inputAnimData.particleSize,
-											   inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
-											   inputAnimData.particleTextureFileName));
-	lifeDrainAnims.back().Init();
-	lifeDrainAnims.back().Activate();*/
+    /*for(int i = 0; i < lifeDrainAnims.size(); i++)
+    {
+        if(!lifeDrainAnims[i].IsActive())
+        {
+            lifeDrainAnims[i].SetPosition(newPosition);
+            lifeDrainAnims[i].Activate();
+            return;
+        }
+    }
+    
+    lifeDrainAnims.push_back(SpriteParticleEmitter(newPosition, inputAnimData.particleCount, 
+                                               inputAnimData.particleLifeTime, inputAnimData.particleSize,
+                                               inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
+                                               inputAnimData.particleTextureFileName));
+    lifeDrainAnims.back().Init();
+    lifeDrainAnims.back().Activate();*/
 }
 
 void PassiveAoeAnimation::SetParticleAnimPosition(glm::vec3 newPosition, int particleAnimIndex)
 {
-	/*int size = lifeDrainAnims.size() - 1;
+    /*int size = lifeDrainAnims.size() - 1;
 
-	if(particleAnimIndex > size)
-	{
-		while(particleAnimIndex > lifeDrainAnims.size())
-		{
-			lifeDrainAnims.push_back(SpriteParticleEmitter(inputAnimData.position, inputAnimData.particleCount, 
-										inputAnimData.particleLifeTime, inputAnimData.particleSize,
-										inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
-										inputAnimData.particleTextureFileName));
-			lifeDrainAnims.back().Init();
-		}
-		lifeDrainAnims.push_back(SpriteParticleEmitter(newPosition, inputAnimData.particleCount, 
-										inputAnimData.particleLifeTime, inputAnimData.particleSize,
-										inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
-										inputAnimData.particleTextureFileName));
-		lifeDrainAnims.back().Init();
-		lifeDrainAnims[particleAnimIndex].Activate();
-		return;
-	}
+    if(particleAnimIndex > size)
+    {
+        while(particleAnimIndex > lifeDrainAnims.size())
+        {
+            lifeDrainAnims.push_back(SpriteParticleEmitter(inputAnimData.position, inputAnimData.particleCount, 
+                                        inputAnimData.particleLifeTime, inputAnimData.particleSize,
+                                        inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
+                                        inputAnimData.particleTextureFileName));
+            lifeDrainAnims.back().Init();
+        }
+        lifeDrainAnims.push_back(SpriteParticleEmitter(newPosition, inputAnimData.particleCount, 
+                                        inputAnimData.particleLifeTime, inputAnimData.particleSize,
+                                        inputAnimData.isParticleLooping, inputAnimData.particleVelocityMultiplier,
+                                        inputAnimData.particleTextureFileName));
+        lifeDrainAnims.back().Init();
+        lifeDrainAnims[particleAnimIndex].Activate();
+        return;
+    }
 
-	lifeDrainAnims[particleAnimIndex].SetPosition(newPosition);
-	lifeDrainAnims[particleAnimIndex].Activate();*/
+    lifeDrainAnims[particleAnimIndex].SetPosition(newPosition);
+    lifeDrainAnims[particleAnimIndex].Activate();*/
 }
 
 void PassiveAoeAnimation::Restart()
 {
-	/*for(int i = 0; i < lifeDrainAnimsSize; i++)
-	{
-		lifeDrainAnims[i].Reset();
-	}*/
-	//lifeDrainAnims.resize(0);
+    /*for(int i = 0; i < lifeDrainAnimsSize; i++)
+    {
+        lifeDrainAnims[i].Reset();
+    }*/
+    //lifeDrainAnims.resize(0);
 }
 
 bool PassiveAoeAnimation::IsEnded()
 {
-	/*bool isEnded = true;
-	for(int i = 0; i < lifeDrainAnims.size(); i++)
-	{
-		if(!lifeDrainAnims[i].IsDead())
-		{
-			isEnded = false;
-		}
-	}
+    /*bool isEnded = true;
+    for(int i = 0; i < lifeDrainAnims.size(); i++)
+    {
+        if(!lifeDrainAnims[i].IsDead())
+        {
+            isEnded = false;
+        }
+    }
 
-	return isEnded;*/
-	return true;
+    return isEnded;*/
+    return true;
 }

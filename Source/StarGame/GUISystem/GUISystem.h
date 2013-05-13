@@ -165,7 +165,8 @@ protected:
 	bool hasHoveredSoon;
 	bool hasUnhoveredSoon;
 
-	Utility::Primitives::Sprite controlBackground;
+	//Utility::Primitives::Sprite controlBackground;
+	Utility::Primitives::ComplexSprite controlBackground;
 	Utility::Primitives::Square controlSquare; // TODO: Replace with rectangle geometry primitive
 
 	int windowWidth;

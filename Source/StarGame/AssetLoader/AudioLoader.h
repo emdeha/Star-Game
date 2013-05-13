@@ -27,29 +27,29 @@
 
 struct AudioFile
 {
-	std::string path;
-	SoundType soundType;
-	bool isLooping;
+    std::string path;
+    SoundType soundType;
+    bool isLooping;
 };
 
 struct AudioData
 {
-	ChannelType channel;
-	float channelVolume;
-	std::vector<AudioFile> audioFiles;
+    ChannelType channel;
+    float channelVolume;
+    std::vector<AudioFile> audioFiles;
 };
 
 class AudioLoader
 {
 private:
-	std::vector<std::pair<ChannelType, AudioData>> loadedAudio;
+    std::vector<std::pair<ChannelType, AudioData>> loadedAudio;
 
 public:
-	AudioLoader() {}
+    AudioLoader() {}
 
-	AudioLoader(const std::string &fileName);
+    AudioLoader(const std::string &fileName);
 
-	const std::vector<std::pair<ChannelType, AudioData>> GetAllLoadedAudios();
+    const std::vector<std::pair<ChannelType, AudioData>> GetAllLoadedAudios();
 };
 
 

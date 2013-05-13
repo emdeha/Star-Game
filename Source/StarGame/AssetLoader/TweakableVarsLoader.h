@@ -27,41 +27,41 @@
 
 struct TweakVarData
 {
-	enum VarType
-	{
-		TYPE_TWEAK_FLOAT,
-		TYPE_TWEAK_INT,
-		TYPE_TWEAK_STRING,
-	};
+    enum VarType
+    {
+        TYPE_TWEAK_FLOAT,
+        TYPE_TWEAK_INT,
+        TYPE_TWEAK_STRING,
+    };
 
-	int itemIndex; // for indexed commands. -1 for non existence
-	VarType currentType;
+    int itemIndex; // for indexed commands. -1 for non existence
+    VarType currentType;
 
-	union 
-	{
-		float varFloat;
-		int varInt;
-		char varString[50];
-	};
+    union 
+    {
+        float varFloat;
+        int varInt;
+        char varString[50];
+    };
 
-	TweakVarData() : itemIndex(-1) {}
+    TweakVarData() : itemIndex(-1) {}
 };
 
 class TweakableVarsLoader
 {
 private:
-	std::vector<std::pair<std::string, TweakVarData>> loadedTweaks;
+    std::vector<std::pair<std::string, TweakVarData>> loadedTweaks;
 
-	void PushInt(const std::string &command, int value, int enumIndex = -999);
-	void PushFloat(const std::string &command, float value, int enumIndex = -999);
-	void PushString(const std::string &command, const std::string &value, int enumIndex = -999);
+    void PushInt(const std::string &command, int value, int enumIndex = -999);
+    void PushFloat(const std::string &command, float value, int enumIndex = -999);
+    void PushString(const std::string &command, const std::string &value, int enumIndex = -999);
 
 public:
-	TweakableVarsLoader() {}
+    TweakableVarsLoader() {}
 
-	TweakableVarsLoader(const std::string &fileName);
+    TweakableVarsLoader(const std::string &fileName);
 
-	const std::vector<std::pair<std::string, TweakVarData>> GetAllLoadedVars();
+    const std::vector<std::pair<std::string, TweakVarData>> GetAllLoadedVars();
 };
 
 

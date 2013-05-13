@@ -35,11 +35,11 @@
 /// \brief Checks if FMOD has generated an error.
 static void CheckForError(FMOD_RESULT result)
 {
-	if(result != FMOD_OK)
-	{
-		printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
-		return;
-	}
+    if(result != FMOD_OK)
+    {
+        printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
+        return;
+    }
 }
 
 
@@ -52,38 +52,38 @@ static void CheckForError(FMOD_RESULT result)
 class Audio
 {
 private:
-	int numberOfChannels;
+    int numberOfChannels;
 
-	/// The volume parameters are contained in an array. 
-	/// Each element represents a channels volume. The first index is for
-	/// the master volume, the second for the interactions and so on.
-	float volumes[CHANNEL_COUNT];
+    /// The volume parameters are contained in an array. 
+    /// Each element represents a channels volume. The first index is for
+    /// the master volume, the second for the interactions and so on.
+    float volumes[CHANNEL_COUNT];
 
 public:
-	Audio();
-	//Audio(int newNumberOfChannels);
-	
-	/// \fn SetFileForPlay
-	/// \brief Loads a sound for later playing.
-	void SetFileForPlay(const std::string &newFileName, SoundType prevSoundType, bool isLooping = false);
-	
-	/// \fn SetVolume
-	/// \brief Fills the `volumes` array which later will be passed to Play().
-	void SetVolume(float volume, ChannelType chType = CHANNEL_MASTER);
+    Audio();
+    //Audio(int newNumberOfChannels);
+    
+    /// \fn SetFileForPlay
+    /// \brief Loads a sound for later playing.
+    void SetFileForPlay(const std::string &newFileName, SoundType prevSoundType, bool isLooping = false);
+    
+    /// \fn SetVolume
+    /// \brief Fills the `volumes` array which later will be passed to Play().
+    void SetVolume(float volume, ChannelType chType = CHANNEL_MASTER);
 
-	/// \fn Play
-	/// \brief Plays a given song.
-	void Play(SoundType soundName, ChannelType chType = CHANNEL_MASTER);
+    /// \fn Play
+    /// \brief Plays a given song.
+    void Play(SoundType soundName, ChannelType chType = CHANNEL_MASTER);
 
-	void Stop(ChannelType chType = CHANNEL_MASTER);
+    void Stop(ChannelType chType = CHANNEL_MASTER);
 
-	~Audio();
+    ~Audio();
 
 private:
-	FMOD::System *system;
-	std::vector<FMOD::Channel *> channels;
+    FMOD::System *system;
+    std::vector<FMOD::Channel *> channels;
 
-	std::map<SoundType, FMOD::Sound *> audioFiles;
+    std::map<SoundType, FMOD::Sound *> audioFiles;
 };
 
 #endif

@@ -62,7 +62,7 @@ Control::Control(const std::string &newName, const std::string &newText,
 	fontColor = newFontColor;
 	position = newPosition;
 	textSize = newTextSize;
-	hasBackground = newHasBackground;
+	hasBackground = true;//newHasBackground;
 	isVisible = newIsVisible;
 	isUsingPercentage = newIsUsingPercentage;
 	isActive = false;
@@ -70,7 +70,7 @@ Control::Control(const std::string &newName, const std::string &newText,
 	hasHoveredSoon = false;
 	hasUnhoveredSoon = true;
 	percentagedPosition = newPercentagedPosition;
-	margins = newMargins;
+	margins = glm::vec4(10, 10, 10, 10);//newMargins;
 
 	onHoverProps.text = newOnHoverProps.text;
 	onHoverProps.backgroundImage = newOnHoverProps.backgroundImage;
@@ -98,8 +98,11 @@ void Control::Init(const std::string &newFontName, const std::string &bckgTextur
 	if(hasBackground)
 	{
 		controlBackground = 
-			Utility::Primitives::Sprite(glm::vec3(), glm::vec4(1.0f), 0.0f, 0.0f, false);
-		controlBackground.Init(bckgTextureFileName, newWindowWidth, newWindowHeight);
+			Utility::Primitives::ComplexSprite(glm::vec3(), glm::vec4(1.0f), 0.0f, 0.0f, false);
+		controlBackground.Init("../data/images/b-left-border.png",
+							   "../data/images/b-right-border.png", 
+                               "../data/images/b-middle-section.png"/*bckgTextureFileName*/, 
+							   newWindowWidth, newWindowHeight);
 	}
 
 	ComputeNewAttributes();

@@ -20,70 +20,70 @@
 
 SunLight::SunLight()
 {
-	position = glm::vec3();
-	lightIntensity = glm::vec4();
-	ambientIntensity = glm::vec4();
-	lightAttenuation = 0.0f;
-	maxIntensity = 0.0f;
-	gamma = 2.2f;
+    position = glm::vec3();
+    lightIntensity = glm::vec4();
+    ambientIntensity = glm::vec4();
+    lightAttenuation = 0.0f;
+    maxIntensity = 0.0f;
+    gamma = 2.2f;
 }
 SunLight::SunLight(glm::vec3 newPosition,
-				   glm::vec4 newLightIntensity, glm::vec4 newAmbientIntensity,
-				   float newLightAttenuation, 
-				   float newMaxIntensity, float newGamma)
+                   glm::vec4 newLightIntensity, glm::vec4 newAmbientIntensity,
+                   float newLightAttenuation, 
+                   float newMaxIntensity, float newGamma)
 {
-	position = newPosition;
-	lightIntensity = newLightIntensity;
-	ambientIntensity = newAmbientIntensity;
-	lightAttenuation = newLightAttenuation;
-	maxIntensity = newMaxIntensity;
-	gamma = newGamma;
+    position = newPosition;
+    lightIntensity = newLightIntensity;
+    ambientIntensity = newAmbientIntensity;
+    lightAttenuation = newLightAttenuation;
+    maxIntensity = newMaxIntensity;
+    gamma = newGamma;
 }
 
 void SunLight::Render(glutil::MatrixStack &modelMatrix, const LitProgData &lightData,
-					  GLuint lightUniformBuffer)
+                      GLuint lightUniformBuffer)
 {
-	glm::vec4 position_cameraSpace = modelMatrix.Top() * glm::vec4(position, 1.0f);
+    glm::vec4 position_cameraSpace = modelMatrix.Top() * glm::vec4(position, 1.0f);
 
-	glUseProgram(lightData.theProgram);
+    glUseProgram(lightData.theProgram);
 
-	glUniform4fv(lightData.lightIntensityUnif, 1, glm::value_ptr(lightIntensity));
-	glUniform3fv(lightData.cameraSpaceLightPosUnif, 1, glm::value_ptr(position_cameraSpace));
+    glUniform4fv(lightData.lightIntensityUnif, 1, glm::value_ptr(lightIntensity));
+    glUniform3fv(lightData.cameraSpaceLightPosUnif, 1, glm::value_ptr(position_cameraSpace));
 
-	
-	LightBlockGamma blockLightData;
+    
+    LightBlockGamma blockLightData;
 
-	blockLightData.ambientIntensity = ambientIntensity;
-	blockLightData.lightAttenuation = lightAttenuation;
-	blockLightData.maxIntensity = maxIntensity;
-	blockLightData.gamma = gamma;
+    blockLightData.ambientIntensity = ambientIntensity;
+    blockLightData.lightAttenuation = lightAttenuation;
+    blockLightData.maxIntensity = maxIntensity;
+    blockLightData.gamma = gamma;
 
-	glBindBuffer(GL_UNIFORM_BUFFER, lightUniformBuffer);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(blockLightData), &blockLightData);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBuffer(GL_UNIFORM_BUFFER, lightUniformBuffer);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(blockLightData), &blockLightData);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-	glUseProgram(0);
+    glUseProgram(0);
 }
 
 void SunLight::Render(glutil::MatrixStack &modelMatrix, const LitTextureProgData &litTextureData,
-					  GLuint lightUniformBuffer)
+                      GLuint lightUniformBuffer)
 {
-	glm::vec4 position_cameraSpace = modelMatrix.Top() * glm::vec4(position, 1.0f);
+    glm::vec4 position_cameraSpace = modelMatrix.Top() * glm::vec4(position, 1.0f);
 
-	glUseProgram(litTextureData.theProgram);
+    glUseProgram(litTextureData.theProgram);
 
-	glUniform4fv(litTextureData.lightIntensityUnif, 1, glm::value_ptr(lightIntensity));
-	glUniform3fv(litTextureData.cameraSpaceLightPosUnif, 1, glm::value_ptr(position_cameraSpace));
+    glUniform4fv(litTextureData.lightIntensityUnif, 1, glm::value_ptr(lightIntensity));
+    glUniform3fv(litTextureData.cameraSpaceLightPosUnif, 1, glm::value_ptr(position_cameraSpace));
 
-	LightBlockGamma blockLightData;
-	blockLightData.ambientIntensity = ambientIntensity;
-	blockLightData.lightAttenuation = lightAttenuation;
-	blockLightData.maxIntensity = maxIntensity;
-	blockLightData.gamma = gamma;
+    LightBlockGamma blockLightData;
+    blockLightData.ambientIntensity = ambientIntensity;
+    blockLightData.lightAttenuation = lightAttenuation;
+    blockLightData.maxIntensity = maxIntensity;
+    blockLightData.gamma = gamma;
 
-	glBindBuffer(GL_UNIFORM_BUFFER, lightUniformBuffer);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(blockLightData), &blockLightData);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBuffer(GL_UNIFORM_BUFFER, lightUniformBuffer);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(blockLightData), &blockLightData);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-	glUseProgram(0);
+    glUseProgram(0);
 }

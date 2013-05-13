@@ -22,54 +22,54 @@
 
 TopDownCamera::TopDownCamera()
 {
-	camTarget = glm::vec3();
-	height = 0.0f;
-	anglePhi_degs = 0.0f;
-	angleTheta_degs = 0.0f;
+    camTarget = glm::vec3();
+    height = 0.0f;
+    anglePhi_degs = 0.0f;
+    angleTheta_degs = 0.0f;
 }
 TopDownCamera::TopDownCamera(glm::vec3 newCamTarget,
-							 float newHeight, float newAnglePhi_degs, float newAngleTheta_degs)
+                             float newHeight, float newAnglePhi_degs, float newAngleTheta_degs)
 {
-	camTarget = newCamTarget;
-	height = newHeight;
-	anglePhi_degs = newAnglePhi_degs;
-	angleTheta_degs = newAngleTheta_degs;
+    camTarget = newCamTarget;
+    height = newHeight;
+    anglePhi_degs = newAnglePhi_degs;
+    angleTheta_degs = newAngleTheta_degs;
 }
 
 glm::vec3 TopDownCamera::ResolveCamPosition()
 {
-	float phi = glm::radians(anglePhi_degs);
-	float theta = glm::radians(angleTheta_degs);
-	
-	float sinTheta = sin(theta);
-	float cosTheta = cos(theta);	
-	float sinPhi = sinf(phi);
-	float cosPhi = cosf(phi);
+    float phi = glm::radians(anglePhi_degs);
+    float theta = glm::radians(angleTheta_degs);
+    
+    float sinTheta = sin(theta);
+    float cosTheta = cos(theta);	
+    float sinPhi = sinf(phi);
+    float cosPhi = cosf(phi);
 
-	glm::vec3 dirToCamera(sinTheta * cosPhi, cosTheta, sinTheta * sinPhi);
+    glm::vec3 dirToCamera(sinTheta * cosPhi, cosTheta, sinTheta * sinPhi);
 
-	return (dirToCamera * height) + camTarget;
+    return (dirToCamera * height) + camTarget;
 }
 
 glm::mat4 TopDownCamera::CalcMatrix()
 {
-	glm::vec3 camPos = ResolveCamPosition();
+    glm::vec3 camPos = ResolveCamPosition();
 
-	glm::vec3 lookDir = glm::normalize(camTarget - camPos);
-	glm::vec3 upDir = glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::vec3 lookDir = glm::normalize(camTarget - camPos);
+    glm::vec3 upDir = glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f));
 
-	glm::vec3 rightDir = glm::normalize(glm::cross(lookDir, upDir));
-	glm::vec3 perpUpDir = glm::cross(rightDir, lookDir);
+    glm::vec3 rightDir = glm::normalize(glm::cross(lookDir, upDir));
+    glm::vec3 perpUpDir = glm::cross(rightDir, lookDir);
 
-	glm::mat4 rotMat(1.0f);
-	rotMat[0] = glm::vec4(rightDir, 0.0f);
-	rotMat[1] = glm::vec4(perpUpDir, 0.0f);
-	rotMat[2] = glm::vec4(-lookDir, 0.0f);
+    glm::mat4 rotMat(1.0f);
+    rotMat[0] = glm::vec4(rightDir, 0.0f);
+    rotMat[1] = glm::vec4(perpUpDir, 0.0f);
+    rotMat[2] = glm::vec4(-lookDir, 0.0f);
 
-	rotMat = glm::transpose(rotMat);
+    rotMat = glm::transpose(rotMat);
 
-	glm::mat4 transMat(1.0f);
-	transMat[3] = glm::vec4(-camPos, 1.0f);
+    glm::mat4 transMat(1.0f);
+    transMat[3] = glm::vec4(-camPos, 1.0f);
 
-	return rotMat * transMat;
+    return rotMat * transMat;
 }

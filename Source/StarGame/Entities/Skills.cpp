@@ -23,1342 +23,1342 @@
 
 Event Skill::GetGeneratedEvent(const std::string &eventName)
 {
-	if(generatedEvents.size() > 0)
-	{
-		for(int i = 0; i < generatedEvents.size(); i++)
-		{
-			if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
-			   strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
-			{
-				return generatedEvents[i];
-			}
-		}
-	}
+    if(generatedEvents.size() > 0)
+    {
+        for(int i = 0; i < generatedEvents.size(); i++)
+        {
+            if(generatedEvents[i].GetType() == EVENT_TYPE_OTHER &&
+               strcmp(generatedEvents[i].GetArgument("what_event").varString, eventName.c_str()) == 0)
+            {
+                return generatedEvents[i];
+            }
+        }
+    }
 
-	return StockEvents::EmptyEvent();
+    return StockEvents::EmptyEvent();
 }
 void Skill::RemoveGeneratedEvent(const std::string &eventName)
 {
-	if(generatedEvents.size() > 0)
-	{
-		for(std::vector<Event>::iterator iter = generatedEvents.begin();
-			iter != generatedEvents.end();)
-		{
-			if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
-			{
-				generatedEvents.erase(iter);
-				break;
-			}
-			else 
-			{
-				++iter;
-			}
-		}
-	}
+    if(generatedEvents.size() > 0)
+    {
+        for(std::vector<Event>::iterator iter = generatedEvents.begin();
+            iter != generatedEvents.end();)
+        {
+            if(strcmp(iter->GetArgument("what_event").varString, eventName.c_str()) == 0)
+            {
+                generatedEvents.erase(iter);
+                break;
+            }
+            else 
+            {
+                ++iter;
+            }
+        }
+    }
 }
 std::vector<Event> Skill::GetGeneratedEvents()
 {
-	std::vector<Event> eventsToReturn;
+    std::vector<Event> eventsToReturn;
 
-	if(generatedEvents.size() > 0)
-	{
-		eventsToReturn = generatedEvents;
-		generatedEvents.resize(0);
-	}
-	else 
-	{
-		eventsToReturn.push_back(StockEvents::EmptyEvent());
-	}
+    if(generatedEvents.size() > 0)
+    {
+        eventsToReturn = generatedEvents;
+        generatedEvents.resize(0);
+    }
+    else 
+    {
+        eventsToReturn.push_back(StockEvents::EmptyEvent());
+    }
 
-	return eventsToReturn;
+    return eventsToReturn;
 }
 
 
 // for lighting
 static void GenerateUniformBuffers(int &materialBlockSize, glm::vec4 diffuseColor, GLuint &materialUniformBuffer)
 {
-	MaterialBlock material;
-	material.diffuseColor = diffuseColor;
-	material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
-	material.shininessFactor = 0.3f;
+    MaterialBlock material;
+    material.diffuseColor = diffuseColor;
+    material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
+    material.shininessFactor = 0.3f;
 
 
-	int uniformBufferAlignSize = 0;
-	glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignSize);
+    int uniformBufferAlignSize = 0;
+    glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignSize);
 
-	materialBlockSize = sizeof(MaterialBlock);
-	materialBlockSize += uniformBufferAlignSize -
-		(materialBlockSize % uniformBufferAlignSize);
+    materialBlockSize = sizeof(MaterialBlock);
+    materialBlockSize += uniformBufferAlignSize -
+        (materialBlockSize % uniformBufferAlignSize);
 
-	
-	glGenBuffers(1, &materialUniformBuffer);
-	glBindBuffer(GL_UNIFORM_BUFFER, materialUniformBuffer);
-	glBufferData(GL_UNIFORM_BUFFER, materialBlockSize, &material, GL_STATIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    
+    glGenBuffers(1, &materialUniformBuffer);
+    glBindBuffer(GL_UNIFORM_BUFFER, materialUniformBuffer);
+    glBufferData(GL_UNIFORM_BUFFER, materialBlockSize, &material, GL_STATIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 
 AOESkill::AOESkill(glm::vec3 newPosition,
-				   int newDamage, float newRange,
-				   const std::string &newSkillType,
-				   char fusionCombA, char fusionCombB, char fusionCombC, 
-				   int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
-				   : Skill(newSkillType,
-						   fusionCombA, fusionCombB, fusionCombC,
-						   skillApplyCost, skillResearchCost, boxIndexForUpgrade)
+                   int newDamage, float newRange,
+                   const std::string &newSkillType,
+                   char fusionCombA, char fusionCombB, char fusionCombC, 
+                   int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
+                   : Skill(newSkillType,
+                           fusionCombA, fusionCombB, fusionCombC,
+                           skillApplyCost, skillResearchCost, boxIndexForUpgrade)
 {
-	damage = newDamage;
-	range = newRange;
-	position = newPosition;
+    damage = newDamage;
+    range = newRange;
+    position = newPosition;
 
-	isStarted = false;
+    isStarted = false;
 
-	skillSelector = 
-		AOESelector(position, range, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
-	skillSelector.Init();
+    skillSelector = 
+        AOESelector(position, range, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
+    skillSelector.Init();
 
-	aoeAnim = AoEAnimation(glm::vec3(1.0f, 0.0f, 0.0f), 2.0f, 100, 1, 25, 0.3f, 0.5f, range, 0.1f, 0.6f, 
-						   "../data/images/particle.png", "../data/images/meteor.png");
+    aoeAnim = AoEAnimation(glm::vec3(1.0f, 0.0f, 0.0f), 2.0f, 100, 1, 25, 0.3f, 0.5f, range, 0.1f, 0.6f, 
+                           "../data/images/particle.png", "../data/images/meteor.png");
 }
 
 void AOESkill::Update()
 {
-	if(isStarted)
-	{
-		skillSelector.Update(position);
-	}
-	if(isDeployed)
-	{
-		aoeAnim.Update();
-		if(aoeAnim.IsEnded())
-		{
-			isDeployed = false;
-			aoeAnim.Restart();
-		}
-	}
+    if(isStarted)
+    {
+        skillSelector.Update(position);
+    }
+    if(isDeployed)
+    {
+        aoeAnim.Update();
+        if(aoeAnim.IsEnded())
+        {
+            isDeployed = false;
+            aoeAnim.Restart();
+        }
+    }
 }
 
 void AOESkill::Render(glutil::MatrixStack &modelMatrix,
-					  const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &progData)
+                      const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &progData)
 {
-	if(isStarted)
-	{
-		glutil::PushStack push(modelMatrix);
-		modelMatrix.Translate(position);
+    if(isStarted)
+    {
+        glutil::PushStack push(modelMatrix);
+        modelMatrix.Translate(position);
 
-		skillSelector.Draw(modelMatrix, progData);
-	}
-	if(isDeployed)
-	{
-		glutil::PushStack push(modelMatrix);
-		modelMatrix.Translate(position);
+        skillSelector.Draw(modelMatrix, progData);
+    }
+    if(isDeployed)
+    {
+        glutil::PushStack push(modelMatrix);
+        modelMatrix.Translate(position);
 
-		aoeAnim.Render(modelMatrix, spriteParticleProgData);
-	}
+        aoeAnim.Render(modelMatrix, spriteParticleProgData);
+    }
 }
 
 void AOESkill::OnEvent(Event &_event)
 {
-	if(isResearched)
-	{
-		switch(_event.GetType())
-		{
-		case EVENT_TYPE_OTHER:
-			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
-			{
-				EventArg skillDeployedEventArgs[5];
-				skillDeployedEventArgs[0].argType = "skillRange";
-				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
-				skillDeployedEventArgs[0].argument.varFloat = range;
-				skillDeployedEventArgs[1].argType = "skillDamage";
-				skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-				skillDeployedEventArgs[1].argument.varInteger = damage;
-				skillDeployedEventArgs[2].argType = "what_event";
-				skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
-				strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-				skillDeployedEventArgs[3].argType = "skillCost";
-				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
-				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-				skillDeployedEventArgs[4].argType = "which_skill";
-				skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
-				strcpy(skillDeployedEventArgs[4].argument.varString, "aoeSkill");
-				Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-				generatedEvents.push_back(skillDeployedEvent);
+    if(isResearched)
+    {
+        switch(_event.GetType())
+        {
+        case EVENT_TYPE_OTHER:
+            if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+            {
+                EventArg skillDeployedEventArgs[5];
+                skillDeployedEventArgs[0].argType = "skillRange";
+                skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+                skillDeployedEventArgs[0].argument.varFloat = range;
+                skillDeployedEventArgs[1].argType = "skillDamage";
+                skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+                skillDeployedEventArgs[1].argument.varInteger = damage;
+                skillDeployedEventArgs[2].argType = "what_event";
+                skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+                strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+                skillDeployedEventArgs[3].argType = "skillCost";
+                skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+                skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+                skillDeployedEventArgs[4].argType = "which_skill";
+                skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
+                strcpy(skillDeployedEventArgs[4].argument.varString, "aoeSkill");
+                Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+                generatedEvents.push_back(skillDeployedEvent);
 
-				isStarted = true;
-			}
-			if(_event.GetArgument("deploy").varBool == true)
-			{	
-				isDeployed = true;
-			}
-			break;
-		default:
-			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
-			break;
-		}
-	}
+                isStarted = true;
+            }
+            if(_event.GetArgument("deploy").varBool == true)
+            {	
+                isDeployed = true;
+            }
+            break;
+        default:
+            HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+            break;
+        }
+    }
 }
 
 float AOESkill::GetRange()
 {
-	return range;
+    return range;
 }
 glm::vec3 AOESkill::GetPosition()
 {
-	return position;
+    return position;
 }
 
 void AOESkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 {
-	if(isStarted)
-	{
-		switch(paramType)
-		{
-		case PARAM_POSITION:
-			position = newParam_vec3;
-			break;
-		default:
-			HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
-			break;
-		}
-	}
+    if(isStarted)
+    {
+        switch(paramType)
+        {
+        case PARAM_POSITION:
+            position = newParam_vec3;
+            break;
+        default:
+            HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
+            break;
+        }
+    }
 }
 
 bool AOESkill::IsIntersectingObject(glm::vec3 objectPosition)
 {
-	if(isStarted)
-	{
-		float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
+    if(isStarted)
+    {
+        float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
 
-		if(distanceBetweenObjectAndSkill < range)
-		{
-			//isStarted = false;
-			return true;
-		}
-	
-		return false;
-	}
-	else return false;
+        if(distanceBetweenObjectAndSkill < range)
+        {
+            //isStarted = false;
+            return true;
+        }
+    
+        return false;
+    }
+    else return false;
 }
 
 
 PassiveAOESkill::PassiveAOESkill(glm::vec3 newPosition,
-								 int newDamage, float newDamageApplyTime_seconds, int newSkillLife,
-								 float newRange,
-								 const std::string &newSkillType,
-								 char fusionCombA, char fusionCombB, char fusionCombC, 
-								 int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
-								 : Skill(newSkillType,
-								   		 fusionCombA, fusionCombB, fusionCombC,
-										 skillApplyCost, skillResearchCost, boxIndexForUpgrade)
+                                 int newDamage, float newDamageApplyTime_seconds, int newSkillLife,
+                                 float newRange,
+                                 const std::string &newSkillType,
+                                 char fusionCombA, char fusionCombB, char fusionCombC, 
+                                 int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
+                                 : Skill(newSkillType,
+                                         fusionCombA, fusionCombB, fusionCombC,
+                                         skillApplyCost, skillResearchCost, boxIndexForUpgrade)
 {
-	damage = newDamage;
-	damageApplyTime_seconds = newDamageApplyTime_seconds;
-	attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE, damageApplyTime_seconds);
-	skillLife = Framework::Timer(Framework::Timer::TT_SINGLE, newSkillLife);
-	range = newRange;
-	position = newPosition;
+    damage = newDamage;
+    damageApplyTime_seconds = newDamageApplyTime_seconds;
+    attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE, damageApplyTime_seconds);
+    skillLife = Framework::Timer(Framework::Timer::TT_SINGLE, newSkillLife);
+    range = newRange;
+    position = newPosition;
 
-	isStarted = false;
+    isStarted = false;
 
-	//skillVisibleRadius = 
-	//	Utility::Primitives::Circle(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), position, range, 90);
-	//skillVisibleRadius.Init();
-	glm::vec3 realPosition = glm::vec3(position.x + range / 2.0f, 0.0f, position.z + range / 2.0f);
-	skillAnim = PassiveAoeAnimation(realPosition, 30, 50, 0.2f, true, 0.01f, range, 
-									"../data/images/particle.png", "../data/images/aoe_target.png");
-	skillAnim.Init();
+    //skillVisibleRadius = 
+    //	Utility::Primitives::Circle(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), position, range, 90);
+    //skillVisibleRadius.Init();
+    glm::vec3 realPosition = glm::vec3(position.x + range / 2.0f, 0.0f, position.z + range / 2.0f);
+    skillAnim = PassiveAoeAnimation(realPosition, 30, 50, 0.2f, true, 0.01f, range, 
+                                    "../data/images/particle.png", "../data/images/aoe_target.png");
+    skillAnim.Init();
 }
 
 void PassiveAOESkill::Update()
 {
-	if(isStarted)
-	{
-		if(skillLife.Update() == false)
-		{
-			attackTimer.Update();
-			if(attackTimer.GetTimeSinceStart() >= damageApplyTime_seconds)
-			{
-				EventArg enemyDamage_perTime[2];
-				enemyDamage_perTime[0].argType = "what_event";
-				enemyDamage_perTime[0].argument.varType = TYPE_STRING;
-				strcpy(enemyDamage_perTime[0].argument.varString, "timeended");
-				enemyDamage_perTime[1].argType = "damage";
-				enemyDamage_perTime[1].argument.varType = TYPE_INTEGER;
-				enemyDamage_perTime[1].argument.varInteger = damage;
+    if(isStarted)
+    {
+        if(skillLife.Update() == false)
+        {
+            attackTimer.Update();
+            if(attackTimer.GetTimeSinceStart() >= damageApplyTime_seconds)
+            {
+                EventArg enemyDamage_perTime[2];
+                enemyDamage_perTime[0].argType = "what_event";
+                enemyDamage_perTime[0].argument.varType = TYPE_STRING;
+                strcpy(enemyDamage_perTime[0].argument.varString, "timeended");
+                enemyDamage_perTime[1].argType = "damage";
+                enemyDamage_perTime[1].argument.varType = TYPE_INTEGER;
+                enemyDamage_perTime[1].argument.varInteger = damage;
 
-				Event enemyDamageEvent(2, EVENT_TYPE_OTHER, enemyDamage_perTime);
-				// Make sure there aren't any duplicated events.
-				RemoveGeneratedEvent("timeended");
-				generatedEvents.push_back(enemyDamageEvent);
+                Event enemyDamageEvent(2, EVENT_TYPE_OTHER, enemyDamage_perTime);
+                // Make sure there aren't any duplicated events.
+                RemoveGeneratedEvent("timeended");
+                generatedEvents.push_back(enemyDamageEvent);
 
-				attackTimer.Reset();
-			}
-			skillAnim.Update();
-		}
-		else
-		{
-			isStarted = false;
-			skillLife.Reset();
-			skillLife.SetPause(true);
+                attackTimer.Reset();
+            }
+            skillAnim.Update();
+        }
+        else
+        {
+            isStarted = false;
+            skillLife.Reset();
+            skillLife.SetPause(true);
 
-			skillAnim.Restart();
-		}
-	}
+            skillAnim.Restart();
+        }
+    }
 }
 
 void PassiveAOESkill::UpdateTimersOnIdle()
 {
-	skillLife.Update();
-	attackTimer.Update();
+    skillLife.Update();
+    attackTimer.Update();
 }
 
 void PassiveAOESkill::Render(glutil::MatrixStack &modelMatrix,
-							 const SpriteParticleProgData &spriteParticleProgData, 
-							 const SimpleTextureProgData &simpleTextureProgData)
-							 //const SimpleProgData &progData)
+                             const SpriteParticleProgData &spriteParticleProgData, 
+                             const SimpleTextureProgData &simpleTextureProgData)
+                             //const SimpleProgData &progData)
 {
-	if(isStarted)
-	{
-		//glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    if(isStarted)
+    {
+        //glEnable(GL_BLEND);
+        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		glutil::PushStack push(modelMatrix);
-		modelMatrix.Translate(position);
+        glutil::PushStack push(modelMatrix);
+        modelMatrix.Translate(position);
 
-		skillAnim.Render(modelMatrix, spriteParticleProgData, simpleTextureProgData);
+        skillAnim.Render(modelMatrix, spriteParticleProgData, simpleTextureProgData);
 
-		//skillVisibleRadius.Draw(modelMatrix, progData);
+        //skillVisibleRadius.Draw(modelMatrix, progData);
 
-		//glDisable(GL_BLEND);
-	}
+        //glDisable(GL_BLEND);
+    }
 }
 
 void PassiveAOESkill::OnEvent(Event &_event)
 {
-	if(isResearched)
-	{
-		switch(_event.GetType())
-		{
-		case EVENT_TYPE_OTHER:
-			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
-			{
-				EventArg skillDeployedEventArgs[5];
-				skillDeployedEventArgs[0].argType = "skillRange";
-				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
-				skillDeployedEventArgs[0].argument.varFloat = range;
-				skillDeployedEventArgs[1].argType = "skillDamage";
-				skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-				skillDeployedEventArgs[1].argument.varInteger = damage;
-				skillDeployedEventArgs[2].argType = "what_event";
-				skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
-				strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-				skillDeployedEventArgs[3].argType = "skillCost";
-				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
-				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-				skillDeployedEventArgs[4].argType = "which_skill";
-				skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
-				strcpy(skillDeployedEventArgs[4].argument.varString, "passiveAoeSkill");
-				Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-				generatedEvents.push_back(skillDeployedEvent);
+    if(isResearched)
+    {
+        switch(_event.GetType())
+        {
+        case EVENT_TYPE_OTHER:
+            if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+            {
+                EventArg skillDeployedEventArgs[5];
+                skillDeployedEventArgs[0].argType = "skillRange";
+                skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+                skillDeployedEventArgs[0].argument.varFloat = range;
+                skillDeployedEventArgs[1].argType = "skillDamage";
+                skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+                skillDeployedEventArgs[1].argument.varInteger = damage;
+                skillDeployedEventArgs[2].argType = "what_event";
+                skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+                strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+                skillDeployedEventArgs[3].argType = "skillCost";
+                skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+                skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+                skillDeployedEventArgs[4].argType = "which_skill";
+                skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
+                strcpy(skillDeployedEventArgs[4].argument.varString, "passiveAoeSkill");
+                Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+                generatedEvents.push_back(skillDeployedEvent);
 
-				isStarted = true;
-				skillLife.SetPause(false);
-			}
-			break;
-		default:
-			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
-			break;
-		}
-	}
+                isStarted = true;
+                skillLife.SetPause(false);
+            }
+            break;
+        default:
+            HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+            break;
+        }
+    }
 }
 
 float PassiveAOESkill::GetRange()
 {
-	return range;
+    return range;
 }
 glm::vec3 PassiveAOESkill::GetPosition()
 {
-	return position;
+    return position;
 }
 
 void PassiveAOESkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 {
-	if(isStarted)
-	{
-		switch(paramType)
-		{
-		case PARAM_POSITION:
-			position = newParam_vec3;
-			break;
-		default:
-			HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
-			break;
-		}
-	}
+    if(isStarted)
+    {
+        switch(paramType)
+        {
+        case PARAM_POSITION:
+            position = newParam_vec3;
+            break;
+        default:
+            HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
+            break;
+        }
+    }
 }
 
 bool PassiveAOESkill::IsIntersectingObject(glm::vec3 objectPosition/*, int objectIndex*/)
 {
-	if(isStarted)
-	{
-		float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
+    if(isStarted)
+    {
+        float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
 
-		if(distanceBetweenObjectAndSkill < range)
-		{
-			////if(objectIndex != -1)
-			//{
-			//	skillAnim.SetParticleAnimPosition(objectPosition, objectIndex);
-			//}
-			return true;
-		}
+        if(distanceBetweenObjectAndSkill < range)
+        {
+            ////if(objectIndex != -1)
+            //{
+            //	skillAnim.SetParticleAnimPosition(objectPosition, objectIndex);
+            //}
+            return true;
+        }
 
-		return false;
-	}
-	else return false;
+        return false;
+    }
+    else return false;
 }
 
 void PassiveAOESkill::SetSkillAnim(glm::vec3 position, int enemyIndex)
 {
-	skillAnim.SetParticleAnimPosition(position, enemyIndex);
+    skillAnim.SetParticleAnimPosition(position, enemyIndex);
 }
 
 void PassiveAOESkill::StopAllTimers()
 {
-	attackTimer.SetPause(true);
-	skillLife.SetPause(true);
+    attackTimer.SetPause(true);
+    skillLife.SetPause(true);
 }
 void PassiveAOESkill::StartAllTimers()
 {
-	attackTimer.SetPause(false);
-	skillLife.SetPause(false);
+    attackTimer.SetPause(false);
+    skillLife.SetPause(false);
 }
 
 
 SunNovaSkill::SunNovaSkill(glm::vec3 newPosition,
-						   int newDamage, 
-						   float newRange, float newScaleRate,
-						   const std::string &skillType,
-						   char fusionCombA, char fusionCombB, char fusionCombC, 
-						   int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
-						   : Skill(skillType,
-								   fusionCombA, fusionCombB, fusionCombC,
-								   skillApplyCost, skillResearchCost, boxIndexForUpgrade)
+                           int newDamage, 
+                           float newRange, float newScaleRate,
+                           const std::string &skillType,
+                           char fusionCombA, char fusionCombB, char fusionCombC, 
+                           int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
+                           : Skill(skillType,
+                                   fusionCombA, fusionCombB, fusionCombC,
+                                   skillApplyCost, skillResearchCost, boxIndexForUpgrade)
 {
-	position = newPosition;
-	damage = newDamage;
-	range = newRange;
-	scaleRate = newScaleRate;
-	currentScale = 1.0f;
-	isStarted = false;
+    position = newPosition;
+    damage = newDamage;
+    range = newRange;
+    scaleRate = newScaleRate;
+    currentScale = 1.0f;
+    isStarted = false;
 
-	glm::vec3 animPos(0.1f, 0.0f, 0.08f);
-	sunNovaAnim = NovaAnimation(animPos, glm::vec4(0.7f, 0.3f, 0.0f, 1.0f), 0.3f, range, scaleRate + 0.01f, 360, 
-								   "../data/images/particle.png");
+    glm::vec3 animPos(0.1f, 0.0f, 0.08f);
+    sunNovaAnim = NovaAnimation(animPos, glm::vec4(0.7f, 0.3f, 0.0f, 1.0f), 0.3f, range, scaleRate + 0.01f, 360, 
+                                   "../data/images/particle.png");
 }
 
 void SunNovaSkill::Update()
 {
-	if(isStarted)
-	{
-		sunNovaAnim.Update();
-		if(sunNovaAnim.IsEnded())
-		{
-			sunNovaAnim.Restart();
-			currentScale = 1.0f;
-			isStarted = false;
-		}
-		if(currentScale <= range)
-		{
-			currentScale += scaleRate;
-		}
-	}
+    if(isStarted)
+    {
+        sunNovaAnim.Update();
+        if(sunNovaAnim.IsEnded())
+        {
+            sunNovaAnim.Restart();
+            currentScale = 1.0f;
+            isStarted = false;
+        }
+        if(currentScale <= range)
+        {
+            currentScale += scaleRate;
+        }
+    }
 }
 
 //void SunNovaSkill::Render(glutil::MatrixStack &modelMatrix, const SimpleProgData &progData)
 void SunNovaSkill::Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &progData)
 {
-	if(isStarted)
-	{
-		glutil::PushStack push(modelMatrix);
-		modelMatrix.Translate(position);
+    if(isStarted)
+    {
+        glutil::PushStack push(modelMatrix);
+        modelMatrix.Translate(position);
 
-		sunNovaAnim.Render(modelMatrix, progData);
-	}
+        sunNovaAnim.Render(modelMatrix, progData);
+    }
 }
 
 void SunNovaSkill::OnEvent(Event &_event)
 {
-	if(isResearched && !isStarted)
-	{
-		switch(_event.GetType())
-		{
-		case EVENT_TYPE_OTHER:
-			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
-			{
-				EventArg skillDeployedEventArgs[5];
-				skillDeployedEventArgs[0].argType = "skillRange";
-				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
-				skillDeployedEventArgs[0].argument.varFloat = range;
-				skillDeployedEventArgs[1].argType = "skillDamage";
-				skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-				skillDeployedEventArgs[1].argument.varInteger = damage;
-				skillDeployedEventArgs[2].argType = "what_event";
-				skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
-				strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-				skillDeployedEventArgs[3].argType = "skillCost";
-				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
-				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-				skillDeployedEventArgs[4].argType = "which_skill";
-				skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
-				strcpy(skillDeployedEventArgs[4].argument.varString, "sunNovaSkill");
-				Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-				generatedEvents.push_back(skillDeployedEvent);
+    if(isResearched && !isStarted)
+    {
+        switch(_event.GetType())
+        {
+        case EVENT_TYPE_OTHER:
+            if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+            {
+                EventArg skillDeployedEventArgs[5];
+                skillDeployedEventArgs[0].argType = "skillRange";
+                skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+                skillDeployedEventArgs[0].argument.varFloat = range;
+                skillDeployedEventArgs[1].argType = "skillDamage";
+                skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+                skillDeployedEventArgs[1].argument.varInteger = damage;
+                skillDeployedEventArgs[2].argType = "what_event";
+                skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+                strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+                skillDeployedEventArgs[3].argType = "skillCost";
+                skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+                skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+                skillDeployedEventArgs[4].argType = "which_skill";
+                skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
+                strcpy(skillDeployedEventArgs[4].argument.varString, "sunNovaSkill");
+                Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+                generatedEvents.push_back(skillDeployedEvent);
 
-				isStarted = true;
-			}
-			break;
-		default:
-			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
-			break;
-		}
-	}
+                isStarted = true;
+            }
+            break;
+        default:
+            HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+            break;
+        }
+    }
 }
 
 float SunNovaSkill::GetRange()
 {
-	return range;
+    return range;
 }
 glm::vec3 SunNovaSkill::GetPosition()
 {
-	return position;
+    return position;
 }
 
 bool SunNovaSkill::IsIntersectingObject(glm::vec3 objectPosition)
 {
-	if(isStarted)
-	{
-		float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
+    if(isStarted)
+    {
+        float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
 
-		if(distanceBetweenObjectAndSkill < currentScale &&
-		   distanceBetweenObjectAndSkill >= currentScale - 0.1f)
-		{
-			return true;
-		}
+        if(distanceBetweenObjectAndSkill < currentScale &&
+           distanceBetweenObjectAndSkill >= currentScale - 0.1f)
+        {
+            return true;
+        }
 
-		return false;
-	}
-	else return false;
+        return false;
+    }
+    else return false;
 }
 
 
 SatelliteChainingSkill::SatelliteChainingSkill(glm::vec3 newPosition,
-											   int newDamage, float newRange, 
-											   glm::vec3 newProjectileVelocity, glm::vec4 newProjectileColor,
-											   float newProjectileRadius,
-											   const std::string &meshFileName, 
-											   const std::string &skillType,
-											   char fusionCombA, char fusionCombB, char fusionCombC,
-											   int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
-											   : Skill(skillType,
-													   fusionCombA, fusionCombB, fusionCombC,
-													   skillApplyCost, skillResearchCost, boxIndexForUpgrade)
+                                               int newDamage, float newRange, 
+                                               glm::vec3 newProjectileVelocity, glm::vec4 newProjectileColor,
+                                               float newProjectileRadius,
+                                               const std::string &meshFileName, 
+                                               const std::string &skillType,
+                                               char fusionCombA, char fusionCombB, char fusionCombC,
+                                               int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
+                                               : Skill(skillType,
+                                                       fusionCombA, fusionCombB, fusionCombC,
+                                                       skillApplyCost, skillResearchCost, boxIndexForUpgrade)
 {
-	currentPosition = newPosition;
-	startingPosition = newPosition;
-	damage = newDamage;
-	range = newRange;
-	projectileVelocity = newProjectileVelocity;
-	projectileColor = newProjectileColor;
-	projectileRadius = newProjectileRadius;
-	materialBlockSize = 0;
-	materialUniformBuffer = 0;
-	isStarted = false;
+    currentPosition = newPosition;
+    startingPosition = newPosition;
+    damage = newDamage;
+    range = newRange;
+    projectileVelocity = newProjectileVelocity;
+    projectileColor = newProjectileColor;
+    projectileRadius = newProjectileRadius;
+    materialBlockSize = 0;
+    materialUniformBuffer = 0;
+    isStarted = false;
 
-	// TODO: Change mesh
-	// TODO: Handle errors
-	try
-	{
-		projectileMesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFileName));
-	}
-	catch(std::exception &except)
-	{
-		printf("%s\n", except.what());
-		throw;
-	}
+    // TODO: Change mesh
+    // TODO: Handle errors
+    try
+    {
+        projectileMesh = std::unique_ptr<Framework::Mesh>(new Framework::Mesh(meshFileName));
+    }
+    catch(std::exception &except)
+    {
+        printf("%s\n", except.what());
+        throw;
+    }
 
-	GenerateUniformBuffers(materialBlockSize, projectileColor, materialUniformBuffer);
+    GenerateUniformBuffers(materialBlockSize, projectileColor, materialUniformBuffer);
 }
 
 void SatelliteChainingSkill::Update()
 {
-	if(isStarted)
-	{
-		if(glm::length(currentPosition - startingPosition) <= range)
-		{
-			currentPosition += projectileVelocity;
-		}
-		else
-		{
-			currentPosition = startingPosition;
-			isStarted = false;
-		}
-	}
+    if(isStarted)
+    {
+        if(glm::length(currentPosition - startingPosition) <= range)
+        {
+            currentPosition += projectileVelocity;
+        }
+        else
+        {
+            currentPosition = startingPosition;
+            isStarted = false;
+        }
+    }
 }
 
 void SatelliteChainingSkill::Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData, 
-									GLuint materialBlockIndex)
+                                    GLuint materialBlockIndex)
 {
-	if(isStarted)
-	{
-		glutil::PushStack push(modelMatrix);
-		modelMatrix.Translate(currentPosition);
-		modelMatrix.Scale(projectileRadius); 
+    if(isStarted)
+    {
+        glutil::PushStack push(modelMatrix);
+        modelMatrix.Translate(currentPosition);
+        modelMatrix.Scale(projectileRadius); 
 
-		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
-						  0, sizeof(MaterialBlock));
+        glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer,
+                          0, sizeof(MaterialBlock));
 
-		glm::mat3 normMatrix(modelMatrix.Top());
-		normMatrix = glm::transpose(glm::inverse(normMatrix));
+        glm::mat3 normMatrix(modelMatrix.Top());
+        normMatrix = glm::transpose(glm::inverse(normMatrix));
 
-		glUseProgram(litData.theProgram);
-		glUniformMatrix4fv(litData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-		glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+        glUseProgram(litData.theProgram);
+        glUniformMatrix4fv(litData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+        glUniformMatrix3fv(litData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
 
 
-		projectileMesh->Render("lit");
+        projectileMesh->Render("lit");
 
-		glUseProgram(0);
-		glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
-	}
+        glUseProgram(0);
+        glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
+    }
 }
 
 void SatelliteChainingSkill::OnEvent(Event &_event)
 {
-	switch(_event.GetType())
-	{
-	case EVENT_TYPE_OTHER:
-		// ???: Should the skill be activated on fusion?
-		if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
-		{
-			EventArg skillDeployedEventArgs[5];
-			skillDeployedEventArgs[0].argType = "skillRange";
-			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
-			skillDeployedEventArgs[0].argument.varFloat = range;
-			skillDeployedEventArgs[1].argType = "skillDamage";
-			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-			skillDeployedEventArgs[1].argument.varInteger = damage;
-			skillDeployedEventArgs[2].argType = "what_event";
-			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
-			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-			skillDeployedEventArgs[3].argType = "skillCost";
-			skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
-			skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-			skillDeployedEventArgs[4].argType = "which_skill";
-			skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
-			strcpy(skillDeployedEventArgs[4].argument.varString, "aoeSkill");
-			Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-			generatedEvents.push_back(skillDeployedEvent);
+    switch(_event.GetType())
+    {
+    case EVENT_TYPE_OTHER:
+        // ???: Should the skill be activated on fusion?
+        if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+        {
+            EventArg skillDeployedEventArgs[5];
+            skillDeployedEventArgs[0].argType = "skillRange";
+            skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+            skillDeployedEventArgs[0].argument.varFloat = range;
+            skillDeployedEventArgs[1].argType = "skillDamage";
+            skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+            skillDeployedEventArgs[1].argument.varInteger = damage;
+            skillDeployedEventArgs[2].argType = "what_event";
+            skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+            strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+            skillDeployedEventArgs[3].argType = "skillCost";
+            skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+            skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+            skillDeployedEventArgs[4].argType = "which_skill";
+            skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
+            strcpy(skillDeployedEventArgs[4].argument.varString, "aoeSkill");
+            Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+            generatedEvents.push_back(skillDeployedEvent);
 
-			isStarted = true;
-		}
-		if(_event.GetArgument("isIntersected").varBool == true)
-		{
-			EventArg skillDeployedEventArgs[3];
-			skillDeployedEventArgs[0].argType = "skillRange";
-			skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
-			skillDeployedEventArgs[0].argument.varFloat = range;
-			skillDeployedEventArgs[1].argType = "skillDamage";
-			skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-			skillDeployedEventArgs[1].argument.varInteger = damage;
-			skillDeployedEventArgs[2].argType = "what_event";
-			skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
-			strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-			Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-			generatedEvents.push_back(skillDeployedEvent);
+            isStarted = true;
+        }
+        if(_event.GetArgument("isIntersected").varBool == true)
+        {
+            EventArg skillDeployedEventArgs[3];
+            skillDeployedEventArgs[0].argType = "skillRange";
+            skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+            skillDeployedEventArgs[0].argument.varFloat = range;
+            skillDeployedEventArgs[1].argType = "skillDamage";
+            skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+            skillDeployedEventArgs[1].argument.varInteger = damage;
+            skillDeployedEventArgs[2].argType = "what_event";
+            skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+            strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+            Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+            generatedEvents.push_back(skillDeployedEvent);
 
-			isStarted = true;
-		}
-		break;
-	default:
-		HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
-		break;
-	}
+            isStarted = true;
+        }
+        break;
+    default:
+        HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+        break;
+    }
 }
 
 float SatelliteChainingSkill::GetRange()
 {
-	return range;
+    return range;
 }
 glm::vec3 SatelliteChainingSkill::GetPosition()
 {
-	return currentPosition;
+    return currentPosition;
 }
 
 void SatelliteChainingSkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 {
-	if(isStarted)
-	{
-		switch(paramType)
-		{
-		case PARAM_POSITION:
-			if(!isStarted)
-			{
-				startingPosition = newParam_vec3;
-				currentPosition = newParam_vec3;
-			}
-			break;
-		default:
-			HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
-			break;
-		}
-	}
+    if(isStarted)
+    {
+        switch(paramType)
+        {
+        case PARAM_POSITION:
+            if(!isStarted)
+            {
+                startingPosition = newParam_vec3;
+                currentPosition = newParam_vec3;
+            }
+            break;
+        default:
+            HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
+            break;
+        }
+    }
 }
 
 bool SatelliteChainingSkill::IsIntersectingObject(glm::vec3 objectPosition)
 {
-	if(isStarted)
-	{
-		float distanceBetweenObjectAndSkill = glm::length(currentPosition - objectPosition);
+    if(isStarted)
+    {
+        float distanceBetweenObjectAndSkill = glm::length(currentPosition - objectPosition);
 
-		if(distanceBetweenObjectAndSkill < projectileRadius + 1.0f) // 1.0f = the object's radius. Makes the intersection easier.
-		{
-			return true;
-		}
+        if(distanceBetweenObjectAndSkill < projectileRadius + 1.0f) // 1.0f = the object's radius. Makes the intersection easier.
+        {
+            return true;
+        }
 
-		return false;
-	}
-	else return false;
+        return false;
+    }
+    else return false;
 }
 
 
 
 SatelliteChainingNova::SatelliteChainingNova(glm::vec3 newPosition, 
-											 int newDamage, 
-											 float newRange, float newScaleRate,
-											 const std::string &skillType,
-											 char fusionCombA, char fusionCombB, char fusionCombC,
-											 int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
-											 : Skill(skillType,
-											   	     fusionCombA, fusionCombB, fusionCombC,
-													 skillApplyCost, skillResearchCost, boxIndexForUpgrade)
+                                             int newDamage, 
+                                             float newRange, float newScaleRate,
+                                             const std::string &skillType,
+                                             char fusionCombA, char fusionCombB, char fusionCombC,
+                                             int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
+                                             : Skill(skillType,
+                                                     fusionCombA, fusionCombB, fusionCombC,
+                                                     skillApplyCost, skillResearchCost, boxIndexForUpgrade)
 {
-	position = newPosition;
-	damage = newDamage;
-	range = newRange;
-	scaleRate = newScaleRate;
-	currentScale = 1.0f;
-	isStarted = false;
-	generatedEvents.resize(0);
+    position = newPosition;
+    damage = newDamage;
+    range = newRange;
+    scaleRate = newScaleRate;
+    currentScale = 1.0f;
+    isStarted = false;
+    generatedEvents.resize(0);
 
-	satNovaAnim = NovaAnimation(position, glm::vec4(0.0f, 0.7f, 0.3f, 1.0f), 0.3f, range, scaleRate, 360,
-							    "../data/images/particle.png");
+    satNovaAnim = NovaAnimation(position, glm::vec4(0.0f, 0.7f, 0.3f, 1.0f), 0.3f, range, scaleRate, 360,
+                                "../data/images/particle.png");
 }
 
 void SatelliteChainingNova::Update()
 {
-	if(isStarted)
-	{
-		satNovaAnim.Update();
-		if(satNovaAnim.IsEnded())
-		{
-			satNovaAnim.Restart();
-			currentScale = 1.0f;
-			isStarted = false;
-		}
-		if(currentScale <= range)
-		{
-			currentScale += scaleRate;
-		}
-	}
+    if(isStarted)
+    {
+        satNovaAnim.Update();
+        if(satNovaAnim.IsEnded())
+        {
+            satNovaAnim.Restart();
+            currentScale = 1.0f;
+            isStarted = false;
+        }
+        if(currentScale <= range)
+        {
+            currentScale += scaleRate;
+        }
+    }
 }
 
 void SatelliteChainingNova::Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &progData)
 {
-	if(isStarted)
-	{
-		glutil::PushStack push(modelMatrix);
-		modelMatrix.Translate(position);
+    if(isStarted)
+    {
+        glutil::PushStack push(modelMatrix);
+        modelMatrix.Translate(position);
 
-		satNovaAnim.Render(modelMatrix, progData);
-	}
+        satNovaAnim.Render(modelMatrix, progData);
+    }
 }
 
 void SatelliteChainingNova::OnEvent(Event &_event)
 {
-	if(isResearched)
-	{
-		switch(_event.GetType())
-		{
-		case EVENT_TYPE_OTHER:
-			// ???: Should the skill be activated on fusion?
-			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
-			{
-				EventArg skillDeployedEventArgs[5];
-				skillDeployedEventArgs[0].argType = "skillRange";
-				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
-				skillDeployedEventArgs[0].argument.varFloat = range;
-				skillDeployedEventArgs[1].argType = "skillDamage";
-				skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-				skillDeployedEventArgs[1].argument.varInteger = damage;
-				skillDeployedEventArgs[2].argType = "what_event";
-				skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
-				strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-				skillDeployedEventArgs[3].argType = "skillCost";
-				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
-				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-				skillDeployedEventArgs[4].argType = "which_skill";
-				skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
-				strcpy(skillDeployedEventArgs[4].argument.varString, "satFrostNova");
-				Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-				generatedEvents.push_back(skillDeployedEvent);
+    if(isResearched)
+    {
+        switch(_event.GetType())
+        {
+        case EVENT_TYPE_OTHER:
+            // ???: Should the skill be activated on fusion?
+            if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+            {
+                EventArg skillDeployedEventArgs[5];
+                skillDeployedEventArgs[0].argType = "skillRange";
+                skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+                skillDeployedEventArgs[0].argument.varFloat = range;
+                skillDeployedEventArgs[1].argType = "skillDamage";
+                skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+                skillDeployedEventArgs[1].argument.varInteger = damage;
+                skillDeployedEventArgs[2].argType = "what_event";
+                skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+                strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+                skillDeployedEventArgs[3].argType = "skillCost";
+                skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+                skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+                skillDeployedEventArgs[4].argType = "which_skill";
+                skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
+                strcpy(skillDeployedEventArgs[4].argument.varString, "satFrostNova");
+                Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+                generatedEvents.push_back(skillDeployedEvent);
 
-				isStarted = true;
-			}
-			if(_event.GetArgument("isIntersected").varBool == true)
-			{
-				EventArg skillDeployedEventArgs[3];
-				skillDeployedEventArgs[0].argType = "skillRange";
-				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
-				skillDeployedEventArgs[0].argument.varFloat = range;
-				skillDeployedEventArgs[1].argType = "skillDamage";
-				skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-				skillDeployedEventArgs[1].argument.varInteger = damage;
-				skillDeployedEventArgs[2].argType = "what_event";
-				skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
-				strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-				Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-				generatedEvents.push_back(skillDeployedEvent);
+                isStarted = true;
+            }
+            if(_event.GetArgument("isIntersected").varBool == true)
+            {
+                EventArg skillDeployedEventArgs[3];
+                skillDeployedEventArgs[0].argType = "skillRange";
+                skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+                skillDeployedEventArgs[0].argument.varFloat = range;
+                skillDeployedEventArgs[1].argType = "skillDamage";
+                skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+                skillDeployedEventArgs[1].argument.varInteger = damage;
+                skillDeployedEventArgs[2].argType = "what_event";
+                skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+                strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+                Event skillDeployedEvent = Event(3, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+                generatedEvents.push_back(skillDeployedEvent);
 
-				isStarted = true;
-			}
-			break;
-		default:
-			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
-			break;
-		}
-	}
+                isStarted = true;
+            }
+            break;
+        default:
+            HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+            break;
+        }
+    }
 }
 
 float SatelliteChainingNova::GetRange()
 {
-	return range;
+    return range;
 }
 glm::vec3 SatelliteChainingNova::GetPosition()
 {
-	return position;
+    return position;
 }
 
 void SatelliteChainingNova::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 {
-	if(isStarted)
-	{
-		switch(paramType)
-		{
-		case PARAM_POSITION:
-			position = newParam_vec3;
-			break;
-		default:
-			HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
-			break;
-		};
-	}
+    if(isStarted)
+    {
+        switch(paramType)
+        {
+        case PARAM_POSITION:
+            position = newParam_vec3;
+            break;
+        default:
+            HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
+            break;
+        };
+    }
 }
 
 bool SatelliteChainingNova::IsIntersectingObject(glm::vec3 objectPosition)
 {
-	if(isStarted)
-	{
-		float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
+    if(isStarted)
+    {
+        float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
 
-		if(distanceBetweenObjectAndSkill < currentScale &&
-		   distanceBetweenObjectAndSkill >= currentScale - 0.1f)
-		{
-			return true;
-		}
+        if(distanceBetweenObjectAndSkill < currentScale &&
+           distanceBetweenObjectAndSkill >= currentScale - 0.1f)
+        {
+            return true;
+        }
 
-		return false;
-	}
-	else return false;
+        return false;
+    }
+    else return false;
 }
 
 
 FrostNovaSkill::FrostNovaSkill(int newDamage, float newStunTime_seconds,
-							   float newRange, float newScaleRate,
-							   glm::vec3 newPosition,
-							   const std::string &skillType,
-							   char fusionCombA, char fusionCombB, char fusionCombC,
-							   int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
-							   : Skill(skillType,
-									   fusionCombA, fusionCombB, fusionCombC,
-									   skillApplyCost, skillResearchCost, boxIndexForUpgrade)
+                               float newRange, float newScaleRate,
+                               glm::vec3 newPosition,
+                               const std::string &skillType,
+                               char fusionCombA, char fusionCombB, char fusionCombC,
+                               int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
+                               : Skill(skillType,
+                                       fusionCombA, fusionCombB, fusionCombC,
+                                       skillApplyCost, skillResearchCost, boxIndexForUpgrade)
 {
-	damage = newDamage;
-	stunTime_seconds = newStunTime_seconds;
-	stunTimer = Framework::Timer(Framework::Timer::TT_INFINITE, stunTime_seconds);
-	stunTimer.SetPause(true);
-	range = newRange;
-	scaleRate = newScaleRate;
-	position = newPosition;
-	currentScale = 1.0f;
-	isStarted = false;
+    damage = newDamage;
+    stunTime_seconds = newStunTime_seconds;
+    stunTimer = Framework::Timer(Framework::Timer::TT_INFINITE, stunTime_seconds);
+    stunTimer.SetPause(true);
+    range = newRange;
+    scaleRate = newScaleRate;
+    position = newPosition;
+    currentScale = 1.0f;
+    isStarted = false;
 
-	skillAnimation = FrostNovaAnimation(position, 0.3f, range, scaleRate, 12, "../data/images/aoe_target.png");
+    skillAnimation = FrostNovaAnimation(position, 0.3f, range, scaleRate, 12, "../data/images/aoe_target.png");
 }
 
 void FrostNovaSkill::Update()
 {
-	stunTimer.Update();
-	if(stunTimer.GetTimeSinceStart() >= stunTime_seconds && stunTimer.IsPaused() == false)
-	{
-		EventArg enemyStunFinishedEventArgs[1];
-		enemyStunFinishedEventArgs[0].argType = "what_event";
-		enemyStunFinishedEventArgs[0].argument.varType = TYPE_STRING;
-		strcpy(enemyStunFinishedEventArgs[0].argument.varString, "stuntimeended");
+    stunTimer.Update();
+    if(stunTimer.GetTimeSinceStart() >= stunTime_seconds && stunTimer.IsPaused() == false)
+    {
+        EventArg enemyStunFinishedEventArgs[1];
+        enemyStunFinishedEventArgs[0].argType = "what_event";
+        enemyStunFinishedEventArgs[0].argument.varType = TYPE_STRING;
+        strcpy(enemyStunFinishedEventArgs[0].argument.varString, "stuntimeended");
 
-		Event enemyStunFinishedEvent(1, EVENT_TYPE_OTHER, enemyStunFinishedEventArgs);
-		RemoveGeneratedEvent("stuntimeended");
-		generatedEvents.push_back(enemyStunFinishedEvent);
+        Event enemyStunFinishedEvent(1, EVENT_TYPE_OTHER, enemyStunFinishedEventArgs);
+        RemoveGeneratedEvent("stuntimeended");
+        generatedEvents.push_back(enemyStunFinishedEvent);
 
-		stunTimer.SetPause(true);
-	}
+        stunTimer.SetPause(true);
+    }
 
-	if(isStarted)
-	{
-		skillAnimation.Update();
-		if(skillAnimation.IsEnded())
-		{
-			skillAnimation.Restart();
-			currentScale = 1.0f;
-			isStarted = false;
-		}
-		if(currentScale <= range)
-		{
-			currentScale += scaleRate;
-		}
-	}
+    if(isStarted)
+    {
+        skillAnimation.Update();
+        if(skillAnimation.IsEnded())
+        {
+            skillAnimation.Restart();
+            currentScale = 1.0f;
+            isStarted = false;
+        }
+        if(currentScale <= range)
+        {
+            currentScale += scaleRate;
+        }
+    }
 }
 
 void FrostNovaSkill::Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteProgData)
 {
-	if(isStarted)
-	{
-		glutil::PushStack push(modelMatrix);
-		modelMatrix.Translate(position);
+    if(isStarted)
+    {
+        glutil::PushStack push(modelMatrix);
+        modelMatrix.Translate(position);
 
-		skillAnimation.Render(modelMatrix, spriteProgData);
-	}
+        skillAnimation.Render(modelMatrix, spriteProgData);
+    }
 }
 
 void FrostNovaSkill::OnEvent(Event &_event)
 {
-	if(isResearched)
-	{
-		switch(_event.GetType())
-		{
-		case EVENT_TYPE_OTHER:
-			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0 && !isStarted)
-			{
-				EventArg skillDeployedEventArgs[5];
-				skillDeployedEventArgs[0].argType = "skillRange";
-				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
-				skillDeployedEventArgs[0].argument.varFloat = range;
-				skillDeployedEventArgs[1].argType = "skillDamage";
-				skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-				skillDeployedEventArgs[1].argument.varInteger = damage;
-				skillDeployedEventArgs[2].argType = "what_event";
-				skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
-				strcpy(skillDeployedEventArgs[2].argument.varString, "stunskilldeployed");
-				skillDeployedEventArgs[3].argType = "skillCost";
-				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
-				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-				skillDeployedEventArgs[4].argType = "which_skill";
-				skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
-				strcpy(skillDeployedEventArgs[4].argument.varString, "satFrostNova");
-				Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-				generatedEvents.push_back(skillDeployedEvent);
+    if(isResearched)
+    {
+        switch(_event.GetType())
+        {
+        case EVENT_TYPE_OTHER:
+            if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0 && !isStarted)
+            {
+                EventArg skillDeployedEventArgs[5];
+                skillDeployedEventArgs[0].argType = "skillRange";
+                skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+                skillDeployedEventArgs[0].argument.varFloat = range;
+                skillDeployedEventArgs[1].argType = "skillDamage";
+                skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+                skillDeployedEventArgs[1].argument.varInteger = damage;
+                skillDeployedEventArgs[2].argType = "what_event";
+                skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+                strcpy(skillDeployedEventArgs[2].argument.varString, "stunskilldeployed");
+                skillDeployedEventArgs[3].argType = "skillCost";
+                skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+                skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+                skillDeployedEventArgs[4].argType = "which_skill";
+                skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
+                strcpy(skillDeployedEventArgs[4].argument.varString, "satFrostNova");
+                Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+                generatedEvents.push_back(skillDeployedEvent);
 
-				isStarted = true;
-				stunTimer.SetPause(false);
-			}
-			break;
-		default:
-			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
-			break;
-		}
-	}
+                isStarted = true;
+                stunTimer.SetPause(false);
+            }
+            break;
+        default:
+            HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+            break;
+        }
+    }
 }
 
 float FrostNovaSkill::GetRange()
 {
-	return range;
+    return range;
 }
 glm::vec3 FrostNovaSkill::GetPosition()
 {
-	return position;
+    return position;
 }
 
 void FrostNovaSkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 {
-	if(isStarted)
-	{
-	switch(paramType)
-	{
-		case PARAM_POSITION:
-			position = newParam_vec3;
-			break;
-		default:
-			HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
-			break;
-		}
-	}
+    if(isStarted)
+    {
+    switch(paramType)
+    {
+        case PARAM_POSITION:
+            position = newParam_vec3;
+            break;
+        default:
+            HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
+            break;
+        }
+    }
 }
 
 bool FrostNovaSkill::IsIntersectingObject(glm::vec3 objectPosition)
 {
-	if(isStarted)
-	{
-		float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
+    if(isStarted)
+    {
+        float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
 
-		if(distanceBetweenObjectAndSkill < currentScale)
-		{
-			stunTimer.SetPause(false);
-			stunTimer.Reset();			
+        if(distanceBetweenObjectAndSkill < currentScale)
+        {
+            stunTimer.SetPause(false);
+            stunTimer.Reset();			
 
-			return true;
-		}
+            return true;
+        }
 
-		return false;
-	}
-	else return false;
+        return false;
+    }
+    else return false;
 }
 
 
 ShieldSkill::ShieldSkill(glm::vec3 newPosition, 
-						 int newDefensePoints, float newRange, 
-						 const std::string &skillType, 
-						 char fusionCombA, char fusionCombB, char fusionCombC,
-						 int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
-						 : Skill(skillType,
-								 fusionCombA, fusionCombB, fusionCombC,
-								 skillApplyCost, skillResearchCost, boxIndexForUpgrade)
+                         int newDefensePoints, float newRange, 
+                         const std::string &skillType, 
+                         char fusionCombA, char fusionCombB, char fusionCombC,
+                         int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
+                         : Skill(skillType,
+                                 fusionCombA, fusionCombB, fusionCombC,
+                                 skillApplyCost, skillResearchCost, boxIndexForUpgrade)
 {
-	position = newPosition;
-	defensePoints = newDefensePoints;
-	startingDefensePoints = defensePoints;
-	range = newRange;
-	isStarted = false;
+    position = newPosition;
+    defensePoints = newDefensePoints;
+    startingDefensePoints = defensePoints;
+    range = newRange;
+    isStarted = false;
 
-	std::shared_ptr<OrbitingAnimationBody> bodyOne =
-		std::shared_ptr<OrbitingAnimationBody>(new OrbitingAnimationBody(position, range, 1.0f, "../data/mesh-files/UnitSphere.xml"));
-	std::shared_ptr<OrbitingAnimationBody> bodyTwo =
-		std::shared_ptr<OrbitingAnimationBody>(new OrbitingAnimationBody(position, range - 0.2f, 2.5f, "../data/mesh-files/UnitSphere.xml"));
-	
-	skillAnimation.AddAnimationBody(bodyTwo);
-	skillAnimation.AddAnimationBody(bodyOne);
+    std::shared_ptr<OrbitingAnimationBody> bodyOne =
+        std::shared_ptr<OrbitingAnimationBody>(new OrbitingAnimationBody(position, range, 1.0f, "../data/mesh-files/UnitSphere.xml"));
+    std::shared_ptr<OrbitingAnimationBody> bodyTwo =
+        std::shared_ptr<OrbitingAnimationBody>(new OrbitingAnimationBody(position, range - 0.2f, 2.5f, "../data/mesh-files/UnitSphere.xml"));
+    
+    skillAnimation.AddAnimationBody(bodyTwo);
+    skillAnimation.AddAnimationBody(bodyOne);
 }
 
 void ShieldSkill::Update()
 {
-	if(isStarted)
-	{
-		if(defensePoints == 0)
-		{
-			isStarted = false;
-			defensePoints = startingDefensePoints;
-		}
+    if(isStarted)
+    {
+        if(defensePoints == 0)
+        {
+            isStarted = false;
+            defensePoints = startingDefensePoints;
+        }
 
-		skillAnimation.Update();
-	}
+        skillAnimation.Update();
+    }
 }
 
 void ShieldSkill::Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData,
-						 GLuint materialBlockIndex)
+                         GLuint materialBlockIndex)
 {
-	if(isStarted)
-	{
-		glutil::PushStack push(modelMatrix);
-		modelMatrix.Translate(position);
+    if(isStarted)
+    {
+        glutil::PushStack push(modelMatrix);
+        modelMatrix.Translate(position);
 
-		skillAnimation.Render(modelMatrix, materialBlockIndex, litData);
-	}
+        skillAnimation.Render(modelMatrix, materialBlockIndex, litData);
+    }
 }
 
 void ShieldSkill::OnEvent(Event &_event)
 {
-	if(isResearched)
-	{
-		switch(_event.GetType())
-		{
-		case EVENT_TYPE_ATTACKED:
-			defensePoints--;
-			break;
-		case EVENT_TYPE_OTHER:
-			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
-			{
-				EventArg skillDeployedEventArgs[2];
-				skillDeployedEventArgs[0].argType = "what_event";
-				skillDeployedEventArgs[0].argument.varType = TYPE_STRING;
-				strcpy(skillDeployedEventArgs[0].argument.varString, "shieldskilldeployed");
-				skillDeployedEventArgs[1].argType = "skillCost";
-				skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-				skillDeployedEventArgs[1].argument.varInteger = skillApplyCost;
-				Event skillDeployedEvent = Event(2, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-				generatedEvents.push_back(skillDeployedEvent);
+    if(isResearched)
+    {
+        switch(_event.GetType())
+        {
+        case EVENT_TYPE_ATTACKED:
+            defensePoints--;
+            break;
+        case EVENT_TYPE_OTHER:
+            if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+            {
+                EventArg skillDeployedEventArgs[2];
+                skillDeployedEventArgs[0].argType = "what_event";
+                skillDeployedEventArgs[0].argument.varType = TYPE_STRING;
+                strcpy(skillDeployedEventArgs[0].argument.varString, "shieldskilldeployed");
+                skillDeployedEventArgs[1].argType = "skillCost";
+                skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+                skillDeployedEventArgs[1].argument.varInteger = skillApplyCost;
+                Event skillDeployedEvent = Event(2, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+                generatedEvents.push_back(skillDeployedEvent);
 
-				isStarted = true;
-			}
-			break;
-		default:
-			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
-			break;
-		}
-	}
+                isStarted = true;
+            }
+            break;
+        default:
+            HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+            break;
+        }
+    }
 }
 
 float ShieldSkill::GetRange()
 {
-	return range;
+    return range;
 }
 glm::vec3 ShieldSkill::GetPosition()
 {
-	return position;
+    return position;
 }
 
 void ShieldSkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 {
-	if(isStarted)
-	{
-		switch(paramType)
-		{
-		case PARAM_POSITION:
-			position = newParam_vec3;
-			break;
-		default:
-			HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
-			break;
-		}
-	}
+    if(isStarted)
+    {
+        switch(paramType)
+        {
+        case PARAM_POSITION:
+            position = newParam_vec3;
+            break;
+        default:
+            HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
+            break;
+        }
+    }
 }
 
 bool ShieldSkill::IsIntersectingObject(glm::vec3 objectPosition)
 {
-	if(isStarted)
-	{
-		float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
+    if(isStarted)
+    {
+        float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
 
-		if(distanceBetweenObjectAndSkill < range)
-		{
-			return true;
-		}
+        if(distanceBetweenObjectAndSkill < range)
+        {
+            return true;
+        }
 
-		return false;
-	}
-	else return false;
+        return false;
+    }
+    else return false;
 }
 
 
 BurnSkill::BurnSkill(glm::vec3 newPosition, 
-					 int newDamage, float newDamageApplyTime_seconds, float newDuration_seconds,
-					 float newRange,
-					 const std::string &skillType,
-					 char fusionCombA, char fusionCombB, char fusionCombC,
-					 int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
-					 : Skill(skillType,
-						 	 fusionCombA, fusionCombB, fusionCombC,
-							 skillApplyCost, skillResearchCost, boxIndexForUpgrade)
+                     int newDamage, float newDamageApplyTime_seconds, float newDuration_seconds,
+                     float newRange,
+                     const std::string &skillType,
+                     char fusionCombA, char fusionCombB, char fusionCombC,
+                     int skillApplyCost, int skillResearchCost, int boxIndexForUpgrade)
+                     : Skill(skillType,
+                             fusionCombA, fusionCombB, fusionCombC,
+                             skillApplyCost, skillResearchCost, boxIndexForUpgrade)
 {
-	position = newPosition;
-	damage = newDamage;
-	damageApplyTime_seconds = newDamageApplyTime_seconds;
-	damageApplyTimeDuration_seconds = damageApplyTime_seconds;
-	duration_seconds = newDuration_seconds;
-	range = newRange;
-	isStarted = false;
-	isDeployed = false;
+    position = newPosition;
+    damage = newDamage;
+    damageApplyTime_seconds = newDamageApplyTime_seconds;
+    damageApplyTimeDuration_seconds = damageApplyTime_seconds;
+    duration_seconds = newDuration_seconds;
+    range = newRange;
+    isStarted = false;
+    isDeployed = false;
 
-	attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE);
-	attackTimer.SetPause(true);
+    attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE);
+    attackTimer.SetPause(true);
 
-	skillRadius = Utility::Primitives::Circle(glm::vec4(0.4f, 0.9f, 0.1f, 0.5f), position, range, 90);
-	skillRadius.Init();
+    skillRadius = Utility::Primitives::Circle(glm::vec4(0.4f, 0.9f, 0.1f, 0.5f), position, range, 90);
+    skillRadius.Init();
 
-	burnAnim = ParticleAnimation(position, 300, 30, 0.4f, true, 0.1f, "../data/images/particle.png");
+    burnAnim = ParticleAnimation(position, 300, 30, 0.4f, true, 0.1f, "../data/images/particle.png");
 }
 
 void BurnSkill::Update()
 {
-	if(isStarted)
-	{
-		attackTimer.Update();
-		if(attackTimer.GetTimeSinceStart() > duration_seconds)
-		{
-			attackTimer.Reset();
-			attackTimer.SetPause(true);
-			isStarted = false;
-			isDeployed = false;
-		}
-		if(attackTimer.GetTimeSinceStart() > damageApplyTime_seconds)
-		{
-			EventArg enemyDamage_perTime[2];
-			enemyDamage_perTime[0].argType = "what_event";
-			enemyDamage_perTime[0].argument.varType = TYPE_STRING;
-			strcpy(enemyDamage_perTime[0].argument.varString, "timeended");
-			enemyDamage_perTime[1].argType = "damage";
-			enemyDamage_perTime[1].argument.varType = TYPE_INTEGER;
-			enemyDamage_perTime[1].argument.varInteger = damage;
+    if(isStarted)
+    {
+        attackTimer.Update();
+        if(attackTimer.GetTimeSinceStart() > duration_seconds)
+        {
+            attackTimer.Reset();
+            attackTimer.SetPause(true);
+            isStarted = false;
+            isDeployed = false;
+        }
+        if(attackTimer.GetTimeSinceStart() > damageApplyTime_seconds)
+        {
+            EventArg enemyDamage_perTime[2];
+            enemyDamage_perTime[0].argType = "what_event";
+            enemyDamage_perTime[0].argument.varType = TYPE_STRING;
+            strcpy(enemyDamage_perTime[0].argument.varString, "timeended");
+            enemyDamage_perTime[1].argType = "damage";
+            enemyDamage_perTime[1].argument.varType = TYPE_INTEGER;
+            enemyDamage_perTime[1].argument.varInteger = damage;
 
-			Event enemyDamageEvent(2, EVENT_TYPE_OTHER, enemyDamage_perTime);
-			// Make sure there aren't any duplicated events.
-			RemoveGeneratedEvent("timeended");
-			generatedEvents.push_back(enemyDamageEvent);
+            Event enemyDamageEvent(2, EVENT_TYPE_OTHER, enemyDamage_perTime);
+            // Make sure there aren't any duplicated events.
+            RemoveGeneratedEvent("timeended");
+            generatedEvents.push_back(enemyDamageEvent);
 
-			damageApplyTime_seconds += damageApplyTimeDuration_seconds;
-		}
+            damageApplyTime_seconds += damageApplyTimeDuration_seconds;
+        }
 
-		if(isDeployed)
-		{
-			burnAnim.Update();
-		}
-	}
+        if(isDeployed)
+        {
+            burnAnim.Update();
+        }
+    }
 }
 
 void BurnSkill::UpdateTimersOnIdle()
 {
-	attackTimer.Update();
+    attackTimer.Update();
 }
 
 void BurnSkill::Render(glutil::MatrixStack &modelMatrix, 
-					   const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &simpleData)
+                       const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &simpleData)
 {
-	if(isStarted)
-	{
-		glutil::PushStack push(modelMatrix);
-		modelMatrix.Translate(position);
-		
-		if(isDeployed)
-		{
-			burnAnim.Render(modelMatrix, spriteParticleProgData);
-		}
-		else
-		{
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    if(isStarted)
+    {
+        glutil::PushStack push(modelMatrix);
+        modelMatrix.Translate(position);
+        
+        if(isDeployed)
+        {
+            burnAnim.Render(modelMatrix, spriteParticleProgData);
+        }
+        else
+        {
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-			skillRadius.Draw(modelMatrix, simpleData);
+            skillRadius.Draw(modelMatrix, simpleData);
 
-			glDisable(GL_BLEND);
-		}
-	}
+            glDisable(GL_BLEND);
+        }
+    }
 }
 
 void BurnSkill::OnEvent(Event &_event)
 {
-	if(isResearched)
-	{
-		switch(_event.GetType())
-		{
-		case EVENT_TYPE_OTHER:
-			if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
-			{
-				EventArg skillDeployedEventArgs[5];
-				skillDeployedEventArgs[0].argType = "skillRange";
-				skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
-				skillDeployedEventArgs[0].argument.varFloat = range;
-				skillDeployedEventArgs[1].argType = "skillDamage";
-				skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
-				skillDeployedEventArgs[1].argument.varInteger = damage;
-				skillDeployedEventArgs[2].argType = "what_event";
-				skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
-				strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
-				skillDeployedEventArgs[3].argType = "skillCost";
-				skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
-				skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
-				skillDeployedEventArgs[4].argType = "which_skill";
-				skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
-				strcpy(skillDeployedEventArgs[4].argument.varString, "burnSkill");
-				Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
-				generatedEvents.push_back(skillDeployedEvent);
+    if(isResearched)
+    {
+        switch(_event.GetType())
+        {
+        case EVENT_TYPE_OTHER:
+            if(strcmp(_event.GetArgument("buttons").varString, fusionCombination) == 0)
+            {
+                EventArg skillDeployedEventArgs[5];
+                skillDeployedEventArgs[0].argType = "skillRange";
+                skillDeployedEventArgs[0].argument.varType = TYPE_FLOAT;
+                skillDeployedEventArgs[0].argument.varFloat = range;
+                skillDeployedEventArgs[1].argType = "skillDamage";
+                skillDeployedEventArgs[1].argument.varType = TYPE_INTEGER;
+                skillDeployedEventArgs[1].argument.varInteger = damage;
+                skillDeployedEventArgs[2].argType = "what_event";
+                skillDeployedEventArgs[2].argument.varType = TYPE_STRING;
+                strcpy(skillDeployedEventArgs[2].argument.varString, "skilldeployed");
+                skillDeployedEventArgs[3].argType = "skillCost";
+                skillDeployedEventArgs[3].argument.varType = TYPE_INTEGER;
+                skillDeployedEventArgs[3].argument.varInteger = skillApplyCost;
+                skillDeployedEventArgs[4].argType = "which_skill";
+                skillDeployedEventArgs[4].argument.varType = TYPE_STRING;
+                strcpy(skillDeployedEventArgs[4].argument.varString, "burnSkill");
+                Event skillDeployedEvent = Event(5, EVENT_TYPE_OTHER, skillDeployedEventArgs);
+                generatedEvents.push_back(skillDeployedEvent);
 
-				isStarted = true;
-				damageApplyTime_seconds = damageApplyTimeDuration_seconds;
-				isDeployed = false;
-				attackTimer.SetPause(true);
-			}
-			if(_event.GetArgument("deploy").varBool == true)
-			{	
-				attackTimer.SetPause(false);
-				attackTimer.Reset();
-				isDeployed = true;
-			}
-			break;
-		default:
-			HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
-			break;
-		}
-	}
+                isStarted = true;
+                damageApplyTime_seconds = damageApplyTimeDuration_seconds;
+                isDeployed = false;
+                attackTimer.SetPause(true);
+            }
+            if(_event.GetArgument("deploy").varBool == true)
+            {	
+                attackTimer.SetPause(false);
+                attackTimer.Reset();
+                isDeployed = true;
+            }
+            break;
+        default:
+            HandleUnexpectedError("invalid event type", __LINE__, __FILE__);
+            break;
+        }
+    }
 }
 
 float BurnSkill::GetRange()
 {
-	return range;
+    return range;
 }
 glm::vec3 BurnSkill::GetPosition()
 {
-	return position;
+    return position;
 }/*
 bool BurnSkill::IsDeployed()
 {
-	return isDeployed;
+    return isDeployed;
 }*/
 
 void BurnSkill::SetParameter(ParameterType paramType, glm::vec3 newParam_vec3)
 {
-	if(isStarted)
-	{
-		if(!isDeployed)
-		{
-			switch(paramType)
-			{
-			case PARAM_POSITION:
-				position = newParam_vec3;
-				break;
-			default:
-				HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
-				break;
-			}
-		}
-	}
+    if(isStarted)
+    {
+        if(!isDeployed)
+        {
+            switch(paramType)
+            {
+            case PARAM_POSITION:
+                position = newParam_vec3;
+                break;
+            default:
+                HandleUnexpectedError("invalid parameter type", __LINE__, __FILE__);
+                break;
+            }
+        }
+    }
 }
 
 bool BurnSkill::IsIntersectingObject(glm::vec3 objectPosition)
 {
-	if(isStarted)
-	{
-		float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
+    if(isStarted)
+    {
+        float distanceBetweenObjectAndSkill = glm::length(position - objectPosition);
 
-		if(distanceBetweenObjectAndSkill < range)
-		{/*
-			if(!isDeployed)
-			{
-				attackTimer.SetPause(false);
-				attackTimer.Reset();
-				isDeployed = true;
-			}
-			*/
-			return true;
-		}
+        if(distanceBetweenObjectAndSkill < range)
+        {/*
+            if(!isDeployed)
+            {
+                attackTimer.SetPause(false);
+                attackTimer.Reset();
+                isDeployed = true;
+            }
+            */
+            return true;
+        }
 
-		return false;
-	}
-	else return false;
+        return false;
+    }
+    else return false;
 }
 
 void BurnSkill::StopAllTimers()
 {
-	attackTimer.SetPause(true);
+    attackTimer.SetPause(true);
 }
 void BurnSkill::StartAllTimers()
 {
-	attackTimer.SetPause(false);
+    attackTimer.SetPause(false);
 }

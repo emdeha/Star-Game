@@ -32,29 +32,29 @@
 
 enum ParameterType
 {
-	PARAM_POSITION,
-	PARAM_LIFE_DRAIN_PARTICLE_EMITTER_POSITION,
-	PARAM_RANGE,
-	PARAM_DAMAGE,
+    PARAM_POSITION,
+    PARAM_LIFE_DRAIN_PARTICLE_EMITTER_POSITION,
+    PARAM_RANGE,
+    PARAM_DAMAGE,
 };
 
 enum SkillType
 {
-	SKILL_TYPE_PASSIVE_AOE,
-	SKILL_TYPE_AOE,
-	SKILL_TYPE_SUN_NOVA,
-	SKILL_TYPE_BURN,
-	SKILL_TYPE_SAT_PASSIVE_AOE,
-	SKILL_TYPE_SAT_CHAIN,
-	SKILL_TYPE_SAT_FROSTNOVA,
-	SKILL_TYPE_SAT_SHIELD,
-		
-	SKILL_TYPE_FIRE_SAT,
-	SKILL_TYPE_EARTH_SAT,
-	SKILL_TYPE_WATER_SAT,
-	SKILL_TYPE_AIR_SAT,
+    SKILL_TYPE_PASSIVE_AOE,
+    SKILL_TYPE_AOE,
+    SKILL_TYPE_SUN_NOVA,
+    SKILL_TYPE_BURN,
+    SKILL_TYPE_SAT_PASSIVE_AOE,
+    SKILL_TYPE_SAT_CHAIN,
+    SKILL_TYPE_SAT_FROSTNOVA,
+    SKILL_TYPE_SAT_SHIELD,
+        
+    SKILL_TYPE_FIRE_SAT,
+    SKILL_TYPE_EARTH_SAT,
+    SKILL_TYPE_WATER_SAT,
+    SKILL_TYPE_AIR_SAT,
 
-	SKILL_TYPE_COUNT,
+    SKILL_TYPE_COUNT,
 };
 
 
@@ -63,127 +63,127 @@ enum SkillType
 class Skill
 {
 protected:
-	friend class Scene;
+    friend class Scene;
 
-	char fusionCombination[4];
-	std::string skillType;
-	std::vector<Event> generatedEvents;
+    char fusionCombination[4];
+    std::string skillType;
+    std::vector<Event> generatedEvents;
 
-	int skillApplyCost;
-	int skillResearchCost;
+    int skillApplyCost;
+    int skillResearchCost;
 
-	bool isStarted;
-	bool isDeployed;
+    bool isStarted;
+    bool isDeployed;
 
-	bool isResearched;
-	int boxIndexForUpgrade;
+    bool isResearched;
+    int boxIndexForUpgrade;
 
 public:
-	Skill() { }
-	Skill(const std::string &newSkillType,
-		  char fusionCombA, char fusionCombB, char fusionCombC,
-		  int newSkillApplyCost, int newSkillResearchCost, int newBoxIndexForUpgrade)
-	{
-		fusionCombination[0] = fusionCombA;
-		fusionCombination[1] = fusionCombB;
-		fusionCombination[2] = fusionCombC;
-		fusionCombination[3] = '\0';
+    Skill() { }
+    Skill(const std::string &newSkillType,
+          char fusionCombA, char fusionCombB, char fusionCombC,
+          int newSkillApplyCost, int newSkillResearchCost, int newBoxIndexForUpgrade)
+    {
+        fusionCombination[0] = fusionCombA;
+        fusionCombination[1] = fusionCombB;
+        fusionCombination[2] = fusionCombC;
+        fusionCombination[3] = '\0';
 
-		skillType = newSkillType;
+        skillType = newSkillType;
 
-		skillApplyCost = newSkillApplyCost;
-		skillResearchCost = newSkillResearchCost;
+        skillApplyCost = newSkillApplyCost;
+        skillResearchCost = newSkillResearchCost;
 
-		isResearched = false;
-		isDeployed = false;
-		boxIndexForUpgrade = newBoxIndexForUpgrade;
-	}
+        isResearched = false;
+        isDeployed = false;
+        boxIndexForUpgrade = newBoxIndexForUpgrade;
+    }
 
-	virtual void Update() {}
-	virtual void UpdateTimersOnIdle() {}
-	virtual void Render(glutil::MatrixStack &modelMatrix,
-						glm::vec3 cameraPosition,
-						const BillboardProgDataNoTexture &progData) {}
-	virtual void Render(glutil::MatrixStack &modelMatrix,
-						const SimpleProgData &simpleData) {}
-	virtual void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData,
-						GLuint materialBlockIndex) {}
-	virtual void Render(glutil::MatrixStack &modelMatrix, 
-						const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &simpleData) {}
-	virtual void Render(glutil::MatrixStack &modelMatrix,
-						const SpriteParticleProgData &spriteParticleProgData) {}
-	virtual void Render(glutil::MatrixStack &modelMatrix,
-						const SpriteParticleProgData &spriteParticleProgData, const SimpleTextureProgData &SimpleTextureProgData) {}
+    virtual void Update() {}
+    virtual void UpdateTimersOnIdle() {}
+    virtual void Render(glutil::MatrixStack &modelMatrix,
+                        glm::vec3 cameraPosition,
+                        const BillboardProgDataNoTexture &progData) {}
+    virtual void Render(glutil::MatrixStack &modelMatrix,
+                        const SimpleProgData &simpleData) {}
+    virtual void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData,
+                        GLuint materialBlockIndex) {}
+    virtual void Render(glutil::MatrixStack &modelMatrix, 
+                        const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &simpleData) {}
+    virtual void Render(glutil::MatrixStack &modelMatrix,
+                        const SpriteParticleProgData &spriteParticleProgData) {}
+    virtual void Render(glutil::MatrixStack &modelMatrix,
+                        const SpriteParticleProgData &spriteParticleProgData, const SimpleTextureProgData &SimpleTextureProgData) {}
 
-	virtual void OnEvent(Event &_event) {}
+    virtual void OnEvent(Event &_event) {}
 
-	virtual void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3) {}
-	virtual void SetParameter(ParameterType paramType, int newParam_int) {}
-	virtual void SetParameter(ParameterType paramType, float newParam_float) {}
+    virtual void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3) {}
+    virtual void SetParameter(ParameterType paramType, int newParam_int) {}
+    virtual void SetParameter(ParameterType paramType, float newParam_float) {}
 
-	virtual bool IsIntersectingObject(glm::vec3 objectPosition) { return false; }
-	virtual bool IsIntersectingObject(glm::vec3 objectPosition, int objectIndex) { return false; }
-	
-	virtual float GetRange() { return 0.0f; }
-	virtual int GetDamage() { return 0; }
+    virtual bool IsIntersectingObject(glm::vec3 objectPosition) { return false; }
+    virtual bool IsIntersectingObject(glm::vec3 objectPosition, int objectIndex) { return false; }
+    
+    virtual float GetRange() { return 0.0f; }
+    virtual int GetDamage() { return 0; }
 
-	virtual void SetSkillAnim(glm::vec3 position, int enemyIndex) {}
+    virtual void SetSkillAnim(glm::vec3 position, int enemyIndex) {}
 
-	virtual void StopAllTimers() {}
-	virtual void StartAllTimers() {}
+    virtual void StopAllTimers() {}
+    virtual void StartAllTimers() {}
 
-	std::string GetSkillType() { return skillType; }
-	int GetApplyCost() { return skillApplyCost; }
-	int GetResearchCost() { return skillResearchCost; }
-	glm::vec3 GetPosition() { return glm::vec3(); }
-	bool IsDeployed() { return isDeployed; }
-	bool IsStarted() { return isStarted; }
-	bool IsResearched() { return isResearched; }
+    std::string GetSkillType() { return skillType; }
+    int GetApplyCost() { return skillApplyCost; }
+    int GetResearchCost() { return skillResearchCost; }
+    glm::vec3 GetPosition() { return glm::vec3(); }
+    bool IsDeployed() { return isDeployed; }
+    bool IsStarted() { return isStarted; }
+    bool IsResearched() { return isResearched; }
 
-	bool Research() { isResearched = true; }
+    bool Research() { isResearched = true; }
 
-	
-	// Only for EVENT_TYPE_OTHER
-	Event GetGeneratedEvent(const std::string &	eventName);
-	void RemoveGeneratedEvent(const std::string &eventName);
-	// Gets the generated events and empties the event list.
-	// (!)It is an one little dangerous method. You can lose a lot of events that way.
-	std::vector<Event> GetGeneratedEvents();
+    
+    // Only for EVENT_TYPE_OTHER
+    Event GetGeneratedEvent(const std::string &	eventName);
+    void RemoveGeneratedEvent(const std::string &eventName);
+    // Gets the generated events and empties the event list.
+    // (!)It is an one little dangerous method. You can lose a lot of events that way.
+    std::vector<Event> GetGeneratedEvents();
 };
 
 
 class AOESkill : public Skill
 {
 private:
-	int damage;
-	float range;
-	glm::vec3 position;
-	
-	AOESelector skillSelector;
+    int damage;
+    float range;
+    glm::vec3 position;
+    
+    AOESelector skillSelector;
 
-	AoEAnimation aoeAnim;
+    AoEAnimation aoeAnim;
 
 public:
-	AOESkill() : Skill() {}
-	AOESkill(glm::vec3 newPosition,
-			 int newDamage, float newRange,
-			 const std::string &newSkillType,
-			 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
-			 int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
+    AOESkill() : Skill() {}
+    AOESkill(glm::vec3 newPosition,
+             int newDamage, float newRange,
+             const std::string &newSkillType,
+             char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
+             int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
-	void Update();
-	void Render(glutil::MatrixStack	&modelMatrix, 
-				const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &progData);
+    void Update();
+    void Render(glutil::MatrixStack	&modelMatrix, 
+                const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &progData);
 
-	void OnEvent(Event &_event);
+    void OnEvent(Event &_event);
 
-	float GetRange();
-	glm::vec3 GetPosition();
-	int GetDamage() { return damage; }
+    float GetRange();
+    glm::vec3 GetPosition();
+    int GetDamage() { return damage; }
 
-	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
+    void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 
-	bool IsIntersectingObject(glm::vec3 objectPosition);
+    bool IsIntersectingObject(glm::vec3 objectPosition);
 };
 
 
@@ -192,277 +192,277 @@ public:
 class PassiveAOESkill : public Skill
 {
 private:
-	int damage;
-	float damageApplyTime_seconds;
-	Framework::Timer attackTimer;
-	Framework::Timer skillLife;
-	float range;
-	glm::vec3 position;
+    int damage;
+    float damageApplyTime_seconds;
+    Framework::Timer attackTimer;
+    Framework::Timer skillLife;
+    float range;
+    glm::vec3 position;
 
-	//Utility::Primitives::Circle skillVisibleRadius;
-	PassiveAoeAnimation skillAnim;
+    //Utility::Primitives::Circle skillVisibleRadius;
+    PassiveAoeAnimation skillAnim;
 
 public:
-	PassiveAOESkill() : Skill() {}
-	PassiveAOESkill(glm::vec3 newPosition,
-					int newDamage, float newDamageApplyTime_seconds, int newSkillLife,
-					float newRange,
-					const std::string &newSkillType,
-					char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
-					int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
+    PassiveAOESkill() : Skill() {}
+    PassiveAOESkill(glm::vec3 newPosition,
+                    int newDamage, float newDamageApplyTime_seconds, int newSkillLife,
+                    float newRange,
+                    const std::string &newSkillType,
+                    char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
+                    int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
-	void Update();
-	void UpdateTimersOnIdle();
-	void Render(glutil::MatrixStack &modelMatrix,
-				const SpriteParticleProgData &spriteParticleProgData, const SimpleTextureProgData &simpleTextureProgData);
-				//const SimpleProgData &progData);
+    void Update();
+    void UpdateTimersOnIdle();
+    void Render(glutil::MatrixStack &modelMatrix,
+                const SpriteParticleProgData &spriteParticleProgData, const SimpleTextureProgData &simpleTextureProgData);
+                //const SimpleProgData &progData);
 
-	void OnEvent(Event &_event);
+    void OnEvent(Event &_event);
 
-	float GetRange();
-	glm::vec3 GetPosition();
-	int GetDamage() { return damage; }
+    float GetRange();
+    glm::vec3 GetPosition();
+    int GetDamage() { return damage; }
 
-	bool IsIntersectingObject(glm::vec3 objectPosition/*, int objectIndex = -1*/);
+    bool IsIntersectingObject(glm::vec3 objectPosition/*, int objectIndex = -1*/);
 
-	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
-	void SetSkillAnim(glm::vec3 position, int enemyIndex);
+    void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
+    void SetSkillAnim(glm::vec3 position, int enemyIndex);
 
-	void StopAllTimers();
-	void StartAllTimers();
+    void StopAllTimers();
+    void StartAllTimers();
 };
 
 
 class SunNovaSkill : public Skill
 {
 private:
-	int damage;
-	float range; // The maximum skill expansion
-	float scaleRate;
-	float currentScale;
-	glm::vec3 position;
+    int damage;
+    float range; // The maximum skill expansion
+    float scaleRate;
+    float currentScale;
+    glm::vec3 position;
 
-	NovaAnimation sunNovaAnim;
+    NovaAnimation sunNovaAnim;
 
 public:
-	SunNovaSkill() : Skill() {}
-	SunNovaSkill(glm::vec3 newPosition,
-				 int newDamage, 
-				 float newRange, float newScaleRate,
-				 const std::string &skillType,
-				 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
-				 int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
+    SunNovaSkill() : Skill() {}
+    SunNovaSkill(glm::vec3 newPosition,
+                 int newDamage, 
+                 float newRange, float newScaleRate,
+                 const std::string &skillType,
+                 char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
+                 int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
-	void Update();
-	void Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &progData);
+    void Update();
+    void Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &progData);
 
-	void OnEvent(Event &_event);
+    void OnEvent(Event &_event);
 
-	float GetRange();
-	glm::vec3 GetPosition();
-	int GetDamage() { return damage; }
+    float GetRange();
+    glm::vec3 GetPosition();
+    int GetDamage() { return damage; }
 
-	bool IsIntersectingObject(glm::vec3 objectPosition);
+    bool IsIntersectingObject(glm::vec3 objectPosition);
 };
 
 
 class SatelliteChainingSkill : public Skill
 {
 private:
-	int damage;
-	float range;
-	glm::vec3 startingPosition;
-	glm::vec3 currentPosition;
+    int damage;
+    float range;
+    glm::vec3 startingPosition;
+    glm::vec3 currentPosition;
 
-	glm::vec3 projectileVelocity;
-	glm::vec4 projectileColor;
-	float projectileRadius;
-	std::unique_ptr<Framework::Mesh> projectileMesh;
-	// for lighting
-	int materialBlockSize;
-	GLuint materialUniformBuffer;
+    glm::vec3 projectileVelocity;
+    glm::vec4 projectileColor;
+    float projectileRadius;
+    std::unique_ptr<Framework::Mesh> projectileMesh;
+    // for lighting
+    int materialBlockSize;
+    GLuint materialUniformBuffer;
 
 public:
-	SatelliteChainingSkill() : Skill() {}
-	SatelliteChainingSkill(glm::vec3 newPosition,
-						   int newDamage, float newRange, 
-						   glm::vec3 newProjectileVelocity, glm::vec4 newProjectileColor,
-						   float newProjectileRadius,
-						   const std::string &meshFileName, 
-						   const std::string &skillType,
-						   char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
-						   int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
+    SatelliteChainingSkill() : Skill() {}
+    SatelliteChainingSkill(glm::vec3 newPosition,
+                           int newDamage, float newRange, 
+                           glm::vec3 newProjectileVelocity, glm::vec4 newProjectileColor,
+                           float newProjectileRadius,
+                           const std::string &meshFileName, 
+                           const std::string &skillType,
+                           char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
+                           int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
-	void Update();
-	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData, 
-				GLuint materialBlockIndex);
+    void Update();
+    void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData, 
+                GLuint materialBlockIndex);
 
-	void OnEvent(Event &_event);
+    void OnEvent(Event &_event);
 
-	float GetRange();
-	glm::vec3 GetPosition();
-	int GetDamage() { return damage; }
+    float GetRange();
+    glm::vec3 GetPosition();
+    int GetDamage() { return damage; }
 
-	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
+    void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 
-	// WARN: Will add artificial radius for easier intersection.
-	bool IsIntersectingObject(glm::vec3 objectPosition);
+    // WARN: Will add artificial radius for easier intersection.
+    bool IsIntersectingObject(glm::vec3 objectPosition);
 };
 
 
 class SatelliteChainingNova : public Skill
 {
 private:
-	int damage;
-	float range; // The maximum skill expansion
-	float scaleRate;
-	float currentScale;
-	glm::vec3 position;
-	
-	NovaAnimation satNovaAnim;
+    int damage;
+    float range; // The maximum skill expansion
+    float scaleRate;
+    float currentScale;
+    glm::vec3 position;
+    
+    NovaAnimation satNovaAnim;
 
 public:
-	SatelliteChainingNova() : Skill() {}
-	SatelliteChainingNova(glm::vec3 newPosition, 
-						  int newDamage, 
-						  float newRange, float newScaleRate,
-						  const std::string &skillType,
-						  char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
-						  int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
+    SatelliteChainingNova() : Skill() {}
+    SatelliteChainingNova(glm::vec3 newPosition, 
+                          int newDamage, 
+                          float newRange, float newScaleRate,
+                          const std::string &skillType,
+                          char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
+                          int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
-	void Update();
-	void Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &progData);
+    void Update();
+    void Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &progData);
 
-	void OnEvent(Event &_event);
+    void OnEvent(Event &_event);
 
-	float GetRange();
-	glm::vec3 GetPosition();
-	int GetDamage() { return damage; }
+    float GetRange();
+    glm::vec3 GetPosition();
+    int GetDamage() { return damage; }
 
-	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
+    void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 
-	bool IsIntersectingObject(glm::vec3 objectPosition);
+    bool IsIntersectingObject(glm::vec3 objectPosition);
 };
 
 
 class FrostNovaSkill : public Skill
 {
 private:
-	int damage; // Must be sth small. This is a stunning skill.
-	float stunTime_seconds;
-	Framework::Timer stunTimer;
-	float range;	
-	float scaleRate;
-	float currentScale;
-	glm::vec3 position;
+    int damage; // Must be sth small. This is a stunning skill.
+    float stunTime_seconds;
+    Framework::Timer stunTimer;
+    float range;	
+    float scaleRate;
+    float currentScale;
+    glm::vec3 position;
 
-	FrostNovaAnimation skillAnimation;
+    FrostNovaAnimation skillAnimation;
 
 public:
-	FrostNovaSkill() : Skill() {}
-	FrostNovaSkill(int newDamage, float newStunTime_seconds,
-				   float newRange, float newScaleRate,
-				   glm::vec3 newPosition,
-				   const std::string &skillType,
-				   char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
-				   int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
+    FrostNovaSkill() : Skill() {}
+    FrostNovaSkill(int newDamage, float newStunTime_seconds,
+                   float newRange, float newScaleRate,
+                   glm::vec3 newPosition,
+                   const std::string &skillType,
+                   char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
+                   int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
-	void Update();
-	void Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteProgData);
+    void Update();
+    void Render(glutil::MatrixStack &modelMatrix, const SpriteParticleProgData &spriteProgData);
 
-	void OnEvent(Event &_event);
+    void OnEvent(Event &_event);
 
-	float GetRange();
-	glm::vec3 GetPosition();
-	int GetDamage() { return damage; }
+    float GetRange();
+    glm::vec3 GetPosition();
+    int GetDamage() { return damage; }
 
-	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
+    void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 
-	bool IsIntersectingObject(glm::vec3 objectPosition);
+    bool IsIntersectingObject(glm::vec3 objectPosition);
 };
 
 
 class ShieldSkill : public Skill
 {
 private:
-	glm::vec3 position;
-	int defensePoints; // if below zero, skill deactivates
-	int startingDefensePoints;
-	float range;
-	
-	bool isStarted;
+    glm::vec3 position;
+    int defensePoints; // if below zero, skill deactivates
+    int startingDefensePoints;
+    float range;
+    
+    bool isStarted;
 
-	Animation skillAnimation;
+    Animation skillAnimation;
 
 public:
-	ShieldSkill() : Skill() {}
-	ShieldSkill(glm::vec3 newPosition, 
-				int newDefensePoints, float newRange, 
-				const std::string &skillType, 
-				char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
-				int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
+    ShieldSkill() : Skill() {}
+    ShieldSkill(glm::vec3 newPosition, 
+                int newDefensePoints, float newRange, 
+                const std::string &skillType, 
+                char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
+                int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
-	void Update();
-	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData,
-				GLuint materialBlockIndex);
+    void Update();
+    void Render(glutil::MatrixStack &modelMatrix, const LitProgData &litData,
+                GLuint materialBlockIndex);
 
-	void OnEvent(Event &_event);
+    void OnEvent(Event &_event);
 
-	float GetRange();
-	glm::vec3 GetPosition();
+    float GetRange();
+    glm::vec3 GetPosition();
 
-	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
+    void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 
-	bool IsIntersectingObject(glm::vec3 objectPosition);
+    bool IsIntersectingObject(glm::vec3 objectPosition);
 };
 
 
 class BurnSkill : public Skill
 {
 private:
-	glm::vec3 position;
-	float range;
-	int damage;
-	float duration_seconds;
-	//
-	float damageApplyTime_seconds;
-	float damageApplyTimeDuration_seconds;
-	//
-	Framework::Timer attackTimer;
+    glm::vec3 position;
+    float range;
+    int damage;
+    float duration_seconds;
+    //
+    float damageApplyTime_seconds;
+    float damageApplyTimeDuration_seconds;
+    //
+    Framework::Timer attackTimer;
 
-	//bool isDeployed;
+    //bool isDeployed;
 
-	Utility::Primitives::Circle skillRadius;
+    Utility::Primitives::Circle skillRadius;
 
-	ParticleAnimation burnAnim;
+    ParticleAnimation burnAnim;
 
 public:
-	BurnSkill() : Skill() {}
-	BurnSkill(glm::vec3 newPosition, 
-			  int newDamage, float newDamageApplyTime_seconds, float newDuration_seconds,
-			  float newRange,
-			  const std::string &skillType,
-			  char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
-			  int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
+    BurnSkill() : Skill() {}
+    BurnSkill(glm::vec3 newPosition, 
+              int newDamage, float newDamageApplyTime_seconds, float newDuration_seconds,
+              float newRange,
+              const std::string &skillType,
+              char fusionCombA = '\0', char fusionCombB = '\0', char fusionCombC = '\0', 
+              int skillApplyCost = 0, int skillResearchCost = 0, int boxIndexForUpgrade = -1);
 
-	void Update();
-	void UpdateTimersOnIdle();
-	void Render(glutil::MatrixStack &modelMatrix, 
-				const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &simpleData);
+    void Update();
+    void UpdateTimersOnIdle();
+    void Render(glutil::MatrixStack &modelMatrix, 
+                const SpriteParticleProgData &spriteParticleProgData, const SimpleProgData &simpleData);
 
-	void OnEvent(Event &_event);
+    void OnEvent(Event &_event);
 
-	float GetRange();
-	glm::vec3 GetPosition();
-	int GetDamage() { return damage; }
-	bool IsDeployed();
+    float GetRange();
+    glm::vec3 GetPosition();
+    int GetDamage() { return damage; }
+    bool IsDeployed();
 
-	void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
+    void SetParameter(ParameterType paramType, glm::vec3 newParam_vec3);
 
-	bool IsIntersectingObject(glm::vec3 objectPosition);
+    bool IsIntersectingObject(glm::vec3 objectPosition);
 
-	void StopAllTimers();
-	void StartAllTimers();
+    void StopAllTimers();
+    void StartAllTimers();
 };
 
 

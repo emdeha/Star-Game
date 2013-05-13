@@ -25,97 +25,97 @@
 
 Audio::Audio()
 {
-	audioFiles.clear();
-	numberOfChannels = 32;
+    audioFiles.clear();
+    numberOfChannels = 32;
 
-	channels.resize(32);
+    channels.resize(32);
 
-	for(int i = 0; i < CHANNEL_COUNT; i++)
-		volumes[i] = 0.0f;
+    for(int i = 0; i < CHANNEL_COUNT; i++)
+        volumes[i] = 0.0f;
 
-	FMOD_RESULT result;
+    FMOD_RESULT result;
 
-	result = FMOD::System_Create(&system);
-	CheckForError(result);
+    result = FMOD::System_Create(&system);
+    CheckForError(result);
 
-	unsigned int version = 0;
-	result = system->getVersion(&version);
-	CheckForError(result);
+    unsigned int version = 0;
+    result = system->getVersion(&version);
+    CheckForError(result);
 
-	if(version < FMOD_VERSION)
-	{
-		std::printf("You are using an old version of FMOD %08x. This program requires %08x\n", version, FMOD_VERSION);
-		HandleUnexpectedError("", __LINE__, __FILE__);
-	}
+    if(version < FMOD_VERSION)
+    {
+        std::printf("You are using an old version of FMOD %08x. This program requires %08x\n", version, FMOD_VERSION);
+        HandleUnexpectedError("", __LINE__, __FILE__);
+    }
 
-	result = system->init(numberOfChannels, FMOD_INIT_NORMAL, 0);
-	CheckForError(result);
+    result = system->init(numberOfChannels, FMOD_INIT_NORMAL, 0);
+    CheckForError(result);
 }
 
 void Audio::SetFileForPlay(const std::string &newFileName, SoundType prevSoundType, bool isLooping)
 {
-	FMOD_RESULT result;
+    FMOD_RESULT result;
 
-	FMOD::Sound *newSound;
-	result = system->createSound(newFileName.c_str(), FMOD_HARDWARE, 0, &newSound);
-	CheckForError(result);
-	if(isLooping)
-	{
-		result = newSound->setMode(FMOD_LOOP_NORMAL);
-		CheckForError(result);
-	}
+    FMOD::Sound *newSound;
+    result = system->createSound(newFileName.c_str(), FMOD_HARDWARE, 0, &newSound);
+    CheckForError(result);
+    if(isLooping)
+    {
+        result = newSound->setMode(FMOD_LOOP_NORMAL);
+        CheckForError(result);
+    }
 
-	if(audioFiles.find(prevSoundType) != audioFiles.end())
-		audioFiles[prevSoundType] = newSound;
-	else audioFiles.insert(std::make_pair(prevSoundType, newSound));
+    if(audioFiles.find(prevSoundType) != audioFiles.end())
+        audioFiles[prevSoundType] = newSound;
+    else audioFiles.insert(std::make_pair(prevSoundType, newSound));
 }
 
 void Audio::SetVolume(float volume, ChannelType chType)
 {
-	volumes[chType] = volume;
+    volumes[chType] = volume;
 }
 
 void Audio::Play(SoundType soundType, ChannelType chType)
 {
-	if(audioFiles.find(soundType) == audioFiles.end())
-	{
-		HandleUnexpectedError("there is no sound at this index", __LINE__, __FILE__);
-	}
-		
-	FMOD_RESULT result;
-	
-	result = system->playSound(FMOD_CHANNEL_FREE, audioFiles[soundType], false, &channels[chType]);
-	CheckForError(result);
-		
-	if(volumes[chType] != 0.0f)
-	{
-		result = channels[chType]->setVolume(volumes[chType]);
-		CheckForError(result);
-	}
+    if(audioFiles.find(soundType) == audioFiles.end())
+    {
+        HandleUnexpectedError("there is no sound at this index", __LINE__, __FILE__);
+    }
+        
+    FMOD_RESULT result;
+    
+    result = system->playSound(FMOD_CHANNEL_FREE, audioFiles[soundType], false, &channels[chType]);
+    CheckForError(result);
+        
+    if(volumes[chType] != 0.0f)
+    {
+        result = channels[chType]->setVolume(volumes[chType]);
+        CheckForError(result);
+    }
 
-	system->update();
+    system->update();
 }
 
 void Audio::Stop(ChannelType chType)
 {	
-	FMOD_RESULT result;
-	result = channels[chType]->stop();
-	CheckForError(result);
+    FMOD_RESULT result;
+    result = channels[chType]->stop();
+    CheckForError(result);
 }
 
 Audio::~Audio()
 {
-	FMOD_RESULT result;
+    FMOD_RESULT result;
 
-	for(std::map<SoundType, FMOD::Sound *>::iterator iter = audioFiles.begin();
-		iter != audioFiles.end(); ++iter)
-	{
-		result = iter->second->release();
-		CheckForError(result);
-	}
+    for(std::map<SoundType, FMOD::Sound *>::iterator iter = audioFiles.begin();
+        iter != audioFiles.end(); ++iter)
+    {
+        result = iter->second->release();
+        CheckForError(result);
+    }
 
-	result = system->release();
-	CheckForError(result);
+    result = system->release();
+    CheckForError(result);
 
-	channels.clear();
+    channels.clear();
 }

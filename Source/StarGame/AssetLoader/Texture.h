@@ -31,18 +31,19 @@
 class Texture2D
 {
 private:
-	GLuint textureObject;
+    GLuint textureObject;
 
 public:
-	Texture2D();
-		
-	// Maybe the texture loading characteristics must be kept away from the user.
-	// Later, I will develop a single format which will have default characteristics.
-	bool Load(const std::string &fileName, 
-			  GLuint store = GL_RGB, GLuint uploadFormat = GL_BGR, GLuint componentType = GL_UNSIGNED_BYTE);
+    Texture2D();
+        
+    // Maybe the texture loading characteristics must be kept away from the user.
+    // Later, I will develop a single format which will have default characteristics.
+    bool Load(const std::string &fileName, 
+              GLuint store = GL_RGB, GLuint uploadFormat = GL_BGR, GLuint componentType = GL_UNSIGNED_BYTE,
+              bool repeat = false);
 
-	void Bind(GLenum textureUnit);
-	void Unbind();
+    void Bind(GLenum textureUnit);
+    void Unbind();
 };
 
 

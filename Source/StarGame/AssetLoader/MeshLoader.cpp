@@ -26,318 +26,318 @@
 
 const std::string ExtractDirectory(const std::string &fileName)
 {
-	std::string::size_type slashIndex = fileName.find_last_of("/");
-	std::string directory;
+    std::string::size_type slashIndex = fileName.find_last_of("/");
+    std::string directory;
 
-	if(slashIndex == std::string::npos)
-	{
-		directory = ".";
-	}
-	else if(slashIndex == 0)
-	{
-		directory = "/";
-	}
-	else
-	{
-		directory = fileName.substr(0, slashIndex);
-	}
+    if(slashIndex == std::string::npos)
+    {
+        directory = ".";
+    }
+    else if(slashIndex == 0)
+    {
+        directory = "/";
+    }
+    else
+    {
+        directory = fileName.substr(0, slashIndex);
+    }
 
-	return directory;
+    return directory;
 }
 
 
 static void GenerateUniformBuffers(int &materialBlockSize, glm::vec4 diffuseColor, GLuint &materialUniformBuffer)
 {
-	MaterialBlock material;
-	material.diffuseColor = diffuseColor;
-	material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
-	material.shininessFactor = 0.3f;
+    MaterialBlock material;
+    material.diffuseColor = diffuseColor;
+    material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
+    material.shininessFactor = 0.3f;
 
 
-	int uniformBufferAlignSize = 0;
-	glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignSize);
+    int uniformBufferAlignSize = 0;
+    glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignSize);
 
-	materialBlockSize = sizeof(MaterialBlock);
-	materialBlockSize += uniformBufferAlignSize -
-		(materialBlockSize % uniformBufferAlignSize);
+    materialBlockSize = sizeof(MaterialBlock);
+    materialBlockSize += uniformBufferAlignSize -
+        (materialBlockSize % uniformBufferAlignSize);
 
-	
-	glGenBuffers(1, &materialUniformBuffer);
-	glBindBuffer(GL_UNIFORM_BUFFER, materialUniformBuffer);
-	glBufferData(GL_UNIFORM_BUFFER, materialBlockSize, &material, GL_STATIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    
+    glGenBuffers(1, &materialUniformBuffer);
+    glBindBuffer(GL_UNIFORM_BUFFER, materialUniformBuffer);
+    glBufferData(GL_UNIFORM_BUFFER, materialBlockSize, &material, GL_STATIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 
 
 Mesh::MeshEntry::MeshEntry()
 {
-	vertexBufferObject = -1;
-	indexBufferObject = -1;
-	indicesCount = 0;
-	materialIndex = -1;
+    vertexBufferObject = -1;
+    indexBufferObject = -1;
+    indicesCount = 0;
+    materialIndex = -1;
 }
 
 Mesh::MeshEntry::~MeshEntry()
 {
-	if(vertexBufferObject != -1)
-	{
-		glDeleteBuffers(1, &vertexBufferObject);
-	}
-	if(indexBufferObject != -1)
-	{
-		glDeleteBuffers(1, &indexBufferObject);
-	}
+    if(vertexBufferObject != -1)
+    {
+        glDeleteBuffers(1, &vertexBufferObject);
+    }
+    if(indexBufferObject != -1)
+    {
+        glDeleteBuffers(1, &indexBufferObject);
+    }
 }
 
 void Mesh::MeshEntry::Init(const std::vector<Vertex> &vertices,
-						   const std::vector<unsigned int> &indices)
+                           const std::vector<unsigned int> &indices)
 {
-	indicesCount = indices.size();
+    indicesCount = indices.size();
 
-	glGenBuffers(1, &vertexBufferObject);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+    glGenBuffers(1, &vertexBufferObject);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 
-	glGenBuffers(1, &indexBufferObject);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indicesCount, &indices[0], GL_STATIC_DRAW);
+    glGenBuffers(1, &indexBufferObject);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indicesCount, &indices[0], GL_STATIC_DRAW);
 }
 
 Mesh::Mesh() {}
 
 bool Mesh::LoadMesh(const std::string &fileName)
 {
-	textures.clear();
+    textures.clear();
 
     const aiScene *scene = 
-		aiImportFile(fileName.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals);
+        aiImportFile(fileName.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals);
 
-	if(scene)
-	{		
-		glGenVertexArrays(1, &vao);
-		glBindVertexArray(vao);
-		return InitFromScene(scene, fileName);
-	}
-	else
-	{
-		std::string errorMessage = "cannot parse ";
-		errorMessage += fileName;
-		errorMessage += ": ";
-		errorMessage += aiGetErrorString();
-		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
-		return false;
-	}
+    if(scene)
+    {		
+        glGenVertexArrays(1, &vao);
+        glBindVertexArray(vao);
+        return InitFromScene(scene, fileName);
+    }
+    else
+    {
+        std::string errorMessage = "cannot parse ";
+        errorMessage += fileName;
+        errorMessage += ": ";
+        errorMessage += aiGetErrorString();
+        HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+        return false;
+    }
 }
 
 void Mesh::LoadLight(const glm::vec4 &diffuseColor)
 {	
-	GenerateUniformBuffers(materialBlockSize, diffuseColor, materialUniformBuffer);
+    GenerateUniformBuffers(materialBlockSize, diffuseColor, materialUniformBuffer);
 }
 
 bool Mesh::InitFromScene(const aiScene *scene, const std::string &fileName)
 {
-	entries.resize(scene->mNumMeshes);
-	textures.resize(scene->mNumMaterials);
+    entries.resize(scene->mNumMeshes);
+    textures.resize(scene->mNumMaterials);
 
-	for(unsigned int i = 0; i < entries.size(); i++)
-	{
-		const aiMesh *mesh = scene->mMeshes[i];
-		InitMesh(i, mesh);
-	}
+    for(unsigned int i = 0; i < entries.size(); i++)
+    {
+        const aiMesh *mesh = scene->mMeshes[i];
+        InitMesh(i, mesh);
+    }
 
-	return InitMaterials(scene, fileName);
+    return InitMaterials(scene, fileName);
 }
 
 void Mesh::InitMesh(unsigned int index, const aiMesh *mesh)
 {
-	entries[index].materialIndex = mesh->mMaterialIndex;
+    entries[index].materialIndex = mesh->mMaterialIndex;
 
-	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indices;
 
-	const aiVector3D zeroVector(0.0f, 0.0f, 0.0f);
+    const aiVector3D zeroVector(0.0f, 0.0f, 0.0f);
 
-	for(unsigned int i = 0; i < mesh->mNumVertices; i++)
-	{
-		// TODO: Use smart ptrs
-		const aiVector3D *position = &(mesh->mVertices[i]);
-		const aiVector3D *normal = &(mesh->mNormals[i]);
-		const aiVector3D *textureCoordinate = mesh->HasTextureCoords(0) ?
-			&(mesh->mTextureCoords[0][i]) : &zeroVector;
+    for(unsigned int i = 0; i < mesh->mNumVertices; i++)
+    {
+        // TODO: Use smart ptrs
+        const aiVector3D *position = &(mesh->mVertices[i]);
+        const aiVector3D *normal = &(mesh->mNormals[i]);
+        const aiVector3D *textureCoordinate = mesh->HasTextureCoords(0) ?
+            &(mesh->mTextureCoords[0][i]) : &zeroVector;
 
-		Vertex vert(glm::vec3(position->x, position->y, position->z), 
-					glm::vec2(textureCoordinate->x, textureCoordinate->y), 
-					glm::vec3(normal->x, normal->y, normal->z));
-		vertices.push_back(vert);
-	}
+        Vertex vert(glm::vec3(position->x, position->y, position->z), 
+                    glm::vec2(textureCoordinate->x, textureCoordinate->y), 
+                    glm::vec3(normal->x, normal->y, normal->z));
+        vertices.push_back(vert);
+    }
 
-	for(unsigned int i = 0; i < mesh->mNumFaces; i++)
-	{
-		const aiFace &face = mesh->mFaces[i];
+    for(unsigned int i = 0; i < mesh->mNumFaces; i++)
+    {
+        const aiFace &face = mesh->mFaces[i];
 
-		//assert(face.mNumIndices == 3);
+        //assert(face.mNumIndices == 3);
 
-		indices.push_back(face.mIndices[0]);
-		indices.push_back(face.mIndices[1]);
-		indices.push_back(face.mIndices[2]);
-	}
+        indices.push_back(face.mIndices[0]);
+        indices.push_back(face.mIndices[1]);
+        indices.push_back(face.mIndices[2]);
+    }
 
-	entries[index].Init(vertices, indices);
+    entries[index].Init(vertices, indices);
 }
 
 bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
 {
-	std::string directory = ExtractDirectory(fileName);
+    std::string directory = ExtractDirectory(fileName);
 
-	// Initialize the materials.
-	for(unsigned int i = 0; i < scene->mNumMaterials; i++)
-	{
-		const aiMaterial *material = scene->mMaterials[i];
+    // Initialize the materials.
+    for(unsigned int i = 0; i < scene->mNumMaterials; i++)
+    {
+        const aiMaterial *material = scene->mMaterials[i];
 
-		textures[i] = NULL;
+        textures[i] = NULL;
 
-		if(material->GetTextureCount(aiTextureType_DIFFUSE) > 0)
-		{
-			aiString path;
+        if(material->GetTextureCount(aiTextureType_DIFFUSE) > 0)
+        {
+            aiString path;
 
-			if(material->GetTexture(aiTextureType_DIFFUSE, 0, &path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS)
-			{
-				// std::string fullPath = directory + '/' + path.data;
-				std::string fullPath = DIR;
-				fullPath.append(path.data);
-				textures[i] = std::shared_ptr<Texture2D>(new Texture2D());
+            if(material->GetTexture(aiTextureType_DIFFUSE, 0, &path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS)
+            {
+                // std::string fullPath = directory + '/' + path.data;
+                std::string fullPath = DIR;
+                fullPath.append(path.data);
+                textures[i] = std::shared_ptr<Texture2D>(new Texture2D());
 
-				if(!textures[i]->Load(fullPath, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE))
-				{
-					std::printf("Error loading texture '%s'\n", fullPath.c_str());
-					return textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
-				}
-			}
-		}
-	
+                if(!textures[i]->Load(fullPath, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE))
+                {
+                    std::printf("Error loading texture '%s'\n", fullPath.c_str());
+                    return textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+                }
+            }
+        }
+    
 
-		// Load a white texture in case the model does not include its own texture
-		if(!textures[i])
-		{
-			textures[i] = std::shared_ptr<Texture2D>(new Texture2D());
+        // Load a white texture in case the model does not include its own texture
+        if(!textures[i])
+        {
+            textures[i] = std::shared_ptr<Texture2D>(new Texture2D());
 
-			std::string path = fileName;
-			path.erase(path.end() - 4, path.end());
-			path += ".png";
+            std::string path = fileName;
+            path.erase(path.end() - 4, path.end());
+            path += ".png";
 
-			if(!textures[i]->Load(path, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE))
-			{
-				//HandleUnexpectedError("cannot load texture", __LINE__, __FILE__);
-				if(!textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_BGR, GL_UNSIGNED_BYTE))
-				{
-					HandleUnexpectedError("cannot load texture", __LINE__, __FILE__);
-				}
-				return true;
-			}
-			return true;
-		}
-	}
-	return false;
+            if(!textures[i]->Load(path, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE))
+            {
+                //HandleUnexpectedError("cannot load texture", __LINE__, __FILE__);
+                if(!textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_BGR, GL_UNSIGNED_BYTE))
+                {
+                    HandleUnexpectedError("cannot load texture", __LINE__, __FILE__);
+                }
+                return true;
+            }
+            return true;
+        }
+    }
+    return false;
 }
 
 void Mesh::Render(glutil::MatrixStack &modelMatrix, const SimpleTextureProgData &progData)
 {
-	glFrontFace(GL_CCW); // Fixes face culling issues with rendering
-	
-	glBindVertexArray(vao);
+    glFrontFace(GL_CCW); // Fixes face culling issues with rendering
+    
+    glBindVertexArray(vao);
 
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
-	
-	for(unsigned int i = 0; i < entries.size(); i++)
-	{
-		glUseProgram(progData.theProgram);
-		
-		glutil::PushStack push(modelMatrix);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    
+    for(unsigned int i = 0; i < entries.size(); i++)
+    {
+        glUseProgram(progData.theProgram);
+        
+        glutil::PushStack push(modelMatrix);
 
-		glUniformMatrix4fv(progData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-		
+        glUniformMatrix4fv(progData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+        
 
-		glBindBuffer(GL_ARRAY_BUFFER, entries[i].vertexBufferObject);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)12);
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)20);
+        glBindBuffer(GL_ARRAY_BUFFER, entries[i].vertexBufferObject);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)12);
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)20);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, entries[i].indexBufferObject);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, entries[i].indexBufferObject);
 
-		const unsigned int materialIndex = entries[i].materialIndex;
+        const unsigned int materialIndex = entries[i].materialIndex;
 
-		if(materialIndex < textures.size() && textures[materialIndex])
-		{
-			textures[materialIndex]->Bind(GL_TEXTURE0);
-		}
+        if(materialIndex < textures.size() && textures[materialIndex])
+        {
+            textures[materialIndex]->Bind(GL_TEXTURE0);
+        }
 
-		glDrawElements(GL_TRIANGLES, entries[i].indicesCount, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, entries[i].indicesCount, GL_UNSIGNED_INT, 0);
 
-		glUseProgram(0);
-	}
+        glUseProgram(0);
+    }
 
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
 
-	glBindVertexArray(0);
+    glBindVertexArray(0);
 
-	glFrontFace(GL_CW);
+    glFrontFace(GL_CW);
 }
 
 void Mesh::Render(glutil::MatrixStack &modelMatrix, const LitTextureProgData &progData,
-				  int materialBlockIndex)
+                  int materialBlockIndex)
 {
-	glFrontFace(GL_CCW);
+    glFrontFace(GL_CCW);
 
-	glBindVertexArray(vao);
+    glBindVertexArray(vao);
 
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
 
-	for(unsigned int i = 0; i < entries.size(); i++)
-	{
-		glUseProgram(progData.theProgram);
+    for(unsigned int i = 0; i < entries.size(); i++)
+    {
+        glUseProgram(progData.theProgram);
 
-		glutil::PushStack push(modelMatrix);
+        glutil::PushStack push(modelMatrix);
 
-		glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer, 0, sizeof(MaterialBlock));
+        glBindBufferRange(GL_UNIFORM_BUFFER, materialBlockIndex, materialUniformBuffer, 0, sizeof(MaterialBlock));
 
-		glm::mat3 normMatrix(modelMatrix.Top());
-		normMatrix = glm::transpose(glm::inverse(normMatrix));
+        glm::mat3 normMatrix(modelMatrix.Top());
+        normMatrix = glm::transpose(glm::inverse(normMatrix));
 
-		glUniformMatrix4fv(progData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-		glUniformMatrix3fv(progData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
+        glUniformMatrix4fv(progData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+        glUniformMatrix3fv(progData.normalModelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(normMatrix));
 
-		glBindBuffer(GL_ARRAY_BUFFER, entries[i].vertexBufferObject);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)12);
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)20);
+        glBindBuffer(GL_ARRAY_BUFFER, entries[i].vertexBufferObject);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)12);
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)20);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, entries[i].indexBufferObject);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, entries[i].indexBufferObject);
 
-		const unsigned int materialIndex = entries[i].materialIndex;
-		if(materialIndex < textures.size() && textures[materialIndex])
-		{
-			textures[materialIndex]->Bind(GL_TEXTURE0);
-		}
+        const unsigned int materialIndex = entries[i].materialIndex;
+        if(materialIndex < textures.size() && textures[materialIndex])
+        {
+            textures[materialIndex]->Bind(GL_TEXTURE0);
+        }
 
-		glDrawElements(GL_TRIANGLES, entries[i].indicesCount, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, entries[i].indicesCount, GL_UNSIGNED_INT, 0);
 
-		glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
+        glBindBufferBase(GL_UNIFORM_BUFFER, materialBlockIndex, 0);
 
-		glUseProgram(0);
-	}
+        glUseProgram(0);
+    }
 
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
 
-	glBindVertexArray(0);
+    glBindVertexArray(0);
 
-	glFrontFace(GL_CW);
+    glFrontFace(GL_CW);
 }

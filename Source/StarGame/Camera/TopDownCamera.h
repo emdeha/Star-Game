@@ -35,47 +35,47 @@
 class TopDownCamera
 {
 private:
-	glm::vec3 camTarget; ///< Represents the target to which the camera looks
+    glm::vec3 camTarget; ///< Represents the target to which the camera looks
 
-	float height; ///< Represents the radial distance to the target.
-	float anglePhi_degs; ///< Represents the azumutal angle relative to the target.
-	float angleTheta_degs; ///< Represents the polar angle relative to the target.
+    float height; ///< Represents the radial distance to the target.
+    float anglePhi_degs; ///< Represents the azumutal angle relative to the target.
+    float angleTheta_degs; ///< Represents the polar angle relative to the target.
 
 public:
-	TopDownCamera(); 
-	TopDownCamera(glm::vec3 newCamTarget, 
-				  float newHeight, float newAnglePhi_degs, float newAngleTheta_degs);
+    TopDownCamera(); 
+    TopDownCamera(glm::vec3 newCamTarget, 
+                  float newHeight, float newAnglePhi_degs, float newAngleTheta_degs);
 
-	/// \fn CalcMatrix
-	/// \brief The function used to calculate the camera matrix.
+    /// \fn CalcMatrix
+    /// \brief The function used to calculate the camera matrix.
 
-	/// The matrix is calculated based on the camera's position 
-	/// (which is calculated through ResolveCamPosition()) and
-	/// the camera's target.
-	///
-	/// To calculate the matrix we need to acquire some directions:
-	///		- the look direction
-	///		- the up direction
-	///		- the right direction
-	///		- the perpendicular direction to the right and look
-	///
-	/// We then use these to construct the camera's rotational matrix.
-	/// 
-	/// For the translational matrix we use the camera position.
-	glm::mat4 CalcMatrix();
+    /// The matrix is calculated based on the camera's position 
+    /// (which is calculated through ResolveCamPosition()) and
+    /// the camera's target.
+    ///
+    /// To calculate the matrix we need to acquire some directions:
+    ///		- the look direction
+    ///		- the up direction
+    ///		- the right direction
+    ///		- the perpendicular direction to the right and look
+    ///
+    /// We then use these to construct the camera's rotational matrix.
+    /// 
+    /// For the translational matrix we use the camera position.
+    glm::mat4 CalcMatrix();
 
-	/// \fn ResolveCamPosition
-	/// \brief The function used to convert the camera's position from spherical to cartesian coordinates.
+    /// \fn ResolveCamPosition
+    /// \brief The function used to convert the camera's position from spherical to cartesian coordinates.
 
-	/// The camera's position is calculated based on the direction of the target to the camera, 
-	/// the camera's height and the camera target.
-	///
-	/// We have the height and the target's coordinate's. The only thing we need to calculate is 
-	/// the direction: (\f$\theta\f$ is the polar angle and \f$\phi\f$ is the azumutal angle)
-	///		- _x_ coordinate is \f$sin(\theta) \times cos(\phi)\f$
-	///		- _y_ coordinate is \f$cos(\theta)\f$
-	///		- _z_ coordinate is \f$sin(\theta) \times sin(\phi)\f$
-	glm::vec3 ResolveCamPosition();
+    /// The camera's position is calculated based on the direction of the target to the camera, 
+    /// the camera's height and the camera target.
+    ///
+    /// We have the height and the target's coordinate's. The only thing we need to calculate is 
+    /// the direction: (\f$\theta\f$ is the polar angle and \f$\phi\f$ is the azumutal angle)
+    ///		- _x_ coordinate is \f$sin(\theta) \times cos(\phi)\f$
+    ///		- _y_ coordinate is \f$cos(\theta)\f$
+    ///		- _z_ coordinate is \f$sin(\theta) \times sin(\phi)\f$
+    glm::vec3 ResolveCamPosition();
 };
 
 #endif

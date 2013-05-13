@@ -18,7 +18,7 @@ layout-menu:
             has-background: false
             is-visible: true
             is-using-percentage: true
-            percentaged-pos: [ 1, 17 ]
+            percentaged-pos: [ 5, 21.4 ]
             text-size: 28
         control-button-resume:
             control-type: button
@@ -28,7 +28,7 @@ layout-menu:
             has-background: false
             is-visible: false
             is-using-percentage: true
-            percentaged-pos: [ 1, 17 ]
+            percentaged-pos: [ 5, 21.4 ]
             text-size: 28
         control-button-save:
             control-type: button
@@ -38,7 +38,7 @@ layout-menu:
             has-background: false
             is-visible: false
             is-using-percentage: true
-            percentaged-pos: [ 1, 13 ]
+            percentaged-pos: [ 5, 16 ]
             text-size: 28
         control-button-load:
             control-type: button
@@ -48,7 +48,7 @@ layout-menu:
             has-background: false
             is-visible: true
             is-using-percentage: true
-            percentaged-pos: [ 1, 13 ]
+            percentaged-pos: [ 5, 16 ]
             text-size: 28
         control-button-options:
             control-type: button
@@ -58,7 +58,7 @@ layout-menu:
             has-background: false
             is-visible: true
             is-using-percentage: true
-            percentaged-pos: [ 1, 9 ]
+            percentaged-pos: [ 5, 10.7 ]
             text-size: 28
         control-button-quit:
             control-type: button
@@ -68,7 +68,7 @@ layout-menu:
             has-background: false
             is-visible: true
             is-using-percentage: true
-            percentaged-pos: [ 1, 5 ]
+            percentaged-pos: [ 5, 4.7 ]
             text-size: 28
 layout-save-game:
     background-color: [ 1.0, 1.0, 1.0, 1.0 ]
@@ -83,7 +83,7 @@ layout-save-game:
             has-background: false
             is-visible: true
             is-using-percentage: true
-            percentaged-pos: [ 1, 5 ]
+            percentaged-pos: [ 3, 5 ]
             text-size: 28
         control-button-saveslot-1:
             control-type: button

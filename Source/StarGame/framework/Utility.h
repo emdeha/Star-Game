@@ -347,8 +347,12 @@ namespace Utility
 			float height;
 
 			GLuint vertexBO;
-			GLuint indexBO;
 			GLuint textureCoordsBO;
+			GLuint leftVertexBO;
+			GLuint leftTextureCoordsBO;
+			GLuint rightVertexBO;
+			GLuint rightTextureCoordsBO;
+			GLuint indexBO;
 			GLuint vao;
 
 			std::shared_ptr<Texture2D> leftTexture;

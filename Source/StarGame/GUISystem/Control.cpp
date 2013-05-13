@@ -70,7 +70,7 @@ Control::Control(const std::string &newName, const std::string &newText,
 	hasHoveredSoon = false;
 	hasUnhoveredSoon = true;
 	percentagedPosition = newPercentagedPosition;
-	margins = glm::vec4(10, 10, 10, 10);//newMargins;
+	margins = glm::vec4(10, 10, 60, 10);//newMargins;
 
 	onHoverProps.text = newOnHoverProps.text;
 	onHoverProps.backgroundImage = newOnHoverProps.backgroundImage;

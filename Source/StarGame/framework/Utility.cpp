@@ -720,16 +720,72 @@ void Utility::Primitives::ComplexSprite::Init(const std::string &leftTextureFile
 											  const std::string &middleTextureFileName,
 											  int windowWidth, int windowHeight)
 {
-	std::vector<float> vertexData;
-	std::vector<float> textureCoordsData;
-	std::vector<unsigned short> indexData;
-
-	
 	glm::vec3 positionRelativeToCoordSystem = glm::vec3(position);
 	if(isCoordinateSystemBottomLeft)
 	{
 	}
 
+	
+	// right border data
+	std::vector<float> rightVertexData;
+	std::vector<float> rightTextureCoordsData;
+
+	rightVertexData.push_back(positionRelativeToCoordSystem.x);
+	rightVertexData.push_back(positionRelativeToCoordSystem.y - height);
+	rightVertexData.push_back(positionRelativeToCoordSystem.z); rightVertexData.push_back(1.0f);
+
+	rightVertexData.push_back(positionRelativeToCoordSystem.x - 10.0f);
+	rightVertexData.push_back(positionRelativeToCoordSystem.y - height);
+	rightVertexData.push_back(positionRelativeToCoordSystem.z); rightVertexData.push_back(1.0f);
+
+	rightVertexData.push_back(positionRelativeToCoordSystem.x - 10.0f);
+	rightVertexData.push_back(positionRelativeToCoordSystem.y);
+	rightVertexData.push_back(positionRelativeToCoordSystem.z); rightVertexData.push_back(1.0f);
+
+	rightVertexData.push_back(positionRelativeToCoordSystem.x);
+	rightVertexData.push_back(positionRelativeToCoordSystem.y);
+	rightVertexData.push_back(positionRelativeToCoordSystem.z); rightVertexData.push_back(1.0f);
+
+
+	rightTextureCoordsData.push_back(0.0f); rightTextureCoordsData.push_back(1.0f);
+	rightTextureCoordsData.push_back(1.0f); rightTextureCoordsData.push_back(1.0f);
+	rightTextureCoordsData.push_back(1.0f); rightTextureCoordsData.push_back(0.0f);
+	rightTextureCoordsData.push_back(0.0f); rightTextureCoordsData.push_back(0.0f);
+
+
+	// left border data
+	std::vector<float> leftVertexData;
+	std::vector<float> leftTextureCoordsData;
+
+	leftVertexData.push_back(positionRelativeToCoordSystem.x);
+	leftVertexData.push_back(positionRelativeToCoordSystem.y - height);
+	leftVertexData.push_back(positionRelativeToCoordSystem.z); leftVertexData.push_back(1.0f);
+
+	leftVertexData.push_back(positionRelativeToCoordSystem.x - 50.0f);
+	leftVertexData.push_back(positionRelativeToCoordSystem.y - height);
+	leftVertexData.push_back(positionRelativeToCoordSystem.z); leftVertexData.push_back(1.0f);
+
+	leftVertexData.push_back(positionRelativeToCoordSystem.x - 50.0f);
+	leftVertexData.push_back(positionRelativeToCoordSystem.y);
+	leftVertexData.push_back(positionRelativeToCoordSystem.z); leftVertexData.push_back(1.0f);
+
+	leftVertexData.push_back(positionRelativeToCoordSystem.x);
+	leftVertexData.push_back(positionRelativeToCoordSystem.y);
+	leftVertexData.push_back(positionRelativeToCoordSystem.z); leftVertexData.push_back(1.0f);
+
+
+	leftTextureCoordsData.push_back(0.0f); leftTextureCoordsData.push_back(1.0f);
+	leftTextureCoordsData.push_back(1.0f); leftTextureCoordsData.push_back(1.0f);
+	leftTextureCoordsData.push_back(1.0f); leftTextureCoordsData.push_back(0.0f);
+	leftTextureCoordsData.push_back(0.0f); leftTextureCoordsData.push_back(0.0f);
+
+
+	// middle section data
+	std::vector<float> vertexData;
+	std::vector<float> textureCoordsData;
+	std::vector<unsigned short> indexData;
+	
+	positionRelativeToCoordSystem.x += 50.0f;
 
 	vertexData.push_back(positionRelativeToCoordSystem.x);
 	vertexData.push_back(positionRelativeToCoordSystem.y - height);
@@ -761,6 +817,31 @@ void Utility::Primitives::ComplexSprite::Init(const std::string &leftTextureFile
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
+	glGenBuffers(1, &rightVertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, rightVertexBO);
+	glBufferData(GL_ARRAY_BUFFER,
+				 sizeof(float) * leftVertexData.size(), &leftVertexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glGenBuffers(1, &rightTextureCoordsBO);
+	glBindBuffer(GL_ARRAY_BUFFER, rightTextureCoordsBO);
+	glBufferData(GL_ARRAY_BUFFER,
+				 sizeof(float) * leftTextureCoordsData.size(), &leftTextureCoordsData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+	glGenBuffers(1, &leftVertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, leftVertexBO);
+	glBufferData(GL_ARRAY_BUFFER,
+				 sizeof(float) * leftVertexData.size(), &leftVertexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glGenBuffers(1, &leftTextureCoordsBO);
+	glBindBuffer(GL_ARRAY_BUFFER, leftTextureCoordsBO);
+	glBufferData(GL_ARRAY_BUFFER,
+				 sizeof(float) * leftTextureCoordsData.size(), &leftTextureCoordsData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 
 	glGenBuffers(1, &vertexBO);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);	
@@ -783,14 +864,14 @@ void Utility::Primitives::ComplexSprite::Init(const std::string &leftTextureFile
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	
 
-	if(!leftTexture->Load(leftTextureFileName))
+	if(!leftTexture->Load(leftTextureFileName, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE))
 	{
 		std::string errorMessage = "cannot load texture ";
 		errorMessage += leftTextureFileName;
 		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 		return;
 	}
-    if(!rightTexture->Load(rightTextureFileName))
+    if(!rightTexture->Load(rightTextureFileName, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE))
 	{
 		std::string errorMessage = "cannot load texture ";
 		errorMessage += rightTextureFileName;
@@ -815,6 +896,23 @@ void Utility::Primitives::ComplexSprite::Draw(glutil::MatrixStack &modelMat, con
 			textureData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMat.Top()));
 		glUniform4f(textureData.colorUnif, color.r, color.g, color.b, color.a);
 
+
+		// draw left border
+		glEnableVertexAttribArray(textureData.positionAttrib);
+		glBindBuffer(GL_ARRAY_BUFFER, leftVertexBO);
+		glVertexAttribPointer(textureData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+		glEnableVertexAttribArray(textureData.texturePosAttrib);
+		glBindBuffer(GL_ARRAY_BUFFER, leftTextureCoordsBO);
+		glVertexAttribPointer(textureData.texturePosAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+		leftTexture->Bind(GL_TEXTURE0);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+
+
+		// draw middle section
 		glEnableVertexAttribArray(textureData.positionAttrib);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
 		glVertexAttribPointer(textureData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
@@ -822,13 +920,25 @@ void Utility::Primitives::ComplexSprite::Draw(glutil::MatrixStack &modelMat, con
 		glEnableVertexAttribArray(textureData.texturePosAttrib);
 		glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
 		glVertexAttribPointer(textureData.texturePosAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-
+		
 		middleTexture->Bind(GL_TEXTURE0);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 
+		// draw right border
+		glEnableVertexAttribArray(textureData.positionAttrib);
+		glBindBuffer(GL_ARRAY_BUFFER, rightVertexBO);
+		glVertexAttribPointer(textureData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+		glEnableVertexAttribArray(textureData.texturePosAttrib);
+		glBindBuffer(GL_ARRAY_BUFFER, rightTextureCoordsBO);
+		glVertexAttribPointer(textureData.texturePosAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+		rightTexture->Bind(GL_TEXTURE0);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 
 		glDisableVertexAttribArray(textureData.positionAttrib);
 		glDisableVertexAttribArray(textureData.texturePosAttrib);
@@ -859,19 +969,19 @@ void Utility::Primitives::ComplexSprite::Update(float newWidth, float newHeight,
 
 	std::vector<float> vertexData;
 
-	vertexData.push_back(position.x);
+	vertexData.push_back(position.x - 50.0f);
+	vertexData.push_back(position.y - height); 
+	vertexData.push_back(position.z); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x - width + 10.0f);
 	vertexData.push_back(position.y - height);
 	vertexData.push_back(position.z); vertexData.push_back(1.0f);
 
-	vertexData.push_back(position.x - width);
-	vertexData.push_back(position.y - height);
-	vertexData.push_back(position.z); vertexData.push_back(1.0f);
-
-	vertexData.push_back(position.x - width);
+	vertexData.push_back(position.x - width + 10.0f);
 	vertexData.push_back(position.y);
 	vertexData.push_back(position.z); vertexData.push_back(1.0f);
 
-	vertexData.push_back(position.x);
+	vertexData.push_back(position.x - 50.0f);
 	vertexData.push_back(position.y);
 	vertexData.push_back(position.z); vertexData.push_back(1.0f);
 
@@ -879,6 +989,54 @@ void Utility::Primitives::ComplexSprite::Update(float newWidth, float newHeight,
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);	
 	glBufferData(GL_ARRAY_BUFFER, 
 				 sizeof(float) * vertexData.size(), &vertexData[0], GL_STATIC_DRAW);
+
+
+	std::vector<float> leftVertexData;
+
+	leftVertexData.push_back(position.x);
+	leftVertexData.push_back(position.y - height);
+	leftVertexData.push_back(position.z); leftVertexData.push_back(1.0f);
+
+	leftVertexData.push_back(position.x - 50.0f);
+	leftVertexData.push_back(position.y - height);
+	leftVertexData.push_back(position.z); leftVertexData.push_back(1.0f);
+
+	leftVertexData.push_back(position.x - 50.0f);
+	leftVertexData.push_back(position.y);
+	leftVertexData.push_back(position.z); leftVertexData.push_back(1.0f);
+
+	leftVertexData.push_back(position.x);
+	leftVertexData.push_back(position.y);
+	leftVertexData.push_back(position.z); leftVertexData.push_back(1.0f);
+
+	glGenBuffers(1, &leftVertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, leftVertexBO);	
+	glBufferData(GL_ARRAY_BUFFER, 
+				 sizeof(float) * leftVertexData.size(), &leftVertexData[0], GL_STATIC_DRAW);
+
+	/*
+	std::vector<float> rightVertexData;
+
+	rightVertexData.push_back(position.x + 10.0f);
+	rightVertexData.push_back(position.y - height);
+	rightVertexData.push_back(position.z); rightVertexData.push_back(1.0f);
+
+	rightVertexData.push_back(position.x);
+	rightVertexData.push_back(position.y - height);
+	rightVertexData.push_back(position.z); rightVertexData.push_back(1.0f);
+
+	rightVertexData.push_back(position.x);
+	rightVertexData.push_back(position.y);
+	rightVertexData.push_back(position.z); rightVertexData.push_back(1.0f);
+
+	rightVertexData.push_back(position.x + 10.0f);
+	rightVertexData.push_back(position.y);
+	rightVertexData.push_back(position.z); rightVertexData.push_back(1.0f);
+
+	glGenBuffers(1, &leftVertexBO);
+	glBindBuffer(GL_ARRAY_BUFFER, rightVertexBO);	
+	glBufferData(GL_ARRAY_BUFFER, 
+				 sizeof(float) * rightVertexData.size(), &rightVertexData[0], GL_STATIC_DRAW);*/
 }
 
 void Utility::Primitives::ComplexSprite::ChangeTexture(const std::string &leftTextureFileName,
@@ -888,7 +1046,8 @@ void Utility::Primitives::ComplexSprite::ChangeTexture(const std::string &leftTe
 	leftTexture = std::shared_ptr<Texture2D>(new Texture2D());
 	rightTexture = std::shared_ptr<Texture2D>(new Texture2D());
 	middleTexture = std::shared_ptr<Texture2D>(new Texture2D());
-		if(!leftTexture->Load(leftTextureFileName))
+	
+	if(!leftTexture->Load(leftTextureFileName))
 	{
 		std::string errorMessage = "cannot load texture ";
 		errorMessage += leftTextureFileName;

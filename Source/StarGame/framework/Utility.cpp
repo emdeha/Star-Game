@@ -926,6 +926,7 @@ void Utility::Primitives::ComplexSprite::Draw(glutil::MatrixStack &modelMat, con
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 
+		
 		// draw right border
 		glEnableVertexAttribArray(textureData.positionAttrib);
 		glBindBuffer(GL_ARRAY_BUFFER, rightVertexBO);
@@ -939,6 +940,7 @@ void Utility::Primitives::ComplexSprite::Draw(glutil::MatrixStack &modelMat, con
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+
 
 		glDisableVertexAttribArray(textureData.positionAttrib);
 		glDisableVertexAttribArray(textureData.texturePosAttrib);
@@ -1014,29 +1016,29 @@ void Utility::Primitives::ComplexSprite::Update(float newWidth, float newHeight,
 	glBufferData(GL_ARRAY_BUFFER, 
 				 sizeof(float) * leftVertexData.size(), &leftVertexData[0], GL_STATIC_DRAW);
 
-	/*
+	
 	std::vector<float> rightVertexData;
 
-	rightVertexData.push_back(position.x + 10.0f);
+	rightVertexData.push_back(position.x - width + 10.0f);
 	rightVertexData.push_back(position.y - height);
 	rightVertexData.push_back(position.z); rightVertexData.push_back(1.0f);
 
-	rightVertexData.push_back(position.x);
+	rightVertexData.push_back(position.x - width);
 	rightVertexData.push_back(position.y - height);
 	rightVertexData.push_back(position.z); rightVertexData.push_back(1.0f);
 
-	rightVertexData.push_back(position.x);
+	rightVertexData.push_back(position.x - width);
 	rightVertexData.push_back(position.y);
 	rightVertexData.push_back(position.z); rightVertexData.push_back(1.0f);
 
-	rightVertexData.push_back(position.x + 10.0f);
+	rightVertexData.push_back(position.x - width + 10.0f);
 	rightVertexData.push_back(position.y);
 	rightVertexData.push_back(position.z); rightVertexData.push_back(1.0f);
 
-	glGenBuffers(1, &leftVertexBO);
+	glGenBuffers(1, &rightVertexBO);
 	glBindBuffer(GL_ARRAY_BUFFER, rightVertexBO);	
 	glBufferData(GL_ARRAY_BUFFER, 
-				 sizeof(float) * rightVertexData.size(), &rightVertexData[0], GL_STATIC_DRAW);*/
+				 sizeof(float) * rightVertexData.size(), &rightVertexData[0], GL_STATIC_DRAW);
 }
 
 void Utility::Primitives::ComplexSprite::ChangeTexture(const std::string &leftTextureFileName,

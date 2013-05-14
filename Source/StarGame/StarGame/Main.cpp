@@ -443,7 +443,9 @@ void InitializeGUI()
                 scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl(controlName)->SetText(splittedFileName[0]);
 
                 HoveredProperties onHoverProps;
-                onHoverProps.backgroundImage = "";
+				onHoverProps.backgroundLeftImage = "";
+				onHoverProps.backgroundRightImage = "";
+                onHoverProps.backgroundMiddleImage = "";
                 onHoverProps.font = "";
                 onHoverProps.text = "";
                 onHoverProps.textColor = glm::vec4(1.0f);
@@ -458,7 +460,7 @@ void InitializeGUI()
                                                        false, true, false,
                                                        onHoverProps,
                                                        glm::vec2()));
-                loadEntryButton->Init("../data/fonts/AGENCYR.TTF", "",
+                loadEntryButton->Init("../data/fonts/AGENCYR.TTF", "", "", "",
                                       glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
                 scene.GetLayout(LAYOUT_LOAD_GAME)->AddControl(loadEntryButton);
             }

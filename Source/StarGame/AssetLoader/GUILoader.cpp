@@ -34,7 +34,9 @@ struct ControlData
 {
     std::string name;
     std::string text; 
-    std::string backgroundImage;
+    std::string leftBackgroundImage;
+	std::string rightBackgroundImage;
+	std::string middleBackgroundImage;
 
     glm::vec4 fontColor;
     glm::vec4 margins;
@@ -56,7 +58,9 @@ struct ControlData
 
     std::string onHoverText;
     std::string onHoverFont;
-    std::string onHoverBackgroundImage;
+    std::string onHoverLeftBackgroundImage;
+	std::string onHoverRightBackgroundImage;
+	std::string onHoverMiddleBackgroundImage;
     glm::vec4 onHoverFontColor;
 };
 
@@ -83,9 +87,17 @@ GUILoader::GUILoader(const std::string &fileName,
         for(YAML::Node::const_iterator onHoverProp = guiData["details"]["global-on-hover"].begin();
             onHoverProp != guiData["details"]["global-on-hover"].end(); ++onHoverProp)
         {
-            if(onHoverProp->first.as<std::string>() == "background-image")
+            if(onHoverProp->first.as<std::string>() == "left-background-image")
             {
-                controlData.onHoverBackgroundImage = onHoverProp->second.as<std::string>();
+                controlData.onHoverLeftBackgroundImage = onHoverProp->second.as<std::string>();
+            }
+            if(onHoverProp->first.as<std::string>() == "right-background-image")
+            {
+				controlData.onHoverRightBackgroundImage = onHoverProp->second.as<std::string>();
+            }
+			if(onHoverProp->first.as<std::string>() == "middle-background-image")
+            {
+				controlData.onHoverMiddleBackgroundImage == onHoverProp->second.as<std::string>();
             }
             if(onHoverProp->first.as<std::string>() == "font-color")
             {
@@ -166,15 +178,22 @@ GUILoader::GUILoader(const std::string &fileName,
                                                           control->second["font-color"][2].as<float>(),
                                                           control->second["font-color"][3].as<float>());
                         controlData.textSize = control->second["text-size"].as<int>();
-                        controlData.backgroundImage = "";
+                        controlData.leftBackgroundImage = "";
+                        controlData.rightBackgroundImage = "";
+                        controlData.middleBackgroundImage = "";
                         if(controlData.hasBackground)
                         {
                             controlData.margins = glm::vec4(control->second["margins"][0].as<float>(),
                                                             control->second["margins"][1].as<float>(),
                                                             control->second["margins"][2].as<float>(),
                                                             control->second["margins"][3].as<float>());
-                            controlData.backgroundImage = texturesDir;
-                            controlData.backgroundImage += control->second["background-image"].as<std::string>();
+
+                            controlData.leftBackgroundImage = texturesDir;
+                            controlData.leftBackgroundImage += control->second["bckg-left"].as<std::string>();
+							controlData.rightBackgroundImage = texturesDir;
+							controlData.rightBackgroundImage += control->second["bckg-right"].as<std::string>();
+							controlData.middleBackgroundImage = texturesDir;
+							controlData.middleBackgroundImage += control->second["bckg-middle"].as<std::string>();
                         }
                         controlData.percentagedPosition = glm::vec2();
                         controlData.position = glm::vec2();
@@ -191,7 +210,9 @@ GUILoader::GUILoader(const std::string &fileName,
                         }
 
                         HoveredProperties newHoveredProps;
-                        newHoveredProps.backgroundImage = controlData.onHoverBackgroundImage;
+                        newHoveredProps.backgroundLeftImage = controlData.onHoverLeftBackgroundImage;
+						newHoveredProps.backgroundRightImage = controlData.onHoverRightBackgroundImage;
+						newHoveredProps.backgroundMiddleImage = controlData.onHoverMiddleBackgroundImage;
                         newHoveredProps.text = controlData.onHoverText;
                         newHoveredProps.textColor = controlData.onHoverFontColor;
                         newHoveredProps.font = controlData.onHoverFont;
@@ -204,7 +225,10 @@ GUILoader::GUILoader(const std::string &fileName,
                                                              controlData.isUsingPercentage, 
                                                              newHoveredProps,
                                                              controlData.percentagedPosition));
-                        label->Init(fontsDir + defaultFont, controlData.backgroundImage,
+                        label->Init(fontsDir + defaultFont, 
+									controlData.leftBackgroundImage,
+									controlData.rightBackgroundImage,
+									controlData.middleBackgroundImage,
                                     windowWidth, windowHeight);
 
                         newLayout->AddControl(label);
@@ -221,15 +245,22 @@ GUILoader::GUILoader(const std::string &fileName,
                                                           control->second["font-color"][2].as<float>(),
                                                           control->second["font-color"][3].as<float>());
                         controlData.textSize = control->second["text-size"].as<int>();
-                        controlData.backgroundImage = "";
+                        controlData.leftBackgroundImage = "";
+                        controlData.rightBackgroundImage = "";
+                        controlData.middleBackgroundImage = "";
                         if(controlData.hasBackground)
                         {
                             controlData.margins = glm::vec4(control->second["margins"][0].as<float>(),
                                                             control->second["margins"][1].as<float>(),
                                                             control->second["margins"][2].as<float>(),
                                                             control->second["margins"][3].as<float>());
-                            controlData.backgroundImage = texturesDir;
-                            controlData.backgroundImage += control->second["background-image"].as<std::string>();
+
+                            controlData.leftBackgroundImage = texturesDir;
+                            controlData.leftBackgroundImage += control->second["bckg-left"].as<std::string>();
+							controlData.rightBackgroundImage = texturesDir;
+							controlData.rightBackgroundImage += control->second["bckg-right"].as<std::string>();
+							controlData.middleBackgroundImage = texturesDir;
+							controlData.middleBackgroundImage += control->second["bckg-middle"].as<std::string>();
                         }
                         controlData.percentagedPosition = glm::vec2();
                         controlData.position = glm::vec2();
@@ -246,7 +277,9 @@ GUILoader::GUILoader(const std::string &fileName,
                         }
 
                         HoveredProperties newHoveredProps;
-                        newHoveredProps.backgroundImage = controlData.onHoverBackgroundImage;
+                        newHoveredProps.backgroundLeftImage = controlData.onHoverLeftBackgroundImage;
+						newHoveredProps.backgroundRightImage = controlData.onHoverRightBackgroundImage;
+						newHoveredProps.backgroundMiddleImage = controlData.onHoverMiddleBackgroundImage;
                         newHoveredProps.text = controlData.onHoverText;
                         newHoveredProps.textColor = controlData.onHoverFontColor;
                         newHoveredProps.font = controlData.onHoverFont;
@@ -259,7 +292,10 @@ GUILoader::GUILoader(const std::string &fileName,
                                                                controlData.isUsingPercentage, 
                                                                newHoveredProps,
                                                                controlData.percentagedPosition));
-                        button->Init(fontsDir + defaultFont, controlData.backgroundImage,
+                        button->Init(fontsDir + defaultFont, 
+									 controlData.leftBackgroundImage,
+									 controlData.rightBackgroundImage,
+									 controlData.middleBackgroundImage,
                                      windowWidth, windowHeight);
 
                         newLayout->AddControl(button);
@@ -267,29 +303,12 @@ GUILoader::GUILoader(const std::string &fileName,
                     else if(control->second["control-type"].as<std::string>() == "imageBox")
                     {
                         controlData.name = control->second["name"].as<std::string>();
-                        //controlData.text = control->second["text"].as<std::string>();
-                        //controlData.hasBackground = control->second["has-background"].as<bool>();
                         controlData.isVisible = control->second["is-visible"].as<bool>();
                         controlData.isUsingPercentage = control->second["is-using-percentage"].as<bool>();
-                        //controlData.fontColor = glm::vec4(control->second["font-color"][0].as<float>(),
-                        //		    						control->second["font-color"][1].as<float>(),
-                        //								    control->second["font-color"][2].as<float>(),
-                        //								    control->second["font-color"][3].as<float>());
-                        //controlData.textSize = control->second["text-size"].as<int>();
-                        //controlData.backgroundImage = "";
-                        //if(controlData.hasBackground)
-                        //{
-                        //	controlData.margins = glm::vec4(control->second["margins"][0].as<float>(),
-                        //									control->second["margins"][1].as<float>(),
-                        //									control->second["margins"][2].as<float>(),
-                        //									control->second["margins"][3].as<float>());
-                        //	controlData.backgroundImage = texturesDir;
-                        //	controlData.backgroundImage += control->second["background-image"].as<std::string>();
-                        //}
                         controlData.imageBoxHeight = control->second["height"].as<float>();
                         controlData.imageBoxWidth = control->second["width"].as<float>();
-                        controlData.backgroundImage = texturesDir;
-                        controlData.backgroundImage += control->second["image"].as<std::string>();
+                        controlData.middleBackgroundImage = texturesDir;
+                        controlData.middleBackgroundImage += control->second["image"].as<std::string>();
                         controlData.percentagedPosition = glm::vec2();
                         controlData.position = glm::vec2();
                         if(controlData.isUsingPercentage)
@@ -305,7 +324,7 @@ GUILoader::GUILoader(const std::string &fileName,
                         }
 
                         HoveredProperties newHoveredProps;
-                        newHoveredProps.backgroundImage = controlData.onHoverBackgroundImage;
+                        newHoveredProps.backgroundMiddleImage = controlData.onHoverMiddleBackgroundImage;
                         newHoveredProps.text = controlData.onHoverText;
                         newHoveredProps.textColor = controlData.onHoverFontColor;
                         newHoveredProps.font = controlData.onHoverFont;
@@ -319,14 +338,13 @@ GUILoader::GUILoader(const std::string &fileName,
                                                                    controlData.isUsingPercentage, 
                                                                    newHoveredProps,
                                                                    controlData.percentagedPosition));
-                        imageBox->Init(controlData.backgroundImage, windowWidth, windowHeight);
+                        imageBox->Init(controlData.middleBackgroundImage, windowWidth, windowHeight);
 
                         newLayout->AddControl(imageBox);
                     }
                     else if(control->second["control-type"].as<std::string>() == "textBox")
                     {
                         controlData.name = control->second["name"].as<std::string>();
-                        //controlData.text = control->second["text"].as<std::string>();
                         controlData.text = "";
                         controlData.hasBackground = control->second["has-background"].as<bool>();
                         controlData.isVisible = control->second["is-visible"].as<bool>();
@@ -337,15 +355,22 @@ GUILoader::GUILoader(const std::string &fileName,
                                                           control->second["font-color"][3].as<float>());
                         controlData.textSize = control->second["text-size"].as<int>();
                         controlData.textBoxWidth = control->second["width"].as<float>();
-                        controlData.backgroundImage = "";
+                        controlData.leftBackgroundImage = "";
+                        controlData.rightBackgroundImage = "";
+                        controlData.middleBackgroundImage = "";
                         if(controlData.hasBackground)
                         {
                             controlData.margins = glm::vec4(control->second["margins"][0].as<float>(),
                                                             control->second["margins"][1].as<float>(),
                                                             control->second["margins"][2].as<float>(),
                                                             control->second["margins"][3].as<float>());
-                            controlData.backgroundImage = texturesDir;
-                            controlData.backgroundImage += control->second["background-image"].as<std::string>();
+							
+                            controlData.leftBackgroundImage = texturesDir;
+                            controlData.leftBackgroundImage += control->second["bckg-left"].as<std::string>();
+							controlData.rightBackgroundImage = texturesDir;
+							controlData.rightBackgroundImage += control->second["bckg-right"].as<std::string>();
+							controlData.middleBackgroundImage = texturesDir;
+							controlData.middleBackgroundImage += control->second["bckg-middle"].as<std::string>();
                         }
                         controlData.percentagedPosition = glm::vec2();
                         controlData.position = glm::vec2();
@@ -362,7 +387,9 @@ GUILoader::GUILoader(const std::string &fileName,
                         }
 
                         HoveredProperties newHoveredProps;
-                        newHoveredProps.backgroundImage = controlData.onHoverBackgroundImage;
+                        newHoveredProps.backgroundLeftImage = controlData.onHoverLeftBackgroundImage;
+						newHoveredProps.backgroundRightImage = controlData.onHoverRightBackgroundImage;
+						newHoveredProps.backgroundMiddleImage = controlData.onHoverMiddleBackgroundImage;
                         newHoveredProps.text = controlData.onHoverText;
                         newHoveredProps.textColor = controlData.onHoverFontColor;
                         newHoveredProps.font = controlData.onHoverFont;
@@ -376,7 +403,10 @@ GUILoader::GUILoader(const std::string &fileName,
                                                                  controlData.isUsingPercentage, 
                                                                  newHoveredProps,
                                                                  controlData.percentagedPosition));
-                        textBox->Init(fontsDir + defaultFont, controlData.backgroundImage,
+                        textBox->Init(fontsDir + defaultFont, 
+									  controlData.leftBackgroundImage,
+									  controlData.rightBackgroundImage,
+									  controlData.middleBackgroundImage,
                                       windowWidth, windowHeight);
 
                         newLayout->AddControl(textBox);

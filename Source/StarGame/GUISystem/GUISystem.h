@@ -130,8 +130,10 @@ public:
 struct HoveredProperties
 {
 	std::string font;
-	std::string backgroundImage;
 	std::string text;
+	std::string backgroundLeftImage;
+	std::string backgroundRightImage;
+	std::string backgroundMiddleImage;
 
 	glm::vec4 textColor;
 };
@@ -145,6 +147,10 @@ protected:
 	std::string text;
 	std::string visibleText;
 	std::string fontName;
+
+	std::string bckgLeftImage;
+	std::string bckgRightImage;
+	std::string bckgMiddleImage;
 
 	std::string onClickEventName;
 	std::string onHoverEventName;
@@ -165,7 +171,6 @@ protected:
 	bool hasHoveredSoon;
 	bool hasUnhoveredSoon;
 
-	//Utility::Primitives::Sprite controlBackground;
 	Utility::Primitives::ComplexSprite controlBackground;
 	Utility::Primitives::Square controlSquare; // TODO: Replace with rectangle geometry primitive
 
@@ -184,7 +189,10 @@ public:
 			HoveredProperties newOnHoverProps,
 			glm::vec2 newPercentagedPosition = glm::vec2());
 
-	void Init(const std::string &newFontName, const std::string &bckgTextureFileName,
+	void Init(const std::string &newFontName, 
+			  const std::string &bckgLeftTextureFileName,
+			  const std::string &bckgRightTextureFileName,
+			  const std::string &bckgMiddleTextureFileName,
 			  int newWindowWidth, int newWindowHeight);
 
 	std::string GetContent();

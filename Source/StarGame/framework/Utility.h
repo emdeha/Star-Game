@@ -341,6 +341,7 @@ namespace Utility
         {
         private:
 			glm::vec4 color;
+			glm::vec4 margins; // x - bottom, y - top, z - left, w - right
 			glm::vec3 position;
 
 			float width;
@@ -363,7 +364,7 @@ namespace Utility
 
         public:
             ComplexSprite() {}
-			ComplexSprite(glm::vec3 newPosition, glm::vec4 newColor,
+			ComplexSprite(glm::vec3 newPosition, glm::vec4 newColor, glm::vec4 newMargins,
 						  float newWidth, float newHeight, 
 						  bool newIsCoordinateSystemBottomLeft);
 

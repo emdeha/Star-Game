@@ -41,7 +41,9 @@ Control::Control()
 	hasUnhoveredSoon = true;
 
 	onHoverProps.text = "";
-	onHoverProps.backgroundImage = "";
+	onHoverProps.backgroundLeftImage = "";
+	onHoverProps.backgroundRightImage = "";
+	onHoverProps.backgroundMiddleImage = "";
 	onHoverProps.font = "";
 	onHoverProps.textColor = glm::vec4(1.0f);
 }
@@ -62,7 +64,7 @@ Control::Control(const std::string &newName, const std::string &newText,
 	fontColor = newFontColor;
 	position = newPosition;
 	textSize = newTextSize;
-	hasBackground = true;//newHasBackground;
+	hasBackground = newHasBackground;
 	isVisible = newIsVisible;
 	isUsingPercentage = newIsUsingPercentage;
 	isActive = false;
@@ -70,15 +72,20 @@ Control::Control(const std::string &newName, const std::string &newText,
 	hasHoveredSoon = false;
 	hasUnhoveredSoon = true;
 	percentagedPosition = newPercentagedPosition;
-	margins = glm::vec4(10, 10, 60, 10);//newMargins;
+	margins = newMargins;
 
 	onHoverProps.text = newOnHoverProps.text;
-	onHoverProps.backgroundImage = newOnHoverProps.backgroundImage;
+	onHoverProps.backgroundLeftImage = "";
+	onHoverProps.backgroundRightImage = "";
+	onHoverProps.backgroundMiddleImage = "";
 	onHoverProps.font = newOnHoverProps.font;
 	onHoverProps.textColor = newOnHoverProps.textColor;
 }
 
-void Control::Init(const std::string &newFontName, const std::string &bckgTextureFileName,
+void Control::Init(const std::string &newFontName, 
+				   const std::string &bckgLeftTextureFileName,
+				   const std::string &bckgRightTextureFileName,
+				   const std::string &bckgMiddleTextureFileName,
 			       int newWindowWidth, int newWindowHeight)
 {
 	windowWidth = newWindowWidth;
@@ -94,14 +101,18 @@ void Control::Init(const std::string &newFontName, const std::string &bckgTextur
 									glm::vec3(position, 0.0f), 
 									0.0f, (float)textSize, true);
 	controlSquare.Init(windowWidth, windowHeight);
+
+	bckgLeftImage = bckgLeftTextureFileName;
+	bckgRightImage = bckgRightTextureFileName;
+	bckgMiddleImage = bckgMiddleTextureFileName;
 	
 	if(hasBackground)
 	{
 		controlBackground = 
-			Utility::Primitives::ComplexSprite(glm::vec3(), glm::vec4(1.0f), 0.0f, 0.0f, false);
-		controlBackground.Init("../data/images/b-left-border.png",
-							   "../data/images/b-right-border.png", 
-                               "../data/images/b-middle-section.png"/*bckgTextureFileName*/, 
+			Utility::Primitives::ComplexSprite(glm::vec3(), glm::vec4(1.0f), margins, 0.0f, 0.0f, false);
+		controlBackground.Init(bckgLeftTextureFileName,
+							   bckgRightTextureFileName,
+							   bckgMiddleTextureFileName,
 							   newWindowWidth, newWindowHeight);
 	}
 
@@ -183,6 +194,13 @@ void Control::Draw(const FontProgData &fontData, const TextureProgData &textureD
 			{
 				textToDisplay = Text(fontName.c_str());
 				textToDisplay.Init(windowWidth, windowHeight);
+				if(hasBackground)
+                {
+					controlBackground.Init(bckgLeftImage,
+						  				   bckgRightImage, 
+										   bckgMiddleImage,  
+										   windowWidth, windowHeight);
+                }
 				hasHoveredSoon = false;
 				hasUnhoveredSoon = true;
 			}
@@ -195,6 +213,13 @@ void Control::Draw(const FontProgData &fontData, const TextureProgData &textureD
 			{
 				textToDisplay = Text(onHoverProps.font.c_str());
 				textToDisplay.Init(windowWidth, windowHeight);
+				if(hasBackground)
+                {
+					controlBackground.Init(onHoverProps.backgroundLeftImage, 
+										   onHoverProps.backgroundRightImage,
+										   onHoverProps.backgroundMiddleImage,
+										   windowWidth, windowHeight);
+                }
 				hasHoveredSoon = true;
 				hasUnhoveredSoon = false;
 			}

@@ -694,11 +694,12 @@ void Utility::Primitives::Sprite::ChangeTexture(const std::string &textureFileNa
 }
 
 
-Utility::Primitives::ComplexSprite::ComplexSprite(glm::vec3 newPosition, glm::vec4 newColor,
+Utility::Primitives::ComplexSprite::ComplexSprite(glm::vec3 newPosition, glm::vec4 newColor, glm::vec4 newMargins,
 												  float newWidth, float newHeight,
 												  bool newIsCoordinateSystemBottomLeft)
 {
 	color = newColor;
+	margins = newMargins;
 	position = newPosition;
 	width = newWidth;
 	height = newHeight;
@@ -730,19 +731,19 @@ void Utility::Primitives::ComplexSprite::Init(const std::string &leftTextureFile
 	std::vector<float> rightVertexData;
 	std::vector<float> rightTextureCoordsData;
 
-	rightVertexData.push_back(positionRelativeToCoordSystem.x);
+	rightVertexData.push_back(positionRelativeToCoordSystem.x - width + margins.w);
 	rightVertexData.push_back(positionRelativeToCoordSystem.y - height);
 	rightVertexData.push_back(positionRelativeToCoordSystem.z); rightVertexData.push_back(1.0f);
 
-	rightVertexData.push_back(positionRelativeToCoordSystem.x - 10.0f);
+	rightVertexData.push_back(positionRelativeToCoordSystem.x - width);
 	rightVertexData.push_back(positionRelativeToCoordSystem.y - height);
 	rightVertexData.push_back(positionRelativeToCoordSystem.z); rightVertexData.push_back(1.0f);
 
-	rightVertexData.push_back(positionRelativeToCoordSystem.x - 10.0f);
+	rightVertexData.push_back(positionRelativeToCoordSystem.x - width);
 	rightVertexData.push_back(positionRelativeToCoordSystem.y);
 	rightVertexData.push_back(positionRelativeToCoordSystem.z); rightVertexData.push_back(1.0f);
 
-	rightVertexData.push_back(positionRelativeToCoordSystem.x);
+	rightVertexData.push_back(positionRelativeToCoordSystem.x - width + margins.w);
 	rightVertexData.push_back(positionRelativeToCoordSystem.y);
 	rightVertexData.push_back(positionRelativeToCoordSystem.z); rightVertexData.push_back(1.0f);
 
@@ -761,11 +762,11 @@ void Utility::Primitives::ComplexSprite::Init(const std::string &leftTextureFile
 	leftVertexData.push_back(positionRelativeToCoordSystem.y - height);
 	leftVertexData.push_back(positionRelativeToCoordSystem.z); leftVertexData.push_back(1.0f);
 
-	leftVertexData.push_back(positionRelativeToCoordSystem.x - 50.0f);
+	leftVertexData.push_back(positionRelativeToCoordSystem.x - margins.z);
 	leftVertexData.push_back(positionRelativeToCoordSystem.y - height);
 	leftVertexData.push_back(positionRelativeToCoordSystem.z); leftVertexData.push_back(1.0f);
 
-	leftVertexData.push_back(positionRelativeToCoordSystem.x - 50.0f);
+	leftVertexData.push_back(positionRelativeToCoordSystem.x - margins.z);
 	leftVertexData.push_back(positionRelativeToCoordSystem.y);
 	leftVertexData.push_back(positionRelativeToCoordSystem.z); leftVertexData.push_back(1.0f);
 
@@ -785,21 +786,19 @@ void Utility::Primitives::ComplexSprite::Init(const std::string &leftTextureFile
 	std::vector<float> textureCoordsData;
 	std::vector<unsigned short> indexData;
 	
-	positionRelativeToCoordSystem.x += 50.0f;
-
-	vertexData.push_back(positionRelativeToCoordSystem.x);
+	vertexData.push_back(positionRelativeToCoordSystem.x - margins.z);
 	vertexData.push_back(positionRelativeToCoordSystem.y - height);
 	vertexData.push_back(positionRelativeToCoordSystem.z); vertexData.push_back(1.0f);
 
-	vertexData.push_back(positionRelativeToCoordSystem.x - width);
+	vertexData.push_back(positionRelativeToCoordSystem.x - width + margins.w);
 	vertexData.push_back(positionRelativeToCoordSystem.y - height);
 	vertexData.push_back(positionRelativeToCoordSystem.z); vertexData.push_back(1.0f);
 
-	vertexData.push_back(positionRelativeToCoordSystem.x - width);
+	vertexData.push_back(positionRelativeToCoordSystem.x - width + margins.w);
 	vertexData.push_back(positionRelativeToCoordSystem.y);
 	vertexData.push_back(positionRelativeToCoordSystem.z); vertexData.push_back(1.0f);
 
-	vertexData.push_back(positionRelativeToCoordSystem.x);
+	vertexData.push_back(positionRelativeToCoordSystem.x - margins.z);
 	vertexData.push_back(positionRelativeToCoordSystem.y);
 	vertexData.push_back(positionRelativeToCoordSystem.z); vertexData.push_back(1.0f);
 
@@ -971,19 +970,19 @@ void Utility::Primitives::ComplexSprite::Update(float newWidth, float newHeight,
 
 	std::vector<float> vertexData;
 
-	vertexData.push_back(position.x - 50.0f);
+	vertexData.push_back(position.x - margins.z);
 	vertexData.push_back(position.y - height); 
 	vertexData.push_back(position.z); vertexData.push_back(1.0f);
 
-	vertexData.push_back(position.x - width + 10.0f);
+	vertexData.push_back(position.x - width + margins.w);
 	vertexData.push_back(position.y - height);
 	vertexData.push_back(position.z); vertexData.push_back(1.0f);
 
-	vertexData.push_back(position.x - width + 10.0f);
+	vertexData.push_back(position.x - width + margins.w);
 	vertexData.push_back(position.y);
 	vertexData.push_back(position.z); vertexData.push_back(1.0f);
 
-	vertexData.push_back(position.x - 50.0f);
+	vertexData.push_back(position.x - margins.z);
 	vertexData.push_back(position.y);
 	vertexData.push_back(position.z); vertexData.push_back(1.0f);
 
@@ -999,11 +998,11 @@ void Utility::Primitives::ComplexSprite::Update(float newWidth, float newHeight,
 	leftVertexData.push_back(position.y - height);
 	leftVertexData.push_back(position.z); leftVertexData.push_back(1.0f);
 
-	leftVertexData.push_back(position.x - 50.0f);
+	leftVertexData.push_back(position.x - margins.z);
 	leftVertexData.push_back(position.y - height);
 	leftVertexData.push_back(position.z); leftVertexData.push_back(1.0f);
 
-	leftVertexData.push_back(position.x - 50.0f);
+	leftVertexData.push_back(position.x - margins.z);
 	leftVertexData.push_back(position.y);
 	leftVertexData.push_back(position.z); leftVertexData.push_back(1.0f);
 
@@ -1019,7 +1018,7 @@ void Utility::Primitives::ComplexSprite::Update(float newWidth, float newHeight,
 	
 	std::vector<float> rightVertexData;
 
-	rightVertexData.push_back(position.x - width + 10.0f);
+	rightVertexData.push_back(position.x - width + margins.w);
 	rightVertexData.push_back(position.y - height);
 	rightVertexData.push_back(position.z); rightVertexData.push_back(1.0f);
 
@@ -1031,7 +1030,7 @@ void Utility::Primitives::ComplexSprite::Update(float newWidth, float newHeight,
 	rightVertexData.push_back(position.y);
 	rightVertexData.push_back(position.z); rightVertexData.push_back(1.0f);
 
-	rightVertexData.push_back(position.x - width + 10.0f);
+	rightVertexData.push_back(position.x - width + margins.w);
 	rightVertexData.push_back(position.y);
 	rightVertexData.push_back(position.z); rightVertexData.push_back(1.0f);
 

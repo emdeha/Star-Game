@@ -877,7 +877,7 @@ void Utility::Primitives::ComplexSprite::Init(const std::string &leftTextureFile
 		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 		return;
     }
-	if(!middleTexture->Load(middleTextureFileName, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE, true))
+    if(!middleTexture->Load(middleTextureFileName, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE, true))
 	{
 		std::string errorMessage = "cannot load texture ";
 		errorMessage += middleTextureFileName;

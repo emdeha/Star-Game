@@ -185,7 +185,12 @@ void Control::Draw(const FontProgData &fontData, const TextureProgData &textureD
 			glutil::MatrixStack identityMatStack;
 			identityMatStack.SetIdentity();
 
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 			controlBackground.Draw(identityMatStack, textureData);
+
+			glDisable(GL_BLEND);
 		}
 
 		if(!isHovered)

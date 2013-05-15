@@ -89,15 +89,18 @@ GUILoader::GUILoader(const std::string &fileName,
         {
             if(onHoverProp->first.as<std::string>() == "left-background-image")
             {
-                controlData.onHoverLeftBackgroundImage = onHoverProp->second.as<std::string>();
+				controlData.onHoverLeftBackgroundImage = texturesDir;
+                controlData.onHoverLeftBackgroundImage += onHoverProp->second.as<std::string>();
             }
             if(onHoverProp->first.as<std::string>() == "right-background-image")
             {
-				controlData.onHoverRightBackgroundImage = onHoverProp->second.as<std::string>();
+				controlData.onHoverRightBackgroundImage = texturesDir;
+				controlData.onHoverRightBackgroundImage += onHoverProp->second.as<std::string>();
             }
 			if(onHoverProp->first.as<std::string>() == "middle-background-image")
             {
-				controlData.onHoverMiddleBackgroundImage == onHoverProp->second.as<std::string>();
+				controlData.onHoverMiddleBackgroundImage = texturesDir;
+				controlData.onHoverMiddleBackgroundImage += onHoverProp->second.as<std::string>();
             }
             if(onHoverProp->first.as<std::string>() == "font-color")
             {

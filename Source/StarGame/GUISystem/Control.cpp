@@ -75,9 +75,9 @@ Control::Control(const std::string &newName, const std::string &newText,
 	margins = newMargins;
 
 	onHoverProps.text = newOnHoverProps.text;
-	onHoverProps.backgroundLeftImage = "";
-	onHoverProps.backgroundRightImage = "";
-	onHoverProps.backgroundMiddleImage = "";
+	onHoverProps.backgroundLeftImage = newOnHoverProps.backgroundLeftImage;
+	onHoverProps.backgroundRightImage = newOnHoverProps.backgroundRightImage;
+	onHoverProps.backgroundMiddleImage = newOnHoverProps.backgroundMiddleImage;
 	onHoverProps.font = newOnHoverProps.font;
 	onHoverProps.textColor = newOnHoverProps.textColor;
 }
@@ -110,9 +110,9 @@ void Control::Init(const std::string &newFontName,
 	{
 		controlBackground = 
 			Utility::Primitives::ComplexSprite(glm::vec3(), glm::vec4(1.0f), margins, 0.0f, 0.0f, false);
-		controlBackground.Init(bckgLeftTextureFileName,
-							   bckgRightTextureFileName,
-							   bckgMiddleTextureFileName,
+		controlBackground.Init(bckgLeftImage,
+							   bckgRightImage,
+							   bckgMiddleImage,
 							   newWindowWidth, newWindowHeight);
 	}
 
@@ -196,10 +196,13 @@ void Control::Draw(const FontProgData &fontData, const TextureProgData &textureD
 				textToDisplay.Init(windowWidth, windowHeight);
 				if(hasBackground)
                 {
+					controlBackground = 
+						Utility::Primitives::ComplexSprite(glm::vec3(), glm::vec4(1.0f), margins, 0.0f, 0.0f, false);
 					controlBackground.Init(bckgLeftImage,
 						  				   bckgRightImage, 
 										   bckgMiddleImage,  
 										   windowWidth, windowHeight);
+					ComputeNewAttributes();
                 }
 				hasHoveredSoon = false;
 				hasUnhoveredSoon = true;
@@ -215,10 +218,13 @@ void Control::Draw(const FontProgData &fontData, const TextureProgData &textureD
 				textToDisplay.Init(windowWidth, windowHeight);
 				if(hasBackground)
                 {
+					controlBackground = 
+						Utility::Primitives::ComplexSprite(glm::vec3(), glm::vec4(1.0f), margins, 0.0f, 0.0f, false);
 					controlBackground.Init(onHoverProps.backgroundLeftImage, 
 										   onHoverProps.backgroundRightImage,
 										   onHoverProps.backgroundMiddleImage,
 										   windowWidth, windowHeight);
+					ComputeNewAttributes();
                 }
 				hasHoveredSoon = true;
 				hasUnhoveredSoon = false;

@@ -31,6 +31,7 @@
 #include "../framework/Utility.h"
 #include "../framework/EventSystem.h"
 #include "../Mouse/Mouse.h"
+#include "../Fusion_AssetLoader/AssetLoader.h"
 
 
 
@@ -56,7 +57,51 @@ struct LightBlockData
 
 namespace FusionEngine
 {
-	class Click : public Component
+	class Transform : public Component
+	{
+	public:
+		glm::vec3 position;
+		glm::vec3 rotation;
+		glm::vec3 scale;
+
+		Transform() : Component(CT_TRANSFORM) {}
+		virtual ~Transform() {}
+	};
+
+
+	class Mesh : public Component 
+    {
+    public:
+		enum RendererType
+        {
+			FE_RENDERER_SIMPLE,
+
+			FE_RENDERER_COUNT,
+        };
+
+    public:
+		FusionEngine::MeshAssetObject mesh;
+		RendererType rendererType;
+
+		GLuint vao;
+		GLuint materialUniformBuffer;
+
+        Mesh() : Component(CT_MESH) {}
+        virtual ~Mesh() {}
+    };
+
+	
+
+	////////////////////////
+	///                  ///
+    ///  Old Components  ///
+	///                  ///
+    ////////////////////////
+
+
+
+
+    class Click : public Component
 	{
 	public:
 		Mouse userMouse;
@@ -82,7 +127,7 @@ namespace FusionEngine
 		virtual ~FunctionalBehavior() {}
 	};
 
-	
+
 	class RotationOrigin : public Component
 	{
 	public:
@@ -92,18 +137,6 @@ namespace FusionEngine
 
 		RotationOrigin() : Component(CT_ROTATE_ORIGIN) {}
 		virtual ~RotationOrigin() {}
-	};
-
-
-	class Transform : public Component
-	{
-	public:
-		glm::vec3 position;
-		glm::vec3 rotation;
-		glm::vec3 scale;
-
-		Transform() : Component(CT_TRANSFORM) {}
-		virtual ~Transform() {}
 	};
 
 

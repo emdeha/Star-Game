@@ -43,6 +43,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fusion_Scene", "Fusion_Scen
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fusion_EntitySystem", "Fusion_EntitySystem\Fusion_EntitySystem.vcxproj", "{46033B29-5B2C-49E1-9F18-58199443D50D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fusion_AssetLoader", "Fusion_AssetLoader\Fusion_AssetLoader.vcxproj", "{9CA9CC8A-1F25-4D48-9D6A-623A6F8061CC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fusion_Renderer", "Fusion_Renderer\Fusion_Renderer.vcxproj", "{7805C27A-13EF-49A7-B430-063367F3F799}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = StarGame.vsmdi
@@ -108,6 +112,14 @@ Global
 		{46033B29-5B2C-49E1-9F18-58199443D50D}.Debug|Win32.Build.0 = Debug|Win32
 		{46033B29-5B2C-49E1-9F18-58199443D50D}.Release|Win32.ActiveCfg = Release|Win32
 		{46033B29-5B2C-49E1-9F18-58199443D50D}.Release|Win32.Build.0 = Release|Win32
+		{9CA9CC8A-1F25-4D48-9D6A-623A6F8061CC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9CA9CC8A-1F25-4D48-9D6A-623A6F8061CC}.Debug|Win32.Build.0 = Debug|Win32
+		{9CA9CC8A-1F25-4D48-9D6A-623A6F8061CC}.Release|Win32.ActiveCfg = Release|Win32
+		{9CA9CC8A-1F25-4D48-9D6A-623A6F8061CC}.Release|Win32.Build.0 = Release|Win32
+		{7805C27A-13EF-49A7-B430-063367F3F799}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7805C27A-13EF-49A7-B430-063367F3F799}.Debug|Win32.Build.0 = Debug|Win32
+		{7805C27A-13EF-49A7-B430-063367F3F799}.Release|Win32.ActiveCfg = Release|Win32
+		{7805C27A-13EF-49A7-B430-063367F3F799}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

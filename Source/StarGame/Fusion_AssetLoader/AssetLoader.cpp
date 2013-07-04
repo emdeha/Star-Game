@@ -25,6 +25,21 @@ using namespace FusionEngine;
 /////////////////////
 ///  Mesh Loader  ///
 /////////////////////
+void MeshEntry::Init(const std::vector<Vertex> &vertices,
+					 const std::vector<unsigned int> &indices)
+{
+	indicesCount = indices.size();
+
+	glGenBuffers(1, &vertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+
+	glGenBuffers(1, &indexBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indicesCount, &indices[0], GL_STATIC_DRAW);
+}
+
+
 MeshAssetObject MeshLoader::Load(const std::string &type, const std::string &name)
 {
 	MeshAssetObject loadedMesh;
@@ -63,7 +78,7 @@ void MeshLoader::InitFromScene(const aiScene *scene, MeshAssetObject &loadedMesh
 
 void MeshLoader::InitMesh(unsigned int index, const aiMesh *mesh, MeshAssetObject &loadedMesh)
 {
-	std::vector<CVertex> vertices;
+	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 
 	const aiVector3D zeroVector(0.0f, 0.0f, 0.0f);
@@ -75,7 +90,7 @@ void MeshLoader::InitMesh(unsigned int index, const aiMesh *mesh, MeshAssetObjec
 		const aiVector3D *textureCoordinate = 
 			mesh->HasTextureCoords(0) ? &(mesh->mTextureCoords[0][i]) : &zeroVector;
 
-		CVertex vert(glm::vec3(position->x, position->y, position->z),
+		Vertex vert(glm::vec3(position->x, position->y, position->z),
 					glm::vec2(textureCoordinate->x, textureCoordinate->y),
 					glm::vec3(normal->x, normal->y, normal->z));
 		vertices.push_back(vert);
@@ -90,7 +105,10 @@ void MeshLoader::InitMesh(unsigned int index, const aiMesh *mesh, MeshAssetObjec
 		indices.push_back(face.mIndices[2]);
     }
 
-	loadedMesh.AddEntry(MeshEntry(vertices, indices, mesh->mMaterialIndex));
+	MeshEntry newMeshEntry = MeshEntry(mesh->mMaterialIndex);
+	newMeshEntry.Init(vertices, indices);
+
+	loadedMesh.AddEntry(newMeshEntry);
 }
 
 void MeshLoader::InitMaterials(const aiScene *scene, MeshAssetObject &loadedMesh)
@@ -177,7 +195,7 @@ ImageAssetObject ImageLoader::Load(const std::string &type, const std::string &n
 //////////////////////
 ///  Audio Loader  ///
 //////////////////////
-const std::vector<std::pair<ChannelType, CAudioData>> AudioAssetObject::GetAllLoadedAudios()
+const std::vector<std::pair<ChannelType, AudioData>> AudioAssetObject::GetAllLoadedAudios()
 {
 	return loadedAudio;
 }
@@ -187,9 +205,9 @@ AudioAssetObject CAudioLoader::Load(const std::string &type, const std::string &
 {
 	YAML::Node audio = YAML::LoadFile("../data/" + type + "/" + name);
 
-	CAudioData audioData;
+	AudioData audioData;
 
-	std::vector<std::pair<ChannelType, CAudioData>> loadedAudio;
+	std::vector<std::pair<ChannelType, AudioData>> loadedAudio;
 
 	for(YAML::Node::const_iterator channel = audio.begin();
 		channel != audio.end(); ++channel)
@@ -208,7 +226,7 @@ AudioAssetObject CAudioLoader::Load(const std::string &type, const std::string &
         }
 		audioData.channelVolume = channel->second["volume"].as<float>();
 
-		CAudioFile audioFile;
+		AudioFile audioFile;
 		for(YAML::Node::const_iterator music = channel->second["music"].begin();
 			music != channel->second["music"].end(); ++music)
         {
@@ -225,7 +243,7 @@ AudioAssetObject CAudioLoader::Load(const std::string &type, const std::string &
 			audioData.audioFiles.push_back(audioFile);
         }
 
-		loadedAudio.push_back(std::pair<ChannelType, CAudioData>(audioData.channel, audioData));
+		loadedAudio.push_back(std::pair<ChannelType, AudioData>(audioData.channel, audioData));
     }
 
 	return AudioAssetObject(loadedAudio);
@@ -279,7 +297,7 @@ const std::map<LayoutType, std::shared_ptr<Layout>> &GUIAssetObject::GetAllLoade
 }
 
 
-GUIAssetObject CGUILoader::Load(const std::string &type, const std::string &name)
+GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 {
 	// TODO: Figure out how to pass them
 	int windowWidth = 800;
@@ -293,14 +311,14 @@ GUIAssetObject CGUILoader::Load(const std::string &type, const std::string &name
 
     YAML::Node guiData = YAML::LoadFile("../data/" + type + "/" + name);
 
-    CLayoutData layoutData;
+    LayoutData layoutData;
 
     fontsDir = guiData["details"]["fonts-dir"].as<std::string>();
     texturesDir = guiData["details"]["textures-dir"].as<std::string>();
     defaultFont = guiData["details"]["default-font"].as<std::string>();
     
 	std::map<LayoutType, std::shared_ptr<Layout>> layouts;
-    CControlData controlData;
+    ControlData controlData;
     if(guiData["details"]["global-on-hover"])
     {
         for(YAML::Node::const_iterator onHoverProp = guiData["details"]["global-on-hover"].begin();
@@ -645,57 +663,57 @@ GUIAssetObject CGUILoader::Load(const std::string &type, const std::string &name
 /////////////////////////
 ///  TweakVar Loader  ///
 /////////////////////////
-const std::vector<std::pair<std::string, CTweakVarData>> TweakVarAssetObject::GetAllLoadedVars()
+const std::vector<std::pair<std::string, TweakVarData>> TweakVarAssetObject::GetAllLoadedVars()
 {
 	return loadedTweaks;
 }
 
 
-std::pair<std::string, CTweakVarData> TweakVarLoader::ToInt(const std::string &command, int value, int enumIndex)
+std::pair<std::string, TweakVarData> TweakVarLoader::ToInt(const std::string &command, int value, int enumIndex)
 {
-	CTweakVarData tweakData;
-    tweakData.currentType = CTweakVarData::TYPE_TWEAK_INT;
+	TweakVarData tweakData;
+    tweakData.currentType = TweakVarData::TYPE_TWEAK_INT;
     tweakData.varInt = value;
     if(enumIndex != -999)
     {
         tweakData.itemIndex = enumIndex;
     }
-	return std::pair<std::string, CTweakVarData>(command, tweakData);
+	return std::pair<std::string, TweakVarData>(command, tweakData);
 }
 
-std::pair<std::string, CTweakVarData> TweakVarLoader::ToFloat(const std::string &command, float value, int enumIndex)
+std::pair<std::string, TweakVarData> TweakVarLoader::ToFloat(const std::string &command, float value, int enumIndex)
 {
-	CTweakVarData tweakData;
-    tweakData.currentType = CTweakVarData::TYPE_TWEAK_FLOAT;
+	TweakVarData tweakData;
+    tweakData.currentType = TweakVarData::TYPE_TWEAK_FLOAT;
     tweakData.varFloat = value;
     if(enumIndex != -999)
     {
         tweakData.itemIndex = enumIndex;
     }
-	return std::pair<std::string, CTweakVarData>(command, tweakData);
+	return std::pair<std::string, TweakVarData>(command, tweakData);
 }
 
-std::pair<std::string, CTweakVarData> TweakVarLoader::ToString(const std::string &command, const std::string &value, int enumIndex)
+std::pair<std::string, TweakVarData> TweakVarLoader::ToString(const std::string &command, const std::string &value, int enumIndex)
 {
-	CTweakVarData tweakData;
-    tweakData.currentType = CTweakVarData::TYPE_TWEAK_STRING;
+	TweakVarData tweakData;
+    tweakData.currentType = TweakVarData::TYPE_TWEAK_STRING;
     std::strcpy(tweakData.varString, value.c_str());
     if(enumIndex != -999)
     {
         tweakData.itemIndex = enumIndex;
     }
-	return std::pair<std::string, CTweakVarData>(command, tweakData);
+	return std::pair<std::string, TweakVarData>(command, tweakData);
 }
 
 TweakVarAssetObject TweakVarLoader::Load(const std::string &type, const std::string &name)
 {
 	YAML::Node tweaks = YAML::LoadFile("../data/" + type + "/" + name);
     
-	std::vector<std::pair<std::string, CTweakVarData>> loadedTweaks;
+	std::vector<std::pair<std::string, TweakVarData>> loadedTweaks;
     for(YAML::Node::const_iterator tweak = tweaks.begin();
         tweak != tweaks.end(); ++tweak)
     {
-        CTweakVarData tweakData;
+        TweakVarData tweakData;
         std::string command = tweak->first.as<std::string>();
 
         if(command == "currentEnemyCount")

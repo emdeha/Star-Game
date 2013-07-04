@@ -7,6 +7,16 @@ namespace FusionEngine
 	enum ComponentType
 	{
 		CT_TRANSFORM = 0,
+		CT_MESH,
+		
+        
+        
+        /////////////
+		///  Old  ///
+		/////////////
+
+
+
 		CT_HEALTH,
 		CT_RENDERABLE,
 		CT_RENDERABLE_GEN_DATA,
@@ -28,6 +38,16 @@ namespace FusionEngine
 
 	// Component type bits. Used by the entity systems to determine if an entity is compatible.
 	const unsigned int CT_TRANSFORM_BIT = 1 << CT_TRANSFORM;
+	const unsigned int CT_MESH_BIT = 1 << CT_MESH;
+	
+
+
+	/////////////
+	///  Old  ///
+	/////////////
+
+
+
 	const unsigned int CT_HEALTH_BIT = 1 << CT_HEALTH;
 	const unsigned int CT_RENDERABLE_BIT = 1 << CT_RENDERABLE;
 	const unsigned int CT_RENDERABLE_UNLIT_BIT = 1 << CT_RENDERABLE_UNLIT;
@@ -43,6 +63,7 @@ namespace FusionEngine
 	const unsigned int CT_SATELLITE_BIT = 1 << CT_SATELLITE;
 	const unsigned int CT_SATELLITE_ORBIT_BIT = 1 << CT_SATELLITE_ORBIT;
 	const unsigned int CT_RENDERABLE_GEN_DATA_BIT = 1 << CT_RENDERABLE_GEN_DATA;
+	
 }
 
 

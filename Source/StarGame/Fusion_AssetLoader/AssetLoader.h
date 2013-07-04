@@ -84,15 +84,15 @@ namespace FusionEngine
 	/////////////////////
 	///  Mesh Loader  ///
 	/////////////////////
-	struct CVertex
+	struct Vertex
 	{
 		glm::vec3 position;
 		glm::vec2 textureCoord;
 		glm::vec3 normal;
 		
-		CVertex() {}
+		Vertex() {}
 
-		CVertex(const glm::vec3 &newPosition,
+		Vertex(const glm::vec3 &newPosition,
 			   const glm::vec2 &newTextureCoord,
 			   const glm::vec3 &newNormal)
 		{
@@ -104,20 +104,22 @@ namespace FusionEngine
 
 	struct MeshEntry
 	{
-		std::vector<CVertex> vertices;
-		std::vector<unsigned int> indices;
-
+		GLuint vertexBuffer;
+		GLuint indexBuffer;
 		unsigned int materialIndex;
+		unsigned int indicesCount;
 
 		MeshEntry() {}
-		MeshEntry(std::vector<CVertex> newVertices,
-				  std::vector<unsigned int> newIndices,
-				  unsigned int newMaterialIndex)
+		MeshEntry(unsigned int newMaterialIndex)
 		{
-			vertices = newVertices;
-			indices = newIndices;
 			materialIndex = newMaterialIndex;
+			vertexBuffer = -1;
+			indexBuffer = -1;
+			indicesCount = 0;
 		}
+
+		void Init(const std::vector<Vertex> &vertices,
+				  const std::vector<unsigned int> &indices);
 	};
 
 	class MeshAssetObject : public IAssetObject
@@ -178,33 +180,33 @@ namespace FusionEngine
 	//////////////////////
 	///  Audio Loader  ///
 	//////////////////////
-	struct CAudioFile
+	struct AudioFile
 	{
 		std::string path;
 		SoundType soundType;
 		bool isLooping;
 	};
 
-	struct CAudioData
+	struct AudioData
 	{
 		ChannelType channel;
 		float channelVolume;
-		std::vector<CAudioFile> audioFiles;
+		std::vector<AudioFile> audioFiles;
 	};
 
 	class AudioAssetObject : public IAssetObject
 	{
 	private:
-		std::vector<std::pair<ChannelType, CAudioData>> loadedAudio;
+		std::vector<std::pair<ChannelType, AudioData>> loadedAudio;
 
 	public:
 		AudioAssetObject() {}
-		AudioAssetObject(const std::vector<std::pair<ChannelType, CAudioData>> &newLoadedAudio) 
+		AudioAssetObject(const std::vector<std::pair<ChannelType, AudioData>> &newLoadedAudio) 
 		{
 			loadedAudio = newLoadedAudio;
 		}
 
-		const std::vector<std::pair<ChannelType, CAudioData>> GetAllLoadedAudios();
+		const std::vector<std::pair<ChannelType, AudioData>> GetAllLoadedAudios();
 	};
 
 	class CAudioLoader : public ITypeLoader<AudioAssetObject>
@@ -218,7 +220,7 @@ namespace FusionEngine
 	////////////////////
 	///  GUI Loader  ///
 	////////////////////
-	struct CLayoutData
+	struct LayoutData
 	{
 		LayoutType layoutType;
 		glm::vec4 layoutColor;
@@ -226,7 +228,7 @@ namespace FusionEngine
 		std::string layoutBackgroundImageFileName;
 	};
 
-	struct CControlData
+	struct ControlData
 	{
 		std::string name;
 		std::string text; 
@@ -276,7 +278,7 @@ namespace FusionEngine
 		const std::map<LayoutType, std::shared_ptr<Layout>> &GetAllLoadedLayouts();
 	};
 
-	class CGUILoader : public ITypeLoader<GUIAssetObject>
+	class GUILoader : public ITypeLoader<GUIAssetObject>
 	{
 	private:
 	public:
@@ -287,7 +289,7 @@ namespace FusionEngine
 	/////////////////////////
 	///  TweakVar Loader  ///
 	/////////////////////////
-	struct CTweakVarData
+	struct TweakVarData
 	{
 		enum VarType
 		{
@@ -306,30 +308,30 @@ namespace FusionEngine
 			char varString[50];
 		};
 
-		CTweakVarData() : itemIndex(-1) {}
+		TweakVarData() : itemIndex(-1) {}
 	};
 
 	class TweakVarAssetObject : public IAssetObject
 	{
 	private:
-		std::vector<std::pair<std::string, CTweakVarData>> loadedTweaks;
+		std::vector<std::pair<std::string, TweakVarData>> loadedTweaks;
 
 	public:
 		TweakVarAssetObject() {}
-		TweakVarAssetObject(const std::vector<std::pair<std::string, CTweakVarData>> &newLoadedTweaks)
+		TweakVarAssetObject(const std::vector<std::pair<std::string, TweakVarData>> &newLoadedTweaks)
 		{
 			loadedTweaks = newLoadedTweaks;
 		}
 
-		const std::vector<std::pair<std::string, CTweakVarData>> GetAllLoadedVars();
+		const std::vector<std::pair<std::string, TweakVarData>> GetAllLoadedVars();
 	};
 
 	class TweakVarLoader : public ITypeLoader<TweakVarAssetObject>
 	{
 	private:
-		std::pair<std::string, CTweakVarData> ToInt(const std::string &command, int value, int enumIndex = -999);
-		std::pair<std::string, CTweakVarData> ToFloat(const std::string &command, float value, int enumIndex = -999);
-		std::pair<std::string, CTweakVarData> ToString(const std::string &command, const std::string &value, int enumIndex = -999);
+		std::pair<std::string, TweakVarData> ToInt(const std::string &command, int value, int enumIndex = -999);
+		std::pair<std::string, TweakVarData> ToFloat(const std::string &command, float value, int enumIndex = -999);
+		std::pair<std::string, TweakVarData> ToString(const std::string &command, const std::string &value, int enumIndex = -999);
 
 	public:
 		TweakVarAssetObject Load(const std::string &type, const std::string &name);

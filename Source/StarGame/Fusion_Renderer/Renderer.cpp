@@ -15,6 +15,33 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
-#include "Renderer.h"
 #include "stdafx.h"
+#include "Renderer.h"
 
+
+using namespace FusionEngine;
+
+void Renderer::SubscribeForRendering(EntityManager *manager, Entity *entity)
+{
+	ComponentMapper<Mesh> meshData = manager->GetComponentList(entity, CT_MESH);
+
+	subscribedMeshes.push_back(std::make_pair<EntityID, MeshData>(entity->GetID(), meshData[0]->mesh));
+}
+void Renderer::UnsubscribeForRendering(Entity *entity)
+{
+	for(std::vector<std::pair<EntityID, MeshData>>::iterator subscribedMesh = subscribedMeshes.begin();
+		subscribedMesh != subscribedMeshes.end(); ++subscribedMesh)
+    {
+		if(subscribedMesh->first == entity->GetID())
+        {
+			subscribedMeshes.erase(subscribedMesh);
+			break;
+        }
+    }
+}
+
+
+void Renderer::Render()
+{
+
+}

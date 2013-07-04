@@ -25,6 +25,18 @@ using namespace FusionEngine;
 /////////////////////
 ///  Mesh Loader  ///
 /////////////////////
+MeshEntry::~MeshEntry()
+{
+	if(vertexBuffer != -1)
+    {
+        glDeleteBuffers(1, &vertexBuffer);
+    }
+    if(indexBuffer != -1)
+    {
+        glDeleteBuffers(1, &indexBuffer);
+    }
+}
+
 void MeshEntry::Init(const std::vector<Vertex> &vertices,
 					 const std::vector<unsigned int> &indices)
 {

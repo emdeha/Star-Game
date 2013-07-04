@@ -35,29 +35,48 @@
 
 
 
-struct Material
-{
-	glm::vec4 diffuseColor; 
-	glm::vec4 specularColor;
-	float shininessFactor;
-
-	float padding[3]; ///< Padding for compatibility with GLSL
-};
-
-struct LightBlockData
-{
-	glm::vec4 ambientIntensiy;
-	float lightAttenuation;
-	float maxIntensity;
-	float gamma;
-
-	float padding; ///< Padding for compatibility with GLSL.
-};
 
 
 namespace FusionEngine
 {
-	class Transform : public Component
+	struct Material
+	{
+		glm::vec4 diffuseColor; 
+		glm::vec4 specularColor;
+		float shininessFactor;
+
+		float padding[3]; ///< Padding for compatibility with GLSL
+	};
+
+	struct LightBlockData
+	{
+		glm::vec4 ambientIntensiy;
+		float lightAttenuation;
+		float maxIntensity;
+		float gamma;
+
+		float padding; ///< Padding for compatibility with GLSL.
+	};
+
+	struct MeshData
+    {
+		enum RendererType
+        {
+			FE_RENDERER_SIMPLE,
+
+			FE_RENDERER_COUNT,
+        };
+
+
+		FusionEngine::MeshAssetObject mesh;
+		RendererType rendererType;
+
+		GLuint vao;
+		GLuint materialUniformBuffer;
+    };
+
+
+    class Transform : public Component
 	{
 	public:
 		glm::vec3 position;
@@ -72,25 +91,14 @@ namespace FusionEngine
 	class Mesh : public Component 
     {
     public:
-		enum RendererType
-        {
-			FE_RENDERER_SIMPLE,
-
-			FE_RENDERER_COUNT,
-        };
-
-    public:
-		FusionEngine::MeshAssetObject mesh;
-		RendererType rendererType;
-
-		GLuint vao;
-		GLuint materialUniformBuffer;
+		MeshData mesh;
 
         Mesh() : Component(CT_MESH) {}
         virtual ~Mesh() {}
     };
 
-	
+	
+
 
 	////////////////////////
 	///                  ///

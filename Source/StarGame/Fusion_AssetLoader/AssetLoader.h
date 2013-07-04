@@ -117,6 +117,7 @@ namespace FusionEngine
 			indexBuffer = -1;
 			indicesCount = 0;
 		}
+		~MeshEntry();
 
 		void Init(const std::vector<Vertex> &vertices,
 				  const std::vector<unsigned int> &indices);

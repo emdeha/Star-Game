@@ -23,16 +23,28 @@
 #include <vector>
 #include "../Fusion_EntitySystem/Component.h"
 #include "../Fusion_EntitySystem/ComponentMapper.h"
+#include "../Fusion_EntitySystem/FusionSystems.h"
+#include "../Fusion_EntitySystem/Entity.h"
+#include "../Fusion_AssetLoader/AssetLoader.h"
+#include "../Fusion_EntitySystem/Entity.h"
 
 
-class Renderer
+namespace FusionEngine
 {
-private:
+	class Renderer
+	{
+	private:
+		std::vector<std::pair<EntityID, MeshData>> subscribedMeshes;		
 
+	public:
+        Renderer() {}
 
-public:
+		void SubscribeForRendering(EntityManager *manager, Entity *entity);
+		void UnsubscribeForRendering(Entity *entity);
 
-};
+		void Render();
+	};
+}
 
 
 #endif

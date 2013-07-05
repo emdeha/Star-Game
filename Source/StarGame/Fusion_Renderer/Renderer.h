@@ -20,7 +20,10 @@
 
 
 #include <glm/glm.hpp>
+#include <glload/gl_3_3.h>
+#include <glutil/glutil.h>
 #include <vector>
+
 #include "../Fusion_EntitySystem/Component.h"
 #include "../Fusion_EntitySystem/ComponentMapper.h"
 #include "../Fusion_EntitySystem/FusionSystems.h"
@@ -42,7 +45,7 @@ namespace FusionEngine
 		void SubscribeForRendering(EntityManager *manager, Entity *entity);
 		void UnsubscribeForRendering(Entity *entity);
 
-		void Render();
+		void Render(glutil::MatrixStack &modelMatrix);
 	};
 }
 

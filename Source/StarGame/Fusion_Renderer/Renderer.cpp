@@ -41,7 +41,56 @@ void Renderer::UnsubscribeForRendering(Entity *entity)
 }
 
 
-void Renderer::Render()
+void Renderer::Render(glutil::MatrixStack &modelMatrix)
 {
+	glFrontFace(GL_CCW);
 
+	for(std::vector<std::pair<EntityID, MeshData>>::iterator subscribedMesh = subscribedMeshes.begin();
+		subscribedMesh != subscribedMeshes.end(); ++subscribedMesh)
+    {
+		glBindVertexArray(subscribedMesh->second.vao);
+
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
+
+        glUseProgram(subscribedMesh->second.shaderProgram); 
+
+		
+        for(std::vector<MeshEntry>::const_iterator entry = subscribedMesh->second.mesh.GetMeshEntries().begin();
+			entry != subscribedMesh->second.mesh.GetMeshEntries().end(); ++entry)
+        {
+			glutil::PushStack push(modelMatrix);
+			GLuint modelToCameraMatrixUnif = 0;
+			glGetUniformLocation(modelToCameraMatrixUnif, "modelToCameraMatrix");
+			glUniformMatrix4fv(modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+
+
+			glBindBuffer(GL_ARRAY_BUFFER, entry->vertexBuffer);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)12);
+			glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)20);
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, entry->indexBuffer);
+
+			if(entry->materialIndex < subscribedMesh->second.mesh.GetTextures().size() &&
+			   subscribedMesh->second.mesh.GetTextures()[entry->materialIndex])
+            {
+				subscribedMesh->second.mesh.GetTextures()[entry->materialIndex]->Bind(GL_TEXTURE0);
+            }
+
+			glDrawElements(GL_TRIANGLES, entry->indicesCount, GL_UNSIGNED_INT, 0);
+        }
+
+		
+		glUseProgram(0);
+        
+        glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
+		
+        glBindVertexArray(0);
+    }
+
+	glFrontFace(GL_CW);
 }

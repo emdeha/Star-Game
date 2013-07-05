@@ -70,6 +70,7 @@ namespace FusionEngine
 
 		FusionEngine::MeshAssetObject mesh;
 		RendererType rendererType;
+		GLuint shaderProgram;
 
 		GLuint vao;
 		GLuint materialUniformBuffer;

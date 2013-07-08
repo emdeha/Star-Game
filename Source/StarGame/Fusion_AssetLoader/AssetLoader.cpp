@@ -71,6 +71,8 @@ MeshAssetObject MeshLoader::Load(const std::string &type, const std::string &nam
     }
     else 
     {
+		glGenVertexArrays(1, &loadedMesh.vao);
+		glBindVertexArray(loadedMesh.vao);
 		InitFromScene(scene, loadedMesh);
     }
 

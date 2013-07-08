@@ -764,7 +764,8 @@ void InitializeScene()
 		mesh->mesh.mesh.AddTexture((*entryTexture));
     }
 	mesh->mesh.rendererType = FusionEngine::MeshData::FE_RENDERER_SIMPLE;
-	mesh->mesh.shaderProgram = scene.GetShaderManager().GetSimpleProgData().theProgram;
+	mesh->mesh.shaderProgram = scene.GetShaderManager().GetSimpleTextureProgData().theProgram;
+	mesh->mesh.vao = loadedMesh.vao;
 
 	FusionEngine::Transform *transform = new FusionEngine::Transform();
 	transform->position = glm::vec3(2.0f, 0.0f, 0.0f);

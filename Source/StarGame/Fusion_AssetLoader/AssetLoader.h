@@ -129,7 +129,9 @@ namespace FusionEngine
 		std::vector<MeshEntry> meshEntries;
 		std::vector<std::shared_ptr<Texture2D>> textures;
 
-	public:
+	public:		GLuint vao;
+
+    public:
 		MeshAssetObject() {}
 
 		void AddEntry(const MeshEntry &newMeshEntry);
@@ -143,6 +145,8 @@ namespace FusionEngine
 	class MeshLoader : public ITypeLoader<MeshAssetObject>
 	{
 	private:
+		GLuint vao;
+
 		void InitFromScene(const aiScene *scene, MeshAssetObject &loadedMesh);
 		void InitMesh(unsigned int index, const aiMesh *mesh, MeshAssetObject &loadedMesh);
 		void InitMaterials(const aiScene *scene, MeshAssetObject &loadedMesh);

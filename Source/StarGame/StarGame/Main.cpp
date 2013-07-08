@@ -40,10 +40,20 @@
 #include "../dirent/dirent.h"
 #include "../framework/ErrorAPI.h"
 
+#include "../Fusion_Scene/Scene.h"
+#include "../Fusion_EntitySystem/FusionComponents.h"
+#include "../Fusion_EntitySystem/FusionSystems.h"
+#include "../Fusion_AssetLoader/AssetLoader.h"
+#include "../Fusion_Renderer/Renderer.h"
+
 
 DisplayData displayData;
 
 Scene scene = Scene(2.2f, 8.0f, 3.0f, 0.5f, 0, 4, 20.0f);
+
+FusionEngine::Scene testScene;
+FusionEngine::Renderer testRenderer;
+
 
 
 long long GetCurrentTimeMillis()
@@ -729,6 +739,43 @@ void InitializeScene()
                           LAYOUT_IN_GAME, OnWPressEventHandler, 'w');
     scene.AddEventHandler("onEPressEventHandler", "onKeyPress", "fusOne", "",
                           LAYOUT_IN_GAME, OnEPressEventHandler, 'e');
+
+
+
+
+	////////////////////////////////////////////////////////////////////
+
+	testScene.Init();
+	testScene.AddEntity("sampleSun");
+	FusionEngine::Mesh *mesh = new FusionEngine::Mesh();
+
+	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
+	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
+	FusionEngine::MeshAssetObject loadedMesh = 
+        meshLoader.LoadAssetObject("mesh-files", "sun.obj");
+	std::vector<FusionEngine::MeshEntry> meshEntries = loadedMesh.GetMeshEntries();
+	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
+    {
+		mesh->mesh.mesh.AddEntry((*meshEntry));
+    }
+	std::vector<std::shared_ptr<Texture2D>> loadedTextures = loadedMesh.GetTextures();
+	for(auto entryTexture = loadedTextures.begin(); entryTexture != loadedTextures.end(); ++entryTexture)
+    {
+		mesh->mesh.mesh.AddTexture((*entryTexture));
+    }
+	mesh->mesh.rendererType = FusionEngine::MeshData::FE_RENDERER_SIMPLE;
+	mesh->mesh.shaderProgram = scene.GetShaderManager().GetSimpleProgData().theProgram;
+
+	FusionEngine::Transform *transform = new FusionEngine::Transform();
+	transform->position = glm::vec3(2.0f, 0.0f, 0.0f);
+	transform->rotation = glm::vec3();
+	transform->scale = glm::vec3(1.0f);
+
+	testScene.AddComponent("sampleSun", mesh);
+	testScene.AddComponent("sampleSun", transform);
+
+
+	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("sampleSun"));
 }
 
 
@@ -859,6 +906,12 @@ void Display()
         if(isEmitterStarted)
         {
             
+        }
+
+		if(testScene.HasEntity("sampleSun"))
+        {
+			testScene.ProcessSystems();
+			testRenderer.Render(modelMatrix);
         }
     }
     else //if(scene->IsLayoutOn(LAYOUT_MENU))

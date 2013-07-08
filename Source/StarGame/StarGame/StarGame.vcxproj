@@ -105,8 +105,14 @@
     <ProjectReference Include="..\Fusion\Fusion.vcxproj">
       <Project>{a35d6336-e27f-47c8-bd8c-356f97dc2846}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Fusion_AssetLoader\Fusion_AssetLoader.vcxproj">
+      <Project>{9ca9cc8a-1f25-4d48-9d6a-623a6f8061cc}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Fusion_EntitySystem\Fusion_EntitySystem.vcxproj">
       <Project>{46033b29-5b2c-49e1-9f18-58199443d50d}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Fusion_Renderer\Fusion_Renderer.vcxproj">
+      <Project>{7805c27a-13ef-49a7-b430-063367f3f799}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Fusion_Scene\Fusion_Scene.vcxproj">
       <Project>{7984709a-7392-4fe3-8590-e38677208bd8}</Project>

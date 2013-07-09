@@ -37,7 +37,7 @@ namespace FusionEngine
 	class Renderer
 	{
 	private:
-		std::vector<std::pair<EntityID, MeshData>> subscribedMeshes;		
+		std::vector<std::pair<unsigned int, MeshData>> subscribedMeshes;		
 
 	public:
         Renderer() {}
@@ -45,7 +45,8 @@ namespace FusionEngine
 		void SubscribeForRendering(EntityManager *manager, Entity *entity);
 		void UnsubscribeForRendering(Entity *entity);
 
-		void Render(glutil::MatrixStack &modelMatrix);
+		void Render(glutil::MatrixStack &modelMatrix,
+					EntityManager *manager);
 	};
 }
 

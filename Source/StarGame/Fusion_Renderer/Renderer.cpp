@@ -41,7 +41,7 @@ void Renderer::SubscribeForRendering(EntityManager *manager, Entity *entity)
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * meshEntry->get()->indices.size(), 
 											  &meshEntry->get()->indices[0], GL_STATIC_DRAW);
     }
-	subscribedMeshes.push_back(std::make_pair<EntityID, MeshData>(entity->GetID(), meshData[0]->mesh));
+	subscribedMeshes.push_back(std::make_pair<unsigned int, MeshData>(entity->GetIndex(), meshData[0]->mesh));
 	std::printf("");
 }
 void Renderer::UnsubscribeForRendering(Entity *entity)
@@ -57,7 +57,8 @@ void Renderer::UnsubscribeForRendering(Entity *entity)
 }
 
 
-void Renderer::Render(glutil::MatrixStack &modelMatrix)
+void Renderer::Render(glutil::MatrixStack &modelMatrix,
+					  EntityManager *manager)
 {
 	glFrontFace(GL_CCW);
 
@@ -77,6 +78,15 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix)
 			glUseProgram(subscribedMesh->second.shaderProgram); 
 		
             glutil::PushStack push(modelMatrix);
+
+			ComponentMapper<Transform> transformData = manager->GetComponentList(subscribedMesh->first, CT_TRANSFORM);
+			modelMatrix.Translate(transformData[0]->position);
+			modelMatrix.RotateX(transformData[0]->rotation.x);
+			modelMatrix.RotateY(transformData[0]->rotation.y);
+			modelMatrix.RotateZ(transformData[0]->rotation.z);
+			modelMatrix.Scale(transformData[0]->scale);
+
+
 			glUniformMatrix4fv(glGetUniformLocation(subscribedMesh->second.shaderProgram, "modelToCameraMatrix"),
                 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
 			glUniform4f(glGetUniformLocation(subscribedMesh->second.shaderProgram, "color"),

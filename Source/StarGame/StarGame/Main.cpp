@@ -775,8 +775,62 @@ void InitializeScene()
 	testScene.AddComponent("sampleSun", mesh);
 	testScene.AddComponent("sampleSun", transform);
 
+	testScene.AddEntity("sampleSpaceship");
+	FusionEngine::Mesh *spaceshipMesh = new FusionEngine::Mesh();
+
+	loadedMesh = meshLoader.LoadAssetObject("mesh-files", "spaceship.obj");
+	meshEntries = loadedMesh.GetMeshEntries();
+	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
+    {
+		spaceshipMesh->mesh.mesh.AddEntry((*meshEntry));
+    }
+	loadedTextures = loadedMesh.GetTextures();
+	for(auto entryTexture = loadedTextures.begin(); entryTexture != loadedTextures.end(); ++entryTexture)
+    {
+		spaceshipMesh->mesh.mesh.AddTexture((*entryTexture));
+    }
+	spaceshipMesh->mesh.rendererType = FusionEngine::MeshData::FE_RENDERER_SIMPLE;
+	spaceshipMesh->mesh.shaderProgram = scene.GetShaderManager().GetSimpleTextureProgData().theProgram;
+	spaceshipMesh->mesh.vao = loadedMesh.vao;
+
+	FusionEngine::Transform *spaceshipTransform = new FusionEngine::Transform();
+	spaceshipTransform->position = glm::vec3(-2.0f, 0.0f, 0.0f);
+	spaceshipTransform->rotation = glm::vec3();
+	spaceshipTransform->scale = glm::vec3(0.2f);
+
+	testScene.AddComponent("sampleSpaceship", spaceshipMesh);
+	testScene.AddComponent("sampleSpaceship", spaceshipTransform);
+
+	testScene.AddEntity("samplePlanet");
+	FusionEngine::Mesh *planetMesh = new FusionEngine::Mesh();
+
+	loadedMesh = meshLoader.LoadAssetObject("mesh-files", "earth_planet.obj");
+	meshEntries = loadedMesh.GetMeshEntries();
+	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
+    {
+		planetMesh->mesh.mesh.AddEntry((*meshEntry));
+    }
+	loadedTextures = loadedMesh.GetTextures();
+	for(auto entryTexture = loadedTextures.begin(); entryTexture != loadedTextures.end(); ++entryTexture)
+    {
+		planetMesh->mesh.mesh.AddTexture((*entryTexture));
+    }
+	planetMesh->mesh.rendererType = FusionEngine::MeshData::FE_RENDERER_SIMPLE;
+	planetMesh->mesh.shaderProgram = scene.GetShaderManager().GetSimpleTextureProgData().theProgram;
+	planetMesh->mesh.vao = loadedMesh.vao;
+
+	FusionEngine::Transform *planetTransform = new FusionEngine::Transform();
+	planetTransform->position = glm::vec3(0.0f, 0.0f, 2.0f);
+	planetTransform->rotation = glm::vec3();
+	planetTransform->scale = glm::vec3(0.2f);
+
+	testScene.AddComponent("samplePlanet", planetMesh);
+	testScene.AddComponent("samplePlanet", planetTransform);
+
 
 	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("sampleSun"));
+	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("sampleSpaceship"));
+	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("samplePlanet"));
 }
 
 
@@ -912,7 +966,8 @@ void Display()
 		if(testScene.HasEntity("sampleSun"))
         {
 			testScene.ProcessSystems();
-			testRenderer.Render(modelMatrix);
+			testRenderer.Render(modelMatrix, 
+								testScene.GetEntityManager());
         }
     }
     else //if(scene->IsLayoutOn(LAYOUT_MENU))

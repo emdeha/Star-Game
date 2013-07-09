@@ -170,6 +170,14 @@ const ComponentList &EntityManager::GetComponentList(const Entity *entity, Compo
 	// Grab the component list for this entity and remove the component.
 	return entities[entity->index];
 }
+const ComponentList &EntityManager::GetComponentList(unsigned int entityIndex, ComponentType type) const
+{
+	const std::vector<ComponentList> &entities = components[type];
+
+	if(entityIndex >= entities.size()) return EmptyList;
+
+	return entities[entityIndex];
+}
 
 bool EntityManager::CheckIfRemoved(unsigned int entityIndex)
 {

@@ -53,6 +53,7 @@ namespace FusionEngine
 
 		// Get the list of components for an entity by type.
 		const ComponentList &GetComponentList(const Entity *entity, ComponentType type) const;
+		const ComponentList &GetComponentList(unsigned int entityIndex, ComponentType type) const;
 
 		// Checks if an entity is removed
 		bool CheckIfRemoved(unsigned int entityIndex);

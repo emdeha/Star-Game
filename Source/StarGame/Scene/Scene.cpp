@@ -893,6 +893,7 @@ void Scene::SpawnEnemies()
 			}
 		}
 
+
 		switch(chosenType)
 		{
 		case ENEMY_TYPE_SWARM:
@@ -1474,6 +1475,7 @@ void Scene::UpdateScene()
 		// Should be in the OnEvent function.
 		if(!suns.empty())
 		{
+			/*
 			if(suns.front()->GetHealth() <= 0)
 			{
 				explosion[lastUsedExplosion].SetPosition(glm::vec3());
@@ -1492,6 +1494,7 @@ void Scene::UpdateScene()
 				lights.pop_back(); // got to find the light connected to the sun
 								   // even if I remove the light the ship is still lit
 			}
+			*/
 		}
 
 		int sizeSuns = suns.size();

@@ -152,9 +152,9 @@ namespace FusionEngine
 	private:
 		GLuint vao;
 
-		void InitFromScene(const aiScene *scene, MeshAssetObject &loadedMesh);
+		void InitFromScene(const aiScene *scene, MeshAssetObject &loadedMesh, const std::string &name);
 		void InitMesh(unsigned int index, const aiMesh *mesh, MeshAssetObject &loadedMesh);
-		void InitMaterials(const aiScene *scene, MeshAssetObject &loadedMesh);
+		void InitMaterials(const aiScene *scene, MeshAssetObject &loadedMesh, const std::string &name);
 
 	public:
 		MeshAssetObject Load(const std::string &type, const std::string &name);

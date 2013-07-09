@@ -793,7 +793,7 @@ void InitializeScene()
 	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("sampleSpaceship"));
 	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("sampleSpaceship2"));
 	*/
-
+	
     for(int i = 0; i < 200; i++)
     {
 		std::stringstream enemyTag;
@@ -814,6 +814,7 @@ void InitializeScene()
 
 		testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity(stringedTag));
     }
+	
 }
 
 

@@ -79,6 +79,8 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix)
             glutil::PushStack push(modelMatrix);
 			glUniformMatrix4fv(glGetUniformLocation(subscribedMesh->second.shaderProgram, "modelToCameraMatrix"),
                 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+			glUniform4f(glGetUniformLocation(subscribedMesh->second.shaderProgram, "color"),
+				        1.0f, 1.0f, 1.0f, 1.0f);
 
 
 			glBindBuffer(GL_ARRAY_BUFFER, entry->get()->vertexBuffer);

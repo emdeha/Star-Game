@@ -158,8 +158,8 @@ void MeshLoader::InitMaterials(const aiScene *scene, MeshAssetObject &loadedMesh
 		if(!newTexture)
         {
 			newTexture = std::shared_ptr<Texture2D>(new Texture2D());
-			std::string pathToWhiteTexture = "../data/mesh-files/white.png";
-			if(!newTexture->Load(pathToWhiteTexture, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE))
+			std::string pathToWhiteTexture = "../data/mesh-files/sun.png";
+			if(!newTexture->Load(pathToWhiteTexture, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE))
             {
 				HandleUnexpectedError("loading DEFAULT texture from path " + pathToWhiteTexture, __LINE__, __FILE__);
 				return;

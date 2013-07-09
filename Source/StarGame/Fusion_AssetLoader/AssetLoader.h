@@ -106,6 +106,10 @@ namespace FusionEngine
 	{
 		GLuint vertexBuffer;
 		GLuint indexBuffer;
+
+		std::vector<Vertex> vertices;
+		std::vector<unsigned int> indices;
+
 		unsigned int materialIndex;
 		unsigned int indicesCount;
 
@@ -119,26 +123,27 @@ namespace FusionEngine
 		}
 		~MeshEntry();
 
-		void Init(const std::vector<Vertex> &vertices,
-				  const std::vector<unsigned int> &indices);
+		void Init(const std::vector<Vertex> &newVertices,
+				  const std::vector<unsigned int> &newIndices);
 	};
 
 	class MeshAssetObject : public IAssetObject
 	{
 	private:
-		std::vector<MeshEntry> meshEntries;
+		std::vector<std::shared_ptr<MeshEntry>> meshEntries;
 		std::vector<std::shared_ptr<Texture2D>> textures;
 
-	public:		GLuint vao;
+	public:
+		GLuint vao;
 
     public:
 		MeshAssetObject() {}
 
-		void AddEntry(const MeshEntry &newMeshEntry);
+		void AddEntry(const std::shared_ptr<MeshEntry>& newMeshEntry);
 		void AddTexture(const std::shared_ptr<Texture2D>& newTexture);
 
 
-		const std::vector<MeshEntry> GetMeshEntries();
+		const std::vector<std::shared_ptr<MeshEntry>> GetMeshEntries();
 		const std::vector<std::shared_ptr<Texture2D>> GetTextures();
 	};
 

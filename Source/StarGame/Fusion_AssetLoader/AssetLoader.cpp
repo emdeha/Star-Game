@@ -37,9 +37,15 @@ MeshEntry::~MeshEntry()
     }
 }
 
-void MeshEntry::Init(const std::vector<Vertex> &vertices,
-					 const std::vector<unsigned int> &indices)
+void MeshEntry::Init(const std::vector<Vertex> &newVertices,
+					 const std::vector<unsigned int> &newIndices)
 {
+	vertices = newVertices;
+	indices = newIndices;
+
+	indicesCount = indices.size();
+
+	/*
 	indicesCount = indices.size();
 
 	glGenBuffers(1, &vertexBuffer);
@@ -49,6 +55,7 @@ void MeshEntry::Init(const std::vector<Vertex> &vertices,
 	glGenBuffers(1, &indexBuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indicesCount, &indices[0], GL_STATIC_DRAW);
+	*/
 }
 
 
@@ -71,8 +78,8 @@ MeshAssetObject MeshLoader::Load(const std::string &type, const std::string &nam
     }
     else 
     {
-		glGenVertexArrays(1, &loadedMesh.vao);
-		glBindVertexArray(loadedMesh.vao);
+		//glGenVertexArrays(1, &loadedMesh.vao);
+		//glBindVertexArray(loadedMesh.vao);
 		InitFromScene(scene, loadedMesh);
     }
 
@@ -119,8 +126,8 @@ void MeshLoader::InitMesh(unsigned int index, const aiMesh *mesh, MeshAssetObjec
 		indices.push_back(face.mIndices[2]);
     }
 
-	MeshEntry newMeshEntry = MeshEntry(mesh->mMaterialIndex);
-	newMeshEntry.Init(vertices, indices);
+	std::shared_ptr<MeshEntry> newMeshEntry = std::shared_ptr<MeshEntry>(new MeshEntry(mesh->mMaterialIndex));
+	newMeshEntry->Init(vertices, indices);
 
 	loadedMesh.AddEntry(newMeshEntry);
 }
@@ -164,7 +171,7 @@ void MeshLoader::InitMaterials(const aiScene *scene, MeshAssetObject &loadedMesh
 }
 
 
-void MeshAssetObject::AddEntry(const MeshEntry &newMeshEntry)
+void MeshAssetObject::AddEntry(const std::shared_ptr<MeshEntry>& newMeshEntry)
 {
 	meshEntries.push_back(newMeshEntry);
 }
@@ -173,7 +180,7 @@ void MeshAssetObject::AddTexture(const std::shared_ptr<Texture2D>& newTexture)
 	textures.push_back(newTexture);
 }
 
-const std::vector<MeshEntry> MeshAssetObject::GetMeshEntries()
+const std::vector<std::shared_ptr<MeshEntry>> MeshAssetObject::GetMeshEntries()
 {
 	return meshEntries;
 }

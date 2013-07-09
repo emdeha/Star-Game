@@ -753,7 +753,7 @@ void InitializeScene()
 	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
 	FusionEngine::MeshAssetObject loadedMesh = 
         meshLoader.LoadAssetObject("mesh-files", "sun.obj");
-	std::vector<FusionEngine::MeshEntry> meshEntries = loadedMesh.GetMeshEntries();
+	std::vector<std::shared_ptr<FusionEngine::MeshEntry>> meshEntries = loadedMesh.GetMeshEntries();
 	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
     {
 		mesh->mesh.mesh.AddEntry((*meshEntry));
@@ -900,7 +900,7 @@ void Display()
         }
 
         float interpolation = float(GetTickCount() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
-        scene.RenderScene(modelMatrix, interpolation);	
+        //scene.RenderScene(modelMatrix, interpolation);	
         
         scene.RenderCurrentLayout();	
 

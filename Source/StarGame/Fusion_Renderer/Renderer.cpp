@@ -28,7 +28,8 @@ void Renderer::SubscribeForRendering(EntityManager *manager, Entity *entity)
 	glGenVertexArrays(1, &meshData[0]->mesh.vao);
 	glBindVertexArray(meshData[0]->mesh.vao);
 
-	std::vector<std::shared_ptr<MeshEntry>> meshEntries = meshData[0]->mesh.mesh.GetMeshEntries();
+
+    std::vector<std::shared_ptr<MeshEntry>> meshEntries = meshData[0]->mesh.mesh.GetMeshEntries();
 	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
     {
 		glGenBuffers(1, &meshEntry->get()->vertexBuffer);
@@ -41,8 +42,9 @@ void Renderer::SubscribeForRendering(EntityManager *manager, Entity *entity)
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * meshEntry->get()->indices.size(), 
 											  &meshEntry->get()->indices[0], GL_STATIC_DRAW);
     }
+
+	glBindVertexArray(0);
 	subscribedMeshes.push_back(std::make_pair<unsigned int, MeshData>(entity->GetIndex(), meshData[0]->mesh));
-	std::printf("");
 }
 void Renderer::UnsubscribeForRendering(Entity *entity)
 {
@@ -65,11 +67,11 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix,
 	for(auto subscribedMesh = subscribedMeshes.begin(); subscribedMesh != subscribedMeshes.end(); ++subscribedMesh)
     {
 		glBindVertexArray(subscribedMesh->second.vao);
-
+		
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
-
+		
 		
 		std::vector<std::shared_ptr<MeshEntry>> entries = subscribedMesh->second.mesh.GetMeshEntries();
         for(std::vector<std::shared_ptr<MeshEntry>>::const_iterator entry = entries.begin(); 
@@ -92,19 +94,20 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix,
 			glUniform4f(glGetUniformLocation(subscribedMesh->second.shaderProgram, "color"),
 				        1.0f, 1.0f, 1.0f, 1.0f);
 
-
-			glBindBuffer(GL_ARRAY_BUFFER, entry->get()->vertexBuffer);
+			
+            glBindBuffer(GL_ARRAY_BUFFER, entry->get()->vertexBuffer);
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(FusionEngine::Vertex), 0);
 			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(FusionEngine::Vertex), (const GLvoid*)12);
 			glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(FusionEngine::Vertex), (const GLvoid*)20);
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, entry->get()->indexBuffer);
-
+			
 			if(entry->get()->materialIndex < subscribedMesh->second.mesh.GetTextures().size() &&
 			   subscribedMesh->second.mesh.GetTextures()[entry->get()->materialIndex])
             {
 				subscribedMesh->second.mesh.GetTextures()[entry->get()->materialIndex]->Bind(GL_TEXTURE0);
             }
+			
 
 			glDrawElements(GL_TRIANGLES, entry->get()->indicesCount, GL_UNSIGNED_INT, 0);
 
@@ -115,9 +118,8 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix,
         glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 		glDisableVertexAttribArray(2);
-		
-        glBindVertexArray(0);
     }
 
+	glBindVertexArray(0);
 	glFrontFace(GL_CW);
 }

@@ -58,7 +58,8 @@ namespace FusionEngine
 		float padding; ///< Padding for compatibility with GLSL.
 	};
 
-	struct MeshData
+	/*
+	struct RenderData
     {
 		enum RendererType
         {
@@ -76,7 +77,7 @@ namespace FusionEngine
 		GLuint vao;
 		GLuint materialUniformBuffer;
     };
-
+	*/
 
     class Transform : public Component
 	{
@@ -90,13 +91,27 @@ namespace FusionEngine
 	};
 
 
-	class Mesh : public Component 
+	class Render : public Component 
     {
     public:
-		MeshData mesh;
+		enum RendererType
+        {
+			FE_RENDERER_SIMPLE,
+			FE_RENDERER_LIT,
 
-        Mesh() : Component(CT_MESH) {}
-        virtual ~Mesh() {}
+			FE_RENDERER_COUNT,
+        };
+
+
+		FusionEngine::MeshAssetObject mesh;
+		RendererType rendererType;
+		GLuint shaderProgram;
+
+		GLuint vao;
+		GLuint materialUniformBuffer;
+
+        Render() : Component(CT_RENDER) {}
+        virtual ~Render() {}
     };
 
 	

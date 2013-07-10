@@ -749,37 +749,37 @@ void InitializeScene()
 	////////////////////////////////////////////////////////////////////
 
 	testScene.Init();
-	FusionEngine::Mesh *mesh = new FusionEngine::Mesh();
+	FusionEngine::Render *mesh = new FusionEngine::Render();
 
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
 	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
 	FusionEngine::MeshAssetObject loadedMesh = meshLoader.LoadAssetObject("mesh-files", "spaceship.obj");
 
-	FusionEngine::Mesh *spaceshipMesh = new FusionEngine::Mesh();
+	FusionEngine::Render *spaceshipRender = new FusionEngine::Render();
 
 	std::vector<std::shared_ptr<FusionEngine::MeshEntry>> meshEntries = loadedMesh.GetMeshEntries();
 	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
     {
-		spaceshipMesh->mesh.mesh.AddEntry((*meshEntry));
+		spaceshipRender->mesh.AddEntry((*meshEntry));
     }
 	std::vector<std::shared_ptr<Texture2D>> loadedTextures = loadedMesh.GetTextures();
 	for(auto entryTexture = loadedTextures.begin(); entryTexture != loadedTextures.end(); ++entryTexture)
     {
-		spaceshipMesh->mesh.mesh.AddTexture((*entryTexture));
+		spaceshipRender->mesh.AddTexture((*entryTexture));
     }
-	spaceshipMesh->mesh.rendererType = FusionEngine::MeshData::FE_RENDERER_LIT;
-	spaceshipMesh->mesh.shaderProgram = scene.GetShaderManager().GetLitTextureProgData().theProgram;
-	spaceshipMesh->mesh.vao = loadedMesh.vao;
+	spaceshipRender->rendererType = FusionEngine::Render::FE_RENDERER_LIT;
+	spaceshipRender->shaderProgram = scene.GetShaderManager().GetLitTextureProgData().theProgram;
+	spaceshipRender->vao = loadedMesh.vao;
 
 	
 
-    for(int i = 0; i < 20; i++)
+    for(int i = 0; i < 200; i++)
     {
 		std::stringstream enemyTag;
         enemyTag<<"sampleSpaceship"<<i;
 		std::string stringedTag = enemyTag.str();
 		testScene.AddEntity(stringedTag);
-		testScene.AddComponent(stringedTag, spaceshipMesh);
+		testScene.AddComponent(stringedTag, spaceshipRender);
 		float range = ((float)rand() / (float)RAND_MAX) * 2.0f + 2.0f;
 		float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
 

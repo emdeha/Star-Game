@@ -21,15 +21,37 @@
 
 using namespace FusionEngine;
 
+
+static void GenerateUniformBuffers(int &materialBlockSize, glm::vec4 diffuseColor, GLuint &materialUniformBuffer)
+{
+	Material material;
+	material.diffuseColor = glm::vec4(1.0f);
+	material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
+	material.shininessFactor = 0.3f;
+
+	int uniformBufferAlignSize = 0;
+	glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignSize);
+
+	materialBlockSize = sizeof(Material);
+	materialBlockSize += uniformBufferAlignSize - 
+		(materialBlockSize % uniformBufferAlignSize);
+
+	glGenBuffers(1, &materialUniformBuffer);
+	glBindBuffer(GL_UNIFORM_BUFFER, materialUniformBuffer);
+	glBufferData(GL_UNIFORM_BUFFER, materialBlockSize, &material, GL_STATIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
+
 void Renderer::SubscribeForRendering(EntityManager *manager, Entity *entity)
 {
-	ComponentMapper<Mesh> meshData = manager->GetComponentList(entity, CT_MESH);
+	ComponentMapper<FusionEngine::Render> renderData = manager->GetComponentList(entity, CT_RENDER);
 
-	glGenVertexArrays(1, &meshData[0]->mesh.vao);
-	glBindVertexArray(meshData[0]->mesh.vao);
+	glGenVertexArrays(1, &renderData[0]->vao);
+	glBindVertexArray(renderData[0]->vao);
 
 
-    std::vector<std::shared_ptr<MeshEntry>> meshEntries = meshData[0]->mesh.mesh.GetMeshEntries();
+    std::vector<std::shared_ptr<MeshEntry>> meshEntries = renderData[0]->mesh.GetMeshEntries();
 	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
     {
 		glGenBuffers(1, &meshEntry->get()->vertexBuffer);
@@ -42,30 +64,15 @@ void Renderer::SubscribeForRendering(EntityManager *manager, Entity *entity)
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * meshEntry->get()->indices.size(), 
 											  &meshEntry->get()->indices[0], GL_STATIC_DRAW);
 
-
-		if(meshData[0]->mesh.rendererType == MeshData::FE_RENDERER_LIT)
+		if(renderData[0]->rendererType == Render::FE_RENDERER_LIT)
         {
-			Material material;
-			material.diffuseColor = glm::vec4(1.0f);
-			material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
-			material.shininessFactor = 0.3f;
-
-			int uniformBufferAlignSize = 0;
-			glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignSize);
-
-			int materialBlockSize = sizeof(Material);
-			materialBlockSize += uniformBufferAlignSize - 
-				(materialBlockSize % uniformBufferAlignSize);
-
-			glGenBuffers(1, &meshData[0]->mesh.materialUniformBuffer);
-			glBindBuffer(GL_UNIFORM_BUFFER, meshData[0]->mesh.materialUniformBuffer);
-			glBufferData(GL_UNIFORM_BUFFER, materialBlockSize, &material, GL_STATIC_DRAW);
-			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+			int materialBlockSize = 0;
+			GenerateUniformBuffers(materialBlockSize, glm::vec4(1.0f), renderData[0]->materialUniformBuffer);
         }
     }
 
 	glBindVertexArray(0);
-	subscribedMeshes.push_back(std::make_pair<unsigned int, MeshData>(entity->GetIndex(), meshData[0]->mesh));
+	subscribedMeshes.push_back(std::make_pair<unsigned int, MeshAssetObject>(entity->GetIndex(), renderData[0]->mesh));
 }
 void Renderer::UnsubscribeForRendering(Entity *entity)
 {
@@ -86,19 +93,22 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix,
 	glFrontFace(GL_CCW);
 
 	for(auto subscribedMesh = subscribedMeshes.begin(); subscribedMesh != subscribedMeshes.end(); ++subscribedMesh)
-    {
-		glBindVertexArray(subscribedMesh->second.vao);
+    {		ComponentMapper<FusionEngine::Render> renderData = manager->GetComponentList(subscribedMesh->first, CT_RENDER);
+
+		glBindVertexArray(renderData[0]->vao);
 		
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
+
 		
 		
-		std::vector<std::shared_ptr<MeshEntry>> entries = subscribedMesh->second.mesh.GetMeshEntries();
+		
+		std::vector<std::shared_ptr<MeshEntry>> entries = subscribedMesh->second.GetMeshEntries();
         for(std::vector<std::shared_ptr<MeshEntry>>::const_iterator entry = entries.begin(); 
 			entry != entries.end(); ++entry)
         {
-			glUseProgram(subscribedMesh->second.shaderProgram); 
+			glUseProgram(renderData[0]->shaderProgram); 
 		
             glutil::PushStack push(modelMatrix);
 
@@ -110,20 +120,20 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix,
 			modelMatrix.RotateZ(transformData[0]->rotation.z);
 			modelMatrix.Scale(transformData[0]->scale);
 
-			glUniformMatrix4fv(glGetUniformLocation(subscribedMesh->second.shaderProgram, "modelToCameraMatrix"),
+			glUniformMatrix4fv(glGetUniformLocation(renderData[0]->shaderProgram, "modelToCameraMatrix"),
                 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-			glUniform4f(glGetUniformLocation(subscribedMesh->second.shaderProgram, "color"),
+			glUniform4f(glGetUniformLocation(renderData[0]->shaderProgram, "color"),
 				        1.0f, 1.0f, 1.0f, 1.0f);
 
-			if(subscribedMesh->second.rendererType == MeshData::FE_RENDERER_LIT)
+			if(renderData[0]->rendererType == Render::FE_RENDERER_LIT)
             {
 				glBindBufferRange(GL_UNIFORM_BUFFER, entry->get()->materialIndex, 
-								  subscribedMesh->second.materialUniformBuffer, 0, sizeof(Material));
+								  renderData[0]->materialUniformBuffer, 0, sizeof(Material));
 
 				glm::mat3 normMatrix(modelMatrix.Top());
 				normMatrix = glm::transpose(glm::inverse(normMatrix));
 
-				glUniformMatrix3fv(glGetUniformLocation(subscribedMesh->second.shaderProgram, "normalModelToCameraMatrix"),
+				glUniformMatrix3fv(glGetUniformLocation(renderData[0]->shaderProgram, "normalModelToCameraMatrix"),
 								   1, GL_FALSE, glm::value_ptr(normMatrix));
             }
 
@@ -136,16 +146,16 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix,
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, entry->get()->indexBuffer);
 			
-			if(entry->get()->materialIndex < subscribedMesh->second.mesh.GetTextures().size() &&
-			   subscribedMesh->second.mesh.GetTextures()[entry->get()->materialIndex])
+			if(entry->get()->materialIndex < subscribedMesh->second.GetTextures().size() &&
+			   subscribedMesh->second.GetTextures()[entry->get()->materialIndex])
             {
-				subscribedMesh->second.mesh.GetTextures()[entry->get()->materialIndex]->Bind(GL_TEXTURE0);
+				subscribedMesh->second.GetTextures()[entry->get()->materialIndex]->Bind(GL_TEXTURE0);
             }
 			
 
 			glDrawElements(GL_TRIANGLES, entry->get()->indicesCount, GL_UNSIGNED_INT, 0);
 			
-            if(subscribedMesh->second.rendererType == MeshData::FE_RENDERER_LIT)
+            if(renderData[0]->rendererType == Render::FE_RENDERER_LIT)
             {
 				glBindBufferBase(GL_UNIFORM_BUFFER, entry->get()->materialIndex, 0);
             }

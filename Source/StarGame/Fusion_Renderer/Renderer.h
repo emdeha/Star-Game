@@ -37,7 +37,7 @@ namespace FusionEngine
 	class Renderer
 	{
 	private:
-		std::vector<std::pair<unsigned int, MeshData>> subscribedMeshes;		
+		std::vector<std::pair<unsigned int, MeshAssetObject>> subscribedMeshes;		
 
 	public:
         Renderer() {}

@@ -44,18 +44,6 @@ void MeshEntry::Init(const std::vector<Vertex> &newVertices,
 	indices = newIndices;
 
 	indicesCount = indices.size();
-
-	/*
-	indicesCount = indices.size();
-
-	glGenBuffers(1, &vertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
-
-	glGenBuffers(1, &indexBuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indicesCount, &indices[0], GL_STATIC_DRAW);
-	*/
 }
 
 
@@ -78,8 +66,6 @@ MeshAssetObject MeshLoader::Load(const std::string &type, const std::string &nam
     }
     else 
     {
-		//glGenVertexArrays(1, &loadedMesh.vao);
-		//glBindVertexArray(loadedMesh.vao);
 		InitFromScene(scene, loadedMesh, name);
     }
 

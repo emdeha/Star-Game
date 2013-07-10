@@ -7,7 +7,7 @@ namespace FusionEngine
 	enum ComponentType
 	{
 		CT_TRANSFORM = 0,
-		CT_MESH,
+		CT_RENDER,
 		
         
         
@@ -38,7 +38,7 @@ namespace FusionEngine
 
 	// Component type bits. Used by the entity systems to determine if an entity is compatible.
 	const unsigned int CT_TRANSFORM_BIT = 1 << CT_TRANSFORM;
-	const unsigned int CT_MESH_BIT = 1 << CT_MESH;
+	const unsigned int CT_RENDER_BIT = 1 << CT_RENDER;
 	
 
 

@@ -80,13 +80,13 @@ MeshAssetObject MeshLoader::Load(const std::string &type, const std::string &nam
     {
 		//glGenVertexArrays(1, &loadedMesh.vao);
 		//glBindVertexArray(loadedMesh.vao);
-		InitFromScene(scene, loadedMesh);
+		InitFromScene(scene, loadedMesh, name);
     }
 
 	return loadedMesh;
 }
 
-void MeshLoader::InitFromScene(const aiScene *scene, MeshAssetObject &loadedMesh)
+void MeshLoader::InitFromScene(const aiScene *scene, MeshAssetObject &loadedMesh, const std::string &name)
 {
 	for(unsigned int i = 0; i < scene->mNumMeshes; i++)
     {
@@ -94,7 +94,7 @@ void MeshLoader::InitFromScene(const aiScene *scene, MeshAssetObject &loadedMesh
 		InitMesh(i, mesh, loadedMesh);
     }
 
-	InitMaterials(scene, loadedMesh);
+	InitMaterials(scene, loadedMesh, name);
 }
 
 void MeshLoader::InitMesh(unsigned int index, const aiMesh *mesh, MeshAssetObject &loadedMesh)
@@ -132,7 +132,7 @@ void MeshLoader::InitMesh(unsigned int index, const aiMesh *mesh, MeshAssetObjec
 	loadedMesh.AddEntry(newMeshEntry);
 }
 
-void MeshLoader::InitMaterials(const aiScene *scene, MeshAssetObject &loadedMesh)
+void MeshLoader::InitMaterials(const aiScene *scene, MeshAssetObject &loadedMesh, const std::string &name)
 {
 	for(unsigned int i = 0; i < scene->mNumMaterials; i++)
     {
@@ -158,11 +158,19 @@ void MeshLoader::InitMaterials(const aiScene *scene, MeshAssetObject &loadedMesh
 		if(!newTexture)
         {
 			newTexture = std::shared_ptr<Texture2D>(new Texture2D());
-			std::string pathToWhiteTexture = "../data/mesh-files/sun.png";
-			if(!newTexture->Load(pathToWhiteTexture, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE))
+
+			std::string textureName = name;
+			textureName.erase(textureName.end() - 4, textureName.end());
+			textureName.append(".png");
+            
+			if(!newTexture->Load(textureName, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE))
             {
-				HandleUnexpectedError("loading DEFAULT texture from path " + pathToWhiteTexture, __LINE__, __FILE__);
-				return;
+				std::string pathToWhiteTexture = "../data/mesh-files/white.png";
+				if(!newTexture->Load(pathToWhiteTexture, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE))
+				{
+					HandleUnexpectedError("loading DEFAULT texture from path " + pathToWhiteTexture, __LINE__, __FILE__);
+					return;
+				}
             }
         }
 

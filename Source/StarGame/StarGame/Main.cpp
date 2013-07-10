@@ -767,41 +767,20 @@ void InitializeScene()
     {
 		spaceshipMesh->mesh.mesh.AddTexture((*entryTexture));
     }
-	spaceshipMesh->mesh.rendererType = FusionEngine::MeshData::FE_RENDERER_SIMPLE;
-	spaceshipMesh->mesh.shaderProgram = scene.GetShaderManager().GetSimpleTextureProgData().theProgram;
+	spaceshipMesh->mesh.rendererType = FusionEngine::MeshData::FE_RENDERER_LIT;
+	spaceshipMesh->mesh.shaderProgram = scene.GetShaderManager().GetLitTextureProgData().theProgram;
 	spaceshipMesh->mesh.vao = loadedMesh.vao;
 
-	//FusionEngine::Transform *spaceshipTransform = new FusionEngine::Transform();
-	//spaceshipTransform->position = glm::vec3(-2.0f, 0.0f, 0.0f);
-	//spaceshipTransform->rotation = glm::vec3();
-	//spaceshipTransform->scale = glm::vec3(0.05f);
+	
 
-	/*
-	testScene.AddEntity("sampleSpaceship");
-	testScene.AddComponent("sampleSpaceship", spaceshipMesh);
-	testScene.AddComponent("sampleSpaceship", spaceshipTransform);
-
-	testScene.AddEntity("sampleSpaceship2");
-	testScene.AddComponent("sampleSpaceship2", spaceshipMesh);
-	FusionEngine::Transform *spaceshipTransform2 = new FusionEngine::Transform();
-	spaceshipTransform2->position = glm::vec3(2.0f, 0.0f, 0.0f);
-	spaceshipTransform2->rotation = glm::vec3();
-	spaceshipTransform2->scale = glm::vec3(0.05);
-    
-    testScene.AddComponent("sampleSpaceship2", spaceshipTransform2);
-
-	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("sampleSpaceship"));
-	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("sampleSpaceship2"));
-	*/
-
-    for(int i = 0; i < 200; i++)
+    for(int i = 0; i < 20; i++)
     {
 		std::stringstream enemyTag;
         enemyTag<<"sampleSpaceship"<<i;
 		std::string stringedTag = enemyTag.str();
 		testScene.AddEntity(stringedTag);
 		testScene.AddComponent(stringedTag, spaceshipMesh);
-		float range = ((float)rand() / (float)RAND_MAX) * 2.0f + 6.0f;
+		float range = ((float)rand() / (float)RAND_MAX) * 2.0f + 2.0f;
 		float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
 
 		float posX = cosf(posOnCircle * (2.0f * PI)) * range;

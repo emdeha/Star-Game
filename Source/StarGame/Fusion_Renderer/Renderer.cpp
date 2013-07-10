@@ -41,6 +41,27 @@ void Renderer::SubscribeForRendering(EntityManager *manager, Entity *entity)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshEntry->get()->indexBuffer);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * meshEntry->get()->indices.size(), 
 											  &meshEntry->get()->indices[0], GL_STATIC_DRAW);
+
+
+		if(meshData[0]->mesh.rendererType == MeshData::FE_RENDERER_LIT)
+        {
+			Material material;
+			material.diffuseColor = glm::vec4(1.0f);
+			material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
+			material.shininessFactor = 0.3f;
+
+			int uniformBufferAlignSize = 0;
+			glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignSize);
+
+			int materialBlockSize = sizeof(Material);
+			materialBlockSize += uniformBufferAlignSize - 
+				(materialBlockSize % uniformBufferAlignSize);
+
+			glGenBuffers(1, &meshData[0]->mesh.materialUniformBuffer);
+			glBindBuffer(GL_UNIFORM_BUFFER, meshData[0]->mesh.materialUniformBuffer);
+			glBufferData(GL_UNIFORM_BUFFER, materialBlockSize, &material, GL_STATIC_DRAW);
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        }
     }
 
 	glBindVertexArray(0);
@@ -81,6 +102,7 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix,
 		
             glutil::PushStack push(modelMatrix);
 
+
 			ComponentMapper<Transform> transformData = manager->GetComponentList(subscribedMesh->first, CT_TRANSFORM);
 			modelMatrix.Translate(transformData[0]->position);
 			modelMatrix.RotateX(transformData[0]->rotation.x);
@@ -88,11 +110,23 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix,
 			modelMatrix.RotateZ(transformData[0]->rotation.z);
 			modelMatrix.Scale(transformData[0]->scale);
 
-
 			glUniformMatrix4fv(glGetUniformLocation(subscribedMesh->second.shaderProgram, "modelToCameraMatrix"),
                 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
 			glUniform4f(glGetUniformLocation(subscribedMesh->second.shaderProgram, "color"),
 				        1.0f, 1.0f, 1.0f, 1.0f);
+
+			if(subscribedMesh->second.rendererType == MeshData::FE_RENDERER_LIT)
+            {
+				glBindBufferRange(GL_UNIFORM_BUFFER, entry->get()->materialIndex, 
+								  subscribedMesh->second.materialUniformBuffer, 0, sizeof(Material));
+
+				glm::mat3 normMatrix(modelMatrix.Top());
+				normMatrix = glm::transpose(glm::inverse(normMatrix));
+
+				glUniformMatrix3fv(glGetUniformLocation(subscribedMesh->second.shaderProgram, "normalModelToCameraMatrix"),
+								   1, GL_FALSE, glm::value_ptr(normMatrix));
+            }
+
 
 			
             glBindBuffer(GL_ARRAY_BUFFER, entry->get()->vertexBuffer);
@@ -110,8 +144,13 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix,
 			
 
 			glDrawElements(GL_TRIANGLES, entry->get()->indicesCount, GL_UNSIGNED_INT, 0);
-
-			glUseProgram(0);
+			
+            if(subscribedMesh->second.rendererType == MeshData::FE_RENDERER_LIT)
+            {
+				glBindBufferBase(GL_UNIFORM_BUFFER, entry->get()->materialIndex, 0);
+            }
+            
+            glUseProgram(0);
         }
 
         

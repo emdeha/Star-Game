@@ -63,6 +63,7 @@ namespace FusionEngine
 		enum RendererType
         {
 			FE_RENDERER_SIMPLE,
+			FE_RENDERER_LIT,
 
 			FE_RENDERER_COUNT,
         };

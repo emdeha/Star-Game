@@ -605,12 +605,157 @@ void OnHoverEventHandler(Scene &scene, Control *control)
     control->SetIsHovered(true);
 }
 
+
+
+// Mixing OOP with Entity Systems :D
+struct EnemyParams
+{
+    BehaviorState currentState;
+	BehaviorState lastState;
+
+	PatrolRoute patrolRoute;
+
+	glm::vec3 frontVector;
+	float speed;
+	float lineOfSight;
+
+	int health;
+
+	bool isSunKilled;
+	bool isDestroyed;
+
+	EnemyParams()
+    {
+		health = 50;
+		isSunKilled = false;
+		isDestroyed = false;
+		currentState = STATE_PATROL;
+		lastState = STATE_PATROL;
+
+
+		patrolRoute.patrolPoints.push_back(glm::vec3(6.0f, 0.0f, 0.0f));
+		patrolRoute.patrolPoints.push_back(glm::vec3(-4.5f, 0.0f, -4.0f));
+		patrolRoute.patrolPoints.push_back(glm::vec3(4.5f, 0.0f, -4.0f));
+		patrolRoute.patrolPoints.push_back(glm::vec3(-4.5f, 0.0f, 4.0f));
+
+		patrolRoute.currentPatrolPointIndex = 0;
+		patrolRoute.lastPatrolPointIndex = 0;
+		patrolRoute.nextPatrolPointIndex = 1;
+
+		lineOfSight = 0.0f;
+
+		speed = 0.008f;
+
+		frontVector = 
+			glm::normalize(patrolRoute.patrolPoints[patrolRoute.nextPatrolPointIndex] - 
+			               patrolRoute.patrolPoints[patrolRoute.currentPatrolPointIndex]);
+		patrolRoute.lastVelocity = frontVector;
+    }
+};
+
+EnemyParams spaceshipParams;
+
+
+void UpdateSpaceshipAI()
+{
+    FusionEngine::ComponentMapper<FusionEngine::Transform> transformData = 
+		testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("spaceship"), FusionEngine::CT_TRANSFORM);
+	
+    if(spaceshipParams.currentState == STATE_ATTACK)
+    {
+		spaceshipParams.frontVector = glm::vec3();
+    }
+    else if(spaceshipParams.currentState == STATE_EVADE)
+    {
+		glm::vec3 vectorFromPlanetToSpaceship = scene.GetSun()->GetPosition() - transformData[0]->position;
+
+		vectorFromPlanetToSpaceship = glm::normalize(vectorFromPlanetToSpaceship);
+		glm::vec3 spaceshipDirection = glm::normalize(spaceshipParams.frontVector * spaceshipParams.speed);
+
+		if(glm::dot(vectorFromPlanetToSpaceship, spaceshipDirection) > 0)
+        {
+			spaceshipParams.speed *= -1.0f;
+        }
+    }
+    else if(spaceshipParams.currentState == STATE_PATROL)
+    {
+		// Updates the patrol points
+		if(spaceshipParams.patrolRoute.patrolPoints.size() > spaceshipParams.patrolRoute.nextPatrolPointIndex)
+        {
+			glm::vec3 vectorBetweenShipAndPatrolPoint = 
+				spaceshipParams.patrolRoute.patrolPoints[spaceshipParams.patrolRoute.nextPatrolPointIndex] -
+				transformData[0]->position;
+			float distanceBetweenShipAndPatrolPoint = glm::length(vectorBetweenShipAndPatrolPoint);
+
+			if(distanceBetweenShipAndPatrolPoint <= 0.1f)
+            {
+				spaceshipParams.patrolRoute.currentPatrolPointIndex = spaceshipParams.patrolRoute.nextPatrolPointIndex;
+				spaceshipParams.patrolRoute.nextPatrolPointIndex++;
+				// If the end of the patrol is reached, we should restart.
+				if(spaceshipParams.patrolRoute.nextPatrolPointIndex >= spaceshipParams.patrolRoute.patrolPoints.size())
+                {
+					spaceshipParams.patrolRoute.nextPatrolPointIndex = 0;
+                }
+
+				glm::vec3 vectorBetweenPatrolPoints =
+					spaceshipParams.patrolRoute.patrolPoints[spaceshipParams.patrolRoute.nextPatrolPointIndex] -
+					spaceshipParams.patrolRoute.patrolPoints[spaceshipParams.patrolRoute.currentPatrolPointIndex];
+
+				spaceshipParams.frontVector = glm::normalize(vectorBetweenPatrolPoints);
+            }
+        }
+
+		glm::vec3 vectorFromSunToSpaceship = scene.GetSun()->GetPosition() - transformData[0]->position;
+		float distanceBetweenSunAndSpaceship = glm::length(vectorFromSunToSpaceship);
+
+		if(distanceBetweenSunAndSpaceship < spaceshipParams.lineOfSight)
+        {
+			spaceshipParams.patrolRoute.lastVelocity = spaceshipParams.frontVector;
+			spaceshipParams.patrolRoute.nextPatrolPoint = scene.GetSun()->GetPosition();
+			spaceshipParams.currentState = STATE_ATTACK;
+        }
+        else
+        {
+            spaceshipParams.patrolRoute.nextPatrolPoint	= 
+                spaceshipParams.patrolRoute.patrolPoints[spaceshipParams.patrolRoute.nextPatrolPointIndex];
+        }
+    }
+}
+
 void EnemyTestUpdateFunction()
 {
-	FusionEngine::ComponentMapper<FusionEngine::Transform> transformData = 
-		testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("spaceship"), FusionEngine::CT_TRANSFORM);
+	if(!spaceshipParams.isSunKilled)
+    {
+		FusionEngine::ComponentMapper<FusionEngine::Transform> transformData = 
+			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("spaceship"), FusionEngine::CT_TRANSFORM);
 
-	transformData[0]->position.x += 0.01f;
+		//transformData[0]->position.x += 0.01f;
+
+		if(spaceshipParams.currentState != STATE_STOPPED)
+        {
+			transformData[0]->position += spaceshipParams.frontVector * spaceshipParams.speed;
+			UpdateSpaceshipAI();
+        }
+
+		if(spaceshipParams.health <= 20)
+        {
+			spaceshipParams.currentState = STATE_EVADE;
+        }
+
+		if(spaceshipParams.health <= 0)
+        {
+			spaceshipParams.isDestroyed = true;
+        }
+    }
+    else
+    {
+		if(spaceshipParams.frontVector == glm::vec3())
+        {
+			spaceshipParams.frontVector = spaceshipParams.patrolRoute.lastVelocity;
+        }
+		spaceshipParams.currentState = STATE_PATROL;
+		UpdateSpaceshipAI();
+    }
 }
 
 void InitializeScene()
@@ -786,13 +931,13 @@ void InitializeScene()
 	testScene.AddSystem(functionalSystem);
 	testScene.AddComponent("spaceship", spaceshipRender);
 	
-	float range = ((float)rand() / (float)RAND_MAX) * 2.0f + 2.0f;
+	float range = ((float)rand() / (float)RAND_MAX) * 2.0f + 6.0f;
 	float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
 
 	float posX = cosf(posOnCircle * (2.0f * PI)) * range;
 	float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
 	FusionEngine::Transform *newTransform = new FusionEngine::Transform();
-	newTransform->position = glm::vec3(posX, 0.0f, posZ);
+	newTransform->position = glm::vec3(6.0f, 0.0f, 0.0f);
 	newTransform->rotation = glm::vec3();
 	newTransform->scale = glm::vec3(0.05f);
 	testScene.AddComponent("spaceship", newTransform);

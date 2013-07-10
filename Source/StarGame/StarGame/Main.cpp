@@ -606,8 +606,40 @@ void OnHoverEventHandler(Scene &scene, Control *control)
 }
 
 
-
 // Mixing OOP with Entity Systems :D
+
+struct ProjectileParams
+{
+	bool isUpdated;
+	bool isDestroyed;
+
+	int lifeSpan;
+	int initialLifeSpan;
+	int damage;
+    float speed;
+	
+
+	glm::vec3 velocity;
+
+	ProjectileParams()
+    {
+		isUpdated = false;
+		isDestroyed = false;
+		
+		lifeSpan = 100;
+		initialLifeSpan = lifeSpan;
+
+		velocity = glm::vec3();
+
+		damage = 2;
+		speed = 0.01f;
+    }
+};
+
+ProjectileParams projParams;
+
+
+
 struct EnemyParams
 {
     BehaviorState currentState;
@@ -664,6 +696,29 @@ void UpdateSpaceshipAI()
     if(spaceshipParams.currentState == STATE_ATTACK)
     {
 		spaceshipParams.frontVector = glm::vec3();
+
+		if(projParams.isDestroyed)
+        {
+			glm::vec3 newDir = glm::vec3();
+
+			if(scene.GetSun()->HasSatellites())
+            {
+				glm::vec3 satellitePos = scene.GetSun()->GetOuterSatellite()->GetPosition();
+				newDir = satellitePos - transformData[0]->position;
+            }
+            else
+            {
+				newDir = scene.GetSun()->GetPosition() - transformData[0]->position;
+            }
+
+			newDir = glm::normalize(newDir);
+			projParams.velocity = newDir * projParams.speed;
+			projParams.lifeSpan = projParams.initialLifeSpan;
+			projParams.isDestroyed = false;
+			FusionEngine::ComponentMapper<FusionEngine::Transform> projTransformData = 
+				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("spaceshipProjectile"), FusionEngine::CT_TRANSFORM);
+			projTransformData[0]->position = transformData[0]->position;
+        }
     }
     else if(spaceshipParams.currentState == STATE_EVADE)
     {
@@ -757,6 +812,71 @@ void EnemyTestUpdateFunction()
 		UpdateSpaceshipAI();
     }
 }
+
+
+
+void CheckTargetHit()
+{
+	FusionEngine::ComponentMapper<FusionEngine::Transform> transformData = 
+		testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("spaceshipProjectile"), FusionEngine::CT_TRANSFORM);
+			
+
+	std::vector<std::shared_ptr<CelestialBody>> sunSats = scene.GetSun()->GetSatellites();
+	for(auto satellite = sunSats.begin(); satellite != sunSats.end(); ++satellite)
+    {
+		glm::vec3 satellitePos = glm::vec3((*satellite)->GetPosition());
+		float satelliteRad = (*satellite)->GetRadius() * 2.0f;
+
+		glm::vec3 distance = transformData[0]->position - satellitePos;
+		float distanceLength = glm::length(distance);
+
+		if(distanceLength <= satelliteRad * satelliteRad)
+        {
+			// Notify hit
+			projParams.isDestroyed = true;
+        }
+    }
+
+	glm::vec3 sunPos = glm::vec3(scene.GetSun()->GetPosition());
+	float sunRad = scene.GetSun()->GetRadius();
+
+	glm::vec3 distance = transformData[0]->position - sunPos;
+	float distanceLength = glm::length(distance);
+
+	if(distanceLength <= sunRad * sunRad)
+    {
+		// Notify sun hit
+		projParams.isDestroyed = true;
+    }
+}
+
+void ProjectileUpdateFunction()
+{
+	if(projParams.isUpdated)
+    {
+		if(scene.GetSun()->GetHealth() <= 0)
+        {
+			projParams.isDestroyed = true;
+        }
+
+		if(projParams.lifeSpan <= 0)
+        {
+			projParams.isDestroyed = true;
+        }
+
+		if(!projParams.isDestroyed)
+        {
+			FusionEngine::ComponentMapper<FusionEngine::Transform> transformData = 
+				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("spaceshipProjectile"), FusionEngine::CT_TRANSFORM);
+			
+			transformData[0]->position += projParams.velocity;
+			projParams.lifeSpan--;
+
+
+        }
+    }
+}
+
 
 void InitializeScene()
 {
@@ -947,6 +1067,39 @@ void InitializeScene()
 	testScene.AddComponent("spaceship", functional);
 
 	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("spaceship"));
+
+
+
+	loadedMesh = meshLoader.LoadAssetObject("mesh-files", "sun.obj");
+	FusionEngine::Render *projectileRender = new FusionEngine::Render();
+
+	meshEntries = loadedMesh.GetMeshEntries();
+	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
+    {
+		projectileRender->mesh.AddEntry((*meshEntry));
+    }
+	loadedTextures = loadedMesh.GetTextures();
+	for(auto texture = loadedTextures.begin(); texture != loadedTextures.end(); ++texture)
+    {
+		projectileRender->mesh.AddTexture((*texture));
+    }
+	projectileRender->rendererType = FusionEngine::Render::FE_RENDERER_LIT;
+	projectileRender->shaderProgram = scene.GetShaderManager().GetLitTextureProgData().theProgram;
+	projectileRender->vao = loadedMesh.vao;
+
+	testScene.AddEntity("spaceshipProjectile");
+	testScene.AddComponent("spaceshipProjectile", projectileRender);
+	FusionEngine::Transform *projectileTransform = new FusionEngine::Transform();
+	projectileTransform->position = glm::vec3(6.0f, 0.0f, 0.0f);
+	projectileTransform->rotation = glm::vec3();
+	projectileTransform->scale = glm::vec3(0.02f);
+	testScene.AddComponent("spaceshipProjectile", projectileTransform);
+
+	FusionEngine::Functional *projectileFunctional = new FusionEngine::Functional();
+	projectileFunctional->UpdateFunction = ProjectileUpdateFunction;
+	testScene.AddComponent("spaceshipProjectile", projectileFunctional);
+
+	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("spaceshipProjectile"));
 	
 	/*
     for(int i = 0; i < 200; i++)

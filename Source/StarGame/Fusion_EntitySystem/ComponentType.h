@@ -8,7 +8,7 @@ namespace FusionEngine
 	{
 		CT_TRANSFORM = 0,
 		CT_RENDER,
-		
+		CT_FUNCTIONAL_BEHAVIOR,
         
         
         /////////////
@@ -25,7 +25,7 @@ namespace FusionEngine
 		CT_RIGID_BODY, 
 		CT_JOINT,
 		CT_CELESTIAL_BODY,
-		CT_FUNCTIONAL_BEHAVIOR,
+		
 		CT_ROTATE_ORIGIN,
 		CT_CLICKABLE,
 		CT_LIGHT,
@@ -39,7 +39,7 @@ namespace FusionEngine
 	// Component type bits. Used by the entity systems to determine if an entity is compatible.
 	const unsigned int CT_TRANSFORM_BIT = 1 << CT_TRANSFORM;
 	const unsigned int CT_RENDER_BIT = 1 << CT_RENDER;
-	
+	const unsigned int CT_FUNCTIONAL_BEHAVIOR_BIT = 1 << CT_FUNCTIONAL_BEHAVIOR;
 
 
 	/////////////
@@ -55,7 +55,7 @@ namespace FusionEngine
 	const unsigned int CT_RIGID_BODY_BIT = 1 << CT_RIGID_BODY;
 	const unsigned int CT_JOINT_BIT = 1 << CT_JOINT;
 	const unsigned int CT_CELESTIAL_BODY_BIT = 1 << CT_CELESTIAL_BODY;
-	const unsigned int CT_FUNCTIONAL_BEHAVIOR_BIT = 1 << CT_FUNCTIONAL_BEHAVIOR;
+	
 	const unsigned int CT_ROTATE_ORIGIN_BIT = 1 << CT_ROTATE_ORIGIN;
 	const unsigned int CT_CLICKABLE_BIT = 1 << CT_CLICKABLE;
 	const unsigned int CT_LIGHT_BIT = 1 << CT_LIGHT;

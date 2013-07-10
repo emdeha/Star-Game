@@ -36,6 +36,28 @@
 
 namespace FusionEngine
 {
+	class FunctionalSystem : public EntityProcessingSystem
+    {
+    protected:
+		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
+        {
+			ComponentMapper<Functional> functionalData = manager->GetComponentList(entity, CT_FUNCTIONAL_BEHAVIOR);
+
+			functionalData[0]->UpdateFunction();
+        }
+
+    public:
+		FunctionalSystem(EventManager *eventManager, EntityManager *entityManager) 
+            : EntityProcessingSystem(eventManager, entityManager, CT_FUNCTIONAL_BEHAVIOR_BIT) {}
+        virtual ~FunctionalSystem() {}
+    };
+
+
+	/////////////////////
+	///  Old Systems  ///
+	/////////////////////
+
+
 	class ClickSystem : public EntityProcessingSystem
 	{
 	protected:

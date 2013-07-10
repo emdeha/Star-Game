@@ -114,6 +114,16 @@ namespace FusionEngine
         virtual ~Render() {}
     };
 
+
+
+	class Functional : public Component
+    {
+    public:
+		void (*UpdateFunction)();
+
+        Functional() : Component(CT_FUNCTIONAL_BEHAVIOR) {}
+        virtual ~Functional() {}
+    };
 	
 
 

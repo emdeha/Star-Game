@@ -605,6 +605,14 @@ void OnHoverEventHandler(Scene &scene, Control *control)
     control->SetIsHovered(true);
 }
 
+void EnemyTestUpdateFunction()
+{
+	FusionEngine::ComponentMapper<FusionEngine::Transform> transformData = 
+		testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("spaceship"), FusionEngine::CT_TRANSFORM);
+
+	transformData[0]->position.x += 0.01f;
+}
+
 void InitializeScene()
 {
     Mouse userMouse;
@@ -748,6 +756,7 @@ void InitializeScene()
 
 	////////////////////////////////////////////////////////////////////
 
+	
 	testScene.Init();
 	FusionEngine::Render *mesh = new FusionEngine::Render();
 
@@ -771,8 +780,30 @@ void InitializeScene()
 	spaceshipRender->shaderProgram = scene.GetShaderManager().GetLitTextureProgData().theProgram;
 	spaceshipRender->vao = loadedMesh.vao;
 
+	testScene.AddEntity("spaceship");
+	FusionEngine::FunctionalSystem *functionalSystem = 
+		new FusionEngine::FunctionalSystem(testScene.GetEventManager(), testScene.GetEntityManager());
+	testScene.AddSystem(functionalSystem);
+	testScene.AddComponent("spaceship", spaceshipRender);
 	
+	float range = ((float)rand() / (float)RAND_MAX) * 2.0f + 2.0f;
+	float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
 
+	float posX = cosf(posOnCircle * (2.0f * PI)) * range;
+	float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
+	FusionEngine::Transform *newTransform = new FusionEngine::Transform();
+	newTransform->position = glm::vec3(posX, 0.0f, posZ);
+	newTransform->rotation = glm::vec3();
+	newTransform->scale = glm::vec3(0.05f);
+	testScene.AddComponent("spaceship", newTransform);
+
+	FusionEngine::Functional *functional = new FusionEngine::Functional();
+	functional->UpdateFunction = EnemyTestUpdateFunction;
+	testScene.AddComponent("spaceship", functional);
+
+	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("spaceship"));
+	
+	/*
     for(int i = 0; i < 200; i++)
     {
 		std::stringstream enemyTag;
@@ -792,7 +823,7 @@ void InitializeScene()
 		testScene.AddComponent(stringedTag, newTransform);
 
 		testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity(stringedTag));
-    }
+    }*/
 }
 
 
@@ -929,8 +960,7 @@ void Display()
 		//if(testScene.HasEntity("sampleSpaceship"))
         {
 			testScene.ProcessSystems();
-			testRenderer.Render(modelMatrix, 
-								testScene.GetEntityManager());
+			testRenderer.Render(modelMatrix, testScene.GetEntityManager());
         }
 		
     }

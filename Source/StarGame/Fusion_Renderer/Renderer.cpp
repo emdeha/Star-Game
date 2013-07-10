@@ -93,16 +93,15 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix,
 	glFrontFace(GL_CCW);
 
 	for(auto subscribedMesh = subscribedMeshes.begin(); subscribedMesh != subscribedMeshes.end(); ++subscribedMesh)
-    {		ComponentMapper<FusionEngine::Render> renderData = manager->GetComponentList(subscribedMesh->first, CT_RENDER);
+    {
+		ComponentMapper<FusionEngine::Render> renderData = manager->GetComponentList(subscribedMesh->first, CT_RENDER);
 
-		glBindVertexArray(renderData[0]->vao);
+		glBindVertexArray(renderData[0]->vao);  //--> vaos are not needed
 		
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
 
-		
-		
 		
 		std::vector<std::shared_ptr<MeshEntry>> entries = subscribedMesh->second.GetMeshEntries();
         for(std::vector<std::shared_ptr<MeshEntry>>::const_iterator entry = entries.begin(); 
@@ -136,7 +135,6 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix,
 				glUniformMatrix3fv(glGetUniformLocation(renderData[0]->shaderProgram, "normalModelToCameraMatrix"),
 								   1, GL_FALSE, glm::value_ptr(normMatrix));
             }
-
 
 			
             glBindBuffer(GL_ARRAY_BUFFER, entry->get()->vertexBuffer);

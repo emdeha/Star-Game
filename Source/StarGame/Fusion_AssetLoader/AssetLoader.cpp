@@ -140,7 +140,7 @@ void MeshLoader::InitMaterials(const aiScene *scene, MeshAssetObject &loadedMesh
             }
         }
 
-		// Load a white texture in case the model doesn't include its own
+		// Try finding a texture with the mesh's file name
 		if(!newTexture)
         {
 			newTexture = std::shared_ptr<Texture2D>(new Texture2D());

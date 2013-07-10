@@ -1100,28 +1100,6 @@ void InitializeScene()
 	testScene.AddComponent("spaceshipProjectile", projectileFunctional);
 
 	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("spaceshipProjectile"));
-	
-	/*
-    for(int i = 0; i < 200; i++)
-    {
-		std::stringstream enemyTag;
-        enemyTag<<"sampleSpaceship"<<i;
-		std::string stringedTag = enemyTag.str();
-		testScene.AddEntity(stringedTag);
-		testScene.AddComponent(stringedTag, spaceshipRender);
-		float range = ((float)rand() / (float)RAND_MAX) * 2.0f + 2.0f;
-		float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
-
-		float posX = cosf(posOnCircle * (2.0f * PI)) * range;
-		float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
-		FusionEngine::Transform *newTransform = new FusionEngine::Transform();
-		newTransform->position = glm::vec3(posX, 0.0f, posZ);
-		newTransform->rotation = glm::vec3();
-		newTransform->scale = glm::vec3(0.05f);
-		testScene.AddComponent(stringedTag, newTransform);
-
-		testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity(stringedTag));
-    }*/
 }
 
 

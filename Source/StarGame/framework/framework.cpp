@@ -10,10 +10,10 @@
 #include <exception>
 #include <stdexcept>
 #include <string.h>
-#include <glload/gl_3_3.h>
-#include <glload/gll.hpp>
-#include <glutil/Shader.h>
-#include <GL/freeglut.h>
+#include "../glsdk/glload/gl_3_3.h"
+#include "../glsdk/glload/gll.hpp"
+#include "../glsdk/glutil/Shader.h"
+#include "../glsdk/freeglut/include/GL/freeglut.h"
 #include "framework.h"
 #include "directories.h"
 

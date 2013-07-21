@@ -53,14 +53,14 @@ AnimationBody::AnimationBody(const AnimationBody &other)
 {
     this->materialBlockSize = other.materialBlockSize;
     this->materialUniformBuffer = other.materialUniformBuffer;
-    this->mesh(other.mesh.get());
+    this->mesh = std::unique_ptr<Framework::Mesh>(other.mesh.get());
 }
 
 AnimationBody AnimationBody::operator=(const AnimationBody &other)
 {
     this->materialBlockSize = other.materialBlockSize;
     this->materialUniformBuffer = other.materialUniformBuffer;
-    this->mesh(other.mesh.get());
+    this->mesh = std::unique_ptr<Framework::Mesh>(other.mesh.get());
 
     return *this;
 }

@@ -8,8 +8,8 @@
 
 #include <string>
 #include <map>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "../glsdk/glm/glm.hpp"
+#include "../glsdk/glm/gtc/type_ptr.hpp"
 #include "Scene.h"
 
 namespace Framework

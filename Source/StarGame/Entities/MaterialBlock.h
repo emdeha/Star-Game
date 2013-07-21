@@ -19,7 +19,7 @@
 #define MATERIAL_BLOCK
 
 
-#include <glm/glm.hpp>
+#include "../glsdk/glm/glm.hpp"
 
 
 /// \struct MaterialBlock

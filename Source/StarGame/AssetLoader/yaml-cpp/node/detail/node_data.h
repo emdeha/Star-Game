@@ -77,10 +77,10 @@ namespace YAML
 			
 			template<typename T>
 			static bool equals(node& node, const T& rhs, shared_memory_holder pMemory);
+			static bool equals(node& node, const char *rhs, shared_memory_holder pMemory);
 			
 			template<typename T>
 			static node& convert_to_node(const T& rhs, shared_memory_holder pMemory);
-			static node& convert_to_node(const char* rhs, shared_memory_holder pMemory);
 
 		private:
 			bool m_isDefined;

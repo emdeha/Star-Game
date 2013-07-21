@@ -21,11 +21,11 @@
 
 #include <string>
 
-#include <glload/gl_3_3.h>
-#include <glutil/glutil.h>
-#include <glload/gll.hpp>
+#include "../glsdk/glload/gl_3_3.h"
+#include "../glsdk/glutil/glutil.h"
+#include "../glsdk/glload/gll.hpp"
 
-#include <FreeImage.h>
+#include "../freeimage/FreeImage.h"
 
 
 class Texture2D

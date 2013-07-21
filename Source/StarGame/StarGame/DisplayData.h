@@ -18,7 +18,7 @@
 #ifndef DISPLAY_DATA_H
 #define DISPLAY_DATA_H
 
-#include <glm/glm.hpp>
+#include "../glsdk/glm/glm.hpp"
 
 struct DisplayData
 {

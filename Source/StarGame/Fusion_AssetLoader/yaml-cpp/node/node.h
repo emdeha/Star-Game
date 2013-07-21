@@ -20,6 +20,7 @@ namespace YAML
 	public:
 		friend class NodeBuilder;
 		friend class NodeEvents;
+        friend struct detail::iterator_value;
 		friend class detail::node_data;
 		template<typename> friend class detail::iterator_base;
         template<typename T, typename S> friend struct as_if;
@@ -56,7 +57,7 @@ namespace YAML
 		bool is(const Node& rhs) const;
 		template<typename T> Node& operator=(const T& rhs);
 		Node& operator=(const Node& rhs);
-        void clear();
+        void reset(const Node& rhs = Node());
         
 		// size/iterator
 		std::size_t size() const;
@@ -74,8 +75,6 @@ namespace YAML
 		// indexing
 		template<typename Key> const Node operator[](const Key& key) const;
 		template<typename Key> Node operator[](const Key& key);
-		const Node operator[](const char * key) const;
-		Node operator[](const char* key);
 		template<typename Key> bool remove(const Key& key);
 
 		const Node operator[](const Node& key) const;
@@ -87,6 +86,8 @@ namespace YAML
         void force_insert(const Key& key, const Value& value);
 
 	private:
+        enum Zombie { ZombieNode };
+        explicit Node(Zombie);
 		explicit Node(detail::node& node, detail::shared_memory_holder pMemory);
 		
 		void EnsureNodeExists() const;
@@ -99,6 +100,7 @@ namespace YAML
 		void AssignNode(const Node& rhs);
 		
 	private:
+        bool m_isValid;
 		mutable detail::shared_memory_holder m_pMemory;
 		mutable detail::node *m_pNode;
 	};

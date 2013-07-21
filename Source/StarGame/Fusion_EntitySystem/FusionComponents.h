@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <functional>
-#include <glm/glm.hpp>
+#include "../glsdk/glm/glm.hpp"
 #include "../Fusion_EntitySystem/EntityManager.h"
 #include "../Fusion_EntitySystem/Component.h"
 #include "../ProgramData/ProgramData.h"

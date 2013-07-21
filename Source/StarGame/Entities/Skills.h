@@ -23,7 +23,7 @@
 
 #include <vector>
 
-#include <glm/glm.hpp>
+#include "../glsdk/glm/glm.hpp"
 
 #include "../framework/EventSystem.h"
 #include "../ParticleEngine/Engine.h"

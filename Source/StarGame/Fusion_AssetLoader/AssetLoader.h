@@ -25,7 +25,8 @@
 #include <vector>
 #include <memory>
 
-#include <glm/glm.hpp>
+
+#include "../glsdk/glm/glm.hpp"
 
 #include "../AssetLoader/Texture.h"
 #include "../StarGame/AudioEnums.h"
@@ -70,7 +71,7 @@ namespace FusionEngine
 	template<class ObjectToLoad>
 	void AssetLoader<ObjectToLoad>::RegisterType(const std::string &type, ITypeLoader<ObjectToLoad>* loader)
 	{
-		loaders.insert(std::make_pair<std::string, ITypeLoader<ObjectToLoad>*>(type, loader));
+		loaders.insert(std::make_pair<const std::string&, ITypeLoader<ObjectToLoad>*&>(type, loader));
 	}
 
 	template<class ObjectToLoad>

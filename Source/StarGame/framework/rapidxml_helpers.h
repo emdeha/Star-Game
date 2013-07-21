@@ -9,8 +9,8 @@
 #include <string>
 #include <strstream>
 #include "rapidxml.hpp"
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include "../glsdk/glm/glm.hpp"
+#include "../glsdk/glm/gtc/quaternion.hpp"
 
 namespace rapidxml
 {

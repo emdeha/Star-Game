@@ -7,9 +7,9 @@
 #define FRAMEWORK_MOUSE_POLE_H
 
 
-#include <glm/glm.hpp>
-#include <GL/freeglut.h>
-#include <glutil/MousePoles.h>
+#include "../glsdk/glm/glm.hpp"
+#include "../glsdk/freeglut/include/GL/freeglut.h"
+#include "../glsdk/glutil/MousePoles.h"
 
 
 namespace Framework

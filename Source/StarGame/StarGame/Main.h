@@ -30,14 +30,14 @@
 #include <math.h>
 #include <stdio.h>
 
-#include <glload/gl_3_3.h>
-#include <glutil/glutil.h>
-#include <glload/gll.hpp>
-#include <glutil/Shader.h>
-#include <GL/freeglut.h>
+#include "../glsdk/glload/gl_3_3.h"
+#include "../glsdk/glutil/glutil.h"
+#include "../glsdk/glload/gll.hpp"
+#include "../glsdk/glutil/Shader.h"
+#include "../glsdk/freeglut/include/GL/freeglut.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "../glsdk/glm/glm.hpp"
+#include "../glsdk/glm/gtc/type_ptr.hpp"
 
 #include "../framework/framework.h"
 #include "../framework/Mesh.h"

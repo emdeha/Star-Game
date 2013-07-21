@@ -24,8 +24,8 @@
 #define PLANET_BODIES_H
 
 
-#include <glload/gl_3_3.h>
-#include <glutil/glutil.h>
+#include "../glsdk/glload/gl_3_3.h"
+#include "../glsdk/glutil/glutil.h"
 
 #include "../framework/framework.h"
 #include "../framework/Mesh.h"
@@ -39,6 +39,8 @@
 #include "../Mouse/Mouse.h"
 #include "Skills.h"
 #include "../AssetLoader/MeshLoader.h"
+
+#include <memory>
 
 
 // NOTE: Maybe the meshes of both the sun and satellites must be loaded in the constructors.

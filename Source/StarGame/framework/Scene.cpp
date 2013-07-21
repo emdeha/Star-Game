@@ -17,20 +17,20 @@
 #include <fstream>
 #include <iostream>
 
-#include <glload/gl_all.h>
+#include "../glsdk/glload/gl_all.h"
 #include "framework.h"
 #include "Scene.h"
 #include "SceneBinders.h"
 #include "Mesh.h"
-#include <glutil/Shader.h>
+#include "../glsdk/glutil/Shader.h"
 
 #include "rapidxml.hpp"
 #include "rapidxml_helpers.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glimg/glimg.h>
+#include "../glsdk/glm/glm.hpp"
+#include "../glsdk/glm/gtc/quaternion.hpp"
+#include "../glsdk/glm/gtc/type_ptr.hpp"
+#include "../glsdk/glm/gtc/matrix_transform.hpp"
+#include "../glsdk/glimg/glimg.h"
 
 
 #define PARSE_THROW(cond, message)\

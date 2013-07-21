@@ -23,9 +23,9 @@
 #ifndef LIGHTS_H
 #define LIGHTS_H
 
-#include <glm/glm.hpp>
-#include <glload/gl_3_3.h>
-#include <glutil/glutil.h>
+#include "../glsdk/glm/glm.hpp"
+#include "../glsdk/glload/gl_3_3.h"
+#include "../glsdk/glutil/glutil.h"
 #include "../ProgramData/ProgramData.h"
 
 

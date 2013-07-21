@@ -13,9 +13,9 @@
 #include <functional>
 #include <algorithm>
 #include <iostream>
-#include <glload/gl_3_2_comp.h>
-#include <glload/gll.h>
-#include <GL/freeglut.h>
+#include "../glsdk/glload/gl_3_2_comp.h"
+#include "../glsdk/glload/gll.h"
+#include "../glsdk/freeglut/include/GL/freeglut.h"
 #include "framework.h"
 #include "Mesh.h"
 #include "directories.h"

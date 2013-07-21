@@ -72,7 +72,7 @@ void Renderer::SubscribeForRendering(EntityManager *manager, Entity *entity)
     }
 
 	glBindVertexArray(0);
-	subscribedMeshes.push_back(std::make_pair<unsigned int, MeshAssetObject>(entity->GetIndex(), renderData[0]->mesh));
+	subscribedMeshes.push_back(std::make_pair<unsigned int, MeshAssetObject&>(entity->GetIndex(), renderData[0]->mesh));
 }
 void Renderer::UnsubscribeForRendering(Entity *entity)
 {

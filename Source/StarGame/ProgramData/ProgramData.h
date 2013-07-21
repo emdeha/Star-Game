@@ -28,7 +28,7 @@
 #include <map>
 #include <string>
 
-#include <glload/gl_3_3.h>
+#include "../glsdk/glload/gl_3_3.h"
 
 
 struct ProgramData

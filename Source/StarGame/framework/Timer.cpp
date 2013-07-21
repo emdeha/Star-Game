@@ -5,8 +5,8 @@
 
 
 #include <math.h>
-#include <glm/glm.hpp>
-#include <GL/freeglut.h>
+#include "../glsdk/glm/glm.hpp"
+#include "../glsdk/freeglut/include/GL/freeglut.h"
 #include "framework.h"
 #include "Timer.h"
 

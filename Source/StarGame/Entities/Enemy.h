@@ -26,9 +26,9 @@
 #define ENEMY_H
 
 
-#include <glload/gl_3_3.h>
-#include <glutil/glutil.h>
-#include <glm/glm.hpp>
+#include "../glsdk/glload/gl_3_3.h"
+#include "../glsdk/glutil/glutil.h"
+#include "../glsdk/glm/glm.hpp"
 
 
 #include "../framework/Mesh.h"

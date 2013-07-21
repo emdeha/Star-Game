@@ -23,7 +23,7 @@
 #ifndef TOP_DOWN_CAMERA_H
 #define TOP_DOWN_CAMERA_H
 
-#include <glm/glm.hpp>
+#include "../glsdk/glm/glm.hpp"
 
 
 /// \class TopDownCamera

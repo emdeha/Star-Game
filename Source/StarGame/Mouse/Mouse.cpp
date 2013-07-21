@@ -19,8 +19,8 @@
 #include "Mouse.h"
 #include "../framework/ErrorAPI.h"
 
-#include <glload/gl_3_3.h>
-#include <glutil/glutil.h>
+#include "../glsdk/glload/gl_3_3.h"
+#include "../glsdk/glutil/glutil.h"
 
 Mouse::Mouse()
 {

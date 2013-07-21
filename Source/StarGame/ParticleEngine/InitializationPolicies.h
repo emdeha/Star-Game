@@ -21,7 +21,7 @@
 
 #include "../ProgramData/ProgramData.h"
 
-#include <glm/glm.hpp>
+#include "../glsdk/glm/glm.hpp"
 #include <vector>
 
 

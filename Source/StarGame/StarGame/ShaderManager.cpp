@@ -18,7 +18,7 @@
 #include "ShaderManager.h"
 
 #include <vector>
-#include <glload/_int_gl_3_3.h>
+#include "../glsdk/glload/_int_gl_3_3.h"
 
 #include "framework.h"
 #include "../framework/ErrorAPI.h"

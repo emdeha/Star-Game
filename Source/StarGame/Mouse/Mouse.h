@@ -27,7 +27,7 @@
 #define PI 3.14159f
 
 
-#include <glm\glm.hpp>
+#include "../glsdk/glm/glm.hpp"
 #include "../framework/Utility.h"
 
 

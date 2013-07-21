@@ -27,9 +27,9 @@
 #define ARRAY_COUNT( array ) (sizeof( array ) / (sizeof( array[0] ) * (sizeof( array ) != sizeof(void*) || sizeof( array[0] ) <= sizeof(void*))))
 
 
-#include <glload/gl_3_3.h>
-#include <glutil/glutil.h>
-#include <glm/glm.hpp>
+#include "../glsdk/glload/gl_3_3.h"
+#include "../glsdk/glutil/glutil.h"
+#include "../glsdk/glm/glm.hpp"
 
 #include "../framework/framework.h"
 #include "../framework/Mesh.h"
@@ -39,6 +39,7 @@
 #include "../AssetLoader/Texture.h"
 
 #include <vector>
+#include <memory>
 
 
 /// \namespace Utility

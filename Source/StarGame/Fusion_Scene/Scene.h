@@ -25,6 +25,7 @@
 #include "../Fusion_EntitySystem/Component.h"
 #include "../Fusion_EntitySystem/ComponentMapper.h"
 #include <vector>
+#include <memory>
 
 
 struct EntityProperties

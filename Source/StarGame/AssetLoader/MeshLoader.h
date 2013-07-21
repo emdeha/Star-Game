@@ -27,12 +27,13 @@
 
 
 #include <vector>
+#include <memory>
 
 #include "..\assimp\include\assimp\cimport.h"
 #include "..\assimp\include\assimp\scene.h"
 #include "..\assimp\include\assimp\postprocess.h"
 
-#include <glm\glm.hpp>
+#include "../glsdk/glm/glm.hpp"
 
 
 #include "Texture.h"

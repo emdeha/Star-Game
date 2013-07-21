@@ -20,7 +20,7 @@
 
 
 #include <string>
-#include "glm\glm.hpp"
+#include "../glsdk/glm/glm.hpp"
 
 
 enum EventType

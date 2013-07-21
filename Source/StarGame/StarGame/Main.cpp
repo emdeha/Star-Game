@@ -606,7 +606,6 @@ void OnHoverEventHandler(Scene &scene, Control *control)
 }
 
 
-// Mixing OOP with Entity Systems :D
 
 struct ProjectileParams
 {
@@ -623,8 +622,8 @@ struct ProjectileParams
 
 	ProjectileParams()
     {
-		isUpdated = false;
-		isDestroyed = false;
+		isUpdated = true;
+		isDestroyed = true;
 		
 		lifeSpan = 100;
 		initialLifeSpan = lifeSpan;
@@ -674,7 +673,7 @@ struct EnemyParams
 		patrolRoute.lastPatrolPointIndex = 0;
 		patrolRoute.nextPatrolPointIndex = 1;
 
-		lineOfSight = 0.0f;
+		lineOfSight = 3.0f;
 
 		speed = 0.008f;
 
@@ -872,7 +871,7 @@ void ProjectileUpdateFunction()
 			transformData[0]->position += projParams.velocity;
 			projParams.lifeSpan--;
 
-
+			CheckTargetHit();
         }
     }
 }

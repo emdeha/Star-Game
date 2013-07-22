@@ -25,40 +25,37 @@
 #include "../framework/Timer.h"
 #include "../glsdk/glload/gl_3_3.h"
 
+#include "../Fusion_Scene/Scene.h"
 
-namespace FusionEngine
+
+
+struct NewCelestialBody
 {
-	class Scene;
-}
-
-
-class CelestialBody
-{
-private:
 	std::unique_ptr<FusionEngine::Scene> scene;
 
-	std::unique_ptr<CelestialBody> parent;
-	std::vector<std::shared_ptr<CelestialBody>> satellites;
+	std::unique_ptr<NewCelestialBody> parent;
+	std::vector<std::shared_ptr<NewCelestialBody>> satellites;
 
 	float diameter;
 	float offsetFromSun;
 
 	Framework::Timer revolutionTimer;
 	
-public:
-	CelestialBody() :
+	NewCelestialBody() :
 		scene(std::unique_ptr<FusionEngine::Scene>()), 
-		parent(std::unique_ptr<CelestialBody>(new CelestialBody())), satellites(0), diameter(0.0f),
+		parent(std::unique_ptr<NewCelestialBody>(new NewCelestialBody())), satellites(0), diameter(0.0f),
 		offsetFromSun(0.0f), revolutionTimer() {}
-	CelestialBody(FusionEngine::Scene &newScene, float newDiameter, float newOffsetFromSun, float cycleDuration) :
+	NewCelestialBody(FusionEngine::Scene &newScene, float newDiameter, float newOffsetFromSun, float cycleDuration) :
 		scene(std::unique_ptr<FusionEngine::Scene>(&newScene)),
-		parent(std::unique_ptr<CelestialBody>(new CelestialBody())), satellites(0), diameter(newDiameter),
+		parent(std::unique_ptr<NewCelestialBody>(new NewCelestialBody())), satellites(0), diameter(newDiameter),
 	    offsetFromSun(newOffsetFromSun), revolutionTimer(Framework::Timer::TT_LOOP, cycleDuration) {}
-
-	void Update();
-
-	bool AddSatellite(GLuint shaderProg);
 };
+
+
+bool AddSatellite(NewCelestialBody *celestialBody,
+				  GLuint shaderProg, 
+				  float newDiameter, float newOffsetFromSun, float cycleDuration);
+void Update(NewCelestialBody *celestialBody);
 
 
 #endif

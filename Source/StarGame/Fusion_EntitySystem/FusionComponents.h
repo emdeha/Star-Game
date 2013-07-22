@@ -115,11 +115,12 @@ namespace FusionEngine
     };
 
 
-
+	template<class Object>
 	class Functional : public Component
     {
     public:
-		void (*UpdateFunction)();
+		void (*UpdateFunction)(Object *obj);
+		std::unique_ptr<Object> updatedObject;
 
         Functional() : Component(CT_FUNCTIONAL_BEHAVIOR) {}
         virtual ~Functional() {}

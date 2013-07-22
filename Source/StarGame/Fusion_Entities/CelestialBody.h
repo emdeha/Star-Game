@@ -22,6 +22,14 @@
 #include <memory>
 #include <vector>
 
+#include "../framework/Timer.h"
+
+
+namespace FusionEngine
+{
+	class Scene;
+}
+
 
 class CelestialBody
 {
@@ -30,14 +38,21 @@ private:
 	std::vector<std::shared_ptr<CelestialBody>> satellites;
 
 	float diameter;
-	float clickableRadius;
+	float offsetFromSun;
 
-	int currentResource;
-	int initialResource;
-	int health;
-	int satelliteCap;
-	int satelliteConstructionCost;
+	Framework::Timer revolutionTimer;
+	
+public:
+	CelestialBody() :
+		parent(std::unique_ptr<CelestialBody>(new CelestialBody())), satellites(0), diameter(0.0f),
+		offsetFromSun(0.0f), revolutionTimer() {}
+	CelestialBody(float newDiameter, float newOffsetFromSun, float cycleDuration) :
+		parent(std::unique_ptr<CelestialBody>(new CelestialBody())), satellites(0), diameter(newDiameter),
+	    offsetFromSun(newOffsetFromSun), revolutionTimer(Framework::Timer::TT_LOOP, cycleDuration) {}
 
+	void Update(FusionEngine::Scene &scene);
+
+	bool AddSatellite(FusionEngine::Scene &scene, GLuint shaderProg);
 };
 
 

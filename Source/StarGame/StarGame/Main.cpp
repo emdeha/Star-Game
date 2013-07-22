@@ -1020,8 +1020,13 @@ void InitializeScene()
 
 	////////////////////////////////////////////////////////////////////
 
-	
+
 	testScene.Init();
+
+
+
+	/*
+
 	FusionEngine::Render *mesh = new FusionEngine::Render();
 
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
@@ -1099,6 +1104,8 @@ void InitializeScene()
 	testScene.AddComponent("spaceshipProjectile", projectileFunctional);
 
 	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("spaceshipProjectile"));
+
+	*/
 }
 
 

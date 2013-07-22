@@ -39,7 +39,7 @@ struct EntityProperties
 
 namespace FusionEngine
 {
-	class Scene
+	class Scene// : public IEventListener
 	{
 	private:
 		typedef std::vector<std::pair<EntityProperties, std::shared_ptr<Entity>>> EntitiesMap;
@@ -93,6 +93,9 @@ namespace FusionEngine
 
 		
 		void ProcessSystems();
+
+	public:
+		//virtual bool HandleEvent(const IEventData &eventData);
 	};
 };
 

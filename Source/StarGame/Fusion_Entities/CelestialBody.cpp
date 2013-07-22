@@ -24,7 +24,7 @@
 #include "../Fusion_Scene/Scene.h"
 
 
-bool CelestialBody::AddSatellite(FusionEngine::Scene &scene, GLuint shaderProg)
+bool CelestialBody::AddSatellite(GLuint shaderProg)
 {
 	// Load mesh
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
@@ -47,36 +47,36 @@ bool CelestialBody::AddSatellite(FusionEngine::Scene &scene, GLuint shaderProg)
 	satRender->shaderProgram = shaderProg;
 	satRender->vao = loadedMesh.vao;
 
-	scene.AddEntity("satellite");
+	scene->AddEntity("satellite");
 	FusionEngine::FunctionalSystem *satFunctional = 
-		new FusionEngine::FunctionalSystem(scene.GetEventManager(), scene.GetEntityManager());
-	scene.AddSystem(satFunctional);
-	scene.AddComponent("satellite", satRender);
+		new FusionEngine::FunctionalSystem(scene->GetEventManager(), scene->GetEntityManager());
+	scene->AddSystem(satFunctional);
+	scene->AddComponent("satellite", satRender);
 
 	FusionEngine::Transform *satTransform = new FusionEngine::Transform();
 	satTransform->position = glm::vec3();
 	satTransform->rotation = glm::vec3();
 	satTransform->scale = glm::vec3(diameter);
-	scene.AddComponent("satellite", satTransform);
+	scene->AddComponent("satellite", satTransform);
 
 	FusionEngine::Functional *satFuncComp = new FusionEngine::Functional();
-	satFuncComp->UpdateFunction = this->Update; //  add scene as a param to the func ptr
-	scene.AddComponent("satellite", satFuncComp);
+	satFuncComp->UpdateFunction = this->Update;
+	scene->AddComponent("satellite", satFuncComp);
 
 
-	std::shared_ptr<CelestialBody> newSat(new CelestialBody(1.0f, 2.0f, 5.0f));
+	std::shared_ptr<CelestialBody> newSat(new CelestialBody(*scene.get(), 1.0f, 2.0f, 5.0f));
 	satellites.push_back(newSat);
 
 	return true;
 }
 
-void CelestialBody::Update(FusionEngine::Scene &scene)
+void CelestialBody::Update()
 {
 	for(auto satellite = satellites.begin(); satellite != satellites.end(); ++satellite)
 	{
 		// TODO: Get entity by id
 		FusionEngine::ComponentMapper<FusionEngine::Transform> transformData =
-			scene.GetEntityManager()->GetComponentList(scene.GetEntity("satellite"), FusionEngine::CT_TRANSFORM);
+			scene->GetEntityManager()->GetComponentList(scene->GetEntity("satellite"), FusionEngine::CT_TRANSFORM);
 
 		(*satellite)->revolutionTimer.Update();
 

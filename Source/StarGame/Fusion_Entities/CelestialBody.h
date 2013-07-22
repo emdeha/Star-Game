@@ -23,6 +23,7 @@
 #include <vector>
 
 #include "../framework/Timer.h"
+#include "../glsdk/glload/gl_3_3.h"
 
 
 namespace FusionEngine
@@ -34,6 +35,8 @@ namespace FusionEngine
 class CelestialBody
 {
 private:
+	std::unique_ptr<FusionEngine::Scene> scene;
+
 	std::unique_ptr<CelestialBody> parent;
 	std::vector<std::shared_ptr<CelestialBody>> satellites;
 
@@ -44,15 +47,17 @@ private:
 	
 public:
 	CelestialBody() :
+		scene(std::unique_ptr<FusionEngine::Scene>()), 
 		parent(std::unique_ptr<CelestialBody>(new CelestialBody())), satellites(0), diameter(0.0f),
 		offsetFromSun(0.0f), revolutionTimer() {}
-	CelestialBody(float newDiameter, float newOffsetFromSun, float cycleDuration) :
+	CelestialBody(FusionEngine::Scene &newScene, float newDiameter, float newOffsetFromSun, float cycleDuration) :
+		scene(std::unique_ptr<FusionEngine::Scene>(&newScene)),
 		parent(std::unique_ptr<CelestialBody>(new CelestialBody())), satellites(0), diameter(newDiameter),
 	    offsetFromSun(newOffsetFromSun), revolutionTimer(Framework::Timer::TT_LOOP, cycleDuration) {}
 
-	void Update(FusionEngine::Scene &scene);
+	void Update();
 
-	bool AddSatellite(FusionEngine::Scene &scene, GLuint shaderProg);
+	bool AddSatellite(GLuint shaderProg);
 };
 
 

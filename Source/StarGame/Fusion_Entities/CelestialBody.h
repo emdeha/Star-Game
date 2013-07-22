@@ -33,7 +33,7 @@ struct NewCelestialBody
 {
 	std::unique_ptr<FusionEngine::Scene> scene;
 
-	std::unique_ptr<NewCelestialBody> parent;
+	//std::unique_ptr<NewCelestialBody> parent;
 	std::vector<std::shared_ptr<NewCelestialBody>> satellites;
 
 	float diameter;
@@ -42,13 +42,17 @@ struct NewCelestialBody
 	Framework::Timer revolutionTimer;
 	
 	NewCelestialBody() :
-		scene(std::unique_ptr<FusionEngine::Scene>()), 
-		parent(std::unique_ptr<NewCelestialBody>(new NewCelestialBody())), satellites(0), diameter(0.0f),
+		scene(std::unique_ptr<FusionEngine::Scene>()), satellites(0), diameter(0.0f),
 		offsetFromSun(0.0f), revolutionTimer() {}
 	NewCelestialBody(FusionEngine::Scene &newScene, float newDiameter, float newOffsetFromSun, float cycleDuration) :
 		scene(std::unique_ptr<FusionEngine::Scene>(&newScene)),
-		parent(std::unique_ptr<NewCelestialBody>(new NewCelestialBody())), satellites(0), diameter(newDiameter),
+		satellites(0), diameter(newDiameter),
 	    offsetFromSun(newOffsetFromSun), revolutionTimer(Framework::Timer::TT_LOOP, cycleDuration) {}
+
+	~NewCelestialBody() 
+	{
+		scene.release();
+	}
 };
 
 

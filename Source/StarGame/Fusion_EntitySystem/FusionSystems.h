@@ -29,7 +29,6 @@
 #include "../Fusion_EntitySystem/Component.h"
 #include "../Fusion_EntitySystem/ComponentMapper.h"
 #include "../Fusion_EntitySystem/FusionComponents.h"
-#include "../Fusion_Entities/CelestialBody.h"
 
 
 #define PI 3.14159f
@@ -37,12 +36,13 @@
 
 namespace FusionEngine
 {
+	template<class ObjectToUpdate>
 	class FunctionalSystem : public EntityProcessingSystem
     {
     protected:
 		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
         {
-			ComponentMapper<Functional<NewCelestialBody>> functionalData = 
+			ComponentMapper<Functional<ObjectToUpdate>> functionalData = 
 				manager->GetComponentList(entity, CT_FUNCTIONAL_BEHAVIOR);
 
 			functionalData[0]->UpdateFunction(functionalData[0]->updatedObject.get());

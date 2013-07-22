@@ -49,6 +49,7 @@
 #include "../Fusion_EntitySystem/FusionSystems.h"
 #include "../Fusion_AssetLoader/AssetLoader.h"
 #include "../Fusion_Renderer/Renderer.h"
+#include "../Fusion_Entities/CelestialBody.h"
 
 
 DisplayData displayData;
@@ -606,276 +607,7 @@ void OnHoverEventHandler(Scene &scene, Control *control)
 }
 
 
-
-struct ProjectileParams
-{
-	bool isUpdated;
-	bool isDestroyed;
-
-	int lifeSpan;
-	int initialLifeSpan;
-	int damage;
-    float speed;
-	
-
-	glm::vec3 velocity;
-
-	ProjectileParams()
-    {
-		isUpdated = true;
-		isDestroyed = true;
-		
-		lifeSpan = 100;
-		initialLifeSpan = lifeSpan;
-
-		velocity = glm::vec3();
-
-		damage = 2;
-		speed = 0.01f;
-    }
-};
-
-ProjectileParams projParams;
-
-
-
-struct EnemyParams
-{
-    BehaviorState currentState;
-	BehaviorState lastState;
-
-	PatrolRoute patrolRoute;
-
-	glm::vec3 frontVector;
-	float speed;
-	float lineOfSight;
-
-	int health;
-
-	bool isSunKilled;
-	bool isDestroyed;
-
-	EnemyParams()
-    {
-		health = 50;
-		isSunKilled = false;
-		isDestroyed = false;
-		currentState = STATE_PATROL;
-		lastState = STATE_PATROL;
-
-
-		patrolRoute.patrolPoints.push_back(glm::vec3(6.0f, 0.0f, 0.0f));
-		patrolRoute.patrolPoints.push_back(glm::vec3(-4.5f, 0.0f, -4.0f));
-		patrolRoute.patrolPoints.push_back(glm::vec3(4.5f, 0.0f, -4.0f));
-		patrolRoute.patrolPoints.push_back(glm::vec3(-4.5f, 0.0f, 4.0f));
-
-		patrolRoute.currentPatrolPointIndex = 0;
-		patrolRoute.lastPatrolPointIndex = 0;
-		patrolRoute.nextPatrolPointIndex = 1;
-
-		lineOfSight = 3.0f;
-
-		speed = 0.008f;
-
-		frontVector = 
-			glm::normalize(patrolRoute.patrolPoints[patrolRoute.nextPatrolPointIndex] - 
-			               patrolRoute.patrolPoints[patrolRoute.currentPatrolPointIndex]);
-		patrolRoute.lastVelocity = frontVector;
-    }
-};
-
-EnemyParams spaceshipParams;
-
-
-void UpdateSpaceshipAI()
-{
-    FusionEngine::ComponentMapper<FusionEngine::Transform> transformData = 
-		testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("spaceship"), FusionEngine::CT_TRANSFORM);
-	
-    if(spaceshipParams.currentState == STATE_ATTACK)
-    {
-		spaceshipParams.frontVector = glm::vec3();
-
-		if(projParams.isDestroyed)
-        {
-			glm::vec3 newDir = glm::vec3();
-
-			if(scene.GetSun()->HasSatellites())
-            {
-				glm::vec3 satellitePos = scene.GetSun()->GetOuterSatellite()->GetPosition();
-				newDir = satellitePos - transformData[0]->position;
-            }
-            else
-            {
-				newDir = scene.GetSun()->GetPosition() - transformData[0]->position;
-            }
-
-			newDir = glm::normalize(newDir);
-			projParams.velocity = newDir * projParams.speed;
-			projParams.lifeSpan = projParams.initialLifeSpan;
-			projParams.isDestroyed = false;
-			FusionEngine::ComponentMapper<FusionEngine::Transform> projTransformData = 
-				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("spaceshipProjectile"), FusionEngine::CT_TRANSFORM);
-			projTransformData[0]->position = transformData[0]->position;
-        }
-    }
-    else if(spaceshipParams.currentState == STATE_EVADE)
-    {
-		glm::vec3 vectorFromPlanetToSpaceship = scene.GetSun()->GetPosition() - transformData[0]->position;
-
-		vectorFromPlanetToSpaceship = glm::normalize(vectorFromPlanetToSpaceship);
-		glm::vec3 spaceshipDirection = glm::normalize(spaceshipParams.frontVector * spaceshipParams.speed);
-
-		if(glm::dot(vectorFromPlanetToSpaceship, spaceshipDirection) > 0)
-        {
-			spaceshipParams.speed *= -1.0f;
-        }
-    }
-    else if(spaceshipParams.currentState == STATE_PATROL)
-    {
-		// Updates the patrol points
-		if(spaceshipParams.patrolRoute.patrolPoints.size() > spaceshipParams.patrolRoute.nextPatrolPointIndex)
-        {
-			glm::vec3 vectorBetweenShipAndPatrolPoint = 
-				spaceshipParams.patrolRoute.patrolPoints[spaceshipParams.patrolRoute.nextPatrolPointIndex] -
-				transformData[0]->position;
-			float distanceBetweenShipAndPatrolPoint = glm::length(vectorBetweenShipAndPatrolPoint);
-
-			if(distanceBetweenShipAndPatrolPoint <= 0.1f)
-            {
-				spaceshipParams.patrolRoute.currentPatrolPointIndex = spaceshipParams.patrolRoute.nextPatrolPointIndex;
-				spaceshipParams.patrolRoute.nextPatrolPointIndex++;
-				// If the end of the patrol is reached, we should restart.
-				if(spaceshipParams.patrolRoute.nextPatrolPointIndex >= spaceshipParams.patrolRoute.patrolPoints.size())
-                {
-					spaceshipParams.patrolRoute.nextPatrolPointIndex = 0;
-                }
-
-				glm::vec3 vectorBetweenPatrolPoints =
-					spaceshipParams.patrolRoute.patrolPoints[spaceshipParams.patrolRoute.nextPatrolPointIndex] -
-					spaceshipParams.patrolRoute.patrolPoints[spaceshipParams.patrolRoute.currentPatrolPointIndex];
-
-				spaceshipParams.frontVector = glm::normalize(vectorBetweenPatrolPoints);
-            }
-        }
-
-		glm::vec3 vectorFromSunToSpaceship = scene.GetSun()->GetPosition() - transformData[0]->position;
-		float distanceBetweenSunAndSpaceship = glm::length(vectorFromSunToSpaceship);
-
-		if(distanceBetweenSunAndSpaceship < spaceshipParams.lineOfSight)
-        {
-			spaceshipParams.patrolRoute.lastVelocity = spaceshipParams.frontVector;
-			spaceshipParams.patrolRoute.nextPatrolPoint = scene.GetSun()->GetPosition();
-			spaceshipParams.currentState = STATE_ATTACK;
-        }
-        else
-        {
-            spaceshipParams.patrolRoute.nextPatrolPoint	= 
-                spaceshipParams.patrolRoute.patrolPoints[spaceshipParams.patrolRoute.nextPatrolPointIndex];
-        }
-    }
-}
-
-void EnemyTestUpdateFunction()
-{
-	if(!spaceshipParams.isSunKilled)
-    {
-		FusionEngine::ComponentMapper<FusionEngine::Transform> transformData = 
-			testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("spaceship"), FusionEngine::CT_TRANSFORM);
-
-		//transformData[0]->position.x += 0.01f;
-
-		if(spaceshipParams.currentState != STATE_STOPPED)
-        {
-			transformData[0]->position += spaceshipParams.frontVector * spaceshipParams.speed;
-			UpdateSpaceshipAI();
-        }
-
-		if(spaceshipParams.health <= 20)
-        {
-			spaceshipParams.currentState = STATE_EVADE;
-        }
-
-		if(spaceshipParams.health <= 0)
-        {
-			spaceshipParams.isDestroyed = true;
-        }
-    }
-    else
-    {
-		if(spaceshipParams.frontVector == glm::vec3())
-        {
-			spaceshipParams.frontVector = spaceshipParams.patrolRoute.lastVelocity;
-        }
-		spaceshipParams.currentState = STATE_PATROL;
-		UpdateSpaceshipAI();
-    }
-}
-
-
-
-void CheckTargetHit()
-{
-	FusionEngine::ComponentMapper<FusionEngine::Transform> transformData = 
-		testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("spaceshipProjectile"), FusionEngine::CT_TRANSFORM);
-			
-
-	std::vector<std::shared_ptr<CelestialBody>> sunSats = scene.GetSun()->GetSatellites();
-	for(auto satellite = sunSats.begin(); satellite != sunSats.end(); ++satellite)
-    {
-		glm::vec3 satellitePos = glm::vec3((*satellite)->GetPosition());
-		float satelliteRad = (*satellite)->GetRadius() * 2.0f;
-
-		glm::vec3 distance = transformData[0]->position - satellitePos;
-		float distanceLength = glm::length(distance);
-
-		if(distanceLength <= satelliteRad * satelliteRad)
-        {
-			// Notify hit
-			projParams.isDestroyed = true;
-        }
-    }
-
-	glm::vec3 sunPos = glm::vec3(scene.GetSun()->GetPosition());
-	float sunRad = scene.GetSun()->GetRadius();
-
-	glm::vec3 distance = transformData[0]->position - sunPos;
-	float distanceLength = glm::length(distance);
-
-	if(distanceLength <= sunRad * sunRad)
-    {
-		// Notify sun hit
-		projParams.isDestroyed = true;
-    }
-}
-
-void ProjectileUpdateFunction()
-{
-	if(projParams.isUpdated)
-    {
-		if(scene.GetSun()->GetHealth() <= 0)
-        {
-			projParams.isDestroyed = true;
-        }
-
-		if(projParams.lifeSpan <= 0)
-        {
-			projParams.isDestroyed = true;
-        }
-
-		if(!projParams.isDestroyed)
-        {
-			FusionEngine::ComponentMapper<FusionEngine::Transform> transformData = 
-				testScene.GetEntityManager()->GetComponentList(testScene.GetEntity("spaceshipProjectile"), FusionEngine::CT_TRANSFORM);
-			
-			transformData[0]->position += projParams.velocity;
-			projParams.lifeSpan--;
-
-			CheckTargetHit();
-        }
-    }
-}
-
+//NewCelestialBody sun = NewCelestialBody(testScene, 2.0f, 0.0f, 1.0f);
 
 void InitializeScene()
 {
@@ -1023,89 +755,46 @@ void InitializeScene()
 
 	testScene.Init();
 
+	NewCelestialBody sun = NewCelestialBody(testScene, 0.5f, 0.0f, 1.0f);
 
-
-	/*
-
-	FusionEngine::Render *mesh = new FusionEngine::Render();
-
+	
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
 	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
-	FusionEngine::MeshAssetObject loadedMesh = meshLoader.LoadAssetObject("mesh-files", "spaceship.obj");
+	FusionEngine::MeshAssetObject loadedMesh = meshLoader.LoadAssetObject("mesh-files", "sun.obj");
 
-	FusionEngine::Render *spaceshipRender = new FusionEngine::Render();
+	FusionEngine::Render *sunRender = new FusionEngine::Render();
 
 	std::vector<std::shared_ptr<FusionEngine::MeshEntry>> meshEntries = loadedMesh.GetMeshEntries();
 	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
-    {
-		spaceshipRender->mesh.AddEntry((*meshEntry));
-    }
-	std::vector<std::shared_ptr<Texture2D>> loadedTextures = loadedMesh.GetTextures();
-	for(auto entryTexture = loadedTextures.begin(); entryTexture != loadedTextures.end(); ++entryTexture)
-    {
-		spaceshipRender->mesh.AddTexture((*entryTexture));
-    }
-	spaceshipRender->rendererType = FusionEngine::Render::FE_RENDERER_LIT;
-	spaceshipRender->shaderProgram = scene.GetShaderManager().GetLitTextureProgData().theProgram;
-	spaceshipRender->vao = loadedMesh.vao;
+	{
+		sunRender->mesh.AddEntry((*meshEntry));
+	}
+	std::vector<std::shared_ptr<Texture2D>> textures = loadedMesh.GetTextures();
+	for(auto texture = textures.begin(); texture != textures.end(); ++texture)
+	{
+		sunRender->mesh.AddTexture((*texture));
+	}
+	sunRender->rendererType = FusionEngine::Render::FE_RENDERER_LIT;
+	sunRender->shaderProgram = scene.GetShaderManager().GetLitProgData().theProgram;
+	sunRender->vao = loadedMesh.vao;
 
-	testScene.AddEntity("spaceship");
-	FusionEngine::FunctionalSystem *functionalSystem = 
-		new FusionEngine::FunctionalSystem(testScene.GetEventManager(), testScene.GetEntityManager());
-	testScene.AddSystem(functionalSystem);
-	testScene.AddComponent("spaceship", spaceshipRender);
-	
-	float range = ((float)rand() / (float)RAND_MAX) * 2.0f + 6.0f;
-	float posOnCircle = ((float)rand() / (float)RAND_MAX) * 360;
+	testScene.AddEntity("sun");
+	FusionEngine::FunctionalSystem<NewCelestialBody> *sunFunctional =
+		new FusionEngine::FunctionalSystem<NewCelestialBody>(testScene.GetEventManager(), testScene.GetEntityManager());
+	testScene.AddSystem(sunFunctional);
+	testScene.AddComponent("sun", sunRender);
 
-	float posX = cosf(posOnCircle * (2.0f * PI)) * range;
-	float posZ = sinf(posOnCircle * (2.0f * PI)) * range;
-	FusionEngine::Transform *newTransform = new FusionEngine::Transform();
-	newTransform->position = glm::vec3(6.0f, 0.0f, 0.0f);
-	newTransform->rotation = glm::vec3();
-	newTransform->scale = glm::vec3(0.05f);
-	testScene.AddComponent("spaceship", newTransform);
+	FusionEngine::Transform *sunTransform = new FusionEngine::Transform();
+	sunTransform->position = glm::vec3(2.0f, 0.0f, 0.0f);
+	sunTransform->rotation = glm::vec3();
+	sunTransform->scale = glm::vec3(0.5f);
+	testScene.AddComponent("sun", sunTransform);
 
-	FusionEngine::Functional *functional = new FusionEngine::Functional();
-	functional->UpdateFunction = EnemyTestUpdateFunction;
-	testScene.AddComponent("spaceship", functional);
+	FusionEngine::Functional<NewCelestialBody> *sunFuncComp = new FusionEngine::Functional<NewCelestialBody>();
+	sunFuncComp->UpdateFunction = Update;
+	testScene.AddComponent("sun", sunFuncComp);
 
-	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("spaceship"));
-
-
-
-	loadedMesh = meshLoader.LoadAssetObject("mesh-files", "sun.obj");
-	FusionEngine::Render *projectileRender = new FusionEngine::Render();
-
-	meshEntries = loadedMesh.GetMeshEntries();
-	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
-    {
-		projectileRender->mesh.AddEntry((*meshEntry));
-    }
-	loadedTextures = loadedMesh.GetTextures();
-	for(auto texture = loadedTextures.begin(); texture != loadedTextures.end(); ++texture)
-    {
-		projectileRender->mesh.AddTexture((*texture));
-    }
-	projectileRender->rendererType = FusionEngine::Render::FE_RENDERER_LIT;
-	projectileRender->shaderProgram = scene.GetShaderManager().GetLitTextureProgData().theProgram;
-	projectileRender->vao = loadedMesh.vao;
-
-	testScene.AddEntity("spaceshipProjectile");
-	testScene.AddComponent("spaceshipProjectile", projectileRender);
-	FusionEngine::Transform *projectileTransform = new FusionEngine::Transform();
-	projectileTransform->position = glm::vec3(6.0f, 0.0f, 0.0f);
-	projectileTransform->rotation = glm::vec3();
-	projectileTransform->scale = glm::vec3(0.02f);
-	testScene.AddComponent("spaceshipProjectile", projectileTransform);
-
-	FusionEngine::Functional *projectileFunctional = new FusionEngine::Functional();
-	projectileFunctional->UpdateFunction = ProjectileUpdateFunction;
-	testScene.AddComponent("spaceshipProjectile", projectileFunctional);
-
-	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("spaceshipProjectile"));
-
-	*/
+	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("sun"));
 }
 
 

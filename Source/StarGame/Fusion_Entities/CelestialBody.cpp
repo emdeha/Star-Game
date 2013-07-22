@@ -50,8 +50,8 @@ bool AddSatellite(NewCelestialBody *celestialBody,
 	satRender->vao = loadedMesh.vao;
 
 	celestialBody->scene->AddEntity("satellite");
-	FusionEngine::FunctionalSystem *satFunctional = 
-		new FusionEngine::FunctionalSystem(celestialBody->scene->GetEventManager(), 
+	FusionEngine::FunctionalSystem<NewCelestialBody> *satFunctional = 
+		new FusionEngine::FunctionalSystem<NewCelestialBody>(celestialBody->scene->GetEventManager(), 
 										   celestialBody->scene->GetEntityManager());
 	celestialBody->scene->AddSystem(satFunctional);
 	celestialBody->scene->AddComponent("satellite", satRender);
@@ -69,12 +69,20 @@ bool AddSatellite(NewCelestialBody *celestialBody,
 
 	std::shared_ptr<NewCelestialBody> newSat(new NewCelestialBody(*celestialBody->scene.get(), 1.0f, 2.0f, 5.0f));
 	celestialBody->satellites.push_back(newSat);
+	//newSat->parent = celestialBody;
+
 
 	return true;
 }
 
 void Update(NewCelestialBody *celestialBody)
 {
+	FusionEngine::ComponentMapper<FusionEngine::Transform> transformData =
+		celestialBody->scene->GetEntityManager()->GetComponentList(celestialBody->scene->GetEntity("sun"), FusionEngine::CT_TRANSFORM);
+
+	transformData[0]->position.x += 0.001f;
+
+	/*
 	for(auto satellite = celestialBody->satellites.begin(); satellite != celestialBody->satellites.end(); ++satellite)
 	{
 		// TODO: Get entity by id
@@ -88,4 +96,5 @@ void Update(NewCelestialBody *celestialBody)
 		transformData[0]->position.x = sinf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
 		transformData[0]->position.y = cosf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
 	}
+	*/
 }

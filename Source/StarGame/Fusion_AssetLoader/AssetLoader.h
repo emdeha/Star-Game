@@ -71,7 +71,10 @@ namespace FusionEngine
 	template<class ObjectToLoad>
 	void AssetLoader<ObjectToLoad>::RegisterType(const std::string &type, ITypeLoader<ObjectToLoad>* loader)
 	{
-		loaders.insert(std::make_pair<const std::string&, ITypeLoader<ObjectToLoad>*&>(type, loader));
+		if(loaders.find(type) == loaders.end())
+		{
+			loaders.insert(std::make_pair<const std::string&, ITypeLoader<ObjectToLoad>*&>(type, loader));
+		}
 	}
 
 	template<class ObjectToLoad>

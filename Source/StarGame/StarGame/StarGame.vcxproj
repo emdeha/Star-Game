@@ -110,6 +110,9 @@
     <ProjectReference Include="..\Fusion_AssetLoader\Fusion_AssetLoader.vcxproj">
       <Project>{9ca9cc8a-1f25-4d48-9d6a-623a6f8061cc}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Fusion_Entities\Fusion_Entities.vcxproj">
+      <Project>{6ea21665-7fff-4460-b1b4-6551fd606e3e}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Fusion_EntitySystem\Fusion_EntitySystem.vcxproj">
       <Project>{46033b29-5b2c-49e1-9f18-58199443d50d}</Project>
     </ProjectReference>

@@ -26,6 +26,7 @@
 #include "../glsdk/glload/gl_3_3.h"
 
 #include "../Fusion_Scene/Scene.h"
+#include "../Fusion_Renderer/Renderer.h"
 
 
 
@@ -57,7 +58,7 @@ struct NewCelestialBody
 };
 
 
-bool AddSatellite(NewCelestialBody *celestialBody,
+bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *renderer,
 				  GLuint shaderProg, 
 				  float newDiameter, float newOffsetFromSun, float cycleDuration);
 void Update(NewCelestialBody *celestialBody);

@@ -755,9 +755,6 @@ void InitializeScene()
 
 	testScene.Init();
 
-	NewCelestialBody sun = NewCelestialBody(testScene, 0.5f, 0.0f, 1.0f);
-
-	
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
 	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
 	FusionEngine::MeshAssetObject loadedMesh = meshLoader.LoadAssetObject("mesh-files", "sun.obj");
@@ -774,8 +771,8 @@ void InitializeScene()
 	{
 		sunRender->mesh.AddTexture((*texture));
 	}
-	sunRender->rendererType = FusionEngine::Render::FE_RENDERER_LIT;
-	sunRender->shaderProgram = scene.GetShaderManager().GetLitProgData().theProgram;
+	sunRender->rendererType = FusionEngine::Render::FE_RENDERER_SIMPLE;
+	sunRender->shaderProgram = scene.GetShaderManager().GetSimpleProgData().theProgram;
 	sunRender->vao = loadedMesh.vao;
 
 	testScene.AddEntity("sun");
@@ -796,6 +793,8 @@ void InitializeScene()
 	testScene.AddComponent("sun", sunFuncComp);
 
 	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("sun"));
+
+
 }
 
 

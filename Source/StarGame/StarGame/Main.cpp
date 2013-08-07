@@ -790,11 +790,10 @@ void InitializeScene()
 	FusionEngine::Functional<NewCelestialBody> *sunFuncComp = new FusionEngine::Functional<NewCelestialBody>();
 	sunFuncComp->UpdateFunction = Update;
 	sunFuncComp->updatedObject = std::unique_ptr<NewCelestialBody>(new NewCelestialBody(testScene, 0.5f, 0.0f, 1.0f));
+	AddSatellite(sunFuncComp->updatedObject.get(), &testRenderer, scene.GetShaderManager().GetLitProgData().theProgram, 0.5f, 2.0f, 3.0f);
 	testScene.AddComponent("sun", sunFuncComp);
 
 	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("sun"));
-
-
 }
 
 

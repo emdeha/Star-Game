@@ -27,43 +27,62 @@
 
 #include "../Fusion_Scene/Scene.h"
 #include "../Fusion_Renderer/Renderer.h"
+#include "../Fusion_EntitySystem/Event.h"
 
 
-
-class NewCelestialBody
+namespace FusionEngine
 {
-public:
-	FusionEngine::Scene &scene;
+	class EventManager;
 
-	//std::unique_ptr<NewCelestialBody> parent;
-	std::vector<std::shared_ptr<NewCelestialBody>> satellites;
-
-	float diameter;
-	float offsetFromSun;
-
-	Framework::Timer revolutionTimer;
-	
-public:
-	NewCelestialBody() :
-		scene(FusionEngine::Scene()), satellites(0), diameter(0.0f),
-		offsetFromSun(0.0f), revolutionTimer() {}
-	NewCelestialBody(FusionEngine::Scene &newScene, float newDiameter, float newOffsetFromSun, float cycleDuration) :
-		scene(newScene),
-		satellites(0), diameter(newDiameter),
-	    offsetFromSun(newOffsetFromSun), revolutionTimer(Framework::Timer::TT_LOOP, cycleDuration) {}
-
-	~NewCelestialBody() 
+	class NewCelestialBody : public IEventListener
 	{
-		//scene.reset();
-		//scene.release();
-	}
-};
+	public:
+		enum
+		{
+			EVENT_ON_CLICK,
+		};
 
+		FusionEngine::Scene &scene;
 
-bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *renderer,
+		//std::unique_ptr<NewCelestialBody> parent;
+		std::vector<std::shared_ptr<NewCelestialBody>> satellites;
+
+		float diameter;
+		float offsetFromSun;
+
+		Framework::Timer revolutionTimer;
+	
+		EventManager *eventManager;
+
+	public:
+		NewCelestialBody() :
+			scene(FusionEngine::Scene()), satellites(0), diameter(0.0f),
+			offsetFromSun(0.0f), revolutionTimer() 
+		{
+			eventManager->AddListener(this, EVENT_ON_CLICK);
+		}
+		NewCelestialBody(FusionEngine::Scene &newScene, float newDiameter, float newOffsetFromSun, float cycleDuration) :
+			scene(newScene),
+			satellites(0), diameter(newDiameter),
+			offsetFromSun(newOffsetFromSun), revolutionTimer(Framework::Timer::TT_LOOP, cycleDuration) 
+		{
+			eventManager->AddListener(this, EVENT_ON_CLICK);
+		}
+
+		~NewCelestialBody() 
+		{
+			//scene.reset();
+			//scene.release();
+		}
+
+		bool HandleEvent(const IEventData &eventData);
+	};
+}
+
+bool AddSatellite(FusionEngine::NewCelestialBody *celestialBody, FusionEngine::Renderer *renderer,
 				  GLuint shaderProg, 
 				  float newDiameter, float newOffsetFromSun, float cycleDuration);
-void Update(NewCelestialBody *celestialBody);
+void Update(FusionEngine::NewCelestialBody *celestialBody);
 
 
 #endif

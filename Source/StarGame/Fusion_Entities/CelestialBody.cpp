@@ -24,6 +24,24 @@
 #include "../Fusion_Scene/Scene.h"
 
 
+using namespace FusionEngine;
+
+bool NewCelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
+{
+	EventType type = eventData.GetType();
+	switch(type)
+	{
+	case EVENT_ON_CLICK:
+		{
+			
+		}
+		break;
+	}
+	
+	return false;
+}
+
+
 bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *renderer,
 				  GLuint shaderProg, 
 				  float newDiameter, float newOffsetFromSun, float cycleDuration)

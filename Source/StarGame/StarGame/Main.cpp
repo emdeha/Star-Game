@@ -774,8 +774,8 @@ void InitializeScene()
 	sunRender->vao = loadedMesh.vao;
 
 	testScene.AddEntity("sun");
-	FusionEngine::FunctionalSystem<NewCelestialBody> *sunFunctional =
-		new FusionEngine::FunctionalSystem<NewCelestialBody>(testScene.GetEventManager(), testScene.GetEntityManager());
+	FusionEngine::FunctionalSystem<FusionEngine::NewCelestialBody> *sunFunctional =
+		new FusionEngine::FunctionalSystem<FusionEngine::NewCelestialBody>(testScene.GetEventManager(), testScene.GetEntityManager());
 	testScene.AddSystem(sunFunctional);
 	testScene.AddComponent("sun", sunRender);
 
@@ -785,9 +785,10 @@ void InitializeScene()
 	sunTransform->scale = glm::vec3(0.5f);
 	testScene.AddComponent("sun", sunTransform);
 
-	FusionEngine::Functional<NewCelestialBody> *sunFuncComp = new FusionEngine::Functional<NewCelestialBody>();
+	FusionEngine::Functional<FusionEngine::NewCelestialBody> *sunFuncComp = 
+		new FusionEngine::Functional<FusionEngine::NewCelestialBody>();
 	sunFuncComp->UpdateFunction = Update;
-	sunFuncComp->updatedObject = std::unique_ptr<NewCelestialBody>(new NewCelestialBody(testScene, 0.5f, 0.0f, 1.0f));
+	sunFuncComp->updatedObject = std::unique_ptr<FusionEngine::NewCelestialBody>(new FusionEngine::NewCelestialBody(testScene, 0.5f, 0.0f, 1.0f));
 	AddSatellite(sunFuncComp->updatedObject.get(), &testRenderer, scene.GetShaderManager().GetLitProgData().theProgram, 0.5f, 2.0f, 3.0f);
 	testScene.AddComponent("sun", sunFuncComp);
 

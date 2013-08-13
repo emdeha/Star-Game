@@ -607,8 +607,6 @@ void OnHoverEventHandler(Scene &scene, Control *control)
 }
 
 
-//NewCelestialBody sun = NewCelestialBody(testScene, 2.0f, 0.0f, 1.0f);
-
 void InitializeScene()
 {
     Mouse userMouse;

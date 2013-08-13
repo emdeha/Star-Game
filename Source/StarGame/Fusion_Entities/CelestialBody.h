@@ -30,8 +30,9 @@
 
 
 
-struct NewCelestialBody
+class NewCelestialBody
 {
+public:
 	FusionEngine::Scene &scene;
 
 	//std::unique_ptr<NewCelestialBody> parent;
@@ -42,6 +43,7 @@ struct NewCelestialBody
 
 	Framework::Timer revolutionTimer;
 	
+public:
 	NewCelestialBody() :
 		scene(FusionEngine::Scene()), satellites(0), diameter(0.0f),
 		offsetFromSun(0.0f), revolutionTimer() {}

@@ -83,21 +83,16 @@ void Update(NewCelestialBody *celestialBody)
 	for(auto satellite = celestialBody->satellites.begin(); satellite != celestialBody->satellites.end(); ++satellite)
 	{
 		// TODO: Get entity by id
-		FusionEngine::ComponentMapper<FusionEngine::Transform> transformData =
+		FusionEngine::ComponentMapper<FusionEngine::Transform> satTransformData =
 			celestialBody->scene.GetEntityManager()->GetComponentList(celestialBody->scene.GetEntity("satellite"), FusionEngine::CT_TRANSFORM);
 
 		(*satellite)->revolutionTimer.Update();
-
-		glutil::MatrixStack satRotStack;
 		
 		float currentTimeThroughLoop = (*satellite)->revolutionTimer.GetAlpha();
-		satRotStack.Translate(0.0f, (*satellite)->offsetFromSun, 0.0f);
-		satRotStack.RotateY(currentTimeThroughLoop * (2.0f * PI));
+		
+		satTransformData[0]->position = transformData[0]->position;
 
-		transformData[0]->position = transformData[0]->position * glm::mat3(satRotStack.Top());
-		/*
-		transformData[0]->position.x = sinf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
-		transformData[0]->position.z = cosf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
-		*/
+		satTransformData[0]->position.x += sinf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
+		satTransformData[0]->position.z += cosf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
 	}
 }

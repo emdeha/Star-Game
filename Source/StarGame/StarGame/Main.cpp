@@ -50,6 +50,7 @@
 #include "../Fusion_AssetLoader/AssetLoader.h"
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Fusion_Entities/CelestialBody.h"
+#include "../Fusion_EntitySystem/EntityEvents.h"
 
 
 DisplayData displayData;
@@ -95,6 +96,7 @@ void HandleMouse()
                                                              scene.GetMouse().GetCurrentPosition());
 
         scene.OnEvent(leftClickEvent);
+		testScene.GetEventManager()->FireEvent(FusionEngine::OnClickEvent(EVENT_TYPE_ON_CLICK, true, scene.GetShaderManager().GetLitProgData().theProgram));
     }
 
     if(scene.GetMouse().IsRightButtonDown())

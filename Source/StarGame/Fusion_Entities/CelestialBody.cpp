@@ -21,6 +21,7 @@
 #include "../Fusion_EntitySystem/ComponentMapper.h"
 #include "../Fusion_EntitySystem/FusionComponents.h"
 #include "../Fusion_EntitySystem/FusionSystems.h"
+#include "../Fusion_EntitySystem/EntityEvents.h"
 #include "../Fusion_Scene/Scene.h"
 
 
@@ -33,7 +34,12 @@ bool NewCelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 	{
 	case EVENT_ON_CLICK:
 		{
-			
+			const OnClickEvent &data = static_cast<const OnClickEvent&>(eventData);
+
+			if(data.isLeftButtonDown)
+			{
+				AddSatellite(this, &this->scene.GetRenderer(), data.shaderProgram, 0.2f, 4.0f, 3.0f);
+			}
 		}
 		break;
 	}

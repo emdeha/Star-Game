@@ -8,7 +8,7 @@
 using namespace FusionEngine;
 
 
-Scene::~Scene()
+FusionEngine::Scene::~Scene()
 {
 	entities.clear();
 	components.clear();
@@ -16,7 +16,7 @@ Scene::~Scene()
 	removedEntitiesIDs.clear();
 }
 
-void Scene::Init()
+void FusionEngine::Scene::Init()
 {
 	eventManager = std::unique_ptr<EventManager>(new EventManager());
 	entityManager = std::unique_ptr<EntityManager>(new EntityManager(eventManager.get()));
@@ -27,7 +27,7 @@ void Scene::Init()
 }
 
 
-void Scene::AddEntity(const std::string &entityTag)
+void FusionEngine::Scene::AddEntity(const std::string &entityTag)
 {
 	std::shared_ptr<Entity> newEntity = 
 		std::shared_ptr<Entity>(entityManager->CreateEntity());
@@ -37,12 +37,12 @@ void Scene::AddEntity(const std::string &entityTag)
 	entities.push_back(std::pair<EntityProperties, std::shared_ptr<Entity>>
 							(newProperties, newEntity));
 }
-void Scene::AddSystem(EntityProcessingSystem *system)
+void FusionEngine::Scene::AddSystem(EntityProcessingSystem *system)
 {
 	systems.push_back(std::unique_ptr<EntityProcessingSystem>(system));
 }
 
-void Scene::AddComponent(const std::string &entityTag, Component *component)
+void FusionEngine::Scene::AddComponent(const std::string &entityTag, Component *component)
 {
 #ifdef _DEBUG
 	assert(!entities.empty());
@@ -66,7 +66,7 @@ void Scene::AddComponent(const std::string &entityTag, Component *component)
 	entityManager->InsertComponent(foundEntity, component);
 }
 
-bool Scene::HasEntity(const std::string &entityTag)
+bool FusionEngine::Scene::HasEntity(const std::string &entityTag)
 {
 #ifdef _DEBUG
 	assert(!entities.empty());
@@ -86,7 +86,7 @@ bool Scene::HasEntity(const std::string &entityTag)
 	return false;
 }
 
-bool Scene::RemoveEntityFirst(const std::string &entityTag)
+bool FusionEngine::Scene::RemoveEntityFirst(const std::string &entityTag)
 {	
 #ifdef _DEBUG
 	assert(entities.empty() == false);
@@ -109,7 +109,7 @@ bool Scene::RemoveEntityFirst(const std::string &entityTag)
 	return false;
 }
 
-bool Scene::RemoveEntityLast(const std::string &entityTag)
+bool FusionEngine::Scene::RemoveEntityLast(const std::string &entityTag)
 {
 #ifdef _DEBUG
 	assert(entities.empty() == false);
@@ -132,7 +132,7 @@ bool Scene::RemoveEntityLast(const std::string &entityTag)
 	return false;
 }
 
-Entity *Scene::GetEntity(const std::string &entityTag)
+Entity *FusionEngine::Scene::GetEntity(const std::string &entityTag)
 {	
 #ifdef _DEBUG
 	assert(!entities.empty());
@@ -164,17 +164,17 @@ Entity *Scene::GetEntity(const std::string &entityTag)
 	return foundEntity;
 }
 
-EntityManager *Scene::GetEntityManager()
+EntityManager *FusionEngine::Scene::GetEntityManager()
 {
 	return entityManager.get();
 }
-EventManager *Scene::GetEventManager()
+EventManager *FusionEngine::Scene::GetEventManager()
 {
 	return eventManager.get();
 }
 
 
-bool Scene::CheckIfRemoved(unsigned int entityId)
+bool FusionEngine::Scene::CheckIfRemoved(unsigned int entityId)
 {
 	for(std::vector<unsigned int>::iterator iter = removedEntitiesIDs.begin(); 
 		iter != removedEntitiesIDs.end(); 
@@ -190,10 +190,14 @@ bool Scene::CheckIfRemoved(unsigned int entityId)
 }
 
 
-void Scene::ProcessSystems()
+void FusionEngine::Scene::ProcessSystems()
 {
 	for(SystemsVector::iterator iter = systems.begin(); iter != systems.end(); ++iter)
 	{
 		(*iter)->Process();
 	}
+}
+
+void FusionEngine::Scene::Render()
+{
 }

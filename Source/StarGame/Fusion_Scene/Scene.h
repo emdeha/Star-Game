@@ -24,6 +24,7 @@
 #include "../Fusion_EntitySystem/EntityProcessingSystem.h"
 #include "../Fusion_EntitySystem/Component.h"
 #include "../Fusion_EntitySystem/ComponentMapper.h"
+#include "../Fusion_Renderer/Renderer.h"
 #include <vector>
 #include <memory>
 
@@ -53,6 +54,8 @@ namespace FusionEngine
 		ComponentsVector components;
 		SystemsVector systems;
 		std::vector<unsigned int> removedEntitiesIDs;
+
+		Renderer sceneRenderer;
 
 	public:
 		Scene() {}
@@ -93,6 +96,7 @@ namespace FusionEngine
 
 		
 		void ProcessSystems();
+		void Render();
 
 	public:
 		//virtual bool HandleEvent(const IEventData &eventData);

@@ -29,7 +29,6 @@
 #include "../Fusion_EntitySystem/FusionSystems.h"
 #include "../Fusion_EntitySystem/Entity.h"
 #include "../Fusion_AssetLoader/AssetLoader.h"
-#include "../Fusion_EntitySystem/Entity.h"
 
 
 namespace FusionEngine

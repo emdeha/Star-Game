@@ -66,13 +66,13 @@ void FusionEngine::Scene::AddComponent(const std::string &entityTag, Component *
 	entityManager->InsertComponent(foundEntity, component);
 }
 
-bool FusionEngine::Scene::HasEntity(const std::string &entityTag)
+bool FusionEngine::Scene::HasEntity(const std::string &entityTag) const
 {
 #ifdef _DEBUG
 	assert(!entities.empty());
 #endif
 
-	for(EntitiesMap::iterator iter = entities.begin(); iter != entities.end(); ++iter)
+	for(EntitiesMap::const_iterator iter = entities.begin(); iter != entities.end(); ++iter)
 	{
 		if(iter->first.isActive)
 		{
@@ -132,7 +132,7 @@ bool FusionEngine::Scene::RemoveEntityLast(const std::string &entityTag)
 	return false;
 }
 
-Entity *FusionEngine::Scene::GetEntity(const std::string &entityTag)
+Entity *FusionEngine::Scene::GetEntity(const std::string &entityTag) const
 {	
 #ifdef _DEBUG
 	assert(!entities.empty());
@@ -141,7 +141,7 @@ Entity *FusionEngine::Scene::GetEntity(const std::string &entityTag)
 	bool isFound = false;
 	
 	Entity *foundEntity = entities[0].second.get();
-	for(EntitiesMap::iterator iter = entities.begin(); iter != entities.end(); ++iter)
+	for(EntitiesMap::const_iterator iter = entities.begin(); iter != entities.end(); ++iter)
 	{
 		if(iter->first.isActive)
 		{		
@@ -164,19 +164,19 @@ Entity *FusionEngine::Scene::GetEntity(const std::string &entityTag)
 	return foundEntity;
 }
 
-EntityManager *FusionEngine::Scene::GetEntityManager()
+EntityManager *FusionEngine::Scene::GetEntityManager() const
 {
 	return entityManager.get();
 }
-EventManager *FusionEngine::Scene::GetEventManager()
+EventManager *FusionEngine::Scene::GetEventManager() const
 {
 	return eventManager.get();
 }
 
 
-bool FusionEngine::Scene::CheckIfRemoved(unsigned int entityId)
+bool FusionEngine::Scene::CheckIfRemoved(unsigned int entityId) const
 {
-	for(std::vector<unsigned int>::iterator iter = removedEntitiesIDs.begin(); 
+	for(std::vector<unsigned int>::const_iterator iter = removedEntitiesIDs.begin(); 
 		iter != removedEntitiesIDs.end(); 
 		++iter)
 	{
@@ -198,6 +198,12 @@ void FusionEngine::Scene::ProcessSystems()
 	}
 }
 
-void FusionEngine::Scene::Render()
+void FusionEngine::Scene::Render(glutil::MatrixStack &modelMatrix) const
 {
+	sceneRenderer.Render(modelMatrix, entityManager.get());
+}
+
+Renderer& FusionEngine::Scene::GetRenderer()
+{
+	return sceneRenderer;
 }

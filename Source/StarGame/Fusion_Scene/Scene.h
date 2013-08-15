@@ -67,7 +67,7 @@ namespace FusionEngine
 		/*
 		Checks if there is AT LEAST ONE entity with this tag.
 		*/
-		bool HasEntity(const std::string &entityTag);
+		bool HasEntity(const std::string &entityTag) const;
 
 		void AddEntity(const std::string &entityTag);
 		void AddSystem(EntityProcessingSystem *system);
@@ -85,18 +85,20 @@ namespace FusionEngine
 		*/
 		bool RemoveEntityLast(const std::string &entityTag);
 
-		EntityManager *GetEntityManager();
-		EventManager *GetEventManager();
+		EntityManager *GetEntityManager() const;
+		EventManager *GetEventManager() const;
 		/*
 		Gets the LAST ADDED entity found with the given tag.
 		*/
-		Entity *GetEntity(const std::string &entityTag);
+		Entity *GetEntity(const std::string &entityTag) const;
 
-		bool CheckIfRemoved(unsigned int entityId);
+		bool CheckIfRemoved(unsigned int entityId) const;
 
 		
 		void ProcessSystems();
-		void Render();
+		void Render(glutil::MatrixStack &modelMatrix) const;
+
+		Renderer& GetRenderer();
 
 	public:
 		//virtual bool HandleEvent(const IEventData &eventData);

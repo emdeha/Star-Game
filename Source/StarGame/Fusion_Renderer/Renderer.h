@@ -44,8 +44,7 @@ namespace FusionEngine
 		void SubscribeForRendering(EntityManager *manager, Entity *entity);
 		void UnsubscribeForRendering(Entity *entity);
 
-		void Render(glutil::MatrixStack &modelMatrix,
-					EntityManager *manager);
+		void Render(glutil::MatrixStack &modelMatrix, EntityManager *manager) const;
 	};
 }
 

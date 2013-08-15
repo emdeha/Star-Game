@@ -147,8 +147,8 @@ namespace FusionEngine
 		void AddTexture(const std::shared_ptr<Texture2D>& newTexture);
 
 
-		const std::vector<std::shared_ptr<MeshEntry>> GetMeshEntries();
-		const std::vector<std::shared_ptr<Texture2D>> GetTextures();
+		const std::vector<std::shared_ptr<MeshEntry>> GetMeshEntries() const;
+		const std::vector<std::shared_ptr<Texture2D>> GetTextures() const;
 	};
 
 	class MeshLoader : public ITypeLoader<MeshAssetObject>
@@ -180,7 +180,7 @@ namespace FusionEngine
 			loadedTexture = newLoadedTexture;
 		}
 
-		const std::shared_ptr<Texture2D> GetLoadedTexture();
+		const std::shared_ptr<Texture2D> GetLoadedTexture() const;
 	};
 
 	class ImageLoader : public ITypeLoader<ImageAssetObject>
@@ -220,7 +220,7 @@ namespace FusionEngine
 			loadedAudio = newLoadedAudio;
 		}
 
-		const std::vector<std::pair<ChannelType, AudioData>> GetAllLoadedAudios();
+		const std::vector<std::pair<ChannelType, AudioData>> GetAllLoadedAudios() const;
 	};
 
 	class CAudioLoader : public ITypeLoader<AudioAssetObject>
@@ -288,8 +288,8 @@ namespace FusionEngine
 			layouts = loadedLayouts;
 		}
 
-		std::shared_ptr<Layout> GetLayout(LayoutType layoutType);
-		const std::map<LayoutType, std::shared_ptr<Layout>> &GetAllLoadedLayouts();
+		std::shared_ptr<Layout> GetLayout(LayoutType layoutType) const;
+		const std::map<LayoutType, std::shared_ptr<Layout>> &GetAllLoadedLayouts() const;
 	};
 
 	class GUILoader : public ITypeLoader<GUIAssetObject>
@@ -337,15 +337,15 @@ namespace FusionEngine
 			loadedTweaks = newLoadedTweaks;
 		}
 
-		const std::vector<std::pair<std::string, TweakVarData>> GetAllLoadedVars();
+		const std::vector<std::pair<std::string, TweakVarData>> GetAllLoadedVars() const;
 	};
 
 	class TweakVarLoader : public ITypeLoader<TweakVarAssetObject>
 	{
 	private:
-		std::pair<std::string, TweakVarData> ToInt(const std::string &command, int value, int enumIndex = -999);
-		std::pair<std::string, TweakVarData> ToFloat(const std::string &command, float value, int enumIndex = -999);
-		std::pair<std::string, TweakVarData> ToString(const std::string &command, const std::string &value, int enumIndex = -999);
+		std::pair<std::string, TweakVarData> ToInt(const std::string &command, int value, int enumIndex = -999) const;
+		std::pair<std::string, TweakVarData> ToFloat(const std::string &command, float value, int enumIndex = -999) const;
+		std::pair<std::string, TweakVarData> ToString(const std::string &command, const std::string &value, int enumIndex = -999) const;
 
 	public:
 		TweakVarAssetObject Load(const std::string &type, const std::string &name);

@@ -174,11 +174,11 @@ void MeshAssetObject::AddTexture(const std::shared_ptr<Texture2D>& newTexture)
 	textures.push_back(newTexture);
 }
 
-const std::vector<std::shared_ptr<MeshEntry>> MeshAssetObject::GetMeshEntries()
+const std::vector<std::shared_ptr<MeshEntry>> MeshAssetObject::GetMeshEntries() const
 {
 	return meshEntries;
 }
-const std::vector<std::shared_ptr<Texture2D>> MeshAssetObject::GetTextures()
+const std::vector<std::shared_ptr<Texture2D>> MeshAssetObject::GetTextures() const
 {
 	return textures;
 }
@@ -187,7 +187,7 @@ const std::vector<std::shared_ptr<Texture2D>> MeshAssetObject::GetTextures()
 //////////////////////
 ///  Image Loader  ///
 //////////////////////
-const std::shared_ptr<Texture2D> ImageAssetObject::GetLoadedTexture()
+const std::shared_ptr<Texture2D> ImageAssetObject::GetLoadedTexture() const
 {
 	return loadedTexture;
 }
@@ -210,7 +210,7 @@ ImageAssetObject ImageLoader::Load(const std::string &type, const std::string &n
 //////////////////////
 ///  Audio Loader  ///
 //////////////////////
-const std::vector<std::pair<ChannelType, AudioData>> AudioAssetObject::GetAllLoadedAudios()
+const std::vector<std::pair<ChannelType, AudioData>> AudioAssetObject::GetAllLoadedAudios() const
 {
 	return loadedAudio;
 }
@@ -268,7 +268,7 @@ AudioAssetObject CAudioLoader::Load(const std::string &type, const std::string &
 ////////////////////
 ///  GUI Loader  ///
 ////////////////////
-std::shared_ptr<Layout> GUIAssetObject::GetLayout(LayoutType layoutType)
+std::shared_ptr<Layout> GUIAssetObject::GetLayout(LayoutType layoutType) const
 {
 	if(layouts.find(layoutType) == layouts.end())
     {
@@ -303,10 +303,10 @@ std::shared_ptr<Layout> GUIAssetObject::GetLayout(LayoutType layoutType)
         HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
     }
 
-    return layouts[layoutType];
+    return layouts.at(layoutType);
 }
 
-const std::map<LayoutType, std::shared_ptr<Layout>> &GUIAssetObject::GetAllLoadedLayouts()
+const std::map<LayoutType, std::shared_ptr<Layout>> &GUIAssetObject::GetAllLoadedLayouts() const
 {
 	return layouts;
 }
@@ -678,13 +678,13 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 /////////////////////////
 ///  TweakVar Loader  ///
 /////////////////////////
-const std::vector<std::pair<std::string, TweakVarData>> TweakVarAssetObject::GetAllLoadedVars()
+const std::vector<std::pair<std::string, TweakVarData>> TweakVarAssetObject::GetAllLoadedVars() const
 {
 	return loadedTweaks;
 }
 
 
-std::pair<std::string, TweakVarData> TweakVarLoader::ToInt(const std::string &command, int value, int enumIndex)
+std::pair<std::string, TweakVarData> TweakVarLoader::ToInt(const std::string &command, int value, int enumIndex) const
 {
 	TweakVarData tweakData;
     tweakData.currentType = TweakVarData::TYPE_TWEAK_INT;
@@ -696,7 +696,7 @@ std::pair<std::string, TweakVarData> TweakVarLoader::ToInt(const std::string &co
 	return std::pair<std::string, TweakVarData>(command, tweakData);
 }
 
-std::pair<std::string, TweakVarData> TweakVarLoader::ToFloat(const std::string &command, float value, int enumIndex)
+std::pair<std::string, TweakVarData> TweakVarLoader::ToFloat(const std::string &command, float value, int enumIndex) const
 {
 	TweakVarData tweakData;
     tweakData.currentType = TweakVarData::TYPE_TWEAK_FLOAT;
@@ -708,7 +708,7 @@ std::pair<std::string, TweakVarData> TweakVarLoader::ToFloat(const std::string &
 	return std::pair<std::string, TweakVarData>(command, tweakData);
 }
 
-std::pair<std::string, TweakVarData> TweakVarLoader::ToString(const std::string &command, const std::string &value, int enumIndex)
+std::pair<std::string, TweakVarData> TweakVarLoader::ToString(const std::string &command, const std::string &value, int enumIndex) const
 {
 	TweakVarData tweakData;
     tweakData.currentType = TweakVarData::TYPE_TWEAK_STRING;

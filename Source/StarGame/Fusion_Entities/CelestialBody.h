@@ -59,14 +59,14 @@ namespace FusionEngine
 			scene(FusionEngine::Scene()), satellites(0), diameter(0.0f),
 			offsetFromSun(0.0f), revolutionTimer() 
 		{
-			eventManager->AddListener(this, EVENT_ON_CLICK);
+			//eventManager->AddListener(this, EVENT_ON_CLICK);
 		}
 		NewCelestialBody(FusionEngine::Scene &newScene, float newDiameter, float newOffsetFromSun, float cycleDuration) :
 			scene(newScene),
 			satellites(0), diameter(newDiameter),
 			offsetFromSun(newOffsetFromSun), revolutionTimer(Framework::Timer::TT_LOOP, cycleDuration) 
 		{
-			eventManager->AddListener(this, EVENT_ON_CLICK);
+			//eventManager->AddListener(this, EVENT_ON_CLICK);
 		}
 
 		~NewCelestialBody() 

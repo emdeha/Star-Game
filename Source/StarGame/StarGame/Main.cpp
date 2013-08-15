@@ -57,7 +57,7 @@ DisplayData displayData;
 Scene scene = Scene(2.2f, 8.0f, 3.0f, 0.5f, 0, 4, 20.0f);
 
 FusionEngine::Scene testScene;
-FusionEngine::Renderer testRenderer;
+//FusionEngine::Renderer testRenderer;
 
 
 
@@ -789,10 +789,11 @@ void InitializeScene()
 		new FusionEngine::Functional<FusionEngine::NewCelestialBody>();
 	sunFuncComp->UpdateFunction = Update;
 	sunFuncComp->updatedObject = std::unique_ptr<FusionEngine::NewCelestialBody>(new FusionEngine::NewCelestialBody(testScene, 0.5f, 0.0f, 1.0f));
-	AddSatellite(sunFuncComp->updatedObject.get(), &testRenderer, scene.GetShaderManager().GetLitProgData().theProgram, 0.5f, 2.0f, 3.0f);
+	AddSatellite(sunFuncComp->updatedObject.get(), &testScene.GetRenderer(), scene.GetShaderManager().GetLitProgData().theProgram, 0.5f, 2.0f, 3.0f);
 	testScene.AddComponent("sun", sunFuncComp);
 
-	testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("sun"));
+	testScene.GetRenderer().SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("sun"));
+	//testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("sun"));
 }
 
 
@@ -929,7 +930,8 @@ void Display()
 		//if(testScene.HasEntity("sampleSpaceship"))
         {
 			testScene.ProcessSystems();
-			testRenderer.Render(modelMatrix, testScene.GetEntityManager());
+			testScene.Render(modelMatrix);
+			//testRenderer.Render(modelMatrix, testScene.GetEntityManager());
         }
 		
     }

@@ -87,8 +87,7 @@ void Renderer::UnsubscribeForRendering(Entity *entity)
 }
 
 
-void Renderer::Render(glutil::MatrixStack &modelMatrix,
-					  EntityManager *manager)
+void Renderer::Render(glutil::MatrixStack &modelMatrix, EntityManager *manager) const
 {
 	glFrontFace(GL_CCW);
 

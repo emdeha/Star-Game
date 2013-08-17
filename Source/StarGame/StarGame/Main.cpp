@@ -96,8 +96,11 @@ void HandleMouse()
                                                              scene.GetMouse().GetCurrentPosition());
 
         scene.OnEvent(leftClickEvent);
-		testScene.GetEventManager()->FireEvent(FusionEngine::OnClickEvent(EVENT_TYPE_ON_CLICK, true, scene.GetShaderManager().GetLitProgData().theProgram));
-    }
+		//if(scene.IsLayoutOn(LAYOUT_IN_GAME))
+		//{
+			testScene.GetEventManager()->FireEvent(FusionEngine::OnClickEvent(FusionEngine::EVENT_ON_CLICK, true, scene.GetShaderManager().GetLitProgData().theProgram));
+		//}
+	}
 
     if(scene.GetMouse().IsRightButtonDown())
     {		
@@ -667,7 +670,7 @@ void InitializeScene()
 
     // WARN: When audio is not loaded first, a break is thrown
     scene.LoadAudio("../data/loader-files/audio-config.yaml");
-    scene.InitTweakableVariables(true, "../data/loader-files/tweak-config.yaml");
+    //scene.InitTweakableVariables(true, "../data/loader-files/tweak-config.yaml");
     InitializeGUI();
 
     //scene.GetLayout(LAYOUT_IN_GAME)->SetBackgroundImage(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),

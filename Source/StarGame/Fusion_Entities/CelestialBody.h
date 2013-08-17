@@ -52,30 +52,16 @@ namespace FusionEngine
 
 		Framework::Timer revolutionTimer;
 	
-		EventManager *eventManager;
+		//EventManager *eventManager;
 
 	public:
-		NewCelestialBody() :
-			scene(FusionEngine::Scene()), satellites(0), diameter(0.0f),
-			offsetFromSun(0.0f), revolutionTimer() 
-		{
-			eventManager->AddListener(this, EVENT_ON_CLICK);
-		}
-		NewCelestialBody(FusionEngine::Scene &newScene, float newDiameter, float newOffsetFromSun, float cycleDuration) :
-			scene(newScene),
-			satellites(0), diameter(newDiameter),
-			offsetFromSun(newOffsetFromSun), revolutionTimer(Framework::Timer::TT_LOOP, cycleDuration) 
-		{
-			eventManager->AddListener(this, EVENT_ON_CLICK);
-		}
+		NewCelestialBody();
+		NewCelestialBody(FusionEngine::Scene &newScene, 
+						 float newDiameter, float newOffsetFromSun, float cycleDuration);
 
-		~NewCelestialBody() 
-		{
-			//scene.reset();
-			//scene.release();
-		}
+		~NewCelestialBody();
 
-		bool HandleEvent(const IEventData &eventData);
+		virtual bool HandleEvent(const IEventData &eventData);
 	};
 }
 

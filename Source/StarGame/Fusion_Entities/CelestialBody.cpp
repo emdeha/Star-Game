@@ -27,18 +27,41 @@
 
 using namespace FusionEngine;
 
+
+NewCelestialBody::NewCelestialBody() :
+	scene(FusionEngine::Scene()), satellites(0), diameter(0.0f),
+	offsetFromSun(0.0f), revolutionTimer()
+{
+}
+
+NewCelestialBody::NewCelestialBody(
+	FusionEngine::Scene &newScene, 
+	float newDiameter, float newOffsetFromSun, float cycleDuration) :
+	scene(newScene),
+	satellites(0), diameter(newDiameter),
+	offsetFromSun(newOffsetFromSun), revolutionTimer(Framework::Timer::TT_LOOP, cycleDuration) 
+{
+	scene.GetEventManager()->AddListener(this, FusionEngine::EVENT_ON_CLICK);
+}
+
+NewCelestialBody::~NewCelestialBody()
+{
+	//scene.GetEventManager()->RemoveListener(this, EVENT_ON_CLICK);
+}
+
 bool NewCelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 {
 	EventType type = eventData.GetType();
 	switch(type)
 	{
-	case EVENT_ON_CLICK:
+	case FusionEngine::EVENT_ON_CLICK:
 		{
 			const OnClickEvent &data = static_cast<const OnClickEvent&>(eventData);
 
 			if(data.isLeftButtonDown)
 			{
 				AddSatellite(this, &this->scene.GetRenderer(), data.shaderProgram, 0.2f, 4.0f, 3.0f);
+				return true;
 			}
 		}
 		break;
@@ -91,7 +114,8 @@ bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *rende
 	//celestialBody->scene.AddComponent("satellite", satFuncComp);
 
 
-	std::shared_ptr<NewCelestialBody> newSat(new NewCelestialBody(celestialBody->scene, 1.0f, 2.0f, 5.0f));
+	std::shared_ptr<NewCelestialBody> 
+		newSat(new NewCelestialBody(celestialBody->scene, 1.0f, 2.0f, 5.0f));
 	celestialBody->satellites.push_back(newSat);
 	//newSat->parent = celestialBody;
 	renderer->SubscribeForRendering(celestialBody->scene.GetEntityManager(), celestialBody->scene.GetEntity("satellite"));

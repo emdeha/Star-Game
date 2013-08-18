@@ -24,6 +24,8 @@
 #include "../Fusion_EntitySystem/EntityEvents.h"
 #include "../Fusion_Scene/Scene.h"
 
+#include <time.h>
+
 
 using namespace FusionEngine;
 
@@ -75,6 +77,10 @@ bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *rende
 				  GLuint shaderProg, 
 				  float newDiameter, float newOffsetFromSun, float cycleDuration)
 {
+	srand(time(0));
+	std::ostringstream satName;
+	satName<<"satellite"<<rand() % 9999;
+
 	// Load mesh
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
 	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
@@ -96,18 +102,18 @@ bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *rende
 	satRender->shaderProgram = shaderProg;
 	satRender->vao = loadedMesh.vao;
 
-	celestialBody->scene.AddEntity("satellite");
+	celestialBody->scene.AddEntity(satName.str());
 	//FusionEngine::FunctionalSystem<NewCelestialBody> *satFunctional = 
 	//	new FusionEngine::FunctionalSystem<NewCelestialBody>(celestialBody->scene.GetEventManager(), 
 	//									   celestialBody->scene.GetEntityManager());
 	//celestialBody->scene.AddSystem(satFunctional);
-	celestialBody->scene.AddComponent("satellite", satRender);
+	celestialBody->scene.AddComponent(satName.str(), satRender);
 
 	FusionEngine::Transform *satTransform = new FusionEngine::Transform();
 	satTransform->position = glm::vec3();
 	satTransform->rotation = glm::vec3();
 	satTransform->scale = glm::vec3(celestialBody->diameter);
-	celestialBody->scene.AddComponent("satellite", satTransform);
+	celestialBody->scene.AddComponent(satName.str(), satTransform);
 
 	//FusionEngine::Functional<NewCelestialBody> *satFuncComp = new FusionEngine::Functional<NewCelestialBody>();
 	//satFuncComp->UpdateFunction = Update;
@@ -118,7 +124,7 @@ bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *rende
 		newSat(new NewCelestialBody(celestialBody->scene, 1.0f, 2.0f, 5.0f));
 	celestialBody->satellites.push_back(newSat);
 	//newSat->parent = celestialBody;
-	renderer->SubscribeForRendering(celestialBody->scene.GetEntityManager(), celestialBody->scene.GetEntity("satellite"));
+	renderer->SubscribeForRendering(celestialBody->scene.GetEntityManager(), celestialBody->scene.GetEntity(satName.str()));
 
 	return true;
 }

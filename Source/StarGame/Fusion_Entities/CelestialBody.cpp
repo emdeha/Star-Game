@@ -78,9 +78,13 @@ bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *rende
 				  float newDiameter, float newOffsetFromSun, float cycleDuration)
 {
 	srand(time(0));
-	std::ostringstream satName;
-	satName<<"satellite"<<rand() % 9999;
-
+	//std::ostringstream satName;
+	//satName<<"satellite"<<rand() % 9999;
+	//std::printf(satName.str().c_str());
+	std::string satName = "satellite";
+	char numInStr[7] = "";
+	itoa(rand() % 9999, numInStr, 10);
+	satName.append(numInStr);
 	// Load mesh
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
 	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
@@ -102,18 +106,18 @@ bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *rende
 	satRender->shaderProgram = shaderProg;
 	satRender->vao = loadedMesh.vao;
 
-	celestialBody->scene.AddEntity(satName.str());
+	celestialBody->scene.AddEntity(satName);
 	//FusionEngine::FunctionalSystem<NewCelestialBody> *satFunctional = 
 	//	new FusionEngine::FunctionalSystem<NewCelestialBody>(celestialBody->scene.GetEventManager(), 
 	//									   celestialBody->scene.GetEntityManager());
 	//celestialBody->scene.AddSystem(satFunctional);
-	celestialBody->scene.AddComponent(satName.str(), satRender);
+	celestialBody->scene.AddComponent(satName, satRender);
 
 	FusionEngine::Transform *satTransform = new FusionEngine::Transform();
 	satTransform->position = glm::vec3();
 	satTransform->rotation = glm::vec3();
 	satTransform->scale = glm::vec3(celestialBody->diameter);
-	celestialBody->scene.AddComponent(satName.str(), satTransform);
+	celestialBody->scene.AddComponent(satName, satTransform);
 
 	//FusionEngine::Functional<NewCelestialBody> *satFuncComp = new FusionEngine::Functional<NewCelestialBody>();
 	//satFuncComp->UpdateFunction = Update;
@@ -124,7 +128,7 @@ bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *rende
 		newSat(new NewCelestialBody(celestialBody->scene, 1.0f, 2.0f, 5.0f));
 	celestialBody->satellites.push_back(newSat);
 	//newSat->parent = celestialBody;
-	renderer->SubscribeForRendering(celestialBody->scene.GetEntityManager(), celestialBody->scene.GetEntity(satName.str()));
+	renderer->SubscribeForRendering(celestialBody->scene.GetEntityManager(), celestialBody->scene.GetEntity(satName));
 
 	return true;
 }
@@ -143,8 +147,6 @@ void Update(NewCelestialBody *celestialBody)
 		(*satellite)->revolutionTimer.Update();
 		
 		float currentTimeThroughLoop = (*satellite)->revolutionTimer.GetAlpha();
-		
-		satTransformData[0]->position = transformData[0]->position;
 
 		satTransformData[0]->position.x += sinf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
 		satTransformData[0]->position.z += cosf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;

@@ -922,7 +922,7 @@ void Display()
         }
 
         float interpolation = float(GetTickCount() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
-        scene.RenderScene(modelMatrix, interpolation);	
+        //scene.RenderScene(modelMatrix, interpolation);	
         
         scene.RenderCurrentLayout();	
 

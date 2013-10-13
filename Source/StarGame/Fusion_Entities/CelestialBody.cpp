@@ -148,7 +148,7 @@ void Update(NewCelestialBody *celestialBody)
 		
 		float currentTimeThroughLoop = (*satellite)->revolutionTimer.GetAlpha();
 
-		satTransformData[0]->position.x += sinf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
-		satTransformData[0]->position.z += cosf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
+		//satTransformData[0]->position.x += sinf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
+		//satTransformData[0]->position.z += cosf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
 	}
 }

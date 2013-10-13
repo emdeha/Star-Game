@@ -52,6 +52,7 @@
 #include "../Fusion_Entities/CelestialBody.h"
 #include "../Fusion_EntitySystem/EntityEvents.h"
 
+#define FUSION_LOAD_FAST
 
 DisplayData displayData;
 
@@ -433,66 +434,6 @@ void InitializePrograms()
     scene.GetShaderManager().LoadSpriteParticleProgData("shaders/SpriteParticleShader.vert", "shaders/SpriteParticleShader.frag");
 }
 
-void InitializeGUI()
-{
-    GUILoader guiLoader("../data/loader-files/test-gui.yaml", 
-                        glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-
-    scene.AddLayouts(guiLoader.GetAllLoadedLayouts());
-    
-    scene.GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetIsVisible(false);
-    
-    // Set buttons text
-    DIR *dir;
-    struct dirent *ent;
-    int i = 0;
-    if ((dir = opendir ("../data/saved-games/")) != NULL) 
-    {
-        glm::vec2 controlPosition = glm::vec2(10, 600);
-        // print all the files and directories within directory 
-        while ((ent = readdir (dir)) != NULL) 
-        {
-            //printf ("%s\n", ent->d_name);
-            if(ent->d_namlen > 5)
-            {
-                i++;
-                std::string controlName = "saveSlot";
-                controlName += (char)(i + 48); // converting number to its char
-                controlPosition.y -= 30.0f;
-                std::vector<std::string> splittedFileName = Utility::SplitString(ent->d_name, '.');
-                scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl(controlName)->SetText(splittedFileName[0]);
-
-                HoveredProperties onHoverProps;
-				onHoverProps.backgroundLeftImage = "";
-				onHoverProps.backgroundRightImage = "";
-                onHoverProps.backgroundMiddleImage = "";
-                onHoverProps.font = "";
-                onHoverProps.text = "";
-                onHoverProps.textColor = glm::vec4(1.0f);
-
-                std::string loadSlotName = "loadSlot";
-                loadSlotName += (char)(i + 48);
-                std::shared_ptr<Button> loadEntryButton = 
-                    std::shared_ptr<Button>(new Button(loadSlotName, splittedFileName[0],
-                                                       glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
-                                                       controlPosition, glm::vec4(),
-                                                       28,
-                                                       false, true, false,
-                                                       onHoverProps,
-                                                       glm::vec2()));
-                loadEntryButton->Init("../data/fonts/AGENCYR.TTF", "", "", "",
-                                      glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-                scene.GetLayout(LAYOUT_LOAD_GAME)->AddControl(loadEntryButton);
-            }
-        }
-        closedir (dir);
-    } 
-    else 
-    {
-        HandleUnexpectedError("invalid directory", __LINE__, __FILE__);
-    }
-}
-
 void OnTextBoxClickedEventHandler(Scene &scene, Control *control)
 {
     scene.GetLayout(LAYOUT_MENU)->DeactivateAllControls();
@@ -611,71 +552,11 @@ void OnHoverEventHandler(Scene &scene, Control *control)
     control->SetIsHovered(true);
 }
 
-
-void InitializeScene()
+void InitializeEvents()
 {
-    Mouse userMouse;
-    TopDownCamera userCamera = TopDownCamera(glm::vec3(), 13.5f, 0.0f, 45.0f);
-
-
-    std::shared_ptr<CelestialBody> 
-        mainSun(new CelestialBody(glm::vec3(0.0f), glm::vec4(0.738f, 0.738f, 0.423f, 1.0f), 1.25f, 4, 50, 
-                                  200, 100));
-
-    SunLight 
-        mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, displayData.gamma));
-
-    mainSun->LoadMesh("../data/mesh-files/sun.obj");
-
-    scene.SetMouse(userMouse);
-    scene.SetTopDownCamera(userCamera);
-
-    scene.AddSun(mainSun);
-    scene.AddSunLight(mainSunLight);
-	
-
-    ExplosionEmitter sceneExplosion = ExplosionEmitter(glm::vec3(), 300, 30, 0.1f);
-    sceneExplosion.Init();
-    scene.SetExplosion(sceneExplosion);
-
-    scene.SetFusion(FusionInput('f'));
-    scene.AddFusionSequence("fireSatellite", 'q', 'q', 'q');
-    scene.AddFusionSequence("earthSatellite", 'e', 'e', 'e');
-    scene.AddFusionSequence("waterSatellite", 'w', 'w', 'w');
-    scene.AddFusionSequence("airSatellite", 'q', 'w', 'e');
-    scene.AddFusionSequence("aoeSkill", 'q', 'q', 'w');
-    scene.AddFusionSequence("passiveAoeSkill", 'q', 'q', 'e');
-    scene.AddFusionSequence("sunNovaSkill", 'w', 'w', 'e');
-    scene.AddFusionSequence("satFrostNova", 'q', 'w', 'q');
-    scene.AddFusionSequence("satShieldSkill", 'w', 'e', 'w');
-    scene.AddFusionSequence("burnSkill", 'w', 'e', 'q');
-    
-
-    glUseProgram(scene.GetShaderManager().GetTextureProgData().theProgram);
-    glUniform1i(scene.GetShaderManager().GetTextureProgData().colorTextureUnif, 0);
-    glUseProgram(0);
-    glUseProgram(scene.GetShaderManager().GetPerspectiveTextureProgData().theProgram);
-    glUniform1i(scene.GetShaderManager().GetPerspectiveTextureProgData().colorTextureUnif, 0);
-    glUseProgram(0);
-    glUseProgram(scene.GetShaderManager().GetSimpleTextureProgData().theProgram);
-    glUniform1i(scene.GetShaderManager().GetSimpleTextureProgData().textureUnif, 0);
-    glUseProgram(0);
-    glUseProgram(scene.GetShaderManager().GetLitTextureProgData().theProgram);
-    glUniform1i(scene.GetShaderManager().GetLitTextureProgData().textureUnif, 0);
-    glUseProgram(0);
-    glUseProgram(scene.GetShaderManager().GetSpriteParticleProgData().theProgram);
-    glUniform1i(scene.GetShaderManager().GetSpriteParticleProgData().samplerUnif, 0);
-    glUseProgram(0);
-    
-
-    // WARN: When audio is not loaded first, a break is thrown
-    scene.LoadAudio("../data/loader-files/audio-config.yaml");
-    //scene.InitTweakableVariables(true, "../data/loader-files/tweak-config.yaml");
-    InitializeGUI();
-
     //scene.GetLayout(LAYOUT_IN_GAME)->SetBackgroundImage(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT),
     //													"../data/images/background.png");
-
+	
     EventArg inMenuEventArg[1];
     inMenuEventArg[0].argType = "command";
     inMenuEventArg[0].argument.varType = TYPE_STRING;
@@ -751,7 +632,133 @@ void InitializeScene()
                           LAYOUT_IN_GAME, OnWPressEventHandler, 'w');
     scene.AddEventHandler("onEPressEventHandler", "onKeyPress", "fusOne", "",
                           LAYOUT_IN_GAME, OnEPressEventHandler, 'e');
+}
 
+void InitializeGUI()
+{
+    GUILoader guiLoader("../data/loader-files/test-gui.yaml", 
+                        glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
+    scene.AddLayouts(guiLoader.GetAllLoadedLayouts());
+    
+    scene.GetLayout(LAYOUT_IN_GAME)->GetControl("labelToolTip")->SetIsVisible(false);
+    
+    // Set buttons text
+    DIR *dir;
+    struct dirent *ent;
+    int i = 0;
+    if ((dir = opendir ("../data/saved-games/")) != NULL) 
+    {
+        glm::vec2 controlPosition = glm::vec2(10, 600);
+        // print all the files and directories within directory 
+        while ((ent = readdir (dir)) != NULL) 
+        {
+            //printf ("%s\n", ent->d_name);
+            if(ent->d_namlen > 5)
+            {
+                i++;
+                std::string controlName = "saveSlot";
+                controlName += (char)(i + 48); // converting number to its char
+                controlPosition.y -= 30.0f;
+                std::vector<std::string> splittedFileName = Utility::SplitString(ent->d_name, '.');
+                scene.GetLayout(LAYOUT_SAVE_GAME)->GetControl(controlName)->SetText(splittedFileName[0]);
+
+                HoveredProperties onHoverProps;
+				onHoverProps.backgroundLeftImage = "";
+				onHoverProps.backgroundRightImage = "";
+                onHoverProps.backgroundMiddleImage = "";
+                onHoverProps.font = "";
+                onHoverProps.text = "";
+                onHoverProps.textColor = glm::vec4(1.0f);
+
+                std::string loadSlotName = "loadSlot";
+                loadSlotName += (char)(i + 48);
+                std::shared_ptr<Button> loadEntryButton = 
+                    std::shared_ptr<Button>(new Button(loadSlotName, splittedFileName[0],
+                                                       glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 
+                                                       controlPosition, glm::vec4(),
+                                                       28,
+                                                       false, true, false,
+                                                       onHoverProps,
+                                                       glm::vec2()));
+                loadEntryButton->Init("../data/fonts/AGENCYR.TTF", "", "", "",
+                                      glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+                scene.GetLayout(LAYOUT_LOAD_GAME)->AddControl(loadEntryButton);
+            }
+        }
+        closedir (dir);
+    } 
+    else 
+    {
+        HandleUnexpectedError("invalid directory", __LINE__, __FILE__);
+    }
+
+	InitializeEvents();
+}
+
+void InitializeScene()
+{
+    Mouse userMouse;
+    TopDownCamera userCamera = TopDownCamera(glm::vec3(), 13.5f, 0.0f, 45.0f);
+
+
+    std::shared_ptr<CelestialBody> 
+        mainSun(new CelestialBody(glm::vec3(0.0f), glm::vec4(0.738f, 0.738f, 0.423f, 1.0f), 1.25f, 4, 50, 
+                                  200, 100));
+
+    SunLight 
+        mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, displayData.gamma));
+
+    mainSun->LoadMesh("../data/mesh-files/sun.obj");
+
+    scene.SetMouse(userMouse);
+    scene.SetTopDownCamera(userCamera);
+
+    scene.AddSun(mainSun);
+    scene.AddSunLight(mainSunLight);
+	
+
+    ExplosionEmitter sceneExplosion = ExplosionEmitter(glm::vec3(), 300, 30, 0.1f);
+    sceneExplosion.Init();
+    scene.SetExplosion(sceneExplosion);
+
+    scene.SetFusion(FusionInput('f'));
+    scene.AddFusionSequence("fireSatellite", 'q', 'q', 'q');
+    scene.AddFusionSequence("earthSatellite", 'e', 'e', 'e');
+    scene.AddFusionSequence("waterSatellite", 'w', 'w', 'w');
+    scene.AddFusionSequence("airSatellite", 'q', 'w', 'e');
+    scene.AddFusionSequence("aoeSkill", 'q', 'q', 'w');
+    scene.AddFusionSequence("passiveAoeSkill", 'q', 'q', 'e');
+    scene.AddFusionSequence("sunNovaSkill", 'w', 'w', 'e');
+    scene.AddFusionSequence("satFrostNova", 'q', 'w', 'q');
+    scene.AddFusionSequence("satShieldSkill", 'w', 'e', 'w');
+    scene.AddFusionSequence("burnSkill", 'w', 'e', 'q');
+    
+
+    glUseProgram(scene.GetShaderManager().GetTextureProgData().theProgram);
+    glUniform1i(scene.GetShaderManager().GetTextureProgData().colorTextureUnif, 0);
+    glUseProgram(0);
+    glUseProgram(scene.GetShaderManager().GetPerspectiveTextureProgData().theProgram);
+    glUniform1i(scene.GetShaderManager().GetPerspectiveTextureProgData().colorTextureUnif, 0);
+    glUseProgram(0);
+    glUseProgram(scene.GetShaderManager().GetSimpleTextureProgData().theProgram);
+    glUniform1i(scene.GetShaderManager().GetSimpleTextureProgData().textureUnif, 0);
+    glUseProgram(0);
+    glUseProgram(scene.GetShaderManager().GetLitTextureProgData().theProgram);
+    glUniform1i(scene.GetShaderManager().GetLitTextureProgData().textureUnif, 0);
+    glUseProgram(0);
+    glUseProgram(scene.GetShaderManager().GetSpriteParticleProgData().theProgram);
+    glUniform1i(scene.GetShaderManager().GetSpriteParticleProgData().samplerUnif, 0);
+    glUseProgram(0);
+    
+#ifdef FUSION_LOAD_FAST
+	InitializeGUI();
+#else
+    // WARN: When audio is not loaded first, a break is thrown
+    scene.LoadAudio("../data/loader-files/audio-config.yaml");
+    scene.InitTweakableVariables(true, "../data/loader-files/tweak-config.yaml");
+    InitializeGUI();
+#endif
 
 	////////////////////////////////////////////////////////////////////
 

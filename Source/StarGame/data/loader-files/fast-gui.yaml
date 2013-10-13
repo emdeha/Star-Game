@@ -1,0 +1,104 @@
+details:
+    fonts-dir: "../data/fonts/"
+    textures-dir: "../data/images/"
+    default-font: AGENCYR.TTF
+    global-on-hover:
+        font: AGENCYB.TTF
+        font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+        left-background-image: "b-hov-left-border.png"
+        right-background-image: "b-hov-right-border.png"
+        middle-background-image: "b-hov-middle-section.png"
+layout-game:
+    background-color: [ 0.0, 0.0, 0.0, 1.0 ]
+    is-active: true 
+    controls:
+        control-label-matter:
+            control-type: label
+            name: labelMatter
+            text: "Matter:"
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 2, 95 ]
+            text-size: 28
+        control-label-tooltip:
+            control-type: label
+            name: labelToolTip
+            text: ""
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 0, 0 ]
+            text-size: 28 
+        control-textbox-varinput:
+            control-type: textBox
+            name: varInput
+            width: 200
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: true
+            bckg-left: "t-left-border.png"
+            bckg-right: "t-right-border.png"
+            bckg-middle: "t-middle-section.png"
+            is-visible: true
+            is-using-percentage: true
+            margins: [ 5, 5, 5, 5 ]
+            percentaged-pos: [ 78, 95 ]
+            text-size: 28
+        control-button-apply:
+            control-type: button
+            name: applyInput
+            text: Apply
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 95, 95 ]
+            text-size: 28
+        control-imagebox-fusone:
+            control-type: imageBox
+            name: fusOne
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 48, 96 ]
+            width: 50
+            height: 50
+            image: "fusion-empty.jpg"
+        control-imagebox-fustwo:
+            control-type: imageBox
+            name: fusTwo
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 52.5, 96 ]
+            width: 50
+            height: 50
+            image: "fusion-empty.jpg"
+        control-imagebox-fusthree:
+            control-type: imageBox
+            name: fusThree
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 57, 96 ]
+            width: 50
+            height: 50
+            image: "fusion-empty.jpg"
+        control-imagebox-fushint:
+            control-type: imageBox
+            name: fusHint
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 52.5, 89 ]
+            width: 50
+            height: 50
+            image: "fusion-empty.jpg"
+        control-label-fushint:
+            control-type: label
+            name: labelFusHint
+            text: "Not a combination"
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true   
+            percentaged-pos: [ 53, 13 ] 
+            text-size: 28 

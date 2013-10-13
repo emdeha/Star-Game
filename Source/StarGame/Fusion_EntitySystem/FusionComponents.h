@@ -115,6 +115,17 @@ namespace FusionEngine
     };
 
 
+	template<class ParentObject>
+	class Child : public Component
+	{
+	public:
+		std::unique_ptr<ParentObject> parent;
+
+		Child() : Component(CT_CHILD) {}
+		virtual ~Child() {}
+	};
+
+
 	template<class ObjectToUpdate>
 	class Functional : public Component
     {

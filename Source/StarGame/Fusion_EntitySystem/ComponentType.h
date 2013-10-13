@@ -9,6 +9,7 @@ namespace FusionEngine
 		CT_TRANSFORM = 0,
 		CT_RENDER,
 		CT_FUNCTIONAL_BEHAVIOR,
+		CT_CHILD,
         
         
         /////////////
@@ -40,6 +41,7 @@ namespace FusionEngine
 	const unsigned int CT_TRANSFORM_BIT = 1 << CT_TRANSFORM;
 	const unsigned int CT_RENDER_BIT = 1 << CT_RENDER;
 	const unsigned int CT_FUNCTIONAL_BEHAVIOR_BIT = 1 << CT_FUNCTIONAL_BEHAVIOR;
+	const unsigned int CT_CHILD_BIT = 1 << CT_CHILD;
 
 
 	/////////////

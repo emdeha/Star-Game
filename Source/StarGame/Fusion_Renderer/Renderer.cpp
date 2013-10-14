@@ -109,8 +109,7 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix, EntityManager *manager) 
 			glUseProgram(renderData[0]->shaderProgram); 
 		
             glutil::PushStack push(modelMatrix);
-
-
+			
 			ComponentMapper<Transform> transformData = manager->GetComponentList(subscribedMesh->first, CT_TRANSFORM);
 			modelMatrix.Translate(transformData[0]->position);
 			modelMatrix.RotateX(transformData[0]->rotation.x);

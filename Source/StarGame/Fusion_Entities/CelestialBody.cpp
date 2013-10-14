@@ -84,7 +84,7 @@ bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *rende
 	std::string satName = "satellite";
 	char numInStr[7] = "";
 	itoa(rand() % 9999, numInStr, 10);
-	satName.append(numInStr);
+	//satName.append(numInStr);
 	// Load mesh
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
 	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
@@ -148,7 +148,15 @@ void Update(NewCelestialBody *celestialBody)
 		
 		float currentTimeThroughLoop = (*satellite)->revolutionTimer.GetAlpha();
 
-		//satTransformData[0]->position.x += sinf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
-		//satTransformData[0]->position.z += cosf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
+		glutil::MatrixStack relativeTransformStack;
+		//relativeTransformStack.RotateY((currentTimeThroughLoop / (*satellite)->revolutionTimer.GetDuration()) * 360.0f);
+		relativeTransformStack.Translate(transformData[0]->position);
+		relativeTransformStack.Translate(currentTimeThroughLoop, 0.0f, 0.0f);
+		
+		satTransformData[0]->position += glm::vec3(0.005f, 0.0f, 0.0f);//glm::mat3(relativeTransformStack.Top()) * satTransformData[0]->position;
+		/*
+		satTransformData[0]->position.x += sinf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
+		satTransformData[0]->position.z += cosf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
+		*/
 	}
 }

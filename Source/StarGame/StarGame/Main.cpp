@@ -86,20 +86,18 @@ void HandleMouse()
 
     if(scene.GetMouse().IsRightButtonDown())
     {
-        Event rightClickEvent = StockEvents::EventOnRightClick("all", 
-                                                               scene.GetMouse().GetCurrentPosition());
+        Event rightClickEvent = StockEvents::EventOnRightClick("all", scene.GetMouse().GetCurrentPosition());
 
         scene.OnEvent(rightClickEvent);
     }
     if(scene.GetMouse().IsLeftButtonDown())
     {
-        Event leftClickEvent = StockEvents::EventOnLeftClick("all",
-                                                             scene.GetMouse().GetCurrentPosition());
+        Event leftClickEvent = StockEvents::EventOnLeftClick("all", scene.GetMouse().GetCurrentPosition());
 
         scene.OnEvent(leftClickEvent);
 		//if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 		//{
-			testScene.GetEventManager()->FireEvent(FusionEngine::OnClickEvent(FusionEngine::EVENT_ON_CLICK, true, scene.GetShaderManager().GetLitProgData().theProgram));
+			//testScene.GetEventManager()->FireEvent(FusionEngine::OnClickEvent(FusionEngine::EVENT_ON_CLICK, true, scene.GetShaderManager().GetSimpleProgData().theProgram));
 		//}
 	}
 
@@ -801,7 +799,7 @@ void InitializeScene()
 		new FusionEngine::Functional<FusionEngine::NewCelestialBody>();
 	sunFuncComp->UpdateFunction = Update;
 	sunFuncComp->updatedObject = std::unique_ptr<FusionEngine::NewCelestialBody>(new FusionEngine::NewCelestialBody(testScene, 0.5f, 0.0f, 1.0f));
-	AddSatellite(sunFuncComp->updatedObject.get(), &testScene.GetRenderer(), scene.GetShaderManager().GetLitProgData().theProgram, 0.5f, 2.0f, 3.0f);
+	AddSatellite(sunFuncComp->updatedObject.get(), &testScene.GetRenderer(), FusionEngine::Render::FE_RENDERER_SIMPLE, scene.GetShaderManager().GetSimpleProgData().theProgram, 0.5f, 2.0f, 3.0f);
 	testScene.AddComponent("sun", sunFuncComp);
 
 	testScene.GetRenderer().SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("sun"));

@@ -36,7 +36,7 @@ namespace FusionEngine
 	struct OnClickEvent : public IEventData
 	{
 		bool isLeftButtonDown;
-		unsigned int shaderProgram; // only for testing purposes
+		unsigned int shaderProgram; // only for testing 
 
 		OnClickEvent(EventType eventType, bool newIsLeftButtonDown, unsigned int newShaderProgram) 
 			: IEventData(eventType), isLeftButtonDown(newIsLeftButtonDown), shaderProgram(newShaderProgram) {}

@@ -62,7 +62,7 @@ bool NewCelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 
 			if(data.isLeftButtonDown)
 			{
-				AddSatellite(this, &this->scene.GetRenderer(), data.shaderProgram, 0.2f, 4.0f, 3.0f);
+				AddSatellite(this, &this->scene.GetRenderer(), Render::FE_RENDERER_LIT, data.shaderProgram, 0.2f, 4.0f, 3.0f);
 				return true;
 			}
 		}
@@ -74,7 +74,7 @@ bool NewCelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 
 
 bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *renderer,
-				  GLuint shaderProg, 
+				  Render::RendererType rendererType, GLuint shaderProg, 
 				  float newDiameter, float newOffsetFromSun, float cycleDuration)
 {
 	srand(time(0));
@@ -102,7 +102,7 @@ bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *rende
 	{
 		satRender->mesh.AddTexture((*texture));
 	}
-	satRender->rendererType = FusionEngine::Render::FE_RENDERER_LIT;
+	satRender->rendererType = rendererType;
 	satRender->shaderProgram = shaderProg;
 	satRender->vao = loadedMesh.vao;
 
@@ -125,7 +125,7 @@ bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *rende
 
 
 	std::shared_ptr<NewCelestialBody> 
-		newSat(new NewCelestialBody(celestialBody->scene, 1.0f, 2.0f, 5.0f));
+		newSat(new NewCelestialBody(celestialBody->scene, 0.5f, 2.0f, 5.0f));
 	celestialBody->satellites.push_back(newSat);
 	//newSat->parent = celestialBody;
 	renderer->SubscribeForRendering(celestialBody->scene.GetEntityManager(), celestialBody->scene.GetEntity(satName));
@@ -149,14 +149,10 @@ void Update(NewCelestialBody *celestialBody)
 		float currentTimeThroughLoop = (*satellite)->revolutionTimer.GetAlpha();
 
 		glutil::MatrixStack relativeTransformStack;
-		//relativeTransformStack.RotateY((currentTimeThroughLoop / (*satellite)->revolutionTimer.GetDuration()) * 360.0f);
 		relativeTransformStack.Translate(transformData[0]->position);
-		relativeTransformStack.Translate(currentTimeThroughLoop, 0.0f, 0.0f);
+		satTransformData[0]->position.x = sinf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
+		satTransformData[0]->position.z = cosf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
 		
-		satTransformData[0]->position += glm::vec3(0.005f, 0.0f, 0.0f);//glm::mat3(relativeTransformStack.Top()) * satTransformData[0]->position;
-		/*
-		satTransformData[0]->position.x += sinf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
-		satTransformData[0]->position.z += cosf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
-		*/
+		satTransformData[0]->position = glm::vec3(relativeTransformStack.Top() * glm::vec4(satTransformData[0]->position, 1.0f));
 	}
 }

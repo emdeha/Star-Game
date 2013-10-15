@@ -66,7 +66,7 @@ namespace FusionEngine
 }
 
 bool AddSatellite(FusionEngine::NewCelestialBody *celestialBody, FusionEngine::Renderer *renderer,
-				  GLuint shaderProg, 
+				  FusionEngine::Render::RendererType, GLuint shaderProg, 
 				  float newDiameter, float newOffsetFromSun, float cycleDuration);
 void Update(FusionEngine::NewCelestialBody *celestialBody);
 

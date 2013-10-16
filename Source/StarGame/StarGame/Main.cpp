@@ -58,11 +58,6 @@ DisplayData displayData;
 
 Scene scene = Scene(2.2f, 8.0f, 3.0f, 0.5f, 0, 4, 20.0f);
 
-FusionEngine::Scene testScene;
-//FusionEngine::Renderer testRenderer;
-
-
-
 long long GetCurrentTimeMillis()
 {
     return time(0) * 1000;
@@ -97,7 +92,7 @@ void HandleMouse()
         scene.OnEvent(leftClickEvent);
 		//if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 		//{
-			testScene.GetEventManager()->FireEvent(FusionEngine::OnClickEvent(FusionEngine::EVENT_ON_CLICK, true, scene.GetShaderManager().GetSimpleProgData().theProgram));
+			FusionEngine::Scene::GetScene()->GetEventManager()->FireEvent(FusionEngine::OnClickEvent(FusionEngine::EVENT_ON_CLICK, true, scene.GetShaderManager().GetSimpleProgData().theProgram));
 		//}
 	}
 
@@ -761,7 +756,7 @@ void InitializeScene()
 	////////////////////////////////////////////////////////////////////
 
 
-	testScene.Init();
+	FusionEngine::Scene::GetScene()->Init();
 
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
 	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
@@ -783,27 +778,26 @@ void InitializeScene()
 	sunRender->shaderProgram = scene.GetShaderManager().GetSimpleProgData().theProgram;
 	sunRender->vao = loadedMesh.vao;
 
-	testScene.AddEntity("sun");
+	FusionEngine::Scene::GetScene()->AddEntity("sun");
 	FusionEngine::FunctionalSystem<FusionEngine::NewCelestialBody> *sunFunctional =
-		new FusionEngine::FunctionalSystem<FusionEngine::NewCelestialBody>(testScene.GetEventManager(), testScene.GetEntityManager());
-	testScene.AddSystem(sunFunctional);
-	testScene.AddComponent("sun", sunRender);
+		new FusionEngine::FunctionalSystem<FusionEngine::NewCelestialBody>(FusionEngine::Scene::GetScene()->GetEventManager(), FusionEngine::Scene::GetScene()->GetEntityManager());
+	FusionEngine::Scene::GetScene()->AddSystem(sunFunctional);
+	FusionEngine::Scene::GetScene()->AddComponent("sun", sunRender);
 
 	FusionEngine::Transform *sunTransform = new FusionEngine::Transform();
 	sunTransform->position = glm::vec3(2.0f, 0.0f, 0.0f);
 	sunTransform->rotation = glm::vec3();
 	sunTransform->scale = glm::vec3(0.5f);
-	testScene.AddComponent("sun", sunTransform);
+	FusionEngine::Scene::GetScene()->AddComponent("sun", sunTransform);
 
 	FusionEngine::Functional<FusionEngine::NewCelestialBody> *sunFuncComp = 
 		new FusionEngine::Functional<FusionEngine::NewCelestialBody>();
 	sunFuncComp->UpdateFunction = Update;
-	sunFuncComp->updatedObject = std::unique_ptr<FusionEngine::NewCelestialBody>(new FusionEngine::NewCelestialBody(testScene, 0.5f, 0.0f, 1.0f));
-	AddSatellite(sunFuncComp->updatedObject.get(), &testScene.GetRenderer(), FusionEngine::Render::FE_RENDERER_SIMPLE, scene.GetShaderManager().GetSimpleProgData().theProgram, 0.5f, 2.0f, 3.0f);
-	testScene.AddComponent("sun", sunFuncComp);
+	sunFuncComp->updatedObject = std::unique_ptr<FusionEngine::NewCelestialBody>(new FusionEngine::NewCelestialBody(0.5f, 0.0f, 1.0f));
+	AddSatellite(sunFuncComp->updatedObject.get(), FusionEngine::Render::FE_RENDERER_SIMPLE, scene.GetShaderManager().GetSimpleProgData().theProgram, 0.5f, 2.0f, 3.0f);
+	FusionEngine::Scene::GetScene()->AddComponent("sun", sunFuncComp);
 
-	testScene.GetRenderer().SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("sun"));
-	//testRenderer.SubscribeForRendering(testScene.GetEntityManager(), testScene.GetEntity("sun"));
+	FusionEngine::Scene::GetScene()->GetRenderer().SubscribeForRendering(FusionEngine::Scene::GetScene()->GetEntityManager(), FusionEngine::Scene::GetScene()->GetEntity("sun"));
 }
 
 
@@ -939,8 +933,8 @@ void Display()
 		
 		//if(testScene.HasEntity("sampleSpaceship"))
         {
-			testScene.ProcessSystems();
-			testScene.Render(modelMatrix);
+			FusionEngine::Scene::GetScene()->ProcessSystems();
+			FusionEngine::Scene::GetScene()->Render(modelMatrix);
 			//testRenderer.Render(modelMatrix, testScene.GetEntityManager());
         }
 		

@@ -7,6 +7,7 @@
 
 using namespace FusionEngine;
 
+FusionEngine::Scene* FusionEngine::Scene::sceneInstance = 0;
 
 FusionEngine::Scene::~Scene()
 {
@@ -14,6 +15,15 @@ FusionEngine::Scene::~Scene()
 	components.clear();
 	systems.clear();
 	removedEntitiesIDs.clear();
+}
+
+FusionEngine::Scene* FusionEngine::Scene::GetScene()
+{
+	if (!sceneInstance)
+	{
+		sceneInstance = new Scene;
+	}
+	return sceneInstance;
 }
 
 void FusionEngine::Scene::Init()
@@ -206,4 +216,9 @@ void FusionEngine::Scene::Render(glutil::MatrixStack &modelMatrix) const
 Renderer& FusionEngine::Scene::GetRenderer()
 {
 	return sceneRenderer;
+}
+
+Mouse& FusionEngine::Scene::GetMouse()
+{
+	return sceneMouse;
 }

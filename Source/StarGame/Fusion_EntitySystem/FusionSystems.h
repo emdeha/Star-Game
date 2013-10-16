@@ -42,8 +42,7 @@ namespace FusionEngine
     protected:
 		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
         {
-			ComponentMapper<Functional<ObjectToUpdate>> functionalData = 
-				manager->GetComponentList(entity, CT_FUNCTIONAL_BEHAVIOR);
+			ComponentMapper<Functional<ObjectToUpdate>> functionalData = manager->GetComponentList(entity, CT_FUNCTIONAL_BEHAVIOR);
 
 			functionalData[0]->UpdateFunction(functionalData[0]->updatedObject.get());
         }
@@ -62,7 +61,8 @@ namespace FusionEngine
 		{
 			ComponentMapper<Transform> transformData = manager->GetComponentList(entity, CT_TRANSFORM);
 
-			
+			//Utility::Ray mouseRay = 
+				
 		}
 	};
 

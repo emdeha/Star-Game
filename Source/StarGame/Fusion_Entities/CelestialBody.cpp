@@ -31,7 +31,7 @@ using namespace FusionEngine;
 
 
 NewCelestialBody::NewCelestialBody() :
-	scene(FusionEngine::Scene()), satellites(0), diameter(0.0f),
+	satellites(0), diameter(0.0f),
 	offsetFromSun(0.0f), revolutionTimer()
 {
 	char stringedOffset[15];
@@ -40,13 +40,11 @@ NewCelestialBody::NewCelestialBody() :
 }
 
 NewCelestialBody::NewCelestialBody(
-	FusionEngine::Scene &newScene, 
 	float newDiameter, float newOffsetFromSun, float cycleDuration) :
-	scene(newScene),
 	satellites(0), diameter(newDiameter),
 	offsetFromSun(newOffsetFromSun), revolutionTimer(Framework::Timer::TT_LOOP, cycleDuration) 
 {
-	scene.GetEventManager()->AddListener(this, FusionEngine::EVENT_ON_CLICK);
+	FusionEngine::Scene::GetScene()->GetEventManager()->AddListener(this, FusionEngine::EVENT_ON_CLICK);
 
 	char stringedOffset[15];
 	_snprintf(stringedOffset, 15, "satellite%f", offsetFromSun);
@@ -69,7 +67,7 @@ bool NewCelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 
 			if(data.isLeftButtonDown)
 			{
-				AddSatellite(this, &this->scene.GetRenderer(), Render::FE_RENDERER_LIT, data.shaderProgram, 0.2f, 4.0f, 3.0f);
+				AddSatellite(this, Render::FE_RENDERER_LIT, data.shaderProgram, 0.2f, 4.0f, 3.0f);
 				return true;
 			}
 		}
@@ -80,7 +78,7 @@ bool NewCelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 }
 
 
-bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *renderer,
+bool AddSatellite(NewCelestialBody *celestialBody, 
 				  Render::RendererType rendererType, GLuint shaderProg, 
 				  float newDiameter, float newOffsetFromSun, float cycleDuration)
 {
@@ -89,7 +87,7 @@ bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *rende
 	float satOffset = float(rand()) / float(RAND_MAX) + 2.0f;
 	
 	std::shared_ptr<NewCelestialBody> 
-		newSat(new NewCelestialBody(celestialBody->scene, 0.5f, satOffset, 5.0f));
+		newSat(new NewCelestialBody(0.5f, satOffset, 5.0f));
 	celestialBody->satellites.push_back(newSat);
 
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
@@ -112,16 +110,16 @@ bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *rende
 	satRender->shaderProgram = shaderProg;
 	satRender->vao = loadedMesh.vao;
 
-	celestialBody->scene.AddEntity(newSat->GetID());
-	celestialBody->scene.AddComponent(newSat->GetID(), satRender);
+	FusionEngine::Scene::GetScene()->AddEntity(newSat->GetID());
+	FusionEngine::Scene::GetScene()->AddComponent(newSat->GetID(), satRender);
 
 	FusionEngine::Transform *satTransform = new FusionEngine::Transform();
 	satTransform->position = glm::vec3();
 	satTransform->rotation = glm::vec3();
 	satTransform->scale = glm::vec3(celestialBody->diameter);
-	celestialBody->scene.AddComponent(newSat->GetID(), satTransform);
+	FusionEngine::Scene::GetScene()->AddComponent(newSat->GetID(), satTransform);
 
-	renderer->SubscribeForRendering(celestialBody->scene.GetEntityManager(), celestialBody->scene.GetEntity(newSat->GetID()));
+	FusionEngine::Scene::GetScene()->GetRenderer().SubscribeForRendering(FusionEngine::Scene::GetScene()->GetEntityManager(), FusionEngine::Scene::GetScene()->GetEntity(newSat->GetID()));
 
 	return true;
 }
@@ -129,13 +127,13 @@ bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *rende
 void Update(NewCelestialBody *celestialBody)
 {
 	FusionEngine::ComponentMapper<FusionEngine::Transform> transformData =
-		celestialBody->scene.GetEntityManager()->GetComponentList(celestialBody->scene.GetEntity("sun"), FusionEngine::CT_TRANSFORM);
+		FusionEngine::Scene::GetScene()->GetEntityManager()->GetComponentList(FusionEngine::Scene::GetScene()->GetEntity("sun"), FusionEngine::CT_TRANSFORM);
 
 	for(auto satellite = celestialBody->satellites.begin(); satellite != celestialBody->satellites.end(); ++satellite)
 	{
 		// TODO: Get entity by id
 		FusionEngine::ComponentMapper<FusionEngine::Transform> satTransformData =
-			celestialBody->scene.GetEntityManager()->GetComponentList(celestialBody->scene.GetEntity((*satellite)->GetID()), FusionEngine::CT_TRANSFORM);
+			FusionEngine::Scene::GetScene()->GetEntityManager()->GetComponentList(FusionEngine::Scene::GetScene()->GetEntity((*satellite)->GetID()), FusionEngine::CT_TRANSFORM);
 
 		(*satellite)->revolutionTimer.Update();
 		

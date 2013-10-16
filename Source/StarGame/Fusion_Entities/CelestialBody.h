@@ -42,8 +42,6 @@ namespace FusionEngine
 			EVENT_ON_CLICK,
 		};
 
-		FusionEngine::Scene &scene;
-
 		//std::unique_ptr<NewCelestialBody> parent;
 		std::vector<std::shared_ptr<NewCelestialBody>> satellites;
 		std::string id; // TODO: replace with ints
@@ -52,13 +50,10 @@ namespace FusionEngine
 		float offsetFromSun;
 
 		Framework::Timer revolutionTimer;
-	
-		//EventManager *eventManager;
 
 	public:
 		NewCelestialBody();
-		NewCelestialBody(FusionEngine::Scene &newScene, 
-						 float newDiameter, float newOffsetFromSun, float cycleDuration);
+		NewCelestialBody(float newDiameter, float newOffsetFromSun, float cycleDuration);
 
 		~NewCelestialBody();
 
@@ -68,7 +63,7 @@ namespace FusionEngine
 	};
 }
 
-bool AddSatellite(FusionEngine::NewCelestialBody *celestialBody, FusionEngine::Renderer *renderer,
+bool AddSatellite(FusionEngine::NewCelestialBody *celestialBody, 
 				  FusionEngine::Render::RendererType, GLuint shaderProg, 
 				  float newDiameter, float newOffsetFromSun, float cycleDuration);
 void Update(FusionEngine::NewCelestialBody *celestialBody);

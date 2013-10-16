@@ -25,6 +25,7 @@
 #include "../Fusion_EntitySystem/Component.h"
 #include "../Fusion_EntitySystem/ComponentMapper.h"
 #include "../Fusion_Renderer/Renderer.h"
+#include "../Mouse/Mouse.h"
 #include <vector>
 #include <memory>
 
@@ -56,13 +57,21 @@ namespace FusionEngine
 		std::vector<unsigned int> removedEntitiesIDs;
 
 		Renderer sceneRenderer;
+		Mouse sceneMouse;
 
-	public:
-		Scene() {}
+	private:
+		static Scene* sceneInstance;
+
+		Scene() {};
+		Scene(const Scene&);
+		Scene& operator=(const Scene&);
 		~Scene();
 
-		void Init();
+	public:
+		static Scene* GetScene();
 
+
+		void Init();
 
 		/*
 		Checks if there is AT LEAST ONE entity with this tag.
@@ -98,7 +107,10 @@ namespace FusionEngine
 		void ProcessSystems();
 		void Render(glutil::MatrixStack &modelMatrix) const;
 
+	public:
+
 		Renderer& GetRenderer();
+		Mouse& GetMouse();
 
 	public:
 		//virtual bool HandleEvent(const IEventData &eventData);

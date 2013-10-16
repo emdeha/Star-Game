@@ -46,6 +46,7 @@ namespace FusionEngine
 
 		//std::unique_ptr<NewCelestialBody> parent;
 		std::vector<std::shared_ptr<NewCelestialBody>> satellites;
+		std::string id; // TODO: replace with ints
 
 		float diameter;
 		float offsetFromSun;
@@ -60,6 +61,8 @@ namespace FusionEngine
 						 float newDiameter, float newOffsetFromSun, float cycleDuration);
 
 		~NewCelestialBody();
+
+		std::string GetID() { return id; }
 
 		virtual bool HandleEvent(const IEventData &eventData);
 	};

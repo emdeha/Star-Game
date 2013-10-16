@@ -97,7 +97,7 @@ void HandleMouse()
         scene.OnEvent(leftClickEvent);
 		//if(scene.IsLayoutOn(LAYOUT_IN_GAME))
 		//{
-			//testScene.GetEventManager()->FireEvent(FusionEngine::OnClickEvent(FusionEngine::EVENT_ON_CLICK, true, scene.GetShaderManager().GetSimpleProgData().theProgram));
+			testScene.GetEventManager()->FireEvent(FusionEngine::OnClickEvent(FusionEngine::EVENT_ON_CLICK, true, scene.GetShaderManager().GetSimpleProgData().theProgram));
 		//}
 	}
 

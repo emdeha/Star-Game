@@ -44,7 +44,7 @@ NewCelestialBody::NewCelestialBody(
 	satellites(0), diameter(newDiameter),
 	offsetFromSun(newOffsetFromSun), revolutionTimer(Framework::Timer::TT_LOOP, cycleDuration) 
 {
-	FusionEngine::Scene::GetScene()->GetEventManager()->AddListener(this, FusionEngine::EVENT_ON_CLICK);
+	FusionEngine::Scene::GetScene().GetEventManager()->AddListener(this, FusionEngine::EVENT_ON_CLICK);
 
 	char stringedOffset[15];
 	_snprintf(stringedOffset, 15, "satellite%f", offsetFromSun);
@@ -110,16 +110,16 @@ bool AddSatellite(NewCelestialBody *celestialBody,
 	satRender->shaderProgram = shaderProg;
 	satRender->vao = loadedMesh.vao;
 
-	FusionEngine::Scene::GetScene()->AddEntity(newSat->GetID());
-	FusionEngine::Scene::GetScene()->AddComponent(newSat->GetID(), satRender);
+	FusionEngine::Scene::GetScene().AddEntity(newSat->GetID());
+	FusionEngine::Scene::GetScene().AddComponent(newSat->GetID(), satRender);
 
 	FusionEngine::Transform *satTransform = new FusionEngine::Transform();
 	satTransform->position = glm::vec3();
 	satTransform->rotation = glm::vec3();
 	satTransform->scale = glm::vec3(celestialBody->diameter);
-	FusionEngine::Scene::GetScene()->AddComponent(newSat->GetID(), satTransform);
+	FusionEngine::Scene::GetScene().AddComponent(newSat->GetID(), satTransform);
 
-	FusionEngine::Scene::GetScene()->GetRenderer().SubscribeForRendering(FusionEngine::Scene::GetScene()->GetEntityManager(), FusionEngine::Scene::GetScene()->GetEntity(newSat->GetID()));
+	FusionEngine::Scene::GetScene().GetRenderer().SubscribeForRendering(FusionEngine::Scene::GetScene().GetEntityManager(), FusionEngine::Scene::GetScene().GetEntity(newSat->GetID()));
 
 	return true;
 }
@@ -127,13 +127,13 @@ bool AddSatellite(NewCelestialBody *celestialBody,
 void Update(NewCelestialBody *celestialBody)
 {
 	FusionEngine::ComponentMapper<FusionEngine::Transform> transformData =
-		FusionEngine::Scene::GetScene()->GetEntityManager()->GetComponentList(FusionEngine::Scene::GetScene()->GetEntity("sun"), FusionEngine::CT_TRANSFORM);
+		FusionEngine::Scene::GetScene().GetEntityManager()->GetComponentList(FusionEngine::Scene::GetScene().GetEntity("sun"), FusionEngine::CT_TRANSFORM);
 
 	for(auto satellite = celestialBody->satellites.begin(); satellite != celestialBody->satellites.end(); ++satellite)
 	{
 		// TODO: Get entity by id
 		FusionEngine::ComponentMapper<FusionEngine::Transform> satTransformData =
-			FusionEngine::Scene::GetScene()->GetEntityManager()->GetComponentList(FusionEngine::Scene::GetScene()->GetEntity((*satellite)->GetID()), FusionEngine::CT_TRANSFORM);
+			FusionEngine::Scene::GetScene().GetEntityManager()->GetComponentList(FusionEngine::Scene::GetScene().GetEntity((*satellite)->GetID()), FusionEngine::CT_TRANSFORM);
 
 		(*satellite)->revolutionTimer.Update();
 		

@@ -41,7 +41,31 @@ struct EntityProperties
 
 namespace FusionEngine
 {
-	class Scene// : public IEventListener
+	struct DisplayData
+	{
+		float gamma;
+
+		float zNear;
+		float zFar;
+
+		glm::mat4 projectionMatrix;
+		glm::mat4 modelMatrix;
+
+		int windowWidth;
+		int windowHeight;
+
+		glm::ivec2 mousePosition;
+
+		DisplayData()
+		{
+			gamma = 2.2f;
+
+			zNear = 1.0f;
+			zFar = 1000.0f;
+		}
+	};
+
+	class Scene
 	{
 	private:
 		typedef std::vector<std::pair<EntityProperties, std::shared_ptr<Entity>>> EntitiesMap;
@@ -58,17 +82,16 @@ namespace FusionEngine
 
 		Renderer sceneRenderer;
 		Mouse sceneMouse;
+		DisplayData sceneDisplayData;
 
 	private:
-		static Scene* sceneInstance;
-
 		Scene() {};
 		Scene(const Scene&);
 		Scene& operator=(const Scene&);
 		~Scene();
 
 	public:
-		static Scene* GetScene();
+		static Scene& GetScene();
 
 
 		void Init();
@@ -111,6 +134,7 @@ namespace FusionEngine
 
 		Renderer& GetRenderer();
 		Mouse& GetMouse();
+		DisplayData& GetDisplayData();
 
 	public:
 		//virtual bool HandleEvent(const IEventData &eventData);

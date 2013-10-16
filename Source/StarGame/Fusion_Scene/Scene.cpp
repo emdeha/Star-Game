@@ -7,8 +7,6 @@
 
 using namespace FusionEngine;
 
-FusionEngine::Scene* FusionEngine::Scene::sceneInstance = 0;
-
 FusionEngine::Scene::~Scene()
 {
 	entities.clear();
@@ -17,12 +15,9 @@ FusionEngine::Scene::~Scene()
 	removedEntitiesIDs.clear();
 }
 
-FusionEngine::Scene* FusionEngine::Scene::GetScene()
+FusionEngine::Scene& FusionEngine::Scene::GetScene()
 {
-	if (!sceneInstance)
-	{
-		sceneInstance = new Scene;
-	}
+	static Scene sceneInstance;
 	return sceneInstance;
 }
 
@@ -39,14 +34,13 @@ void FusionEngine::Scene::Init()
 
 void FusionEngine::Scene::AddEntity(const std::string &entityTag)
 {
-	std::shared_ptr<Entity> newEntity = 
-		std::shared_ptr<Entity>(entityManager->CreateEntity());
+	std::shared_ptr<Entity> newEntity = std::shared_ptr<Entity>(entityManager->CreateEntity());
 	EntityProperties newProperties;
 	newProperties.entityName = entityTag;
 	newProperties.isActive = true;
-	entities.push_back(std::pair<EntityProperties, std::shared_ptr<Entity>>
-							(newProperties, newEntity));
+	entities.push_back(std::pair<EntityProperties, std::shared_ptr<Entity>>(newProperties, newEntity));
 }
+
 void FusionEngine::Scene::AddSystem(EntityProcessingSystem *system)
 {
 	systems.push_back(std::unique_ptr<EntityProcessingSystem>(system));
@@ -61,11 +55,11 @@ void FusionEngine::Scene::AddComponent(const std::string &entityTag, Component *
 
 	components.push_back(std::unique_ptr<Component>(component));
 	Entity *foundEntity = entities[0].second.get();
-	for(EntitiesMap::iterator iter = entities.begin(); iter != entities.end(); ++iter)
+	for(EntitiesMap::iterator entity = entities.begin(); entity != entities.end(); ++entity)
 	{
-		if(iter->first.entityName.compare(entityTag) == 0)
+		if(entity->first.entityName.compare(entityTag) == 0)
 		{
-			foundEntity = iter->second.get();
+			foundEntity = entity->second.get();
 			isFound = true;
 		}
 	}
@@ -82,11 +76,11 @@ bool FusionEngine::Scene::HasEntity(const std::string &entityTag) const
 	assert(!entities.empty());
 #endif
 
-	for(EntitiesMap::const_iterator iter = entities.begin(); iter != entities.end(); ++iter)
+	for(EntitiesMap::const_iterator entity = entities.begin(); entity != entities.end(); ++entity)
 	{
-		if(iter->first.isActive)
+		if(entity->first.isActive)
 		{
-			if(iter->first.entityName.compare(entityTag) == 0)
+			if(entity->first.entityName.compare(entityTag) == 0)
 			{
 				return true;
 			}
@@ -102,15 +96,14 @@ bool FusionEngine::Scene::RemoveEntityFirst(const std::string &entityTag)
 	assert(entities.empty() == false);
 #endif
 
-	EntitiesMap::iterator iter = entities.begin();
-	for(iter; iter != entities.end(); ++iter)
+	for(EntitiesMap::iterator entity = entities.begin(); entity != entities.end(); ++entity)
 	{
-		if(iter->first.isActive)
+		if(entity->first.isActive)
 		{
-			if(iter->first.entityName.compare(entityTag) == 0)
+			if(entity->first.entityName.compare(entityTag) == 0)
 			{
-				entityManager->DestroyEntity(iter->second.get());		
-				iter->first.isActive = false;
+				entityManager->DestroyEntity(entity->second.get());		
+				entity->first.isActive = false;
 				return true;
 			}	
 		}
@@ -125,15 +118,14 @@ bool FusionEngine::Scene::RemoveEntityLast(const std::string &entityTag)
 	assert(entities.empty() == false);
 #endif
 
-	EntitiesMap::iterator iter = entities.end() - 1;
-	for(iter; iter >= entities.begin(); --iter)
+	for(EntitiesMap::reverse_iterator entity = entities.rbegin(); entity <= entities.rend(); --entity)
 	{
-		if(iter->first.isActive)
+		if(entity->first.isActive)
 		{
-			if(iter->first.entityName.compare(entityTag) == 0)
+			if(entity->first.entityName.compare(entityTag) == 0)
 			{
-				entityManager->DestroyEntity(iter->second.get());
-				iter->first.isActive = false;
+				entityManager->DestroyEntity(entity->second.get());
+				entity->first.isActive = false;
 				return true;
 			}
 		}
@@ -151,13 +143,13 @@ Entity *FusionEngine::Scene::GetEntity(const std::string &entityTag) const
 	bool isFound = false;
 	
 	Entity *foundEntity = entities[0].second.get();
-	for(EntitiesMap::const_iterator iter = entities.begin(); iter != entities.end(); ++iter)
+	for(EntitiesMap::const_iterator entity = entities.begin(); entity != entities.end(); ++entity)
 	{
-		if(iter->first.isActive)
+		if(entity->first.isActive)
 		{		
-			if(iter->first.entityName.compare(entityTag) == 0)
+			if(entity->first.entityName.compare(entityTag) == 0)
 			{
-				foundEntity = iter->second.get();			
+				foundEntity = entity->second.get();			
 				isFound = true;
 			}
 		}
@@ -186,11 +178,10 @@ EventManager *FusionEngine::Scene::GetEventManager() const
 
 bool FusionEngine::Scene::CheckIfRemoved(unsigned int entityId) const
 {
-	for(std::vector<unsigned int>::const_iterator iter = removedEntitiesIDs.begin(); 
-		iter != removedEntitiesIDs.end(); 
-		++iter)
+	std::vector<unsigned int>::const_iterator id = removedEntitiesIDs.begin();
+	for ( ; id != removedEntitiesIDs.end(); ++id)
 	{
-		if((*iter) == entityId)
+		if((*id) == entityId)
 		{
 			return true;
 		}
@@ -202,9 +193,9 @@ bool FusionEngine::Scene::CheckIfRemoved(unsigned int entityId) const
 
 void FusionEngine::Scene::ProcessSystems()
 {
-	for(SystemsVector::iterator iter = systems.begin(); iter != systems.end(); ++iter)
+	for(SystemsVector::iterator system = systems.begin(); system != systems.end(); ++system)
 	{
-		(*iter)->Process();
+		(*system)->Process();
 	}
 }
 
@@ -221,4 +212,9 @@ Renderer& FusionEngine::Scene::GetRenderer()
 Mouse& FusionEngine::Scene::GetMouse()
 {
 	return sceneMouse;
+}
+
+FusionEngine::DisplayData& FusionEngine::Scene::GetDisplayData()
+{
+	return sceneDisplayData;
 }

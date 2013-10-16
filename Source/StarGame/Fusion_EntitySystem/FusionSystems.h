@@ -29,6 +29,7 @@
 #include "../Fusion_EntitySystem/Component.h"
 #include "../Fusion_EntitySystem/ComponentMapper.h"
 #include "../Fusion_EntitySystem/FusionComponents.h"
+//#include "../Fusion_Scene/Scene.h"
 
 
 #define PI 3.14159f
@@ -60,9 +61,20 @@ namespace FusionEngine
 		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
 		{
 			ComponentMapper<Transform> transformData = manager->GetComponentList(entity, CT_TRANSFORM);
+			
+			/*
+			FusionEngine::DisplayData displayData = FusionEngine::Scene::GetScene().GetDisplayData();
 
-			//Utility::Ray mouseRay = 
+			Utility::Ray mouseRay = 
+				FusionEngine::Scene::GetScene().GetMouse().GetPickRay(displayData.projectionMatrix, displayData.modelMatrix,
+																	  glm::vec4(0.0f), 
+																	  displayData.windowWidth, displayData.windowHeight);
 				
+			if (Utility::Intersections::RayIntersectsSphere(mouseRay, transformData[0]->position, transformData[0]->scale.x))
+			{
+				FusionEngine::Scene::GetScene().GetEventManager()->FireEvent(FusionEngine::OnClickEvent(FusionEngine::EVENT_ON_CLICK, true, scene.GetShaderManager().GetSimpleProgData().theProgram));
+			}
+			*/
 		}
 	};
 

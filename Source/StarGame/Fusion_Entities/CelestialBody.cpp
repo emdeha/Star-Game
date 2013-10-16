@@ -85,14 +85,6 @@ bool AddSatellite(NewCelestialBody *celestialBody, FusionEngine::Renderer *rende
 				  float newDiameter, float newOffsetFromSun, float cycleDuration)
 {
 	srand(time(0));
-	//std::ostringstream satName;
-	//satName<<"satellite"<<rand() % 9999;
-	//std::printf(satName.str().c_str());
-	//std::string satName = "satellite";
-	//char numInStr[7] = "";
-	//itoa(rand() % 9999, numInStr, 10);
-	//satName.append(numInStr);
-	// Load mesh
 
 	float satOffset = float(rand()) / float(RAND_MAX) + 2.0f;
 	

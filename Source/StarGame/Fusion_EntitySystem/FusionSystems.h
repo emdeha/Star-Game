@@ -55,6 +55,18 @@ namespace FusionEngine
     };
 
 
+	class CollisionSystem : public EntityProcessingSystem
+	{
+	protected:
+		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
+		{
+			ComponentMapper<Transform> transformData = manager->GetComponentList(entity, CT_TRANSFORM);
+
+			
+		}
+	};
+
+
 	/////////////////////
 	///  Old Systems  ///
 	/////////////////////

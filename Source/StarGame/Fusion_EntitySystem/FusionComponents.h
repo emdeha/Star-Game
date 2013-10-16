@@ -115,14 +115,11 @@ namespace FusionEngine
     };
 
 
-	template<class ParentObject>
-	class Child : public Component
+	class Interactable : public Component
 	{
 	public:
-		std::unique_ptr<ParentObject> parent;
-
-		Child() : Component(CT_CHILD) {}
-		virtual ~Child() {}
+		Interactable() : Component(CT_INTERACTABLE) {}
+		virtual ~Interactable() {}
 	};
 
 

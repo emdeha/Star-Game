@@ -114,14 +114,14 @@ namespace FusionEngine
         virtual ~Render() {}
     };
 
-
-	class Interactable : public Component
+	
+	class Collidable : public Component
 	{
 	public:
-		Interactable() : Component(CT_INTERACTABLE) {}
-		virtual ~Interactable() {}
+		Collidable() : Component(CT_COLLISION) {}
+		virtual ~Collidable() {}
 	};
-
+	
 
 	template<class ObjectToUpdate>
 	class Functional : public Component

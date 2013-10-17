@@ -25,9 +25,9 @@
 #include "../framework/Timer.h"
 #include "../glsdk/glload/gl_3_3.h"
 
-#include "../Fusion_Scene/Scene.h"
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Fusion_EntitySystem/Event.h"
+#include "../Fusion_EntitySystem/FusionComponents.h"
 
 
 namespace FusionEngine

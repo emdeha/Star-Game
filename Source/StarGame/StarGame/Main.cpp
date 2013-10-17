@@ -783,6 +783,9 @@ void InitializeScene()
 	FusionEngine::FunctionalSystem<FusionEngine::NewCelestialBody> *sunFunctional =
 		new FusionEngine::FunctionalSystem<FusionEngine::NewCelestialBody>(&FusionEngine::World::GetWorld().GetEventManager(), FusionEngine::Scene::GetScene().GetEntityManager());
 	FusionEngine::Scene::GetScene().AddSystem(sunFunctional);
+	FusionEngine::CollisionSystem *sunClickable = 
+		new FusionEngine::CollisionSystem(&FusionEngine::World::GetWorld().GetEventManager(), FusionEngine::Scene::GetScene().GetEntityManager());
+	FusionEngine::Scene::GetScene().AddSystem(sunClickable);
 	FusionEngine::Scene::GetScene().AddComponent("sun", sunRender);
 
 	FusionEngine::Transform *sunTransform = new FusionEngine::Transform();
@@ -797,6 +800,9 @@ void InitializeScene()
 	sunFuncComp->updatedObject = std::unique_ptr<FusionEngine::NewCelestialBody>(new FusionEngine::NewCelestialBody(0.5f, 0.0f, 1.0f));
 	AddSatellite(sunFuncComp->updatedObject.get(), FusionEngine::Render::FE_RENDERER_SIMPLE, scene.GetShaderManager().GetSimpleProgData().theProgram, 0.5f, 2.0f, 3.0f);
 	FusionEngine::Scene::GetScene().AddComponent("sun", sunFuncComp);
+	
+	FusionEngine::Collidable *sunCollidable = new FusionEngine::Collidable();
+	FusionEngine::Scene::GetScene().AddComponent("sun", sunCollidable);
 
 	FusionEngine::World::GetWorld().GetRenderer().SubscribeForRendering(FusionEngine::Scene::GetScene().GetEntity("sun"));
 }

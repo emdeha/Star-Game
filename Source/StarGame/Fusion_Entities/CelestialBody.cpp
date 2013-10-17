@@ -68,7 +68,8 @@ bool NewCelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 
 			if(data.isLeftButtonDown)
 			{
-				AddSatellite(this, Render::FE_RENDERER_LIT, data.shaderProgram, 0.2f, 4.0f, 3.0f);
+				//AddSatellite(this, Render::FE_RENDERER_LIT, data.shaderProgram, 0.2f, 4.0f, 3.0f);
+				std::printf("\n\n\n CLICKED ON THE SUN \n\n\n");
 				return true;
 			}
 		}

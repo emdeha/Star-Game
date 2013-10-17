@@ -24,9 +24,6 @@
 #include "../glsdk/glutil/glutil.h"
 #include <vector>
 
-#include "../Fusion_EntitySystem/Component.h"
-#include "../Fusion_EntitySystem/ComponentMapper.h"
-#include "../Fusion_EntitySystem/FusionSystems.h"
 #include "../Fusion_EntitySystem/Entity.h"
 #include "../Fusion_AssetLoader/AssetLoader.h"
 

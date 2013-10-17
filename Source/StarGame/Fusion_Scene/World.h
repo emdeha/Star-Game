@@ -15,6 +15,10 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
+#ifndef __WORLD_H
+#define __WORLD_H
+
+
 #include "../Fusion_EntitySystem/EventManager.h"
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Mouse/Mouse.h" // TODO: Replace with Fusion_Mouse
@@ -95,3 +99,5 @@ namespace FusionEngine
 		return displayData;
 	}
 }
+
+#endif

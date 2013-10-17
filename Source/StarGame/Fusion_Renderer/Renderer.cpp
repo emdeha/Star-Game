@@ -19,6 +19,8 @@
 #include "Renderer.h"
 
 #include "../Fusion_Scene/Scene.h"
+#include "../Fusion_EntitySystem/FusionComponents.h"
+#include "../Fusion_EntitySystem/ComponentMapper.h"
 
 
 using namespace FusionEngine;

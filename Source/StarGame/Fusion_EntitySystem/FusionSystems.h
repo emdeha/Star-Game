@@ -24,12 +24,14 @@
 #include "../glsdk/glutil/glutil.h"
 #include "../glsdk/glload/gll.hpp"
 #include <algorithm>
+
 #include "../Fusion_EntitySystem/EntityManager.h"
+#include "../Fusion_EntitySystem/EntityEvents.h"
 #include "../Fusion_EntitySystem/EntityProcessingSystem.h"
 #include "../Fusion_EntitySystem/Component.h"
 #include "../Fusion_EntitySystem/ComponentMapper.h"
 #include "../Fusion_EntitySystem/FusionComponents.h"
-//#include "../Fusion_Scene/Scene.h"
+#include "../Fusion_Scene/World.h"
 
 
 #define PI 3.14159f
@@ -61,21 +63,24 @@ namespace FusionEngine
 		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
 		{
 			ComponentMapper<Transform> transformData = manager->GetComponentList(entity, CT_TRANSFORM);
-			
-			/*
-			FusionEngine::DisplayData displayData = FusionEngine::Scene::GetScene().GetDisplayData();
+						
+			FusionEngine::DisplayData displayData = World::GetWorld().GetDisplayData();
 
 			Utility::Ray mouseRay = 
-				FusionEngine::Scene::GetScene().GetMouse().GetPickRay(displayData.projectionMatrix, displayData.modelMatrix,
-																	  glm::vec4(0.0f), 
-																	  displayData.windowWidth, displayData.windowHeight);
+				World::GetWorld().GetMouse().GetPickRay(displayData.projectionMatrix, displayData.modelMatrix,
+														glm::vec4(0.0f), 
+														displayData.windowWidth, displayData.windowHeight);
 				
 			if (Utility::Intersections::RayIntersectsSphere(mouseRay, transformData[0]->position, transformData[0]->scale.x))
 			{
-				FusionEngine::Scene::GetScene().GetEventManager()->FireEvent(FusionEngine::OnClickEvent(FusionEngine::EVENT_ON_CLICK, true, scene.GetShaderManager().GetSimpleProgData().theProgram));
+				World::GetWorld().GetEventManager().FireEvent(FusionEngine::OnClickEvent(FusionEngine::EVENT_ON_CLICK, true, 0));
 			}
-			*/
 		}
+
+	public:
+		CollisionSystem(EventManager *eventManager, EntityManager *entityManager)
+			: EntityProcessingSystem(eventManager, entityManager, CT_COLLISION_BIT) {}
+		virtual ~CollisionSystem() {}
 	};
 
 

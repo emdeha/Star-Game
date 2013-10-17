@@ -62,18 +62,22 @@ namespace FusionEngine
 	protected:
 		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
 		{
-			ComponentMapper<Transform> transformData = manager->GetComponentList(entity, CT_TRANSFORM);
-						
-			FusionEngine::DisplayData displayData = World::GetWorld().GetDisplayData();
-
-			Utility::Ray mouseRay = 
-				World::GetWorld().GetMouse().GetPickRay(displayData.projectionMatrix, displayData.modelMatrix,
-														glm::vec4(0.0f), 
-														displayData.windowWidth, displayData.windowHeight);
-				
-			if (Utility::Intersections::RayIntersectsSphere(mouseRay, transformData[0]->position, transformData[0]->scale.x))
+			ComponentMapper<Collidable> collidableData = manager->GetComponentList(entity, CT_COLLISION);
+			if (collidableData[0]->isForCheck)
 			{
-				World::GetWorld().GetEventManager().FireEvent(FusionEngine::OnClickEvent(FusionEngine::EVENT_ON_CLICK, true, 0));
+				ComponentMapper<Transform> transformData = manager->GetComponentList(entity, CT_TRANSFORM);
+						
+				FusionEngine::DisplayData displayData = World::GetWorld().GetDisplayData();
+
+				Utility::Ray mouseRay = 
+					World::GetWorld().GetMouse().GetPickRay(displayData.projectionMatrix, displayData.modelMatrix,
+															glm::vec4(World::GetWorld().GetCamera().ResolveCamPosition(), 1.0f), 
+															displayData.windowWidth, displayData.windowHeight);
+				
+				if (Utility::Intersections::RayIntersectsSphere(mouseRay, transformData[0]->position, transformData[0]->scale.x))
+				{
+					World::GetWorld().GetEventManager().FireEvent(FusionEngine::OnClickEvent(FusionEngine::EVENT_ON_CLICK, true, 0));
+				}
 			}
 		}
 

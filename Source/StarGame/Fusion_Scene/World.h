@@ -22,6 +22,7 @@
 #include "../Fusion_EntitySystem/EventManager.h"
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Mouse/Mouse.h" // TODO: Replace with Fusion_Mouse
+#include "../Camera/TopDownCamera.h" // TODO: Replace with Fusion_Camera
 
 #include <memory>
 
@@ -58,6 +59,7 @@ namespace FusionEngine
 		Renderer renderer;
 		Mouse mouse;
 		DisplayData displayData;
+		TopDownCamera camera;
 
 	private:
 		World() {}
@@ -72,6 +74,7 @@ namespace FusionEngine
 		Renderer& GetRenderer();
 		Mouse& GetMouse();
 		DisplayData& GetDisplayData();
+		TopDownCamera& GetCamera();
 
 		void Render(glutil::MatrixStack &modelMatrix) const;
 	};
@@ -97,6 +100,10 @@ namespace FusionEngine
 	inline DisplayData& World::GetDisplayData()
 	{
 		return displayData;
+	}
+	inline TopDownCamera& World::GetCamera()
+	{
+		return camera;
 	}
 }
 

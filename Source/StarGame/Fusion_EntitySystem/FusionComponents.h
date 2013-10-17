@@ -118,6 +118,8 @@ namespace FusionEngine
 	class Collidable : public Component
 	{
 	public:
+		bool isForCheck;
+
 		Collidable() : Component(CT_COLLISION) {}
 		virtual ~Collidable() {}
 	};

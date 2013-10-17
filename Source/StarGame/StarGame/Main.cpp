@@ -79,6 +79,18 @@ void HandleMouse()
 
     Event mouseActive = StockEvents::EventOnHover("all", scene.GetMouse().GetCurrentPosition());
     scene.OnEvent(mouseActive);
+	
+	unsigned int entityIndex = FusionEngine::Scene::GetScene().GetEntity("sun")->GetIndex();
+	FusionEngine::ComponentMapper<FusionEngine::Collidable> collidableData = 
+		FusionEngine::Scene::GetScene().GetEntityManager()->GetComponentList(entityIndex, FusionEngine::CT_COLLISION);
+	if (FusionEngine::World::GetWorld().GetMouse().IsLeftButtonDown())
+	{
+		collidableData[0]->isForCheck = true;
+	}
+	else
+	{
+		collidableData[0]->isForCheck = false;
+	}
 
     if(scene.GetMouse().IsRightButtonDown())
     {
@@ -378,6 +390,8 @@ void HandleMouse()
     displayData.mousePosition = scene.GetMouse().GetCurrentPosition();
 
 
+	FusionEngine::World::GetWorld().GetMouse().ReleaseLeftButton();
+	FusionEngine::World::GetWorld().GetMouse().ReleaseRightButton();
     scene.GetMouse().ReleaseRightButton();
     scene.GetMouse().ReleaseLeftButton();
 }
@@ -385,28 +399,34 @@ void HandleMouseButtons(int button, int state, int x, int y)
 {
     if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
     {
+		FusionEngine::World::GetWorld().GetMouse().PressLeftButton();
         scene.GetMouse().PressLeftButton();
     }
     if(button == GLUT_LEFT_BUTTON && state == GLUT_UP)
     {
+		FusionEngine::World::GetWorld().GetMouse().ReleaseLeftButton();
         scene.GetMouse().ReleaseLeftButton();
     }
 
     if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
     {
+		FusionEngine::World::GetWorld().GetMouse().PressRightButton();
         scene.GetMouse().PressRightButton();
     }
     if(button == GLUT_RIGHT_BUTTON && state == GLUT_UP)
     {
+		FusionEngine::World::GetWorld().GetMouse().ReleaseRightButton();
         scene.GetMouse().ReleaseRightButton();
     }
 }
 void HandleActiveMovement(int x, int y)
 {
+	FusionEngine::World::GetWorld().GetMouse().SetCurrentPosition(glm::ivec2(x, y));
     scene.GetMouse().SetCurrentPosition(glm::ivec2(x, y));
 }
 void HandlePassiveMovement(int x, int y)
 {
+	FusionEngine::World::GetWorld().GetMouse().SetCurrentPosition(glm::ivec2(x, y));
     scene.GetMouse().SetCurrentPosition(glm::ivec2(x, y));
 }
 
@@ -707,6 +727,7 @@ void InitializeScene()
 
     scene.SetMouse(userMouse);
     scene.SetTopDownCamera(userCamera);
+	FusionEngine::World::GetWorld().GetCamera() = userCamera;
 
     scene.AddSun(mainSun);
     scene.AddSunLight(mainSunLight);
@@ -802,6 +823,7 @@ void InitializeScene()
 	FusionEngine::Scene::GetScene().AddComponent("sun", sunFuncComp);
 	
 	FusionEngine::Collidable *sunCollidable = new FusionEngine::Collidable();
+	sunCollidable->isForCheck = false;
 	FusionEngine::Scene::GetScene().AddComponent("sun", sunCollidable);
 
 	FusionEngine::World::GetWorld().GetRenderer().SubscribeForRendering(FusionEngine::Scene::GetScene().GetEntity("sun"));
@@ -917,6 +939,7 @@ void Display()
 
         modelMatrix.SetMatrix(scene.GetTopDownCamera().CalcMatrix());
         displayData.modelMatrix = modelMatrix.Top();
+		FusionEngine::World::GetWorld().GetDisplayData().modelMatrix = modelMatrix.Top();
 
         int loops = 0;
         while(GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
@@ -976,7 +999,8 @@ void Reshape(int width, int height)
     projMatrix.Perspective(45.0f, aspectRatio, displayData.zNear, displayData.zFar);
 
     displayData.projectionMatrix = projMatrix.Top();
-    
+    FusionEngine::World::GetWorld().GetDisplayData().projectionMatrix = projMatrix.Top();
+
     glUseProgram(scene.GetShaderManager().GetBillboardProgData().theProgram);
     glUniformMatrix4fv(scene.GetShaderManager().GetBillboardProgData().cameraToClipMatrixUnif, 
                        1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
@@ -1004,6 +1028,8 @@ void Reshape(int width, int height)
 
     displayData.windowHeight = height;
     displayData.windowWidth = width;
+	FusionEngine::World::GetWorld().GetDisplayData().windowHeight = height;
+	FusionEngine::World::GetWorld().GetDisplayData().windowWidth = width;
 
     glViewport(0, 0, (GLsizei) width, (GLsizei) height);
     glutPostRedisplay();

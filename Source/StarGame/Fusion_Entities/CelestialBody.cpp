@@ -23,6 +23,7 @@
 #include "../Fusion_EntitySystem/FusionSystems.h"
 #include "../Fusion_EntitySystem/EntityEvents.h"
 #include "../Fusion_Scene/Scene.h"
+#include "../Fusion_Scene/World.h"
 
 #include <time.h>
 
@@ -44,7 +45,7 @@ NewCelestialBody::NewCelestialBody(
 	satellites(0), diameter(newDiameter),
 	offsetFromSun(newOffsetFromSun), revolutionTimer(Framework::Timer::TT_LOOP, cycleDuration) 
 {
-	FusionEngine::Scene::GetScene().GetEventManager()->AddListener(this, FusionEngine::EVENT_ON_CLICK);
+	World::GetWorld().GetEventManager().AddListener(this, FusionEngine::EVENT_ON_CLICK);
 
 	char stringedOffset[15];
 	_snprintf(stringedOffset, 15, "satellite%f", offsetFromSun);
@@ -119,7 +120,7 @@ bool AddSatellite(NewCelestialBody *celestialBody,
 	satTransform->scale = glm::vec3(celestialBody->diameter);
 	FusionEngine::Scene::GetScene().AddComponent(newSat->GetID(), satTransform);
 
-	FusionEngine::Scene::GetScene().GetRenderer().SubscribeForRendering(FusionEngine::Scene::GetScene().GetEntityManager(), FusionEngine::Scene::GetScene().GetEntity(newSat->GetID()));
+	World::GetWorld().GetRenderer().SubscribeForRendering(FusionEngine::Scene::GetScene().GetEntity(newSat->GetID()));
 
 	return true;
 }

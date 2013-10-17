@@ -41,10 +41,10 @@ namespace FusionEngine
 	public:
         Renderer() {}
 
-		void SubscribeForRendering(EntityManager *manager, Entity *entity);
+		void SubscribeForRendering(Entity *entity);
 		void UnsubscribeForRendering(Entity *entity);
 
-		void Render(glutil::MatrixStack &modelMatrix, EntityManager *manager) const;
+		void Render(glutil::MatrixStack &modelMatrix) const;
 	};
 }
 

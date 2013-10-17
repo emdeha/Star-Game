@@ -18,6 +18,8 @@
 #include "stdafx.h"
 #include "Renderer.h"
 
+#include "../Fusion_Scene/Scene.h"
+
 
 using namespace FusionEngine;
 
@@ -43,9 +45,10 @@ static void GenerateUniformBuffers(int &materialBlockSize, glm::vec4 diffuseColo
 }
 
 
-void Renderer::SubscribeForRendering(EntityManager *manager, Entity *entity)
+void Renderer::SubscribeForRendering(Entity *entity)
 {
-	ComponentMapper<FusionEngine::Render> renderData = manager->GetComponentList(entity, CT_RENDER);
+	ComponentMapper<FusionEngine::Render> renderData = 
+		Scene::GetScene().GetEntityManager()->GetComponentList(entity, CT_RENDER);
 
 	glGenVertexArrays(1, &renderData[0]->vao);
 	glBindVertexArray(renderData[0]->vao);
@@ -87,13 +90,14 @@ void Renderer::UnsubscribeForRendering(Entity *entity)
 }
 
 
-void Renderer::Render(glutil::MatrixStack &modelMatrix, EntityManager *manager) const
+void Renderer::Render(glutil::MatrixStack &modelMatrix) const
 {
 	glFrontFace(GL_CCW);
 
 	for(auto subscribedMesh = subscribedMeshes.begin(); subscribedMesh != subscribedMeshes.end(); ++subscribedMesh)
     {
-		ComponentMapper<FusionEngine::Render> renderData = manager->GetComponentList(subscribedMesh->first, CT_RENDER);
+		ComponentMapper<FusionEngine::Render> renderData = 
+			Scene::GetScene().GetEntityManager()->GetComponentList(subscribedMesh->first, CT_RENDER);
 
 		glBindVertexArray(renderData[0]->vao);  //--> vaos are not needed
 		
@@ -110,7 +114,8 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix, EntityManager *manager) 
 		
             glutil::PushStack push(modelMatrix);
 			
-			ComponentMapper<Transform> transformData = manager->GetComponentList(subscribedMesh->first, CT_TRANSFORM);
+			ComponentMapper<Transform> transformData = 
+				Scene::GetScene().GetEntityManager()->GetComponentList(subscribedMesh->first, CT_TRANSFORM);
 			modelMatrix.Translate(transformData[0]->position);
 			modelMatrix.RotateX(transformData[0]->rotation.x);
 			modelMatrix.RotateY(transformData[0]->rotation.y);

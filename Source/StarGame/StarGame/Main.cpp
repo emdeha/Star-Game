@@ -45,6 +45,7 @@
 #include "../framework/ErrorAPI.h"
 
 #include "../Fusion_Scene/Scene.h"
+#include "../Fusion_Scene/World.h"
 #include "../Fusion_EntitySystem/FusionComponents.h"
 #include "../Fusion_EntitySystem/FusionSystems.h"
 #include "../Fusion_AssetLoader/AssetLoader.h"
@@ -756,7 +757,7 @@ void InitializeScene()
 	////////////////////////////////////////////////////////////////////
 
 
-	FusionEngine::Scene::GetScene().Init();
+	FusionEngine::Scene::GetScene().Init(FusionEngine::World::GetWorld().GetEventManager());
 
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
 	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
@@ -780,7 +781,7 @@ void InitializeScene()
 
 	FusionEngine::Scene::GetScene().AddEntity("sun");
 	FusionEngine::FunctionalSystem<FusionEngine::NewCelestialBody> *sunFunctional =
-		new FusionEngine::FunctionalSystem<FusionEngine::NewCelestialBody>(FusionEngine::Scene::GetScene().GetEventManager(), FusionEngine::Scene::GetScene().GetEntityManager());
+		new FusionEngine::FunctionalSystem<FusionEngine::NewCelestialBody>(&FusionEngine::World::GetWorld().GetEventManager(), FusionEngine::Scene::GetScene().GetEntityManager());
 	FusionEngine::Scene::GetScene().AddSystem(sunFunctional);
 	FusionEngine::Scene::GetScene().AddComponent("sun", sunRender);
 
@@ -797,7 +798,7 @@ void InitializeScene()
 	AddSatellite(sunFuncComp->updatedObject.get(), FusionEngine::Render::FE_RENDERER_SIMPLE, scene.GetShaderManager().GetSimpleProgData().theProgram, 0.5f, 2.0f, 3.0f);
 	FusionEngine::Scene::GetScene().AddComponent("sun", sunFuncComp);
 
-	FusionEngine::Scene::GetScene().GetRenderer().SubscribeForRendering(FusionEngine::Scene::GetScene().GetEntityManager(), FusionEngine::Scene::GetScene().GetEntity("sun"));
+	FusionEngine::World::GetWorld().GetRenderer().SubscribeForRendering(FusionEngine::Scene::GetScene().GetEntity("sun"));
 }
 
 
@@ -934,8 +935,7 @@ void Display()
 		//if(testScene.HasEntity("sampleSpaceship"))
         {
 			FusionEngine::Scene::GetScene().ProcessSystems();
-			FusionEngine::Scene::GetScene().Render(modelMatrix);
-			//testRenderer.Render(modelMatrix, testScene.GetEntityManager());
+			FusionEngine::World::GetWorld().Render(modelMatrix);
         }
 		
     }

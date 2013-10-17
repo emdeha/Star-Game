@@ -41,30 +41,6 @@ struct EntityProperties
 
 namespace FusionEngine
 {
-	struct DisplayData
-	{
-		float gamma;
-
-		float zNear;
-		float zFar;
-
-		glm::mat4 projectionMatrix;
-		glm::mat4 modelMatrix;
-
-		int windowWidth;
-		int windowHeight;
-
-		glm::ivec2 mousePosition;
-
-		DisplayData()
-		{
-			gamma = 2.2f;
-
-			zNear = 1.0f;
-			zFar = 1000.0f;
-		}
-	};
-
 	class Scene
 	{
 	private:
@@ -73,16 +49,11 @@ namespace FusionEngine
 		typedef std::vector<std::shared_ptr<EntityProcessingSystem>> SystemsVector;
 
 
-		std::unique_ptr<EventManager> eventManager;
 		std::unique_ptr<EntityManager> entityManager;
 		EntitiesMap entities;
 		ComponentsVector components;
 		SystemsVector systems;
 		std::vector<unsigned int> removedEntitiesIDs;
-
-		Renderer sceneRenderer;
-		Mouse sceneMouse;
-		DisplayData sceneDisplayData;
 
 	private:
 		Scene() {};
@@ -94,7 +65,7 @@ namespace FusionEngine
 		static Scene& GetScene();
 
 
-		void Init();
+		void Init(EventManager &eventManager);
 
 		/*
 		Checks if there is AT LEAST ONE entity with this tag.
@@ -118,7 +89,7 @@ namespace FusionEngine
 		bool RemoveEntityLast(const std::string &entityTag);
 
 		EntityManager *GetEntityManager() const;
-		EventManager *GetEventManager() const;
+
 		/*
 		Gets the LAST ADDED entity found with the given tag.
 		*/
@@ -128,16 +99,6 @@ namespace FusionEngine
 
 		
 		void ProcessSystems();
-		void Render(glutil::MatrixStack &modelMatrix) const;
-
-	public:
-
-		Renderer& GetRenderer();
-		Mouse& GetMouse();
-		DisplayData& GetDisplayData();
-
-	public:
-		//virtual bool HandleEvent(const IEventData &eventData);
 	};
 };
 

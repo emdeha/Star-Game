@@ -21,10 +21,9 @@ FusionEngine::Scene& FusionEngine::Scene::GetScene()
 	return sceneInstance;
 }
 
-void FusionEngine::Scene::Init()
+void FusionEngine::Scene::Init(EventManager &eventManager)
 {
-	eventManager = std::unique_ptr<EventManager>(new EventManager());
-	entityManager = std::unique_ptr<EntityManager>(new EntityManager(eventManager.get()));
+	entityManager = std::unique_ptr<EntityManager>(new EntityManager(&eventManager));
 	entities.resize(0);
 	components.resize(0);
 	systems.resize(0);
@@ -170,11 +169,6 @@ EntityManager *FusionEngine::Scene::GetEntityManager() const
 {
 	return entityManager.get();
 }
-EventManager *FusionEngine::Scene::GetEventManager() const
-{
-	return eventManager.get();
-}
-
 
 bool FusionEngine::Scene::CheckIfRemoved(unsigned int entityId) const
 {
@@ -197,24 +191,4 @@ void FusionEngine::Scene::ProcessSystems()
 	{
 		(*system)->Process();
 	}
-}
-
-void FusionEngine::Scene::Render(glutil::MatrixStack &modelMatrix) const
-{
-	sceneRenderer.Render(modelMatrix, entityManager.get());
-}
-
-Renderer& FusionEngine::Scene::GetRenderer()
-{
-	return sceneRenderer;
-}
-
-Mouse& FusionEngine::Scene::GetMouse()
-{
-	return sceneMouse;
-}
-
-FusionEngine::DisplayData& FusionEngine::Scene::GetDisplayData()
-{
-	return sceneDisplayData;
 }

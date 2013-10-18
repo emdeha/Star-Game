@@ -32,8 +32,6 @@
 
 namespace FusionEngine
 {
-	class EventManager;
-
 	class NewCelestialBody : public IEventListener
 	{
 	public:
@@ -60,9 +58,7 @@ namespace FusionEngine
 	};
 }
 
-bool AddSatellite(FusionEngine::NewCelestialBody *celestialBody, 
-				  FusionEngine::Render::RendererType,
-				  float newDiameter, float newOffsetFromSun, float cycleDuration);
+bool AddSatellite(FusionEngine::NewCelestialBody *celestialBody);
 void Update(FusionEngine::NewCelestialBody *celestialBody);
 
 

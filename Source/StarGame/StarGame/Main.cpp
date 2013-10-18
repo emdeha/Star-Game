@@ -448,6 +448,7 @@ void InitializePrograms()
     scene.GetShaderManager().LoadSpriteParticleProgData("shaders/SpriteParticleShader.vert", "shaders/SpriteParticleShader.frag");
 
 	FusionEngine::World::GetWorld().GetShaderManager().LoadSimpleProgram("shaders/PosColorLocalTransform.vert", "shaders/ColorPassThrough.frag");
+	FusionEngine::World::GetWorld().GetShaderManager().LoadLitProgram("shaders/PN.vert", "shaders/GaussianLighting.frag");
 }
 
 void OnTextBoxClickedEventHandler(Scene &scene, Control *control)
@@ -730,6 +731,7 @@ void InitializeScene()
     scene.SetMouse(userMouse);
     scene.SetTopDownCamera(userCamera);
 	FusionEngine::World::GetWorld().GetCamera() = userCamera;
+	FusionEngine::World::GetWorld().GetSunLight() = mainSunLight;
 
     scene.AddSun(mainSun);
     scene.AddSunLight(mainSunLight);
@@ -812,7 +814,7 @@ void InitializeScene()
 	FusionEngine::Scene::GetScene().AddComponent("sun", sunRender);
 
 	FusionEngine::Transform *sunTransform = new FusionEngine::Transform();
-	sunTransform->position = glm::vec3(2.0f, 0.0f, 0.0f);
+	sunTransform->position = glm::vec3(0.0f, 0.0f, 0.0f);
 	sunTransform->rotation = glm::vec3();
 	sunTransform->scale = glm::vec3(0.5f);
 	FusionEngine::Scene::GetScene().AddComponent("sun", sunTransform);
@@ -821,7 +823,7 @@ void InitializeScene()
 		new FusionEngine::Functional<FusionEngine::NewCelestialBody>();
 	sunFuncComp->UpdateFunction = Update;
 	sunFuncComp->updatedObject = std::unique_ptr<FusionEngine::NewCelestialBody>(new FusionEngine::NewCelestialBody(4, 0.5f, 0.0f, 1.0f));
-	AddSatellite(sunFuncComp->updatedObject.get(), FusionEngine::Render::FE_RENDERER_SIMPLE, 0.5f, 2.0f, 3.0f);
+	AddSatellite(sunFuncComp->updatedObject.get());
 	FusionEngine::Scene::GetScene().AddComponent("sun", sunFuncComp);
 	
 	FusionEngine::Collidable *sunCollidable = new FusionEngine::Collidable();

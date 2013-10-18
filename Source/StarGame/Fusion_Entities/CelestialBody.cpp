@@ -70,7 +70,7 @@ bool NewCelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 
 			if(data.isLeftButtonDown && currentSatelliteCount <= maxSatelliteCount)
 			{
-				AddSatellite(this, Render::FE_RENDERER_LIT, 0.2f, 4.0f, 3.0f);
+				AddSatellite(this);
 				return true;
 			}
 		}
@@ -80,21 +80,39 @@ bool NewCelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 	return false;
 }
 
-
-bool AddSatellite(NewCelestialBody *celestialBody, 
-				  Render::RendererType rendererType, 
-				  float newDiameter, float newOffsetFromSun, float cycleDuration)
+std::string GetSatMesh(int satCount)
 {
-	srand(time(0));
+	std::string satMesh = "";
+	switch (satCount)
+	{
+	case 1:
+		satMesh = "fire_planet.obj";
+		break;
+	case 2: 
+		satMesh = "air_planet.obj";
+		break;
+	case 3: 
+		satMesh = "earth_planet.obj";
+		break;
+	case 4: 
+		satMesh = "water_planet.obj";
+		break;
+	default:
+		break;
+	}
 
-	float satOffset = float(rand()) / float(RAND_MAX) + 2.0f;
-	
-	std::shared_ptr<NewCelestialBody> newSat(new NewCelestialBody(0, 0.5f, satOffset, 5.0f));
+	return satMesh;
+}
+
+bool AddSatellite(NewCelestialBody *celestialBody)
+{
+	float satOffset = celestialBody->currentSatelliteCount * 1.2f;
+	std::shared_ptr<NewCelestialBody> newSat(new NewCelestialBody(0, 0.3f, satOffset, 5.0f));
 	celestialBody->satellites.push_back(newSat);
 
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
-	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
-	FusionEngine::MeshAssetObject loadedMesh = meshLoader.LoadAssetObject("mesh-files", "sun.obj");
+	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());	
+	FusionEngine::MeshAssetObject loadedMesh = meshLoader.LoadAssetObject("mesh-files", GetSatMesh(celestialBody->currentSatelliteCount));
 	
 	FusionEngine::Render *satRender = new FusionEngine::Render();
 	
@@ -108,8 +126,8 @@ bool AddSatellite(NewCelestialBody *celestialBody,
 	{
 		satRender->mesh.AddTexture((*texture));
 	}
-	satRender->rendererType = rendererType;
-	satRender->shaderProgram = World::GetWorld().GetShaderManager().GetSimpleProgData().theProgram;
+	satRender->rendererType = Render::FE_RENDERER_LIT;
+	satRender->shaderProgram = World::GetWorld().GetShaderManager().GetLitProgData().theProgram;
 	satRender->vao = loadedMesh.vao;
 
 	FusionEngine::Scene::GetScene().AddEntity(newSat->GetID());
@@ -118,7 +136,7 @@ bool AddSatellite(NewCelestialBody *celestialBody,
 	FusionEngine::Transform *satTransform = new FusionEngine::Transform();
 	satTransform->position = glm::vec3();
 	satTransform->rotation = glm::vec3();
-	satTransform->scale = glm::vec3(celestialBody->diameter);
+	satTransform->scale = glm::vec3(newSat->diameter);
 	FusionEngine::Scene::GetScene().AddComponent(newSat->GetID(), satTransform);
 
 	World::GetWorld().GetRenderer().SubscribeForRendering(FusionEngine::Scene::GetScene().GetEntity(newSat->GetID()));

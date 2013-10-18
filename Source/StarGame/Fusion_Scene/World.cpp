@@ -8,7 +8,8 @@ World::~World()
 {
 }
 
-void World::Render(glutil::MatrixStack &modelMatrix) const
+void World::Render(glutil::MatrixStack &modelMatrix) 
 {
+	sunLight.Render(modelMatrix, shaderManager.GetLitProgData(), shaderManager.GetUniformBuffer(UBT_LIGHT));
 	renderer.Render(modelMatrix);
 }

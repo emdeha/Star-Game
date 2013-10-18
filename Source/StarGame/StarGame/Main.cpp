@@ -446,6 +446,8 @@ void InitializePrograms()
     scene.GetShaderManager().LoadSpriteParticleProgData("shaders/ParticleShader.vert", "shaders/ParticleShader.frag");
     scene.GetShaderManager().LoadLitTextureProgram("shaders/LitTexture.vert", "shaders/LitTexture.frag");
     scene.GetShaderManager().LoadSpriteParticleProgData("shaders/SpriteParticleShader.vert", "shaders/SpriteParticleShader.frag");
+
+	FusionEngine::World::GetWorld().GetShaderManager().LoadSimpleProgram("shaders/PosColorLocalTransform.vert", "shaders/ColorPassThrough.frag");
 }
 
 void OnTextBoxClickedEventHandler(Scene &scene, Control *control)
@@ -818,8 +820,8 @@ void InitializeScene()
 	FusionEngine::Functional<FusionEngine::NewCelestialBody> *sunFuncComp = 
 		new FusionEngine::Functional<FusionEngine::NewCelestialBody>();
 	sunFuncComp->UpdateFunction = Update;
-	sunFuncComp->updatedObject = std::unique_ptr<FusionEngine::NewCelestialBody>(new FusionEngine::NewCelestialBody(0.5f, 0.0f, 1.0f));
-	AddSatellite(sunFuncComp->updatedObject.get(), FusionEngine::Render::FE_RENDERER_SIMPLE, scene.GetShaderManager().GetSimpleProgData().theProgram, 0.5f, 2.0f, 3.0f);
+	sunFuncComp->updatedObject = std::unique_ptr<FusionEngine::NewCelestialBody>(new FusionEngine::NewCelestialBody(4, 0.5f, 0.0f, 1.0f));
+	AddSatellite(sunFuncComp->updatedObject.get(), FusionEngine::Render::FE_RENDERER_SIMPLE, 0.5f, 2.0f, 3.0f);
 	FusionEngine::Scene::GetScene().AddComponent("sun", sunFuncComp);
 	
 	FusionEngine::Collidable *sunCollidable = new FusionEngine::Collidable();

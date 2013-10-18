@@ -37,14 +37,11 @@ namespace FusionEngine
 	class NewCelestialBody : public IEventListener
 	{
 	public:
-		enum
-		{
-			EVENT_ON_CLICK,
-		};
-
-		//std::unique_ptr<NewCelestialBody> parent;
 		std::vector<std::shared_ptr<NewCelestialBody>> satellites;
 		std::string id; // TODO: replace with ints
+
+		int maxSatelliteCount;
+		int currentSatelliteCount;
 
 		float diameter;
 		float offsetFromSun;
@@ -53,7 +50,7 @@ namespace FusionEngine
 
 	public:
 		NewCelestialBody();
-		NewCelestialBody(float newDiameter, float newOffsetFromSun, float cycleDuration);
+		NewCelestialBody(int newMaxSatelliteCount, float newDiameter, float newOffsetFromSun, float cycleDuration);
 
 		~NewCelestialBody();
 
@@ -64,7 +61,7 @@ namespace FusionEngine
 }
 
 bool AddSatellite(FusionEngine::NewCelestialBody *celestialBody, 
-				  FusionEngine::Render::RendererType, GLuint shaderProg, 
+				  FusionEngine::Render::RendererType,
 				  float newDiameter, float newOffsetFromSun, float cycleDuration);
 void Update(FusionEngine::NewCelestialBody *celestialBody);
 

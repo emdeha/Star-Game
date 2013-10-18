@@ -23,6 +23,7 @@
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Mouse/Mouse.h" // TODO: Replace with Fusion_Mouse
 #include "../Camera/TopDownCamera.h" // TODO: Replace with Fusion_Camera
+#include "../StarGame/ShaderManager.h" // TODO: Replace with Fusion_ShaderManager
 
 #include <memory>
 
@@ -56,6 +57,7 @@ namespace FusionEngine
 	{
 	private:
 		EventManager eventManager;
+		ShaderManager shaderManager;
 		Renderer renderer;
 		Mouse mouse;
 		DisplayData displayData;
@@ -71,10 +73,12 @@ namespace FusionEngine
 		static World& GetWorld();
 
 		EventManager& GetEventManager();
+		ShaderManager& GetShaderManager();
 		Renderer& GetRenderer();
 		Mouse& GetMouse();
 		DisplayData& GetDisplayData();
 		TopDownCamera& GetCamera();
+
 
 		void Render(glutil::MatrixStack &modelMatrix) const;
 	};
@@ -104,6 +108,10 @@ namespace FusionEngine
 	inline TopDownCamera& World::GetCamera()
 	{
 		return camera;
+	}
+	inline ShaderManager& World::GetShaderManager()
+	{
+		return shaderManager;
 	}
 }
 

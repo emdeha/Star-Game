@@ -70,7 +70,7 @@ bool NewCelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 
 			if(data.isLeftButtonDown && currentSatelliteCount <= maxSatelliteCount)
 			{
-				AddSatellite(this);
+				AddSatellite();
 				return true;
 			}
 		}
@@ -104,15 +104,15 @@ std::string GetSatMesh(int satCount)
 	return satMesh;
 }
 
-bool AddSatellite(NewCelestialBody *celestialBody)
+bool NewCelestialBody::AddSatellite()//NewCelestialBody *celestialBody)
 {
-	float satOffset = celestialBody->currentSatelliteCount * 1.2f;
+	float satOffset = this->currentSatelliteCount * 1.2f;
 	std::shared_ptr<NewCelestialBody> newSat(new NewCelestialBody(0, 0.3f, satOffset, 5.0f));
-	celestialBody->satellites.push_back(newSat);
+	this->satellites.push_back(newSat);
 
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
 	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());	
-	FusionEngine::MeshAssetObject loadedMesh = meshLoader.LoadAssetObject("mesh-files", GetSatMesh(celestialBody->currentSatelliteCount));
+	FusionEngine::MeshAssetObject loadedMesh = meshLoader.LoadAssetObject("mesh-files", GetSatMesh(this->currentSatelliteCount));
 	
 	FusionEngine::Render *satRender = new FusionEngine::Render();
 	
@@ -141,17 +141,17 @@ bool AddSatellite(NewCelestialBody *celestialBody)
 
 	World::GetWorld().GetRenderer().SubscribeForRendering(FusionEngine::Scene::GetScene().GetEntity(newSat->GetID()));
 
-	celestialBody->currentSatelliteCount++;
+	this->currentSatelliteCount++;
 
 	return true;
 }
 
-void Update(NewCelestialBody *celestialBody)
+void NewCelestialBody::Update()//NewCelestialBody *celestialBody)
 {
 	FusionEngine::ComponentMapper<FusionEngine::Transform> transformData =
 		FusionEngine::Scene::GetScene().GetEntityManager()->GetComponentList(FusionEngine::Scene::GetScene().GetEntity("sun"), FusionEngine::CT_TRANSFORM);
 
-	for(auto satellite = celestialBody->satellites.begin(); satellite != celestialBody->satellites.end(); ++satellite)
+	for(auto satellite = this->satellites.begin(); satellite != this->satellites.end(); ++satellite)
 	{
 		// TODO: Get entity by id
 		FusionEngine::ComponentMapper<FusionEngine::Transform> satTransformData =

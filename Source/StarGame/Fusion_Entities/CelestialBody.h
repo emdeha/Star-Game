@@ -34,7 +34,7 @@ namespace FusionEngine
 {
 	class NewCelestialBody : public IEventListener
 	{
-	public:
+	private:
 		std::vector<std::shared_ptr<NewCelestialBody>> satellites;
 		std::string id; // TODO: replace with ints
 
@@ -51,6 +51,9 @@ namespace FusionEngine
 		NewCelestialBody(int newMaxSatelliteCount, float newDiameter, float newOffsetFromSun, float cycleDuration);
 
 		~NewCelestialBody();
+
+		bool AddSatellite();
+		void Update();
 
 		std::string GetID() { return id; }
 

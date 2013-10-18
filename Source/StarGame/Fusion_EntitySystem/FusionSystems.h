@@ -47,7 +47,8 @@ namespace FusionEngine
         {
 			ComponentMapper<Functional<ObjectToUpdate>> functionalData = manager->GetComponentList(entity, CT_FUNCTIONAL_BEHAVIOR);
 
-			functionalData[0]->UpdateFunction(functionalData[0]->updatedObject.get());
+			//functionalData[0]->UpdateFunction;
+			functionalData[0]->updatedObject->Update();
         }
 
     public:

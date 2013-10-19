@@ -1,0 +1,318 @@
+details:
+    fonts-dir: "../data/fonts/"
+    textures-dir: "../data/images/"
+    default-font: AGENCYR.TTF
+    global-on-hover:
+        font: AGENCYB.TTF
+        font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+        left-background-image: "b-hov-left-border.png"
+        right-background-image: "b-hov-right-border.png"
+        middle-background-image: "b-hov-middle-section.png"
+layout-menu:
+    background-color: [ 1.0, 1.0, 1.0, 1.0 ]
+    is-active: true
+    background-image: "background.png"
+    controls:
+        control-button-new:
+            control-type: button
+            name: newGame
+            text: New Game
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: true
+            margins: [ 10, 10, 50, 10 ]
+            bckg-left: "b-left-border.png"
+            bckg-right: "b-right-border.png"
+            bckg-middle: "b-middle-section.png"
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 5, 21.4 ]
+            text-size: 28
+        control-button-resume:
+            control-type: button
+            name: resumeGame
+            text: Resume Game
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: true
+            margins: [ 10, 10, 50, 10 ]
+            bckg-left: "b-left-border.png"
+            bckg-right: "b-right-border.png"
+            bckg-middle: "b-middle-section.png"
+            is-visible: false
+            is-using-percentage: true
+            percentaged-pos: [ 5, 21.4 ]
+            text-size: 28
+        control-button-save:
+            control-type: button
+            name: saveGame
+            text: Save Game
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: true
+            margins: [ 10, 10, 50, 10 ]
+            bckg-left: "b-left-border.png"
+            bckg-right: "b-right-border.png"
+            bckg-middle: "b-middle-section.png"
+            is-visible: false
+            is-using-percentage: true
+            percentaged-pos: [ 5, 16 ]
+            text-size: 28
+        control-button-load:
+            control-type: button
+            name: loadGame
+            text: Load Game
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: true
+            margins: [ 10, 10, 50, 10 ]
+            bckg-left: "b-left-border.png"
+            bckg-right: "b-right-border.png"
+            bckg-middle: "b-middle-section.png"
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 5, 16 ]
+            text-size: 28
+        control-button-options:
+            control-type: button
+            name: options
+            text: Options
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: true
+            margins: [ 10, 10, 50, 10 ]
+            bckg-left: "b-left-border.png"
+            bckg-right: "b-right-border.png"
+            bckg-middle: "b-middle-section.png"
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 5, 10.7 ]
+            text-size: 28
+        control-button-quit:
+            control-type: button
+            name: quitGame 
+            text: Quit 
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: true
+            margins: [ 10, 10, 50, 10 ]
+            bckg-left: "b-left-border.png"
+            bckg-right: "b-right-border.png"
+            bckg-middle: "b-middle-section.png"
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 5, 4.7 ]
+            text-size: 28
+layout-save-game:
+    background-color: [ 1.0, 1.0, 1.0, 1.0 ]
+    is-active: false
+    background-image: "background.png"
+    controls:
+        control-button-back:
+            control-type: button
+            name: backBtn
+            text: Back to Main
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 3, 5 ]
+            text-size: 28
+        control-button-saveslot-1:
+            control-type: button
+            name: saveSlot1
+            text: Empty
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 1, 78 ]
+            text-size: 28
+        control-button-saveslot-2:
+            control-type: button
+            name: saveSlot2
+            text: Empty
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 1, 74 ]
+            text-size: 28
+        control-button-saveslot-3:
+            control-type: button
+            name: saveSlot3
+            text: Empty
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 1, 70 ]
+            text-size: 28
+        control-button-saveslot-4:
+            control-type: button
+            name: saveSlot4
+            text: Empty
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 1, 66 ]
+            text-size: 28
+        control-button-saveslot-5:
+            control-type: button
+            name: saveSlot5
+            text: Empty
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true 
+            percentaged-pos: [ 1, 62 ]
+            text-size: 28
+        control-label-tooltip:
+            control-type: label
+            name: labelHeader
+            text: Save Game
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 1, 94 ]
+            text-size: 48
+layout-load-game:
+    background-color: [ 1.0, 1.0, 1.0, 1.0 ]
+    is-active: false
+    background-image: "background.png"
+    controls:
+        control-button-back:
+            control-type: button
+            name: backBtn
+            text: Back to Main
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 1, 5 ]
+            text-size: 28
+        control-label-tooltip:
+            control-type: label
+            name: labelHeader
+            text: "Load Game"
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 1, 93 ]
+            text-size: 48 
+layout-options:
+    background-color: [ 1.0, 1.0, 1.0, 1.0 ]
+    is-active: false
+    background-image: "background.png"
+    controls:
+        control-button-back:
+            control-type: button
+            name: backBtn
+            text: Back to Main
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 1, 5 ]
+            text-size: 28
+        control-label-tooltip:
+            control-type: label
+            name: labelHeader
+            text: Options
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 1, 93 ]
+            text-size: 48
+layout-game:
+    background-color: [ 0.0, 0.0, 0.0, 1.0 ]
+    is-active: false
+    controls:
+        control-label-matter:
+            control-type: label
+            name: labelMatter
+            text: "Matter:"
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 2, 95 ]
+            text-size: 28
+        control-label-tooltip:
+            control-type: label
+            name: labelToolTip
+            text: ""
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: false
+            position: [ 0, 0 ]
+            text-size: 28 
+        control-textbox-varinput:
+            control-type: textBox
+            name: varInput
+            width: 200
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: true
+            bckg-left: "t-left-border.png"
+            bckg-right: "t-right-border.png"
+            bckg-middle: "t-middle-section.png"
+            is-visible: true
+            is-using-percentage: true
+            margins: [ 5, 5, 5, 5 ]
+            percentaged-pos: [ 78, 95 ]
+            text-size: 28
+        control-button-apply:
+            control-type: button
+            name: applyInput
+            text: Apply
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 95, 95 ]
+            text-size: 28
+        control-imagebox-fusone:
+            control-type: imageBox
+            name: fusOne
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 48, 96 ]
+            width: 50
+            height: 50
+            image: "fusion-empty.jpg"
+        control-imagebox-fustwo:
+            control-type: imageBox
+            name: fusTwo
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 52.5, 96 ]
+            width: 50
+            height: 50
+            image: "fusion-empty.jpg"
+        control-imagebox-fusthree:
+            control-type: imageBox
+            name: fusThree
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 57, 96 ]
+            width: 50
+            height: 50
+            image: "fusion-empty.jpg"
+        control-imagebox-fushint:
+            control-type: imageBox
+            name: fusHint
+            is-visible: true
+            is-using-percentage: true
+            percentaged-pos: [ 52.5, 89 ]
+            width: 50
+            height: 50
+            image: "fusion-empty.jpg"
+        control-label-fushint:
+            control-type: label
+            name: labelFusHint
+            text: "Not a combination"
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            is-using-percentage: true   
+            percentaged-pos: [ 53, 13 ] 
+            text-size: 28 

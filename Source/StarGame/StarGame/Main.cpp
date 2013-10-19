@@ -352,6 +352,8 @@ void Reshape(int width, int height)
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     
+	FusionEngine::World::GetWorld().GetDisplayData().windowHeight = height;
+	FusionEngine::World::GetWorld().GetDisplayData().windowWidth = width;
 	FusionEngine::World::GetWorld().GetEventManager().
 		FireEvent(FusionEngine::OnReshapeEvent(FusionEngine::EVENT_ON_RESHAPE, width, height));
 

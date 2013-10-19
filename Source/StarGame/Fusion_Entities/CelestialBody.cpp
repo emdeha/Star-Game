@@ -67,7 +67,7 @@ bool NewCelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 	case FusionEngine::EVENT_ON_CLICK:
 		{
 			const OnClickEvent &data = static_cast<const OnClickEvent&>(eventData);
-
+	
 			if(data.isLeftButtonDown && currentSatelliteCount <= maxSatelliteCount)
 			{
 				AddSatellite();
@@ -104,7 +104,7 @@ std::string GetSatMesh(int satCount)
 	return satMesh;
 }
 
-bool NewCelestialBody::AddSatellite()//NewCelestialBody *celestialBody)
+bool NewCelestialBody::AddSatellite()
 {
 	float satOffset = this->currentSatelliteCount * 1.2f;
 	std::shared_ptr<NewCelestialBody> newSat(new NewCelestialBody(0, 0.3f, satOffset, 5.0f));
@@ -146,7 +146,7 @@ bool NewCelestialBody::AddSatellite()//NewCelestialBody *celestialBody)
 	return true;
 }
 
-void NewCelestialBody::Update()//NewCelestialBody *celestialBody)
+void NewCelestialBody::Update()
 {
 	FusionEngine::ComponentMapper<FusionEngine::Transform> transformData =
 		FusionEngine::Scene::GetScene().GetEntityManager()->GetComponentList(FusionEngine::Scene::GetScene().GetEntity("sun"), FusionEngine::CT_TRANSFORM);

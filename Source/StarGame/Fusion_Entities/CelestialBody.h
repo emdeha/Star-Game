@@ -61,8 +61,5 @@ namespace FusionEngine
 	};
 }
 
-bool AddSatellite(FusionEngine::NewCelestialBody *celestialBody);
-void Update(FusionEngine::NewCelestialBody *celestialBody);
-
 
 #endif

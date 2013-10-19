@@ -129,7 +129,6 @@ namespace FusionEngine
 	class Functional : public Component
     {
     public:
-		//void (ObjectToUpdate::*UpdateFunction)();
 		std::unique_ptr<ObjectToUpdate> updatedObject;
 
         Functional() : Component(CT_FUNCTIONAL_BEHAVIOR) {}

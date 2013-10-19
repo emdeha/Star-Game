@@ -48,9 +48,9 @@ glm::ivec2 Mouse::GetLastPosition()
 	return lastPosition;
 }
 
-void Mouse::OverrideLastPosition(glm::ivec2 newLastPosition)
+void Mouse::OverrideLastPosition()
 {
-	lastPosition = newLastPosition;
+	lastPosition = currentPosition;
 }
 
 

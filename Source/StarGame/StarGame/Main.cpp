@@ -449,6 +449,9 @@ void InitializePrograms()
 
 	FusionEngine::World::GetWorld().GetShaderManager().LoadSimpleProgram("shaders/PosColorLocalTransform.vert", "shaders/ColorPassThrough.frag");
 	FusionEngine::World::GetWorld().GetShaderManager().LoadLitProgram("shaders/PN.vert", "shaders/GaussianLighting.frag");
+	FusionEngine::World::GetWorld().GetShaderManager().LoadSimpleNoUBProgram("shaders/PosTransformNoUB.vert", "shaders/ColorPassThrough.frag");
+	FusionEngine::World::GetWorld().GetShaderManager().LoadFontProgram("shaders/Font.vert", "shaders/Font.frag");
+	FusionEngine::World::GetWorld().GetShaderManager().LoadTextureProgData("shaders/Texture.vert", "shaders/Texture.frag");
 }
 
 void OnTextBoxClickedEventHandler(Scene &scene, Control *control)
@@ -822,8 +825,6 @@ void InitializeScene()
 	FusionEngine::Functional<FusionEngine::NewCelestialBody> *sunFuncComp = 
 		new FusionEngine::Functional<FusionEngine::NewCelestialBody>();
 	sunFuncComp->updatedObject = std::unique_ptr<FusionEngine::NewCelestialBody>(new FusionEngine::NewCelestialBody(4, 0.5f, 0.0f, 1.0f));
-	//sunFuncComp->UpdateFunction = &FusionEngine::NewCelestialBody::Update;
-	//sunFuncComp->updatedObject->AddSatellite();//sunFuncComp->updatedObject.get());
 	FusionEngine::Scene::GetScene().AddComponent("sun", sunFuncComp);
 	
 	FusionEngine::Collidable *sunCollidable = new FusionEngine::Collidable();
@@ -935,6 +936,26 @@ void Display()
     glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
+
+	glutil::MatrixStack modelMatrix;
+
+	modelMatrix.SetMatrix(FusionEngine::World::GetWorld().GetCamera().CalcMatrix());
+	FusionEngine::World::GetWorld().GetDisplayData().modelMatrix = modelMatrix;
+
+	int loops = 0;
+	while (GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
+	{
+		FusionEngine::Scene::GetScene().ProcessSystems();
+	    HandleMouse();
+	
+		nextGameTick += SKIP_TICKS;
+		loops++;
+	}
+	// TODO: Use that
+	float interpolation = float(GetTickCount() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
+
+	FusionEngine::World::GetWorld().Render();
+	/*
     if(scene.IsLayoutOn(LAYOUT_IN_GAME))
     {		
         scene.SetDisplayData(displayData);
@@ -957,7 +978,7 @@ void Display()
         float interpolation = float(GetTickCount() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
         //scene.RenderScene(modelMatrix, interpolation);	
         
-        scene.RenderCurrentLayout();	
+        //scene.RenderCurrentLayout();	
 
         if(isEmitterStarted)
         {
@@ -985,11 +1006,12 @@ void Display()
                 loops++;
             }
         }
-        scene.RenderCurrentLayout();
+        //scene.RenderCurrentLayout();
     }
+	*/
 
-    HandleMouse();
-    scene.GetMouse().OverrideLastPosition(scene.GetMouse().GetCurrentPosition());
+	FusionEngine::World::GetWorld().GetMouse().OverrideLastPosition();
+    scene.GetMouse().OverrideLastPosition();
     
     glutSwapBuffers();
     glutPostRedisplay();

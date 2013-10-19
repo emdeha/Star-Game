@@ -25,8 +25,10 @@
 #include "../Camera/TopDownCamera.h" // TODO: Replace with Fusion_Camera
 #include "../StarGame/ShaderManager.h" // TODO: Replace with Fusion_ShaderManager
 #include "../Entities/Lights.h" // TODO: Refactor
+#include "../GUISystem/GUISystem.h"
 
 #include <memory>
+#include <map>
 
 namespace FusionEngine
 {
@@ -38,7 +40,7 @@ namespace FusionEngine
 		float zFar;
 
 		glm::mat4 projectionMatrix;
-		glm::mat4 modelMatrix;
+		glutil::MatrixStack modelMatrix;
 
 		int windowWidth;
 		int windowHeight;
@@ -57,6 +59,8 @@ namespace FusionEngine
 	class World
 	{
 	private:
+		std::map<LayoutType, std::shared_ptr<Layout>> guiLayouts;
+
 		EventManager eventManager;
 		ShaderManager shaderManager;
 		Renderer renderer;
@@ -82,8 +86,9 @@ namespace FusionEngine
 		TopDownCamera& GetCamera();
 		SunLight& GetSunLight();
 
+		void Load(const std::string &guiLayoutFile); // TODO: Later - a generic loading method
 
-		void Render(glutil::MatrixStack &modelMatrix);
+		void Render();
 	};
 
 	inline World& World::GetWorld()

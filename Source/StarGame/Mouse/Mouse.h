@@ -58,7 +58,7 @@ public:
 
 	/// \fn OverrideLastPosition
 	/// \brief Explicitly sets the mouse's last position.
-	void OverrideLastPosition(glm::ivec2 newLastPosition);
+	void OverrideLastPosition();
 
 	/// \fn GetPickRay
 	/// \brief Gets the mouse ray from the camera to where it points in the scene.

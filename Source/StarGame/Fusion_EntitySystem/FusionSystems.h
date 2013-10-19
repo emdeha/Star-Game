@@ -47,7 +47,6 @@ namespace FusionEngine
         {
 			ComponentMapper<Functional<ObjectToUpdate>> functionalData = manager->GetComponentList(entity, CT_FUNCTIONAL_BEHAVIOR);
 
-			//functionalData[0]->UpdateFunction;
 			functionalData[0]->updatedObject->Update();
         }
 
@@ -71,7 +70,7 @@ namespace FusionEngine
 				FusionEngine::DisplayData displayData = World::GetWorld().GetDisplayData();
 
 				Utility::Ray mouseRay = 
-					World::GetWorld().GetMouse().GetPickRay(displayData.projectionMatrix, displayData.modelMatrix,
+					World::GetWorld().GetMouse().GetPickRay(displayData.projectionMatrix, displayData.modelMatrix.Top(),
 															glm::vec4(World::GetWorld().GetCamera().ResolveCamPosition(), 1.0f), 
 															displayData.windowWidth, displayData.windowHeight);
 				

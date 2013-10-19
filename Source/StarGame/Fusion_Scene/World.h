@@ -19,7 +19,6 @@
 #define WORLD_H
 
 
-//#include "../Fusion_EntitySystem/EntityEvents.h"
 #include "../Fusion_EntitySystem/EventManager.h"
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Mouse/Mouse.h" // TODO: Replace with Fusion_Mouse
@@ -78,6 +77,9 @@ namespace FusionEngine
 		~World();
 
 	public:
+		float interpolation;
+
+
 		static World& GetWorld();
 
 		EventManager& GetEventManager();
@@ -88,7 +90,8 @@ namespace FusionEngine
 		TopDownCamera& GetCamera();
 		SunLight& GetSunLight();
 
-		void Load(const std::string &guiLayoutFile); // TODO: Later - a generic loading method
+		// TODO: Later - a generic loading method
+		void Load(const std::string &guiLayoutFile); 
 
 		void Render();
 

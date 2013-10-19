@@ -181,7 +181,7 @@ void InitializeScene()
 
 	FusionEngine::Functional<FusionEngine::NewCelestialBody> *sunFuncComp = 
 		new FusionEngine::Functional<FusionEngine::NewCelestialBody>();
-	sunFuncComp->updatedObject = std::unique_ptr<FusionEngine::NewCelestialBody>(new FusionEngine::NewCelestialBody(4, 0.5f, 0.0f, 1.0f));
+	sunFuncComp->updatedObject = std::unique_ptr<FusionEngine::NewCelestialBody>(new FusionEngine::NewCelestialBody(4, 0.5f, 0.0f));
 	FusionEngine::Scene::GetScene().AddComponent("sun", sunFuncComp);
 	
 	FusionEngine::Collidable *sunCollidable = new FusionEngine::Collidable();
@@ -308,7 +308,7 @@ void Display()
 	}
 	// TODO: Use that
 	float interpolation = float(GetTickCount() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
-
+	FusionEngine::World::GetWorld().interpolation = interpolation;
 	FusionEngine::World::GetWorld().Render();
 
 

@@ -34,7 +34,7 @@ using namespace FusionEngine;
 NewCelestialBody::NewCelestialBody() :
 	maxSatelliteCount(0), currentSatelliteCount(1),
 	satellites(0), diameter(0.0f),
-	offsetFromSun(0.0f), revolutionTimer()
+	offsetFromSun(0.0f), currentRotationAngle(0.0f), angularVelocity(5.0f)
 {
 	char stringedOffset[15];
 	_snprintf(stringedOffset, 15, "satellite%f", offsetFromSun);
@@ -42,10 +42,11 @@ NewCelestialBody::NewCelestialBody() :
 }
 
 NewCelestialBody::NewCelestialBody(int newMaxSatelliteCount, float newDiameter, 
-								   float newOffsetFromSun, float cycleDuration) :
+								   float newOffsetFromSun) :
 	maxSatelliteCount(newMaxSatelliteCount), currentSatelliteCount(1),
 	satellites(0), diameter(newDiameter),
-	offsetFromSun(newOffsetFromSun), revolutionTimer(Framework::Timer::TT_LOOP, cycleDuration) 
+	offsetFromSun(newOffsetFromSun),
+	currentRotationAngle(0.0f), angularVelocity(5.0f)
 {
 	World::GetWorld().GetEventManager().AddListener(this, FusionEngine::EVENT_ON_CLICK);
 
@@ -107,7 +108,7 @@ std::string GetSatMesh(int satCount)
 bool NewCelestialBody::AddSatellite()
 {
 	float satOffset = this->currentSatelliteCount * 1.2f;
-	std::shared_ptr<NewCelestialBody> newSat(new NewCelestialBody(0, 0.3f, satOffset, 5.0f));
+	std::shared_ptr<NewCelestialBody> newSat(new NewCelestialBody(0, 0.3f, satOffset));
 	this->satellites.push_back(newSat);
 
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
@@ -157,14 +158,17 @@ void NewCelestialBody::Update()
 		FusionEngine::ComponentMapper<FusionEngine::Transform> satTransformData =
 			FusionEngine::Scene::GetScene().GetEntityManager()->GetComponentList(FusionEngine::Scene::GetScene().GetEntity((*satellite)->GetID()), FusionEngine::CT_TRANSFORM);
 
-		(*satellite)->revolutionTimer.Update();
 		
-		float currentTimeThroughLoop = (*satellite)->revolutionTimer.GetAlpha();
-
 		glutil::MatrixStack relativeTransformStack;
 		relativeTransformStack.Translate(transformData[0]->position);
-		satTransformData[0]->position.x = sinf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
-		satTransformData[0]->position.z = cosf(currentTimeThroughLoop * (2.0f * PI)) * (*satellite)->offsetFromSun;
+		relativeTransformStack.RotateY((*satellite)->currentRotationAngle);
+		(*satellite)->currentRotationAngle += (*satellite)->angularVelocity * World::GetWorld().interpolation;
+		if ((*satellite)->currentRotationAngle >= 360.0f)
+		{
+			(*satellite)->currentRotationAngle = 0.0f;
+		}
+		float offset = (*satellite)->offsetFromSun;
+		satTransformData[0]->position = glm::vec3(offset, 0.0f, offset);
 		
 		satTransformData[0]->position = glm::vec3(relativeTransformStack.Top() * glm::vec4(satTransformData[0]->position, 1.0f));
 	}

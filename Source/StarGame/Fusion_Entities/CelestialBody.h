@@ -43,12 +43,12 @@ namespace FusionEngine
 
 		float diameter;
 		float offsetFromSun;
-
-		Framework::Timer revolutionTimer;
+		float currentRotationAngle;
+		float angularVelocity;
 
 	public:
 		NewCelestialBody();
-		NewCelestialBody(int newMaxSatelliteCount, float newDiameter, float newOffsetFromSun, float cycleDuration);
+		NewCelestialBody(int newMaxSatelliteCount, float newDiameter, float newOffsetFromSun);
 
 		~NewCelestialBody();
 

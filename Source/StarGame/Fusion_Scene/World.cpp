@@ -23,7 +23,7 @@ void World::Load(const std::string &guiLayoutFile)
 	guiLayouts = loadedGUI.GetAllLoadedLayouts();
 }
 
-void World::Render() 
+void World::Render()
 {
 	// Render GUI
 	FontProgData fontData = shaderManager.GetFontProgData();

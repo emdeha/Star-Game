@@ -15,10 +15,11 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
-#ifndef __WORLD_H
-#define __WORLD_H
+#ifndef WORLD_H
+#define WORLD_H
 
 
+//#include "../Fusion_EntitySystem/EntityEvents.h"
 #include "../Fusion_EntitySystem/EventManager.h"
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Mouse/Mouse.h" // TODO: Replace with Fusion_Mouse
@@ -29,6 +30,7 @@
 
 #include <memory>
 #include <map>
+
 
 namespace FusionEngine
 {
@@ -56,7 +58,7 @@ namespace FusionEngine
 		}
 	};
 
-	class World
+	class World : public IEventListener
 	{
 	private:
 		std::map<LayoutType, std::shared_ptr<Layout>> guiLayouts;
@@ -70,7 +72,7 @@ namespace FusionEngine
 		SunLight sunLight;
 
 	private:
-		World() {}
+		World();
 		World(const World&);
 		World& operator=(const World&);
 		~World();
@@ -89,6 +91,8 @@ namespace FusionEngine
 		void Load(const std::string &guiLayoutFile); // TODO: Later - a generic loading method
 
 		void Render();
+
+		virtual bool HandleEvent(const IEventData &eventData);
 	};
 
 	inline World& World::GetWorld()

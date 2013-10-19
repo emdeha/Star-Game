@@ -13,7 +13,9 @@ namespace FusionEngine
 		EVENT_DESTROY_ENTITY = 2,
 		EVENT_INSERT_COMPONENT = 3,
 		EVENT_REMOVE_COMPONENT = 4,
+		
 		EVENT_ON_CLICK = 5,
+		EVENT_ON_RESHAPE = 6,
 	};
 
 	struct EntityEvent : public IEventData
@@ -39,6 +41,16 @@ namespace FusionEngine
 
 		OnClickEvent(EventType eventType, bool newIsLeftButtonDown) 
 			: IEventData(eventType), isLeftButtonDown(newIsLeftButtonDown) {}
+	};
+
+	struct OnReshapeEvent : public IEventData
+	{
+		int windowWidth;
+		int windowHeight;
+
+		OnReshapeEvent(EventType eventType, int newWindowWidth, int newWindowHeight) 
+			: IEventData(eventType),
+			  windowWidth(newWindowWidth), windowHeight(newWindowHeight) {}
 	};
 }
 

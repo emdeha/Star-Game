@@ -29,7 +29,6 @@
 #include "../framework/Mesh.h"
 #include "../framework/Timer.h"
 #include "../framework/Utility.h"
-#include "../framework/EventSystem.h"
 #include "../Mouse/Mouse.h"
 #include "../Fusion_AssetLoader/AssetLoader.h"
 

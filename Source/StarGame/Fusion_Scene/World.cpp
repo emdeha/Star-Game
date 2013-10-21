@@ -43,7 +43,7 @@ void World::Load(const std::string &guiLayoutFile,
 			path = "../data/music/";
 		}
 	}
-
+	
 	// Load Cheats
 }
 

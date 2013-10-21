@@ -57,7 +57,7 @@ void Audio::SetFileForPlay(const std::string &newFileName, SoundType prevSoundTy
     FMOD_RESULT result;
 
     FMOD::Sound *newSound;
-    result = system->createSound(newFileName.c_str(), FMOD_HARDWARE, 0, &newSound);
+    result = system->createSound(newFileName.c_str(), FMOD_HARDWARE | FMOD_CREATESTREAM, 0, &newSound);
     CheckForError(result);
     if(isLooping)
     {
@@ -66,8 +66,13 @@ void Audio::SetFileForPlay(const std::string &newFileName, SoundType prevSoundTy
     }
 
     if(audioFiles.find(prevSoundType) != audioFiles.end())
+	{
         audioFiles[prevSoundType] = newSound;
-    else audioFiles.insert(std::make_pair(prevSoundType, newSound));
+	}
+    else 
+	{
+		audioFiles.insert(std::make_pair(prevSoundType, newSound));
+	}
 }
 
 void Audio::SetVolume(float volume, ChannelType chType)

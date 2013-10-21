@@ -1,44 +1,44 @@
-channel-master: 
-    volume: 0.5
-    music:
-        music-ingame:
-            sound-type: 0
-            sound-file: ingame.mp3
-            sound-loop: 1
-        music-menu:
-            sound-type: 1
-            sound-file: menu.mp3
-            sound-loop: 1
+#channel-master: 
+#    volume: 0.5
+#    music:
+#        music-ingame:
+#            sound-type: 0
+#            sound-file: ingame.mp3
+#            sound-loop: 1
+#        music-menu:
+#            sound-type: 1
+#            sound-file: menu.mp3
+#            sound-loop: 1
 channel-interaction:
     volume: 1.0
     music:
         music-on-sun-click:
             sound-type: 2
-            sound-file: Click.wav
+            sound-file: Click.mp3
 channel-game:
     volume: 1.0
     music:
         music-explosion1:
             sound-type: 3
-            sound-file: explosion1.wav
+            sound-file: explosion1.mp3
         music-explosion2:
             sound-type: 9
-            sound-file: explosion2.wav
+            sound-file: explosion2.mp3
         music-explosion3:
             sound-type: 10
-            sound-file: explosion3.wav
+            sound-file: explosion3.mp3
         music-fusion:
             sound-type: 4
-            sound-file: Fusion.wav
+            sound-file: Fusion.mp3
         music-sun-nova:
             sound-type: 5
-            sound-file: sun_nova.wav
+            sound-file: sun_nova.mp3
         music-game-over:
             sound-type: 6
-            sound-file: sun_death.wav
+            sound-file: sun_death.mp3
         music-frost-nova:
             sound-type: 7
-            sound-file: frost_nova.wav
+            sound-file: frost_nova.mp3
         music-aoe:
             sound-type: 8
-            sound-file: aoe.wav
+            sound-file: aoe.mp3

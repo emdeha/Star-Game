@@ -62,12 +62,15 @@ void HandleMouse()
 		auto guiLayouts = GetWorld().GetLayouts();
 		for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
 		{
-			auto layoutControls = (*layout).second->GetControls();
-			for (auto control = layoutControls.begin(); control != layoutControls.end(); ++control)
+			if ((*layout).second->IsSet())
 			{
-				if ((*control)->IsMouseOn(GetWorld().GetMouse().GetCurrentPosition()))
+				auto layoutControls = (*layout).second->GetControls();
+				for (auto control = layoutControls.begin(); control != layoutControls.end(); ++control)
 				{
-					GetWorld().GetEventManager().FireEvent(FusionEngine::OnClickEvent(FusionEngine::EVENT_ON_CLICK, true, (*control)->GetName()));
+					if ((*control)->IsMouseOn(GetWorld().GetMouse().GetCurrentPosition()))
+					{
+						GetWorld().GetEventManager().FireEvent(FusionEngine::OnClickEvent(FusionEngine::EVENT_ON_CLICK, true, (*control)->GetName()));
+					}
 				}
 			}
 		}

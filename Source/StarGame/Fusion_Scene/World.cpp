@@ -56,6 +56,7 @@ void World::SetLayout(LayoutType layoutToSet)
 		if ((*layout).first == layoutToSet)
 		{
 			(*layout).second->Set(true);
+			(*layout).second->Update(displayData.windowWidth, displayData.windowHeight);
 		}
 		else 
 		{
@@ -72,6 +73,8 @@ bool World::HandleEvent(const IEventData &eventData)
 	case FusionEngine::EVENT_ON_RESHAPE:
 		{
 			const OnReshapeEvent &data = static_cast<const OnReshapeEvent&>(eventData);
+			displayData.windowHeight = data.windowHeight;
+			displayData.windowWidth = data.windowWidth;
 			for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
 			{
 				if((*layout).second->IsSet())
@@ -92,9 +95,28 @@ bool World::HandleEvent(const IEventData &eventData)
 				}
 				else if (data.objectId == "resumeGame")
 				{
-					std::printf("\n\n\n CLICKED ON RESUME_GAME \n\n\n");
+					SetLayout(LAYOUT_IN_GAME);
 				}
-				// ...
+				else if (data.objectId == "saveGame")
+				{
+					SetLayout(LAYOUT_SAVE_GAME);
+				}
+				else if (data.objectId == "loadGame")
+				{
+					SetLayout(LAYOUT_LOAD_GAME);
+				}
+				else if (data.objectId == "options")
+				{
+					SetLayout(LAYOUT_OPTIONS);
+				}
+				else if (data.objectId == "quitGame")
+				{
+					exit(EXIT_SUCCESS);
+				}
+				else if (data.objectId == "backBtn")
+				{
+					SetLayout(LAYOUT_MENU);
+				}
 			}
 		}
 		break;

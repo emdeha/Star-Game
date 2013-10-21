@@ -26,6 +26,7 @@
 #include "../StarGame/ShaderManager.h" // TODO: Replace with Fusion_ShaderManager
 #include "../Entities/Lights.h" // TODO: Refactor
 #include "../GUISystem/GUISystem.h"
+#include "../Audio/Audio.h" 
 
 #include <memory>
 #include <map>
@@ -69,6 +70,7 @@ namespace FusionEngine
 		DisplayData displayData;
 		TopDownCamera camera;
 		SunLight sunLight;
+		Audio audio;
 		LayoutsMap guiLayouts;
 
 	private:
@@ -91,10 +93,12 @@ namespace FusionEngine
 		TopDownCamera& GetCamera();
 		SunLight& GetSunLight();
 		LayoutsMap& GetLayouts();
+		Audio& GetAudio();
 
 	public:
 		// TODO: Later - a generic loading method
-		void Load(const std::string &guiLayoutFile); 
+		void Load(const std::string &guiLayoutFile, 
+				  const std::string &audioFile); 
 
 		void Render();
 
@@ -137,6 +141,10 @@ namespace FusionEngine
 	inline SunLight& World::GetSunLight()
 	{
 		return sunLight;
+	}
+	inline Audio& World::GetAudio()
+	{
+		return audio;
 	}
 	inline World::LayoutsMap& World::GetLayouts()
 	{

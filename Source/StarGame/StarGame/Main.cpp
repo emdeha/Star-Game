@@ -244,7 +244,7 @@ void Init()
 
     InitializePrograms();
     InitializeScene();
-	GetWorld().Load("test-gui.yaml");
+	GetWorld().Load("test-gui.yaml", "audio-config.yaml");
 
     
     glEnable(GL_CULL_FACE);

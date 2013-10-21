@@ -16,12 +16,35 @@ World::~World()
 {
 }
 
-void World::Load(const std::string &guiLayoutFile)
+void World::Load(const std::string &guiLayoutFile,
+				 const std::string &audioFile)
 {
+	// Load GUI
 	FusionEngine::AssetLoader<FusionEngine::GUIAssetObject> guiLoader;
 	guiLoader.RegisterType("loader-files", new FusionEngine::GUILoader());
 	FusionEngine::GUIAssetObject loadedGUI = guiLoader.LoadAssetObject("loader-files", guiLayoutFile);
 	guiLayouts = loadedGUI.GetAllLoadedLayouts();
+
+	// Load Audio
+	FusionEngine::AssetLoader<FusionEngine::AudioAssetObject> audioLoader;
+	audioLoader.RegisterType("loader-files", new FusionEngine::CAudioLoader());
+	FusionEngine::AudioAssetObject loadedAudio = audioLoader.LoadAssetObject("loader-files", audioFile);
+	auto loadedAudios = loadedAudio.GetAllLoadedAudios();
+	
+	std::string path = "../data/music/"; // TODO: Get from config
+	for (auto loadedAudio = loadedAudios.begin(); loadedAudio != loadedAudios.end(); ++loadedAudio)
+	{
+		for (auto audioFile = loadedAudio->second.audioFiles.begin(); 
+			 audioFile != loadedAudio->second.audioFiles.end(); ++audioFile)
+		{
+			path += audioFile->path;
+			audio.SetFileForPlay(path, audioFile->soundType, audioFile->isLooping);
+			audio.SetVolume(loadedAudio->second.channelVolume, loadedAudio->second.channel);
+			path = "../data/music/";
+		}
+	}
+
+	// Load Cheats
 }
 
 void World::Render()
@@ -92,6 +115,7 @@ bool World::HandleEvent(const IEventData &eventData)
 				if (data.objectId == "newGame")
 				{
 					SetLayout(LAYOUT_IN_GAME);
+					audio.Play(MUSIC_BACKGROUND);
 				}
 				else if (data.objectId == "resumeGame")
 				{

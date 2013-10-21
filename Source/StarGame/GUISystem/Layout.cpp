@@ -250,6 +250,10 @@ std::shared_ptr<Control> Layout::GetControl(const std::string &controlName)
 	errorMessage += controlName;
 	HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 }
+std::vector<std::shared_ptr<Control>>& Layout::GetControls()
+{
+	return controls;
+}
 
 LayoutType Layout::GetLayoutType()
 {

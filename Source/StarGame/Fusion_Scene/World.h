@@ -60,8 +60,8 @@ namespace FusionEngine
 	class World : public IEventListener
 	{
 	private:
-		std::map<LayoutType, std::shared_ptr<Layout>> guiLayouts;
-
+		typedef std::map<LayoutType, std::shared_ptr<Layout>> LayoutsMap;
+		
 		EventManager eventManager;
 		ShaderManager shaderManager;
 		Renderer renderer;
@@ -69,6 +69,7 @@ namespace FusionEngine
 		DisplayData displayData;
 		TopDownCamera camera;
 		SunLight sunLight;
+		LayoutsMap guiLayouts;
 
 	private:
 		World();
@@ -89,11 +90,16 @@ namespace FusionEngine
 		DisplayData& GetDisplayData();
 		TopDownCamera& GetCamera();
 		SunLight& GetSunLight();
+		LayoutsMap& GetLayouts();
 
+	public:
 		// TODO: Later - a generic loading method
 		void Load(const std::string &guiLayoutFile); 
 
 		void Render();
+
+		// WARN: If there's no layout of this type, all layouts will be unset!!!
+		void SetLayout(LayoutType layoutToSet);
 
 		virtual bool HandleEvent(const IEventData &eventData);
 	};
@@ -131,6 +137,10 @@ namespace FusionEngine
 	inline SunLight& World::GetSunLight()
 	{
 		return sunLight;
+	}
+	inline World::LayoutsMap& World::GetLayouts()
+	{
+		return guiLayouts;
 	}
 }
 

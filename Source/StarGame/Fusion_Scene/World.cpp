@@ -9,6 +9,7 @@ using namespace FusionEngine;
 World::World()
 {
 	eventManager.AddListener(this, FusionEngine::EVENT_ON_RESHAPE);
+	eventManager.AddListener(this, FusionEngine::EVENT_ON_CLICK);
 }
 
 World::~World()
@@ -48,6 +49,21 @@ void World::Render()
 	renderer.Render(displayData.modelMatrix);
 }
 
+void World::SetLayout(LayoutType layoutToSet)
+{
+	for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
+	{
+		if ((*layout).first == layoutToSet)
+		{
+			(*layout).second->Set(true);
+		}
+		else 
+		{
+			(*layout).second->Set(false);
+		}
+	}
+}
+
 bool World::HandleEvent(const IEventData &eventData)
 {
 	EventType type = eventData.GetType();
@@ -62,6 +78,23 @@ bool World::HandleEvent(const IEventData &eventData)
 				{
 					(*layout).second->Update(data.windowWidth, data.windowHeight);
 				}
+			}
+		}
+		break;
+	case FusionEngine::EVENT_ON_CLICK:		
+		{
+			const OnClickEvent &data = static_cast<const OnClickEvent&>(eventData);
+			if (data.isLeftButtonDown)
+			{
+				if (data.objectId == "newGame")
+				{
+					SetLayout(LAYOUT_IN_GAME);
+				}
+				else if (data.objectId == "resumeGame")
+				{
+					std::printf("\n\n\n CLICKED ON RESUME_GAME \n\n\n");
+				}
+				// ...
 			}
 		}
 		break;

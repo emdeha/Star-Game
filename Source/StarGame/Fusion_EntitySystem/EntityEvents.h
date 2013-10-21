@@ -38,9 +38,10 @@ namespace FusionEngine
 	struct OnClickEvent : public IEventData
 	{
 		bool isLeftButtonDown;
+		std::string objectId; // replace with int
 
-		OnClickEvent(EventType eventType, bool newIsLeftButtonDown) 
-			: IEventData(eventType), isLeftButtonDown(newIsLeftButtonDown) {}
+		OnClickEvent(EventType eventType, bool newIsLeftButtonDown, const std::string &newObjectId) 
+			: IEventData(eventType), isLeftButtonDown(newIsLeftButtonDown), objectId(newObjectId) {}
 	};
 
 	struct OnReshapeEvent : public IEventData

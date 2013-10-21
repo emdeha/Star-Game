@@ -100,6 +100,7 @@ public:
 							const std::string &backgroundImageFileName);
 
 	std::shared_ptr<Control> GetControl(const std::string &controlName);
+	std::vector<std::shared_ptr<Control>>& GetControls();
 
 	void Draw(const FontProgData &fontData, 
 			  const SimpleProgData &simpleData,

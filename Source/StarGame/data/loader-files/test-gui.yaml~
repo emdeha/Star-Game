@@ -10,7 +10,7 @@ details:
         middle-background-image: "b-hov-middle-section.png"
 layout-menu:
     background-color: [ 1.0, 1.0, 1.0, 1.0 ]
-    is-active: true
+    is-active: false 
     background-image: "background.png"
     controls:
         control-button-new:
@@ -224,7 +224,7 @@ layout-options:
             text-size: 48
 layout-game:
     background-color: [ 0.0, 0.0, 0.0, 1.0 ]
-    is-active: false
+    is-active: true
     controls:
         control-label-matter:
             control-type: label

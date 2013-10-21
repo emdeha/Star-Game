@@ -52,10 +52,10 @@ long long GetCurrentTimeMillis()
 
 void HandleMouse()
 {
-	unsigned int entityIndex = FusionEngine::Scene::GetScene().GetEntity("sun")->GetIndex();
+	unsigned int entityIndex = GetScene().GetEntity("sun")->GetIndex();
 	FusionEngine::ComponentMapper<FusionEngine::Collidable> collidableData = 
-		FusionEngine::Scene::GetScene().GetEntityManager()->GetComponentList(entityIndex, FusionEngine::CT_COLLISION);
-	if (FusionEngine::World::GetWorld().GetMouse().IsLeftButtonDown())
+		GetScene().GetEntityManager()->GetComponentList(entityIndex, FusionEngine::CT_COLLISION);
+	if (GetWorld().GetMouse().IsLeftButtonDown())
 	{
 		collidableData[0]->isForCheck = true;
 	}
@@ -64,54 +64,54 @@ void HandleMouse()
 		collidableData[0]->isForCheck = false;
 	}
 
-	FusionEngine::World::GetWorld().GetMouse().ReleaseLeftButton();
-	FusionEngine::World::GetWorld().GetMouse().ReleaseRightButton();
+	GetWorld().GetMouse().ReleaseLeftButton();
+	GetWorld().GetMouse().ReleaseRightButton();
 }
 void HandleMouseButtons(int button, int state, int x, int y)
 {
     if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
     {
-		FusionEngine::World::GetWorld().GetMouse().PressLeftButton();
+		GetWorld().GetMouse().PressLeftButton();
     }
     if(button == GLUT_LEFT_BUTTON && state == GLUT_UP)
     {
-		FusionEngine::World::GetWorld().GetMouse().ReleaseLeftButton();
+		GetWorld().GetMouse().ReleaseLeftButton();
     }
 
     if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
     {
-		FusionEngine::World::GetWorld().GetMouse().PressRightButton();
+		GetWorld().GetMouse().PressRightButton();
     }
     if(button == GLUT_RIGHT_BUTTON && state == GLUT_UP)
     {
-		FusionEngine::World::GetWorld().GetMouse().ReleaseRightButton();
+		GetWorld().GetMouse().ReleaseRightButton();
     }
 }
 void HandleActiveMovement(int x, int y)
 {
-	FusionEngine::World::GetWorld().GetMouse().SetCurrentPosition(glm::ivec2(x, y));
+	GetWorld().GetMouse().SetCurrentPosition(glm::ivec2(x, y));
 }
 void HandlePassiveMovement(int x, int y)
 {
-	FusionEngine::World::GetWorld().GetMouse().SetCurrentPosition(glm::ivec2(x, y));
+	GetWorld().GetMouse().SetCurrentPosition(glm::ivec2(x, y));
 }
 
 void InitializePrograms()
 {
-	FusionEngine::World::GetWorld().GetShaderManager().LoadSimpleTextureProgData("shaders/SimpleTexture.vert", "shaders/SimpleTexture.frag");
-	FusionEngine::World::GetWorld().GetShaderManager().LoadUnlitProgram("shaders/PosTransform.vert", "shaders/UniformColor.frag");
-	FusionEngine::World::GetWorld().GetShaderManager().LoadSimpleProgram("shaders/PosColorLocalTransform.vert", "shaders/ColorPassThrough.frag");
-	FusionEngine::World::GetWorld().GetShaderManager().LoadLitProgram("shaders/PN.vert", "shaders/GaussianLighting.frag");
-	FusionEngine::World::GetWorld().GetShaderManager().LoadSimpleNoUBProgram("shaders/PosTransformNoUB.vert", "shaders/ColorPassThrough.frag");
-	FusionEngine::World::GetWorld().GetShaderManager().LoadFontProgram("shaders/Font.vert", "shaders/Font.frag");
-	FusionEngine::World::GetWorld().GetShaderManager().LoadTextureProgData("shaders/Texture.vert", "shaders/Texture.frag");
-	FusionEngine::World::GetWorld().GetShaderManager().LoadPerspectiveTextureProgData("shaders/TexturePerspective.vert", "shaders/Texture.frag");
-	FusionEngine::World::GetWorld().GetShaderManager().LoadBillboardProgData("shaders/BillboardShader.vert", "shaders/BillboardShader.geom", "shaders/BillboardShader.frag");
-	FusionEngine::World::GetWorld().GetShaderManager().LoadParticleProgData("shaders/ParticleShaderBillboarded.vert", "shaders/ParticleShaderBillboarded.geom");
-	FusionEngine::World::GetWorld().GetShaderManager().LoadBillboardProgDataNoTexture("shaders/BillboardShader.vert", "shaders/BillboardShaderNoTexture.geom", "shaders/BillboardShaderNoTexture.frag");
-	FusionEngine::World::GetWorld().GetShaderManager().LoadSpriteParticleProgData("shaders/ParticleShader.vert", "shaders/ParticleShader.frag");
-	FusionEngine::World::GetWorld().GetShaderManager().LoadLitTextureProgram("shaders/LitTexture.vert", "shaders/LitTexture.frag");
-	FusionEngine::World::GetWorld().GetShaderManager().LoadSpriteParticleProgData("shaders/SpriteParticleShader.vert", "shaders/SpriteParticleShader.frag");
+	GetWorld().GetShaderManager().LoadSimpleTextureProgData("shaders/SimpleTexture.vert", "shaders/SimpleTexture.frag");
+	GetWorld().GetShaderManager().LoadUnlitProgram("shaders/PosTransform.vert", "shaders/UniformColor.frag");
+	GetWorld().GetShaderManager().LoadSimpleProgram("shaders/PosColorLocalTransform.vert", "shaders/ColorPassThrough.frag");
+	GetWorld().GetShaderManager().LoadLitProgram("shaders/PN.vert", "shaders/GaussianLighting.frag");
+	GetWorld().GetShaderManager().LoadSimpleNoUBProgram("shaders/PosTransformNoUB.vert", "shaders/ColorPassThrough.frag");
+	GetWorld().GetShaderManager().LoadFontProgram("shaders/Font.vert", "shaders/Font.frag");
+	GetWorld().GetShaderManager().LoadTextureProgData("shaders/Texture.vert", "shaders/Texture.frag");
+	GetWorld().GetShaderManager().LoadPerspectiveTextureProgData("shaders/TexturePerspective.vert", "shaders/Texture.frag");
+	GetWorld().GetShaderManager().LoadBillboardProgData("shaders/BillboardShader.vert", "shaders/BillboardShader.geom", "shaders/BillboardShader.frag");
+	GetWorld().GetShaderManager().LoadParticleProgData("shaders/ParticleShaderBillboarded.vert", "shaders/ParticleShaderBillboarded.geom");
+	GetWorld().GetShaderManager().LoadBillboardProgDataNoTexture("shaders/BillboardShader.vert", "shaders/BillboardShaderNoTexture.geom", "shaders/BillboardShaderNoTexture.frag");
+	GetWorld().GetShaderManager().LoadSpriteParticleProgData("shaders/ParticleShader.vert", "shaders/ParticleShader.frag");
+	GetWorld().GetShaderManager().LoadLitTextureProgram("shaders/LitTexture.vert", "shaders/LitTexture.frag");
+	GetWorld().GetShaderManager().LoadSpriteParticleProgData("shaders/SpriteParticleShader.vert", "shaders/SpriteParticleShader.frag");
 }
 
 void InitializeScene()
@@ -119,12 +119,12 @@ void InitializeScene()
     TopDownCamera userCamera = TopDownCamera(glm::vec3(), 13.5f, 0.0f, 45.0f);
 
     SunLight 
-        mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, FusionEngine::World::GetWorld().GetDisplayData().gamma));//displayData.gamma));
+        mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, GetWorld().GetDisplayData().gamma));//displayData.gamma));
 
-	FusionEngine::World::GetWorld().GetCamera() = userCamera;
-	FusionEngine::World::GetWorld().GetSunLight() = mainSunLight;
+	GetWorld().GetCamera() = userCamera;
+	GetWorld().GetSunLight() = mainSunLight;
 
-	ShaderManager worldShaderManager = FusionEngine::World::GetWorld().GetShaderManager();
+	ShaderManager worldShaderManager = GetWorld().GetShaderManager();
     glUseProgram(worldShaderManager.GetTextureProgData().theProgram);
     glUniform1i(worldShaderManager.GetTextureProgData().colorTextureUnif, 0);
     glUseProgram(0);
@@ -142,7 +142,7 @@ void InitializeScene()
     glUseProgram(0);
 
 
-	FusionEngine::Scene::GetScene().Init(FusionEngine::World::GetWorld().GetEventManager());
+	GetScene().Init(GetWorld().GetEventManager());
 
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
 	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
@@ -161,34 +161,34 @@ void InitializeScene()
 		sunRender->mesh.AddTexture((*texture));
 	}
 	sunRender->rendererType = FusionEngine::Render::FE_RENDERER_SIMPLE;
-	sunRender->shaderProgram = FusionEngine::World::GetWorld().GetShaderManager().GetSimpleProgData().theProgram;
+	sunRender->shaderProgram = GetWorld().GetShaderManager().GetSimpleProgData().theProgram;
 	sunRender->vao = loadedMesh.vao;
 
-	FusionEngine::Scene::GetScene().AddEntity("sun");
+	GetScene().AddEntity("sun");
 	FusionEngine::FunctionalSystem<FusionEngine::NewCelestialBody> *sunFunctional =
-		new FusionEngine::FunctionalSystem<FusionEngine::NewCelestialBody>(&FusionEngine::World::GetWorld().GetEventManager(), FusionEngine::Scene::GetScene().GetEntityManager());
-	FusionEngine::Scene::GetScene().AddSystem(sunFunctional);
+		new FusionEngine::FunctionalSystem<FusionEngine::NewCelestialBody>(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
+	GetScene().AddSystem(sunFunctional);
 	FusionEngine::CollisionSystem *sunClickable = 
-		new FusionEngine::CollisionSystem(&FusionEngine::World::GetWorld().GetEventManager(), FusionEngine::Scene::GetScene().GetEntityManager());
-	FusionEngine::Scene::GetScene().AddSystem(sunClickable);
-	FusionEngine::Scene::GetScene().AddComponent("sun", sunRender);
+		new FusionEngine::CollisionSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
+	GetScene().AddSystem(sunClickable);
+	GetScene().AddComponent("sun", sunRender);
 
 	FusionEngine::Transform *sunTransform = new FusionEngine::Transform();
 	sunTransform->position = glm::vec3(0.0f, 0.0f, 0.0f);
 	sunTransform->rotation = glm::vec3();
 	sunTransform->scale = glm::vec3(0.5f);
-	FusionEngine::Scene::GetScene().AddComponent("sun", sunTransform);
+	GetScene().AddComponent("sun", sunTransform);
 
 	FusionEngine::Functional<FusionEngine::NewCelestialBody> *sunFuncComp = 
 		new FusionEngine::Functional<FusionEngine::NewCelestialBody>();
 	sunFuncComp->updatedObject = std::unique_ptr<FusionEngine::NewCelestialBody>(new FusionEngine::NewCelestialBody(4, 0.5f, 0.0f));
-	FusionEngine::Scene::GetScene().AddComponent("sun", sunFuncComp);
+	GetScene().AddComponent("sun", sunFuncComp);
 	
 	FusionEngine::Collidable *sunCollidable = new FusionEngine::Collidable();
 	sunCollidable->isForCheck = false;
-	FusionEngine::Scene::GetScene().AddComponent("sun", sunCollidable);
+	GetScene().AddComponent("sun", sunCollidable);
 
-	FusionEngine::World::GetWorld().GetRenderer().SubscribeForRendering(FusionEngine::Scene::GetScene().GetEntity("sun"));
+	GetWorld().GetRenderer().SubscribeForRendering(GetScene().GetEntity("sun"));
 }
 
 
@@ -228,7 +228,7 @@ void Init()
 
     InitializePrograms();
     InitializeScene();
-	FusionEngine::World::GetWorld().Load("test-gui.yaml");
+	GetWorld().Load("test-gui.yaml");
 
     
     glEnable(GL_CULL_FACE);
@@ -244,7 +244,7 @@ void Init()
     glDepthRange(depthZNear, depthZFar);
     glEnable(GL_DEPTH_CLAMP);
 
-	ShaderManager &worldShaderManager = FusionEngine::World::GetWorld().GetShaderManager();
+	ShaderManager &worldShaderManager = GetWorld().GetShaderManager();
 
     GLuint lightUniformBuffer = 0;
     glGenBuffers(1, &lightUniformBuffer);
@@ -294,13 +294,13 @@ void Display()
 
 	glutil::MatrixStack modelMatrix;
 
-	modelMatrix.SetMatrix(FusionEngine::World::GetWorld().GetCamera().CalcMatrix());
-	FusionEngine::World::GetWorld().GetDisplayData().modelMatrix = modelMatrix;
+	modelMatrix.SetMatrix(GetWorld().GetCamera().CalcMatrix());
+	GetWorld().GetDisplayData().modelMatrix = modelMatrix;
 
 	int loops = 0;
 	while (GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
 	{
-		FusionEngine::Scene::GetScene().ProcessSystems();
+		GetScene().ProcessSystems();
 	    HandleMouse();
 	
 		nextGameTick += SKIP_TICKS;
@@ -308,11 +308,11 @@ void Display()
 	}
 	// TODO: Use that
 	float interpolation = float(GetTickCount() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
-	FusionEngine::World::GetWorld().interpolation = interpolation;
-	FusionEngine::World::GetWorld().Render();
+	GetWorld().interpolation = interpolation;
+	GetWorld().Render();
 
 
-	FusionEngine::World::GetWorld().GetMouse().OverrideLastPosition();
+	GetWorld().GetMouse().OverrideLastPosition();
     
     glutSwapBuffers();
     glutPostRedisplay();
@@ -323,11 +323,11 @@ void Reshape(int width, int height)
 {
     glutil::MatrixStack projMatrix;
     float aspectRatio = width / (float)height;
-    projMatrix.Perspective(45.0f, aspectRatio, FusionEngine::World::GetWorld().GetDisplayData().zNear, 
-											   FusionEngine::World::GetWorld().GetDisplayData().zFar);
+    projMatrix.Perspective(45.0f, aspectRatio, GetWorld().GetDisplayData().zNear, 
+											   GetWorld().GetDisplayData().zFar);
 
-    FusionEngine::World::GetWorld().GetDisplayData().projectionMatrix = projMatrix.Top();
-	ShaderManager worldShaderManager = FusionEngine::World::GetWorld().GetShaderManager();
+    GetWorld().GetDisplayData().projectionMatrix = projMatrix.Top();
+	ShaderManager worldShaderManager = GetWorld().GetShaderManager();
 
     glUseProgram(worldShaderManager.GetBillboardProgData().theProgram);
     glUniformMatrix4fv(worldShaderManager.GetBillboardProgData().cameraToClipMatrixUnif, 
@@ -352,9 +352,9 @@ void Reshape(int width, int height)
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     
-	FusionEngine::World::GetWorld().GetDisplayData().windowHeight = height;
-	FusionEngine::World::GetWorld().GetDisplayData().windowWidth = width;
-	FusionEngine::World::GetWorld().GetEventManager().
+	GetWorld().GetDisplayData().windowHeight = height;
+	GetWorld().GetDisplayData().windowWidth = width;
+	GetWorld().GetEventManager().
 		FireEvent(FusionEngine::OnReshapeEvent(FusionEngine::EVENT_ON_RESHAPE, width, height));
 
     glViewport(0, 0, (GLsizei) width, (GLsizei) height);

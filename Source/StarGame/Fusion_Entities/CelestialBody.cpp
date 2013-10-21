@@ -131,16 +131,16 @@ bool NewCelestialBody::AddSatellite()
 	satRender->shaderProgram = World::GetWorld().GetShaderManager().GetLitProgData().theProgram;
 	satRender->vao = loadedMesh.vao;
 
-	FusionEngine::Scene::GetScene().AddEntity(newSat->GetID());
-	FusionEngine::Scene::GetScene().AddComponent(newSat->GetID(), satRender);
+	GetScene().AddEntity(newSat->GetID());
+	GetScene().AddComponent(newSat->GetID(), satRender);
 
 	FusionEngine::Transform *satTransform = new FusionEngine::Transform();
 	satTransform->position = glm::vec3();
 	satTransform->rotation = glm::vec3();
 	satTransform->scale = glm::vec3(newSat->diameter);
-	FusionEngine::Scene::GetScene().AddComponent(newSat->GetID(), satTransform);
+	GetScene().AddComponent(newSat->GetID(), satTransform);
 
-	World::GetWorld().GetRenderer().SubscribeForRendering(FusionEngine::Scene::GetScene().GetEntity(newSat->GetID()));
+	World::GetWorld().GetRenderer().SubscribeForRendering(GetScene().GetEntity(newSat->GetID()));
 
 	this->currentSatelliteCount++;
 
@@ -150,13 +150,13 @@ bool NewCelestialBody::AddSatellite()
 void NewCelestialBody::Update()
 {
 	FusionEngine::ComponentMapper<FusionEngine::Transform> transformData =
-		FusionEngine::Scene::GetScene().GetEntityManager()->GetComponentList(FusionEngine::Scene::GetScene().GetEntity("sun"), FusionEngine::CT_TRANSFORM);
+		GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity("sun"), FusionEngine::CT_TRANSFORM);
 
 	for(auto satellite = this->satellites.begin(); satellite != this->satellites.end(); ++satellite)
 	{
 		// TODO: Get entity by id
 		FusionEngine::ComponentMapper<FusionEngine::Transform> satTransformData =
-			FusionEngine::Scene::GetScene().GetEntityManager()->GetComponentList(FusionEngine::Scene::GetScene().GetEntity((*satellite)->GetID()), FusionEngine::CT_TRANSFORM);
+			GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity((*satellite)->GetID()), FusionEngine::CT_TRANSFORM);
 
 		
 		glutil::MatrixStack relativeTransformStack;

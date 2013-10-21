@@ -134,4 +134,10 @@ namespace FusionEngine
 	}
 }
 
+inline FusionEngine::World& GetWorld()
+{
+	return FusionEngine::World::GetWorld();
+}
+
+
 #endif

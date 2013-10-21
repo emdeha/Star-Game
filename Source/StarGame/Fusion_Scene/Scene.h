@@ -102,5 +102,10 @@ namespace FusionEngine
 	};
 };
 
+inline FusionEngine::Scene& GetScene()
+{
+	return FusionEngine::Scene::GetScene();
+}
+
 
 #endif

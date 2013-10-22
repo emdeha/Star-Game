@@ -19,7 +19,7 @@
 #define SHADER_MANAGER_H
 
 
-#include <vector>
+#include <unordered_map>
 #include <string>
 
 #include "../glsdk/glload/gl_3_3.h"
@@ -29,7 +29,18 @@ namespace FusionEngine
 	enum ProgramType
 	{
 		FE_LIT_PROGRAM,
+		FE_LIT_TEXTURE_PROGRAM,
 		FE_UNLIT_PROGRAM,
+		FE_SIMPLE_PROGRAM,
+		FE_SIMPLE_NO_UB_PROGRAM,
+		FE_FONT_PROGRAM,
+		FE_SIMPLE_TEXTURE_PROGRAM,
+		FE_TEXTURE_PROGRAM,
+		FE_TEXTURE_PERSPECTIVE_PROGRAM,
+		FE_BILLBOARD_NO_TEXTURE_PROGRAM,
+		FE_BILLBOARD_PROGRAM,
+		FE_PARTICLE_PROGRAM,
+		FE_SPRITE_PARTICLE_PROGRAM,
 	};
 
 	struct Program
@@ -40,14 +51,17 @@ namespace FusionEngine
 	class ShaderManager
 	{
 	private:
-		std::vector<std::pair<ProgramType, Program>> loadedPrograms;
+		std::unordered_map<ProgramType, Program> loadedPrograms;
 
 	public:
 		ShaderManager();
 
-		void LoadProgram(const std::string &vertexShader, const std::string &fragmentShader);
+		void LoadFromConfig(const std::string &configFile); // Implement
 
-		Program GetProgram(ProgramType);
+		void LoadProgram(ProgramType programType, 
+						 const std::string &vertexShader, const std::string &fragmentShader);
+
+		Program GetProgram(ProgramType programType);
 	};
 }
 

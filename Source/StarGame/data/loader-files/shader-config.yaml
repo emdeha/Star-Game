@@ -1,0 +1,16 @@
+block-indices: [ MATERIAL, LIGHT, PROJECTION, ORTHOGRAPHIC ]
+uniform-buffers: [ LIGHT, PROJECTION, ORTHOGRAPHIC ]
+programs:
+    id: LIT
+    vertex-source: "PN"
+    fragment-source: "GaussianLighting"
+    uniforms: 
+        - "modelToCameraMatrix"
+        - "lightIntensity"
+        - "normalModelToCameraMatrix"
+        - "cameraSpaceLightPos"
+    blocks:
+        - { index: MATERIAL, name: "Material" }
+        - { index: LIGHT, name: "Light" }
+        - { index: PROJECTION, name: "Projection" }
+

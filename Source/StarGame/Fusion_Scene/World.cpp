@@ -5,6 +5,7 @@
 
 using namespace FusionEngine;
 
+#define FAST_LOAD
 
 World::World()
 {
@@ -25,6 +26,7 @@ void World::Load(const std::string &guiLayoutFile,
 	FusionEngine::GUIAssetObject loadedGUI = guiLoader.LoadAssetObject("loader-files", guiLayoutFile);
 	guiLayouts = loadedGUI.GetAllLoadedLayouts();
 
+#ifndef FAST_LOAD
 	// Load Audio
 	FusionEngine::AssetLoader<FusionEngine::AudioAssetObject> audioLoader;
 	audioLoader.RegisterType("loader-files", new FusionEngine::CAudioLoader());
@@ -43,6 +45,7 @@ void World::Load(const std::string &guiLayoutFile,
 			path = "../data/music/";
 		}
 	}
+#endif
 	
 	// Load Cheats
 }

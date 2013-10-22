@@ -1,0 +1,96 @@
+block-indices: [ MATERIAL, LIGHT, PROJECTION, ORTHOGRAPHIC ]
+uniform-buffers: [ LIGHT, PROJECTION, ORTHOGRAPHIC ]
+programs:
+    lit: 
+        id: LIT
+        vertex-source: "PN"
+        fragment-source: "GaussianLighting"
+        uniforms: 
+            - "modelToCameraMatrix"
+            - "lightIntensity"
+            - "normalModelToCameraMatrix"
+            - "cameraSpaceLightPos"
+        blocks:
+            - { index: MATERIAL, name: "Material" }
+            - { index: LIGHT, name: "Light" }
+            - { index: PROJECTION, name: "Projection" }
+    simple-texture:
+        id: SIMPLE_TEXTURE
+        vertex-source: "SimpleTexture"
+        fragment-source: "SimpleTexture"
+        uniforms:
+            - "colorTexture"
+            - "modelToCameraMatrix"
+            - "color"
+        blocks: 
+            - { index: PROJECTION, name: "Projection" }
+        attribs: 
+            - "position"
+            - "normal"
+            - "texCoord"
+    unlit:
+        id: UNLIT
+        vertex-source: "PosTransform"
+        fragment-source: "UniformColor"
+        uniforms:
+            - "modelToCameraMatrix"
+            - "objectColor"
+        blocks:
+            - { index: PROJECTION, name: "Projection" }
+    simple:
+        id: SIMPLE
+        vertex-source: "PosColorLocalTransform"
+        fragment-source: "ColorPassThrough"
+        uniforms:
+            - "modelToCameraMatrix"
+            - "color" 
+        attribs:
+            - "position"
+        blocks:
+            - { index: PROJECTION, name: "Projection" }
+    simple-no-ub:
+        id: SIMPLE_NO_UB
+        vertex-source: "PosTransformNoUB"
+        fragment-source: "ColorPassThrough"
+        uniforms: 
+            - "modelToCameraMatrix"
+            - "color"
+            - "cameraToClipMatrix"
+        attribs:
+            - "position"
+        blocks:
+            - { index: ORTHOGRAPHIC, name: "OrthographicProjection" }
+    font: 
+        id: FONT
+        vertex-source: "Font"
+        fragment-source: "Font"
+    texture:
+        id: TEXTURE
+        vertex-source: "Texture"
+        fragment-source: "Texture"  
+    perspective-texture:
+        id: TEXTURE_PERSPECTIVE
+        vertex-source: "TexturePerspective"
+        fragment-source: "Texture"
+    billboard:
+        id: BILLBOARD
+        vertex-source: "BillboardShader"
+        geom-source: "BillboardShader"
+        fragment-source: "BillboardShader"
+    particle:
+        id: PARTICLE
+        vertex-source: "ParticleShaderBillboarded"
+        geom-source: "ParticleShaderBillboarded"
+    billboard-no-texture:
+        id: BILLBOARD_NO_TEXTURE
+        vertex-source: "BillboardShader"
+        geom-source: "BillboardShaderNoTexture"
+        fragment-source: "BillboardShaderNoTexture"
+    sprite-particle:
+        id: SPRITE_PARTICLE
+        vertex-source: "SpriteParticleShader"
+        fragment-source: "SpriteParticleShader"   
+    lit-texture:
+        id: LIT_TEXTURE
+        vertex-source: "LitTexture"
+        fragment-source: "LitTexture"  

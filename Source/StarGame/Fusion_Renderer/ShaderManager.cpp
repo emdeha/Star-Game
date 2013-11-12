@@ -7,6 +7,11 @@
 using namespace FusionEngine;
 
 
+void ShaderManager::LoadFromConfig(const std::string &configFile)
+{
+
+}
+
 void ShaderManager::LoadProgram(ProgramType programType,
 								const std::string &vertexShader, const std::string &fragmentShader)
 {

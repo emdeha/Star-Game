@@ -1778,3 +1778,18 @@ TweakVarAssetObject TweakVarLoader::Load(const std::string &type, const std::str
 
 	return TweakVarAssetObject(loadedTweaks);
 }
+
+
+ShaderAssetObject ShaderLoader::Load(const std::string &type, const std::string &name)
+{
+	YAML::Node shaderConfig = YAML::LoadFile("../data/" + type + "/" + name);
+
+
+
+	if (shaderConfig)
+	{
+		if (shaderConfig["programs"])
+		{
+		}
+	}
+}

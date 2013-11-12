@@ -76,15 +76,39 @@ programs:
         id: TEXTURE
         vertex-source: "Texture"
         fragment-source: "Texture"  
+        uniforms:
+            - "modelToCameraMatrix"
+            - "cameraToClipMatrix"
+            - "_sampler"
+            - "color"
+        attribs:
+            - "position"
+            - "texCoord"
+        blocks:
+            - { index: ORTHOGRAPHIC, name: "OrthographicProjection" }
     perspective-texture:
         id: TEXTURE_PERSPECTIVE
         vertex-source: "TexturePerspective"
         fragment-source: "Texture"
+        uniforms:
+            - "modelToCameraMatrix"
+            - "cameraToClipMatrix"
+            - "_sampler"
+            - "color"
+        attribs:
+            - "position"
+            - "texCoord"
+        blocks:
+            - { index: PROJECTION, name: "Projection" }
     billboard:
         id: BILLBOARD
         vertex-source: "BillboardShader"
         geom-source: "BillboardShader"
         fragment-source: "BillboardShader"
+        uniforms: 
+            - "cameraPosition"
+            - "cameraToClipMatrix"
+            - "modelToCameraMatrix"
     particle:
         id: PARTICLE
         vertex-source: "ParticleShaderBillboarded"
@@ -94,6 +118,15 @@ programs:
         vertex-source: "BillboardShader"
         geom-source: "BillboardShaderNoTexture"
         fragment-source: "BillboardShaderNoTexture"
+        uniforms:
+            - "cameraPosition"
+            - "cameraToClipMatrix"
+            - "modelToCameraMatrix"
+            - "color"
+            - "billboardSize"
+            - "deltaPosition"
+        attribs:
+            - "position"
     sprite-particle:
         id: SPRITE_PARTICLE
         vertex-source: "SpriteParticleShader"

@@ -43,9 +43,26 @@ namespace FusionEngine
 		FE_SPRITE_PARTICLE_PROGRAM,
 	};
 
+	enum BlockType
+	{
+		BT_MATERIAL,
+		BT_LIGHT, 
+		BT_PROJECTION,
+		BT_ORTHOGRAPHIC,
+	};
+
+	enum UniformBufferType
+	{
+		UBT_PROJECTION,
+		UBT_ORTHOGRAPHIC, 
+		UBT_LIGHT,
+	};
+
 	struct Program
 	{
 		GLuint programHandle;
+
+
 	};
 
 	class ShaderManager

@@ -23,6 +23,7 @@
 #include "framework.h"
 #include "../framework/ErrorAPI.h"
 
+using namespace FusionEngine;
 
 // TODO: Check if each uniform and attribute location is gathered correctly
 

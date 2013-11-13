@@ -23,6 +23,10 @@
 #include <ctime>
 #include <sstream>
 
+#include "../Fusion_Renderer/ShaderEnums.h"
+
+using namespace FusionEngine;
+
 
 #define DEPLOY_UNITS_COUNT 4
 static int countedUnits = 0;
@@ -1370,8 +1374,8 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
 {
 	//if(!isPaused)
 	//{
-		GLuint materialBlockIndex = shaderManager.GetBlockIndex(BT_MATERIAL);
-		GLuint lightUniformBuffer = shaderManager.GetUniformBuffer(UBT_LIGHT);
+		GLuint materialBlockIndex = shaderManager.GetBlockIndex(FusionEngine::BT_MATERIAL);
+		GLuint lightUniformBuffer = shaderManager.GetUniformBuffer(FusionEngine::UBT_LIGHT);
 		LitProgData litData = shaderManager.GetLitProgData();
 		UnlitProgData unLitData = shaderManager.GetUnlitProgData();
 		SimpleProgData simpleData = shaderManager.GetSimpleProgData();

@@ -24,40 +24,10 @@
 
 #include "../glsdk/glload/gl_3_3.h"
 
+#include "ShaderEnums.h"
+
 namespace FusionEngine
 {
-	enum ProgramType
-	{
-		FE_LIT_PROGRAM,
-		FE_LIT_TEXTURE_PROGRAM,
-		FE_UNLIT_PROGRAM,
-		FE_SIMPLE_PROGRAM,
-		FE_SIMPLE_NO_UB_PROGRAM,
-		FE_FONT_PROGRAM,
-		FE_SIMPLE_TEXTURE_PROGRAM,
-		FE_TEXTURE_PROGRAM,
-		FE_TEXTURE_PERSPECTIVE_PROGRAM,
-		FE_BILLBOARD_NO_TEXTURE_PROGRAM,
-		FE_BILLBOARD_PROGRAM,
-		FE_PARTICLE_PROGRAM,
-		FE_SPRITE_PARTICLE_PROGRAM,
-	};
-
-	enum BlockType
-	{
-		BT_MATERIAL,
-		BT_LIGHT, 
-		BT_PROJECTION,
-		BT_ORTHOGRAPHIC,
-	};
-
-	enum UniformBufferType
-	{
-		UBT_PROJECTION,
-		UBT_ORTHOGRAPHIC, 
-		UBT_LIGHT,
-	};
-
 	struct Program
 	{
 		GLuint programHandle;

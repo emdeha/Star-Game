@@ -31,21 +31,7 @@
 //		 generic shader manager
 
 
-
-enum BlockType
-{
-	BT_MATERIAL,
-	BT_LIGHT, 
-	BT_PROJECTION,
-	BT_ORTHOGRAPHIC,
-};
-
-enum UniformBufferType
-{
-	UBT_PROJECTION,
-	UBT_ORTHOGRAPHIC, 
-	UBT_LIGHT,
-};
+#include "../Fusion_Renderer/ShaderEnums.h"
 
 
 enum ProgramDataType
@@ -116,8 +102,8 @@ public:
 class ShaderManager
 {
 private:
-	std::map<BlockType, int> blockIndices;
-	std::map<UniformBufferType, unsigned int> uniformBuffers; 
+	std::map<FusionEngine::BlockType, int> blockIndices;
+	std::map<FusionEngine::UniformBufferType, unsigned int> uniformBuffers; 
 
 	std::map<std::string, ProgramData> programDatas;
 
@@ -151,7 +137,7 @@ public:
 	void AddUniformBlock(const std::string &programDataType, 
 						 const std::string &uniformBlockName, 
 						 const std::string &uniformBlockNameInShader,
-						 BlockType blockType);
+						 FusionEngine::BlockType blockType);
 	
 	ProgramData GetProgramData(const std::string &programDataType);
 
@@ -196,9 +182,9 @@ public:
 	SpriteParticleProgData GetSpriteParticleProgData();
 
 
-	const int GetBlockIndex(BlockType);
-	unsigned int GetUniformBuffer(UniformBufferType);
-	void SetUniformBuffer(UniformBufferType, unsigned int value);
+	const int GetBlockIndex(FusionEngine::BlockType);
+	unsigned int GetUniformBuffer(FusionEngine::UniformBufferType);
+	void SetUniformBuffer(FusionEngine::UniformBufferType, unsigned int value);
 };
 
 

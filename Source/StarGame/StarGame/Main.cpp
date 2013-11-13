@@ -39,6 +39,7 @@
 #include "../Fusion_EntitySystem/FusionSystems.h"
 #include "../Fusion_AssetLoader/AssetLoader.h"
 #include "../Fusion_Renderer/Renderer.h"
+#include "../Fusion_Renderer/ShaderEnums.h"
 #include "../Fusion_Entities/CelestialBody.h"
 
 #define FUSION_LOAD_FAST
@@ -264,32 +265,32 @@ void Init()
 
     GLuint lightUniformBuffer = 0;
     glGenBuffers(1, &lightUniformBuffer);
-    worldShaderManager.SetUniformBuffer(UBT_LIGHT, lightUniformBuffer);
+    worldShaderManager.SetUniformBuffer(FusionEngine::UBT_LIGHT, lightUniformBuffer);
     glBindBuffer(GL_UNIFORM_BUFFER, lightUniformBuffer);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(LightBlockGamma), NULL, GL_DYNAMIC_DRAW);
 
     GLuint projectionUniformBuffer = 0;
     glGenBuffers(1, &projectionUniformBuffer);
-    worldShaderManager.SetUniformBuffer(UBT_PROJECTION, projectionUniformBuffer);
+    worldShaderManager.SetUniformBuffer(FusionEngine::UBT_PROJECTION, projectionUniformBuffer);
     glBindBuffer(GL_UNIFORM_BUFFER, projectionUniformBuffer);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 
     GLuint orthographicUniformBuffer = 0;
     glGenBuffers(1, &orthographicUniformBuffer);
-    worldShaderManager.SetUniformBuffer(UBT_ORTHOGRAPHIC, orthographicUniformBuffer);
+    worldShaderManager.SetUniformBuffer(FusionEngine::UBT_ORTHOGRAPHIC, orthographicUniformBuffer);
     glBindBuffer(GL_UNIFORM_BUFFER, orthographicUniformBuffer);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 
     // Bind the static buffers.
-    glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(BT_LIGHT), 
+    glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(FusionEngine::BT_LIGHT), 
         lightUniformBuffer, 
         0, sizeof(LightBlockGamma));
 
-    glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(BT_PROJECTION), 
+    glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(FusionEngine::BT_PROJECTION), 
         projectionUniformBuffer,
         0, sizeof(glm::mat4));
 
-    glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(BT_ORTHOGRAPHIC),
+    glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(FusionEngine::BT_ORTHOGRAPHIC),
         orthographicUniformBuffer,
         0, sizeof(glm::mat4));
 
@@ -355,7 +356,7 @@ void Reshape(int width, int height)
                        1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
     glUseProgram(0);
     
-    glBindBuffer(GL_UNIFORM_BUFFER, worldShaderManager.GetUniformBuffer(UBT_PROJECTION));
+    glBindBuffer(GL_UNIFORM_BUFFER, worldShaderManager.GetUniformBuffer(FusionEngine::UBT_PROJECTION));
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(projMatrix.Top()), &projMatrix.Top());
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
@@ -363,7 +364,7 @@ void Reshape(int width, int height)
     projMatrix.SetIdentity();
     projMatrix.Orthographic((float)width, 0.0f, (float)height, 0.0f, 1.0f, 1000.0f);
     
-    glBindBuffer(GL_UNIFORM_BUFFER, worldShaderManager.GetUniformBuffer(UBT_ORTHOGRAPHIC));
+    glBindBuffer(GL_UNIFORM_BUFFER, worldShaderManager.GetUniformBuffer(FusionEngine::UBT_ORTHOGRAPHIC));
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(projMatrix.Top()), &projMatrix.Top());
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 

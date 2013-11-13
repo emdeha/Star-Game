@@ -374,8 +374,11 @@ namespace FusionEngine
 
 	public:
 		ShaderAssetObject() {}
-		ShaderAssetObject(const std::map<ProgramType, ProgramData> &newLoadedPrograms)
-			: loadedPrograms(newLoadedPrograms) {}
+		ShaderAssetObject(const std::map<ProgramType, ProgramData> &newLoadedPrograms,
+						  const std::map<UniformBufferType, unsigned int> &newUniformBuffers,
+						  const std::map<BlockType, int> &newBlockIndices)
+			: loadedPrograms(newLoadedPrograms), 
+			  uniformBuffers(newUniformBuffers), blockIndices(newBlockIndices) {}
 
 		unsigned int GetUniformBuffer(UniformBufferType ubType) const;
 		int GetLoadedBlockIndex(BlockType blockType) const;

@@ -237,11 +237,16 @@ void ShaderManager::LoadLitTextureProgram(const std::string &vertexShader,
 	shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, fragmentShader));
 
 	litTextureData.theProgram = Framework::CreateProgram(shaderList);
-	litTextureData.modelToCameraMatrixUnif = glGetUniformLocation(litTextureData.theProgram, "modelToCameraMatrix");
-	litTextureData.lightIntensityUnif = glGetUniformLocation(litTextureData.theProgram, "lightIntensity");
-	litTextureData.normalModelToCameraMatrixUnif = glGetUniformLocation(litTextureData.theProgram, "normalModelToCameraMatrix");
-	litTextureData.cameraSpaceLightPosUnif = glGetUniformLocation(litTextureData.theProgram, "cameraSpaceLightPos");
-	litTextureData.textureUnif = glGetUniformLocation(litTextureData.theProgram, "_sampler");
+	litTextureData.modelToCameraMatrixUnif = 
+		glGetUniformLocation(litTextureData.theProgram, "modelToCameraMatrix");
+	litTextureData.lightIntensityUnif = 
+		glGetUniformLocation(litTextureData.theProgram, "lightIntensity");
+	litTextureData.normalModelToCameraMatrixUnif = 
+		glGetUniformLocation(litTextureData.theProgram, "normalModelToCameraMatrix");
+	litTextureData.cameraSpaceLightPosUnif = 
+		glGetUniformLocation(litTextureData.theProgram, "cameraSpaceLightPos");
+	litTextureData.textureUnif = 
+		glGetUniformLocation(litTextureData.theProgram, "_sampler");
 
 	litTextureData.positionAttrib = glGetAttribLocation(litTextureData.theProgram, "position");
 	litTextureData.normalAttrib = glGetAttribLocation(litTextureData.theProgram, "normal");

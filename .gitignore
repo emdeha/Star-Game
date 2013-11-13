@@ -12,3 +12,4 @@ Source/Star Game/data/saved-games/
 *.pdb
 *.suo
 *.sdf
+*.opensdf

@@ -36,6 +36,8 @@
 #include "../assimp/include/assimp/postprocess.h"
 #include "yaml-cpp/yaml.h"
 
+#include "../Fusion_Renderer/ShaderEnums.h"
+
 
 namespace FusionEngine
 {
@@ -354,12 +356,32 @@ namespace FusionEngine
 	/////////////////////
 	//  Shader Loader  //
 	/////////////////////
+	struct ProgramData
+	{
+		GLuint programId;
+
+		std::map<UniformType, GLuint> uniforms;
+		std::map<AttribType, GLuint> attribs;
+	};
+
 	class ShaderAssetObject : public IAssetObject
 	{
 	private:
+		std::map<ProgramType, ProgramData> loadedPrograms;
+
+		std::map<UniformBufferType, unsigned int> uniformBuffers;
+		std::map<BlockType, int> blockIndices;
+
 	public:
 		ShaderAssetObject() {}
+		ShaderAssetObject(const std::map<ProgramType, ProgramData> &newLoadedPrograms)
+			: loadedPrograms(newLoadedPrograms) {}
+
+		unsigned int GetUniformBuffer(UniformBufferType ubType) const;
+		int GetLoadedBlockIndex(BlockType blockType) const;
 		
+		ProgramData GetLoadedProgram(ProgramType progType) const;
+		const std::map<ProgramType, ProgramData> &GetAllLoadedPrograms() const;
 	};
 
 	class ShaderLoader : public ITypeLoader<ShaderAssetObject>

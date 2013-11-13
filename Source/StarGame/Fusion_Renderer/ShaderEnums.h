@@ -23,7 +23,9 @@ namespace FusionEngine
 {
 	enum ProgramType
 	{
-		FE_PROGRAM_LIT,
+		FE_PROGRAM_BAD = -1,
+
+		FE_PROGRAM_LIT = 0,
 		FE_PROGRAM_LIT_TEXTURE,
 		FE_PROGRAM_UNLIT,
 		FE_PROGRAM_SIMPLE,
@@ -41,7 +43,9 @@ namespace FusionEngine
 	// TODO: Generate from file?
 	enum UniformType
 	{
-		FE_UNIFORM_MODEL_TO_CAMERA_MATRIX,
+		FE_UNIFORM_BAD = -1,
+
+		FE_UNIFORM_MODEL_TO_CAMERA_MATRIX = 0,
 		FE_UNIFORM_NORMAL_MODEL_TO_CAMERA_MATRIX,
 		FE_UNIFORM_COLOR_TEXTURE,
 		FE_UNIFORM_COLOR,
@@ -66,7 +70,9 @@ namespace FusionEngine
 
 	enum AttribType
 	{
-		FE_ATTRIB_POSITION,
+		FE_ATTRIB_BAD = -1,
+
+		FE_ATTRIB_POSITION = 0,
 		FE_ATTRIB_NORMAL,
 		FE_ATTRIB_TEX_COORD,
 		FE_ATTRIB_AGE,
@@ -77,7 +83,9 @@ namespace FusionEngine
 	// TODO: Add FE_ prefix
 	enum BlockType
 	{
-		BT_MATERIAL,
+		BT_BAD = -1,
+
+		BT_MATERIAL = 0,
 		BT_LIGHT, 
 		BT_PROJECTION,
 		BT_ORTHOGRAPHIC,
@@ -85,7 +93,9 @@ namespace FusionEngine
 
 	enum UniformBufferType
 	{
-		UBT_PROJECTION,
+		UBT_BAD = -1,
+
+		UBT_PROJECTION = 0,
 		UBT_ORTHOGRAPHIC, 
 		UBT_LIGHT,
 	};

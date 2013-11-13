@@ -390,6 +390,14 @@ namespace FusionEngine
 	class ShaderLoader : public ITypeLoader<ShaderAssetObject>
 	{
 	private:
+		ProgramType GetProgramTypeFromString(const std::string &strId);
+
+		std::pair<BlockType, int> GetBlockPairFromString(const std::string &strId);
+		std::pair<UniformBufferType, unsigned int> GetUBPairFromString(const std::string &strId);
+		
+		UniformType GetUniformTypeFromString(const std::string &strId);
+		AttribType GetAttribTypeFromString(const std::string &strId);
+
 	public:
 		ShaderAssetObject Load(const std::string &type, const std::string &name);
 	};

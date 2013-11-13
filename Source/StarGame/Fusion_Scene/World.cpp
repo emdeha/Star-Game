@@ -26,6 +26,14 @@ void World::Load(const std::string &guiLayoutFile,
 	FusionEngine::GUIAssetObject loadedGUI = guiLoader.LoadAssetObject("loader-files", guiLayoutFile);
 	guiLayouts = loadedGUI.GetAllLoadedLayouts();
 
+	// Load Shader Programs
+	FusionEngine::AssetLoader<FusionEngine::ShaderAssetObject> shaderLoader;
+	shaderLoader.RegisterType("loader-files", new FusionEngine::ShaderLoader());
+	FusionEngine::ShaderAssetObject loadedShaders = shaderLoader.LoadAssetObject("loader-files", "shader-config.yaml");
+
+	std::printf("SAD");
+
+
 #ifndef FAST_LOAD
 	// Load Audio
 	FusionEngine::AssetLoader<FusionEngine::AudioAssetObject> audioLoader;

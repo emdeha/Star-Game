@@ -29,65 +29,65 @@ const std::map<ProgramType, FusionEngine::ProgramData> &ShaderAssetObject::GetAl
 }
 
 
-ProgramType ShaderLoader::GetProgramTypeFromString(const std::string &strId)
+ProgramType ShaderLoader::GetProgramTypeFromString(const std::string &strId) const
 {
 	if (strId == "LIT")
 	{
-		FE_PROGRAM_LIT;
+		return FE_PROGRAM_LIT;
 	}
 	if (strId == "LIT_TEXTURE")
 	{
-		FE_PROGRAM_LIT_TEXTURE;
+		return FE_PROGRAM_LIT_TEXTURE;
 	}
 	if (strId == "UNLIT")
 	{
-		FE_PROGRAM_UNLIT;
+		return FE_PROGRAM_UNLIT;
 	}
 	if (strId == "SIMPLE")
 	{
-		FE_PROGRAM_SIMPLE;
+		return FE_PROGRAM_SIMPLE;
 	}
 	if (strId == "SIMPLE_NO_UB")
 	{
-		FE_PROGRAM_SIMPLE_NO_UB;
+		return FE_PROGRAM_SIMPLE_NO_UB;
 	}
 	if (strId == "FONT")
 	{
-		FE_PROGRAM_FONT;
+		return FE_PROGRAM_FONT;
 	}
 	if (strId == "SIMPLE_TEXTURE")
 	{
-		FE_PROGRAM_SIMPLE_TEXTURE;
+		return FE_PROGRAM_SIMPLE_TEXTURE;
 	}
 	if (strId == "TEXTURE")
 	{
-		FE_PROGRAM_TEXTURE;
+		return FE_PROGRAM_TEXTURE;
 	}
 	if (strId == "TEXTURE_PERSPECTIVE")
 	{
-		FE_PROGRAM_TEXTURE_PERSPECTIVE;
+		return FE_PROGRAM_TEXTURE_PERSPECTIVE;
 	}
 	if (strId == "BILLBOARD_NO_TEXTURE")
 	{
-		FE_PROGRAM_BILLBOARD_NO_TEXTURE;
+		return FE_PROGRAM_BILLBOARD_NO_TEXTURE;
 	}
 	if (strId == "BILLBOARD")
 	{
-		FE_PROGRAM_BILLBOARD;
+		return FE_PROGRAM_BILLBOARD;
 	}
 	if (strId == "PARTICLE")
 	{
-		FE_PROGRAM_PARTICLE;
+		return FE_PROGRAM_PARTICLE;
 	}
 	if (strId == "SPRITE_PARTICLE")
 	{
-		FE_PROGRAM_SPRITE_PARTICLE;
+		return FE_PROGRAM_SPRITE_PARTICLE;
 	}
 
 	return FE_PROGRAM_BAD;
 }
 
-std::pair<BlockType, int> ShaderLoader::GetBlockPairFromString(const std::string &strId)
+std::pair<BlockType, int> ShaderLoader::GetBlockPairFromString(const std::string &strId) const
 {
 	if (strId == "MATERIAL")
 	{
@@ -109,7 +109,7 @@ std::pair<BlockType, int> ShaderLoader::GetBlockPairFromString(const std::string
 	return std::make_pair(BT_BAD, -1);
 }
 
-std::pair<UniformBufferType, unsigned int> ShaderLoader::GetUBPairFromString(const std::string &strId)
+std::pair<UniformBufferType, unsigned int> ShaderLoader::GetUBPairFromString(const std::string &strId) const
 {
 	if (strId == "LIGHT")
 	{
@@ -127,7 +127,7 @@ std::pair<UniformBufferType, unsigned int> ShaderLoader::GetUBPairFromString(con
 	return std::make_pair(UBT_BAD, -1);
 }
 
-UniformType GetUniformTypeFromString(const std::string &strId)
+UniformType ShaderLoader::GetUniformTypeFromString(const std::string &strId) const
 {
 	if (strId == "modelToCameraMatrix")
 	{
@@ -217,31 +217,31 @@ UniformType GetUniformTypeFromString(const std::string &strId)
 	return FE_UNIFORM_BAD;
 }
 
-AttribType GetAttribTypeFromString(const std::string &strId)
+AttribType ShaderLoader::GetAttribTypeFromString(const std::string &strId) const
 {
 	if (strId == "position")
 	{
-		FE_ATTRIB_POSITION;
+		return FE_ATTRIB_POSITION;
 	}
 	if (strId == "normal")
 	{
-		FE_ATTRIB_NORMAL;
+		return FE_ATTRIB_NORMAL;
 	}
 	if (strId == "texCoord")
 	{
-		FE_ATTRIB_TEX_COORD;
+		return FE_ATTRIB_TEX_COORD;
 	}
 	if (strId == "age")
 	{
-		FE_ATTRIB_AGE;
+		return FE_ATTRIB_AGE;
 	}
 	if (strId == "type")
 	{
-		FE_ATTRIB_TYPE;
+		return FE_ATTRIB_TYPE;
 	}
 	if (strId == "velocity")
 	{
-		FE_ATTRIB_VELOCITY;
+		return FE_ATTRIB_VELOCITY;
 	}
 
 	return FE_ATTRIB_BAD;
@@ -282,6 +282,43 @@ ShaderAssetObject ShaderLoader::Load(const std::string &type, const std::string 
 
 			if (shaderConfig["programs"])
 			{
+				for (auto programIdx = shaderConfig["programs"].begin();
+					 programIdx != shaderConfig["programs"].end(); ++programIdx)
+				{
+					ProgramType currentProgType = FE_PROGRAM_BAD;
+					ProgramData loadedProgramData;
+					std::vector<GLuint> shaderList;
+					std::string shaderDir = "shaders/";
+					if (programIdx->second["id"])
+					{
+						currentProgType = 
+							GetProgramTypeFromString(programIdx->second["id"].as<std::string>());
+					}
+					if (programIdx->second["vertex-source"])
+					{
+						std::string shaderFilePath = shaderDir;
+						shaderFilePath.append(programIdx->second["vertex-source"].as<std::string>());
+						shaderFilePath.append(".vert");
+						shaderList.push_back(Framework::LoadShader(GL_VERTEX_SHADER, shaderFilePath)); 
+					}
+					if (programIdx->second["fragment-source"])
+					{
+						std::string shaderFilePath = shaderDir;
+						shaderFilePath.append(programIdx->second["fragment-source"].as<std::string>());
+						shaderFilePath.append(".frag");
+						shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, shaderFilePath));
+					}
+					if (programIdx->second["geom-source"])
+					{
+						std::string shaderFilePath = shaderDir;
+						shaderFilePath.append(programIdx->second["geom-source"].as<std::string>());
+						shaderFilePath.append(".geom");
+						shaderList.push_back(Framework::LoadShader(GL_GEOMETRY_SHADER, shaderFilePath));
+					}
+					loadedProgramData.programId = Framework::CreateProgram(shaderList);
+
+					programs.insert(std::make_pair(currentProgType, loadedProgramData));
+				}
 			}
 		}
 	}

@@ -31,6 +31,59 @@ const std::map<ProgramType, FusionEngine::ProgramData> &ShaderAssetObject::GetAl
 
 ProgramType ShaderLoader::GetProgramTypeFromString(const std::string &strId)
 {
+	if (strId == "LIT")
+	{
+		FE_PROGRAM_LIT;
+	}
+	if (strId == "LIT_TEXTURE")
+	{
+		FE_PROGRAM_LIT_TEXTURE;
+	}
+	if (strId == "UNLIT")
+	{
+		FE_PROGRAM_UNLIT;
+	}
+	if (strId == "SIMPLE")
+	{
+		FE_PROGRAM_SIMPLE;
+	}
+	if (strId == "SIMPLE_NO_UB")
+	{
+		FE_PROGRAM_SIMPLE_NO_UB;
+	}
+	if (strId == "FONT")
+	{
+		FE_PROGRAM_FONT;
+	}
+	if (strId == "SIMPLE_TEXTURE")
+	{
+		FE_PROGRAM_SIMPLE_TEXTURE;
+	}
+	if (strId == "TEXTURE")
+	{
+		FE_PROGRAM_TEXTURE;
+	}
+	if (strId == "TEXTURE_PERSPECTIVE")
+	{
+		FE_PROGRAM_TEXTURE_PERSPECTIVE;
+	}
+	if (strId == "BILLBOARD_NO_TEXTURE")
+	{
+		FE_PROGRAM_BILLBOARD_NO_TEXTURE;
+	}
+	if (strId == "BILLBOARD")
+	{
+		FE_PROGRAM_BILLBOARD;
+	}
+	if (strId == "PARTICLE")
+	{
+		FE_PROGRAM_PARTICLE;
+	}
+	if (strId == "SPRITE_PARTICLE")
+	{
+		FE_PROGRAM_SPRITE_PARTICLE;
+	}
+
 	return FE_PROGRAM_BAD;
 }
 

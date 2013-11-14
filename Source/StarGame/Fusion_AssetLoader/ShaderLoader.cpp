@@ -76,11 +76,121 @@ std::pair<UniformBufferType, unsigned int> ShaderLoader::GetUBPairFromString(con
 
 UniformType GetUniformTypeFromString(const std::string &strId)
 {
+	if (strId == "modelToCameraMatrix")
+	{
+		return FE_UNIFORM_MODEL_TO_CAMERA_MATRIX;
+	}
+	if (strId == "normalModelToCameraMatrix")
+	{
+		return 	FE_UNIFORM_NORMAL_MODEL_TO_CAMERA_MATRIX;
+	}
+	if (strId == "colorTexture")
+	{
+		return 	FE_UNIFORM_COLOR_TEXTURE;
+	}
+	if (strId == "color")
+	{
+		return 	FE_UNIFORM_COLOR;
+	}
+	if (strId == "objectColor")
+	{
+		return 	FE_UNIFORM_OBJECT_COLOR;
+	}
+	if (strId == "cameraToClipMatrix")
+	{
+		return 	FE_UNIFORM_CAMERA_TO_CLIP_MATRIX;
+	}
+	if (strId == "fontColor")
+	{
+		return 	FE_UNIFORM_FONT_COLOR;
+	}
+	if (strId == "fontTexture")
+	{
+		return 	FE_UNIFORM_FONT_TEXTURE;
+	}
+	if (strId == "projection")
+	{
+		return 	FE_UNIFORM_PROJECTION;
+	}
+	if (strId == "_sampler")
+	{
+		return 	FE_UNIFORM__SAMPLER;
+	}
+	if (strId == "cameraPosition")
+	{
+		return 	FE_UNIFORM_CAMERA_POSITION;
+	}
+	if (strId == "deltaTime_milliseconds")
+	{
+		return 	FE_UNIFORM_DELTA_TIME_MILLISECONDS;
+	}
+	if (strId == "launcherLifetime")
+	{
+		return 	FE_UNIFORM_LAUNCHER_LIFETIME;
+	}
+	if (strId == "randomDirections")
+	{
+		return 	FE_UNIFORM_RANDOM_DIRECTIONS;
+	}
+	if (strId == "secondaryShellLifetime")
+	{
+		return 	FE_UNIFORM_SECONDARY_SHELL_LIFETIME;
+	}
+	if (strId == "shellLifetime")
+	{
+		return 	FE_UNIFORM_SHELL_LIFETIME;
+	}
+	if (strId == "time")
+	{
+		return 	FE_UNIFORM_TIME;
+	}
+	if (strId == "deltaPosition")
+	{
+		return 	FE_UNIFORM_DELTA_POSITION;
+	}
+	if (strId == "billboardSize")
+	{
+		return 	FE_UNIFORM_BILLBOARD_SIZE;
+	}
+	if (strId == "lightIntensity")
+	{
+		return 	FE_UNIFORM_LIGHT_INTENSITY;
+	}
+	if (strId == "cameraSpaceLightPos")
+	{
+		return 	FE_UNIFORM_CAMERA_SPACE_LIGHT_POS;
+	}
+
 	return FE_UNIFORM_BAD;
 }
 
 AttribType GetAttribTypeFromString(const std::string &strId)
 {
+	if (strId == "position")
+	{
+		FE_ATTRIB_POSITION;
+	}
+	if (strId == "normal")
+	{
+		FE_ATTRIB_NORMAL;
+	}
+	if (strId == "texCoord")
+	{
+		FE_ATTRIB_TEX_COORD;
+	}
+	if (strId == "age")
+	{
+		FE_ATTRIB_AGE;
+	}
+	if (strId == "type")
+	{
+		FE_ATTRIB_TYPE;
+	}
+	if (strId == "velocity")
+	{
+		FE_ATTRIB_VELOCITY;
+	}
+
 	return FE_ATTRIB_BAD;
 }
 

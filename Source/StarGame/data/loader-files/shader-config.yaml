@@ -11,9 +11,9 @@ programs:
             - "normalModelToCameraMatrix"
             - "cameraSpaceLightPos"
         blocks:
-            - { index: MATERIAL, name: "Material" }
-            - { index: LIGHT, name: "Light" }
-            - { index: PROJECTION, name: "Projection" }
+            MATERIAL: "Material"
+            LIGHT: "Light"
+            PROJECTION: "Projection"
     simple-texture:
         id: SIMPLE_TEXTURE
         vertex-source: "SimpleTexture"
@@ -23,7 +23,7 @@ programs:
             - "modelToCameraMatrix"
             - "color"
         blocks: 
-            - { index: PROJECTION, name: "Projection" }
+            PROJECTION: "Projection"
         attribs: 
             - "position"
             - "normal"
@@ -36,7 +36,7 @@ programs:
             - "modelToCameraMatrix"
             - "objectColor"
         blocks:
-            - { index: PROJECTION, name: "Projection" }
+            PROJECTION: "Projection"
     simple:
         id: SIMPLE
         vertex-source: "PosColorLocalTransform"
@@ -47,7 +47,7 @@ programs:
         attribs:
             - "position"
         blocks:
-            - { index: PROJECTION, name: "Projection" }
+            PROJECTION: "Projection"
     simple-no-ub:
         id: SIMPLE_NO_UB
         vertex-source: "PosTransformNoUB"
@@ -59,7 +59,7 @@ programs:
         attribs:
             - "position"
         blocks:
-            - { index: ORTHOGRAPHIC, name: "OrthographicProjection" }
+            ORTHOGRAPHIC: "OrthographicProjection"
     font: 
         id: FONT
         vertex-source: "Font"
@@ -71,7 +71,7 @@ programs:
         attribs:
             - "position"
         blocks: 
-            - { index: ORTHOGRAPHIC, name: "OrthographicProjection" }
+            ORTHOGRAPHIC: "OrthographicProjection"
     texture:
         id: TEXTURE
         vertex-source: "Texture"
@@ -85,7 +85,7 @@ programs:
             - "position"
             - "texCoord"
         blocks:
-            - { index: ORTHOGRAPHIC, name: "OrthographicProjection" }
+            ORTHOGRAPHIC: "OrthographicProjection"
     perspective-texture:
         id: TEXTURE_PERSPECTIVE
         vertex-source: "TexturePerspective"
@@ -99,7 +99,7 @@ programs:
             - "position"
             - "texCoord"
         blocks:
-            - { index: PROJECTION, name: "Projection" }
+            PROJECTION: "Projection"
     billboard:
         id: BILLBOARD
         vertex-source: "BillboardShader"
@@ -153,7 +153,7 @@ programs:
             - "position"
             - "texCoord"
         blocks:
-            - { index: PROJECTION, name: "Projection" }
+            PROJECTION: "Projection"
     lit-texture:
         id: LIT_TEXTURE
         vertex-source: "LitTexture"
@@ -169,6 +169,6 @@ programs:
             - "normal"
             - "texCoord"
         blocks:
-            - { index: MATERIAL, name: "Material" }
-            - { index: LIGHT, name: "Light" }
-            - { index: PROJECTION, name: "Projection" }
+            MATERIAL: "Material"
+            LIGHT: "Light"
+            PROJECTION: "Projection"

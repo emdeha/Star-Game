@@ -294,6 +294,7 @@ ShaderAssetObject ShaderLoader::Load(const std::string &type, const std::string 
 						currentProgType = 
 							GetProgramTypeFromString(programIdx->second["id"].as<std::string>());
 					}
+
 					if (programIdx->second["vertex-source"])
 					{
 						std::string shaderFilePath = shaderDir;
@@ -315,8 +316,55 @@ ShaderAssetObject ShaderLoader::Load(const std::string &type, const std::string 
 						shaderFilePath.append(".geom");
 						shaderList.push_back(Framework::LoadShader(GL_GEOMETRY_SHADER, shaderFilePath));
 					}
+					
 					loadedProgramData.programId = Framework::CreateProgram(shaderList);
 
+					if (programIdx->second["uniforms"] && loadedProgramData.programId >= 0)
+					{
+						for (auto uniformIdx = programIdx->second["uniforms"].begin();
+							 uniformIdx != programIdx->second["uniforms"].end(); ++uniformIdx)
+						{
+							std::string uniformName = uniformIdx->as<std::string>();
+							UniformType uniformType = 
+								GetUniformTypeFromString(uniformName);
+							GLuint uniformID = 
+								glGetUniformLocation(loadedProgramData.programId, uniformName.c_str());
+
+							loadedProgramData.uniforms.insert(std::make_pair(uniformType, uniformID));
+						}
+					}
+					if (programIdx->second["attribs"] && loadedProgramData.programId >= 0)
+					{
+						for (auto attribIdx = programIdx->second["attribs"].begin();
+							 attribIdx != programIdx->second["attribs"].end(); ++attribIdx)
+						{
+							std::string attribName = attribIdx->as<std::string>();
+							AttribType attribType =
+								GetAttribTypeFromString(attribName);
+							GLuint attribID = 
+								glGetAttribLocation(loadedProgramData.programId, attribName.c_str());
+
+							loadedProgramData.attribs.insert(std::make_pair(attribType, attribID));
+						}
+					}
+					if (programIdx->second["blocks"] && loadedProgramData.programId >= 0)
+					{
+						for (auto blockIdx = programIdx->second["blocks"].begin();
+							 blockIdx != programIdx->second["blocks"].end(); ++blockIdx)
+						{
+
+							std::string blockName = blockIdx->second.as<std::string>();
+							std::string blockIndex = blockIdx->first.as<std::string>();
+							GLuint block = 
+								glGetUniformBlockIndex(loadedProgramData.programId, blockName.c_str());
+							int blockBindingPoint = 
+								GetBlockPairFromString(blockIndex).second;
+							if (block != GL_INVALID_INDEX)
+								glUniformBlockBinding(loadedProgramData.programId, block, blockBindingPoint);
+						}
+					}
+
+					
 					programs.insert(std::make_pair(currentProgType, loadedProgramData));
 				}
 			}

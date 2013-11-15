@@ -24,31 +24,28 @@
 
 #include "../glsdk/glload/gl_3_3.h"
 
+#include "../Fusion_AssetLoader/AssetLoader.h"
 #include "ShaderEnums.h"
 
 namespace FusionEngine
 {
-	struct Program
-	{
-		GLuint programHandle;
-
-
-	};
-
 	class ShaderManager
 	{
 	private:
-		std::unordered_map<ProgramType, Program> loadedPrograms;
+		std::map<ProgramType, ProgramData> loadedPrograms;
+
+		std::map<UniformBufferType, unsigned int> uniformBuffers;
+		std::map<BlockType, int> blockIndices;
 
 	public:
 		ShaderManager();
 
-		void LoadFromConfig(const std::string &configFile); // Implement
+		void Load(const ShaderAssetObject &loaderData); // Implement
 
 		void LoadProgram(ProgramType programType, 
 						 const std::string &vertexShader, const std::string &fragmentShader);
 
-		Program GetProgram(ProgramType programType);
+		ProgramData GetProgram(ProgramType programType);
 	};
 }
 

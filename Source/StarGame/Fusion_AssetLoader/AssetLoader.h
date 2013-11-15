@@ -381,7 +381,10 @@ namespace FusionEngine
 			  uniformBuffers(newUniformBuffers), blockIndices(newBlockIndices) {}
 
 		unsigned int GetUniformBuffer(UniformBufferType ubType) const;
+		std::map<UniformBufferType, unsigned int> GetLoadedUniformBuffers() const;
+		
 		int GetLoadedBlockIndex(BlockType blockType) const;
+		std::map<BlockType, int> GetLoadedBlockIndices() const;
 		
 		ProgramData GetLoadedProgram(ProgramType progType) const;
 		const std::map<ProgramType, ProgramData> &GetAllLoadedPrograms() const;

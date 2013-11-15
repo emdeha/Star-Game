@@ -31,6 +31,7 @@
 #include "../glsdk/glload/gl_3_3.h"
 
 
+/*
 struct ProgramData
 {
 	GLuint theProgram;
@@ -41,6 +42,7 @@ struct ProgramData
 	// Maybe the buffers needn't be stored in the program data
 	std::map<std::string, GLuint> uniformBuffers;
 };
+*/
 
 
 struct SpriteParticleProgData

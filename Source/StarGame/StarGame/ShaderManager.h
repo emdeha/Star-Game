@@ -34,78 +34,11 @@
 #include "../Fusion_Renderer/ShaderEnums.h"
 
 
-enum ProgramDataType
-{
-	PDT_UNIFORM,
-	PDT_ATTRIBUTE,
-};
-
-
-class Program
-{
-private:
-	struct ProgramData
-	{
-		GLuint theProgram;
-
-		std::map<GLenum, std::string> shaderNames;
-
-		std::map<std::string, GLuint> uniformData;
-		std::map<std::string, GLuint> attributeData;
-	};
-
-	ProgramData data;
-
-public:
-	Program();
-	
-	void AddShader(GLenum shaderType, const std::string &shaderFileName);
-
-	void AddDataElement(ProgramDataType whatData,
-						const std::string &dataElementName);
-
-	void SetData(ProgramDataType whatData,
-				 const std::map<std::string, GLuint> &newData);
-
-	std::map<std::string, GLuint> GetData();
-	GLuint GetProgramObject()
-	{
-		return data.theProgram;
-	}
-
-	
-	void BuildProgram();
-};
-
-
-class ShaderProgramContainer
-{
-private:
-	std::map<std::string, Program> shaderPrograms;
-
-public:
-	ShaderProgramContainer();
-
-
-	void AddProgram(const std::string &newProgramName, const Program &newProgram);
-
-
-	void LoadProgram(const std::string &programName);
-
-	Program GetProgram(const std::string &programName);
-};
-
-
-
-
-
 class ShaderManager
 {
 private:
 	std::map<FusionEngine::BlockType, int> blockIndices;
 	std::map<FusionEngine::UniformBufferType, unsigned int> uniformBuffers; 
-
-	std::map<std::string, ProgramData> programDatas;
 
 	LitProgData litData;
 	LitTextureProgData litTextureData;
@@ -123,29 +56,6 @@ private:
 
 public:
 	ShaderManager();
-
-	void LoadProgram(const std::string &vertexShader, const std::string &fragmentShader,
-					 const std::string &programDataType);
-
-	void AddUniform(const std::string &programDataType, 
-					const std::string &uniformName, 
-					const std::string &uniformNameInShader);
-	void AddAttrubute(const std::string &programDataType,
-					  const std::string &attributeName, 
-					  const std::string &attrubuteNameInShader);
-	
-	void AddUniformBlock(const std::string &programDataType, 
-						 const std::string &uniformBlockName, 
-						 const std::string &uniformBlockNameInShader,
-						 FusionEngine::BlockType blockType);
-	
-	ProgramData GetProgramData(const std::string &programDataType);
-
-
-
-
-
-
 
 	void LoadLitProgram(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadLitTextureProgram(const std::string &vertexShader, const std::string &fragmentShader);
@@ -182,7 +92,7 @@ public:
 	SpriteParticleProgData GetSpriteParticleProgData();
 
 
-	const int GetBlockIndex(FusionEngine::BlockType);
+	int GetBlockIndex(FusionEngine::BlockType);
 	unsigned int GetUniformBuffer(FusionEngine::UniformBufferType);
 	void SetUniformBuffer(FusionEngine::UniformBufferType, unsigned int value);
 };

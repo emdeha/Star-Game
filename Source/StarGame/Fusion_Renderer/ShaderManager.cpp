@@ -7,9 +7,11 @@
 using namespace FusionEngine;
 
 
-void ShaderManager::LoadFromConfig(const std::string &configFile)
+void ShaderManager::Load(const ShaderAssetObject &loaderData)
 {
-
+	loadedPrograms = loaderData.GetAllLoadedPrograms();
+	uniformBuffers = loaderData.GetLoadedUniformBuffers();
+	blockIndices = loaderData.GetLoadedBlockIndices();
 }
 
 void ShaderManager::LoadProgram(ProgramType programType,
@@ -20,13 +22,13 @@ void ShaderManager::LoadProgram(ProgramType programType,
 	shaderList.push_back(Framework::LoadShader(GL_VERTEX_SHADER, vertexShader));
 	shaderList.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, fragmentShader));
 
-	Program loadedProgram;
-	loadedProgram.programHandle = Framework::CreateProgram(shaderList);
+	ProgramData loadedProgram;
+	loadedProgram.programId = Framework::CreateProgram(shaderList);
 
 	loadedPrograms.insert(std::make_pair(programType, loadedProgram));
 }
 
-Program ShaderManager::GetProgram(ProgramType programType)
+ProgramData ShaderManager::GetProgram(ProgramType programType)
 {
 	return loadedPrograms[programType];
 }

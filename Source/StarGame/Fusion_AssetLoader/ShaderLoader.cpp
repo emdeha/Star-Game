@@ -12,10 +12,19 @@ unsigned int ShaderAssetObject::GetUniformBuffer(UniformBufferType ubType) const
 	auto foundIter = uniformBuffers.find(ubType);
 	return (*foundIter).second;
 }
+std::map<UniformBufferType, unsigned int> ShaderAssetObject::GetLoadedUniformBuffers() const
+{
+	return uniformBuffers;
+}
+
 int ShaderAssetObject::GetLoadedBlockIndex(BlockType blockType) const
 {
 	auto foundIter = blockIndices.find(blockType);
 	return (*foundIter).second;
+}
+std::map<BlockType, int> ShaderAssetObject::GetLoadedBlockIndices() const
+{
+	return blockIndices;
 }
 
 FusionEngine::ProgramData ShaderAssetObject::GetLoadedProgram(ProgramType progType) const

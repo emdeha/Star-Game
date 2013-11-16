@@ -79,10 +79,8 @@ void Text::UpdateWindowDimensions(int newWindowWidth, int newWindowHeight)
 	textMaxHeight = -9999.0f;
 }
 
-void Text::Print(const char *text, const FontProgData &fontData,
-				 glm::vec2 position,
-				 glm::vec4 color,
-				 int fontSize)
+void Text::Print(FusionEngine::ShaderManager shaderManager,
+				 char *text, glm::vec2 position, glm::vec4 color, int fontSize)
 {
 	FT_Face fontFaceToUse = fontFace;
 	if(isBold)
@@ -99,17 +97,20 @@ void Text::Print(const char *text, const FontProgData &fontData,
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glUseProgram(fontData.theProgram);
+	FusionEngine::ProgramData fontProgram =
+		shaderManager.GetProgram(FusionEngine::FE_PROGRAM_FONT);
+	glUseProgram(fontProgram.programId);
 	glBindVertexArray(vao);
 
 	FT_Set_Pixel_Sizes(fontFaceToUse, 0, fontSize);
-	glUniform4fv(fontData.colorUnif, 1, glm::value_ptr(color));
+	glUniform4fv(fontProgram.GetUniform(FusionEngine::FE_UNIFORM_FONT_COLOR),
+				 1, glm::value_ptr(color));
 
 	GLuint texture;
 	glActiveTexture(GL_TEXTURE0);
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glUniform1i(fontData.textureUnif, 0);
+	glUniform1i(fontProgram.GetUniform(FusionEngine::FE_UNIFORM_FONT_TEXTURE), 0);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -156,8 +157,9 @@ void Text::Print(const char *text, const FontProgData &fontData,
 
 		
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glEnableVertexAttribArray(fontData.positionAttrib);	
-		glVertexAttribPointer(fontData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(fontProgram.GetAttrib(FusionEngine::FE_ATTRIB_POSITION));	
+		glVertexAttribPointer(fontProgram.GetAttrib(FusionEngine::FE_ATTRIB_POSITION),
+			                  4, GL_FLOAT, GL_FALSE, 0, 0);
 
 		glBufferData(GL_ARRAY_BUFFER, sizeof(bufferData), bufferData, GL_DYNAMIC_DRAW);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -166,7 +168,7 @@ void Text::Print(const char *text, const FontProgData &fontData,
 		position.y += (fontFaceToUse->glyph->advance.y >> 6);
 	}
 
-	glDisableVertexAttribArray(fontData.positionAttrib);
+	glDisableVertexAttribArray(fontProgram.GetAttrib(FusionEngine::FE_ATTRIB_POSITION);
 	glDeleteTextures(1, &texture);
 
 	glUseProgram(0);

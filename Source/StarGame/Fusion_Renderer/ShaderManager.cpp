@@ -7,11 +7,12 @@
 using namespace FusionEngine;
 
 
-void ShaderManager::Load(const ShaderAssetObject &loaderData)
+void ShaderManager::Load(ProgramMap newLoadedPrograms,
+						 UBTMap newUniformBuffers, BlockMap newBlockIndices)
 {
-	loadedPrograms = loaderData.GetAllLoadedPrograms();
-	uniformBuffers = loaderData.GetLoadedUniformBuffers();
-	blockIndices = loaderData.GetLoadedBlockIndices();
+	loadedPrograms = newLoadedPrograms; 
+	uniformBuffers = newUniformBuffers; 
+	blockIndices = newBlockIndices;
 }
 
 void ShaderManager::LoadProgram(ProgramType programType,

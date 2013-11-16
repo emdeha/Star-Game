@@ -31,6 +31,7 @@
 
 
 #include "Utility.h"
+#include "../Fusion_Renderer/ShaderManager.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -91,10 +92,8 @@ public:
 	/// with its texture and corresponding alpha blending.
 	///
 	/// It doesn't make any text formatting.
-	void Print(const char *text, const FontProgData &fontData,
-			   glm::vec2 position,
-			   glm::vec4 color, 
-			   int fontSize);
+	void Print(FusionEngine::ShaderManager shaderManager,
+			   char *text, glm::vec2 position, glm::vec4 color, int fontSize);
 
 
 	void ComputeTextDimensions(const char *text, glm::vec2 position, int fontSize);

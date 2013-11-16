@@ -362,6 +362,17 @@ namespace FusionEngine
 
 		std::map<UniformType, GLuint> uniforms;
 		std::map<AttribType, GLuint> attribs;
+
+		GLuint GetUniform(UniformType uniformType)
+		{
+			auto foundIter = uniforms.find(uniformType);
+			return (*foundIter).second;
+		}
+		GLuint GetAttrib(AttribType attribType)
+		{
+			auto foundIter = attribs.find(attribType);
+			return (*foundIter).second;
+		}
 	};
 
 	class ShaderAssetObject : public IAssetObject

@@ -102,9 +102,7 @@ public:
 	std::shared_ptr<Control> GetControl(const std::string &controlName);
 	std::vector<std::shared_ptr<Control>>& GetControls();
 
-	void Draw(const FontProgData &fontData, 
-			  const SimpleProgData &simpleData,
-			  const TextureProgData &textureData);
+	void Draw(); 
 	void Update(int windowWidth, int windowHeight);
 
 	void HandleClickedControls(bool isRightButtonclicked,

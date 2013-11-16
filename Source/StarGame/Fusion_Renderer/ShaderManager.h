@@ -19,28 +19,51 @@
 #define SHADER_MANAGER_H
 
 
-#include <unordered_map>
+#include <map>
 #include <string>
 
 #include "../glsdk/glload/gl_3_3.h"
 
-#include "../Fusion_AssetLoader/AssetLoader.h"
 #include "ShaderEnums.h"
 
 namespace FusionEngine
 {
+	struct ProgramData
+	{
+		GLuint programId;
+
+		std::map<UniformType, GLuint> uniforms;
+		std::map<AttribType, GLuint> attribs;
+
+		GLuint GetUniform(UniformType uniformType)
+		{
+			auto foundIter = uniforms.find(uniformType);
+			return (*foundIter).second;
+		}
+		GLuint GetAttrib(AttribType attribType)
+		{
+			auto foundIter = attribs.find(attribType);
+			return (*foundIter).second;
+		}
+	};
+
 	class ShaderManager
 	{
 	private:
-		std::map<ProgramType, ProgramData> loadedPrograms;
+		typedef std::map<ProgramType, ProgramData> ProgramMap;
+		typedef std::map<UniformBufferType, unsigned int> UBTMap;
+		typedef std::map<BlockType, int> BlockMap;
 
-		std::map<UniformBufferType, unsigned int> uniformBuffers;
-		std::map<BlockType, int> blockIndices;
+		ProgramMap loadedPrograms;
+
+		UBTMap uniformBuffers;
+		BlockMap blockIndices;
 
 	public:
 		ShaderManager();
 
-		void Load(const ShaderAssetObject &loaderData); // Implement
+		void Load(ProgramMap newLoadedPrograms,
+				  UBTMap newUniformBuffers, BlockMap newBlockIndices);
 
 		void LoadProgram(ProgramType programType, 
 						 const std::string &vertexShader, const std::string &fragmentShader);

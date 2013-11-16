@@ -21,9 +21,9 @@
 
 #include "../Fusion_EntitySystem/EventManager.h"
 #include "../Fusion_Renderer/Renderer.h"
+#include "../Fusion_Renderer/ShaderManager.h"
 #include "../Mouse/Mouse.h" // TODO: Replace with Fusion_Mouse
 #include "../Camera/TopDownCamera.h" // TODO: Replace with Fusion_Camera
-#include "../StarGame/ShaderManager.h" // TODO: Replace with Fusion_ShaderManager
 #include "../Entities/Lights.h" // TODO: Refactor
 #include "../GUISystem/GUISystem.h"
 #include "../Audio/Audio.h" 
@@ -98,7 +98,8 @@ namespace FusionEngine
 	public:
 		// TODO: Later - a generic loading method
 		void Load(const std::string &guiLayoutFile, 
-				  const std::string &audioFile); 
+				  const std::string &audioFile,
+				  const std::string &shaderDataFile); 
 
 		void Render();
 

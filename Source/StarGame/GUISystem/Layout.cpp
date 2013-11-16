@@ -49,9 +49,7 @@ Layout::Layout(LayoutType newLayoutType, glm::vec4 newBackgroundColor)
 	backgroundSprite = Utility::Primitives::Sprite(glm::vec3(), backgroundColor, 0.0f, 0.0f, false); 
 }
 
-void Layout::Draw(const FontProgData &fontData, 
-				  const SimpleProgData &simpleData,
-				  const TextureProgData &textureData)
+void Layout::Draw()
 {
 	glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
 
@@ -63,7 +61,7 @@ void Layout::Draw(const FontProgData &fontData,
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		backgroundSprite.Draw(identityMatrix, textureData);
+		backgroundSprite.Draw(identityMatrix);
 
 		glDisable(GL_BLEND);
 	}
@@ -71,7 +69,7 @@ void Layout::Draw(const FontProgData &fontData,
 	for(std::vector<std::shared_ptr</*TextControl*/Control>>::iterator iter = controls.begin();
 		iter != controls.end(); ++iter)
 	{
-		(*iter)->Draw(fontData, textureData);
+		(*iter)->Draw();
 	}
 	for(std::vector<std::shared_ptr<Layout>>::iterator iter = subLayouts.begin();
 		iter != subLayouts.end();
@@ -79,7 +77,7 @@ void Layout::Draw(const FontProgData &fontData,
 	{
 		if((*iter)->IsSet())
 		{
-			(*iter)->Draw(fontData, simpleData, textureData);
+			(*iter)->Draw();
 		}
 	}
 }

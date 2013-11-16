@@ -18,7 +18,8 @@ World::~World()
 }
 
 void World::Load(const std::string &guiLayoutFile,
-				 const std::string &audioFile)
+				 const std::string &audioFile
+				 const std::string &shaderDataFile)
 {
 	// Load GUI
 	FusionEngine::AssetLoader<FusionEngine::GUIAssetObject> guiLoader;
@@ -29,7 +30,8 @@ void World::Load(const std::string &guiLayoutFile,
 	// Load Shader Programs
 	FusionEngine::AssetLoader<FusionEngine::ShaderAssetObject> shaderLoader;
 	shaderLoader.RegisterType("loader-files", new FusionEngine::ShaderLoader());
-	FusionEngine::ShaderAssetObject loadedShaders = shaderLoader.LoadAssetObject("loader-files", "shader-config.yaml");
+	FusionEngine::ShaderAssetObject loadedShaders = shaderLoader.LoadAssetObject("loader-files", shaderDataFile);
+	shaderManager.Load(loadedShaders);
 
 
 #ifndef FAST_LOAD
@@ -59,15 +61,11 @@ void World::Load(const std::string &guiLayoutFile,
 void World::Render()
 {
 	// Render GUI
-	FontProgData fontData = shaderManager.GetFontProgData();
-	SimpleProgData simpleData = shaderManager.GetSimpleNoUBProgData();
-	TextureProgData textureData = shaderManager.GetTextureProgData();
-	
 	for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
 	{
 		if ((*layout).second->IsSet())
 		{
-			(*layout).second->Draw(fontData, simpleData, textureData);
+			(*layout).second->Draw();
 		}
 	}
 

@@ -37,6 +37,8 @@
 
 #include "../ProgramData/ProgramData.h"
 #include "../AssetLoader/Texture.h"
+// WARN: BADBADBAD!!! NANANANNAAN BA_D_MAN!
+#include "../Fusion_Renderer/ShaderManager.h"
 
 #include <vector>
 #include <memory>
@@ -299,7 +301,7 @@ namespace Utility
 			void Init(const std::string &textureFileName, 
 					  int windowWidth = 0, int windowHeight = 0);
 
-			void Draw(glutil::MatrixStack &modelMat, const TextureProgData &textureData);
+			void Draw(glutil::MatrixStack &modelMat, FusionEngine::ShaderManager shaderManager);
 			void Update(float newWidth, float newHeight,
 						glm::vec2 newPosition = glm::vec2(-1.0f, -1.0f));
 
@@ -374,7 +376,7 @@ namespace Utility
 					  const std::string &middleTextureFileName,
 					  int windowWidth = 0, int windowHeight = 0);
 
-			void Draw(glutil::MatrixStack &modelMat, const TextureProgData &textureData);
+			void Draw(glutil::MatrixStack &modelMat, FusionEngine::ShaderManager shaderManager);
 			void Update(float newWidth, float newHeight,
 						glm::vec2 newPosition = glm::vec2(-1.0f, -1.0f));
 

@@ -604,23 +604,29 @@ void Utility::Primitives::Sprite::Init(const std::string &textureFileName,
 	}
 }
 
-void Utility::Primitives::Sprite::Draw(glutil::MatrixStack &modelMat, const TextureProgData &textureData)
+void Utility::Primitives::Sprite::Draw(glutil::MatrixStack &modelMat,
+									   FusionEngine::ShaderManager shaderManager)
 {
-	glUseProgram(textureData.theProgram);
+	FusionEngine::ProgramData textureData = 
+		shaderManager.GetProgram(FusionEngine::FE_PROGRAM_TEXTURE);
+	glUseProgram(textureData.programId);
 	glBindVertexArray(vao);
 	{
-		glUniformMatrix4fv(
-			textureData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMat.Top()));
+		glUniformMatrix4fv(textureData.GetUniform(FusionEngine::FE_UNIFORM_MODEL_TO_CAMERA_MATRIX),
+						   1, GL_FALSE, glm::value_ptr(modelMat.Top()));
 
-		glUniform4f(textureData.colorUnif, color.r, color.g, color.b, color.a);
+		glUniform4f(textureData.GetUniform(FusionEngine::FE_UNIFORM_COLOR),
+			        color.r, color.g, color.b, color.a);
 
-		glEnableVertexAttribArray(textureData.positionAttrib);
+		glEnableVertexAttribArray(textureData.GetAttrib(FusionEngine::FE_ATTRIB_POSITION));
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
-		glVertexAttribPointer(textureData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer(textureData.GetAttrib(FusionEngine::FE_ATTRIB_POSITION),
+							  4, GL_FLOAT, GL_FALSE, 0, 0);
 		
-		glEnableVertexAttribArray(textureData.texturePosAttrib);
+		glEnableVertexAttribArray(textureData.GetAttrib(FusionEngine::FE_ATTRIB_TEX_COORD));
 		glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
-		glVertexAttribPointer(textureData.texturePosAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer(textureData.GetAttrib(FusionEngine::FE_ATTRIB_TEX_COORD),
+							  2, GL_FLOAT, GL_FALSE, 0, 0);
 
 
 		texture->Bind(GL_TEXTURE0);
@@ -629,8 +635,8 @@ void Utility::Primitives::Sprite::Draw(glutil::MatrixStack &modelMat, const Text
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 
 
-		glDisableVertexAttribArray(textureData.positionAttrib);
-		glDisableVertexAttribArray(textureData.texturePosAttrib);
+		glDisableVertexAttribArray(textureData.GetAttrib(FusionEngine::FE_ATTRIB_POSITION));
+		glDisableVertexAttribArray(textureData.GetAttrib(FusionEngine::FE_ATTRIB_TEX_COORD));
 
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -886,24 +892,31 @@ void Utility::Primitives::ComplexSprite::Init(const std::string &leftTextureFile
 	}
 }
 
-void Utility::Primitives::ComplexSprite::Draw(glutil::MatrixStack &modelMat, const TextureProgData &textureData)
+void Utility::Primitives::ComplexSprite::Draw(glutil::MatrixStack &modelMat, 
+											  FusionEngine::ShaderManager shaderManager)
 {
-	glUseProgram(textureData.theProgram);
+	FusionEngine::ProgramData textureData = 
+		shaderManager.GetProgram(FusionEngine::FE_PROGRAM_TEXTURE);
+
+	glUseProgram(textureData.programId);
 	glBindVertexArray(vao);
     {
-		glUniformMatrix4fv(
-			textureData.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMat.Top()));
-		glUniform4f(textureData.colorUnif, color.r, color.g, color.b, color.a);
+		glUniformMatrix4fv(textureData.GetUniform(FusionEngine::FE_UNIFORM_MODEL_TO_CAMERA_MATRIX),
+						   1, GL_FALSE, glm::value_ptr(modelMat.Top()));
+		glUniform4f(textureData.GetUniform(FusionEngine::FE_UNIFORM_COLOR),
+					color.r, color.g, color.b, color.a);
 
 
 		// draw left border
-		glEnableVertexAttribArray(textureData.positionAttrib);
+		GLuint positionAttrib = textureData.GetAttrib(FusionEngine::FE_ATTRIB_POSITION);
+		GLuint textureCoordAttrib = textureData.GetAttrib(FusionEngine::FE_ATTRIB_TEX_COORD);
+		glEnableVertexAttribArray(positionAttrib);
 		glBindBuffer(GL_ARRAY_BUFFER, leftVertexBO);
-		glVertexAttribPointer(textureData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer(positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-		glEnableVertexAttribArray(textureData.texturePosAttrib);
+		glEnableVertexAttribArray(textureCoordAttrib);
 		glBindBuffer(GL_ARRAY_BUFFER, leftTextureCoordsBO);
-		glVertexAttribPointer(textureData.texturePosAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer(textureCoordAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 		leftTexture->Bind(GL_TEXTURE0);
 
@@ -912,13 +925,13 @@ void Utility::Primitives::ComplexSprite::Draw(glutil::MatrixStack &modelMat, con
 
 
 		// draw middle section
-		glEnableVertexAttribArray(textureData.positionAttrib);
+		glEnableVertexAttribArray(positionAttrib);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
-		glVertexAttribPointer(textureData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer(positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-		glEnableVertexAttribArray(textureData.texturePosAttrib);
+		glEnableVertexAttribArray(textureCoordAttrib);
 		glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBO);
-		glVertexAttribPointer(textureData.texturePosAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer(textureCoordAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
 		
 		middleTexture->Bind(GL_TEXTURE0);
 
@@ -927,13 +940,13 @@ void Utility::Primitives::ComplexSprite::Draw(glutil::MatrixStack &modelMat, con
 
 		
 		// draw right border
-		glEnableVertexAttribArray(textureData.positionAttrib);
+		glEnableVertexAttribArray(positionAttrib);
 		glBindBuffer(GL_ARRAY_BUFFER, rightVertexBO);
-		glVertexAttribPointer(textureData.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer(positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-		glEnableVertexAttribArray(textureData.texturePosAttrib);
+		glEnableVertexAttribArray(textureCoordAttrib);
 		glBindBuffer(GL_ARRAY_BUFFER, rightTextureCoordsBO);
-		glVertexAttribPointer(textureData.texturePosAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer(textureCoordAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 		rightTexture->Bind(GL_TEXTURE0);
 
@@ -941,8 +954,8 @@ void Utility::Primitives::ComplexSprite::Draw(glutil::MatrixStack &modelMat, con
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 
 
-		glDisableVertexAttribArray(textureData.positionAttrib);
-		glDisableVertexAttribArray(textureData.texturePosAttrib);
+		glDisableVertexAttribArray(positionAttrib);
+		glDisableVertexAttribArray(textureCoordAttrib);
 
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);

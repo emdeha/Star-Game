@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+# Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StarGame", "StarGame\StarGame.vcxproj", "{8A802BF6-FBD4-463F-BAA2-AA3AC7D619A4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F4D5FA3D-2A08-5146-A354-4B4F0729A6E3} = {F4D5FA3D-2A08-5146-A354-4B4F0729A6E3}
@@ -48,6 +48,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fusion_Renderer", "Fusion_Renderer\Fusion_Renderer.vcxproj", "{7805C27A-13EF-49A7-B430-063367F3F799}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fusion_Entities", "Fusion_Entities\Fusion_Entities.vcxproj", "{6EA21665-7FFF-4460-B1B4-6551FD606E3E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{80AB8269-2CBD-4FC9-A5D4-90103B86C6DD}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -129,5 +134,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

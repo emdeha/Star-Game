@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "AssetLoader.h"
 
+#include <sstream> 
+
 #include "../framework/ErrorAPI.h"
 
 
@@ -10,6 +12,13 @@ using namespace FusionEngine;
 unsigned int ShaderAssetObject::GetUniformBuffer(UniformBufferType ubType) const
 {
 	auto foundIter = uniformBuffers.find(ubType);
+	if (foundIter == uniformBuffers.end())
+	{
+		std::ostringstream errorMsg;
+		errorMsg << "No such block: " << (int)ubType << ".\n";
+		HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
+		return 0;
+	}
 	return (*foundIter).second;
 }
 std::map<UniformBufferType, unsigned int> ShaderAssetObject::GetAllLoadedUniformBuffers() const
@@ -20,6 +29,13 @@ std::map<UniformBufferType, unsigned int> ShaderAssetObject::GetAllLoadedUniform
 int ShaderAssetObject::GetLoadedBlockIndex(BlockType blockType) const
 {
 	auto foundIter = blockIndices.find(blockType);
+	if (foundIter == blockIndices.end())
+	{
+		std::ostringstream errorMsg;
+		errorMsg << "No such block: " << (int)blockType << ".\n";
+		HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
+		return -1;
+	}
 	return (*foundIter).second;
 }
 std::map<BlockType, int> ShaderAssetObject::GetAllLoadedBlockIndices() const
@@ -30,6 +46,15 @@ std::map<BlockType, int> ShaderAssetObject::GetAllLoadedBlockIndices() const
 FusionEngine::ProgramData ShaderAssetObject::GetLoadedProgram(ProgramType progType) const
 {
 	auto foundIter = loadedPrograms.find(progType);
+	if (foundIter == loadedPrograms.end())
+	{
+		std::ostringstream errorMsg;
+		errorMsg << "No such program: " << (int)progType << ".\n";
+		HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
+		ProgramData wrongData;
+		wrongData.programId = FE_PROGRAM_BAD;
+		return wrongData;
+	}
 	return (*foundIter).second;
 }
 const std::map<ProgramType, FusionEngine::ProgramData> &ShaderAssetObject::GetAllLoadedPrograms() const

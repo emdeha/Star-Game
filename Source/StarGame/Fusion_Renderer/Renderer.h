@@ -35,6 +35,10 @@ namespace FusionEngine
 	private:
 		std::vector<std::pair<unsigned int, MeshAssetObject>> subscribedMeshes;		
 
+		GLuint modelToCameraMatrixUniform;
+		GLuint colorUniform;
+		GLuint normalModelToCameraMatrixUniform;
+
 	public:
         Renderer() {}
 

@@ -148,11 +148,11 @@ void InitializeScene()
 	FusionEngine::ProgramData textureProgData =
 		worldShaderManager.GetProgram(FusionEngine::FE_PROGRAM_TEXTURE);
     glUseProgram(textureProgData.programId);
-    glUniform1i(textureProgData.GetUniform(FusionEngine::FE_UNIFORM_COLOR_TEXTURE), 0);
+    glUniform1i(textureProgData.GetUniform(FusionEngine::FE_UNIFORM__SAMPLER), 0);
 	FusionEngine::ProgramData perspectiveTextureProgData =
 		worldShaderManager.GetProgram(FusionEngine::FE_PROGRAM_TEXTURE_PERSPECTIVE);
     glUseProgram(perspectiveTextureProgData.programId);
-    glUniform1i(perspectiveTextureProgData.GetUniform(FusionEngine::FE_UNIFORM_COLOR_TEXTURE), 0);
+    glUniform1i(perspectiveTextureProgData.GetUniform(FusionEngine::FE_UNIFORM__SAMPLER), 0);
 	FusionEngine::ProgramData simpleTextureProgData =
 		worldShaderManager.GetProgram(FusionEngine::FE_PROGRAM_SIMPLE_TEXTURE);
     glUseProgram(simpleTextureProgData.programId);
@@ -215,6 +215,8 @@ void InitializeScene()
 	GetScene().AddComponent("sun", sunCollidable);
 
 	GetWorld().GetRenderer().SubscribeForRendering(GetScene().GetEntity("sun"));
+
+	sunFuncComp->updatedObject->AddSatellite();
 }
 
 
@@ -253,8 +255,8 @@ void Init()
 
 
     //InitializePrograms();
-    InitializeScene();
 	GetWorld().Load("test-gui.yaml", "audio-config.yaml", "shader-config.yaml");
+	InitializeScene();
 
     
     glEnable(GL_CULL_FACE);
@@ -336,7 +338,6 @@ void Display()
 	float interpolation = float(GetTickCount() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
 	GetWorld().interpolation = interpolation;
 	GetWorld().Render();
-
 
 	GetWorld().GetMouse().OverrideLastPosition();
     

@@ -20,9 +20,11 @@
 
 
 #include <map>
+#include <sstream>
 
 #include "../glsdk/glload/gl_3_3.h"
 
+#include "../framework/ErrorAPI.h"
 #include "ShaderEnums.h"
 
 
@@ -38,11 +40,25 @@ namespace FusionEngine
 		GLuint GetUniform(UniformType uniformType) const
 		{
 			auto foundUniform = uniforms.find(uniformType);
+			if (foundUniform == uniforms.end())
+			{
+				std::ostringstream errorMsg;
+				errorMsg << "No such uniform: " << (int)uniformType << ".\n";
+				HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
+				return 0;
+			}
 			return (*foundUniform).second;
 		}
 		GLuint GetAttrib(AttribType attribType) const
 		{
 			auto foundAttrib = attribs.find(attribType);
+			if (foundAttrib == attribs.end())
+			{
+				std::ostringstream errorMsg;
+				errorMsg << "No such attrib: " << (int)attribType << ".\n";
+				HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
+				return 0;
+			}
 			return (*foundAttrib).second;
 		}
 	};

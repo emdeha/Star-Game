@@ -85,6 +85,17 @@ private:
 	float maxIntensity;
 	float gamma;
 
+private:
+	GLuint litProgId;
+	GLuint litLightIntensityUnif;
+	GLuint litCameraSpaceLightPosUnif;
+
+	GLuint litTextureProgId;
+	GLuint litTextureLightIntensityUnif;
+	GLuint litTextureCameraSpaceLightPosUnif;
+
+	unsigned int ubtLight;
+
 public:
 	SunLight();
 	SunLight(glm::vec3 newPosition,

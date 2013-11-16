@@ -55,6 +55,13 @@ void Renderer::SubscribeForRendering(Entity *entity)
 	glGenVertexArrays(1, &renderData[0]->vao);
 	glBindVertexArray(renderData[0]->vao);
 
+	modelToCameraMatrixUniform = 
+		glGetUniformLocation(renderData[0]->shaderProgram, "modelToCameraMatrix");
+	colorUniform =
+		glGetUniformLocation(renderData[0]->shaderProgram, "color");
+	normalModelToCameraMatrixUniform =
+		glGetUniformLocation(renderData[0]->shaderProgram, "normalModelToCameraMatrix");
+
 
     std::vector<std::shared_ptr<MeshEntry>> meshEntries = renderData[0]->mesh.GetMeshEntries();
 	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
@@ -124,10 +131,8 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix) const
 			modelMatrix.RotateZ(transformData[0]->rotation.z);
 			modelMatrix.Scale(transformData[0]->scale);
 
-			glUniformMatrix4fv(glGetUniformLocation(renderData[0]->shaderProgram, "modelToCameraMatrix"),
-                1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-			glUniform4f(glGetUniformLocation(renderData[0]->shaderProgram, "color"),
-				        1.0f, 1.0f, 1.0f, 1.0f);
+			glUniformMatrix4fv(modelToCameraMatrixUniform, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+			glUniform4f(colorUniform, 1.0f, 1.0f, 1.0f, 1.0f);
 
 			if(renderData[0]->rendererType == Render::FE_RENDERER_LIT)
             {
@@ -137,8 +142,7 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix) const
 				glm::mat3 normMatrix(modelMatrix.Top());
 				normMatrix = glm::transpose(glm::inverse(normMatrix));
 
-				glUniformMatrix3fv(glGetUniformLocation(renderData[0]->shaderProgram, "normalModelToCameraMatrix"),
-								   1, GL_FALSE, glm::value_ptr(normMatrix));
+				glUniformMatrix3fv(normalModelToCameraMatrixUniform, 1, GL_FALSE, glm::value_ptr(normMatrix));
             }
 
 			

@@ -15,8 +15,8 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
-#ifndef __FUSION_SYSTEMS_H
-#define __FUSION_SYSTEMS_H
+#ifndef FE_FUSION_SYSTEMS_H
+#define FE_FUSION_SYSTEMS_H
 
 
 #include "../glsdk/glm/glm.hpp"

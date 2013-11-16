@@ -15,6 +15,10 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
+#ifndef FE_STATES_H
+#define FE_STATES_H
+
+
 enum BehaviorState
 {
 	STATE_ATTACK,
@@ -24,3 +28,6 @@ enum BehaviorState
 	// should it be a stopped state or a boolean?
 	STATE_STOPPED,
 };
+
+
+#endif

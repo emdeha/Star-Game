@@ -15,8 +15,8 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
-#ifndef __FUSION_COMPONENTS_H
-#define __FUSION_COMPONENTS_H
+#ifndef FE_FUSION_COMPONENTS_H
+#define FE_FUSION_COMPONENTS_H
 
 
 #include <vector>

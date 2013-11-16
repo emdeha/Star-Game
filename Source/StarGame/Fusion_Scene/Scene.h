@@ -15,8 +15,8 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
-#ifndef __SCENE_H
-#define __SCENE_H
+#ifndef FE_SCENE_H
+#define FE_SCENE_H
 
 
 #include "../Fusion_EntitySystem/EventManager.h"

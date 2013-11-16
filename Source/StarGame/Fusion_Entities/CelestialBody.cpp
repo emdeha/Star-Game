@@ -31,7 +31,7 @@
 using namespace FusionEngine;
 
 
-NewCelestialBody::NewCelestialBody() :
+CelestialBody::CelestialBody() :
 	maxSatelliteCount(0), currentSatelliteCount(1),
 	satellites(0), diameter(0.0f),
 	offsetFromSun(0.0f), currentRotationAngle(0.0f), angularVelocity(5.0f)
@@ -41,7 +41,7 @@ NewCelestialBody::NewCelestialBody() :
 	id.assign(stringedOffset);
 }
 
-NewCelestialBody::NewCelestialBody(int newMaxSatelliteCount, float newDiameter, 
+CelestialBody::CelestialBody(int newMaxSatelliteCount, float newDiameter, 
 								   float newOffsetFromSun) :
 	maxSatelliteCount(newMaxSatelliteCount), currentSatelliteCount(1),
 	satellites(0), diameter(newDiameter),
@@ -55,12 +55,12 @@ NewCelestialBody::NewCelestialBody(int newMaxSatelliteCount, float newDiameter,
 	id.assign(stringedOffset);
 }
 
-NewCelestialBody::~NewCelestialBody()
+CelestialBody::~CelestialBody()
 {
 	//scene.GetEventManager()->RemoveListener(this, EVENT_ON_CLICK);
 }
 
-bool NewCelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
+bool CelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 {
 	EventType type = eventData.GetType();
 	switch(type)
@@ -105,10 +105,10 @@ std::string GetSatMesh(int satCount)
 	return satMesh;
 }
 
-bool NewCelestialBody::AddSatellite()
+bool CelestialBody::AddSatellite()
 {
 	float satOffset = this->currentSatelliteCount * 1.2f;
-	std::shared_ptr<NewCelestialBody> newSat(new NewCelestialBody(0, 0.3f, satOffset));
+	std::shared_ptr<CelestialBody> newSat(new CelestialBody(0, 0.3f, satOffset));
 	this->satellites.push_back(newSat);
 
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
@@ -148,7 +148,7 @@ bool NewCelestialBody::AddSatellite()
 	return true;
 }
 
-void NewCelestialBody::Update()
+void CelestialBody::Update()
 {
 	FusionEngine::ComponentMapper<FusionEngine::Transform> transformData =
 		GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity("sun"), FusionEngine::CT_TRANSFORM);

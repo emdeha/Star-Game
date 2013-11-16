@@ -15,6 +15,10 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
+#ifndef FE_STRUCTS_H
+#define FE_STRUCTS_H
+
+
 #include <vector>
 #include "../glsdk/glm/glm.hpp"
 
@@ -41,3 +45,6 @@ struct DamageOverTime
 	DamageOverTime() :
 		damage(0), time_seconds(0) {}
 };
+
+
+#endif

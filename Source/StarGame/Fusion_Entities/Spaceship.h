@@ -15,8 +15,8 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
-#ifndef SPACESHIP_H
-#define SPACESHIP_H
+#ifndef FE_SPACESHIP_H
+#define FE_SPACESHIP_H
 
 
 #include "../glsdk/glm/glm.hpp"

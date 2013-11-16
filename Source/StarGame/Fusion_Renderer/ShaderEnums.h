@@ -15,8 +15,8 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
-#ifndef SHADER_ENUMS_H
-#define SHADER_ENUMS_H
+#ifndef FE_SHADER_ENUMS_H
+#define FE_SHADER_ENUMS_H
 
 
 namespace FusionEngine

@@ -15,8 +15,8 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
-#ifndef CELESTIAL_BODY_H
-#define CELESTIAL_BODY_H
+#ifndef FE_CELESTIAL_BODY_H
+#define FE_CELESTIAL_BODY_H
 
 
 #include <memory>
@@ -32,10 +32,10 @@
 
 namespace FusionEngine
 {
-	class NewCelestialBody : public IEventListener
+	class CelestialBody : public IEventListener
 	{
 	private:
-		std::vector<std::shared_ptr<NewCelestialBody>> satellites;
+		std::vector<std::shared_ptr<CelestialBody>> satellites;
 		std::string id; // TODO: replace with ints
 
 		int maxSatelliteCount;
@@ -47,10 +47,10 @@ namespace FusionEngine
 		float angularVelocity;
 
 	public:
-		NewCelestialBody();
-		NewCelestialBody(int newMaxSatelliteCount, float newDiameter, float newOffsetFromSun);
+		CelestialBody();
+		CelestialBody(int newMaxSatelliteCount, float newDiameter, float newOffsetFromSun);
 
-		~NewCelestialBody();
+		~CelestialBody();
 
 		bool AddSatellite();
 		void Update();

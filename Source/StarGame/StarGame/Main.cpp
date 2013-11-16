@@ -171,8 +171,8 @@ void InitializeScene()
 	sunRender->vao = loadedMesh.vao;
 
 	GetScene().AddEntity("sun");
-	FusionEngine::FunctionalSystem<FusionEngine::NewCelestialBody> *sunFunctional =
-		new FusionEngine::FunctionalSystem<FusionEngine::NewCelestialBody>(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
+	FusionEngine::FunctionalSystem<FusionEngine::CelestialBody> *sunFunctional =
+		new FusionEngine::FunctionalSystem<FusionEngine::CelestialBody>(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
 	GetScene().AddSystem(sunFunctional);
 	FusionEngine::CollisionSystem *sunClickable = 
 		new FusionEngine::CollisionSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
@@ -185,9 +185,9 @@ void InitializeScene()
 	sunTransform->scale = glm::vec3(0.5f);
 	GetScene().AddComponent("sun", sunTransform);
 
-	FusionEngine::Functional<FusionEngine::NewCelestialBody> *sunFuncComp = 
-		new FusionEngine::Functional<FusionEngine::NewCelestialBody>();
-	sunFuncComp->updatedObject = std::unique_ptr<FusionEngine::NewCelestialBody>(new FusionEngine::NewCelestialBody(4, 0.5f, 0.0f));
+	FusionEngine::Functional<FusionEngine::CelestialBody> *sunFuncComp = 
+		new FusionEngine::Functional<FusionEngine::CelestialBody>();
+	sunFuncComp->updatedObject = std::unique_ptr<FusionEngine::CelestialBody>(new FusionEngine::CelestialBody(4, 0.5f, 0.0f));
 	GetScene().AddComponent("sun", sunFuncComp);
 	
 	FusionEngine::Collidable *sunCollidable = new FusionEngine::Collidable();

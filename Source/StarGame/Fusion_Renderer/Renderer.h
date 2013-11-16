@@ -15,8 +15,8 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef FE_RENDERER_H
+#define FE_RENDERER_H
 
 
 #include "../glsdk/glm/glm.hpp"

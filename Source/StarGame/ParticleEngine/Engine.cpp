@@ -31,7 +31,7 @@ ParticleEmitter::ParticleEmitter(glm::vec3 newPosition, int newParticleCount)
 	vertexBO = 0;
 
 	texture = Texture2D();
-	if(!texture.Load("../data/images/particle.png"))
+	if(!texture.Load("../data/images/particle.png", GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, false))
 	{
 		std::string errorMessage = "cannot load particle texture ";
 		errorMessage += "../data/images/particle.png";
@@ -357,7 +357,7 @@ TexturedExplosionEmitter::TexturedExplosionEmitter(glm::vec3 newPosition, int ne
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	
 	texture = std::shared_ptr<Texture2D>(new Texture2D());
-	if(!texture->Load(textureFileName, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE))
+	if(!texture->Load(textureFileName, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false))
 	{
 		std::string errorMessage = "cannot load texture";
 		errorMessage += textureFileName;
@@ -499,7 +499,7 @@ SpriteParticleEmitter::SpriteParticleEmitter(glm::vec3 newPosition, int newParti
 	indexBO = 0;
 
 	texture = std::shared_ptr<Texture2D>(new Texture2D());
-	if(!texture->Load(textureFileName, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE))
+	if(!texture->Load(textureFileName, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false))
 	{
 		std::string errorMessage = "cannot load texture";
 		errorMessage += textureFileName;
@@ -739,7 +739,7 @@ MeteoriteEmitter::MeteoriteEmitter(glm::vec3 newPosition,
 	indexBO = 0;
 
 	meteoriteTexture = std::shared_ptr<Texture2D>(new Texture2D());
-	if(!meteoriteTexture->Load(meteoriteParticlesTextureFileName, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE))
+	if(!meteoriteTexture->Load(meteoriteParticlesTextureFileName, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false))
 	{
 		std::string errorMessage = "cannot load texture";
 		errorMessage += meteoriteParticlesTextureFileName;
@@ -944,7 +944,7 @@ RadialEmitter::RadialEmitter(glm::vec3 newPosition,
 	indicesBO = 0;
 
 	particleTexture = std::shared_ptr<Texture2D>(new Texture2D());
-	if(!particleTexture->Load(particleTextureFileName, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE))
+	if(!particleTexture->Load(particleTextureFileName, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false))
 	{
 		std::string errorMessage = "cannot load texture";
 		errorMessage += particleTextureFileName;

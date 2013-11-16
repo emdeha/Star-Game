@@ -93,6 +93,7 @@ namespace FusionEngine
 	/////////////////////
 
 
+	/*
 	class ClickSystem : public EntityProcessingSystem
 	{
 	protected:
@@ -349,6 +350,8 @@ namespace FusionEngine
 			: EntityProcessingSystem(eventManager, entityManager, CT_SATELLITE_BIT) {}
 		virtual ~SatelliteUpdateSystem() {}
 	};
+	*/
+
 	/*class SunUpdateSystem : public EntityProcessingSystem
 	{
 	protected:

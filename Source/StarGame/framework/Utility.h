@@ -36,7 +36,7 @@
 #include "../framework/Timer.h"
 
 #include "../ProgramData/ProgramData.h"
-#include "../AssetLoader/Texture.h"
+#include "../Fusion_Renderer/Texture.h"
 // WARN: BADBADBAD!!! NANANANNAAN BA_D_MAN!
 #include "../Fusion_Renderer/ShaderManager.h"
 

@@ -19,7 +19,30 @@
 #define FE_LAYOUT_H
 
 
+#include <vector>
 
+#include "Control.h"
+
+
+enum LayoutType
+{
+	FE_LAYOUT_BAD = -1,
+
+	FE_LAYOUT_MENU = 0,
+	FE_LAYOUT_GAME,
+};
+
+
+class Layout
+{
+private:
+	LayoutType type;
+	
+	std::vector<Control> controls;
+
+public:
+	
+};
 
 
 #endif

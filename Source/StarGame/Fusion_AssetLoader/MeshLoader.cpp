@@ -114,7 +114,7 @@ void MeshLoader::InitMaterials(const aiScene *scene, MeshAssetObject &loadedMesh
 
 			if(material->GetTexture(aiTextureType_DIFFUSE, 0, &path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS)
             {
-				if(!newTexture->Load(path.C_Str(), GL_RGB, GL_RGB, GL_UNSIGNED_BYTE))
+				if(!newTexture->Load(path.C_Str(), GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, false))
                 {
 					HandleUnexpectedError("loading texture " + std::string(path.C_Str()), __LINE__, __FILE__);
 					return;
@@ -131,10 +131,10 @@ void MeshLoader::InitMaterials(const aiScene *scene, MeshAssetObject &loadedMesh
 			textureName.erase(textureName.end() - 4, textureName.end());
 			textureName.append(".png");
             
-			if(!newTexture->Load(textureName, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE))
+			if(!newTexture->Load(textureName, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE, false))
             {
 				std::string pathToWhiteTexture = "../data/mesh-files/white.png";
-				if(!newTexture->Load(pathToWhiteTexture, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE))
+				if(!newTexture->Load(pathToWhiteTexture, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, false))
 				{
 					HandleUnexpectedError("loading DEFAULT texture from path " + pathToWhiteTexture, __LINE__, __FILE__);
 					return;

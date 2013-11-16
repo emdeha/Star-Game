@@ -3,6 +3,9 @@
 
 #include <sstream> 
 
+#include "../glsdk/glload/gl_3_3.h"
+#include "../glsdk/glutil/glutil.h"
+#include "../framework/framework.h"
 #include "../framework/ErrorAPI.h"
 
 

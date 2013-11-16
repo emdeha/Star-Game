@@ -60,6 +60,7 @@ void HandleMouse()
 	{
 		collidableData[0]->isForCheck = true;
 
+		/*
 		auto guiLayouts = GetWorld().GetLayouts();
 		for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
 		{
@@ -75,6 +76,7 @@ void HandleMouse()
 				}
 			}
 		}
+		*/
 	}
 	else
 	{

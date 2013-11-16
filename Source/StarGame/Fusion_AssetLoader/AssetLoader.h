@@ -28,15 +28,16 @@
 
 #include "../glsdk/glm/glm.hpp"
 
-#include "../AssetLoader/Texture.h"
+
 #include "../StarGame/AudioEnums.h"
-#include "../GUISystem/GUISystem.h"
+//#include "../GUISystem/GUISystem.h"
 #include "../assimp/include/assimp/Importer.hpp"
 #include "../assimp/include/assimp/scene.h"
 #include "../assimp/include/assimp/postprocess.h"
 #include "yaml-cpp/yaml.h"
 
 #include "../Fusion_Renderer/ProgramData.h"
+#include "../Fusion_Renderer/Texture.h"
 
 
 namespace FusionEngine
@@ -232,7 +233,7 @@ namespace FusionEngine
 		AudioAssetObject Load(const std::string &type, const std::string &name);
 	};
 
-
+/*
 	////////////////////
 	///  GUI Loader  ///
 	////////////////////
@@ -300,7 +301,7 @@ namespace FusionEngine
 	public:
 		GUIAssetObject Load(const std::string &type, const std::string &name);
 	};
-
+*/
 
 	/////////////////////////
 	///  TweakVar Loader  ///

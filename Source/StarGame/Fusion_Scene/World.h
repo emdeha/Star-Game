@@ -22,10 +22,11 @@
 #include "../Fusion_EntitySystem/EventManager.h"
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Fusion_Renderer/ShaderManager.h"
+#include "../Fusion_GUI/Layout.h"
 #include "../Mouse/Mouse.h" // TODO: Replace with Fusion_Mouse
 #include "../Camera/TopDownCamera.h" // TODO: Replace with Fusion_Camera
 #include "../Entities/Lights.h" // TODO: Refactor
-#include "../GUISystem/GUISystem.h"
+//#include "../GUISystem/GUISystem.h"
 #include "../Audio/Audio.h" 
 
 #include <memory>

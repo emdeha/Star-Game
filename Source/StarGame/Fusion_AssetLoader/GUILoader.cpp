@@ -6,7 +6,7 @@
 
 using namespace FusionEngine;
 
-
+/*
 std::shared_ptr<Layout> GUIAssetObject::GetLayout(LayoutType layoutType) const
 {
 	if(layouts.find(layoutType) == layouts.end())
@@ -412,3 +412,4 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 
 	return layouts;
 }
+*/

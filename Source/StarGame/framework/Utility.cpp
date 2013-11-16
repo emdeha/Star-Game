@@ -595,7 +595,7 @@ void Utility::Primitives::Sprite::Init(const std::string &textureFileName,
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	
 
-	if(!texture->Load(textureFileName))
+	if(!texture->Load(textureFileName, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, false))
 	{
 		std::string errorMessage = "cannot load texture ";
 		errorMessage += textureFileName;
@@ -690,7 +690,7 @@ void Utility::Primitives::Sprite::Update(float newWidth, float newHeight,
 void Utility::Primitives::Sprite::ChangeTexture(const std::string &textureFileName)
 {
 	texture = std::shared_ptr<Texture2D>(new Texture2D());
-	if(!texture->Load(textureFileName))
+	if(!texture->Load(textureFileName, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, false))
 	{
 		std::string errorMessage = "cannot load texture ";
 		errorMessage += textureFileName;
@@ -869,14 +869,14 @@ void Utility::Primitives::ComplexSprite::Init(const std::string &leftTextureFile
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	
 
-	if(!leftTexture->Load(leftTextureFileName, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE))
+	if(!leftTexture->Load(leftTextureFileName, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE, false))
 	{
 		std::string errorMessage = "cannot load texture ";
 		errorMessage += leftTextureFileName;
 		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 		return;
 	}
-    if(!rightTexture->Load(rightTextureFileName, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE))
+    if(!rightTexture->Load(rightTextureFileName, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE, false))
 	{
 		std::string errorMessage = "cannot load texture ";
 		errorMessage += rightTextureFileName;
@@ -1061,14 +1061,14 @@ void Utility::Primitives::ComplexSprite::ChangeTexture(const std::string &leftTe
 	rightTexture = std::shared_ptr<Texture2D>(new Texture2D());
 	middleTexture = std::shared_ptr<Texture2D>(new Texture2D());
 	
-	if(!leftTexture->Load(leftTextureFileName))
+	if(!leftTexture->Load(leftTextureFileName, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, false))
 	{
 		std::string errorMessage = "cannot load texture ";
 		errorMessage += leftTextureFileName;
 		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 		return;
 	}
-    if(!rightTexture->Load(rightTextureFileName))
+    if(!rightTexture->Load(rightTextureFileName, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, false))
 	{
 		std::string errorMessage = "cannot load texture ";
 		errorMessage += rightTextureFileName;
@@ -1153,7 +1153,7 @@ void Utility::Primitives::Sprite3D::Init(const std::string &textureFileName)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	// TODO: Better error-handling needed
-	if(!texture->Load(textureFileName))
+	if(!texture->Load(textureFileName, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, false))
 	{
 		std::string errorMessage = "cannot load texture ";
 		errorMessage += textureFileName;
@@ -1199,7 +1199,7 @@ void Utility::Primitives::Sprite3D::Draw(glutil::MatrixStack &modelMat, const Si
 void Utility::Primitives::Sprite3D::ChangeTexture(const std::string &textureFileName)
 {
 	texture = std::shared_ptr<Texture2D>(new Texture2D());
-	if(!texture->Load(textureFileName))
+	if(!texture->Load(textureFileName, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, false))
 	{
 		std::string errorMessage = "cannot load texture ";
 		errorMessage += textureFileName;
@@ -1309,7 +1309,7 @@ void Utility::Primitives::SpriteArray::Init(int newSpritesCount,
 				 sizeof(unsigned short) * indexData.size(), &indexData[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	if(!texture->Load(textureFileName))
+	if(!texture->Load(textureFileName, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, false))
 	{
 		std::string errorMessage = "cannot load texture ";
 		errorMessage += textureFileName;

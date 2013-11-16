@@ -208,10 +208,10 @@ bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
                 fullPath.append(path.data);
                 textures[i] = std::shared_ptr<Texture2D>(new Texture2D());
 
-                if(!textures[i]->Load(fullPath, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE))
+                if(!textures[i]->Load(fullPath, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, false))
                 {
                     std::printf("Error loading texture '%s'\n", fullPath.c_str());
-                    return textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+                    return textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, false);
                 }
             }
         }
@@ -226,10 +226,10 @@ bool Mesh::InitMaterials(const aiScene *scene, const std::string &fileName)
             path.erase(path.end() - 4, path.end());
             path += ".png";
 
-            if(!textures[i]->Load(path, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE))
+            if(!textures[i]->Load(path, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE, false))
             {
                 //HandleUnexpectedError("cannot load texture", __LINE__, __FILE__);
-                if(!textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_BGR, GL_UNSIGNED_BYTE))
+                if(!textures[i]->Load("../data/mesh-files/white.png", GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, false))
                 {
                     HandleUnexpectedError("cannot load texture", __LINE__, __FILE__);
                 }

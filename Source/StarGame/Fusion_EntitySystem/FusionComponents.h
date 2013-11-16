@@ -145,6 +145,7 @@ namespace FusionEngine
 
 
 
+	/*
     class Click : public Component
 	{
 	public:
@@ -367,6 +368,7 @@ namespace FusionEngine
 		SatelliteOrbit() : Component(CT_SATELLITE_ORBIT) {}
 		virtual ~SatelliteOrbit() {}
 	};
+	*/
 }
 
 #endif

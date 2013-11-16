@@ -18,7 +18,7 @@ ImageAssetObject ImageLoader::Load(const std::string &type, const std::string &n
 	std::shared_ptr<Texture2D> loadedTexture;
 
 	loadedTexture = std::shared_ptr<Texture2D>(new Texture2D());
-	if(!loadedTexture->Load("../data/" + type + "/" + name, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE))
+	if(!loadedTexture->Load("../data/" + type + "/" + name, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, false))
     {
 		HandleUnexpectedError("cannot load texture " + type + "/" + name, __LINE__, __FILE__);
     }

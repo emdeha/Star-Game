@@ -30,10 +30,12 @@ void World::Load(const std::string &guiLayoutFile,
 					   loadedShaders.GetAllLoadedBlockIndices());
 
 	// Load GUI
+	/*
 	FusionEngine::AssetLoader<FusionEngine::GUIAssetObject> guiLoader;
 	guiLoader.RegisterType("loader-files", new FusionEngine::GUILoader());
 	FusionEngine::GUIAssetObject loadedGUI = guiLoader.LoadAssetObject("loader-files", guiLayoutFile);
 	guiLayouts = loadedGUI.GetAllLoadedLayouts();
+	*/
 
 
 #ifndef FAST_LOAD
@@ -63,6 +65,7 @@ void World::Load(const std::string &guiLayoutFile,
 void World::Render()
 {
 	// Render GUI
+	/*
 	for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
 	{
 		if ((*layout).second->IsSet())
@@ -70,6 +73,7 @@ void World::Render()
 			(*layout).second->Draw(shaderManager);
 		}
 	}
+	*/
 
 	// Render Lights
 	// TODO: Render relative to layout
@@ -82,6 +86,7 @@ void World::Render()
 
 void World::SetLayout(LayoutType layoutToSet)
 {
+	/*
 	for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
 	{
 		if ((*layout).first == layoutToSet)
@@ -94,6 +99,7 @@ void World::SetLayout(LayoutType layoutToSet)
 			(*layout).second->Set(false);
 		}
 	}
+	*/
 }
 
 bool World::HandleEvent(const IEventData &eventData)
@@ -106,6 +112,7 @@ bool World::HandleEvent(const IEventData &eventData)
 			const OnReshapeEvent &data = static_cast<const OnReshapeEvent&>(eventData);
 			displayData.windowHeight = data.windowHeight;
 			displayData.windowWidth = data.windowWidth;
+			/*
 			for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
 			{
 				if((*layout).second->IsSet())
@@ -113,6 +120,7 @@ bool World::HandleEvent(const IEventData &eventData)
 					(*layout).second->Update(data.windowWidth, data.windowHeight);
 				}
 			}
+			*/
 		}
 		break;
 	case FusionEngine::EVENT_ON_CLICK:		
@@ -120,6 +128,7 @@ bool World::HandleEvent(const IEventData &eventData)
 			const OnClickEvent &data = static_cast<const OnClickEvent&>(eventData);
 			if (data.isLeftButtonDown)
 			{
+				/*
 				if (data.objectId == "newGame")
 				{
 					SetLayout(LAYOUT_IN_GAME);
@@ -149,6 +158,7 @@ bool World::HandleEvent(const IEventData &eventData)
 				{
 					SetLayout(LAYOUT_MENU);
 				}
+				*/
 			}
 		}
 		break;

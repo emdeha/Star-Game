@@ -24,19 +24,28 @@
 #include "../Fusion_Renderer/Sprite.h"
 
 
-class Control
+namespace FusionEngine
 {
-private:
-	glm::ivec2 position;
+	class Control
+	{
+	private:
+		glm::ivec2 position;
 
-	int width;
-	int height;
+		int width;
+		int height;
 
-	Sprite2D background;
+		Sprite2D background;
 
-public:
+	public:
+		Control(glm::ivec2 newPosition, int newWidth, int newHeight)
+			: position(newPosition), width(newWidth), height(newHeight),
+			 background(glm::vec2(position), float(width), float(height)) {}
 
-};
+		void Init(const std::string &backgroundImageFileName);
+
+		void Draw(glutil::MatrixStack &modelMatrix);
+	};
+}
 
 
 #endif

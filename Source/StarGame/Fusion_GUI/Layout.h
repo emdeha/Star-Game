@@ -24,25 +24,33 @@
 #include "Control.h"
 
 
-enum LayoutType
+namespace FusionEngine
 {
-	FE_LAYOUT_BAD = -1,
+	enum LayoutType
+	{
+		FE_LAYOUT_BAD = -1,
 
-	FE_LAYOUT_MENU = 0,
-	FE_LAYOUT_GAME,
-};
+		FE_LAYOUT_MENU = 0,
+		FE_LAYOUT_GAME,
+	};
 
 
-class Layout
-{
-private:
-	LayoutType type;
-	
-	std::vector<Control> controls;
+	class Layout
+	{
+	private:
+		LayoutType type;
+		
+		std::vector<Control> controls;
 
-public:
-	
-};
+	public:
+		Layout(LayoutType newType)
+			: type(newType) {}
+
+		void AddControl(Control newControl);
+
+		void Draw(glutil::MatrixStack &modelMatrix);
+	};
+}
 
 
 #endif

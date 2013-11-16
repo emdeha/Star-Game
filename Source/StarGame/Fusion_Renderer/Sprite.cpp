@@ -6,6 +6,9 @@
 #include "../Fusion_Scene/World.h"
 
 
+using namespace FusionEngine;
+
+
 void Sprite2D::Init(const std::string &textureFileName)
 {
 	std::vector<float> vertexData;

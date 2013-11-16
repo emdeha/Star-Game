@@ -18,7 +18,7 @@ World::~World()
 }
 
 void World::Load(const std::string &guiLayoutFile,
-				 const std::string &audioFile
+				 const std::string &audioFile,
 				 const std::string &shaderDataFile)
 {
 	// Load GUI
@@ -31,7 +31,9 @@ void World::Load(const std::string &guiLayoutFile,
 	FusionEngine::AssetLoader<FusionEngine::ShaderAssetObject> shaderLoader;
 	shaderLoader.RegisterType("loader-files", new FusionEngine::ShaderLoader());
 	FusionEngine::ShaderAssetObject loadedShaders = shaderLoader.LoadAssetObject("loader-files", shaderDataFile);
-	shaderManager.Load(loadedShaders);
+	shaderManager.Load(loadedShaders.GetAllLoadedPrograms(),
+					   loadedShaders.GetAllLoadedUniformBuffers(),
+					   loadedShaders.GetAllLoadedBlockIndices());
 
 
 #ifndef FAST_LOAD
@@ -65,14 +67,13 @@ void World::Render()
 	{
 		if ((*layout).second->IsSet())
 		{
-			(*layout).second->Draw();
+			(*layout).second->Draw(shaderManager);
 		}
 	}
 
 	// Render Lights
 	// TODO: Render relative to layout
-	sunLight.Render(displayData.modelMatrix,
-					shaderManager.GetLitProgData(), shaderManager.GetUniformBuffer(UBT_LIGHT));
+	sunLight.Render(displayData.modelMatrix, shaderManager);
 	
 	// Render Models
 	// TODO: Render relative to layout

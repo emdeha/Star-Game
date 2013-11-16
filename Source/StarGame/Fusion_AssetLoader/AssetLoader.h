@@ -15,8 +15,8 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
-#ifndef ASSET_LOADER_H
-#define ASSET_LOADER_H
+#ifndef FE_ASSET_LOADER_H
+#define FE_ASSET_LOADER_H
 
 
 #include <fstream>
@@ -36,7 +36,7 @@
 #include "../assimp/include/assimp/postprocess.h"
 #include "yaml-cpp/yaml.h"
 
-#include "../Fusion_Renderer/ShaderEnums.h"
+#include "../Fusion_Renderer/ProgramData.h"
 
 
 namespace FusionEngine
@@ -356,25 +356,6 @@ namespace FusionEngine
 	/////////////////////
 	//  Shader Loader  //
 	/////////////////////
-	struct ProgramData
-	{
-		GLuint programId;
-
-		std::map<UniformType, GLuint> uniforms;
-		std::map<AttribType, GLuint> attribs;
-
-		GLuint GetUniform(UniformType uniformType)
-		{
-			auto foundIter = uniforms.find(uniformType);
-			return (*foundIter).second;
-		}
-		GLuint GetAttrib(AttribType attribType)
-		{
-			auto foundIter = attribs.find(attribType);
-			return (*foundIter).second;
-		}
-	};
-
 	class ShaderAssetObject : public IAssetObject
 	{
 	private:
@@ -392,10 +373,10 @@ namespace FusionEngine
 			  uniformBuffers(newUniformBuffers), blockIndices(newBlockIndices) {}
 
 		unsigned int GetUniformBuffer(UniformBufferType ubType) const;
-		std::map<UniformBufferType, unsigned int> GetLoadedUniformBuffers() const;
+		std::map<UniformBufferType, unsigned int> GetAllLoadedUniformBuffers() const;
 		
 		int GetLoadedBlockIndex(BlockType blockType) const;
-		std::map<BlockType, int> GetLoadedBlockIndices() const;
+		std::map<BlockType, int> GetAllLoadedBlockIndices() const;
 		
 		ProgramData GetLoadedProgram(ProgramType progType) const;
 		const std::map<ProgramType, ProgramData> &GetAllLoadedPrograms() const;

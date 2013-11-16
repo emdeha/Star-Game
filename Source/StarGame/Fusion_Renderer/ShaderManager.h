@@ -15,8 +15,8 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
-#ifndef SHADER_MANAGER_H
-#define SHADER_MANAGER_H
+#ifndef FE_SHADER_MANAGER_H
+#define FE_SHADER_MANAGER_H
 
 
 #include <map>
@@ -24,29 +24,10 @@
 
 #include "../glsdk/glload/gl_3_3.h"
 
-#include "ShaderEnums.h"
+#include "ProgramData.h"
 
 namespace FusionEngine
 {
-	struct ProgramData
-	{
-		GLuint programId;
-
-		std::map<UniformType, GLuint> uniforms;
-		std::map<AttribType, GLuint> attribs;
-
-		GLuint GetUniform(UniformType uniformType)
-		{
-			auto foundIter = uniforms.find(uniformType);
-			return (*foundIter).second;
-		}
-		GLuint GetAttrib(AttribType attribType)
-		{
-			auto foundIter = attribs.find(attribType);
-			return (*foundIter).second;
-		}
-	};
-
 	class ShaderManager
 	{
 	private:
@@ -60,7 +41,7 @@ namespace FusionEngine
 		BlockMap blockIndices;
 
 	public:
-		ShaderManager();
+		ShaderManager() {};
 
 		void Load(ProgramMap newLoadedPrograms,
 				  UBTMap newUniformBuffers, BlockMap newBlockIndices);
@@ -68,7 +49,12 @@ namespace FusionEngine
 		void LoadProgram(ProgramType programType, 
 						 const std::string &vertexShader, const std::string &fragmentShader);
 
-		ProgramData GetProgram(ProgramType programType);
+		ProgramData GetProgram(ProgramType programType) const;
+
+		unsigned int GetUniformBuffer(UniformBufferType ubType) const;
+		void SetUniformBuffer(UniformBufferType ubType, unsigned int index);
+
+		int GetBlockIndex(BlockType blockType) const;
 	};
 }
 

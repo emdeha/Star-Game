@@ -40,15 +40,17 @@ SunLight::SunLight(glm::vec3 newPosition,
     gamma = newGamma;
 }
 
-void SunLight::Render(glutil::MatrixStack &modelMatrix, const LitProgData &lightData,
-                      GLuint lightUniformBuffer)
+void SunLight::Render(glutil::MatrixStack &modelMatrix, FusionEngine::ShaderManager shaderManager)
 {
     glm::vec4 position_cameraSpace = modelMatrix.Top() * glm::vec4(position, 1.0f);
 
-    glUseProgram(lightData.theProgram);
+	FusionEngine::ProgramData lightData =
+		shaderManager.GetProgram(FusionEngine::FE_PROGRAM_LIT);
+    glUseProgram(lightData.programId);
 
-    glUniform4fv(lightData.lightIntensityUnif, 1, glm::value_ptr(lightIntensity));
-    glUniform3fv(lightData.cameraSpaceLightPosUnif, 1, glm::value_ptr(position_cameraSpace));
+    glUniform4fv(lightData.GetUniform(FusionEngine::FE_UNIFORM_LIGHT_INTENSITY), 1, glm::value_ptr(lightIntensity));
+    glUniform3fv(lightData.GetUniform(FusionEngine::FE_UNIFORM_CAMERA_SPACE_LIGHT_POS),
+			 	 1, glm::value_ptr(position_cameraSpace));
 
     
     LightBlockGamma blockLightData;
@@ -57,14 +59,35 @@ void SunLight::Render(glutil::MatrixStack &modelMatrix, const LitProgData &light
     blockLightData.lightAttenuation = lightAttenuation;
     blockLightData.maxIntensity = maxIntensity;
     blockLightData.gamma = gamma;
+	
+	
+	glBindBuffer(GL_UNIFORM_BUFFER, shaderManager.GetUniformBuffer(FusionEngine::FE_UBT_LIGHT));
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(blockLightData), &blockLightData);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-    glBindBuffer(GL_UNIFORM_BUFFER, lightUniformBuffer);
+
+	FusionEngine::ProgramData litTextureData =
+		shaderManager.GetProgram(FusionEngine::FE_PROGRAM_LIT_TEXTURE);
+	glUseProgram(litTextureData.programId);
+
+    glUniform4fv(litTextureData.GetUniform(FusionEngine::FE_UNIFORM_LIGHT_INTENSITY), 1, glm::value_ptr(lightIntensity));
+    glUniform3fv(lightData.GetUniform(FusionEngine::FE_UNIFORM_CAMERA_SPACE_LIGHT_POS),
+		1, glm::value_ptr(position_cameraSpace));
+
+    blockLightData.ambientIntensity = ambientIntensity;
+    blockLightData.lightAttenuation = lightAttenuation;
+    blockLightData.maxIntensity = maxIntensity;
+    blockLightData.gamma = gamma;
+
+
+    glBindBuffer(GL_UNIFORM_BUFFER, shaderManager.GetUniformBuffer(FusionEngine::FE_UBT_LIGHT));
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(blockLightData), &blockLightData);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     glUseProgram(0);
 }
 
+/*
 void SunLight::Render(glutil::MatrixStack &modelMatrix, const LitTextureProgData &litTextureData,
                       GLuint lightUniformBuffer)
 {
@@ -87,3 +110,4 @@ void SunLight::Render(glutil::MatrixStack &modelMatrix, const LitTextureProgData
 
     glUseProgram(0);
 }
+*/

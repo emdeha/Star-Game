@@ -25,19 +25,19 @@
 
 using namespace FusionEngine;
 
-ShaderManager::ShaderManager()
+ShaderManager_::ShaderManager_()
 {
-	blockIndices.insert(std::make_pair(BT_MATERIAL, 0));
-	blockIndices.insert(std::make_pair(BT_LIGHT, 1));
-	blockIndices.insert(std::make_pair(BT_PROJECTION, 2));
-	blockIndices.insert(std::make_pair(BT_ORTHOGRAPHIC, 3));
+	blockIndices.insert(std::make_pair(FE_BT_MATERIAL, 0));
+	blockIndices.insert(std::make_pair(FE_BT_LIGHT, 1));
+	blockIndices.insert(std::make_pair(FE_BT_PROJECTION, 2));
+	blockIndices.insert(std::make_pair(FE_BT_ORTHOGRAPHIC, 3));
 
-	uniformBuffers.insert(std::make_pair(UBT_PROJECTION, 0));
-	uniformBuffers.insert(std::make_pair(UBT_ORTHOGRAPHIC, 0));
-	uniformBuffers.insert(std::make_pair(UBT_LIGHT, 0));
+	uniformBuffers.insert(std::make_pair(FE_UBT_PROJECTION, 0));
+	uniformBuffers.insert(std::make_pair(FE_UBT_ORTHOGRAPHIC, 0));
+	uniformBuffers.insert(std::make_pair(FE_UBT_LIGHT, 0));
 }
 
-void ShaderManager::LoadLitProgram(const std::string &vertexShader, 
+void ShaderManager_::LoadLitProgram(const std::string &vertexShader, 
 								   const std::string &fragmentShader)
 {
 	std::vector<GLuint> shaderList;
@@ -57,13 +57,13 @@ void ShaderManager::LoadLitProgram(const std::string &vertexShader,
 	GLuint projectionBlock = glGetUniformBlockIndex(litData.theProgram, "Projection");
 
 	if(materialBlock != GL_INVALID_INDEX)
-		glUniformBlockBinding(litData.theProgram, materialBlock, blockIndices[BT_MATERIAL]);
+		glUniformBlockBinding(litData.theProgram, materialBlock, blockIndices[FE_BT_MATERIAL]);
 
-	glUniformBlockBinding(litData.theProgram, lightBlock, blockIndices[BT_LIGHT]);
-	glUniformBlockBinding(litData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
+	glUniformBlockBinding(litData.theProgram, lightBlock, blockIndices[FE_BT_LIGHT]);
+	glUniformBlockBinding(litData.theProgram, projectionBlock, blockIndices[FE_BT_PROJECTION]);
 }
 
-void ShaderManager::LoadLitTextureProgram(const std::string &vertexShader,
+void ShaderManager_::LoadLitTextureProgram(const std::string &vertexShader,
 										  const std::string &fragmentShader)
 {
 	std::vector<GLuint> shaderList;
@@ -92,13 +92,13 @@ void ShaderManager::LoadLitTextureProgram(const std::string &vertexShader,
 	GLuint projectionBlock = glGetUniformBlockIndex(litTextureData.theProgram, "Projection");
 
 	if(materialBlock != GL_INVALID_INDEX)
-		glUniformBlockBinding(litTextureData.theProgram, materialBlock, blockIndices[BT_MATERIAL]);
+		glUniformBlockBinding(litTextureData.theProgram, materialBlock, blockIndices[FE_BT_MATERIAL]);
 
-	glUniformBlockBinding(litTextureData.theProgram, lightBlock, blockIndices[BT_LIGHT]);
-	glUniformBlockBinding(litTextureData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
+	glUniformBlockBinding(litTextureData.theProgram, lightBlock, blockIndices[FE_BT_LIGHT]);
+	glUniformBlockBinding(litTextureData.theProgram, projectionBlock, blockIndices[FE_BT_PROJECTION]);
 }
 
-void ShaderManager::LoadUnlitProgram(const std::string &vertexShader, 
+void ShaderManager_::LoadUnlitProgram(const std::string &vertexShader, 
 								     const std::string &fragmentShader)
 {
 	std::vector<GLuint> shaderList;
@@ -111,10 +111,10 @@ void ShaderManager::LoadUnlitProgram(const std::string &vertexShader,
 	unlitData.objectColorUnif = glGetUniformLocation(unlitData.theProgram, "objectColor");
 
 	GLuint projectionBlock = glGetUniformBlockIndex(unlitData.theProgram, "Projection");
-	glUniformBlockBinding(unlitData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
+	glUniformBlockBinding(unlitData.theProgram, projectionBlock, blockIndices[FE_BT_PROJECTION]);
 }
 
-void ShaderManager::LoadSimpleProgram(const std::string &vertexShader, 
+void ShaderManager_::LoadSimpleProgram(const std::string &vertexShader, 
 								      const std::string &fragmentShader)
 {
 	std::vector<GLuint> shaderList;
@@ -131,10 +131,10 @@ void ShaderManager::LoadSimpleProgram(const std::string &vertexShader,
 
 
 	GLuint projectionBlock = glGetUniformBlockIndex(simpleData.theProgram, "Projection");	
-	glUniformBlockBinding(simpleData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
+	glUniformBlockBinding(simpleData.theProgram, projectionBlock, blockIndices[FE_BT_PROJECTION]);
 }
 
-void ShaderManager::LoadSimpleNoUBProgram(const std::string &vertexShader, 
+void ShaderManager_::LoadSimpleNoUBProgram(const std::string &vertexShader, 
 										  const std::string &fragmentShader)	
 {
 	std::vector<GLuint> shaderList;
@@ -155,10 +155,10 @@ void ShaderManager::LoadSimpleNoUBProgram(const std::string &vertexShader,
 
 
 	GLuint projectionBlock = glGetUniformBlockIndex(simpleNoUBData.theProgram, "OrthographicProjection");
-	glUniformBlockBinding(simpleNoUBData.theProgram, projectionBlock, blockIndices[BT_ORTHOGRAPHIC]);
+	glUniformBlockBinding(simpleNoUBData.theProgram, projectionBlock, blockIndices[FE_BT_ORTHOGRAPHIC]);
 }
 
-void ShaderManager::LoadFontProgram(const std::string &vertexShader, 
+void ShaderManager_::LoadFontProgram(const std::string &vertexShader, 
 								    const std::string &fragmentShader)
 {
 	std::vector<GLuint> shaderList;
@@ -176,11 +176,11 @@ void ShaderManager::LoadFontProgram(const std::string &vertexShader,
 
 
 	GLuint projectionBlock = glGetUniformBlockIndex(fontData.theProgram, "OrthographicProjection");
-	glUniformBlockBinding(fontData.theProgram, projectionBlock, blockIndices[BT_ORTHOGRAPHIC]);
+	glUniformBlockBinding(fontData.theProgram, projectionBlock, blockIndices[FE_BT_ORTHOGRAPHIC]);
 	//fontData.textureCoordAttrib = glGetAttribLocation(fontData.theProgram, "textureCoordinates");
 }
 
-void ShaderManager::LoadSimpleTextureProgData(const std::string &vertexShader,
+void ShaderManager_::LoadSimpleTextureProgData(const std::string &vertexShader,
 											  const std::string &fragmentShader)
 {
 	std::vector<GLuint> shaderList;
@@ -198,7 +198,7 @@ void ShaderManager::LoadSimpleTextureProgData(const std::string &vertexShader,
 
 	GLuint projectionBlock = 
 		glGetUniformBlockIndex(simpleTextureProgData.theProgram, "Projection");
-	glUniformBlockBinding(simpleTextureProgData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]); 
+	glUniformBlockBinding(simpleTextureProgData.theProgram, projectionBlock, blockIndices[FE_BT_PROJECTION]); 
 
 	simpleTextureProgData.positionAttrib = 
 		glGetAttribLocation(simpleTextureProgData.theProgram, "position");
@@ -208,7 +208,7 @@ void ShaderManager::LoadSimpleTextureProgData(const std::string &vertexShader,
 		glGetAttribLocation(simpleTextureProgData.theProgram, "texCoord");
 }
 
-void ShaderManager::LoadTextureProgData(const std::string &vertexShader, 
+void ShaderManager_::LoadTextureProgData(const std::string &vertexShader, 
 										const std::string &fragmentShader)
 {
 	std::vector<GLuint> shaderList;
@@ -236,10 +236,10 @@ void ShaderManager::LoadTextureProgData(const std::string &vertexShader,
 
 
 	GLuint projectionBlock = glGetUniformBlockIndex(textureProgData.theProgram, "OrthographicProjection");
-	glUniformBlockBinding(textureProgData.theProgram, projectionBlock, blockIndices[BT_ORTHOGRAPHIC]);
+	glUniformBlockBinding(textureProgData.theProgram, projectionBlock, blockIndices[FE_BT_ORTHOGRAPHIC]);
 }
 
-void ShaderManager::LoadPerspectiveTextureProgData(const std::string &vertexShader, 
+void ShaderManager_::LoadPerspectiveTextureProgData(const std::string &vertexShader, 
 												   const std::string &fragmentShader)
 {
 	std::vector<GLuint> shaderList;
@@ -266,10 +266,10 @@ void ShaderManager::LoadPerspectiveTextureProgData(const std::string &vertexShad
 
 
 	GLuint projectionBlock = glGetUniformBlockIndex(perspTextureProgData.theProgram, "Projection");
-	glUniformBlockBinding(perspTextureProgData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
+	glUniformBlockBinding(perspTextureProgData.theProgram, projectionBlock, blockIndices[FE_BT_PROJECTION]);
 }
 
-void ShaderManager::LoadBillboardProgDataNoTexture(const std::string &vertexShader,
+void ShaderManager_::LoadBillboardProgDataNoTexture(const std::string &vertexShader,
 												   const std::string &geometryShader,
 												   const std::string &fragmentShader)
 {
@@ -299,7 +299,7 @@ void ShaderManager::LoadBillboardProgDataNoTexture(const std::string &vertexShad
 		glGetAttribLocation(billboardProgDataNoTexture.theProgram, "position");
 }
 
-void ShaderManager::LoadBillboardProgData(const std::string &vertexShader,
+void ShaderManager_::LoadBillboardProgData(const std::string &vertexShader,
 										  const std::string &geometryShader,
 										  const std::string &fragmentShader)
 {
@@ -333,7 +333,7 @@ void ShaderManager::LoadBillboardProgData(const std::string &vertexShader,
 		glGetAttribLocation(billboardProgData.theProgram, "texCoord");
 }
 
-void ShaderManager::LoadParticleProgData(const std::string &vertexShader, 
+void ShaderManager_::LoadParticleProgData(const std::string &vertexShader, 
 										 const std::string &geometryShader)
 {
 	std::vector<GLuint> shaderList;
@@ -367,7 +367,7 @@ void ShaderManager::LoadParticleProgData(const std::string &vertexShader,
 		glGetAttribLocation(particleProgData.theProgram, "velocity");
 }
 
-void ShaderManager::LoadSpriteParticleProgData(const std::string &vertexShader, const std::string &fragmentShader)
+void ShaderManager_::LoadSpriteParticleProgData(const std::string &vertexShader, const std::string &fragmentShader)
 {
 	std::vector<GLuint> shaderList;
 
@@ -393,65 +393,65 @@ void ShaderManager::LoadSpriteParticleProgData(const std::string &vertexShader, 
 		glGetAttribLocation(spriteParticleProgData.theProgram, "texCoord");
 
 	GLuint projectionBlock = glGetUniformBlockIndex(spriteParticleProgData.theProgram, "Projection");
-	glUniformBlockBinding(spriteParticleProgData.theProgram, projectionBlock, blockIndices[BT_PROJECTION]);
+	glUniformBlockBinding(spriteParticleProgData.theProgram, projectionBlock, blockIndices[FE_BT_PROJECTION]);
 }
 
 
-LitProgData ShaderManager::GetLitProgData()
+LitProgData ShaderManager_::GetLitProgData()
 {
 	return litData;
 }
-LitTextureProgData ShaderManager::GetLitTextureProgData()
+LitTextureProgData ShaderManager_::GetLitTextureProgData()
 {
 	return litTextureData;
 }
-UnlitProgData ShaderManager::GetUnlitProgData()
+UnlitProgData ShaderManager_::GetUnlitProgData()
 {
 	return unlitData;
 }
-SimpleProgData ShaderManager::GetSimpleProgData()
+SimpleProgData ShaderManager_::GetSimpleProgData()
 {
 	return simpleData;
 }
-SimpleProgData ShaderManager::GetSimpleNoUBProgData()
+SimpleProgData ShaderManager_::GetSimpleNoUBProgData()
 {
 	return simpleNoUBData;
 }
-FontProgData ShaderManager::GetFontProgData()
+FontProgData ShaderManager_::GetFontProgData()
 {
 	return fontData;
 }
-SimpleTextureProgData ShaderManager::GetSimpleTextureProgData()
+SimpleTextureProgData ShaderManager_::GetSimpleTextureProgData()
 {
 	return simpleTextureProgData;
 }
-TextureProgData ShaderManager::GetTextureProgData()
+TextureProgData ShaderManager_::GetTextureProgData()
 {
 	return textureProgData;
 }
-TextureProgData ShaderManager::GetPerspectiveTextureProgData()
+TextureProgData ShaderManager_::GetPerspectiveTextureProgData()
 {
 	return perspTextureProgData;
 }
-BillboardProgDataNoTexture ShaderManager::GetBillboardProgDataNoTexture()
+BillboardProgDataNoTexture ShaderManager_::GetBillboardProgDataNoTexture()
 {
 	return billboardProgDataNoTexture;
 }
-BillboardProgData ShaderManager::GetBillboardProgData()
+BillboardProgData ShaderManager_::GetBillboardProgData()
 {
 	return billboardProgData;
 }
-ParticleProgData ShaderManager::GetParticleProgData()
+ParticleProgData ShaderManager_::GetParticleProgData()
 {
 	return particleProgData;
 }
-SpriteParticleProgData ShaderManager::GetSpriteParticleProgData()
+SpriteParticleProgData ShaderManager_::GetSpriteParticleProgData()
 {
 	return spriteParticleProgData;
 }
 
 
-int ShaderManager::GetBlockIndex(BlockType blockType)
+int ShaderManager_::GetBlockIndex(BlockType blockType)
 {
 	if(blockIndices.find(blockType) != blockIndices.end())
 		return blockIndices[blockType];
@@ -463,7 +463,7 @@ int ShaderManager::GetBlockIndex(BlockType blockType)
 		return 0;
 	}
 }
-unsigned int ShaderManager::GetUniformBuffer(UniformBufferType uniformBufferType)
+unsigned int ShaderManager_::GetUniformBuffer(UniformBufferType uniformBufferType)
 {
 	if(uniformBuffers.find(uniformBufferType) != uniformBuffers.end())
 		return uniformBuffers[uniformBufferType];
@@ -475,7 +475,7 @@ unsigned int ShaderManager::GetUniformBuffer(UniformBufferType uniformBufferType
 		return 0;
 	}
 }
-void ShaderManager::SetUniformBuffer(UniformBufferType uniformBufferType,
+void ShaderManager_::SetUniformBuffer(UniformBufferType uniformBufferType,
 									 unsigned int value)
 {
 	if(uniformBuffers.find(uniformBufferType) != uniformBuffers.end())

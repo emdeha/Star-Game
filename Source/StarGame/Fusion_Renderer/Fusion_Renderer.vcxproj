@@ -74,6 +74,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ProgramData.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ShaderEnums.h" />
     <ClInclude Include="ShaderManager.h" />

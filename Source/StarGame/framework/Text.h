@@ -93,7 +93,7 @@ public:
 	///
 	/// It doesn't make any text formatting.
 	void Print(FusionEngine::ShaderManager shaderManager,
-			   char *text, glm::vec2 position, glm::vec4 color, int fontSize);
+			   const char *text, glm::vec2 position, glm::vec4 color, int fontSize);
 
 
 	void ComputeTextDimensions(const char *text, glm::vec2 position, int fontSize);

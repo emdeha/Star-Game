@@ -80,24 +80,23 @@ namespace FusionEngine
 		FE_ATTRIB_VELOCITY,
 	};
 	
-	// TODO: Add FE_ prefix
 	enum BlockType
 	{
-		BT_BAD = -1,
+		FE_BT_BAD = -1,
 
-		BT_MATERIAL = 0,
-		BT_LIGHT, 
-		BT_PROJECTION,
-		BT_ORTHOGRAPHIC,
+		FE_BT_MATERIAL = 0,
+		FE_BT_LIGHT, 
+		FE_BT_PROJECTION,
+		FE_BT_ORTHOGRAPHIC,
 	};
 
 	enum UniformBufferType
 	{
-		UBT_BAD = -1,
+		FE_UBT_BAD = -1,
 
-		UBT_PROJECTION = 0,
-		UBT_ORTHOGRAPHIC, 
-		UBT_LIGHT,
+		FE_UBT_PROJECTION = 0,
+		FE_UBT_ORTHOGRAPHIC, 
+		FE_UBT_LIGHT,
 	};
 }
 

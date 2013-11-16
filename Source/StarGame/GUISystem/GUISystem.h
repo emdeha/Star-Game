@@ -102,7 +102,7 @@ public:
 	std::shared_ptr<Control> GetControl(const std::string &controlName);
 	std::vector<std::shared_ptr<Control>>& GetControls();
 
-	void Draw(); 
+	void Draw(FusionEngine::ShaderManager shaderManager); 
 	void Update(int windowWidth, int windowHeight);
 
 	void HandleClickedControls(bool isRightButtonclicked,
@@ -218,7 +218,7 @@ public:
 	void SetIsHovered(bool newIsHovered);
 
 
-	virtual void Draw(const FontProgData &fontData, const TextureProgData &textureData);
+	virtual void Draw(FusionEngine::ShaderManager shaderManager);
 
 	virtual void ComputeNewAttributes();
 	virtual void Update(int newWindowWidth, int newWindowHeight);
@@ -351,8 +351,7 @@ public:
 	void ComputeNewAttributes();
 
 	void Update(int newWindowWidth, int newWindowHeight);
-	// Adding the font data for later usage.
-	void Draw(const FontProgData &fontData, const TextureProgData &textureData);
+	void Draw(FusionEngine::ShaderManager shaderManager);
 
 	void SetTexture(const std::string &textureName);
 

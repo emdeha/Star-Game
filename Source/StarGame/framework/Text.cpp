@@ -80,7 +80,7 @@ void Text::UpdateWindowDimensions(int newWindowWidth, int newWindowHeight)
 }
 
 void Text::Print(FusionEngine::ShaderManager shaderManager,
-				 char *text, glm::vec2 position, glm::vec4 color, int fontSize)
+				 const char *text, glm::vec2 position, glm::vec4 color, int fontSize)
 {
 	FT_Face fontFaceToUse = fontFace;
 	if(isBold)
@@ -168,7 +168,7 @@ void Text::Print(FusionEngine::ShaderManager shaderManager,
 		position.y += (fontFaceToUse->glyph->advance.y >> 6);
 	}
 
-	glDisableVertexAttribArray(fontProgram.GetAttrib(FusionEngine::FE_ATTRIB_POSITION);
+	glDisableVertexAttribArray(fontProgram.GetAttrib(FusionEngine::FE_ATTRIB_POSITION));
 	glDeleteTextures(1, &texture);
 
 	glUseProgram(0);

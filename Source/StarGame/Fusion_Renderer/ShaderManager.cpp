@@ -29,7 +29,25 @@ void ShaderManager::LoadProgram(ProgramType programType,
 	loadedPrograms.insert(std::make_pair(programType, loadedProgram));
 }
 
-ProgramData ShaderManager::GetProgram(ProgramType programType)
+ProgramData ShaderManager::GetProgram(ProgramType programType) const
 {
-	return loadedPrograms[programType];
+	auto foundProgram = loadedPrograms.find(programType);
+	return (*foundProgram).second;
+}
+
+unsigned int ShaderManager::GetUniformBuffer(UniformBufferType ubType) const
+{
+	auto foundUB = uniformBuffers.find(ubType);
+	return (*foundUB).second;
+}
+void ShaderManager::SetUniformBuffer(UniformBufferType ubType, unsigned int index) 
+{
+	auto foundUB = uniformBuffers.find(ubType);
+	foundUB->second = index;
+}
+
+int ShaderManager::GetBlockIndex(BlockType blockType) const
+{
+	auto foundBlock = blockIndices.find(blockType);
+	return (*foundBlock).second;
 }

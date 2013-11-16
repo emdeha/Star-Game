@@ -34,7 +34,7 @@
 #include "../Fusion_Renderer/ShaderEnums.h"
 
 
-class ShaderManager
+class ShaderManager_
 {
 private:
 	std::map<FusionEngine::BlockType, int> blockIndices;
@@ -55,7 +55,7 @@ private:
 	SpriteParticleProgData spriteParticleProgData;
 
 public:
-	ShaderManager();
+	ShaderManager_();
 
 	void LoadLitProgram(const std::string &vertexShader, const std::string &fragmentShader);
 	void LoadLitTextureProgram(const std::string &vertexShader, const std::string &fragmentShader);

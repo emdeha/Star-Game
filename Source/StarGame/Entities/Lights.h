@@ -26,8 +26,8 @@
 #include "../glsdk/glm/glm.hpp"
 #include "../glsdk/glload/gl_3_3.h"
 #include "../glsdk/glutil/glutil.h"
-#include "../ProgramData/ProgramData.h"
 
+#include "../Fusion_Renderer/ShaderManager.h"
 
 /// \struct LightBlockGamma
 /// \brief Contains the lighting model information.
@@ -94,10 +94,8 @@ public:
 
 	/// \fn Render
 	/// \brief Applies the light to the scene.
-	void Render(glutil::MatrixStack &modelMatrix, const LitProgData &lightData,
-				GLuint lightUniformBuffer);
-	void Render(glutil::MatrixStack &modelMatrix, const LitTextureProgData &litTextureData,
-				GLuint lightUniformBuffer);
+	void Render(glutil::MatrixStack &modelMatrix, 
+				FusionEngine::ShaderManager shaderManager);
 };
 
 #endif

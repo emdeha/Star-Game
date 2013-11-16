@@ -12,7 +12,7 @@ unsigned int ShaderAssetObject::GetUniformBuffer(UniformBufferType ubType) const
 	auto foundIter = uniformBuffers.find(ubType);
 	return (*foundIter).second;
 }
-std::map<UniformBufferType, unsigned int> ShaderAssetObject::GetLoadedUniformBuffers() const
+std::map<UniformBufferType, unsigned int> ShaderAssetObject::GetAllLoadedUniformBuffers() const
 {
 	return uniformBuffers;
 }
@@ -22,7 +22,7 @@ int ShaderAssetObject::GetLoadedBlockIndex(BlockType blockType) const
 	auto foundIter = blockIndices.find(blockType);
 	return (*foundIter).second;
 }
-std::map<BlockType, int> ShaderAssetObject::GetLoadedBlockIndices() const
+std::map<BlockType, int> ShaderAssetObject::GetAllLoadedBlockIndices() const
 {
 	return blockIndices;
 }
@@ -100,40 +100,40 @@ std::pair<BlockType, int> ShaderLoader::GetBlockPairFromString(const std::string
 {
 	if (strId == "MATERIAL")
 	{
-		return std::make_pair(BT_MATERIAL, 0);
+		return std::make_pair(FE_BT_MATERIAL, 0);
 	}
 	if (strId == "LIGHT")
 	{
-		return std::make_pair(BT_LIGHT, 1);
+		return std::make_pair(FE_BT_LIGHT, 1);
 	}
 	if (strId == "PROJECTION")
 	{
-		return std::make_pair(BT_PROJECTION, 2);
+		return std::make_pair(FE_BT_PROJECTION, 2);
 	}
 	if (strId == "ORTHOGRAPHIC")
 	{
-		return std::make_pair(BT_ORTHOGRAPHIC, 3);
+		return std::make_pair(FE_BT_ORTHOGRAPHIC, 3);
 	}
 
-	return std::make_pair(BT_BAD, -1);
+	return std::make_pair(FE_BT_BAD, -1);
 }
 
 std::pair<UniformBufferType, unsigned int> ShaderLoader::GetUBPairFromString(const std::string &strId) const
 {
 	if (strId == "LIGHT")
 	{
-		return std::make_pair(UBT_LIGHT, 0);
+		return std::make_pair(FE_UBT_LIGHT, 0);
 	}
 	if (strId == "PROJECTION")
 	{
-		return std::make_pair(UBT_PROJECTION, 0);
+		return std::make_pair(FE_UBT_PROJECTION, 0);
 	}
 	if (strId == "ORTHOGRAPHIC")
 	{
-		return std::make_pair(UBT_ORTHOGRAPHIC, 0);
+		return std::make_pair(FE_UBT_ORTHOGRAPHIC, 0);
 	}
 
-	return std::make_pair(UBT_BAD, -1);
+	return std::make_pair(FE_UBT_BAD, -1);
 }
 
 UniformType ShaderLoader::GetUniformTypeFromString(const std::string &strId) const

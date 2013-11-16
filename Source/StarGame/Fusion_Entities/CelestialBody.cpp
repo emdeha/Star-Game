@@ -128,7 +128,8 @@ bool NewCelestialBody::AddSatellite()
 		satRender->mesh.AddTexture((*texture));
 	}
 	satRender->rendererType = Render::FE_RENDERER_LIT;
-	satRender->shaderProgram = World::GetWorld().GetShaderManager().GetLitProgData().theProgram;
+	satRender->shaderProgram = 
+		World::GetWorld().GetShaderManager().GetProgram(FusionEngine::FE_PROGRAM_LIT).programId;
 	satRender->vao = loadedMesh.vao;
 
 	GetScene().AddEntity(newSat->GetID());

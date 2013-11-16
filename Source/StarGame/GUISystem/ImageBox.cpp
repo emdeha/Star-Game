@@ -53,7 +53,7 @@ void ImageBox::Update(int newWindowWidth, int newWindowHeight)
 	ComputeNewAttributes();
 }
 
-void ImageBox::Draw(const FontProgData &fontData, const TextureProgData &textureData)
+void ImageBox::Draw(FusionEngine::ShaderManager shaderManager)
 {
 	glutil::MatrixStack identityMat;
 	identityMat.SetIdentity();
@@ -61,7 +61,7 @@ void ImageBox::Draw(const FontProgData &fontData, const TextureProgData &texture
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	image.Draw(identityMat, textureData);
+	image.Draw(identityMat, shaderManager);
 
 	glDisable(GL_BLEND);
 }

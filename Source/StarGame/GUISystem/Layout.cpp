@@ -49,7 +49,7 @@ Layout::Layout(LayoutType newLayoutType, glm::vec4 newBackgroundColor)
 	backgroundSprite = Utility::Primitives::Sprite(glm::vec3(), backgroundColor, 0.0f, 0.0f, false); 
 }
 
-void Layout::Draw()
+void Layout::Draw(FusionEngine::ShaderManager shaderManager)
 {
 	glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
 
@@ -61,15 +61,15 @@ void Layout::Draw()
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		backgroundSprite.Draw(identityMatrix);
+		backgroundSprite.Draw(identityMatrix, shaderManager);
 
 		glDisable(GL_BLEND);
 	}
 
-	for(std::vector<std::shared_ptr</*TextControl*/Control>>::iterator iter = controls.begin();
+	for(std::vector<std::shared_ptr<Control>>::iterator iter = controls.begin();
 		iter != controls.end(); ++iter)
 	{
-		(*iter)->Draw();
+		(*iter)->Draw(shaderManager);
 	}
 	for(std::vector<std::shared_ptr<Layout>>::iterator iter = subLayouts.begin();
 		iter != subLayouts.end();
@@ -77,7 +77,7 @@ void Layout::Draw()
 	{
 		if((*iter)->IsSet())
 		{
-			(*iter)->Draw();
+			(*iter)->Draw(shaderManager);
 		}
 	}
 }

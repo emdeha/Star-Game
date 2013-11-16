@@ -109,7 +109,7 @@ private:
 	TopDownCamera sceneTopDownCamera;
 	Audio sceneMusic;
 
-	ShaderManager shaderManager;
+	ShaderManager_ shaderManager;
 	DisplayData currentDisplayData;
 
 	float sceneGamma;
@@ -139,7 +139,7 @@ public:
 		  float newInitialSpawnTime_secs, float newEndSpawnTime_secs, float newTimeDecrement_secs,
 		  int newCurrentEnemyCount, int newMaxEnemyCount, float newEnemyDestructionRadius);
 
-	ShaderManager &GetShaderManager();
+	ShaderManager_ &GetShaderManager();
 
 	/// \fn UpdateScene
 	/// \brief Goes through the game objects and calls their update functions.

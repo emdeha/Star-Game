@@ -1365,7 +1365,7 @@ void SaveVariablesTweak()
 
 }
 
-ShaderManager &Scene::GetShaderManager()
+ShaderManager_ &Scene::GetShaderManager()
 {
 	return shaderManager;
 }
@@ -1374,8 +1374,8 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
 {
 	//if(!isPaused)
 	//{
-		GLuint materialBlockIndex = shaderManager.GetBlockIndex(FusionEngine::BT_MATERIAL);
-		GLuint lightUniformBuffer = shaderManager.GetUniformBuffer(FusionEngine::UBT_LIGHT);
+		GLuint materialBlockIndex = shaderManager.GetBlockIndex(FusionEngine::FE_BT_MATERIAL);
+		GLuint lightUniformBuffer = shaderManager.GetUniformBuffer(FusionEngine::FE_UBT_LIGHT);
 		LitProgData litData = shaderManager.GetLitProgData();
 		UnlitProgData unLitData = shaderManager.GetUnlitProgData();
 		SimpleProgData simpleData = shaderManager.GetSimpleProgData();
@@ -1406,8 +1406,10 @@ void Scene::RenderScene(glutil::MatrixStack &modelMatrix, float interpolation)
 		int sizeLights = lights.size();
 		for(int i = 0; i < sizeLights; i++)
 		{
+			/*
 			lights[i].Render(modelMatrix, litData, lightUniformBuffer);
 			lights[i].Render(modelMatrix, litTextureData, lightUniformBuffer);
+			*/
 		}	
 
 		int sizeSuns = suns.size();
@@ -1430,7 +1432,7 @@ void Scene::RenderCurrentLayout()
 	{
 		if(iter->second->IsSet())
 		{
-			iter->second->Draw(fontData, simpleData, textureData);
+			//iter->second->Draw(fontData, simpleData, textureData);
 			break;
 		}
 	}

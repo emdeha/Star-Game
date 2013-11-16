@@ -176,7 +176,7 @@ void Control::Update(int newWindowWidth, int newWindowHeight)
 	}
 }
 
-void Control::Draw(const FontProgData &fontData, const TextureProgData &textureData)
+void Control::Draw(FusionEngine::ShaderManager shaderManager)
 {
 	if(isVisible)
 	{
@@ -188,7 +188,7 @@ void Control::Draw(const FontProgData &fontData, const TextureProgData &textureD
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-			controlBackground.Draw(identityMatStack, textureData);
+			controlBackground.Draw(identityMatStack, shaderManager);
 
 			glDisable(GL_BLEND);
 		}
@@ -213,7 +213,8 @@ void Control::Draw(const FontProgData &fontData, const TextureProgData &textureD
 				hasUnhoveredSoon = true;
 			}
 
-			textToDisplay.Print(visibleText.c_str(), fontData, position, fontColor, textSize);	
+			textToDisplay.Print(shaderManager,
+								visibleText.c_str(), position, fontColor, textSize);	
 		}
 		else
 		{
@@ -244,7 +245,7 @@ void Control::Draw(const FontProgData &fontData, const TextureProgData &textureD
 			{
 				textToPrint = onHoverProps.text;
 			}
-			textToDisplay.Print(textToPrint.c_str(), fontData, position, 
+			textToDisplay.Print(shaderManager, textToPrint.c_str(), position, 
 								onHoverProps.textColor, textSize); 
 		}
 	}

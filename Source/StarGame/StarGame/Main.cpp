@@ -113,6 +113,7 @@ void HandlePassiveMovement(int x, int y)
 	GetWorld().GetMouse().SetCurrentPosition(glm::ivec2(x, y));
 }
 
+/*
 void InitializePrograms()
 {
 	GetWorld().GetShaderManager().LoadSimpleTextureProgData("shaders/SimpleTexture.vert", "shaders/SimpleTexture.frag");
@@ -130,6 +131,7 @@ void InitializePrograms()
 	GetWorld().GetShaderManager().LoadLitTextureProgram("shaders/LitTexture.vert", "shaders/LitTexture.frag");
 	GetWorld().GetShaderManager().LoadSpriteParticleProgData("shaders/SpriteParticleShader.vert", "shaders/SpriteParticleShader.frag");
 }
+*/
 
 void InitializeScene()
 {
@@ -141,21 +143,28 @@ void InitializeScene()
 	GetWorld().GetCamera() = userCamera;
 	GetWorld().GetSunLight() = mainSunLight;
 
-	ShaderManager worldShaderManager = GetWorld().GetShaderManager();
-    glUseProgram(worldShaderManager.GetTextureProgData().theProgram);
-    glUniform1i(worldShaderManager.GetTextureProgData().colorTextureUnif, 0);
-    glUseProgram(0);
-    glUseProgram(worldShaderManager.GetPerspectiveTextureProgData().theProgram);
-    glUniform1i(worldShaderManager.GetPerspectiveTextureProgData().colorTextureUnif, 0);
-    glUseProgram(0);
-    glUseProgram(worldShaderManager.GetSimpleTextureProgData().theProgram);
-    glUniform1i(worldShaderManager.GetSimpleTextureProgData().textureUnif, 0);
-    glUseProgram(0);
-    glUseProgram(worldShaderManager.GetLitTextureProgData().theProgram);
-    glUniform1i(worldShaderManager.GetLitTextureProgData().textureUnif, 0);
-    glUseProgram(0);
-    glUseProgram(worldShaderManager.GetSpriteParticleProgData().theProgram);
-    glUniform1i(worldShaderManager.GetSpriteParticleProgData().samplerUnif, 0);
+	FusionEngine::ShaderManager worldShaderManager = 
+		GetWorld().GetShaderManager();
+	FusionEngine::ProgramData textureProgData =
+		worldShaderManager.GetProgram(FusionEngine::FE_PROGRAM_TEXTURE);
+    glUseProgram(textureProgData.programId);
+    glUniform1i(textureProgData.GetUniform(FusionEngine::FE_UNIFORM_COLOR_TEXTURE), 0);
+	FusionEngine::ProgramData perspectiveTextureProgData =
+		worldShaderManager.GetProgram(FusionEngine::FE_PROGRAM_TEXTURE_PERSPECTIVE);
+    glUseProgram(perspectiveTextureProgData.programId);
+    glUniform1i(perspectiveTextureProgData.GetUniform(FusionEngine::FE_UNIFORM_COLOR_TEXTURE), 0);
+	FusionEngine::ProgramData simpleTextureProgData =
+		worldShaderManager.GetProgram(FusionEngine::FE_PROGRAM_SIMPLE_TEXTURE);
+    glUseProgram(simpleTextureProgData.programId);
+    glUniform1i(simpleTextureProgData.GetUniform(FusionEngine::FE_UNIFORM_COLOR_TEXTURE), 0);
+	FusionEngine::ProgramData litTextureProgData =
+		worldShaderManager.GetProgram(FusionEngine::FE_PROGRAM_LIT_TEXTURE);
+    glUseProgram(litTextureProgData.programId);
+    glUniform1i(litTextureProgData.GetUniform(FusionEngine::FE_UNIFORM__SAMPLER), 0);
+	FusionEngine::ProgramData spriteProgramData =
+		worldShaderManager.GetProgram(FusionEngine::FE_PROGRAM_SPRITE_PARTICLE);
+    glUseProgram(spriteProgramData.programId);
+    glUniform1i(spriteProgramData.GetUniform(FusionEngine::FE_UNIFORM__SAMPLER), 0);
     glUseProgram(0);
 
 
@@ -178,7 +187,7 @@ void InitializeScene()
 		sunRender->mesh.AddTexture((*texture));
 	}
 	sunRender->rendererType = FusionEngine::Render::FE_RENDERER_SIMPLE;
-	sunRender->shaderProgram = GetWorld().GetShaderManager().GetSimpleProgData().theProgram;
+	sunRender->shaderProgram = worldShaderManager.GetProgram(FusionEngine::FE_PROGRAM_SIMPLE).programId;
 	sunRender->vao = loadedMesh.vao;
 
 	GetScene().AddEntity("sun");
@@ -243,9 +252,9 @@ void Init()
     glutTimerFunc(0, TimerFunction, 0);
 
 
-    InitializePrograms();
+    //InitializePrograms();
     InitializeScene();
-	GetWorld().Load("test-gui.yaml", "audio-config.yaml");
+	GetWorld().Load("test-gui.yaml", "audio-config.yaml", "shader-config.yaml");
 
     
     glEnable(GL_CULL_FACE);
@@ -261,36 +270,36 @@ void Init()
     glDepthRange(depthZNear, depthZFar);
     glEnable(GL_DEPTH_CLAMP);
 
-	ShaderManager &worldShaderManager = GetWorld().GetShaderManager();
+	FusionEngine::ShaderManager &worldShaderManager = GetWorld().GetShaderManager();
 
     GLuint lightUniformBuffer = 0;
     glGenBuffers(1, &lightUniformBuffer);
-    worldShaderManager.SetUniformBuffer(FusionEngine::UBT_LIGHT, lightUniformBuffer);
+    worldShaderManager.SetUniformBuffer(FusionEngine::FE_UBT_LIGHT, lightUniformBuffer);
     glBindBuffer(GL_UNIFORM_BUFFER, lightUniformBuffer);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(LightBlockGamma), NULL, GL_DYNAMIC_DRAW);
 
     GLuint projectionUniformBuffer = 0;
     glGenBuffers(1, &projectionUniformBuffer);
-    worldShaderManager.SetUniformBuffer(FusionEngine::UBT_PROJECTION, projectionUniformBuffer);
+    worldShaderManager.SetUniformBuffer(FusionEngine::FE_UBT_PROJECTION, projectionUniformBuffer);
     glBindBuffer(GL_UNIFORM_BUFFER, projectionUniformBuffer);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 
     GLuint orthographicUniformBuffer = 0;
     glGenBuffers(1, &orthographicUniformBuffer);
-    worldShaderManager.SetUniformBuffer(FusionEngine::UBT_ORTHOGRAPHIC, orthographicUniformBuffer);
+    worldShaderManager.SetUniformBuffer(FusionEngine::FE_UBT_ORTHOGRAPHIC, orthographicUniformBuffer);
     glBindBuffer(GL_UNIFORM_BUFFER, orthographicUniformBuffer);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 
     // Bind the static buffers.
-    glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(FusionEngine::BT_LIGHT), 
+    glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(FusionEngine::FE_BT_LIGHT), 
         lightUniformBuffer, 
         0, sizeof(LightBlockGamma));
 
-    glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(FusionEngine::BT_PROJECTION), 
+    glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(FusionEngine::FE_BT_PROJECTION), 
         projectionUniformBuffer,
         0, sizeof(glm::mat4));
 
-    glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(FusionEngine::BT_ORTHOGRAPHIC),
+    glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(FusionEngine::FE_BT_ORTHOGRAPHIC),
         orthographicUniformBuffer,
         0, sizeof(glm::mat4));
 
@@ -344,19 +353,23 @@ void Reshape(int width, int height)
 											   GetWorld().GetDisplayData().zFar);
 
     GetWorld().GetDisplayData().projectionMatrix = projMatrix.Top();
-	ShaderManager worldShaderManager = GetWorld().GetShaderManager();
+	FusionEngine::ShaderManager worldShaderManager = GetWorld().GetShaderManager();
 
-    glUseProgram(worldShaderManager.GetBillboardProgData().theProgram);
-    glUniformMatrix4fv(worldShaderManager.GetBillboardProgData().cameraToClipMatrixUnif, 
+	FusionEngine::ProgramData billboardProgData = 
+		worldShaderManager.GetProgram(FusionEngine::FE_PROGRAM_BILLBOARD);
+    glUseProgram(billboardProgData.programId);
+    glUniformMatrix4fv(billboardProgData.GetUniform(FusionEngine::FE_UNIFORM_CAMERA_TO_CLIP_MATRIX), 
                        1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
     glUseProgram(0);
 
-    glUseProgram(worldShaderManager.GetBillboardProgDataNoTexture().theProgram);
-    glUniformMatrix4fv(worldShaderManager.GetBillboardProgDataNoTexture().cameraToClipMatrixUnif,		
+	FusionEngine::ProgramData billboardNoTextureProgData =
+		worldShaderManager.GetProgram(FusionEngine::FE_PROGRAM_BILLBOARD_NO_TEXTURE);
+    glUseProgram(billboardNoTextureProgData.programId);
+    glUniformMatrix4fv(billboardNoTextureProgData.GetUniform(FusionEngine::FE_UNIFORM_CAMERA_TO_CLIP_MATRIX),		
                        1, GL_FALSE, glm::value_ptr(projMatrix.Top()));
     glUseProgram(0);
     
-    glBindBuffer(GL_UNIFORM_BUFFER, worldShaderManager.GetUniformBuffer(FusionEngine::UBT_PROJECTION));
+    glBindBuffer(GL_UNIFORM_BUFFER, worldShaderManager.GetUniformBuffer(FusionEngine::FE_UBT_PROJECTION));
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(projMatrix.Top()), &projMatrix.Top());
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
@@ -364,7 +377,7 @@ void Reshape(int width, int height)
     projMatrix.SetIdentity();
     projMatrix.Orthographic((float)width, 0.0f, (float)height, 0.0f, 1.0f, 1000.0f);
     
-    glBindBuffer(GL_UNIFORM_BUFFER, worldShaderManager.GetUniformBuffer(FusionEngine::UBT_ORTHOGRAPHIC));
+    glBindBuffer(GL_UNIFORM_BUFFER, worldShaderManager.GetUniformBuffer(FusionEngine::FE_UBT_ORTHOGRAPHIC));
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(projMatrix.Top()), &projMatrix.Top());
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 

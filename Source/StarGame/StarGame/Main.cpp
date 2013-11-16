@@ -113,26 +113,6 @@ void HandlePassiveMovement(int x, int y)
 	GetWorld().GetMouse().SetCurrentPosition(glm::ivec2(x, y));
 }
 
-/*
-void InitializePrograms()
-{
-	GetWorld().GetShaderManager().LoadSimpleTextureProgData("shaders/SimpleTexture.vert", "shaders/SimpleTexture.frag");
-	GetWorld().GetShaderManager().LoadUnlitProgram("shaders/PosTransform.vert", "shaders/UniformColor.frag");
-	GetWorld().GetShaderManager().LoadSimpleProgram("shaders/PosColorLocalTransform.vert", "shaders/ColorPassThrough.frag");
-	GetWorld().GetShaderManager().LoadLitProgram("shaders/PN.vert", "shaders/GaussianLighting.frag");
-	GetWorld().GetShaderManager().LoadSimpleNoUBProgram("shaders/PosTransformNoUB.vert", "shaders/ColorPassThrough.frag");
-	GetWorld().GetShaderManager().LoadFontProgram("shaders/Font.vert", "shaders/Font.frag");
-	GetWorld().GetShaderManager().LoadTextureProgData("shaders/Texture.vert", "shaders/Texture.frag");
-	GetWorld().GetShaderManager().LoadPerspectiveTextureProgData("shaders/TexturePerspective.vert", "shaders/Texture.frag");
-	GetWorld().GetShaderManager().LoadBillboardProgData("shaders/BillboardShader.vert", "shaders/BillboardShader.geom", "shaders/BillboardShader.frag");
-	GetWorld().GetShaderManager().LoadParticleProgData("shaders/ParticleShaderBillboarded.vert", "shaders/ParticleShaderBillboarded.geom");
-	GetWorld().GetShaderManager().LoadBillboardProgDataNoTexture("shaders/BillboardShader.vert", "shaders/BillboardShaderNoTexture.geom", "shaders/BillboardShaderNoTexture.frag");
-	GetWorld().GetShaderManager().LoadSpriteParticleProgData("shaders/ParticleShader.vert", "shaders/ParticleShader.frag");
-	GetWorld().GetShaderManager().LoadLitTextureProgram("shaders/LitTexture.vert", "shaders/LitTexture.frag");
-	GetWorld().GetShaderManager().LoadSpriteParticleProgData("shaders/SpriteParticleShader.vert", "shaders/SpriteParticleShader.frag");
-}
-*/
-
 void InitializeScene()
 {
     TopDownCamera userCamera = TopDownCamera(glm::vec3(), 13.5f, 0.0f, 45.0f);
@@ -215,8 +195,6 @@ void InitializeScene()
 	GetScene().AddComponent("sun", sunCollidable);
 
 	GetWorld().GetRenderer().SubscribeForRendering(GetScene().GetEntity("sun"));
-
-	sunFuncComp->updatedObject->AddSatellite();
 }
 
 

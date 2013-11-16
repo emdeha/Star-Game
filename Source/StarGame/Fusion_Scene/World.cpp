@@ -21,12 +21,6 @@ void World::Load(const std::string &guiLayoutFile,
 				 const std::string &audioFile,
 				 const std::string &shaderDataFile)
 {
-	// Load GUI
-	FusionEngine::AssetLoader<FusionEngine::GUIAssetObject> guiLoader;
-	guiLoader.RegisterType("loader-files", new FusionEngine::GUILoader());
-	FusionEngine::GUIAssetObject loadedGUI = guiLoader.LoadAssetObject("loader-files", guiLayoutFile);
-	guiLayouts = loadedGUI.GetAllLoadedLayouts();
-
 	// Load Shader Programs
 	FusionEngine::AssetLoader<FusionEngine::ShaderAssetObject> shaderLoader;
 	shaderLoader.RegisterType("loader-files", new FusionEngine::ShaderLoader());
@@ -34,6 +28,12 @@ void World::Load(const std::string &guiLayoutFile,
 	shaderManager.Load(loadedShaders.GetAllLoadedPrograms(),
 					   loadedShaders.GetAllLoadedUniformBuffers(),
 					   loadedShaders.GetAllLoadedBlockIndices());
+
+	// Load GUI
+	FusionEngine::AssetLoader<FusionEngine::GUIAssetObject> guiLoader;
+	guiLoader.RegisterType("loader-files", new FusionEngine::GUILoader());
+	FusionEngine::GUIAssetObject loadedGUI = guiLoader.LoadAssetObject("loader-files", guiLayoutFile);
+	guiLayouts = loadedGUI.GetAllLoadedLayouts();
 
 
 #ifndef FAST_LOAD

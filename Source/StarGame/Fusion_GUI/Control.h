@@ -27,12 +27,12 @@
 class Control
 {
 private:
-	glm::vec2 position;
+	glm::ivec2 position;
 
 	int width;
 	int height;
 
-	Sprite background;
+	Sprite2D background;
 
 public:
 

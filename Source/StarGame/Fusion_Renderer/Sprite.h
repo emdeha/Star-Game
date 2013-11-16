@@ -19,11 +19,43 @@
 #define FE_SPRITE_H
 
 
+#include <memory>
+
 #include "Texture.h"
 
 
-class Sprite
+class Sprite2D
 {
+private:
+	glm::vec2 position;
+
+	float width;
+	float height;
+
+	std::shared_ptr<Texture2D> texture;
+
+private:
+	GLuint vertexBO;
+	GLuint indexBO;
+	GLuint texCoordsBO;
+	GLuint vao;
+
+	GLuint programId;
+	GLuint modelToCameraMatrixUnif;
+	GLuint positionAttrib;
+	GLuint texCoordAttrib;
+
+public:
+	Sprite2D(glm::vec2 newPosition, float newWidth, float newHeight)
+		: position(newPosition), width(newWidth), height(newHeight) 
+	{
+		texture = std::shared_ptr<Texture2D>(new Texture2D());
+	}
+
+	void Init(const std::string &textureFileName);
+
+	// TODO: Should be handled by the Fusion_Renderer
+	void Draw(glutil::MatrixStack &modelMatrix);
 };
 
 

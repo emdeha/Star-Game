@@ -38,10 +38,10 @@ namespace FusionEngine
 
 	public:
 		Control(glm::ivec2 newPosition, int newWidth, int newHeight)
-			: position(newPosition), width(newWidth), height(newHeight),
-			 background(glm::vec2(position), float(width), float(height)) {}
+			: position(newPosition), width(newWidth), height(newHeight) {}
 
-		void Init(const std::string &backgroundImageFileName);
+		void Init(const std::string &backgroundImageFileName,
+				  int windowWidth, int windowHeight);
 
 		void Draw(glutil::MatrixStack &modelMatrix);
 	};

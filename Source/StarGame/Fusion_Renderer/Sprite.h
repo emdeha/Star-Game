@@ -44,10 +44,13 @@ namespace FusionEngine
 
 		GLuint programId;
 		GLuint modelToCameraMatrixUnif;
+		GLuint colorUnif;
 		GLuint positionAttrib;
 		GLuint texCoordAttrib;
 
 	public:
+		Sprite2D() {}
+
 		Sprite2D(glm::vec2 newPosition, float newWidth, float newHeight)
 			: position(newPosition), width(newWidth), height(newHeight) 
 		{

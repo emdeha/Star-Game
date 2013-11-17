@@ -116,6 +116,9 @@
     <ProjectReference Include="..\Fusion_EntitySystem\Fusion_EntitySystem.vcxproj">
       <Project>{46033b29-5b2c-49e1-9f18-58199443d50d}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Fusion_GUI\Fusion_GUI.vcxproj">
+      <Project>{0e11d5e3-c942-4a72-ad11-059a8a6867ce}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Fusion_Renderer\Fusion_Renderer.vcxproj">
       <Project>{7805c27a-13ef-49a7-b430-063367f3f799}</Project>
     </ProjectReference>

@@ -5,8 +5,12 @@
 using namespace FusionEngine;
 
 
-void Control::Init(const std::string &backgroundImageFileName)
+void Control::Init(const std::string &backgroundImageFileName,
+				   int windowWidth, int windowHeight)
 {
+	glm::vec2 backgorundPos = 
+		glm::vec2(windowWidth - position.x, windowHeight - position.y);
+	background = Sprite2D(backgorundPos, width, height);
 	background.Init(backgroundImageFileName);
 }
 

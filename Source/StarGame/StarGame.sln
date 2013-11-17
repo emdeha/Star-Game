@@ -40,6 +40,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ParticleEngine", "ParticleEngine\ParticleEngine.vcxproj", "{2E742CE0-402C-476E-8974-BAD3F5967057}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fusion_Scene", "Fusion_Scene\Fusion_Scene.vcxproj", "{7984709A-7392-4FE3-8590-E38677208BD8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0E11D5E3-C942-4A72-AD11-059A8A6867CE} = {0E11D5E3-C942-4A72-AD11-059A8A6867CE}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fusion_EntitySystem", "Fusion_EntitySystem\Fusion_EntitySystem.vcxproj", "{46033B29-5B2C-49E1-9F18-58199443D50D}"
 EndProject

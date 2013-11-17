@@ -36,6 +36,12 @@ void World::Load(const std::string &guiLayoutFile,
 	FusionEngine::GUIAssetObject loadedGUI = guiLoader.LoadAssetObject("loader-files", guiLayoutFile);
 	guiLayouts = loadedGUI.GetAllLoadedLayouts();
 	*/
+	Layout testLayout = Layout(FE_LAYOUT_MENU);
+	Control testControl = Control(glm::ivec2(30, 30), 100, 10);
+	testControl.Init("../data/images/b-middle-section.jpg", 
+					 1280, 768);
+	testLayout.AddControl(testControl);
+	guiLayouts.insert(std::make_pair(FE_LAYOUT_MENU, testLayout));
 
 
 #ifndef FAST_LOAD
@@ -74,6 +80,10 @@ void World::Render()
 		}
 	}
 	*/
+	for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
+	{
+		(*layout).second.Draw(displayData.modelMatrix);
+	}
 
 	// Render Lights
 	// TODO: Render relative to layout

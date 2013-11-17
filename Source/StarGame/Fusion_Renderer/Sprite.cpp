@@ -74,6 +74,13 @@ void Sprite2D::Init(const std::string &textureFileName)
 		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 		return;
 	}
+
+	ProgramData textureData = GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_TEXTURE);
+	programId = textureData.programId;
+	modelToCameraMatrixUnif = textureData.GetUniform(FE_UNIFORM_MODEL_TO_CAMERA_MATRIX);
+	colorUnif = textureData.GetUniform(FE_UNIFORM_COLOR);
+	positionAttrib = textureData.GetAttrib(FE_ATTRIB_POSITION);
+	texCoordAttrib = textureData.GetAttrib(FE_ATTRIB_TEX_COORD);
 }
 
 void Sprite2D::Draw(glutil::MatrixStack &modelMatrix)
@@ -82,6 +89,7 @@ void Sprite2D::Draw(glutil::MatrixStack &modelMatrix)
 	glBindVertexArray(vao);
 	{
 		glUniformMatrix4fv(modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+		glUniform4f(colorUnif, 1.0f, 1.0f, 1.0f, 1.0f);
 
 		glEnableVertexAttribArray(positionAttrib);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);

@@ -21,12 +21,21 @@
 
 #include "../glsdk/glm/glm.hpp"
 
+#include "../Fusion_EntitySystem/EventManager.h"
 #include "../Fusion_Renderer/Sprite.h"
 
 
 namespace FusionEngine
 {
-	class Control
+	enum RelativityOptions
+	{
+		FE_RELATIVE_TOP_LEFT,
+		FE_RELATIVE_TOP_RIGHT,
+		FE_RELATIVE_BOTTOM_LEFT,
+		FE_RELATIVE_BOTTOM_RIGHT,
+	};
+
+	class Control : public IEventListener
 	{
 	private:
 		glm::ivec2 position;
@@ -34,16 +43,25 @@ namespace FusionEngine
 		int width;
 		int height;
 
+		int windowWidth;
+		int windowHeight;
+
 		Sprite2D background;
 
 	public:
-		Control(glm::ivec2 newPosition, int newWidth, int newHeight)
-			: position(newPosition), width(newWidth), height(newHeight) {}
+		Control(glm::ivec2 newPosition, int newWidth, int newHeight,
+				int newWindowWidth, int newWindowHeight)
+			: position(newPosition), width(newWidth), height(newHeight), 
+			  windowWidth(newWindowWidth), windowHeight(newWindowHeight) {}
+
+		void SetRelativity(RelativityOptions relativeTo);
 
 		void Init(const std::string &backgroundImageFileName,
-				  int windowWidth, int windowHeight);
+				  EventManager &eventManager);
 
 		void Draw(glutil::MatrixStack &modelMatrix);
+
+		virtual bool HandleEvent(const IEventData &eventData);
 	};
 }
 

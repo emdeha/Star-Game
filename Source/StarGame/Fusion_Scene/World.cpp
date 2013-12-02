@@ -44,8 +44,13 @@ void World::Load(const std::string &guiLayoutFile,
 	std::shared_ptr<Control> testControlTwo =
 		std::shared_ptr<Control>(new Control(glm::ivec2(130, 60), 100, 30, displayData.windowWidth, displayData.windowHeight));
 	testControlTwo->Init("../data/images/b-middle-section.jpg", eventManager);
+	std::shared_ptr<Control> centeredControl = 
+		std::shared_ptr<Control>(new Control(glm::ivec2(-20, 20), 40, 20, displayData.windowWidth, displayData.windowHeight));
+	centeredControl->SetRelativity(FE_RELATIVE_CENTER_TOP);
+	centeredControl->Init("../data/images/b-middle-section.jpg", eventManager);
 	testLayout.AddControl(testControl);
 	testLayout.AddControl(testControlTwo);
+	testLayout.AddControl(centeredControl);
 	guiLayouts.insert(std::make_pair(FE_LAYOUT_MENU, testLayout));
 
 

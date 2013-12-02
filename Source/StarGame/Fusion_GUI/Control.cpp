@@ -23,6 +23,12 @@ void Control::SetRelativity(RelativityOption relativeTo)
 	case FE_RELATIVE_TOP_RIGHT:
 		position = initialPosition;
 		break;
+	case FE_RELATIVE_CENTER_BOTTOM:
+		position = glm::ivec2((windowWidth / 2) - initialPosition.x, windowHeight - initialPosition.y);
+		break;
+	case FE_RELATIVE_CENTER_TOP:
+		position = glm::ivec2((windowWidth / 2) - initialPosition.x, initialPosition.y);
+		break;
 	}
 
 	currentRelativity = relativeTo;
@@ -66,7 +72,6 @@ bool Control::HandleEvent(const IEventData &eventData)
 			SetRelativity(currentRelativity);
 			background = Sprite2D(glm::vec2(position), width, height);
 			background.Init("../data/images/b-middle-section.jpg");
-			return true;
 		}
 		break;
 	}

@@ -33,6 +33,8 @@ namespace FusionEngine
 		FE_RELATIVE_TOP_RIGHT,
 		FE_RELATIVE_BOTTOM_LEFT,
 		FE_RELATIVE_BOTTOM_RIGHT,
+		FE_RELATIVE_CENTER_BOTTOM,
+		FE_RELATIVE_CENTER_TOP,
 	};
 
 	class Control : public IEventListener

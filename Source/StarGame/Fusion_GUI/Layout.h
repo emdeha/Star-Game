@@ -20,6 +20,7 @@
 
 
 #include <vector>
+#include <memory>
 
 #include "Control.h"
 
@@ -40,13 +41,13 @@ namespace FusionEngine
 	private:
 		LayoutType type;
 		
-		std::vector<Control> controls;
+		std::vector<std::shared_ptr<Control>> controls;
 
 	public:
 		Layout(LayoutType newType)
 			: type(newType) {}
 
-		void AddControl(Control newControl);
+		void AddControl(const std::shared_ptr<Control> newControl);
 
 		void Draw(glutil::MatrixStack &modelMatrix);
 	};

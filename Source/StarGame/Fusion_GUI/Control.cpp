@@ -7,7 +7,7 @@
 using namespace FusionEngine;
 
 
-void Control::SetRelativity(RelativityOptions relativeTo)
+void Control::SetRelativity(RelativityOption relativeTo)
 {
 	switch (relativeTo)
 	{
@@ -24,6 +24,8 @@ void Control::SetRelativity(RelativityOptions relativeTo)
 		// This is by default.
 		break;
 	}
+
+	currentRelativity = relativeTo;
 }
 
 void Control::Init(const std::string &backgroundImageFileName,
@@ -61,7 +63,7 @@ bool Control::HandleEvent(const IEventData &eventData)
 			windowHeight = data.windowHeight;
 			windowWidth = data.windowWidth;
 
-			SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
+			SetRelativity(currentRelativity);
 			background = Sprite2D(glm::vec2(position), width, height);
 			background.Init("../data/images/b-middle-section.jpg");
 			return true;

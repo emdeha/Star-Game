@@ -27,7 +27,7 @@
 
 namespace FusionEngine
 {
-	enum RelativityOptions
+	enum RelativityOption
 	{
 		FE_RELATIVE_TOP_LEFT,
 		FE_RELATIVE_TOP_RIGHT,
@@ -39,6 +39,8 @@ namespace FusionEngine
 	{
 	private:
 		glm::ivec2 position;
+
+		RelativityOption currentRelativity;
 
 		int width;
 		int height;
@@ -54,7 +56,7 @@ namespace FusionEngine
 			: position(newPosition), width(newWidth), height(newHeight), 
 			  windowWidth(newWindowWidth), windowHeight(newWindowHeight) {}
 
-		void SetRelativity(RelativityOptions relativeTo);
+		void SetRelativity(RelativityOption relativeTo);
 
 		void Init(const std::string &backgroundImageFileName,
 				  EventManager &eventManager);

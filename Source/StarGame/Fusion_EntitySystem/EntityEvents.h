@@ -7,6 +7,8 @@
 
 namespace FusionEngine
 {
+	class Entity;
+
 	enum 
 	{
 		EVENT_CREATE_ENTITY = 1,

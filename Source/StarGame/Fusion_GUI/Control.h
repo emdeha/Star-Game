@@ -38,6 +38,7 @@ namespace FusionEngine
 	class Control : public IEventListener
 	{
 	private:
+		glm::ivec2 initialPosition;
 		glm::ivec2 position;
 
 		RelativityOption currentRelativity;
@@ -53,7 +54,9 @@ namespace FusionEngine
 	public:
 		Control(glm::ivec2 newPosition, int newWidth, int newHeight,
 				int newWindowWidth, int newWindowHeight)
-			: position(newPosition), width(newWidth), height(newHeight), 
+			: position(newPosition), initialPosition(newPosition), 
+			  currentRelativity(FE_RELATIVE_TOP_RIGHT),
+			  width(newWidth), height(newHeight), 
 			  windowWidth(newWindowWidth), windowHeight(newWindowHeight) {}
 
 		void SetRelativity(RelativityOption relativeTo);

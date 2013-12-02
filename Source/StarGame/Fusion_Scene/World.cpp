@@ -39,9 +39,13 @@ void World::Load(const std::string &guiLayoutFile,
 	Layout testLayout = Layout(FE_LAYOUT_MENU);
 	std::shared_ptr<Control> testControl = 
 		std::shared_ptr<Control>(new Control(glm::ivec2(30, 30), 100, 10, displayData.windowWidth, displayData.windowHeight));
-	testControl->SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
+	testControl->SetRelativity(FE_RELATIVE_TOP_LEFT);
 	testControl->Init("../data/images/b-middle-section.jpg", eventManager);
+	std::shared_ptr<Control> testControlTwo =
+		std::shared_ptr<Control>(new Control(glm::ivec2(130, 60), 100, 30, displayData.windowWidth, displayData.windowHeight));
+	testControlTwo->Init("../data/images/b-middle-section.jpg", eventManager);
 	testLayout.AddControl(testControl);
+	testLayout.AddControl(testControlTwo);
 	guiLayouts.insert(std::make_pair(FE_LAYOUT_MENU, testLayout));
 
 

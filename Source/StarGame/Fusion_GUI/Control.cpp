@@ -12,16 +12,16 @@ void Control::SetRelativity(RelativityOption relativeTo)
 	switch (relativeTo)
 	{
 	case FE_RELATIVE_BOTTOM_LEFT:
-		position = glm::ivec2(windowWidth - position.x, windowHeight - position.y);
+		position = glm::ivec2(windowWidth - initialPosition.x, windowHeight - initialPosition.y);
 		break;
 	case FE_RELATIVE_BOTTOM_RIGHT:
-		position = glm::ivec2(position.x, windowHeight - position.y);
+		position = glm::ivec2(initialPosition.x, windowHeight - initialPosition.y);
 		break;
 	case FE_RELATIVE_TOP_LEFT:
-		position = glm::ivec2(windowWidth - position.x, position.y);	
+		position = glm::ivec2(windowWidth - initialPosition.x, initialPosition.y);	
 		break;
 	case FE_RELATIVE_TOP_RIGHT:
-		// This is by default.
+		position = initialPosition;
 		break;
 	}
 

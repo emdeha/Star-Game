@@ -61,8 +61,7 @@ namespace FusionEngine
 			: position(newPosition), initialPosition(newPosition), 
 			  currentRelativity(FE_RELATIVE_TOP_RIGHT),
 			  width(newWidth), height(newHeight), 
-			  windowWidth(newWindowWidth), windowHeight(newWindowHeight),
-			  text("../data/fonts/AGENCYR.TTF") {}
+			  windowWidth(newWindowWidth), windowHeight(newWindowHeight) {}
 
 		void SetRelativity(RelativityOption relativeTo);
 

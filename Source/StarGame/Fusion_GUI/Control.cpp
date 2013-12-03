@@ -40,7 +40,8 @@ void Control::Init(const std::string &backgroundImageFileName,
 	background = Sprite2D(glm::vec2(position), width, height);
 	background.Init(backgroundImageFileName);
 
-	text.Init(windowWidth, windowHeight); 
+	text = Text("../data/fonts/AGENCYR.TTF", "SADSADASD", glm::vec2(position), glm::vec4(1.0f), 48);
+	text.Init(); 
 
 	eventManager.AddListener(this, FusionEngine::EVENT_ON_RESHAPE);
 }
@@ -54,7 +55,7 @@ void Control::Draw(glutil::MatrixStack &modelMatrix)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	background.Draw(identityMatrix);
-	text.Print("SADASDDAS", glm::vec2(position), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 48);
+	text.Draw();
 
 	glDisable(GL_BLEND);
 }

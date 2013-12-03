@@ -127,7 +127,7 @@ void MeshLoader::InitMaterials(const aiScene *scene, MeshAssetObject &loadedMesh
         {
 			newTexture = std::shared_ptr<Texture2D>(new Texture2D());
 
-			std::string textureName = name;
+			std::string textureName = "../data/mesh-files/" + name;
 			textureName.erase(textureName.end() - 4, textureName.end());
 			textureName.append(".png");
             

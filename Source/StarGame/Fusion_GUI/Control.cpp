@@ -73,6 +73,7 @@ bool Control::HandleEvent(const IEventData &eventData)
 
 			SetRelativity(currentRelativity);
 			background.SetPosition(glm::vec2(position));
+			text.SetPosition(glm::vec2(position));
 		}
 		break;
 	}

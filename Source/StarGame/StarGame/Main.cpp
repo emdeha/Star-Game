@@ -318,7 +318,7 @@ void Display()
 	// TODO: Use that
 	float interpolation = float(GetTickCount() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
 	GetWorld().interpolation = interpolation;
-	GetWorld().Render();
+	GetWorld().Render(); // TODO: Optimize
 
 	GetWorld().GetMouse().OverrideLastPosition();
     

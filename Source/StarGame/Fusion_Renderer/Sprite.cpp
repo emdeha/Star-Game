@@ -83,6 +83,33 @@ void Sprite2D::Init(const std::string &textureFileName)
 	texCoordAttrib = textureData.GetAttrib(FE_ATTRIB_TEX_COORD);
 }
 
+void Sprite2D::SetPosition(glm::vec2 newPosition)
+{
+	position = newPosition;
+
+	std::vector<float> vertexData;
+
+	vertexData.push_back(position.x);
+	vertexData.push_back(position.y - height);
+	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x - width);
+	vertexData.push_back(position.y - height);
+	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x - width);
+	vertexData.push_back(position.y);
+	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
+
+	vertexData.push_back(position.x);
+	vertexData.push_back(position.y);
+	vertexData.push_back(0.0f); vertexData.push_back(1.0f);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * vertexData.size(), &vertexData[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 void Sprite2D::Draw(glutil::MatrixStack &modelMatrix)
 {
 	glUseProgram(programId);

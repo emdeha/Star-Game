@@ -37,10 +37,10 @@ void Control::SetRelativity(RelativityOption relativeTo)
 void Control::Init(const std::string &backgroundImageFileName,
 				   EventManager &eventManager)
 {
-	//glm::vec2 backgorundPos = 
-	//	glm::vec2(windowWidth - position.x, windowHeight - position.y);
 	background = Sprite2D(glm::vec2(position), width, height);
 	background.Init(backgroundImageFileName);
+
+	text.Init(windowWidth, windowHeight); 
 
 	eventManager.AddListener(this, FusionEngine::EVENT_ON_RESHAPE);
 }
@@ -54,6 +54,7 @@ void Control::Draw(glutil::MatrixStack &modelMatrix)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	background.Draw(identityMatrix);
+	text.Print("SADASDDAS", glm::vec2(position), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 48);
 
 	glDisable(GL_BLEND);
 }
@@ -70,8 +71,7 @@ bool Control::HandleEvent(const IEventData &eventData)
 			windowWidth = data.windowWidth;
 
 			SetRelativity(currentRelativity);
-			background = Sprite2D(glm::vec2(position), width, height);
-			background.Init("../data/images/b-middle-section.jpg");
+			background.SetPosition(glm::vec2(position));
 		}
 		break;
 	}

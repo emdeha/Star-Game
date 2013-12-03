@@ -59,6 +59,8 @@ namespace FusionEngine
 
 		void Init(const std::string &textureFileName);
 
+		void SetPosition(glm::vec2 newPosition);
+
 		// TODO: Should be handled by the Fusion_Renderer
 		void Draw(glutil::MatrixStack &modelMatrix);
 	};

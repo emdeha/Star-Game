@@ -23,6 +23,7 @@
 
 #include "../Fusion_EntitySystem/EventManager.h"
 #include "../Fusion_Renderer/Sprite.h"
+#include "../Fusion_GUI/Text.h"
 
 
 namespace FusionEngine
@@ -52,6 +53,7 @@ namespace FusionEngine
 		int windowHeight;
 
 		Sprite2D background;
+		Text text;
 
 	public:
 		Control(glm::ivec2 newPosition, int newWidth, int newHeight,
@@ -59,7 +61,8 @@ namespace FusionEngine
 			: position(newPosition), initialPosition(newPosition), 
 			  currentRelativity(FE_RELATIVE_TOP_RIGHT),
 			  width(newWidth), height(newHeight), 
-			  windowWidth(newWindowWidth), windowHeight(newWindowHeight) {}
+			  windowWidth(newWindowWidth), windowHeight(newWindowHeight),
+			  text("../data/fonts/AGENCYR.TTF") {}
 
 		void SetRelativity(RelativityOption relativeTo);
 

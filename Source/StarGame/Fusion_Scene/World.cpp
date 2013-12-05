@@ -48,9 +48,24 @@ void World::Load(const std::string &guiLayoutFile,
 		std::shared_ptr<Control>(new Control(glm::ivec2(-20, 320), 40, 20, displayData.windowWidth, displayData.windowHeight));
 	centeredControl->SetRelativity(FE_RELATIVE_CENTER_TOP);
 	centeredControl->Init("../data/images/b-middle-section.jpg", eventManager);
+	std::shared_ptr<Control> bottomCenteredControl =
+		std::shared_ptr<Control>(new Control(glm::ivec2(-40, 700), 30, 20, displayData.windowWidth, displayData.windowHeight));
+	bottomCenteredControl->SetRelativity(FE_RELATIVE_CENTER_BOTTOM);
+	bottomCenteredControl->Init("../data/images/b-middle-section.jpg", eventManager);
+	std::shared_ptr<Control> bottomRightControl =
+		std::shared_ptr<Control>(new Control(glm::ivec2(0, 20), 100, 20, displayData.windowWidth, displayData.windowHeight));
+	bottomRightControl->SetRelativity(FE_RELATIVE_BOTTOM_RIGHT);
+	bottomRightControl->Init("../data/images/b-middle-section.jpg", eventManager);
+	std::shared_ptr<Control> bottomLeftControl = 
+		std::shared_ptr<Control>(new Control(glm::ivec2(150, 20), 50, 50, displayData.windowWidth, displayData.windowHeight));
+	bottomLeftControl->SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
+	bottomLeftControl->Init("../data/images/b-middle-section.jpg", eventManager);
 	testLayout.AddControl(testControl);
 	testLayout.AddControl(testControlTwo);
 	testLayout.AddControl(centeredControl);
+	testLayout.AddControl(bottomCenteredControl);
+	testLayout.AddControl(bottomRightControl);
+	testLayout.AddControl(bottomLeftControl);
 	guiLayouts.insert(std::make_pair(FE_LAYOUT_MENU, testLayout));
 
 

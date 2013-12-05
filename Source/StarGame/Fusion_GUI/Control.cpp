@@ -40,7 +40,7 @@ void Control::Init(const std::string &backgroundImageFileName,
 	background = Sprite2D(glm::vec2(position), width, height);
 	background.Init(backgroundImageFileName);
 
-	text = Text("../data/fonts/AGENCYR.TTF", "TonyStark", glm::vec2(position), glm::vec4(1.0f), 48);
+	text = Text("../data/fonts/AGENCYR.TTF", "TonyStark", glm::vec2(position), glm::vec4(1.0f), 12);
 	text.Init(windowWidth, windowHeight); 
 
 	eventManager.AddListener(this, FusionEngine::EVENT_ON_RESHAPE);

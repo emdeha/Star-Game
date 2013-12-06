@@ -55,15 +55,23 @@ namespace FusionEngine
 		Sprite2D background;
 		Text text;
 
+		std::string textFont;
+		std::string textString;
+		glm::vec4 textColor;
+		int textSize;
+
 	public:
 		Control(glm::ivec2 newPosition, int newWidth, int newHeight,
 				int newWindowWidth, int newWindowHeight)
 			: position(newPosition), initialPosition(newPosition), 
 			  currentRelativity(FE_RELATIVE_TOP_RIGHT),
 			  width(newWidth), height(newHeight), 
-			  windowWidth(newWindowWidth), windowHeight(newWindowHeight) {}
+			  windowWidth(newWindowWidth), windowHeight(newWindowHeight),
+			  textString(""), textFont(""), textColor(0.0f), textSize(-1) {}
 
 		void SetRelativity(RelativityOption relativeTo);
+		void SetTextProperties(const std::string &newTextFont, const std::string &newTextString,
+							   glm::vec4 newTextColor, int newTextSize);
 
 		void Init(const std::string &backgroundImageFileName,
 				  EventManager &eventManager);

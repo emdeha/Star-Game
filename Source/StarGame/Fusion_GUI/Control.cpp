@@ -34,13 +34,22 @@ void Control::SetRelativity(RelativityOption relativeTo)
 	currentRelativity = relativeTo;
 }
 
+void Control::SetTextProperties(const std::string &newTextFont, const std::string &newTextString,
+								glm::vec4 newTextColor, int newTextSize)
+{
+	textFont = newTextFont;
+	textString = newTextString;
+	textColor = newTextColor;
+	textSize = newTextSize;
+}
+
 void Control::Init(const std::string &backgroundImageFileName,
 				   EventManager &eventManager)
 {
 	background = Sprite2D(glm::vec2(position), width, height);
 	background.Init(backgroundImageFileName);
 
-	text = Text("../data/fonts/AGENCYR.TTF", "TonyStark", glm::vec2(position), glm::vec4(1.0f), 12);
+	text = Text(textFont, textString, glm::vec2(position), textColor, textSize);
 	text.Init(windowWidth, windowHeight); 
 
 	eventManager.AddListener(this, FusionEngine::EVENT_ON_RESHAPE);

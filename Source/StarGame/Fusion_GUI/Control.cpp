@@ -80,21 +80,17 @@ void Control::Draw(glutil::MatrixStack &modelMatrix)
 	glDisable(GL_BLEND);
 }
 
-bool Control::IsMouseOn(glm::ivec2 mousePosition)
+bool Control::IsMouseOn(glm::ivec2 mouseCoordinates_windowSpace)
 {
-	glm::ivec2 mouseCoordinates_windowSpace;
-
 	mouseCoordinates_windowSpace.x = windowWidth - mouseCoordinates_windowSpace.x;
 
-	float maxHeight = position.y;
-	float maxWidth = position.x;
-	float minHeight = maxHeight - height;
-	float minWidth = maxWidth - width; 
+	glm::ivec2 minCorner = position - glm::ivec2(width, height);
+	glm::ivec2 maxCorner = position;
 
-	if(mouseCoordinates_windowSpace.y > minHeight &&
-	   mouseCoordinates_windowSpace.x > minWidth &&
-	   mouseCoordinates_windowSpace.y < maxHeight &&
-	   mouseCoordinates_windowSpace.x < maxWidth)
+	if(mouseCoordinates_windowSpace.y > minCorner.y &&
+	   mouseCoordinates_windowSpace.y < maxCorner.y &&
+	   mouseCoordinates_windowSpace.x > minCorner.x &&
+	   mouseCoordinates_windowSpace.x < maxCorner.x)
 	{
 		return true;
 	}
@@ -121,10 +117,20 @@ bool Control::HandleEvent(const IEventData &eventData)
 		break;
 	case EVENT_ON_CLICK:
 		{
-			std::printf("Control ==* %s *== clicked!", name);
+			const OnClickEvent &data = static_cast<const OnClickEvent&>(eventData);
+
+			if (data.isLeftButtonDown && data.objectId == name)
+			{
+				std::printf("Control ==* %s *== clicked!", name.c_str());
+			}
 		}
 		break;
 	}
 	
 	return false;
+}
+
+std::string Control::GetName()
+{
+	return name;
 }

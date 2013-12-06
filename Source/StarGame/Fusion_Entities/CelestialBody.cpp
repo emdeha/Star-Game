@@ -69,7 +69,7 @@ bool CelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 		{
 			const OnClickEvent &data = static_cast<const OnClickEvent&>(eventData);
 	
-			if(data.isLeftButtonDown && currentSatelliteCount <= maxSatelliteCount)
+			if(data.isLeftButtonDown && data.objectId == id && currentSatelliteCount <= maxSatelliteCount)
 			{
 				AddSatellite();
 				return true;

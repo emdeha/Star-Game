@@ -41,6 +41,8 @@ namespace FusionEngine
 	class Control : public IEventListener
 	{
 	private:
+		std::string name;
+
 		glm::ivec2 initialPosition;
 		glm::ivec2 position;
 		glm::ivec2 margins;
@@ -63,10 +65,12 @@ namespace FusionEngine
 		int textSize;
 
 	public:
-		Control(glm::ivec2 newPosition, glm::ivec2 newMargins, 
+		Control(const std::string &newName,
+				glm::ivec2 newPosition, glm::ivec2 newMargins, 
 				int newWidth, int newHeight,
 				int newWindowWidth, int newWindowHeight)
-			: position(newPosition), initialPosition(newPosition), margins(newMargins), 
+			: name(newName),
+			  position(newPosition), initialPosition(newPosition), margins(newMargins), 
 			  currentRelativity(FE_RELATIVE_TOP_RIGHT),
 			  width(newWidth), height(newHeight), 
 			  windowWidth(newWindowWidth), windowHeight(newWindowHeight),

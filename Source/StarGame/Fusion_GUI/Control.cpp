@@ -55,7 +55,7 @@ void Control::Init(const std::string &backgroundImageFileName,
 		textColor == glm::vec4(-1.0f) || textPosition == glm::vec2(-1.0f))
 	{
 		std::string errorMessage = "one or more of the text\'s properties are not initialized ";
-		errorMessage += "Control: " + textString; // TODO: textString should be controlName
+		errorMessage += "Control: ==* " + name + " *=="; // TODO: textString should be controlName
 		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 		return;
 	}

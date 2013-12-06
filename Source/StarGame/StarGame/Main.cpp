@@ -60,23 +60,18 @@ void HandleMouse()
 	{
 		collidableData[0]->isForCheck = true;
 
-		/*
 		auto guiLayouts = GetWorld().GetLayouts();
 		for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
 		{
-			if ((*layout).second->IsSet())
+			auto layoutControls = (*layout).second.GetControls();
+			for (auto control = layoutControls.begin(); control != layoutControls.end(); ++control)
 			{
-				auto layoutControls = (*layout).second->GetControls();
-				for (auto control = layoutControls.begin(); control != layoutControls.end(); ++control)
+				if ((*control)->IsMouseOn(GetWorld().GetMouse().GetCurrentPosition()))
 				{
-					if ((*control)->IsMouseOn(GetWorld().GetMouse().GetCurrentPosition()))
-					{
-						GetWorld().GetEventManager().FireEvent(FusionEngine::OnClickEvent(FusionEngine::EVENT_ON_CLICK, true, (*control)->GetName()));
-					}
+					GetWorld().GetEventManager().FireEvent(FusionEngine::OnClickEvent(FusionEngine::EVENT_ON_CLICK, true, (*control)->GetName()));
 				}
 			}
 		}
-		*/
 	}
 	else
 	{

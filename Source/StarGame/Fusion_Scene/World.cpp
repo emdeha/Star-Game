@@ -47,7 +47,7 @@ void World::Load(const std::string &guiLayoutFile,
 		std::shared_ptr<Control>(new Control("loadGame", glm::ivec2(100, 200), glm::ivec2(5, 5), 
 											 200, 50, displayData.windowWidth, displayData.windowHeight));
 	loadGame->SetRelativity(FE_RELATIVE_BOTTOM_RIGHT);
-	//loadGame->SetTextProperties("../data/fonts/AGENCYR.TTF", "Load Game", glm::vec4(1.0f), 24);
+	loadGame->SetTextProperties("../data/fonts/AGENCYR.TTF", "Load Game", glm::vec4(1.0f), 24);
 	loadGame->Init("../data/images/b-middle-section.jpg", eventManager);
 	std::shared_ptr<Control> saveGame =
 		std::shared_ptr<Control>(new Control("saveGame", glm::ivec2(100, 140), glm::ivec2(5, 5), 
@@ -59,7 +59,7 @@ void World::Load(const std::string &guiLayoutFile,
 		std::shared_ptr<Control>(new Control("options", glm::ivec2(100, 80), glm::ivec2(5, 5), 
 											 200, 50, displayData.windowWidth, displayData.windowHeight));
 	options->SetRelativity(FE_RELATIVE_CENTER_BOTTOM);
-	//options->SetTextProperties("../data/fonts/AGENCYR.TTF", "Options", glm::vec4(1.0f), 24);
+	options->SetTextProperties("../data/fonts/AGENCYR.TTF", "Options", glm::vec4(1.0f), 24);
 	options->Init("../data/images/b-middle-section.jpg", eventManager);
 	std::shared_ptr<Control> quit =
 		std::shared_ptr<Control>(new Control("quit", glm::ivec2(100, 20), glm::ivec2(5, 5), 

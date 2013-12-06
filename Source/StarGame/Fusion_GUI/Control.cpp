@@ -63,6 +63,7 @@ void Control::Init(const std::string &backgroundImageFileName,
 	text.Init(windowWidth, windowHeight); 
 
 	eventManager.AddListener(this, FusionEngine::EVENT_ON_RESHAPE);
+	eventManager.AddListener(this, FusionEngine::EVENT_ON_CLICK);
 }
 
 void Control::Draw(glutil::MatrixStack &modelMatrix)
@@ -77,6 +78,27 @@ void Control::Draw(glutil::MatrixStack &modelMatrix)
 	text.Draw();
 
 	glDisable(GL_BLEND);
+}
+
+bool Control::IsMouseOn(glm::ivec2 mousePosition)
+{
+	glm::ivec2 mouseCoordinates_windowSpace;
+
+	mouseCoordinates_windowSpace.x = windowWidth - mouseCoordinates_windowSpace.x;
+
+	float maxHeight = position.y;
+	float maxWidth = position.x;
+	float minHeight = maxHeight - height;
+	float minWidth = maxWidth - width; 
+
+	if(mouseCoordinates_windowSpace.y > minHeight &&
+	   mouseCoordinates_windowSpace.x > minWidth &&
+	   mouseCoordinates_windowSpace.y < maxHeight &&
+	   mouseCoordinates_windowSpace.x < maxWidth)
+	{
+		return true;
+	}
+	else return false;
 }
 
 bool Control::HandleEvent(const IEventData &eventData)
@@ -95,6 +117,11 @@ bool Control::HandleEvent(const IEventData &eventData)
 			textPosition = glm::vec2(position.x - margins.x,
 									 position.y - margins.y);
 			text.SetPosition(textPosition, windowWidth, windowHeight);
+		}
+		break;
+	case EVENT_ON_CLICK:
+		{
+			std::printf("Control ==* %s *== clicked!", name);
 		}
 		break;
 	}

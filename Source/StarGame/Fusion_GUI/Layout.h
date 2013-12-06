@@ -48,6 +48,7 @@ namespace FusionEngine
 			: type(newType) {}
 
 		void AddControl(const std::shared_ptr<Control> newControl);
+		std::vector<std::shared_ptr<Control>> GetControls();
 
 		void Draw(glutil::MatrixStack &modelMatrix);
 	};

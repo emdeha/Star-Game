@@ -85,6 +85,8 @@ namespace FusionEngine
 
 		void Draw(glutil::MatrixStack &modelMatrix);
 
+		bool IsMouseOn(glm::ivec2 mousePosition);
+
 		virtual bool HandleEvent(const IEventData &eventData);
 	};
 }

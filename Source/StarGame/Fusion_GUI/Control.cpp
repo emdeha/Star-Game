@@ -45,6 +45,11 @@ void Control::SetTextProperties(const std::string &newTextFont, const std::strin
 							 position.y - margins.y);
 }
 
+void Control::SetOnClickHandler(OnClickHandler onClickHandler)
+{
+	handleOnClick = onClickHandler;
+}
+
 void Control::Init(const std::string &backgroundImageFileName,
 				   EventManager &eventManager)
 {
@@ -121,7 +126,18 @@ bool Control::HandleEvent(const IEventData &eventData)
 
 			if (data.isLeftButtonDown && data.objectId == name)
 			{
-				std::printf("Control ==* %s *== clicked!", name.c_str());
+				//std::printf("Control ==* %s *== clicked!", name.c_str());
+				if (handleOnClick != nullptr)
+				{
+					handleOnClick();
+				}
+				else
+				{
+					std::string errorMessage = "no OnClick handler for Control ==* ";
+					errorMessage += name + " *==";
+					HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+					return false;
+				}
 			}
 		}
 		break;

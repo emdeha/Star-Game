@@ -26,8 +26,19 @@ bool Layout::IsSet()
 {
 	return isSet;
 }
-
 void Layout::Set(bool newIsSet)
 {
 	isSet = newIsSet;
+}
+
+void Layout::SetControlOnClickHandler(const std::string &controlName,
+									  OnClickHandler onClickHandler)
+{
+	for (auto control = controls.begin(); control != controls.end(); ++control)
+	{
+		if ((*control)->GetName() == controlName)
+		{
+			(*control)->SetOnClickHandler(onClickHandler);
+		}
+	}
 }

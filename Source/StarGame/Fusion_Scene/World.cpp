@@ -17,6 +17,31 @@ World::~World()
 {
 }
 
+void NewGameHandler()
+{
+	GetWorld().SetLayout(FE_LAYOUT_GAME);
+}
+void SaveGameHandler()
+{
+	GetWorld().SetLayout(FE_LAYOUT_SAVE);
+}
+void LoadGameHandler()
+{
+	GetWorld().SetLayout(FE_LAYOUT_LOAD);
+}
+void OptionsHandler()
+{
+	GetWorld().SetLayout(FE_LAYOUT_OPTIONS);
+}
+void BackHandler()
+{
+	GetWorld().SetLayout(FE_LAYOUT_MENU);
+}
+void QuitHandler()
+{
+	exit(0);
+}
+
 void World::Load(const std::string &guiLayoutFile,
 				 const std::string &audioFile,
 				 const std::string &shaderDataFile)
@@ -42,30 +67,35 @@ void World::Load(const std::string &guiLayoutFile,
 											 200, 50, displayData.windowWidth, displayData.windowHeight));
 	newGame->SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
 	newGame->SetTextProperties("../data/fonts/AGENCYR.TTF", "New Game", glm::vec4(1.0f), 24);
+	newGame->SetOnClickHandler(NewGameHandler);
 	newGame->Init("../data/images/b-middle-section.jpg", eventManager);
 	std::shared_ptr<Control> loadGame =
 		std::shared_ptr<Control>(new Control("loadGame", glm::ivec2(100, 200), glm::ivec2(5, 5), 
 											 200, 50, displayData.windowWidth, displayData.windowHeight));
 	loadGame->SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
 	loadGame->SetTextProperties("../data/fonts/AGENCYR.TTF", "Load Game", glm::vec4(1.0f), 24);
+	loadGame->SetOnClickHandler(LoadGameHandler);
 	loadGame->Init("../data/images/b-middle-section.jpg", eventManager);
 	std::shared_ptr<Control> saveGame =
 		std::shared_ptr<Control>(new Control("saveGame", glm::ivec2(100, 140), glm::ivec2(5, 5), 
 											 200, 50, displayData.windowWidth, displayData.windowHeight));
 	saveGame->SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
 	saveGame->SetTextProperties("../data/fonts/AGENCYR.TTF", "Save Game", glm::vec4(1.0f), 24);
+	saveGame->SetOnClickHandler(SaveGameHandler);
 	saveGame->Init("../data/images/b-middle-section.jpg", eventManager);
 	std::shared_ptr<Control> options = 
 		std::shared_ptr<Control>(new Control("options", glm::ivec2(100, 80), glm::ivec2(5, 5), 
 											 200, 50, displayData.windowWidth, displayData.windowHeight));
 	options->SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
 	options->SetTextProperties("../data/fonts/AGENCYR.TTF", "Options", glm::vec4(1.0f), 24);
+	options->SetOnClickHandler(OptionsHandler);
 	options->Init("../data/images/b-middle-section.jpg", eventManager);
 	std::shared_ptr<Control> quit =
 		std::shared_ptr<Control>(new Control("quit", glm::ivec2(100, 20), glm::ivec2(5, 5), 
 											 200, 50, displayData.windowWidth, displayData.windowHeight));
 	quit->SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
 	quit->SetTextProperties("../data/fonts/AGENCYR.TTF", "Quit", glm::vec4(1.0f), 24);
+	quit->SetOnClickHandler(QuitHandler);
 	quit->Init("../data/images/b-middle-section.jpg", eventManager);
 	testLayout.AddControl(newGame);
 	testLayout.AddControl(loadGame);
@@ -73,9 +103,39 @@ void World::Load(const std::string &guiLayoutFile,
 	testLayout.AddControl(options);
 	testLayout.AddControl(quit);
 
+	Layout saveLayout = Layout(FE_LAYOUT_SAVE);
+	std::shared_ptr<Control> inSave =
+		std::shared_ptr<Control>(new Control("inSave", glm::ivec2(-50, 350), glm::ivec2(5, 10),
+								 100, 50, displayData.windowWidth, displayData.windowHeight));
+	inSave->SetRelativity(FE_RELATIVE_CENTER_BOTTOM);
+	inSave->SetTextProperties("../data/fonts/AGENCYR.TTF", "IN SAVE", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 24);
+	inSave->SetOnClickHandler(BackHandler);
+	inSave->Init("../data/images/b-middle-section.jpg", eventManager);
+	saveLayout.AddControl(inSave);
+	Layout loadLayout = Layout(FE_LAYOUT_LOAD);
+	std::shared_ptr<Control> inLoad =
+		std::shared_ptr<Control>(new Control("inLoad", glm::ivec2(-50, 350), glm::ivec2(5, 10),
+								 100, 50, displayData.windowWidth, displayData.windowHeight));
+	inLoad->SetRelativity(FE_RELATIVE_CENTER_BOTTOM);
+	inLoad->SetTextProperties("../data/fonts/AGENCYR.TTF", "IN LOAD", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 24);
+	inLoad->SetOnClickHandler(BackHandler);
+	inLoad->Init("../data/images/b-middle-section.jpg", eventManager);
+	loadLayout.AddControl(inLoad);
+	Layout optionsLayout = Layout(FE_LAYOUT_OPTIONS);
+	std::shared_ptr<Control> inOptions =
+		std::shared_ptr<Control>(new Control("inOptions", glm::ivec2(-50, 350), glm::ivec2(5, 10),
+								 100, 50, displayData.windowWidth, displayData.windowHeight));
+	inOptions->SetRelativity(FE_RELATIVE_CENTER_BOTTOM);
+	inOptions->SetTextProperties("../data/fonts/AGENCYR.TTF", "IN OPTIONS", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 24);
+	inOptions->SetOnClickHandler(BackHandler);
+	inOptions->Init("../data/images/b-middle-section.jpg", eventManager);
+	optionsLayout.AddControl(inOptions);
 	Layout inGameLayout = Layout(FE_LAYOUT_GAME);
 	guiLayouts.insert(std::make_pair(FE_LAYOUT_MENU, testLayout));
 	guiLayouts.insert(std::make_pair(FE_LAYOUT_GAME, inGameLayout));
+	guiLayouts.insert(std::make_pair(FE_LAYOUT_SAVE, saveLayout));
+	guiLayouts.insert(std::make_pair(FE_LAYOUT_LOAD, loadLayout));
+	guiLayouts.insert(std::make_pair(FE_LAYOUT_OPTIONS, optionsLayout));
 
 	SetLayout(FE_LAYOUT_MENU);
 
@@ -147,15 +207,6 @@ bool World::HandleEvent(const IEventData &eventData)
 			const OnReshapeEvent &data = static_cast<const OnReshapeEvent&>(eventData);
 			displayData.windowHeight = data.windowHeight;
 			displayData.windowWidth = data.windowWidth;
-			/*
-			for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
-			{
-				if((*layout).second->IsSet())
-				{
-					(*layout).second->Update(data.windowWidth, data.windowHeight);
-				}
-			}
-			*/
 		}
 		break;
 	case FusionEngine::EVENT_ON_CLICK:		

@@ -28,6 +28,9 @@
 
 namespace FusionEngine
 {
+	// TODO: Maybe not a good decision
+	typedef void (*OnClickHandler)();
+
 	enum RelativityOption
 	{
 		FE_RELATIVE_TOP_LEFT,
@@ -41,7 +44,9 @@ namespace FusionEngine
 	class Control : public IEventListener
 	{
 	private:
-		std::string name;
+		OnClickHandler handleOnClick;
+
+		std::string name; // TODO: integer ID in the future
 
 		glm::ivec2 initialPosition;
 		glm::ivec2 position;
@@ -69,7 +74,7 @@ namespace FusionEngine
 				glm::ivec2 newPosition, glm::ivec2 newMargins, 
 				int newWidth, int newHeight,
 				int newWindowWidth, int newWindowHeight)
-			: name(newName),
+			: name(newName), handleOnClick(nullptr),
 			  position(newPosition), initialPosition(newPosition), margins(newMargins), 
 			  currentRelativity(FE_RELATIVE_TOP_RIGHT),
 			  width(newWidth), height(newHeight), 
@@ -79,6 +84,8 @@ namespace FusionEngine
 		void SetRelativity(RelativityOption relativeTo);
 		void SetTextProperties(const std::string &newTextFont, const std::string &newTextString,
 							   glm::vec4 newTextColor, int newTextSize);
+
+		void SetOnClickHandler(OnClickHandler onClickHandler);
 
 		void Init(const std::string &backgroundImageFileName,
 				  EventManager &eventManager);

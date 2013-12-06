@@ -51,6 +51,14 @@ void Control::Init(const std::string &backgroundImageFileName,
 	background = Sprite2D(glm::vec2(position), width, height);
 	background.Init(backgroundImageFileName);
 
+	if (textString == "" || textFont == ""  || textSize == -1 || 
+		textColor == glm::vec4(-1.0f) || textPosition == glm::vec2(-1.0f))
+	{
+		std::string errorMessage = "one or more of the text\'s properties are not initialized ";
+		errorMessage += "Control: " + textString; // TODO: textString should be controlName
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+		return;
+	}
 	text = Text(textFont, textString, textPosition, textColor, textSize);
 	text.Init(windowWidth, windowHeight); 
 

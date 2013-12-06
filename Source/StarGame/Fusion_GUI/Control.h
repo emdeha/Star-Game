@@ -70,7 +70,7 @@ namespace FusionEngine
 			  currentRelativity(FE_RELATIVE_TOP_RIGHT),
 			  width(newWidth), height(newHeight), 
 			  windowWidth(newWindowWidth), windowHeight(newWindowHeight),
-			  textString(""), textFont(""), textColor(0.0f), textPosition(0.0f), textSize(-1) {}
+			  textString(""), textFont(""), textColor(-1.0f), textPosition(-1.0f), textSize(-1) {}
 
 		void SetRelativity(RelativityOption relativeTo);
 		void SetTextProperties(const std::string &newTextFont, const std::string &newTextString,

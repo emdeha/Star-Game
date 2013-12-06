@@ -40,31 +40,31 @@ void World::Load(const std::string &guiLayoutFile,
 	std::shared_ptr<Control> newGame = 
 		std::shared_ptr<Control>(new Control("newGame", glm::ivec2(100, 260), glm::ivec2(5, 5), 
 											 200, 50, displayData.windowWidth, displayData.windowHeight));
-	newGame->SetRelativity(FE_RELATIVE_TOP_LEFT);
+	newGame->SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
 	newGame->SetTextProperties("../data/fonts/AGENCYR.TTF", "New Game", glm::vec4(1.0f), 24);
 	newGame->Init("../data/images/b-middle-section.jpg", eventManager);
 	std::shared_ptr<Control> loadGame =
 		std::shared_ptr<Control>(new Control("loadGame", glm::ivec2(100, 200), glm::ivec2(5, 5), 
 											 200, 50, displayData.windowWidth, displayData.windowHeight));
-	loadGame->SetRelativity(FE_RELATIVE_BOTTOM_RIGHT);
+	loadGame->SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
 	loadGame->SetTextProperties("../data/fonts/AGENCYR.TTF", "Load Game", glm::vec4(1.0f), 24);
 	loadGame->Init("../data/images/b-middle-section.jpg", eventManager);
 	std::shared_ptr<Control> saveGame =
 		std::shared_ptr<Control>(new Control("saveGame", glm::ivec2(100, 140), glm::ivec2(5, 5), 
 											 200, 50, displayData.windowWidth, displayData.windowHeight));
-	saveGame->SetRelativity(FE_RELATIVE_TOP_RIGHT);
+	saveGame->SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
 	saveGame->SetTextProperties("../data/fonts/AGENCYR.TTF", "Save Game", glm::vec4(1.0f), 24);
 	saveGame->Init("../data/images/b-middle-section.jpg", eventManager);
 	std::shared_ptr<Control> options = 
 		std::shared_ptr<Control>(new Control("options", glm::ivec2(100, 80), glm::ivec2(5, 5), 
 											 200, 50, displayData.windowWidth, displayData.windowHeight));
-	options->SetRelativity(FE_RELATIVE_CENTER_BOTTOM);
+	options->SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
 	options->SetTextProperties("../data/fonts/AGENCYR.TTF", "Options", glm::vec4(1.0f), 24);
 	options->Init("../data/images/b-middle-section.jpg", eventManager);
 	std::shared_ptr<Control> quit =
 		std::shared_ptr<Control>(new Control("quit", glm::ivec2(100, 20), glm::ivec2(5, 5), 
 											 200, 50, displayData.windowWidth, displayData.windowHeight));
-	quit->SetRelativity(FE_RELATIVE_CENTER_TOP);
+	quit->SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
 	quit->SetTextProperties("../data/fonts/AGENCYR.TTF", "Quit", glm::vec4(1.0f), 24);
 	quit->Init("../data/images/b-middle-section.jpg", eventManager);
 	testLayout.AddControl(newGame);
@@ -72,7 +72,12 @@ void World::Load(const std::string &guiLayoutFile,
 	testLayout.AddControl(saveGame);
 	testLayout.AddControl(options);
 	testLayout.AddControl(quit);
+
+	Layout inGameLayout = Layout(FE_LAYOUT_GAME);
 	guiLayouts.insert(std::make_pair(FE_LAYOUT_MENU, testLayout));
+	guiLayouts.insert(std::make_pair(FE_LAYOUT_GAME, inGameLayout));
+
+	SetLayout(FE_LAYOUT_MENU);
 
 
 #ifndef FAST_LOAD
@@ -102,45 +107,34 @@ void World::Load(const std::string &guiLayoutFile,
 void World::Render()
 {
 	// Render GUI
-	/*
 	for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
 	{
-		if ((*layout).second->IsSet())
+		if ((*layout).second.IsSet())
 		{
-			(*layout).second->Draw(shaderManager);
+			(*layout).second.Draw(displayData.modelMatrix);
+			
+			if ((*layout).first == FE_LAYOUT_GAME)
+			{
+				sunLight.Render(displayData.modelMatrix, shaderManager);
+				renderer.Render(displayData.modelMatrix);
+			}
 		}
 	}
-	*/
-	for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
-	{
-		(*layout).second.Draw(displayData.modelMatrix);
-	}
-
-	// Render Lights
-	// TODO: Render relative to layout
-	sunLight.Render(displayData.modelMatrix, shaderManager);
-	
-	// Render Models
-	// TODO: Render relative to layout
-	renderer.Render(displayData.modelMatrix);
 }
 
 void World::SetLayout(LayoutType layoutToSet)
 {
-	/*
 	for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
 	{
 		if ((*layout).first == layoutToSet)
 		{
-			(*layout).second->Set(true);
-			(*layout).second->Update(displayData.windowWidth, displayData.windowHeight);
+			(*layout).second.Set(true);
 		}
 		else 
 		{
-			(*layout).second->Set(false);
+			(*layout).second.Set(false);
 		}
 	}
-	*/
 }
 
 bool World::HandleEvent(const IEventData &eventData)

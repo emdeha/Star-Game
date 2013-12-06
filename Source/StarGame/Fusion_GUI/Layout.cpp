@@ -21,3 +21,13 @@ void Layout::Draw(glutil::MatrixStack &modelMatrix)
 		(*control)->Draw(modelMatrix);
 	}
 }
+
+bool Layout::IsSet()
+{
+	return isSet;
+}
+
+void Layout::Set(bool newIsSet)
+{
+	isSet = newIsSet;
+}

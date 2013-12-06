@@ -40,17 +40,22 @@ namespace FusionEngine
 	{
 	private:
 		LayoutType type;
+		bool isSet;
 		
 		std::vector<std::shared_ptr<Control>> controls;
 
 	public:
 		Layout(LayoutType newType)
-			: type(newType) {}
+			: type(newType), isSet(false) {}
 
 		void AddControl(const std::shared_ptr<Control> newControl);
 		std::vector<std::shared_ptr<Control>> GetControls();
 
 		void Draw(glutil::MatrixStack &modelMatrix);
+
+	public:
+		bool IsSet();
+		void Set(bool newIsSet);
 	};
 }
 

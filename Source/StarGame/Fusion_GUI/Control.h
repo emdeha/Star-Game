@@ -43,6 +43,7 @@ namespace FusionEngine
 	private:
 		glm::ivec2 initialPosition;
 		glm::ivec2 position;
+		glm::ivec2 margins;
 
 		RelativityOption currentRelativity;
 
@@ -58,16 +59,18 @@ namespace FusionEngine
 		std::string textFont;
 		std::string textString;
 		glm::vec4 textColor;
+		glm::vec2 textPosition;
 		int textSize;
 
 	public:
-		Control(glm::ivec2 newPosition, int newWidth, int newHeight,
+		Control(glm::ivec2 newPosition, glm::ivec2 newMargins, 
+				int newWidth, int newHeight,
 				int newWindowWidth, int newWindowHeight)
-			: position(newPosition), initialPosition(newPosition), 
+			: position(newPosition), initialPosition(newPosition), margins(newMargins), 
 			  currentRelativity(FE_RELATIVE_TOP_RIGHT),
 			  width(newWidth), height(newHeight), 
 			  windowWidth(newWindowWidth), windowHeight(newWindowHeight),
-			  textString(""), textFont(""), textColor(0.0f), textSize(-1) {}
+			  textString(""), textFont(""), textColor(0.0f), textPosition(0.0f), textSize(-1) {}
 
 		void SetRelativity(RelativityOption relativeTo);
 		void SetTextProperties(const std::string &newTextFont, const std::string &newTextString,

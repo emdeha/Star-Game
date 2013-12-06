@@ -41,6 +41,8 @@ void Control::SetTextProperties(const std::string &newTextFont, const std::strin
 	textString = newTextString;
 	textColor = newTextColor;
 	textSize = newTextSize;
+	textPosition = glm::vec2(position.x - margins.x,
+							 position.y - margins.y);
 }
 
 void Control::Init(const std::string &backgroundImageFileName,
@@ -49,7 +51,7 @@ void Control::Init(const std::string &backgroundImageFileName,
 	background = Sprite2D(glm::vec2(position), width, height);
 	background.Init(backgroundImageFileName);
 
-	text = Text(textFont, textString, glm::vec2(position), textColor, textSize);
+	text = Text(textFont, textString, textPosition, textColor, textSize);
 	text.Init(windowWidth, windowHeight); 
 
 	eventManager.AddListener(this, FusionEngine::EVENT_ON_RESHAPE);
@@ -82,7 +84,9 @@ bool Control::HandleEvent(const IEventData &eventData)
 
 			SetRelativity(currentRelativity);
 			background.SetPosition(glm::vec2(position));
-			text.SetPosition(glm::vec2(position), windowWidth, windowHeight);
+			textPosition = glm::vec2(position.x - margins.x,
+									 position.y - margins.y);
+			text.SetPosition(textPosition, windowWidth, windowHeight);
 		}
 		break;
 	}

@@ -179,14 +179,12 @@ namespace FusionEngine
 	public:
 		TextBox(const std::string &newName, glm::ivec2 newPosition,
 				int newWidth, int newHeight, int newWindowWidth, int newWindowHeight,
-				glm::ivec2 newMargins)
+				glm::ivec2 newMargins, float newMaxWidth)
 				: TextControl(newName, newPosition, newWidth, newHeight,
 							  newWindowWidth, newWindowHeight, newMargins),
-				  visibleText("") {}
+				  visibleText(""), maxWidth(newMaxWidth) {}
 
 		virtual void Init(EventManager &eventManager);
-
-		virtual void Draw(glutil::MatrixStack &modelMatrix);
 
 		virtual bool HandleEvent(const IEventData &eventData);
 	};

@@ -195,11 +195,11 @@ void TextControl::SetTextProperties(const std::string &newTextFont, const std::s
 							 position.y - margins.y);
 }
 
-void TextControl::Init( EventManager &eventManager)
+void TextControl::Init(EventManager &eventManager)
 {
 	Control::Init(eventManager);
 
-	if (textString == "" || textFont == ""  || textSize == -1 || 
+	if (textFont == ""  || textSize == -1 || 
 		textColor == glm::vec4(-1.0f) || textPosition == glm::vec2(-1.0f))
 	{
 		std::string errorMessage = "one or more of the text\'s properties are not initialized ";
@@ -333,7 +333,7 @@ bool TextBox::HandleEvent(const IEventData &eventData)
 				{
 					char ch = static_cast<const OnKeyPressedEvent&>(eventData).key;
 
-					if ((int)ch == ASCII_BACKSPACE)
+					if ((int)ch == ASCII_BACKSPACE && textString.length() > 0)
 					{
 						textString.pop_back();
 						int newTextLength = textString.length() - visibleText.length();
@@ -345,16 +345,25 @@ bool TextBox::HandleEvent(const IEventData &eventData)
 							}
 							visibleText[0] = textString[newTextLength];
 						}
+						else 
+						{
+							visibleText.pop_back();
+						}
 					}
 					else
 					{
-						visibleText.pop_back();
+						textString += ch;
+						visibleText.push_back(ch);
 					}
 
-					while (text.GetWidth() > maxWidth && (int)ch != ASCII_BACKSPACE)
+					while (fabsf(text.GetWidth()) > maxWidth && (int)ch != ASCII_BACKSPACE)
 					{
 						visibleText.erase(visibleText.begin());
+						text.CalculateTextWidth(visibleText);
 					}
+
+					text = Text(textFont, visibleText, textPosition, textColor, textSize);
+					text.Init(windowWidth, windowHeight);
 				}
 			}
 			break;

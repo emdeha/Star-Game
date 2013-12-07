@@ -81,11 +81,21 @@ void World::Load(const std::string &guiLayoutFile,
 	quit->SetTextProperties("../data/fonts/AGENCYR.TTF", "Quit", glm::vec4(1.0f), 24);
 	quit->SetOnClickHandler(QuitHandler);
 	quit->Init(eventManager);
+	std::shared_ptr<TextBox> testTextBox = 
+		std::shared_ptr<TextBox>(new TextBox("sampleTextBox", glm::ivec2(200, 70),
+											 100, 50, displayData.windowWidth, displayData.windowHeight,
+											 glm::ivec2(5, 10), 100.0f));
+	testTextBox->SetRelativity(FE_RELATIVE_TOP_RIGHT);
+	testTextBox->SetTextProperties("../data/fonts/AGENCYR.TTF", "", glm::vec4(1.0f), 24);
+	testTextBox->SetBackground("../data/images/fusion-empty.jpg");
+	testTextBox->SetOnClickHandler(TextBoxClickHandler);
+	testTextBox->Init(eventManager);
 	testLayout->AddControl(newGame);
 	testLayout->AddControl(loadGame);
 	testLayout->AddControl(saveGame);
 	testLayout->AddControl(options);
 	testLayout->AddControl(quit);
+	testLayout->AddControl(testTextBox);
 
 	std::shared_ptr<Layout> saveLayout = 
 		std::shared_ptr<Layout>(new Layout(FE_LAYOUT_SAVE));

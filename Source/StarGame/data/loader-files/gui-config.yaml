@@ -3,18 +3,17 @@ details:
     textures-dir: "../data/images/"
     default-font: AGENCYR.TTF
 layout-game:
-    background-color: [ 0.0, 0.0, 0.0, 1.0 ]
     is-active: false
     controls:
         control-label-matter:
-            control-type: label
+            control-type: label 
             name: labelMatter
-            text: Matter:
+            text: "Matter:"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: true
-            percentaged-pos: [ 10, 90 ]
+            relativity: TOP_LEFT
+            position: 5, 30
             text-size: 28
         control-label-tooltip:
             control-type: label
@@ -23,253 +22,201 @@ layout-game:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
+            relativity: TOP_RIGHT
             position: [ 0, 0 ]
             text-size: 28 
         control-imagebox-fusone:
             control-type: imageBox
             name: fusionOne
+            has-background: true
+            width-height: [ 50, 50 ]
+            background: "funsion-empty.jpg"
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 615, 738 ]
-                preset-medium:
-                    position: [ 615, 738 ]
-                preset-big:
-                    position: [ 615, 738 ]
-            width: 50
-            height: 50
-            index: 3
-            textures: [ "fusion-empty.jpg", "fusion-catalyst.jpg", "fusion-ectoplasm.jpg", "fusion-matter.jpg" ]
+            relativity: CENTER_BOTTOM
+            position: [ -80, 10 ]
         control-imagebox-fustwo:
             control-type: imageBox
             name: fusionTwo
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 670, 738 ]
-                preset-medium:
-                    position: [ 670, 738 ]
-                preset-big:
-                    position: [ 670, 738 ]
-            width: 50
-            height: 50
-            index: 2       
-            textures: [ "fusion-empty.jpg", "fusion-catalyst.jpg", "fusion-ectoplasm.jpg", "fusion-matter.jpg" ]
+            has-background: true
+            width-height: [ 50, 50 ]
+            background: "funsion-empty.jpg"
+            relativity: CENTER_BOTTOM
+            position: [ -25, 10 ]
         control-imagebox-fusthree:
             control-type: imageBox
             name: fusionThree
+            has-background: true
+            width-height: [ 50, 50 ]
+            background: "funsion-empty.jpg"
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 725, 738 ]
-                preset-medium:
-                    position: [ 725, 738 ]
-                preset-big:
-                    position: [ 725, 738 ]
-            width: 50
-            height: 50
-            index: 1
-            textures: [ "fusion-empty.jpg", "fusion-catalyst.jpg", "fusion-ectoplasm.jpg", "fusion-matter.jpg" ]
-        control-hintbox:
+            relativity: CENTER_BOTTOM
+            position: [ 30, 10 ]
+        control-imagebox-fushint:
             control-type: hintBox
             name: skillHint
+            has-background: true
+            width-height: [ 50, 50 ]
+            background: "funsion-empty.jpg"
             is-visible: true
-            presets:
-                preset-small:
-                    position: [ 670, 683 ]
-                    text-size: 28
-                preset-medium:
-                    position: [ 670, 683 ]
-                    text-size: 28
-                preset-big:
-                    position: [ 670, 683 ]
-                    text-size: 28
-            width: 50
-            height: 50
-            textures: [ 
-                        "sun.jpg", "fusion-catalyst.jpg", 
-                        "fusion-matter.jpg", "fusion-ectoplasm.jpg", 
-                        "fusion-e.jpg", "fusion-w.jpg", 
-                        "fusion-q.jpg", "mesh.jpg" ]
-            descriptions: [ 
-                            "passive aoe", "aoe",
-                            "sun nova", "burn", 
-                            "sat passive aoe", "sat chain",
-                            "sat frost nova", "sat shield" ]
+            relativity: CENTER_BOTTOM
+            position: [ -25, 65 ]
+        control-label-fushint:
+            control-type: label
+            name: labelFusHint
+            text: "Not a combination"
+            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
+            has-background: false
+            is-visible: true
+            relativity: CENTER_BOTTOM
+            position: [ 30, 65 ]
+            text-size: 28
         control-textbox-varinput:
             control-type: textBox
             name: varInput
-            width: 200
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true
+            width-height: [ 200, 50 ]
+            background: "fusion-empty.jpg"
+            margins: [ 5, 5 ]
             is-visible: true
-            is-using-percentage: false
-            position: [ 1020, 728 ]
+            relativity: TOP_RIGHT
+            position: [ 300, 50 ]
             text-size: 28
         control-button-apply:
             control-type: button
             name: applyInput
-            text: Apply
+            text: "Apply"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 1230, 728 ]
+            relativity: TOP_RIGHT
+            position: [ 400, 50 ]
             text-size: 28
 layout-menu:
-    background-color: [ 1.0, 1.0, 1.0, 1.0 ]
     background-image: "background.png"
     is-active: true
     controls:
         control-button-new:
             control-type: button
             name: newGame
-            text: New Game
+            text: "New Game"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
-            has-background: false
+            has-background: true 
+            width-height: [ 100, 50 ]
+            background: "b-middle-section.jpg"
+            margins: [ 10, 10 ]
             is-visible: true
-            is-using-percentage: false 
+            relativty: BOTTOM_LEFT
             position: [ 10, 130 ]
             text-size: 28
         control-button-resume:
             control-type: button
             name: resumeGame
-            text: Resume Game
+            text: "Resume Game"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
-            has-background: false
+            has-background: true 
+            width-height: [ 100, 50 ]
+            background: "b-middle-section.jpg"
+            margins: [ 10, 10 ]
             is-visible: false
-            is-using-percentage: false
-            position: [ 10, 130 ]
+            relativty: BOTTOM_LEFT
+            position: [ 10, 50 ]
             text-size: 28
         control-button-save:
             control-type: button
             name: saveGame
-            text: Save Game
+            text: "Save Game"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
-            has-background: false
+            has-background: true 
+            width-height: [ 100, 50 ]
+            background: "b-middle-section.jpg"
+            margins: [ 10, 10 ]
             is-visible: false
-            is-using-percentage: false
+            relativity: BOTTOM_LEFT
             position: [ 10, 100 ]
             text-size: 28
         control-button-load:
             control-type: button
             name: loadGame
-            text: Load Game
+            text: "Load Game"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
-            has-background: false
+            has-background: true 
+            width-height: [ 100, 50 ]
+            background: "b-middle-section.jpg"
+            margins: [ 10, 10 ]
             is-visible: true
-            is-using-percentage: false
+            relativity: BOTTOM_LEFT
             position: [ 10, 100 ]
             text-size: 28
         control-button-options:
             control-type: button
             name: options
-            text: Options
+            text: "Options"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
-            has-background: false
+            has-background: true 
+            width-height: [ 100, 50 ]
+            background: "b-middle-section.jpg"
+            margins: [ 10, 10 ]
             is-visible: true
-            is-using-percentage: false
+            relativity: BOTTOM_LEFT
             position: [ 10, 70 ]
             text-size: 28
         control-button-quit:
             control-type: button
             name: quitGame 
-            text: Quit 
+            text: "Quit" 
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
-            has-background: false
+            has-background: true
+            width-height: [ 100, 50 ]
+            background: "b-middle-section.jpg"
+            margins: [ 10, 10 ]
             is-visible: true
-            is-using-percentage: false
+            relativity: BOTTOM_LEFT
             position: [ 10, 40 ]
             text-size: 28   
 layout-save-game:
-    background-color: [ 1.0, 1.0, 1.0, 1.0 ]
     is-active: false
     background-image: "background.png"
     controls:
         control-button-back:
             control-type: button
             name: backBtn
-            text: Back to Main
+            text: "Back to Main"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
-            has-background: false
+            has-background: true
+            width-height: [ 100, 50 ]
+            background: "b-middle-section.jpg"
+            margins: [ 10, 10 ]
             is-visible: true
-            is-using-percentage: false
+            relativity: BOTTOM_LEFT
             position: [ 10, 40 ]
-            text-size: 28
-        control-button-saveslot-1:
-            control-type: button
-            name: saveSlot1
-            text: Empty
-            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
-            has-background: false
-            is-visible: true
-            is-using-percentage: false
-            position: [ 10, 600 ]
-            text-size: 28
-        control-button-saveslot-2:
-            control-type: button
-            name: saveSlot2
-            text: Empty
-            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
-            has-background: false
-            is-visible: true
-            is-using-percentage: false
-            position: [ 10, 570 ]
-            text-size: 28
-        control-button-saveslot-3:
-            control-type: button
-            name: saveSlot3
-            text: Empty
-            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
-            has-background: false
-            is-visible: true
-            is-using-percentage: false
-            position: [ 10, 540 ]
-            text-size: 28
-        control-button-saveslot-4:
-            control-type: button
-            name: saveSlot4
-            text: Empty
-            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
-            has-background: false
-            is-visible: true
-            is-using-percentage: false
-            position: [ 10, 510 ]
-            text-size: 28
-        control-button-saveslot-5:
-            control-type: button
-            name: saveSlot5
-            text: Empty
-            font-color: [ 1.0, 1.0, 1.0, 1.0 ]
-            has-background: false
-            is-visible: true
-            is-using-percentage: false
-            position: [ 10, 480 ]
             text-size: 28
         control-label-tooltip:
             control-type: label
             name: labelHeader
-            text: Save Game
+            text: "Save Game"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 720 ]
-            text-size: 48
+            relativity: CENTER_TOP
+            position: [ -50, 70 ]
+            text-size: 48 
 layout-load-game:
-    background-color: [ 1.0, 1.0, 1.0, 1.0 ]
     is-active: false
     background-image: "background.png"
     controls:
         control-button-back:
             control-type: button
             name: backBtn
-            text: Back to Main
+            text: "Back to Main"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
-            has-background: false
+            has-background: true
+            width-height: [ 100, 50 ]
+            background: "b-middle-section.jpg"
+            margins: [ 10, 10 ]
             is-visible: true
-            is-using-percentage: false
+            relativity: BOTTOM_LEFT
             position: [ 10, 40 ]
             text-size: 28
         control-label-tooltip:
@@ -279,31 +226,33 @@ layout-load-game:
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 720 ]
+            relativity: CENTER_TOP
+            position: [ -50, 70 ]
             text-size: 48 
 layout-options:
-    background-color: [ 1.0, 1.0, 1.0, 1.0 ]
     is-active: false
     background-image: "background.png"
     controls:
         control-button-back:
             control-type: button
             name: backBtn
-            text: Back to Main
+            text: "Back to Main"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
-            has-background: false
+            has-background: true
+            width-height: [ 100, 50 ]
+            background: "b-middle-section.jpg"
+            margins: [ 10, 10 ]
             is-visible: true
-            is-using-percentage: false
+            relativity: CENTER_TOP
             position: [ 10, 40 ]
             text-size: 28
         control-label-tooltip:
             control-type: label
             name: labelHeader
-            text: Options
+            text: "Options"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
             is-visible: true
-            is-using-percentage: false
-            position: [ 10, 720 ]
+            relativity: CENTER_TOP
+            position: [ -50, 70 ]
             text-size: 48 

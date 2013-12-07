@@ -2,6 +2,7 @@
 #include "World.h"
 
 #include "../Fusion_EntitySystem/EntityEvents.h"
+#include "../Fusion_GUI/ControlEvents.h"
 
 using namespace FusionEngine;
 
@@ -14,31 +15,6 @@ World::World()
 
 World::~World()
 {
-}
-
-void NewGameHandler()
-{
-	GetWorld().SetLayout(FE_LAYOUT_GAME);
-}
-void SaveGameHandler()
-{
-	GetWorld().SetLayout(FE_LAYOUT_SAVE);
-}
-void LoadGameHandler()
-{
-	GetWorld().SetLayout(FE_LAYOUT_LOAD);
-}
-void OptionsHandler()
-{
-	GetWorld().SetLayout(FE_LAYOUT_OPTIONS);
-}
-void BackHandler()
-{
-	GetWorld().SetLayout(FE_LAYOUT_MENU);
-}
-void QuitHandler()
-{
-	exit(0);
 }
 
 void World::Load(const std::string &guiLayoutFile,

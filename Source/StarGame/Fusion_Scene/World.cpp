@@ -10,7 +10,6 @@ using namespace FusionEngine;
 World::World()
 {
 	eventManager.AddListener(this, FusionEngine::EVENT_ON_RESHAPE);
-	eventManager.AddListener(this, FusionEngine::EVENT_ON_CLICK);
 }
 
 World::~World()
@@ -218,45 +217,6 @@ bool World::HandleEvent(const IEventData &eventData)
 			const OnReshapeEvent &data = static_cast<const OnReshapeEvent&>(eventData);
 			displayData.windowHeight = data.windowHeight;
 			displayData.windowWidth = data.windowWidth;
-		}
-		break;
-	case FusionEngine::EVENT_ON_CLICK:		
-		{
-			const OnClickEvent &data = static_cast<const OnClickEvent&>(eventData);
-			if (data.isLeftButtonDown)
-			{
-				/*
-				if (data.objectId == "newGame")
-				{
-					SetLayout(LAYOUT_IN_GAME);
-					audio.Play(MUSIC_BACKGROUND);
-				}
-				else if (data.objectId == "resumeGame")
-				{
-					SetLayout(LAYOUT_IN_GAME);
-				}
-				else if (data.objectId == "saveGame")
-				{
-					SetLayout(LAYOUT_SAVE_GAME);
-				}
-				else if (data.objectId == "loadGame")
-				{
-					SetLayout(LAYOUT_LOAD_GAME);
-				}
-				else if (data.objectId == "options")
-				{
-					SetLayout(LAYOUT_OPTIONS);
-				}
-				else if (data.objectId == "quitGame")
-				{
-					exit(EXIT_SUCCESS);
-				}
-				else if (data.objectId == "backBtn")
-				{
-					SetLayout(LAYOUT_MENU);
-				}
-				*/
-			}
 		}
 		break;
 	}

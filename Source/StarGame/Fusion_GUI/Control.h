@@ -44,7 +44,7 @@ namespace FusionEngine
 	class Control : public IEventListener
 	{
 	protected:
-		OnClickHandler handleOnClick;
+		//OnClickHandler handleOnClick;
 
 		std::string name; // TODO: integer ID in the future
 
@@ -61,6 +61,7 @@ namespace FusionEngine
 		int windowHeight;
 
 		Sprite2D background;
+		bool hasBackground;
 		bool isVisible;
 		//Text text;
 
@@ -71,27 +72,29 @@ namespace FusionEngine
 		//int textSize;
 
 	public:
+		virtual ~Control() {}
+
 		Control(const std::string &newName,
 				glm::ivec2 newPosition, //glm::ivec2 newMargins, 
 				int newWidth, int newHeight,
 				int newWindowWidth, int newWindowHeight)
-			: name(newName), handleOnClick(nullptr),
+			: name(newName), //handleOnClick(nullptr),
 			  position(newPosition), initialPosition(newPosition), /*margins(newMargins),*/ 
 			  currentRelativity(FE_RELATIVE_TOP_RIGHT),
 			  width(newWidth), height(newHeight), 
 			  windowWidth(newWindowWidth), windowHeight(newWindowHeight),
-			  isVisible(true) {}
+			  isVisible(true), hasBackground(false) {}
 			  //textString(""), textFont(""), textColor(-1.0f), textPosition(-1.0f), textSize(-1) {}
 
 		void SetRelativity(RelativityOption relativeTo);
 		void SetVisibility(bool newIsVisible);
+		void SetBackground(const std::string &backgroundFileName);
 		//void SetTextProperties(const std::string &newTextFont, const std::string &newTextString,
 		//					   glm::vec4 newTextColor, int newTextSize);
 
-		void SetOnClickHandler(OnClickHandler onClickHandler);
+		//void SetOnClickHandler(OnClickHandler onClickHandler);
 
-		virtual void Init(const std::string &backgroundImageFileName,
-						  EventManager &eventManager);
+		virtual void Init(EventManager &eventManager);
 
 		virtual void Draw(glutil::MatrixStack &modelMatrix);
 
@@ -107,6 +110,8 @@ namespace FusionEngine
 	class TextControl : public Control
 	{
 	protected:
+		OnClickHandler handleOnClick;
+		
 		Text text;
 
 		glm::ivec2 margins;
@@ -123,18 +128,25 @@ namespace FusionEngine
 					glm::ivec2 newMargins)
 				: Control(newName, newPosition, newWidth, newHeight, 
 						  newWindowWidth, newWindowHeight),
-				  margins(newMargins), 
+				  margins(newMargins), handleOnClick(nullptr), 
 				  textString(""), textFont(""), textColor(-1.0f), 
 				  textPosition(-1.0f), textSize(-1) {}
 
+		void SetOnClickHandler(OnClickHandler onClickHandler);
 		void SetTextProperties(const std::string &newTextFont, const std::string &newTextString,
 							   glm::vec4 newTextColor, int newTextSize);
 
-		virtual void Init(const std::string &backgroundImageFileName,
-						  EventManager &eventManager);
+		virtual void Init(EventManager &eventManager);
 
 		virtual void Draw(glutil::MatrixStack &modelMatrix);
 
+		virtual bool HandleEvent(const IEventData &eventData);
+	};
+
+
+	class Label : public TextControl
+	{
+	public:
 		virtual bool HandleEvent(const IEventData &eventData);
 	};
 }

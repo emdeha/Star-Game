@@ -61,6 +61,7 @@ void Layout::SetBackgroundSprite(const std::string &spriteFile)
 	}
 }
 
+/*
 void Layout::SetControlOnClickHandler(const std::string &controlName,
 									  OnClickHandler onClickHandler)
 {
@@ -72,6 +73,7 @@ void Layout::SetControlOnClickHandler(const std::string &controlName,
 		}
 	}
 }
+*/
 
 bool Layout::HandleEvent(const IEventData &eventData)
 {

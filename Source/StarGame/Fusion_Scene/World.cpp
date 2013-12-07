@@ -40,37 +40,42 @@ void World::Load(const std::string &guiLayoutFile,
 		std::shared_ptr<Layout> (new Layout(FE_LAYOUT_MENU, displayData.windowWidth, displayData.windowHeight));
 	testLayout->Init(eventManager);
 	testLayout->SetBackgroundSprite("../data/images/background.png");
-	std::shared_ptr<Control> newGame = 
-		std::shared_ptr<Control>(new Control("newGame", glm::ivec2(100, 260), glm::ivec2(5, 5), 
-											 200, 50, displayData.windowWidth, displayData.windowHeight));
+	std::shared_ptr<TextControl> newGame = 
+		std::shared_ptr<TextControl>(new TextControl("newGame", glm::ivec2(100, 260), 
+											 200, 50, displayData.windowWidth, displayData.windowHeight, 
+											 glm::ivec2(5, 5)));
 	newGame->SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
 	newGame->SetTextProperties("../data/fonts/AGENCYR.TTF", "New Game", glm::vec4(1.0f), 24);
 	newGame->SetOnClickHandler(NewGameHandler);
 	newGame->Init("../data/images/b-middle-section.jpg", eventManager);
-	std::shared_ptr<Control> loadGame =
-		std::shared_ptr<Control>(new Control("loadGame", glm::ivec2(100, 200), glm::ivec2(5, 5), 
-											 200, 50, displayData.windowWidth, displayData.windowHeight));
+	std::shared_ptr<TextControl> loadGame =
+		std::shared_ptr<TextControl>(new TextControl("loadGame", glm::ivec2(100, 200),
+											 200, 50, displayData.windowWidth, displayData.windowHeight,
+											 glm::ivec2(5, 5)));
 	loadGame->SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
 	loadGame->SetTextProperties("../data/fonts/AGENCYR.TTF", "Load Game", glm::vec4(1.0f), 24);
 	loadGame->SetOnClickHandler(LoadGameHandler);
 	loadGame->Init("../data/images/b-middle-section.jpg", eventManager);
-	std::shared_ptr<Control> saveGame =
-		std::shared_ptr<Control>(new Control("saveGame", glm::ivec2(100, 140), glm::ivec2(5, 5), 
-											 200, 50, displayData.windowWidth, displayData.windowHeight));
+	std::shared_ptr<TextControl> saveGame =
+		std::shared_ptr<TextControl>(new TextControl("saveGame", glm::ivec2(100, 140),
+											 200, 50, displayData.windowWidth, displayData.windowHeight,
+											 glm::ivec2(5, 5)));
 	saveGame->SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
 	saveGame->SetTextProperties("../data/fonts/AGENCYR.TTF", "Save Game", glm::vec4(1.0f), 24);
 	saveGame->SetOnClickHandler(SaveGameHandler);
 	saveGame->Init("../data/images/b-middle-section.jpg", eventManager);
-	std::shared_ptr<Control> options = 
-		std::shared_ptr<Control>(new Control("options", glm::ivec2(100, 80), glm::ivec2(5, 5), 
-											 200, 50, displayData.windowWidth, displayData.windowHeight));
+	std::shared_ptr<TextControl> options = 
+		std::shared_ptr<TextControl>(new TextControl("options", glm::ivec2(100, 80),
+											 200, 50, displayData.windowWidth, displayData.windowHeight,
+											 glm::ivec2(5, 5)));
 	options->SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
 	options->SetTextProperties("../data/fonts/AGENCYR.TTF", "Options", glm::vec4(1.0f), 24);
 	options->SetOnClickHandler(OptionsHandler);
 	options->Init("../data/images/b-middle-section.jpg", eventManager);
-	std::shared_ptr<Control> quit =
-		std::shared_ptr<Control>(new Control("quit", glm::ivec2(100, 20), glm::ivec2(5, 5), 
-											 200, 50, displayData.windowWidth, displayData.windowHeight));
+	std::shared_ptr<TextControl> quit =
+		std::shared_ptr<TextControl>(new TextControl("quit", glm::ivec2(100, 20),
+											 200, 50, displayData.windowWidth, displayData.windowHeight,
+											 glm::ivec2(5, 5)));
 	quit->SetRelativity(FE_RELATIVE_BOTTOM_LEFT);
 	quit->SetTextProperties("../data/fonts/AGENCYR.TTF", "Quit", glm::vec4(1.0f), 24);
 	quit->SetOnClickHandler(QuitHandler);
@@ -84,9 +89,10 @@ void World::Load(const std::string &guiLayoutFile,
 	std::shared_ptr<Layout> saveLayout = 
 		std::shared_ptr<Layout>(new Layout(FE_LAYOUT_SAVE));
 	saveLayout->Init(eventManager);
-	std::shared_ptr<Control> inSave =
-		std::shared_ptr<Control>(new Control("inSave", glm::ivec2(-50, 350), glm::ivec2(5, 10),
-								 100, 50, displayData.windowWidth, displayData.windowHeight));
+	std::shared_ptr<TextControl> inSave =
+		std::shared_ptr<TextControl>(new TextControl("inSave", glm::ivec2(-50, 350),
+								 100, 50, displayData.windowWidth, displayData.windowHeight,
+								 glm::ivec2(5, 10)));
 	inSave->SetRelativity(FE_RELATIVE_CENTER_BOTTOM);
 	inSave->SetTextProperties("../data/fonts/AGENCYR.TTF", "IN SAVE", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 24);
 	inSave->SetOnClickHandler(BackHandler);
@@ -95,9 +101,10 @@ void World::Load(const std::string &guiLayoutFile,
 	std::shared_ptr<Layout> loadLayout = 
 		std::shared_ptr<Layout>(new Layout(FE_LAYOUT_LOAD));
 	loadLayout->Init(eventManager);
-	std::shared_ptr<Control> inLoad =
-		std::shared_ptr<Control>(new Control("inLoad", glm::ivec2(-50, 350), glm::ivec2(5, 10),
-								 100, 50, displayData.windowWidth, displayData.windowHeight));
+	std::shared_ptr<TextControl> inLoad =
+		std::shared_ptr<TextControl>(new TextControl("inLoad", glm::ivec2(-50, 350),
+								 100, 50, displayData.windowWidth, displayData.windowHeight,
+								 glm::ivec2(5, 10)));
 	inLoad->SetRelativity(FE_RELATIVE_CENTER_BOTTOM);
 	inLoad->SetTextProperties("../data/fonts/AGENCYR.TTF", "IN LOAD", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 24);
 	inLoad->SetOnClickHandler(BackHandler);
@@ -106,9 +113,10 @@ void World::Load(const std::string &guiLayoutFile,
 	std::shared_ptr<Layout> optionsLayout =
 		std::shared_ptr<Layout>(new Layout(FE_LAYOUT_OPTIONS));
 	optionsLayout->Init(eventManager);
-	std::shared_ptr<Control> inOptions =
-		std::shared_ptr<Control>(new Control("inOptions", glm::ivec2(-50, 350), glm::ivec2(5, 10),
-								 100, 50, displayData.windowWidth, displayData.windowHeight));
+	std::shared_ptr<TextControl> inOptions =
+		std::shared_ptr<TextControl>(new TextControl("inOptions", glm::ivec2(-50, 350),
+								 100, 50, displayData.windowWidth, displayData.windowHeight,
+								 glm::ivec2(5, 10)));
 	inOptions->SetRelativity(FE_RELATIVE_CENTER_BOTTOM);
 	inOptions->SetTextProperties("../data/fonts/AGENCYR.TTF", "IN OPTIONS", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 24);
 	inOptions->SetOnClickHandler(BackHandler);

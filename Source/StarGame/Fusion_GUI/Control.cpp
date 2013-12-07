@@ -34,6 +34,12 @@ void Control::SetRelativity(RelativityOption relativeTo)
 	currentRelativity = relativeTo;
 }
 
+void Control::SetVisibility(bool newIsVisible)
+{
+	isVisible = newIsVisible;
+}
+
+/*
 void Control::SetTextProperties(const std::string &newTextFont, const std::string &newTextString,
 								glm::vec4 newTextColor, int newTextSize)
 {
@@ -44,6 +50,7 @@ void Control::SetTextProperties(const std::string &newTextFont, const std::strin
 	textPosition = glm::vec2(position.x - margins.x,
 							 position.y - margins.y);
 }
+*/
 
 void Control::SetOnClickHandler(OnClickHandler onClickHandler)
 {
@@ -56,16 +63,16 @@ void Control::Init(const std::string &backgroundImageFileName,
 	background = Sprite2D(glm::vec2(position), width, height);
 	background.Init(backgroundImageFileName);
 
-	if (textString == "" || textFont == ""  || textSize == -1 || 
-		textColor == glm::vec4(-1.0f) || textPosition == glm::vec2(-1.0f))
-	{
-		std::string errorMessage = "one or more of the text\'s properties are not initialized ";
-		errorMessage += "Control: ==* " + name + " *=="; // TODO: textString should be controlName
-		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
-		return;
-	}
-	text = Text(textFont, textString, textPosition, textColor, textSize);
-	text.Init(windowWidth, windowHeight); 
+	//if (textString == "" || textFont == ""  || textSize == -1 || 
+	//	textColor == glm::vec4(-1.0f) || textPosition == glm::vec2(-1.0f))
+	//{
+	//	std::string errorMessage = "one or more of the text\'s properties are not initialized ";
+	//	errorMessage += "Control: ==* " + name + " *=="; // TODO: textString should be controlName
+	//	HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+	//	return;
+	//}
+	//text = Text(textFont, textString, textPosition, textColor, textSize);
+	//text.Init(windowWidth, windowHeight); 
 
 	eventManager.AddListener(this, FusionEngine::EVENT_ON_RESHAPE);
 	eventManager.AddListener(this, FusionEngine::EVENT_ON_CLICK);
@@ -73,16 +80,19 @@ void Control::Init(const std::string &backgroundImageFileName,
 
 void Control::Draw(glutil::MatrixStack &modelMatrix)
 {
-	glutil::MatrixStack identityMatrix;
-	identityMatrix.SetIdentity();
+	if (isVisible)
+	{
+		glutil::MatrixStack identityMatrix;
+		identityMatrix.SetIdentity();
 
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	background.Draw(identityMatrix);
-	text.Draw();
+		background.Draw(identityMatrix);
+		//text.Draw();
 
-	glDisable(GL_BLEND);
+		glDisable(GL_BLEND);
+	}
 }
 
 bool Control::IsMouseOn(glm::ivec2 mouseCoordinates_windowSpace)
@@ -115,9 +125,9 @@ bool Control::HandleEvent(const IEventData &eventData)
 
 			SetRelativity(currentRelativity);
 			background.SetPosition(glm::vec2(position));
-			textPosition = glm::vec2(position.x - margins.x,
-									 position.y - margins.y);
-			text.SetPosition(textPosition, windowWidth, windowHeight);
+			//textPosition = glm::vec2(position.x - margins.x,
+			//						 position.y - margins.y);
+			//text.SetPosition(textPosition, windowWidth, windowHeight);
 		}
 		break;
 	case EVENT_ON_CLICK:
@@ -149,4 +159,72 @@ bool Control::HandleEvent(const IEventData &eventData)
 std::string Control::GetName()
 {
 	return name;
+}
+
+
+///////////////////
+//  TextControl  //
+///////////////////
+void TextControl::SetTextProperties(const std::string &newTextFont, const std::string &newTextString,
+									glm::vec4 newTextColor, int newTextSize)
+{
+	textFont = newTextFont;
+	textString = newTextString;
+	textColor = newTextColor;
+	textSize = newTextSize;
+	textPosition = glm::vec2(position.x - margins.x,
+							 position.y - margins.y);
+}
+
+void TextControl::Init(const std::string &bacgkroundImageFileName,
+					   EventManager &eventManager)
+{
+	Control::Init(bacgkroundImageFileName, eventManager);
+
+	if (textString == "" || textFont == ""  || textSize == -1 || 
+		textColor == glm::vec4(-1.0f) || textPosition == glm::vec2(-1.0f))
+	{
+		std::string errorMessage = "one or more of the text\'s properties are not initialized ";
+		errorMessage += "Control: ==* " + name + " *=="; // TODO: textString should be controlName
+		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+		return;
+	}
+	text = Text(textFont, textString, textPosition, textColor, textSize);
+	text.Init(windowWidth, windowHeight); 
+}
+
+void TextControl::Draw(glutil::MatrixStack &modelMatrix)
+{
+	if (isVisible)
+	{
+		glutil::MatrixStack identityMatrix;
+		identityMatrix.SetIdentity();
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		background.Draw(identityMatrix);
+		text.Draw();
+
+		glDisable(GL_BLEND);
+	}
+}
+
+bool TextControl::HandleEvent(const IEventData &eventData)
+{
+	Control::HandleEvent(eventData);
+
+	EventType type = eventData.GetType();
+	switch (type)
+	{
+	case EVENT_ON_RESHAPE:
+		{
+			textPosition = glm::vec2(position.x - margins.x,
+									 position.y - margins.y);
+			text.SetPosition(textPosition, windowWidth, windowHeight);
+		}
+		break;
+	}
+	
+	return false;
 }

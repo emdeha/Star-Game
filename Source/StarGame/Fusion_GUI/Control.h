@@ -43,14 +43,14 @@ namespace FusionEngine
 
 	class Control : public IEventListener
 	{
-	private:
+	protected:
 		OnClickHandler handleOnClick;
 
 		std::string name; // TODO: integer ID in the future
 
 		glm::ivec2 initialPosition;
 		glm::ivec2 position;
-		glm::ivec2 margins;
+		// glm::ivec2 margins;
 
 		RelativityOption currentRelativity;
 
@@ -61,7 +61,55 @@ namespace FusionEngine
 		int windowHeight;
 
 		Sprite2D background;
+		bool isVisible;
+		//Text text;
+
+		//std::string textFont;
+		//std::string textString;
+		//glm::vec4 textColor;
+		//glm::vec2 textPosition;
+		//int textSize;
+
+	public:
+		Control(const std::string &newName,
+				glm::ivec2 newPosition, //glm::ivec2 newMargins, 
+				int newWidth, int newHeight,
+				int newWindowWidth, int newWindowHeight)
+			: name(newName), handleOnClick(nullptr),
+			  position(newPosition), initialPosition(newPosition), /*margins(newMargins),*/ 
+			  currentRelativity(FE_RELATIVE_TOP_RIGHT),
+			  width(newWidth), height(newHeight), 
+			  windowWidth(newWindowWidth), windowHeight(newWindowHeight),
+			  isVisible(true) {}
+			  //textString(""), textFont(""), textColor(-1.0f), textPosition(-1.0f), textSize(-1) {}
+
+		void SetRelativity(RelativityOption relativeTo);
+		void SetVisibility(bool newIsVisible);
+		//void SetTextProperties(const std::string &newTextFont, const std::string &newTextString,
+		//					   glm::vec4 newTextColor, int newTextSize);
+
+		void SetOnClickHandler(OnClickHandler onClickHandler);
+
+		virtual void Init(const std::string &backgroundImageFileName,
+						  EventManager &eventManager);
+
+		virtual void Draw(glutil::MatrixStack &modelMatrix);
+
+		bool IsMouseOn(glm::ivec2 mouseCoordinates_windowSpace);
+
+		virtual bool HandleEvent(const IEventData &eventData);
+
+	public:
+		std::string GetName();
+	};
+
+	
+	class TextControl : public Control
+	{
+	protected:
 		Text text;
+
+		glm::ivec2 margins;
 
 		std::string textFont;
 		std::string textString;
@@ -70,34 +118,24 @@ namespace FusionEngine
 		int textSize;
 
 	public:
-		Control(const std::string &newName,
-				glm::ivec2 newPosition, glm::ivec2 newMargins, 
-				int newWidth, int newHeight,
-				int newWindowWidth, int newWindowHeight)
-			: name(newName), handleOnClick(nullptr),
-			  position(newPosition), initialPosition(newPosition), margins(newMargins), 
-			  currentRelativity(FE_RELATIVE_TOP_RIGHT),
-			  width(newWidth), height(newHeight), 
-			  windowWidth(newWindowWidth), windowHeight(newWindowHeight),
-			  textString(""), textFont(""), textColor(-1.0f), textPosition(-1.0f), textSize(-1) {}
+		TextControl(const std::string &newName, glm::ivec2 newPosition,
+					int newWidth, int newHeight, int newWindowWidth, int newWindowHeight,
+					glm::ivec2 newMargins)
+				: Control(newName, newPosition, newWidth, newHeight, 
+						  newWindowWidth, newWindowHeight),
+				  margins(newMargins), 
+				  textString(""), textFont(""), textColor(-1.0f), 
+				  textPosition(-1.0f), textSize(-1) {}
 
-		void SetRelativity(RelativityOption relativeTo);
 		void SetTextProperties(const std::string &newTextFont, const std::string &newTextString,
 							   glm::vec4 newTextColor, int newTextSize);
 
-		void SetOnClickHandler(OnClickHandler onClickHandler);
+		virtual void Init(const std::string &backgroundImageFileName,
+						  EventManager &eventManager);
 
-		void Init(const std::string &backgroundImageFileName,
-				  EventManager &eventManager);
-
-		void Draw(glutil::MatrixStack &modelMatrix);
-
-		bool IsMouseOn(glm::ivec2 mouseCoordinates_windowSpace);
+		virtual void Draw(glutil::MatrixStack &modelMatrix);
 
 		virtual bool HandleEvent(const IEventData &eventData);
-
-	public:
-		std::string GetName();
 	};
 }
 

@@ -309,9 +309,13 @@ bool Button::HandleEvent(const IEventData &eventData)
 ///////////////
 //  TextBox  //
 ///////////////
-void TextBox::Init(EventManager &eventManager)
+const int ASCII_BACKSPACE = 8;
+
+ void TextBox::Init(EventManager &eventManager)
 {
 	TextControl::Init(eventManager);
+
+	visibleText = textString;
 
 	eventManager.AddListener(this, FusionEngine::EVENT_ON_KEY_PRESSED);
 }
@@ -327,7 +331,30 @@ bool TextBox::HandleEvent(const IEventData &eventData)
 			{
 				if (isActive)
 				{
-					
+					char ch = static_cast<const OnKeyPressedEvent&>(eventData).key;
+
+					if ((int)ch == ASCII_BACKSPACE)
+					{
+						textString.pop_back();
+						int newTextLength = textString.length() - visibleText.length();
+						if (newTextLength >= 0)
+						{
+							for (int i = visibleText.length() - 1; i >= 1; i--)
+							{
+								visibleText[i] = visibleText[i - 1];
+							}
+							visibleText[0] = textString[newTextLength];
+						}
+					}
+					else
+					{
+						visibleText.pop_back();
+					}
+
+					while (text.GetWidth() > maxWidth && (int)ch != ASCII_BACKSPACE)
+					{
+						visibleText.erase(visibleText.begin());
+					}
 				}
 			}
 			break;

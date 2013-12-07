@@ -147,6 +147,12 @@ namespace FusionEngine
 	class Label : public TextControl
 	{
 	public:
+		Label(const std::string &newName, glm::ivec2 newPosition,
+			  int newWidth, int newHeight, int newWindowWidth, int newWindowHeight,
+			  glm::ivec2 newMargins)
+				: TextControl(newName, newPosition, newWidth, newHeight,
+				  newWindowWidth, newWindowHeight, newMargins) {}
+
 		virtual bool HandleEvent(const IEventData &eventData);
 	};
 
@@ -154,6 +160,12 @@ namespace FusionEngine
 	class Button : public TextControl
 	{
 	public:
+		Button(const std::string &newName, glm::ivec2 newPosition,
+			   int newWidth, int newHeight, int newWindowWidth, int newWindowHeight,
+			   glm::ivec2 newMargins)
+				: TextControl(newName, newPosition, newWidth, newHeight,
+				  newWindowWidth, newWindowHeight, newMargins) {}
+
 		virtual bool HandleEvent(const IEventData &eventData);
 	};
 
@@ -161,10 +173,20 @@ namespace FusionEngine
 	class TextBox : public TextControl
 	{
 	private:
+		std::string visibleText;
 		float maxWidth;
 
 	public:
+		TextBox(const std::string &newName, glm::ivec2 newPosition,
+				int newWidth, int newHeight, int newWindowWidth, int newWindowHeight,
+				glm::ivec2 newMargins)
+				: TextControl(newName, newPosition, newWidth, newHeight,
+							  newWindowWidth, newWindowHeight, newMargins),
+				  visibleText("") {}
+
 		virtual void Init(EventManager &eventManager);
+
+		virtual void Draw(glutil::MatrixStack &modelMatrix);
 
 		virtual bool HandleEvent(const IEventData &eventData);
 	};

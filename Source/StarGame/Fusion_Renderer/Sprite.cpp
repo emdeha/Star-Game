@@ -110,6 +110,14 @@ void Sprite2D::SetPosition(glm::vec2 newPosition)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void Sprite2D::SetDimensions(float newWidth, float newHeight)
+{
+	width = newWidth;
+	height = newHeight;
+
+	SetPosition(position);
+}
+
 void Sprite2D::Draw(glutil::MatrixStack &modelMatrix)
 {
 	glUseProgram(programId);
@@ -140,4 +148,13 @@ void Sprite2D::Draw(glutil::MatrixStack &modelMatrix)
 	}
 	glBindVertexArray(0);
 	glUseProgram(0);
+}
+
+float Sprite2D::GetWidth()
+{
+	return width;
+}
+float Sprite2D::GetHeight()
+{
+	return height;
 }

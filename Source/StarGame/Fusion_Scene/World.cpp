@@ -61,7 +61,10 @@ void World::Load(const std::string &guiLayoutFile,
 	FusionEngine::GUIAssetObject loadedGUI = guiLoader.LoadAssetObject("loader-files", guiLayoutFile);
 	guiLayouts = loadedGUI.GetAllLoadedLayouts();
 	*/
-	Layout testLayout = Layout(FE_LAYOUT_MENU);
+	std::shared_ptr<Layout> testLayout =
+		std::shared_ptr<Layout> (new Layout(FE_LAYOUT_MENU, displayData.windowWidth, displayData.windowHeight));
+	testLayout->Init(eventManager);
+	testLayout->SetBackgroundSprite("../data/images/background.png");
 	std::shared_ptr<Control> newGame = 
 		std::shared_ptr<Control>(new Control("newGame", glm::ivec2(100, 260), glm::ivec2(5, 5), 
 											 200, 50, displayData.windowWidth, displayData.windowHeight));
@@ -97,13 +100,15 @@ void World::Load(const std::string &guiLayoutFile,
 	quit->SetTextProperties("../data/fonts/AGENCYR.TTF", "Quit", glm::vec4(1.0f), 24);
 	quit->SetOnClickHandler(QuitHandler);
 	quit->Init("../data/images/b-middle-section.jpg", eventManager);
-	testLayout.AddControl(newGame);
-	testLayout.AddControl(loadGame);
-	testLayout.AddControl(saveGame);
-	testLayout.AddControl(options);
-	testLayout.AddControl(quit);
+	testLayout->AddControl(newGame);
+	testLayout->AddControl(loadGame);
+	testLayout->AddControl(saveGame);
+	testLayout->AddControl(options);
+	testLayout->AddControl(quit);
 
-	Layout saveLayout = Layout(FE_LAYOUT_SAVE);
+	std::shared_ptr<Layout> saveLayout = 
+		std::shared_ptr<Layout>(new Layout(FE_LAYOUT_SAVE));
+	saveLayout->Init(eventManager);
 	std::shared_ptr<Control> inSave =
 		std::shared_ptr<Control>(new Control("inSave", glm::ivec2(-50, 350), glm::ivec2(5, 10),
 								 100, 50, displayData.windowWidth, displayData.windowHeight));
@@ -111,8 +116,10 @@ void World::Load(const std::string &guiLayoutFile,
 	inSave->SetTextProperties("../data/fonts/AGENCYR.TTF", "IN SAVE", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 24);
 	inSave->SetOnClickHandler(BackHandler);
 	inSave->Init("../data/images/b-middle-section.jpg", eventManager);
-	saveLayout.AddControl(inSave);
-	Layout loadLayout = Layout(FE_LAYOUT_LOAD);
+	saveLayout->AddControl(inSave);
+	std::shared_ptr<Layout> loadLayout = 
+		std::shared_ptr<Layout>(new Layout(FE_LAYOUT_LOAD));
+	loadLayout->Init(eventManager);
 	std::shared_ptr<Control> inLoad =
 		std::shared_ptr<Control>(new Control("inLoad", glm::ivec2(-50, 350), glm::ivec2(5, 10),
 								 100, 50, displayData.windowWidth, displayData.windowHeight));
@@ -120,8 +127,10 @@ void World::Load(const std::string &guiLayoutFile,
 	inLoad->SetTextProperties("../data/fonts/AGENCYR.TTF", "IN LOAD", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 24);
 	inLoad->SetOnClickHandler(BackHandler);
 	inLoad->Init("../data/images/b-middle-section.jpg", eventManager);
-	loadLayout.AddControl(inLoad);
-	Layout optionsLayout = Layout(FE_LAYOUT_OPTIONS);
+	loadLayout->AddControl(inLoad);
+	std::shared_ptr<Layout> optionsLayout =
+		std::shared_ptr<Layout>(new Layout(FE_LAYOUT_OPTIONS));
+	optionsLayout->Init(eventManager);
 	std::shared_ptr<Control> inOptions =
 		std::shared_ptr<Control>(new Control("inOptions", glm::ivec2(-50, 350), glm::ivec2(5, 10),
 								 100, 50, displayData.windowWidth, displayData.windowHeight));
@@ -129,8 +138,10 @@ void World::Load(const std::string &guiLayoutFile,
 	inOptions->SetTextProperties("../data/fonts/AGENCYR.TTF", "IN OPTIONS", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 24);
 	inOptions->SetOnClickHandler(BackHandler);
 	inOptions->Init("../data/images/b-middle-section.jpg", eventManager);
-	optionsLayout.AddControl(inOptions);
-	Layout inGameLayout = Layout(FE_LAYOUT_GAME);
+	optionsLayout->AddControl(inOptions);
+	std::shared_ptr<Layout> inGameLayout = 
+		std::shared_ptr<Layout>(new Layout(FE_LAYOUT_GAME));
+	inGameLayout->Init(eventManager);
 	guiLayouts.insert(std::make_pair(FE_LAYOUT_MENU, testLayout));
 	guiLayouts.insert(std::make_pair(FE_LAYOUT_GAME, inGameLayout));
 	guiLayouts.insert(std::make_pair(FE_LAYOUT_SAVE, saveLayout));
@@ -169,9 +180,9 @@ void World::Render()
 	// Render GUI
 	for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
 	{
-		if ((*layout).second.IsSet())
+		if ((*layout).second->IsSet())
 		{
-			(*layout).second.Draw(displayData.modelMatrix);
+			(*layout).second->Draw(displayData.modelMatrix);
 			
 			if ((*layout).first == FE_LAYOUT_GAME)
 			{
@@ -188,11 +199,11 @@ void World::SetLayout(LayoutType layoutToSet)
 	{
 		if ((*layout).first == layoutToSet)
 		{
-			(*layout).second.Set(true);
+			(*layout).second->Set(true);
 		}
 		else 
 		{
-			(*layout).second.Set(false);
+			(*layout).second->Set(false);
 		}
 	}
 }

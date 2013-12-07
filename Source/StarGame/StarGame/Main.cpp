@@ -63,7 +63,7 @@ void HandleMouse()
 		auto guiLayouts = GetWorld().GetLayouts();
 		for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
 		{
-			auto layoutControls = (*layout).second.GetControls();
+			auto layoutControls = (*layout).second->GetControls();
 			for (auto control = layoutControls.begin(); control != layoutControls.end(); ++control)
 			{
 				if ((*control)->IsMouseOn(GetWorld().GetMouse().GetCurrentPosition()))

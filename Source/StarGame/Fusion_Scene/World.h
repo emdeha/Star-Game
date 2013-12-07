@@ -62,7 +62,7 @@ namespace FusionEngine
 	class World : public IEventListener
 	{
 	private:
-		typedef std::map<LayoutType, Layout> LayoutsMap;
+		typedef std::map<LayoutType, std::shared_ptr<Layout>> LayoutsMap;
 		
 		EventManager eventManager;
 		ShaderManager shaderManager;

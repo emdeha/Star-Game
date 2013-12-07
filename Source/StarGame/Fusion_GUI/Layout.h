@@ -71,6 +71,7 @@ namespace FusionEngine
 		void Set(bool newIsSet);
 		void SetBackgroundSprite(const std::string &spriteFile);
 
+		void DeactivateAllControls();
 		//void SetControlOnClickHandler(const std::string &controlName, 
 		//							  OnClickHandler onClickHandler);
 

@@ -106,6 +106,7 @@ namespace FusionEngine
 
 		// WARN: If there's no layout of this type, all layouts will be unset!!!
 		void SetLayout(LayoutType layoutToSet);
+		Layout &GetCurrentLayout();
 
 		virtual bool HandleEvent(const IEventData &eventData);
 	};

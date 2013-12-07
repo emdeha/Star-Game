@@ -192,6 +192,17 @@ void World::SetLayout(LayoutType layoutToSet)
 	}
 }
 
+Layout &World::GetCurrentLayout()
+{
+	for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
+	{
+		if ((*layout).second->IsSet())
+		{
+			return *(*layout).second.get();
+		}
+	}
+}
+
 bool World::HandleEvent(const IEventData &eventData)
 {
 	EventType type = eventData.GetType();

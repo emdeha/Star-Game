@@ -61,6 +61,14 @@ void Layout::SetBackgroundSprite(const std::string &spriteFile)
 	}
 }
 
+void Layout::DeactivateAllControls()
+{
+	for (auto control = controls.begin(); control != controls.end(); ++control)
+	{
+		(*control)->SetActive(false);
+	}
+}
+
 /*
 void Layout::SetControlOnClickHandler(const std::string &controlName,
 									  OnClickHandler onClickHandler)

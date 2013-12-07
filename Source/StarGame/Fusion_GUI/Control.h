@@ -28,9 +28,6 @@
 
 namespace FusionEngine
 {
-	// TODO: Maybe not a good decision
-	typedef void (*OnClickHandler)();
-
 	enum RelativityOption
 	{
 		FE_RELATIVE_TOP_LEFT,
@@ -45,7 +42,6 @@ namespace FusionEngine
 	{
 	protected:
 		//OnClickHandler handleOnClick;
-
 		std::string name; // TODO: integer ID in the future
 
 		glm::ivec2 initialPosition;
@@ -63,6 +59,7 @@ namespace FusionEngine
 		Sprite2D background;
 		bool hasBackground;
 		bool isVisible;
+		bool isActive;
 		//Text text;
 
 		//std::string textFont;
@@ -88,6 +85,7 @@ namespace FusionEngine
 
 		void SetRelativity(RelativityOption relativeTo);
 		void SetVisibility(bool newIsVisible);
+		void SetActive(bool newIsActive);
 		void SetBackground(const std::string &backgroundFileName);
 		//void SetTextProperties(const std::string &newTextFont, const std::string &newTextString,
 		//					   glm::vec4 newTextColor, int newTextSize);
@@ -106,6 +104,8 @@ namespace FusionEngine
 		std::string GetName();
 	};
 
+	// TODO: Maybe not a good decision
+	typedef void (*OnClickHandler)(Control*);
 	
 	class TextControl : public Control
 	{

@@ -39,6 +39,11 @@ void Control::SetVisibility(bool newIsVisible)
 	isVisible = newIsVisible;
 }
 
+void Control::SetActive(bool newIsActive)
+{
+	isActive = newIsActive;
+}
+
 void Control::SetBackground(const std::string &backgroundFileName)
 {
 	background = Sprite2D(glm::vec2(position), width, height);
@@ -251,7 +256,7 @@ bool TextControl::HandleEvent(const IEventData &eventData)
 				//std::printf("Control ==* %s *== clicked!", name.c_str());
 				if (handleOnClick != nullptr)
 				{
-					handleOnClick();
+					handleOnClick(this);
 				}
 				else
 				{
@@ -320,9 +325,10 @@ bool TextBox::HandleEvent(const IEventData &eventData)
 	{
 		case EVENT_ON_KEY_PRESSED:
 			{
-				textPosition = glm::vec2(position.x - margins.x,
-										 position.y - margins.y);
-				text.SetPosition(textPosition, windowWidth, windowHeight);
+				if (isActive)
+				{
+					
+				}
 			}
 			break;
 	}

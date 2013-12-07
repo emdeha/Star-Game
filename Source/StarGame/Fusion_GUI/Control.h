@@ -149,6 +149,25 @@ namespace FusionEngine
 	public:
 		virtual bool HandleEvent(const IEventData &eventData);
 	};
+
+	
+	class Button : public TextControl
+	{
+	public:
+		virtual bool HandleEvent(const IEventData &eventData);
+	};
+
+
+	class TextBox : public TextControl
+	{
+	private:
+		float maxWidth;
+
+	public:
+		virtual void Init(EventManager &eventManager);
+
+		virtual bool HandleEvent(const IEventData &eventData);
+	};
 }
 
 

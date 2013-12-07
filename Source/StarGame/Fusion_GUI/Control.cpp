@@ -274,5 +274,58 @@ bool TextControl::HandleEvent(const IEventData &eventData)
 /////////////
 bool Label::HandleEvent(const IEventData &eventData)
 {
-	return Control::HandleEvent(eventData);
+	Control::HandleEvent(eventData);
+
+	EventType type = eventData.GetType();
+	switch(type)
+	{
+		case EVENT_ON_RESHAPE:
+			{
+				textPosition = glm::vec2(position.x - margins.x,
+										 position.y - margins.y);
+				text.SetPosition(textPosition, windowWidth, windowHeight);
+			}
+			break;
+	}
+
+	return false;
+}
+
+
+//////////////
+//  Button  //
+//////////////
+bool Button::HandleEvent(const IEventData &eventData)
+{
+	return TextControl::HandleEvent(eventData);
+}
+
+
+///////////////
+//  TextBox  //
+///////////////
+void TextBox::Init(EventManager &eventManager)
+{
+	TextControl::Init(eventManager);
+
+	eventManager.AddListener(this, FusionEngine::EVENT_ON_KEY_PRESSED);
+}
+
+bool TextBox::HandleEvent(const IEventData &eventData)
+{
+	TextControl::HandleEvent(eventData);
+
+	EventType type = eventData.GetType();
+	switch(type)
+	{
+		case EVENT_ON_KEY_PRESSED:
+			{
+				textPosition = glm::vec2(position.x - margins.x,
+										 position.y - margins.y);
+				text.SetPosition(textPosition, windowWidth, windowHeight);
+			}
+			break;
+	}
+
+	return false;
 }

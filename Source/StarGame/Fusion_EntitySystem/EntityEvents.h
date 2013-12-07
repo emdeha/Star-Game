@@ -12,12 +12,13 @@ namespace FusionEngine
 	enum 
 	{
 		EVENT_CREATE_ENTITY = 1,
-		EVENT_DESTROY_ENTITY = 2,
-		EVENT_INSERT_COMPONENT = 3,
-		EVENT_REMOVE_COMPONENT = 4,
+		EVENT_DESTROY_ENTITY,
+		EVENT_INSERT_COMPONENT,
+		EVENT_REMOVE_COMPONENT,
 		
-		EVENT_ON_CLICK = 5,
-		EVENT_ON_RESHAPE = 6,
+		EVENT_ON_CLICK,
+		EVENT_ON_RESHAPE,
+		EVENT_ON_KEY_PRESSED,
 	};
 
 	struct EntityEvent : public IEventData
@@ -54,6 +55,14 @@ namespace FusionEngine
 		OnReshapeEvent(EventType eventType, int newWindowWidth, int newWindowHeight) 
 			: IEventData(eventType),
 			  windowWidth(newWindowWidth), windowHeight(newWindowHeight) {}
+	};
+
+	struct OnKeyPressedEvent : public IEventData
+	{
+		char key;
+
+		OnKeyPressedEvent(EventType eventType, char newKey)
+			: IEventData(eventType), key(newKey) {}
 	};
 }
 

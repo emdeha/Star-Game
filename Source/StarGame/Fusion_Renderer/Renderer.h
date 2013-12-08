@@ -19,10 +19,12 @@
 #define FE_RENDERER_H
 
 
+#pragma warning(push, 0)
 #include "../glsdk/glm/glm.hpp"
 #include "../glsdk/glload/gl_3_3.h"
 #include "../glsdk/glutil/glutil.h"
 #include <vector>
+#pragma warning(pop)
 
 #include "../Fusion_EntitySystem/Entity.h"
 #include "../Fusion_AssetLoader/AssetLoader.h"

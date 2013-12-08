@@ -19,7 +19,9 @@
 #define FE_SPRITE_H
 
 
+#pragma warning(push, 0)
 #include <memory>
+#pragma warning(pop)
 
 #include "Texture.h"
 
@@ -63,11 +65,11 @@ namespace FusionEngine
 		void SetDimensions(float newWidth, float newHeight);
 
 		// TODO: Should be handled by the Fusion_Renderer
-		void Draw(glutil::MatrixStack &modelMatrix);
+		void Draw(glutil::MatrixStack &modelMatrix) const;
 
 	public:
-		float GetWidth();
-		float GetHeight();
+		float GetWidth() const;
+		float GetHeight() const;
 	};
 }
 

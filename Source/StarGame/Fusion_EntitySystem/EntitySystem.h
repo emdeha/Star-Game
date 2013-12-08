@@ -5,7 +5,11 @@
 #include "Event.h"
 #include "Entity.h"
 #include "ComponentType.h"
+
+#pragma warning(push, 0)
 #include <set>
+#pragma warning(pop)
+
 
 namespace FusionEngine
 {

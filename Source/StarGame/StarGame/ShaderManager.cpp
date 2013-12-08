@@ -17,10 +17,12 @@
 
 #include "ShaderManager.h"
 
+#pragma warning(push, 0)
 #include <vector>
 #include "../glsdk/glload/_int_gl_3_3.h"
 
 #include "framework.h"
+#pragma warning(pop)
 #include "../framework/ErrorAPI.h"
 
 using namespace FusionEngine;

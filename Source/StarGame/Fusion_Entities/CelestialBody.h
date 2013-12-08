@@ -19,11 +19,13 @@
 #define FE_CELESTIAL_BODY_H
 
 
+#pragma warning(push, 0)
 #include <memory>
 #include <vector>
 
 #include "../framework/Timer.h"
 #include "../glsdk/glload/gl_3_3.h"
+#pragma warning(pop)
 
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Fusion_EntitySystem/Event.h"

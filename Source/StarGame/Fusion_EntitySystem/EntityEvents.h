@@ -49,10 +49,10 @@ namespace FusionEngine
 
 	struct OnReshapeEvent : public IEventData
 	{
-		int windowWidth;
-		int windowHeight;
+		unsigned short windowWidth;
+		unsigned short windowHeight;
 
-		OnReshapeEvent(EventType eventType, int newWindowWidth, int newWindowHeight) 
+		OnReshapeEvent(EventType eventType, unsigned short newWindowWidth, unsigned short newWindowHeight) 
 			: IEventData(eventType),
 			  windowWidth(newWindowWidth), windowHeight(newWindowHeight) {}
 	};

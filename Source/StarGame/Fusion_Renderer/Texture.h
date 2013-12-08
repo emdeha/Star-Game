@@ -19,11 +19,13 @@
 #define FE_TEXTURE_H
 
 
+#pragma warning(push, 0)
 #include "../glsdk/glload/gl_3_3.h"
 #include "../glsdk/glutil/glutil.h"
 #include "../glsdk/glload/gll.hpp"
 
 #include "../freeimage/FreeImage.h"
+#pragma warning(pop)
 
 
 class Texture2D
@@ -38,8 +40,8 @@ public:
 	bool Load(const std::string &fileName,
 			  GLuint store, GLuint uploadFormat, GLuint componentType, bool repeat);
 
-	void Bind(GLenum textureUnit);
-	void Unbind();
+	void Bind(GLenum textureUnit) const;
+	void Unbind() const;
 };
 
 

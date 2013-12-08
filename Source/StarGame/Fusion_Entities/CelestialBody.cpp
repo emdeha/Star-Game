@@ -25,7 +25,9 @@
 #include "../Fusion_Scene/Scene.h"
 #include "../Fusion_Scene/World.h"
 
+#pragma warning(push, 0)
 #include <time.h>
+#pragma warning(pop)
 
 
 using namespace FusionEngine;

@@ -85,13 +85,13 @@ bool Texture2D::Load(const std::string &fileName,
 	return true;
 }
 
-void Texture2D::Bind(GLenum textureUnit)
+void Texture2D::Bind(GLenum textureUnit) const
 {
     glActiveTexture(textureUnit);
     glBindTexture(GL_TEXTURE_2D, textureObject);
 }
 
-void Texture2D::Unbind()
+void Texture2D::Unbind() const
 {
     glBindTexture(GL_TEXTURE_2D, 0);
 }

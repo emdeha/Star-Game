@@ -19,11 +19,13 @@
 #define SHADER_MANAGER_H
 
 
+#pragma warning(push, 0)
 #include <map>
 #include <vector>
 #include <string>
 
 #include "../ProgramData/ProgramData.h"
+#pragma warning(pop)
 
 
 

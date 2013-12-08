@@ -19,8 +19,10 @@
 #define FE_LAYOUT_H
 
 
+#pragma warning(push, 0)
 #include <vector>
 #include <memory>
+#pragma warning(pop)
 
 #include "Control.h"
 
@@ -55,25 +57,23 @@ namespace FusionEngine
 		Layout(LayoutType newType)
 			: type(newType), isSet(false), isBackgroundSet(false),
 			  background(glm::vec2(), 0.0f, 0.0f) {}
-		Layout(LayoutType newType, float backgroundWidth, float backgroundHeight)
+		Layout(LayoutType newType, unsigned short backgroundWidth, unsigned short backgroundHeight)
 			: type(newType), isSet(false), isBackgroundSet(false),
 			  background(glm::vec2(backgroundWidth, backgroundHeight), backgroundWidth, backgroundHeight) {}
 
 		void Init(EventManager &eventManager);
 
 		void AddControl(const std::shared_ptr<Control> newControl);
-		std::vector<std::shared_ptr<Control>> GetControls();
+		std::vector<std::shared_ptr<Control>> GetControls() const;
 
-		void Draw(glutil::MatrixStack &modelMatrix);
+		void Draw(glutil::MatrixStack &modelMatrix) const;
 
 	public:
-		bool IsSet();
+		bool IsSet() const;
 		void Set(bool newIsSet);
 		void SetBackgroundSprite(const std::string &spriteFile);
 
 		void DeactivateAllControls();
-		//void SetControlOnClickHandler(const std::string &controlName, 
-		//							  OnClickHandler onClickHandler);
 
 		virtual bool HandleEvent(const IEventData &eventData);
 	};

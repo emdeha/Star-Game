@@ -19,8 +19,10 @@
 #define FE_STRUCTS_H
 
 
+#pragma warning(push, 0)
 #include <vector>
 #include "../glsdk/glm/glm.hpp"
+#pragma warning(pop)
 
 
 struct PatrolRoute

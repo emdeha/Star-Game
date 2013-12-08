@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "EventManager.h"
+
+#pragma warning(push, 0)
 #include <assert.h>
+#pragma warning(pop)
 
 
 using namespace FusionEngine;

@@ -18,7 +18,9 @@
 #ifndef DISPLAY_DATA_H
 #define DISPLAY_DATA_H
 
+#pragma warning(push, 0)
 #include "../glsdk/glm/glm.hpp"
+#pragma warning(pop)
 
 struct DisplayData
 {

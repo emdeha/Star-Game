@@ -19,11 +19,13 @@
 #define FE_FUSION_SYSTEMS_H
 
 
+#pragma warning(push, 0)
 #include "../glsdk/glm/glm.hpp"
 #include "../glsdk/glload/gl_3_3.h"
 #include "../glsdk/glutil/glutil.h"
 #include "../glsdk/glload/gll.hpp"
 #include <algorithm>
+#pragma warning(pop)
 
 #include "../Fusion_EntitySystem/EntityManager.h"
 #include "../Fusion_EntitySystem/EntityEvents.h"

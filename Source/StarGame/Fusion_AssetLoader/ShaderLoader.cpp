@@ -1,10 +1,13 @@
 #include "stdafx.h"
 #include "AssetLoader.h"
 
+#pragma warning(push, 0)
 #include <sstream> 
 
 #include "../glsdk/glload/gl_3_3.h"
 #include "../glsdk/glutil/glutil.h"
+#pragma warning(pop)
+
 #include "../framework/framework.h"
 #include "../framework/ErrorAPI.h"
 

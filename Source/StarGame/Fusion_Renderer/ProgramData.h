@@ -19,10 +19,12 @@
 #define FE_PROGRAM_DATA_H
 
 
+#pragma warning(push, 0)
 #include <map>
 #include <sstream>
 
 #include "../glsdk/glload/gl_3_3.h"
+#pragma warning(pop)
 
 #include "../framework/ErrorAPI.h"
 #include "ShaderEnums.h"

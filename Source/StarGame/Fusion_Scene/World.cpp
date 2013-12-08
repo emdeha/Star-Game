@@ -178,7 +178,6 @@ void World::Load(const std::string &guiLayoutFile,
 
 void World::Render()
 {
-	// Render GUI
 	for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
 	{
 		if ((*layout).second->IsSet())
@@ -218,6 +217,9 @@ Layout &World::GetCurrentLayout()
 			return *(*layout).second.get();
 		}
 	}
+
+	HandleUnexpectedError("no current layout", __LINE__, __FILE__);
+	return *(*guiLayouts.begin()).second.get();
 }
 
 bool World::HandleEvent(const IEventData &eventData)

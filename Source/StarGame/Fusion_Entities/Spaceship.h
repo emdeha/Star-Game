@@ -19,7 +19,9 @@
 #define FE_SPACESHIP_H
 
 
+#pragma warning(push, 0)
 #include "../glsdk/glm/glm.hpp"
+#pragma warning(pop)
 
 #include "States.h"
 #include "Structs.h"

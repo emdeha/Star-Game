@@ -23,6 +23,7 @@
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Fusion_Renderer/ShaderManager.h"
 #include "../Fusion_GUI/Layout.h"
+#pragma warning(push, 0)
 #include "../Mouse/Mouse.h" // TODO: Replace with Fusion_Mouse
 #include "../Camera/TopDownCamera.h" // TODO: Replace with Fusion_Camera
 #include "../Entities/Lights.h" // TODO: Refactor
@@ -31,6 +32,7 @@
 
 #include <memory>
 #include <map>
+#pragma warning(pop)
 
 
 namespace FusionEngine

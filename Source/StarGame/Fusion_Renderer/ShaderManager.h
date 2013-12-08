@@ -19,12 +19,15 @@
 #define FE_SHADER_MANAGER_H
 
 
+#pragma warning(push, 0)
 #include <map>
 #include <string>
 
 #include "../glsdk/glload/gl_3_3.h"
+#pragma warning(pop)
 
 #include "ProgramData.h"
+
 
 namespace FusionEngine
 {

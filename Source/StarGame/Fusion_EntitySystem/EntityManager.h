@@ -4,8 +4,12 @@
 
 #include "Entity.h"
 #include "ComponentType.h"
+
+#pragma warning(push, 0)
 #include <vector>
 #include <list>
+#pragma warning(pop)
+
 
 namespace FusionEngine
 {

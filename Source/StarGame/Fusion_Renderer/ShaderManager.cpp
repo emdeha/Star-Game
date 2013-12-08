@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "ShaderManager.h"
 
+#pragma warning(push, 0)
 #include <sstream>
 
 #include "../framework/framework.h"
+#pragma warning(pop)
 
 #include "../framework/ErrorAPI.h"
 

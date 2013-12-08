@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "Scene.h"
 
+#pragma warning(push, 0)
 #include <algorithm>
 #include <assert.h>
+#pragma warning(pop)
 
 
 using namespace FusionEngine;

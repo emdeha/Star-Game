@@ -38,7 +38,7 @@ void Control::SetVisibility(bool newIsVisible)
 {
 	isVisible = newIsVisible;
 }
-bool Control::IsVisible()
+bool Control::IsVisible() const
 {
 	return isVisible;
 }
@@ -55,44 +55,13 @@ void Control::SetBackground(const std::string &backgroundFileName)
 
 	hasBackground = true;
 }
-/*
-void Control::SetTextProperties(const std::string &newTextFont, const std::string &newTextString,
-								glm::vec4 newTextColor, int newTextSize)
-{
-	textFont = newTextFont;
-	textString = newTextString;
-	textColor = newTextColor;
-	textSize = newTextSize;
-	textPosition = glm::vec2(position.x - margins.x,
-							 position.y - margins.y);
-}
-*/
-/*
-void Control::SetOnClickHandler(OnClickHandler onClickHandler)
-{
-	handleOnClick = onClickHandler;
-}
-*/
 
 void Control::Init(EventManager &eventManager)
 {
-
-	//if (textString == "" || textFont == ""  || textSize == -1 || 
-	//	textColor == glm::vec4(-1.0f) || textPosition == glm::vec2(-1.0f))
-	//{
-	//	std::string errorMessage = "one or more of the text\'s properties are not initialized ";
-	//	errorMessage += "Control: ==* " + name + " *=="; // TODO: textString should be controlName
-	//	HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
-	//	return;
-	//}
-	//text = Text(textFont, textString, textPosition, textColor, textSize);
-	//text.Init(windowWidth, windowHeight); 
-
 	eventManager.AddListener(this, FusionEngine::EVENT_ON_RESHAPE);
-	//eventManager.AddListener(this, FusionEngine::EVENT_ON_CLICK);
 }
 
-void Control::Draw(glutil::MatrixStack &modelMatrix)
+void Control::Draw(glutil::MatrixStack &modelMatrix) const
 {
 	if (isVisible && hasBackground)
 	{
@@ -103,13 +72,12 @@ void Control::Draw(glutil::MatrixStack &modelMatrix)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		background.Draw(identityMatrix);
-		//text.Draw();
 
 		glDisable(GL_BLEND);
 	}
 }
 
-bool Control::IsMouseOn(glm::ivec2 mouseCoordinates_windowSpace)
+bool Control::IsMouseOn(glm::ivec2 mouseCoordinates_windowSpace) const
 {
 	mouseCoordinates_windowSpace.x = windowWidth - mouseCoordinates_windowSpace.x;
 
@@ -142,40 +110,14 @@ bool Control::HandleEvent(const IEventData &eventData)
 			{
 				background.SetPosition(glm::vec2(position));
 			}
-			//textPosition = glm::vec2(position.x - margins.x,
-			//						 position.y - margins.y);
-			//text.SetPosition(textPosition, windowWidth, windowHeight);
 		}
 		break;
-		/* 
-	case EVENT_ON_CLICK:
-		{
-			const OnClickEvent &data = static_cast<const OnClickEvent&>(eventData);
-
-			if (data.isLeftButtonDown && data.objectId == name)
-			{
-				//std::printf("Control ==* %s *== clicked!", name.c_str());
-				if (handleOnClick != nullptr)
-				{
-					handleOnClick();
-				}
-				else
-				{
-					std::string errorMessage = "no OnClick handler for Control ==* ";
-					errorMessage += name + " *==";
-					HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
-					return false;
-				}
-			}
-		}
-		break;
-		*/
 	}
 	
 	return false;
 }
 
-std::string Control::GetName()
+std::string Control::GetName() const
 {
 	return name;
 }
@@ -189,7 +131,7 @@ void TextControl::SetOnClickHandler(OnClickHandler onClickHandler)
 	handleOnClick = onClickHandler;
 }
 void TextControl::SetTextProperties(const std::string &newTextFont, const std::string &newTextString,
-									glm::vec4 newTextColor, int newTextSize)
+									glm::vec4 newTextColor, unsigned short newTextSize)
 {
 	textFont = newTextFont;
 	textString = newTextString;
@@ -207,7 +149,7 @@ void TextControl::Init(EventManager &eventManager)
 		textColor == glm::vec4(-1.0f) || textPosition == glm::vec2(-1.0f))
 	{
 		std::string errorMessage = "one or more of the text\'s properties are not initialized ";
-		errorMessage += "Control: ==* " + name + " *=="; // TODO: textString should be controlName
+		errorMessage += "Control: ==* " + name + " *==";
 		HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 		return;
 	}
@@ -217,7 +159,7 @@ void TextControl::Init(EventManager &eventManager)
 	eventManager.AddListener(this, FusionEngine::EVENT_ON_CLICK);
 }
 
-void TextControl::Draw(glutil::MatrixStack &modelMatrix)
+void TextControl::Draw(glutil::MatrixStack &modelMatrix) const
 {
 	if (isVisible)
 	{
@@ -257,7 +199,6 @@ bool TextControl::HandleEvent(const IEventData &eventData)
 
 			if (data.isLeftButtonDown && data.objectId == name)
 			{
-				//std::printf("Control ==* %s *== clicked!", name.c_str());
 				if (handleOnClick != nullptr)
 				{
 					handleOnClick(this);

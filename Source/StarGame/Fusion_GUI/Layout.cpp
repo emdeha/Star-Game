@@ -16,12 +16,12 @@ void Layout::AddControl(const std::shared_ptr<Control> newControl)
 {
 	controls.push_back(newControl);
 }
-std::vector<std::shared_ptr<Control>> Layout::GetControls()
+std::vector<std::shared_ptr<Control>> Layout::GetControls() const
 {
 	return controls;
 }
 
-void Layout::Draw(glutil::MatrixStack &modelMatrix)
+void Layout::Draw(glutil::MatrixStack &modelMatrix) const
 {
 	if (isBackgroundSet)
 	{
@@ -36,7 +36,7 @@ void Layout::Draw(glutil::MatrixStack &modelMatrix)
 	}
 }
 
-bool Layout::IsSet()
+bool Layout::IsSet() const
 {
 	return isSet;
 }
@@ -72,20 +72,6 @@ void Layout::DeactivateAllControls()
 		(*control)->SetActive(false);
 	}
 }
-
-/*
-void Layout::SetControlOnClickHandler(const std::string &controlName,
-									  OnClickHandler onClickHandler)
-{
-	for (auto control = controls.begin(); control != controls.end(); ++control)
-	{
-		if ((*control)->GetName() == controlName)
-		{
-			(*control)->SetOnClickHandler(onClickHandler);
-		}
-	}
-}
-*/
 
 bool Layout::HandleEvent(const IEventData &eventData)
 {

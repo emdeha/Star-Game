@@ -19,7 +19,9 @@
 #define FE_CONTROL_H
 
 
+#pragma warning(push, 0)
 #include "../glsdk/glm/glm.hpp"
+#pragma warning(pop)
 
 #include "../Fusion_EntitySystem/EventManager.h"
 #include "../Fusion_Renderer/Sprite.h"
@@ -41,68 +43,53 @@ namespace FusionEngine
 	class Control : public IEventListener
 	{
 	protected:
-		//OnClickHandler handleOnClick;
 		std::string name; // TODO: integer ID in the future
 
 		glm::ivec2 initialPosition;
 		glm::ivec2 position;
-		// glm::ivec2 margins;
 
 		RelativityOption currentRelativity;
 
-		int width;
-		int height;
+		unsigned short width;
+		unsigned short height;
 
-		int windowWidth;
-		int windowHeight;
+		unsigned short windowWidth;
+		unsigned short windowHeight;
 
 		Sprite2D background;
 		bool hasBackground;
 		bool isVisible;
 		bool isActive;
-		//Text text;
-
-		//std::string textFont;
-		//std::string textString;
-		//glm::vec4 textColor;
-		//glm::vec2 textPosition;
-		//int textSize;
 
 	public:
 		virtual ~Control() {}
 
 		Control(const std::string &newName,
-				glm::ivec2 newPosition, //glm::ivec2 newMargins, 
-				int newWidth, int newHeight,
-				int newWindowWidth, int newWindowHeight)
-			: name(newName), //handleOnClick(nullptr),
-			  position(newPosition), initialPosition(newPosition), /*margins(newMargins),*/ 
-			  currentRelativity(FE_RELATIVE_TOP_RIGHT),
-			  width(newWidth), height(newHeight), 
+				glm::ivec2 newPosition,
+				unsigned short newWidth, unsigned short newHeight,
+				unsigned short newWindowWidth, unsigned short newWindowHeight)
+			: name(newName), position(newPosition), initialPosition(newPosition),
+			  currentRelativity(FE_RELATIVE_TOP_RIGHT), width(newWidth), height(newHeight), 
 			  windowWidth(newWindowWidth), windowHeight(newWindowHeight),
 			  isVisible(true), hasBackground(false) {}
-			  //textString(""), textFont(""), textColor(-1.0f), textPosition(-1.0f), textSize(-1) {}
-
-		void SetRelativity(RelativityOption relativeTo);
-		void SetVisibility(bool newIsVisible);
-		bool IsVisible();
-		void SetActive(bool newIsActive);
-		void SetBackground(const std::string &backgroundFileName);
-		//void SetTextProperties(const std::string &newTextFont, const std::string &newTextString,
-		//					   glm::vec4 newTextColor, int newTextSize);
-
-		//void SetOnClickHandler(OnClickHandler onClickHandler);
 
 		virtual void Init(EventManager &eventManager);
 
-		virtual void Draw(glutil::MatrixStack &modelMatrix);
+		virtual void Draw(glutil::MatrixStack &modelMatrix) const;
 
-		bool IsMouseOn(glm::ivec2 mouseCoordinates_windowSpace);
+		bool IsMouseOn(glm::ivec2 mouseCoordinates_windowSpace) const;
 
 		virtual bool HandleEvent(const IEventData &eventData);
 
 	public:
-		std::string GetName();
+		std::string GetName() const;
+
+		void SetVisibility(bool newIsVisible);
+		bool IsVisible() const;
+		void SetActive(bool newIsActive);
+
+		void SetRelativity(RelativityOption relativeTo);
+		void SetBackground(const std::string &backgroundFileName);
 	};
 
 	// TODO: Maybe not a good decision
@@ -125,7 +112,8 @@ namespace FusionEngine
 
 	public:
 		TextControl(const std::string &newName, glm::ivec2 newPosition,
-					int newWidth, int newHeight, int newWindowWidth, int newWindowHeight,
+					unsigned short newWidth, unsigned short newHeight,
+					unsigned short newWindowWidth, unsigned short newWindowHeight,
 					glm::ivec2 newMargins)
 				: Control(newName, newPosition, newWidth, newHeight, 
 						  newWindowWidth, newWindowHeight),
@@ -135,11 +123,11 @@ namespace FusionEngine
 
 		void SetOnClickHandler(OnClickHandler onClickHandler);
 		void SetTextProperties(const std::string &newTextFont, const std::string &newTextString,
-							   glm::vec4 newTextColor, int newTextSize);
+							   glm::vec4 newTextColor, unsigned short newTextSize);
 
 		virtual void Init(EventManager &eventManager);
 
-		virtual void Draw(glutil::MatrixStack &modelMatrix);
+		virtual void Draw(glutil::MatrixStack &modelMatrix) const;
 
 		virtual bool HandleEvent(const IEventData &eventData);
 	};
@@ -149,7 +137,8 @@ namespace FusionEngine
 	{
 	public:
 		Label(const std::string &newName, glm::ivec2 newPosition,
-			  int newWidth, int newHeight, int newWindowWidth, int newWindowHeight,
+			  unsigned short newWidth, unsigned short newHeight, 
+			  unsigned short newWindowWidth, unsigned short newWindowHeight,
 			  glm::ivec2 newMargins)
 				: TextControl(newName, newPosition, newWidth, newHeight,
 				  newWindowWidth, newWindowHeight, newMargins) {}
@@ -162,7 +151,8 @@ namespace FusionEngine
 	{
 	public:
 		Button(const std::string &newName, glm::ivec2 newPosition,
-			   int newWidth, int newHeight, int newWindowWidth, int newWindowHeight,
+			   unsigned short newWidth, unsigned short newHeight, 
+			   unsigned short newWindowWidth, unsigned short newWindowHeight,
 			   glm::ivec2 newMargins)
 				: TextControl(newName, newPosition, newWidth, newHeight,
 				  newWindowWidth, newWindowHeight, newMargins) {}
@@ -179,7 +169,8 @@ namespace FusionEngine
 
 	public:
 		TextBox(const std::string &newName, glm::ivec2 newPosition,
-				int newWidth, int newHeight, int newWindowWidth, int newWindowHeight,
+				unsigned short newWidth, unsigned short newHeight, 
+				unsigned short newWindowWidth, unsigned short newWindowHeight,
 				glm::ivec2 newMargins, float newMaxWidth)
 				: TextControl(newName, newPosition, newWidth, newHeight,
 							  newWindowWidth, newWindowHeight, newMargins),
@@ -196,8 +187,8 @@ namespace FusionEngine
 	public:
 		ImageBox(const std::string &newName,
 				 glm::ivec2 newPosition,
-				 int newWidth, int newHeight,
-				 int newWindowWidth, int newWindowHeight)
+				 unsigned short newWidth, unsigned short newHeight,
+				 unsigned short newWindowWidth, unsigned short newWindowHeight)
 				 : Control(newName, newPosition, newWidth, newHeight, 
 						   newWindowWidth, newWindowHeight) {}
 

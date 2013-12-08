@@ -23,6 +23,7 @@
 /// @}
 
 
+#pragma warning(push, 0)
 #include <string>
 #include <sstream>
 #include <vector>
@@ -47,6 +48,7 @@
 
 #include "../ProgramData/ProgramData.h"
 #include "../Audio/Audio.h"
+#pragma warning(pop)
 
 
 #ifdef LOAD_X11

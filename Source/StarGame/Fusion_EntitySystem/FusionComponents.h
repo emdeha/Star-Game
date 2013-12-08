@@ -19,21 +19,22 @@
 #define FE_FUSION_COMPONENTS_H
 
 
+#pragma warning(push, 0)
 #include <vector>
 #include <functional>
 #include "../glsdk/glm/glm.hpp"
-#include "../Fusion_EntitySystem/EntityManager.h"
-#include "../Fusion_EntitySystem/Component.h"
-#include "../ProgramData/ProgramData.h"
-#include "../framework/framework.h"
 #include "../framework/Mesh.h"
 #include "../framework/Timer.h"
 #include "../framework/Utility.h"
 #include "../Mouse/Mouse.h"
+#include "../ProgramData/ProgramData.h"
+#pragma warning(pop)
+
+#include "../Fusion_EntitySystem/EntityManager.h"
+#include "../Fusion_EntitySystem/Component.h"
 #include "../Fusion_AssetLoader/AssetLoader.h"
 
-
-
+#include "../framework/framework.h"
 
 
 namespace FusionEngine

@@ -23,6 +23,7 @@
 // TODO: Fix a bug with satellite selection. 
 //		 When the sun is moved the selection doesn't work properly. Move the sun for an example.
 
+#pragma warning(push, 0)
 #include <ctime>
 #include <sstream>
 #include <string>
@@ -32,6 +33,7 @@
 #include "ShaderManager.h"
 #include "DisplayData.h"
 #include "../framework/ErrorAPI.h"
+#pragma warning(pop)
 
 #include "../Fusion_Scene/Scene.h"
 #include "../Fusion_Scene/World.h"

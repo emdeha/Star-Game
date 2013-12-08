@@ -19,23 +19,22 @@
 #define FE_ASSET_LOADER_H
 
 
+#pragma warning(push, 0)
 #include <fstream>
 #include <string>
 #include <map>
 #include <vector>
 #include <memory>
 
-
 #include "../glsdk/glm/glm.hpp"
 
-
-#include "../StarGame/AudioEnums.h"
-//#include "../GUISystem/GUISystem.h"
 #include "../assimp/include/assimp/Importer.hpp"
 #include "../assimp/include/assimp/scene.h"
 #include "../assimp/include/assimp/postprocess.h"
 #include "yaml-cpp/yaml.h"
+#pragma warning(pop)
 
+#include "../StarGame/AudioEnums.h"
 #include "../Fusion_Renderer/ProgramData.h"
 #include "../Fusion_Renderer/Texture.h"
 

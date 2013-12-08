@@ -6,7 +6,7 @@
 
 using namespace FusionEngine;
 
-/*
+
 std::shared_ptr<Layout> GUIAssetObject::GetLayout(LayoutType layoutType) const
 {
 	if(layouts.find(layoutType) == layouts.end())
@@ -14,25 +14,19 @@ std::shared_ptr<Layout> GUIAssetObject::GetLayout(LayoutType layoutType) const
         std::string errorMessage = "no layout of type ";
         switch(layoutType)
         {
-        case LAYOUT_IN_GAME:
+        case FE_LAYOUT_GAME:
             errorMessage += "LAYOUT_IN_GAME";
             break;
-        case LAYOUT_LOAD_GAME:
+        case FE_LAYOUT_LOAD:
             errorMessage += "LAYOUT_LOAD_GAME";
             break;
-        case LAYOUT_MENU:
+        case FE_LAYOUT_MENU:
             errorMessage += "LAYOUT_MENU";
             break;
-        case LAYOUT_NEW_GAME:
-            errorMessage += "LAYOUT_NEW_GAME";
-            break;
-        case LAYOUT_OPTIONS:
+        case FE_LAYOUT_OPTIONS:
             errorMessage += "LAYOUT_OPTIONS";
             break;
-        case LAYOUT_OTHER:
-            errorMessage += "LAYOUT_OTHER";
-            break;
-        case LAYOUT_SAVE_GAME:
+        case FE_LAYOUT_SAVE:
             errorMessage += "LAYOUT_SAVE_GAME";
             break;
         default:
@@ -51,8 +45,61 @@ const std::map<LayoutType, std::shared_ptr<Layout>> &GUIAssetObject::GetAllLoade
 }
 
 
+RelativityOption GetControlRelativity(const std::string &relativityString)
+{
+	if (relativityString == "BOTTOM_LEFT")
+	{
+		return FE_RELATIVE_BOTTOM_LEFT;
+	}
+	else if (relativityString == "BOTTOM_RIGHT")
+	{
+		return FE_RELATIVE_BOTTOM_RIGHT;
+	}
+	else if (relativityString == "CENTER_TOP")
+	{
+		return FE_RELATIVE_CENTER_TOP;
+	}
+	else if (relativityString == "CENTER_BOTTOM")
+	{
+		return FE_RELATIVE_CENTER_BOTTOM;
+	}
+	else if (relativityString == "TOP_RIGHT")
+	{
+		return FE_RELATIVE_TOP_RIGHT;
+	}
+	else if (relativityString == "TOP_LEFT")
+	{
+		return FE_RELATIVE_TOP_LEFT;
+	}
+}
+
+LayoutType GetLayoutType(const std::string &layoutTypeString)
+{
+	if (layoutTypeString == "layout-game")
+	{
+		return FE_LAYOUT_GAME;
+	}
+	else if (layoutTypeString == "layout-menu")
+	{
+		return FE_LAYOUT_MENU;
+	}
+	else if (layoutTypeString == "layout-save-game")
+	{
+		return FE_LAYOUT_SAVE;
+	}
+	else if (layoutTypeString == "layout-load-game")
+	{
+		return FE_LAYOUT_LOAD;
+	}
+	else if(layoutTypeString == "layout-options")
+	{
+		return FE_LAYOUT_OPTIONS;
+	}
+}
+
 GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 {
+	// GENERAL SETTINGS
 	// TODO: Figure out how to pass them
 	int windowWidth = 800;
 	int windowHeight = 600;
@@ -62,97 +109,52 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
     std::string texturesDir = "";
     std::string defaultFont = "";
 
+	// LAYOUT SETTINGS
+	LayoutType currentLayoutType;
+	bool isLayoutSet;
+
+	// CONTROL SETTINGS
+	std::string controlName;
+	std::string controlType;
+	std::string controlText;
+	std::string controlBackgroundImage;
+	glm::vec4 controlFontColor;
+	glm::ivec2 controlDimensions;
+	glm::ivec2 controlMargins;
+	bool controlIsVisible;
+	bool controlHasBackground;
+	RelativityOption controlRelativity;
+	glm::ivec2 controlPosition;
+	unsigned short controlTextSize;
+	float controlTextBoxMaxWidth;
+
+	//////////////////////////////
 
     YAML::Node guiData = YAML::LoadFile("../data/" + type + "/" + name);
-
-    LayoutData layoutData;
 
     fontsDir = guiData["details"]["fonts-dir"].as<std::string>();
     texturesDir = guiData["details"]["textures-dir"].as<std::string>();
     defaultFont = guiData["details"]["default-font"].as<std::string>();
     
 	std::map<LayoutType, std::shared_ptr<Layout>> layouts;
-    ControlData controlData;
-    if(guiData["details"]["global-on-hover"])
-    {
-        for(YAML::Node::const_iterator onHoverProp = guiData["details"]["global-on-hover"].begin();
-            onHoverProp != guiData["details"]["global-on-hover"].end(); ++onHoverProp)
-        {
-            if(onHoverProp->first.as<std::string>() == "left-background-image")
-            {
-				controlData.onHoverLeftBackgroundImage = texturesDir;
-                controlData.onHoverLeftBackgroundImage += onHoverProp->second.as<std::string>();
-            }
-            if(onHoverProp->first.as<std::string>() == "right-background-image")
-            {
-				controlData.onHoverRightBackgroundImage = texturesDir;
-				controlData.onHoverRightBackgroundImage += onHoverProp->second.as<std::string>();
-            }
-			if(onHoverProp->first.as<std::string>() == "middle-background-image")
-            {
-				controlData.onHoverMiddleBackgroundImage = texturesDir;
-				controlData.onHoverMiddleBackgroundImage += onHoverProp->second.as<std::string>();
-            }
-            if(onHoverProp->first.as<std::string>() == "font-color")
-            {
-                controlData.onHoverFontColor = glm::vec4(onHoverProp->second[0].as<float>(),
-                                                         onHoverProp->second[1].as<float>(),
-                                                         onHoverProp->second[2].as<float>(),
-                                                         onHoverProp->second[3].as<float>());
-            }
-            if(onHoverProp->first.as<std::string>() == "font")
-            {
-                controlData.onHoverFont = fontsDir + onHoverProp->second.as<std::string>();
-            }
-            if(onHoverProp->first.as<std::string>() == "text")
-            {
-                controlData.onHoverText = onHoverProp->second.as<std::string>();
-            }
-        }
-    }
-
     for(YAML::Node::const_iterator guiNode = guiData.begin();
         guiNode != guiData.end(); ++guiNode)
     {
-        if(guiNode->first.as<std::string>() == "layout-game")
-        {
-            layoutData.layoutType = LAYOUT_IN_GAME;
-        }
-        else if(guiNode->first.as<std::string>() == "layout-menu")
-        {
-            layoutData.layoutType = LAYOUT_MENU;
-        }
-        else if(guiNode->first.as<std::string>() == "layout-save-game")
-        {
-            layoutData.layoutType = LAYOUT_SAVE_GAME;
-        }
-        else if(guiNode->first.as<std::string>() == "layout-load-game")
-        {
-            layoutData.layoutType = LAYOUT_LOAD_GAME;
-        }
-        else if(guiNode->first.as<std::string>() == "layout-options")
-        {
-            layoutData.layoutType = LAYOUT_OPTIONS;
-        }
+		currentLayoutType = GetLayoutType(guiNode->first.as<std::string>());
         
         if(guiNode->first.as<std::string>() != "details")
         {
-            layoutData.layoutColor = glm::vec4(guiNode->second["background-color"][0].as<float>(),
-                                               guiNode->second["background-color"][1].as<float>(), 
-                                               guiNode->second["background-color"][2].as<float>(), 
-                                               guiNode->second["background-color"][3].as<float>());
-            layoutData.layoutIsSet = guiNode->second["is-active"].as<bool>();
+            isLayoutSet = guiNode->second["is-active"].as<bool>();
 
             std::shared_ptr<Layout> newLayout =
-                std::shared_ptr<Layout>(new Layout(layoutData.layoutType, layoutData.layoutColor));
-            layouts.insert(std::make_pair(layoutData.layoutType, newLayout));
-
-            layouts[layoutData.layoutType]->Set(layoutData.layoutIsSet);
+                std::shared_ptr<Layout>(new Layout(currentLayoutType));
+			newLayout->Set(isLayoutSet);
+			std::string layoutBackgroundFile = "";
             if(guiNode->second["background-image"].IsDefined())
             {
-                layoutData.layoutBackgroundImageFileName = texturesDir;
-                layoutData.layoutBackgroundImageFileName += guiNode->second["background-image"].as<std::string>();
-                layouts[layoutData.layoutType]->SetBackgroundImage(1280, 768, layoutData.layoutBackgroundImageFileName);
+                layoutBackgroundFile = texturesDir;
+                layoutBackgroundFile += guiNode->second["background-image"].as<std::string>();
+				newLayout->SetBackgroundSprite(layoutBackgroundFile);
             }
 
             if(guiNode->second["controls"])
@@ -160,256 +162,108 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
                 for(YAML::Node::const_iterator control = guiNode->second["controls"].begin();
                     control != guiNode->second["controls"].end(); ++control)
                 {
-                    if(control->second["control-type"].as<std::string>() == "label")
+					controlName = control->second["name"].as<std::string>();
+					controlHasBackground = control->second["has-background"].as<bool>();
+					if (controlHasBackground)
+					{
+						controlBackgroundImage = control->second["background"].as<std::string>();
+						controlDimensions = glm::ivec2(control->second["width-height"][0].as<int>(),
+													   control->second["width-height"][1].as<int>());
+					}
+					controlIsVisible = control->second["is-visible"].as<bool>();
+					controlRelativity = GetControlRelativity(control->second["relativity"].as<std::string>());
+					controlPosition = glm::ivec2(control->second["position"][0].as<int>(),
+												 control->second["position"][1].as<int>());
+
+					std::string controlType = control->second["control-type"].as<std::string>();
+                    if (controlType == "label" || controlType == "button" || controlType == "textBox")
                     {					
-                        controlData.name = control->second["name"].as<std::string>();
-                        controlData.text = control->second["text"].as<std::string>();
-                        controlData.hasBackground = control->second["has-background"].as<bool>();
-                        controlData.isVisible = control->second["is-visible"].as<bool>();
-                        controlData.isUsingPercentage = control->second["is-using-percentage"].as<bool>();
-                        controlData.fontColor = glm::vec4(control->second["font-color"][0].as<float>(),
-                                                          control->second["font-color"][1].as<float>(),
-                                                          control->second["font-color"][2].as<float>(),
-                                                          control->second["font-color"][3].as<float>());
-                        controlData.textSize = control->second["text-size"].as<int>();
-                        controlData.leftBackgroundImage = "";
-                        controlData.rightBackgroundImage = "";
-                        controlData.middleBackgroundImage = "";
-                        if(controlData.hasBackground)
-                        {
-                            controlData.margins = glm::vec4(control->second["margins"][0].as<float>(),
-                                                            control->second["margins"][1].as<float>(),
-                                                            control->second["margins"][2].as<float>(),
-                                                            control->second["margins"][3].as<float>());
-
-                            controlData.leftBackgroundImage = texturesDir;
-                            controlData.leftBackgroundImage += control->second["bckg-left"].as<std::string>();
-							controlData.rightBackgroundImage = texturesDir;
-							controlData.rightBackgroundImage += control->second["bckg-right"].as<std::string>();
-							controlData.middleBackgroundImage = texturesDir;
-							controlData.middleBackgroundImage += control->second["bckg-middle"].as<std::string>();
-                        }
-                        controlData.percentagedPosition = glm::vec2();
-                        controlData.position = glm::vec2();
-                        if(controlData.isUsingPercentage)
-                        {
-                            controlData.percentagedPosition = 
-                                glm::vec2(control->second["percentaged-pos"][0].as<float>(),
-                                          control->second["percentaged-pos"][1].as<float>());
-                        }
-                        else
-                        {
-                            controlData.position = glm::vec2(control->second["position"][0].as<float>(),
-                                                             control->second["position"][1].as<float>());
-                        }
-
-                        HoveredProperties newHoveredProps;
-                        newHoveredProps.backgroundLeftImage = controlData.onHoverLeftBackgroundImage;
-						newHoveredProps.backgroundRightImage = controlData.onHoverRightBackgroundImage;
-						newHoveredProps.backgroundMiddleImage = controlData.onHoverMiddleBackgroundImage;
-                        newHoveredProps.text = controlData.onHoverText;
-                        newHoveredProps.textColor = controlData.onHoverFontColor;
-                        newHoveredProps.font = controlData.onHoverFont;
-
-                        std::shared_ptr<Label> label =
-                            std::shared_ptr<Label>(new Label(controlData.name, controlData.text,
-                                                             controlData.fontColor, controlData.position,
-                                                             controlData.margins, controlData.textSize,
-                                                             controlData.hasBackground, controlData.isVisible,
-                                                             controlData.isUsingPercentage, 
-                                                             newHoveredProps,
-                                                             controlData.percentagedPosition));
-                        label->Init(fontsDir + defaultFont, 
-									controlData.leftBackgroundImage,
-									controlData.rightBackgroundImage,
-									controlData.middleBackgroundImage,
-                                    windowWidth, windowHeight);
-
-                        newLayout->AddControl(label);
+						controlTextSize = control->second["text-size"].as<unsigned short>();
+						controlText = control->second["text"].as<std::string>();
+						controlMargins = glm::ivec2(control->second["margins"][0].as<int>(),
+													control->second["margins"][1].as<int>());
+						controlFontColor = glm::vec4(control->second["font-color"][0].as<float>(),
+													 control->second["font-color"][1].as<float>(),
+													 control->second["font-color"][2].as<float>(),
+													 control->second["font-color"][3].as<float>());
+						if (controlType == "textBox")
+						{
+							controlTextBoxMaxWidth = control->second["text-max-width"].as<float>();
+						}
                     }
-                    else if(control->second["control-type"].as<std::string>() == "button")
-                    {
-                        controlData.name = control->second["name"].as<std::string>();
-                        controlData.text = control->second["text"].as<std::string>();
-                        controlData.hasBackground = control->second["has-background"].as<bool>();
-                        controlData.isVisible = control->second["is-visible"].as<bool>();
-                        controlData.isUsingPercentage = control->second["is-using-percentage"].as<bool>();
-                        controlData.fontColor = glm::vec4(control->second["font-color"][0].as<float>(),
-                                                          control->second["font-color"][1].as<float>(),
-                                                          control->second["font-color"][2].as<float>(),
-                                                          control->second["font-color"][3].as<float>());
-                        controlData.textSize = control->second["text-size"].as<int>();
-                        controlData.leftBackgroundImage = "";
-                        controlData.rightBackgroundImage = "";
-                        controlData.middleBackgroundImage = "";
-                        if(controlData.hasBackground)
-                        {
-                            controlData.margins = glm::vec4(control->second["margins"][0].as<float>(),
-                                                            control->second["margins"][1].as<float>(),
-                                                            control->second["margins"][2].as<float>(),
-                                                            control->second["margins"][3].as<float>());
 
-                            controlData.leftBackgroundImage = texturesDir;
-                            controlData.leftBackgroundImage += control->second["bckg-left"].as<std::string>();
-							controlData.rightBackgroundImage = texturesDir;
-							controlData.rightBackgroundImage += control->second["bckg-right"].as<std::string>();
-							controlData.middleBackgroundImage = texturesDir;
-							controlData.middleBackgroundImage += control->second["bckg-middle"].as<std::string>();
-                        }
-                        controlData.percentagedPosition = glm::vec2();
-                        controlData.position = glm::vec2();
-                        if(controlData.isUsingPercentage)
-                        {
-                            controlData.percentagedPosition = 
-                                glm::vec2(control->second["percentaged-pos"][0].as<float>(),
-                                          control->second["percentaged-pos"][1].as<float>());
-                        }
-                        else
-                        {
-                            controlData.position = glm::vec2(control->second["position"][0].as<float>(),
-                                                             control->second["position"][1].as<float>());
-                        }
+					if (controlType == "label")
+					{
+						std::shared_ptr<Label> newLabel = std::shared_ptr<Label>(new Label(
+								controlName, controlPosition, controlDimensions.x, controlDimensions.y,
+								windowWidth, windowHeight, controlMargins)
+								);
+						newLabel->SetRelativity(controlRelativity);
+						newLabel->SetTextProperties(fontsDir + defaultFont, controlText, 
+													controlFontColor, controlTextSize);
+						if (controlHasBackground)
+						{
+							newLabel->SetBackground(controlBackgroundImage);
+						}
+						newLabel->SetVisibility(controlIsVisible);
 
-                        HoveredProperties newHoveredProps;
-                        newHoveredProps.backgroundLeftImage = controlData.onHoverLeftBackgroundImage;
-						newHoveredProps.backgroundRightImage = controlData.onHoverRightBackgroundImage;
-						newHoveredProps.backgroundMiddleImage = controlData.onHoverMiddleBackgroundImage;
-                        newHoveredProps.text = controlData.onHoverText;
-                        newHoveredProps.textColor = controlData.onHoverFontColor;
-                        newHoveredProps.font = controlData.onHoverFont;
+						newLayout->AddControl(newLabel);
+					}
+					else if (controlType == "button")
+					{
+						std::shared_ptr<Button> newButton = std::shared_ptr<Button>(new Button(
+								controlName, controlPosition, controlDimensions.x, controlDimensions.y,
+								windowWidth, windowHeight, controlMargins)
+								);
+						newButton->SetRelativity(controlRelativity);
+						newButton->SetTextProperties(fontsDir + defaultFont, controlText, 
+													 controlFontColor, controlTextSize);
+						if (controlHasBackground)
+						{
+							newButton->SetBackground(controlBackgroundImage);
+						}
+						newButton->SetVisibility(controlIsVisible);
 
-                        std::shared_ptr<Button> button = 
-                            std::shared_ptr<Button>(new Button(controlData.name, controlData.text,
-                                                               controlData.fontColor, controlData.position,
-                                                               controlData.margins, controlData.textSize,
-                                                               controlData.hasBackground, controlData.isVisible,
-                                                               controlData.isUsingPercentage, 
-                                                               newHoveredProps,
-                                                               controlData.percentagedPosition));
-                        button->Init(fontsDir + defaultFont, 
-									 controlData.leftBackgroundImage,
-									 controlData.rightBackgroundImage,
-									 controlData.middleBackgroundImage,
-                                     windowWidth, windowHeight);
+						newLayout->AddControl(newButton);
+					}
+					else if (controlType == "textBox")
+					{
+						std::shared_ptr<TextBox> newTextBox = std::shared_ptr<TextBox>(new TextBox(
+								controlName, controlPosition, controlDimensions.x, controlDimensions.y,
+								windowWidth, windowHeight, controlMargins, controlTextBoxMaxWidth)
+								);
+						newTextBox->SetRelativity(controlRelativity);
+						newTextBox->SetTextProperties(fontsDir + defaultFont, controlText, 
+													  controlFontColor, controlTextSize);
+						if (controlHasBackground)
+						{
+							newTextBox->SetBackground(controlBackgroundImage);
+						}
+						newTextBox->SetVisibility(controlIsVisible);
 
-                        newLayout->AddControl(button);
-                    }
-                    else if(control->second["control-type"].as<std::string>() == "imageBox")
-                    {
-                        controlData.name = control->second["name"].as<std::string>();
-                        controlData.isVisible = control->second["is-visible"].as<bool>();
-                        controlData.isUsingPercentage = control->second["is-using-percentage"].as<bool>();
-                        controlData.imageBoxHeight = control->second["height"].as<float>();
-                        controlData.imageBoxWidth = control->second["width"].as<float>();
-                        controlData.middleBackgroundImage = texturesDir;
-                        controlData.middleBackgroundImage += control->second["image"].as<std::string>();
-                        controlData.percentagedPosition = glm::vec2();
-                        controlData.position = glm::vec2();
-                        if(controlData.isUsingPercentage)
-                        {
-                            controlData.percentagedPosition = 
-                                glm::vec2(control->second["percentaged-pos"][0].as<float>(),
-                                          control->second["percentaged-pos"][1].as<float>());
-                        }
-                        else
-                        {
-                            controlData.position = glm::vec2(control->second["position"][0].as<float>(),
-                                                             control->second["position"][1].as<float>());
-                        }
+						newLayout->AddControl(newTextBox);
+					}
+					else if (controlType == "imageBox")
+					{
+						std::shared_ptr<ImageBox> newImageBox = std::shared_ptr<ImageBox>(new ImageBox(
+								controlName, controlPosition, controlDimensions.x, controlDimensions.y,
+								windowWidth, windowHeight)
+								);
+						newImageBox->SetRelativity(controlRelativity);
+						if (controlHasBackground)
+						{
+							newImageBox->SetBackground(controlBackgroundImage);
+						}
+						newImageBox->SetVisibility(controlIsVisible);
 
-                        HoveredProperties newHoveredProps;
-                        newHoveredProps.backgroundMiddleImage = controlData.onHoverMiddleBackgroundImage;
-                        newHoveredProps.text = controlData.onHoverText;
-                        newHoveredProps.textColor = controlData.onHoverFontColor;
-                        newHoveredProps.font = controlData.onHoverFont;
-
-                        std::shared_ptr<ImageBox> imageBox = 
-                            std::shared_ptr<ImageBox>(new ImageBox(controlData.imageBoxWidth, controlData.imageBoxHeight,
-                                                                   controlData.name, controlData.text,
-                                                                   controlData.fontColor, controlData.position,
-                                                                   controlData.margins, controlData.textSize,
-                                                                   controlData.hasBackground, controlData.isVisible,
-                                                                   controlData.isUsingPercentage, 
-                                                                   newHoveredProps,
-                                                                   controlData.percentagedPosition));
-                        imageBox->Init(controlData.middleBackgroundImage, windowWidth, windowHeight);
-
-                        newLayout->AddControl(imageBox);
-                    }
-                    else if(control->second["control-type"].as<std::string>() == "textBox")
-                    {
-                        controlData.name = control->second["name"].as<std::string>();
-                        controlData.text = "";
-                        controlData.hasBackground = control->second["has-background"].as<bool>();
-                        controlData.isVisible = control->second["is-visible"].as<bool>();
-                        controlData.isUsingPercentage = control->second["is-using-percentage"].as<bool>();
-                        controlData.fontColor = glm::vec4(control->second["font-color"][0].as<float>(),
-                                                          control->second["font-color"][1].as<float>(),
-                                                          control->second["font-color"][2].as<float>(),
-                                                          control->second["font-color"][3].as<float>());
-                        controlData.textSize = control->second["text-size"].as<int>();
-                        controlData.textBoxWidth = control->second["width"].as<float>();
-                        controlData.leftBackgroundImage = "";
-                        controlData.rightBackgroundImage = "";
-                        controlData.middleBackgroundImage = "";
-                        if(controlData.hasBackground)
-                        {
-                            controlData.margins = glm::vec4(control->second["margins"][0].as<float>(),
-                                                            control->second["margins"][1].as<float>(),
-                                                            control->second["margins"][2].as<float>(),
-                                                            control->second["margins"][3].as<float>());
-							
-                            controlData.leftBackgroundImage = texturesDir;
-                            controlData.leftBackgroundImage += control->second["bckg-left"].as<std::string>();
-							controlData.rightBackgroundImage = texturesDir;
-							controlData.rightBackgroundImage += control->second["bckg-right"].as<std::string>();
-							controlData.middleBackgroundImage = texturesDir;
-							controlData.middleBackgroundImage += control->second["bckg-middle"].as<std::string>();
-                        }
-                        controlData.percentagedPosition = glm::vec2();
-                        controlData.position = glm::vec2();
-                        if(controlData.isUsingPercentage)
-                        {
-                            controlData.percentagedPosition = 
-                                glm::vec2(control->second["percentaged-pos"][0].as<float>(),
-                                          control->second["percentaged-pos"][1].as<float>());
-                        }
-                        else
-                        {
-                            controlData.position = glm::vec2(control->second["position"][0].as<float>(),
-                                                             control->second["position"][1].as<float>());
-                        }
-
-                        HoveredProperties newHoveredProps;
-                        newHoveredProps.backgroundLeftImage = controlData.onHoverLeftBackgroundImage;
-						newHoveredProps.backgroundRightImage = controlData.onHoverRightBackgroundImage;
-						newHoveredProps.backgroundMiddleImage = controlData.onHoverMiddleBackgroundImage;
-                        newHoveredProps.text = controlData.onHoverText;
-                        newHoveredProps.textColor = controlData.onHoverFontColor;
-                        newHoveredProps.font = controlData.onHoverFont;
-
-                        std::shared_ptr<TextBox> textBox = 
-                            std::shared_ptr<TextBox>(new TextBox(controlData.textBoxWidth,
-                                                                 controlData.name, controlData.text,
-                                                                 controlData.fontColor, controlData.position,
-                                                                 controlData.margins, controlData.textSize,
-                                                                 controlData.hasBackground, controlData.isVisible,
-                                                                 controlData.isUsingPercentage, 
-                                                                 newHoveredProps,
-                                                                 controlData.percentagedPosition));
-                        textBox->Init(fontsDir + defaultFont, 
-									  controlData.leftBackgroundImage,
-									  controlData.rightBackgroundImage,
-									  controlData.middleBackgroundImage,
-                                      windowWidth, windowHeight);
-
-                        newLayout->AddControl(textBox);
-                    }
+						newLayout->AddControl(newImageBox);
+					}
                 }
             }
+
+            layouts.insert(std::make_pair(currentLayoutType, newLayout));
         }
     }
 
 	return layouts;
 }
-*/

@@ -82,6 +82,7 @@ layout-game:
             is-visible: true
             relativity: TOP_RIGHT
             position: [ 300, 50 ]
+            text-max-width: 100.0
             text-size: 28
         control-button-apply:
             control-type: button
@@ -94,8 +95,8 @@ layout-game:
             position: [ 400, 50 ]
             text-size: 28
 layout-menu:
-    background-image: "background.png"
     is-active: true
+    background-image: "background.png"
     controls:
         control-button-new:
             control-type: button

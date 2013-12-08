@@ -38,7 +38,6 @@ namespace FusionEngine
 		FE_LAYOUT_SAVE,
 		FE_LAYOUT_LOAD,
 		FE_LAYOUT_OPTIONS,
-		FE_LAYOUT_QUIT,
 	};
 
 

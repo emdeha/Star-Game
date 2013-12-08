@@ -37,6 +37,7 @@
 #include "../StarGame/AudioEnums.h"
 #include "../Fusion_Renderer/ProgramData.h"
 #include "../Fusion_Renderer/Texture.h"
+#include "../Fusion_GUI/Layout.h"
 
 
 namespace FusionEngine
@@ -232,52 +233,9 @@ namespace FusionEngine
 		AudioAssetObject Load(const std::string &type, const std::string &name);
 	};
 
-/*
 	////////////////////
 	///  GUI Loader  ///
 	////////////////////
-	struct LayoutData
-	{
-		LayoutType layoutType;
-		glm::vec4 layoutColor;
-		int layoutIsSet;
-		std::string layoutBackgroundImageFileName;
-	};
-
-	struct ControlData
-	{
-		std::string name;
-		std::string text; 
-		std::string leftBackgroundImage;
-		std::string rightBackgroundImage;
-		std::string middleBackgroundImage;
-
-		glm::vec4 fontColor;
-		glm::vec4 margins;
-		glm::vec2 position;
-		glm::vec2 percentagedPosition;
-		int textSize;
-
-		bool hasBackground;
-		bool isVisible;
-		bool isUsingPercentage;
-			
-		float textBoxWidth;
-
-		float imageBoxWidth;
-		float imageBoxHeight;
-
-		LayoutType toLayout;
-
-
-		std::string onHoverText;
-		std::string onHoverFont;
-		std::string onHoverLeftBackgroundImage;
-		std::string onHoverRightBackgroundImage;
-		std::string onHoverMiddleBackgroundImage;
-		glm::vec4 onHoverFontColor;
-	};
-
 	class GUIAssetObject : public IAssetObject
 	{
 	private:
@@ -300,7 +258,6 @@ namespace FusionEngine
 	public:
 		GUIAssetObject Load(const std::string &type, const std::string &name);
 	};
-*/
 
 	/////////////////////////
 	///  TweakVar Loader  ///

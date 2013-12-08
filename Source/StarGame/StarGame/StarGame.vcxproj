@@ -92,9 +92,6 @@
     <ClInclude Include="ShaderManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AssetLoader\AssetLoader.vcxproj">
-      <Project>{f0acc795-f7c6-4cee-840d-a17bc02d7141}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\Audio\Audio.vcxproj">
       <Project>{dd6314d9-02e5-4daa-b229-cdce18221633}</Project>
     </ProjectReference>

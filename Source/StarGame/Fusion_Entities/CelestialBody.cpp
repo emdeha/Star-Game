@@ -36,13 +36,13 @@ CelestialBody::CelestialBody() :
 	satellites(0), diameter(0.0f),
 	offsetFromSun(0.0f), currentRotationAngle(0.0f), angularVelocity(5.0f)
 {
-	char stringedOffset[15];
-	_snprintf(stringedOffset, 15, "satellite%f", offsetFromSun);
-	id.assign(stringedOffset);
+	std::ostringstream name;
+	name << "satellite" << offsetFromSun;
+	id = name.str();
 }
 
 CelestialBody::CelestialBody(int newMaxSatelliteCount, float newDiameter, 
-								   float newOffsetFromSun) :
+							 float newOffsetFromSun) :
 	maxSatelliteCount(newMaxSatelliteCount), currentSatelliteCount(1),
 	satellites(0), diameter(newDiameter),
 	offsetFromSun(newOffsetFromSun),
@@ -50,9 +50,18 @@ CelestialBody::CelestialBody(int newMaxSatelliteCount, float newDiameter,
 {
 	World::GetWorld().GetEventManager().AddListener(this, FusionEngine::EVENT_ON_CLICK);
 
-	char stringedOffset[15];
-	_snprintf(stringedOffset, 15, "satellite%f", offsetFromSun);
-	id.assign(stringedOffset);
+	if (offsetFromSun <= 0.0f)
+	{
+		std::ostringstream name;
+		name << "sun";
+		id = name.str();
+	}
+	else
+	{
+		std::ostringstream name;
+		name << "satellite" << offsetFromSun;
+		id = name.str();
+	}
 }
 
 CelestialBody::~CelestialBody()

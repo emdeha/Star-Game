@@ -85,6 +85,7 @@ namespace FusionEngine
 
 		void SetRelativity(RelativityOption relativeTo);
 		void SetVisibility(bool newIsVisible);
+		bool IsVisible();
 		void SetActive(bool newIsActive);
 		void SetBackground(const std::string &backgroundFileName);
 		//void SetTextProperties(const std::string &newTextFont, const std::string &newTextString,
@@ -183,6 +184,22 @@ namespace FusionEngine
 				: TextControl(newName, newPosition, newWidth, newHeight,
 							  newWindowWidth, newWindowHeight, newMargins),
 				  visibleText(""), maxWidth(newMaxWidth) {}
+
+		virtual void Init(EventManager &eventManager);
+
+		virtual bool HandleEvent(const IEventData &eventData);
+	};
+
+
+	class ImageBox : public Control
+	{
+	public:
+		ImageBox(const std::string &newName,
+				 glm::ivec2 newPosition,
+				 int newWidth, int newHeight,
+				 int newWindowWidth, int newWindowHeight)
+				 : Control(newName, newPosition, newWidth, newHeight, 
+						   newWindowWidth, newWindowHeight) {}
 
 		virtual void Init(EventManager &eventManager);
 

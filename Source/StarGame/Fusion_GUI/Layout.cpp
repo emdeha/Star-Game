@@ -43,6 +43,10 @@ bool Layout::IsSet()
 void Layout::Set(bool newIsSet)
 {
 	isSet = newIsSet;
+	for (auto control = controls.begin(); control != controls.end(); ++control)
+	{
+		(*control)->SetVisibility(isSet);
+	}
 }
 
 void Layout::SetBackgroundSprite(const std::string &spriteFile)

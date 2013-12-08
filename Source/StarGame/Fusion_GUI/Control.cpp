@@ -38,6 +38,10 @@ void Control::SetVisibility(bool newIsVisible)
 {
 	isVisible = newIsVisible;
 }
+bool Control::IsVisible()
+{
+	return isVisible;
+}
 
 void Control::SetActive(bool newIsActive)
 {
@@ -132,10 +136,10 @@ bool Control::HandleEvent(const IEventData &eventData)
 			const OnReshapeEvent &data = static_cast<const OnReshapeEvent&>(eventData);
 			windowHeight = data.windowHeight;
 			windowWidth = data.windowWidth;
-
+			
+			SetRelativity(currentRelativity);
 			if (hasBackground)
 			{
-				SetRelativity(currentRelativity);
 				background.SetPosition(glm::vec2(position));
 			}
 			//textPosition = glm::vec2(position.x - margins.x,
@@ -368,6 +372,24 @@ bool TextBox::HandleEvent(const IEventData &eventData)
 			}
 			break;
 	}
+
+	return false;
+}
+
+
+////////////////
+//  ImageBox  //
+////////////////
+void ImageBox::Init(EventManager &eventManager)
+{
+	Control::Init(eventManager);
+
+	eventManager.AddListener(this, FusionEngine::EVENT_ON_KEY_PRESSED);
+}
+
+bool ImageBox::HandleEvent(const IEventData &eventData)
+{
+	Control::HandleEvent(eventData);
 
 	return false;
 }

@@ -90,12 +90,19 @@ void World::Load(const std::string &guiLayoutFile,
 	testTextBox->SetBackground("../data/images/fusion-empty.jpg");
 	testTextBox->SetOnClickHandler(TextBoxClickHandler);
 	testTextBox->Init(eventManager);
+	std::shared_ptr<ImageBox> testImageBox =
+		std::shared_ptr<ImageBox>(new ImageBox("sampleImageBox", glm::ivec2(-25, 10),
+											   50, 50, displayData.windowWidth, displayData.windowHeight));
+	testImageBox->SetRelativity(FE_RELATIVE_CENTER_BOTTOM);
+	testImageBox->SetBackground("../data/images/fusion-catalyst.jpg");
+	testImageBox->Init(eventManager);
 	testLayout->AddControl(newGame);
 	testLayout->AddControl(loadGame);
 	testLayout->AddControl(saveGame);
 	testLayout->AddControl(options);
 	testLayout->AddControl(quit);
 	testLayout->AddControl(testTextBox);
+	testLayout->AddControl(testImageBox);
 
 	std::shared_ptr<Layout> saveLayout = 
 		std::shared_ptr<Layout>(new Layout(FE_LAYOUT_SAVE));

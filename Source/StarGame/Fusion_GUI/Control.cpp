@@ -7,6 +7,11 @@
 using namespace FusionEngine;
 
 
+void Control::SetOnKeyPressedHandler(EventHandlingFunc onKeyPressedHandler)
+{
+	handleOnKeyPress = onKeyPressedHandler;
+}
+
 void Control::SetRelativity(RelativityOption relativeTo)
 {
 	switch (relativeTo)
@@ -126,7 +131,7 @@ std::string Control::GetName() const
 ///////////////////
 //  TextControl  //
 ///////////////////
-void TextControl::SetOnClickHandler(OnClickHandler onClickHandler)
+void TextControl::SetOnClickHandler(EventHandlingFunc onClickHandler)
 {
 	handleOnClick = onClickHandler;
 }
@@ -201,7 +206,7 @@ bool TextControl::HandleEvent(const IEventData &eventData)
 			{
 				if (handleOnClick != nullptr)
 				{
-					handleOnClick(this);
+					handleOnClick(this, eventData);
 				}
 				else
 				{
@@ -331,6 +336,26 @@ void ImageBox::Init(EventManager &eventManager)
 bool ImageBox::HandleEvent(const IEventData &eventData)
 {
 	Control::HandleEvent(eventData);
+
+	EventType type = eventData.GetType();
+	switch(type)
+	{
+		case EVENT_ON_KEY_PRESSED:
+			{
+				if (handleOnKeyPress != nullptr)
+				{
+					handleOnKeyPress(this, eventData);
+				}
+				else 
+				{
+					std::string errorMessage = "no OnKeyPressde handler for Control ==* ";
+					errorMessage += name + " *==";
+					HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+					return false;
+				}
+				break;
+			}
+	}
 
 	return false;
 }

@@ -40,9 +40,16 @@ namespace FusionEngine
 		FE_RELATIVE_CENTER_TOP,
 	};
 
+	class Control;
+
+	// TODO: Maybe not a good decision
+	typedef void (*EventHandlingFunc)(Control*, const IEventData&);
+
 	class Control : public IEventListener
 	{
 	protected:
+		EventHandlingFunc handleOnKeyPress;
+
 		std::string name; // TODO: integer ID in the future
 
 		glm::ivec2 initialPosition;
@@ -71,7 +78,7 @@ namespace FusionEngine
 			: name(newName), position(newPosition), initialPosition(newPosition),
 			  currentRelativity(FE_RELATIVE_TOP_RIGHT), width(newWidth), height(newHeight), 
 			  windowWidth(newWindowWidth), windowHeight(newWindowHeight),
-			  isVisible(true), hasBackground(false) {}
+			  isVisible(true), hasBackground(false), handleOnKeyPress(nullptr) {}
 
 		virtual void Init(EventManager &eventManager);
 
@@ -88,17 +95,16 @@ namespace FusionEngine
 		bool IsVisible() const;
 		void SetActive(bool newIsActive);
 
+		void SetOnKeyPressedHandler(EventHandlingFunc onKeyPressedHandler);
 		void SetRelativity(RelativityOption relativeTo);
 		void SetBackground(const std::string &backgroundFileName);
 	};
 
-	// TODO: Maybe not a good decision
-	typedef void (*OnClickHandler)(Control*);
 	
 	class TextControl : public Control
 	{
 	protected:
-		OnClickHandler handleOnClick;
+		EventHandlingFunc handleOnClick;
 		
 		Text text;
 
@@ -121,7 +127,7 @@ namespace FusionEngine
 				  textString(""), textFont(""), textColor(-1.0f), 
 				  textPosition(-1.0f), textSize(-1) {}
 
-		void SetOnClickHandler(OnClickHandler onClickHandler);
+		void SetOnClickHandler(EventHandlingFunc onClickHandler);
 		void SetTextProperties(const std::string &newTextFont, const std::string &newTextString,
 							   glm::vec4 newTextColor, unsigned short newTextSize);
 

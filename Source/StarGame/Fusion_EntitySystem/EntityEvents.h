@@ -2,6 +2,10 @@
 #define __EVENT_TYPE_H
 
 
+#pragma warning(push, 0)
+#include <string>
+#pragma warning(pop)
+
 #include "ComponentType.h"
 #include "Event.h"
 

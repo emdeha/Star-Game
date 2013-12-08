@@ -71,6 +71,7 @@ namespace FusionEngine
 	public:
 		bool IsSet() const;
 		void Set(bool newIsSet);
+		bool HasActiveTextBox() const;
 		void SetBackgroundSprite(const std::string &spriteFile);
 
 		void DeactivateAllControls();

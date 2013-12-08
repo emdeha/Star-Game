@@ -49,6 +49,19 @@ void Layout::Set(bool newIsSet)
 	}
 }
 
+bool Layout::HasActiveTextBox() const
+{
+	for (auto control = controls.begin(); control != controls.end(); ++control)
+	{
+		if ((*control)->IsTextBox() && (*control)->IsActive())
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void Layout::SetBackgroundSprite(const std::string &spriteFile)
 {
 	if (background.GetWidth() > 0 || background.GetHeight() > 0)

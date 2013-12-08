@@ -65,6 +65,7 @@ void HandleMouse()
 		auto guiLayouts = GetWorld().GetLayouts();
 		for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
 		{
+			(*layout).second->DeactivateAllControls();
 			auto layoutControls = (*layout).second->GetControls();
 			for (auto control = layoutControls.begin(); control != layoutControls.end(); ++control)
 			{

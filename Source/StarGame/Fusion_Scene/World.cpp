@@ -95,6 +95,7 @@ void World::Load(const std::string &guiLayoutFile,
 											   50, 50, displayData.windowWidth, displayData.windowHeight));
 	testImageBox->SetRelativity(FE_RELATIVE_CENTER_BOTTOM);
 	testImageBox->SetBackground("../data/images/fusion-catalyst.jpg");
+	testImageBox->SetOnKeyPressedHandler(KeyPressed_FusionImageBox);
 	testImageBox->Init(eventManager);
 	testLayout->AddControl(newGame);
 	testLayout->AddControl(loadGame);

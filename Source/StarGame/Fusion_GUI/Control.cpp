@@ -52,6 +52,10 @@ void Control::SetActive(bool newIsActive)
 {
 	isActive = newIsActive;
 }
+bool Control::IsActive() const
+{
+	return isActive;
+}
 
 void Control::SetBackground(const std::string &backgroundFileName)
 {
@@ -348,14 +352,19 @@ bool ImageBox::HandleEvent(const IEventData &eventData)
 				}
 				else 
 				{
-					std::string errorMessage = "no OnKeyPressde handler for Control ==* ";
+					std::string errorMessage = "no OnKeyPressed handler for Control ==* ";
 					errorMessage += name + " *==";
 					HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
 					return false;
 				}
-				break;
 			}
+
 	}
 
 	return false;
+}
+
+void ImageBox::ChangeImage(const std::string &newImageFile)
+{
+	background.Init(newImageFile);
 }

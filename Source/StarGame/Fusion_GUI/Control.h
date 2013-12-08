@@ -88,12 +88,18 @@ namespace FusionEngine
 
 		virtual bool HandleEvent(const IEventData &eventData);
 
+		virtual bool IsTextBox() { return false; }
+		virtual bool IsImageBox() { return false; }
+		virtual bool IsButton() { return false; }
+		virtual bool IsLabel() { return false; }
+
 	public:
 		std::string GetName() const;
 
 		void SetVisibility(bool newIsVisible);
 		bool IsVisible() const;
 		void SetActive(bool newIsActive);
+		bool IsActive() const;
 
 		void SetOnKeyPressedHandler(EventHandlingFunc onKeyPressedHandler);
 		void SetRelativity(RelativityOption relativeTo);
@@ -150,6 +156,8 @@ namespace FusionEngine
 				  newWindowWidth, newWindowHeight, newMargins) {}
 
 		virtual bool HandleEvent(const IEventData &eventData);
+
+		virtual bool IsLabel() { return true; }
 	};
 
 	
@@ -164,6 +172,8 @@ namespace FusionEngine
 				  newWindowWidth, newWindowHeight, newMargins) {}
 
 		virtual bool HandleEvent(const IEventData &eventData);
+
+		virtual bool IsButton() { return true; }
 	};
 
 
@@ -185,6 +195,8 @@ namespace FusionEngine
 		virtual void Init(EventManager &eventManager);
 
 		virtual bool HandleEvent(const IEventData &eventData);
+
+		virtual bool IsTextBox() { return true; }
 	};
 
 
@@ -201,6 +213,11 @@ namespace FusionEngine
 		virtual void Init(EventManager &eventManager);
 
 		virtual bool HandleEvent(const IEventData &eventData);
+
+		virtual bool IsImageBox() { return true; }
+
+	public:
+		void ChangeImage(const std::string &newImageFile);
 	};
 }
 

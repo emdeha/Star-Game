@@ -337,7 +337,7 @@ bool TextBox::HandleEvent(const IEventData &eventData)
 					{
 						textString.pop_back();
 						int newTextLength = textString.length() - visibleText.length();
-						if (newTextLength >= 0)
+						if (newTextLength >= 0 && fabsf(text.GetWidth()) < maxWidth)
 						{
 							for (int i = visibleText.length() - 1; i >= 1; i--)
 							{

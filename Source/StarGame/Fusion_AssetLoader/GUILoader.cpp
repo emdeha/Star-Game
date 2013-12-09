@@ -72,6 +72,8 @@ RelativityOption GetControlRelativity(const std::string &relativityString)
 	{
 		return FE_RELATIVE_TOP_LEFT;
 	}
+
+	return FE_RELATIVE_BAD;
 }
 
 LayoutType GetLayoutType(const std::string &layoutTypeString)
@@ -96,6 +98,8 @@ LayoutType GetLayoutType(const std::string &layoutTypeString)
 	{
 		return FE_LAYOUT_OPTIONS;
 	}
+
+	return FE_LAYOUT_BAD;
 }
 
 GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
@@ -141,10 +145,16 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
     for(YAML::Node::const_iterator guiNode = guiData.begin();
         guiNode != guiData.end(); ++guiNode)
     {
-		currentLayoutType = GetLayoutType(guiNode->first.as<std::string>());
-        
         if(guiNode->first.as<std::string>() != "details")
         {
+			std::string layoutType = guiNode->first.as<std::string>();
+			currentLayoutType = GetLayoutType(layoutType);
+			if (currentLayoutType == FE_LAYOUT_BAD)
+			{
+				HandleUnexpectedError("BAD LAYOUT CAUGHT!!!", __LINE__, __FILE__);
+				return layouts;
+			}
+        
             isLayoutSet = guiNode->second["is-active"].as<bool>();
 
             std::shared_ptr<Layout> newLayout =
@@ -174,6 +184,11 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 					}
 					controlIsVisible = control->second["is-visible"].as<bool>();
 					controlRelativity = GetControlRelativity(control->second["relativity"].as<std::string>());
+					if (controlRelativity == FE_RELATIVE_BAD)
+					{
+						HandleUnexpectedError("BAD RELATIVITY CAUGHT!!!", __LINE__, __FILE__);
+						return layouts;
+					}
 					controlPosition = glm::ivec2(control->second["position"][0].as<int>(),
 												 control->second["position"][1].as<int>());
 
@@ -212,6 +227,7 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 							newLabel->SetBackground(controlBackgroundImageDir);
 						}
 						newLabel->SetVisibility(controlIsVisible);
+						newLabel->Init(GetWorld().GetEventManager());
 
 						newLayout->AddControl(newLabel);
 					}
@@ -229,6 +245,7 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 							newButton->SetBackground(controlBackgroundImageDir);
 						}
 						newButton->SetVisibility(controlIsVisible);
+						newButton->Init(GetWorld().GetEventManager());
 
 						newLayout->AddControl(newButton);
 					}
@@ -246,6 +263,7 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 							newTextBox->SetBackground(controlBackgroundImageDir);
 						}
 						newTextBox->SetVisibility(controlIsVisible);
+						newTextBox->Init(GetWorld().GetEventManager());
 
 						newLayout->AddControl(newTextBox);
 					}
@@ -261,6 +279,7 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 							newImageBox->SetBackground(controlBackgroundImageDir);
 						}
 						newImageBox->SetVisibility(controlIsVisible);
+						newImageBox->Init(GetWorld().GetEventManager());
 
 						newLayout->AddControl(newImageBox);
 					}

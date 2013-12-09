@@ -38,6 +38,8 @@ namespace FusionEngine
 		FE_RELATIVE_BOTTOM_RIGHT,
 		FE_RELATIVE_CENTER_BOTTOM,
 		FE_RELATIVE_CENTER_TOP,
+
+		FE_RELATIVE_BAD = -1,
 	};
 
 	class Control;

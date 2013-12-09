@@ -3,7 +3,7 @@ details:
     textures-dir: "../data/images/"
     default-font: AGENCYR.TTF
 layout-game:
-    is-active: false
+    is-active: true
     controls:
         control-label-matter:
             control-type: label 
@@ -60,7 +60,7 @@ layout-game:
             background: "fusion-empty.jpg"
             is-visible: true
             relativity: CENTER_BOTTOM
-            position: [ -25, 65 ]
+            position: [ -25, 95 ]
         control-label-fushint:
             control-type: label
             name: labelFusHint
@@ -96,7 +96,7 @@ layout-game:
             position: [ 400, 50 ]
             text-size: 28
 layout-menu:
-    is-active: true
+    is-active: false 
     background-image: "background.png"
     controls:
         control-button-new:
@@ -105,7 +105,7 @@ layout-menu:
             text: "New Game"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true 
-            width-height: [ 100, 50 ]
+            width-height: [ 100, 25 ]
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: true

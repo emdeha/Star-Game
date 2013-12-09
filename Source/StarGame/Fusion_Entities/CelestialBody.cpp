@@ -177,7 +177,7 @@ void CelestialBody::Update()
 		(*satellite)->currentRotationAngle += (*satellite)->angularVelocity * World::GetWorld().interpolation;
 		if ((*satellite)->currentRotationAngle >= 360.0f)
 		{
-			(*satellite)->currentRotationAngle = 0.0f;
+			(*satellite)->currentRotationAngle -= 360.0f;
 		}
 		float offset = (*satellite)->offsetFromSun;
 		satTransformData[0]->position = glm::vec3(offset, 0.0f, offset);

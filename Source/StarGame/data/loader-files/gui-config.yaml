@@ -13,7 +13,7 @@ layout-game:
             has-background: false
             is-visible: true
             relativity: TOP_LEFT
-            position: 5, 30
+            position: [ 5, 30 ]
             text-size: 28
         control-label-tooltip:
             control-type: label
@@ -30,7 +30,7 @@ layout-game:
             name: fusionOne
             has-background: true
             width-height: [ 50, 50 ]
-            background: "funsion-empty.jpg"
+            background: "fusion-empty.jpg"
             is-visible: true
             relativity: CENTER_BOTTOM
             position: [ -80, 10 ]
@@ -40,7 +40,7 @@ layout-game:
             is-visible: true
             has-background: true
             width-height: [ 50, 50 ]
-            background: "funsion-empty.jpg"
+            background: "fusion-empty.jpg"
             relativity: CENTER_BOTTOM
             position: [ -25, 10 ]
         control-imagebox-fusthree:
@@ -48,7 +48,7 @@ layout-game:
             name: fusionThree
             has-background: true
             width-height: [ 50, 50 ]
-            background: "funsion-empty.jpg"
+            background: "fusion-empty.jpg"
             is-visible: true
             relativity: CENTER_BOTTOM
             position: [ 30, 10 ]
@@ -57,7 +57,7 @@ layout-game:
             name: skillHint
             has-background: true
             width-height: [ 50, 50 ]
-            background: "funsion-empty.jpg"
+            background: "fusion-empty.jpg"
             is-visible: true
             relativity: CENTER_BOTTOM
             position: [ -25, 65 ]
@@ -74,6 +74,7 @@ layout-game:
         control-textbox-varinput:
             control-type: textBox
             name: varInput
+            text: ""
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true
             width-height: [ 200, 50 ]
@@ -108,7 +109,7 @@ layout-menu:
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: true
-            relativty: BOTTOM_LEFT
+            relativity: BOTTOM_LEFT
             position: [ 10, 130 ]
             text-size: 28
         control-button-resume:
@@ -121,7 +122,7 @@ layout-menu:
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: false
-            relativty: BOTTOM_LEFT
+            relativity: BOTTOM_LEFT
             position: [ 10, 50 ]
             text-size: 28
         control-button-save:

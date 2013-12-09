@@ -2,6 +2,7 @@
 #include "AssetLoader.h"
 
 #include "../framework/ErrorAPI.h"
+#include "../Fusion_Scene/World.h"
 
 
 using namespace FusionEngine;
@@ -101,8 +102,8 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 {
 	// GENERAL SETTINGS
 	// TODO: Figure out how to pass them
-	int windowWidth = 800;
-	int windowHeight = 600;
+	int windowWidth = GetWorld().GetDisplayData().windowWidth;
+	int windowHeight = GetWorld().GetDisplayData().windowHeight;
 
 
 	std::string fontsDir = "";
@@ -147,7 +148,8 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
             isLayoutSet = guiNode->second["is-active"].as<bool>();
 
             std::shared_ptr<Layout> newLayout =
-                std::shared_ptr<Layout>(new Layout(currentLayoutType));
+                std::shared_ptr<Layout>(new Layout(currentLayoutType, windowWidth, windowHeight));
+			newLayout->Init(GetWorld().GetEventManager());
 			newLayout->Set(isLayoutSet);
 			std::string layoutBackgroundFile = "";
             if(guiNode->second["background-image"].IsDefined())
@@ -180,8 +182,11 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
                     {					
 						controlTextSize = control->second["text-size"].as<unsigned short>();
 						controlText = control->second["text"].as<std::string>();
-						controlMargins = glm::ivec2(control->second["margins"][0].as<int>(),
-													control->second["margins"][1].as<int>());
+						if (controlHasBackground)
+						{
+							controlMargins = glm::ivec2(control->second["margins"][0].as<int>(),
+														control->second["margins"][1].as<int>());
+						}
 						controlFontColor = glm::vec4(control->second["font-color"][0].as<float>(),
 													 control->second["font-color"][1].as<float>(),
 													 control->second["font-color"][2].as<float>(),
@@ -192,6 +197,7 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 						}
                     }
 
+					std::string controlBackgroundImageDir = texturesDir + controlBackgroundImage;
 					if (controlType == "label")
 					{
 						std::shared_ptr<Label> newLabel = std::shared_ptr<Label>(new Label(
@@ -203,7 +209,7 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 													controlFontColor, controlTextSize);
 						if (controlHasBackground)
 						{
-							newLabel->SetBackground(controlBackgroundImage);
+							newLabel->SetBackground(controlBackgroundImageDir);
 						}
 						newLabel->SetVisibility(controlIsVisible);
 
@@ -220,7 +226,7 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 													 controlFontColor, controlTextSize);
 						if (controlHasBackground)
 						{
-							newButton->SetBackground(controlBackgroundImage);
+							newButton->SetBackground(controlBackgroundImageDir);
 						}
 						newButton->SetVisibility(controlIsVisible);
 
@@ -237,7 +243,7 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 													  controlFontColor, controlTextSize);
 						if (controlHasBackground)
 						{
-							newTextBox->SetBackground(controlBackgroundImage);
+							newTextBox->SetBackground(controlBackgroundImageDir);
 						}
 						newTextBox->SetVisibility(controlIsVisible);
 
@@ -252,7 +258,7 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 						newImageBox->SetRelativity(controlRelativity);
 						if (controlHasBackground)
 						{
-							newImageBox->SetBackground(controlBackgroundImage);
+							newImageBox->SetBackground(controlBackgroundImageDir);
 						}
 						newImageBox->SetVisibility(controlIsVisible);
 

@@ -30,12 +30,12 @@ void World::Load(const std::string &guiLayoutFile,
 					   loadedShaders.GetAllLoadedBlockIndices());
 
 	// Load GUI
-	/*
 	FusionEngine::AssetLoader<FusionEngine::GUIAssetObject> guiLoader;
 	guiLoader.RegisterType("loader-files", new FusionEngine::GUILoader());
 	FusionEngine::GUIAssetObject loadedGUI = guiLoader.LoadAssetObject("loader-files", guiLayoutFile);
 	guiLayouts = loadedGUI.GetAllLoadedLayouts();
-	*/
+
+	/*
 	std::shared_ptr<Layout> testLayout =
 		std::shared_ptr<Layout> (new Layout(FE_LAYOUT_MENU, displayData.windowWidth, displayData.windowHeight));
 	testLayout->Init(eventManager);
@@ -151,6 +151,7 @@ void World::Load(const std::string &guiLayoutFile,
 	guiLayouts.insert(std::make_pair(FE_LAYOUT_OPTIONS, optionsLayout));
 
 	SetLayout(FE_LAYOUT_MENU);
+	*/
 
 
 #ifndef FAST_LOAD

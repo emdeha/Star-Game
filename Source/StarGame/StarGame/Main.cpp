@@ -234,8 +234,7 @@ void Init()
 
 	GetWorld().GetDisplayData().windowWidth = glutGet(GLUT_WINDOW_WIDTH);
 	GetWorld().GetDisplayData().windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
-    //InitializePrograms();
-	GetWorld().Load("test-gui.yaml", "audio-config.yaml", "shader-config.yaml");
+	GetWorld().Load("gui-config.yaml", "audio-config.yaml", "shader-config.yaml");
 	InitializeScene();
 
     

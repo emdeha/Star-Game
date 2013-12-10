@@ -137,15 +137,20 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 
     YAML::Node guiData = YAML::LoadFile("../data/" + type + "/" + name);
 
+	std::map<LayoutType, std::shared_ptr<Layout>> layouts;
+	if (!guiData["details"])
+	{
+		HandleUnexpectedError("No \'details\' node in GUI config", __LINE__, __FILE__);
+		return layouts; 
+	}
     fontsDir = guiData["details"]["fonts-dir"].as<std::string>();
     texturesDir = guiData["details"]["textures-dir"].as<std::string>();
     defaultFont = guiData["details"]["default-font"].as<std::string>();
     
-	std::map<LayoutType, std::shared_ptr<Layout>> layouts;
-    for(YAML::Node::const_iterator guiNode = guiData.begin();
-        guiNode != guiData.end(); ++guiNode)
+    for (YAML::Node::const_iterator guiNode = guiData.begin();
+         guiNode != guiData.end(); ++guiNode)
     {
-        if(guiNode->first.as<std::string>() != "details")
+        if (guiNode->first.as<std::string>() != "details")
         {
 			std::string layoutType = guiNode->first.as<std::string>();
 			currentLayoutType = GetLayoutType(layoutType);
@@ -162,26 +167,26 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 			newLayout->Init(GetWorld().GetEventManager());
 			newLayout->Set(isLayoutSet);
 			std::string layoutBackgroundFile = "";
-            if(guiNode->second["background-image"].IsDefined())
+            if (guiNode->second["background-image"])
             {
                 layoutBackgroundFile = texturesDir;
                 layoutBackgroundFile += guiNode->second["background-image"].as<std::string>();
 				newLayout->SetBackgroundSprite(layoutBackgroundFile);
             }
 
-            if(guiNode->second["controls"])
+            if (guiNode->second["controls"])
             {
-                for(YAML::Node::const_iterator control = guiNode->second["controls"].begin();
-                    control != guiNode->second["controls"].end(); ++control)
+                for (YAML::Node::const_iterator control = guiNode->second["controls"].begin();
+                     control != guiNode->second["controls"].end(); ++control)
                 {
 					controlName = control->second["name"].as<std::string>();
 					controlHasBackground = control->second["has-background"].as<bool>();
 					if (controlHasBackground)
 					{
 						controlBackgroundImage = control->second["background"].as<std::string>();
-						controlDimensions = glm::ivec2(control->second["width-height"][0].as<int>(),
-													   control->second["width-height"][1].as<int>());
 					}
+					controlDimensions = glm::ivec2(control->second["width-height"][0].as<int>(),
+												   control->second["width-height"][1].as<int>());
 					controlIsVisible = control->second["is-visible"].as<bool>();
 					controlRelativity = GetControlRelativity(control->second["relativity"].as<std::string>());
 					if (controlRelativity == FE_RELATIVE_BAD)

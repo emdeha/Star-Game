@@ -11,6 +11,7 @@ layout-game:
             text: "Matter:"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
+            width-height: [ 0, 0 ]
             is-visible: true
             relativity: TOP_LEFT
             position: [ 5, 30 ]
@@ -21,6 +22,7 @@ layout-game:
             text: ""
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
+            width-height: [ 0, 0 ]
             is-visible: true
             relativity: TOP_RIGHT
             position: [ 0, 0 ]
@@ -67,6 +69,7 @@ layout-game:
             text: "Not a combination"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
+            width-height: [ 0, 0 ]
             is-visible: true
             relativity: CENTER_BOTTOM
             position: [ 30, 65 ]
@@ -91,6 +94,7 @@ layout-game:
             text: "Apply"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
+            width-height: [ 100, 20 ]
             is-visible: true
             relativity: TOP_RIGHT
             position: [ 400, 50 ]
@@ -200,6 +204,7 @@ layout-save-game:
             text: "Save Game"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
+            width-height: [ 0, 0 ]
             is-visible: true
             relativity: CENTER_TOP
             position: [ -50, 70 ]
@@ -227,6 +232,7 @@ layout-load-game:
             text: "Load Game"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
+            width-height: [ 0, 0 ]
             is-visible: true
             relativity: CENTER_TOP
             position: [ -50, 70 ]
@@ -254,6 +260,7 @@ layout-options:
             text: "Options"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: false
+            width-height: [ 0, 0 ]
             is-visible: true
             relativity: CENTER_TOP
             position: [ -50, 70 ]

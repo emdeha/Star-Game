@@ -3,6 +3,7 @@
 
 #include "../framework/ErrorAPI.h"
 #include "../Fusion_Scene/World.h"
+#include "../Fusion_GUI/ControlEvents.h"
 
 
 using namespace FusionEngine;
@@ -102,6 +103,55 @@ LayoutType GetLayoutType(const std::string &layoutTypeString)
 	return FE_LAYOUT_BAD;
 }
 
+EventHandlingFunc GetEventHandlerForControl(const std::string &eventHandlerType)
+{
+	if (eventHandlerType == "TEXT_BOX_ON_CLICK")
+	{
+		return Click_TextBox;
+	}
+	else if (eventHandlerType == "NEW_GAME_ON_CLICK")
+	{
+		return Click_NewGame;
+	}
+	else if (eventHandlerType == "RESUME_GAME_ON_CLICK")
+	{
+		return Click_ResumeGame;
+	}
+	else if (eventHandlerType == "SAVE_GAME_ON_CLICK")
+	{
+		return Click_SaveGame;
+	}
+	else if (eventHandlerType == "LOAD_GAME_ON_CLICK")
+	{
+		return Click_LoadGame;
+	}
+	else if (eventHandlerType == "OPTIONS_ON_CLICK")
+	{
+		return Click_Options;
+	}
+	else if (eventHandlerType == "BACK_BTN_ON_CLICK")
+	{
+		return Click_Back;
+	}
+	else if (eventHandlerType == "APPLY_INPUT_ON_CLICK")
+	{
+		return Click_Apply;
+	}
+	else if (eventHandlerType == "QUIT_ON_CLICK")
+	{
+		return Click_Quit;
+	}
+	else if (eventHandlerType == "FUSION_ON_KEY")
+	{
+		return KeyPressed_FusionImageBox;
+	}
+
+	std::string errorMessage = "not a valid event handling function ";
+	errorMessage += eventHandlerType;
+	HandleUnexpectedError(errorMessage, __LINE__, __FILE__);
+	return nullptr;
+}
+
 GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 {
 	// GENERAL SETTINGS
@@ -132,6 +182,9 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 	glm::ivec2 controlPosition;
 	unsigned short controlTextSize;
 	float controlTextBoxMaxWidth;
+
+	EventHandlingFunc onClickHandler;
+	EventHandlingFunc onKeyPressedHandler;
 
 	//////////////////////////////
 
@@ -197,6 +250,26 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 					controlPosition = glm::ivec2(control->second["position"][0].as<int>(),
 												 control->second["position"][1].as<int>());
 
+					if (control->second["event-handlers"])
+					{
+						for (auto eventHandler = control->second["event-handlers"].begin();
+							 eventHandler != control->second["event-handlers"].end(); ++eventHandler)
+						{
+							if (eventHandler->first.as<std::string>() == "OnClick")
+							{
+								onClickHandler =
+									GetEventHandlerForControl(
+										eventHandler->second.as<std::string>());
+							}
+							if (eventHandler->first.as<std::string>() == "OnKey")
+							{
+								onKeyPressedHandler = 
+									GetEventHandlerForControl(
+										eventHandler->second.as<std::string>());
+							}
+						}
+					}
+					
 					std::string controlType = control->second["control-type"].as<std::string>();
                     if (controlType == "label" || controlType == "button" || controlType == "textBox")
                     {					
@@ -250,6 +323,10 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 							newButton->SetBackground(controlBackgroundImageDir);
 						}
 						newButton->SetVisibility(controlIsVisible);
+						if (onClickHandler)
+						{
+							newButton->SetOnClickHandler(onClickHandler);
+						}
 						newButton->Init(GetWorld().GetEventManager());
 
 						newLayout->AddControl(newButton);
@@ -268,6 +345,10 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 							newTextBox->SetBackground(controlBackgroundImageDir);
 						}
 						newTextBox->SetVisibility(controlIsVisible);
+						if (onClickHandler)
+						{
+							newTextBox->SetOnClickHandler(onClickHandler);
+						}
 						newTextBox->Init(GetWorld().GetEventManager());
 
 						newLayout->AddControl(newTextBox);
@@ -284,6 +365,10 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 							newImageBox->SetBackground(controlBackgroundImageDir);
 						}
 						newImageBox->SetVisibility(controlIsVisible);
+						if (onKeyPressedHandler)
+						{
+							newImageBox->SetOnKeyPressedHandler(onKeyPressedHandler);
+						}
 						newImageBox->Init(GetWorld().GetEventManager());
 
 						newLayout->AddControl(newImageBox);

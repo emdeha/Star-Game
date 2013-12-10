@@ -150,6 +150,11 @@ void TextControl::SetTextProperties(const std::string &newTextFont, const std::s
 							 position.y - margins.y);
 }
 
+std::string TextControl::GetText() const
+{
+	return textString;
+}
+
 void TextControl::Init(EventManager &eventManager)
 {
 	Control::Init(eventManager);

@@ -3,7 +3,7 @@ details:
     textures-dir: "../data/images/"
     default-font: AGENCYR.TTF
 layout-game:
-    is-active: true
+    is-active: false
     controls:
         control-label-matter:
             control-type: label 
@@ -36,6 +36,8 @@ layout-game:
             is-visible: true
             relativity: CENTER_BOTTOM
             position: [ -80, 10 ]
+            event-handlers:
+                OnKey: FUSION_ON_KEY
         control-imagebox-fustwo:
             control-type: imageBox
             name: fusionTwo
@@ -45,6 +47,8 @@ layout-game:
             background: "fusion-empty.jpg"
             relativity: CENTER_BOTTOM
             position: [ -25, 10 ]
+            event-handlers:
+                OnKey: FUSION_ON_KEY
         control-imagebox-fusthree:
             control-type: imageBox
             name: fusionThree
@@ -54,6 +58,8 @@ layout-game:
             is-visible: true
             relativity: CENTER_BOTTOM
             position: [ 30, 10 ]
+            event-handlers:
+                OnKey: FUSION_ON_KEY
         control-imagebox-fushint:
             control-type: imageBox
             name: skillHint
@@ -63,6 +69,8 @@ layout-game:
             is-visible: true
             relativity: CENTER_BOTTOM
             position: [ -25, 65 ]
+            event-handlers:
+                OnKey: FUSION_ON_KEY
         control-label-fushint:
             control-type: label
             name: labelFusHint
@@ -88,6 +96,8 @@ layout-game:
             position: [ 300, 50 ]
             text-max-width: 100.0
             text-size: 28
+            event-handlers:
+                OnClick: TEXT_BOX_ON_CLICK
         control-button-apply:
             control-type: button
             name: applyInput
@@ -99,8 +109,10 @@ layout-game:
             relativity: TOP_RIGHT
             position: [ 400, 50 ]
             text-size: 28
+            event-handlers:
+                OnClick: APPLY_INPUT_ON_CLICK
 layout-menu:
-    is-active: false 
+    is-active: true
     background-image: "background.png"
     controls:
         control-button-new:
@@ -116,6 +128,8 @@ layout-menu:
             relativity: BOTTOM_LEFT
             position: [ 10, 130 ]
             text-size: 28
+            event-handlers:
+                OnClick: NEW_GAME_ON_CLICK
         control-button-resume:
             control-type: button
             name: resumeGame
@@ -129,6 +143,8 @@ layout-menu:
             relativity: BOTTOM_LEFT
             position: [ 10, 50 ]
             text-size: 28
+            event-handlers:
+                OnClick: RESUME_GAME_ON_CLICK
         control-button-save:
             control-type: button
             name: saveGame
@@ -142,6 +158,8 @@ layout-menu:
             relativity: BOTTOM_LEFT
             position: [ 10, 100 ]
             text-size: 28
+            event-handlers:
+                OnClick: SAVE_GAME_ON_CLICK
         control-button-load:
             control-type: button
             name: loadGame
@@ -155,6 +173,8 @@ layout-menu:
             relativity: BOTTOM_LEFT
             position: [ 10, 100 ]
             text-size: 28
+            event-handlers:
+                OnClick: LOAD_GAME_ON_CLICK
         control-button-options:
             control-type: button
             name: options
@@ -168,6 +188,8 @@ layout-menu:
             relativity: BOTTOM_LEFT
             position: [ 10, 70 ]
             text-size: 28
+            event-handlers:
+                OnClick: OPTIONS_ON_CLICK
         control-button-quit:
             control-type: button
             name: quitGame 
@@ -181,6 +203,8 @@ layout-menu:
             relativity: BOTTOM_LEFT
             position: [ 10, 40 ]
             text-size: 28   
+            event-handlers:
+                OnClick: QUIT_ON_CLICK
 layout-save-game:
     is-active: false
     background-image: "background.png"
@@ -198,6 +222,8 @@ layout-save-game:
             relativity: BOTTOM_LEFT
             position: [ 10, 40 ]
             text-size: 28
+            event-handlers:
+                OnClick: BACK_BTN_ON_CLICK
         control-label-tooltip:
             control-type: label
             name: labelHeader
@@ -226,6 +252,8 @@ layout-load-game:
             relativity: BOTTOM_LEFT
             position: [ 10, 40 ]
             text-size: 28
+            event-handlers:
+                OnClick: BACK_BTN_ON_CLICK
         control-label-tooltip:
             control-type: label
             name: labelHeader
@@ -254,6 +282,8 @@ layout-options:
             relativity: CENTER_TOP
             position: [ 10, 40 ]
             text-size: 28
+            event-handlers:
+                OnClick: BACK_BTN_ON_CLICK
         control-label-tooltip:
             control-type: label
             name: labelHeader

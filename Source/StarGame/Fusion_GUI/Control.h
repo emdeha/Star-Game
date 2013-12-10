@@ -139,6 +139,8 @@ namespace FusionEngine
 		void SetTextProperties(const std::string &newTextFont, const std::string &newTextString,
 							   glm::vec4 newTextColor, unsigned short newTextSize);
 
+		std::string GetText() const;
+
 		virtual void Init(EventManager &eventManager);
 
 		virtual void Draw(glutil::MatrixStack &modelMatrix) const;

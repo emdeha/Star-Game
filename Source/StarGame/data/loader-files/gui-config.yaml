@@ -121,12 +121,12 @@ layout-menu:
             text: "New Game"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true 
-            width-height: [ 100, 25 ]
+            width-height: [ 100, 40 ]
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: true
             relativity: BOTTOM_LEFT
-            position: [ 10, 130 ]
+            position: [ 10, 150 ]
             text-size: 28
             event-handlers:
                 OnClick: NEW_GAME_ON_CLICK
@@ -136,12 +136,12 @@ layout-menu:
             text: "Resume Game"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true 
-            width-height: [ 100, 50 ]
+            width-height: [ 100, 40 ]
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: false
             relativity: BOTTOM_LEFT
-            position: [ 10, 50 ]
+            position: [ 10, 150 ]
             text-size: 28
             event-handlers:
                 OnClick: RESUME_GAME_ON_CLICK
@@ -151,12 +151,12 @@ layout-menu:
             text: "Save Game"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true 
-            width-height: [ 100, 50 ]
+            width-height: [ 100, 40 ]
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: false
             relativity: BOTTOM_LEFT
-            position: [ 10, 100 ]
+            position: [ 10, 110 ]
             text-size: 28
             event-handlers:
                 OnClick: SAVE_GAME_ON_CLICK
@@ -166,12 +166,12 @@ layout-menu:
             text: "Load Game"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true 
-            width-height: [ 100, 50 ]
+            width-height: [ 100, 40 ]
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: true
             relativity: BOTTOM_LEFT
-            position: [ 10, 100 ]
+            position: [ 10, 110 ]
             text-size: 28
             event-handlers:
                 OnClick: LOAD_GAME_ON_CLICK
@@ -181,7 +181,7 @@ layout-menu:
             text: "Options"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true 
-            width-height: [ 100, 50 ]
+            width-height: [ 100, 40 ]
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: true
@@ -196,12 +196,12 @@ layout-menu:
             text: "Quit" 
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true
-            width-height: [ 100, 50 ]
+            width-height: [ 100, 40 ]
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: true
             relativity: BOTTOM_LEFT
-            position: [ 10, 40 ]
+            position: [ 10, 30 ]
             text-size: 28   
             event-handlers:
                 OnClick: QUIT_ON_CLICK

@@ -27,7 +27,6 @@
 #include "../Mouse/Mouse.h" // TODO: Replace with Fusion_Mouse
 #include "../Camera/TopDownCamera.h" // TODO: Replace with Fusion_Camera
 #include "../Entities/Lights.h" // TODO: Refactor
-//#include "../GUISystem/GUISystem.h"
 #include "../Audio/Audio.h" 
 
 #include <memory>
@@ -103,6 +102,7 @@ namespace FusionEngine
 		void Load(const std::string &guiLayoutFile, 
 				  const std::string &audioFile,
 				  const std::string &shaderDataFile); 
+		void ReloadGUI(const std::string &guiLayoutFile);
 
 		void Render();
 

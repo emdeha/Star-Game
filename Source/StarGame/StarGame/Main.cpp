@@ -373,15 +373,21 @@ void Reshape(int width, int height)
 
 void Keyboard(unsigned char key, int x, int y)
 {
-	GetWorld().GetEventManager().
-		FireEvent(FusionEngine::OnKeyPressedEvent(FusionEngine::EVENT_ON_KEY_PRESSED, key));
-
     switch(key)
     {
     case 27:
         glutLeaveMainLoop();
         return;
+	case 'r':
+		if (!GetWorld().GetCurrentLayout().HasActiveTextBox())
+		{
+			GetWorld().ReloadGUI("gui-config.yaml");
+		}
+		return;
    }
+
+	GetWorld().GetEventManager().
+		FireEvent(FusionEngine::OnKeyPressedEvent(FusionEngine::EVENT_ON_KEY_PRESSED, key));
 
     glutPostRedisplay();
 }

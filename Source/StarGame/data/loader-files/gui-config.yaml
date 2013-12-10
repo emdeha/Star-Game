@@ -53,14 +53,14 @@ layout-game:
             relativity: CENTER_BOTTOM
             position: [ 30, 10 ]
         control-imagebox-fushint:
-            control-type: hintBox
+            control-type: imageBox
             name: skillHint
             has-background: true
             width-height: [ 50, 50 ]
             background: "fusion-empty.jpg"
             is-visible: true
             relativity: CENTER_BOTTOM
-            position: [ -25, 95 ]
+            position: [ -25, 65 ]
         control-label-fushint:
             control-type: label
             name: labelFusHint

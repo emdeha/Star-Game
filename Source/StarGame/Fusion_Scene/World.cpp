@@ -108,18 +108,34 @@ void World::SetLayout(LayoutType layoutToSet)
 	}
 }
 
-Layout &World::GetCurrentLayout()
+Layout *World::GetLayout(LayoutType layoutType) const
+{
+	for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
+	{
+		if ((*layout).second->GetType() == layoutType)
+		{
+			return (*layout).second.get();
+		}
+	}
+
+	std::ostringstream errorMsg;
+	errorMsg << "no such layout: " << (int)layoutType;
+	HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
+	return nullptr;
+}
+
+Layout *World::GetCurrentLayout() const
 {
 	for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
 	{
 		if ((*layout).second->IsSet())
 		{
-			return *(*layout).second.get();
+			return (*layout).second.get();
 		}
 	}
 
 	HandleUnexpectedError("no current layout", __LINE__, __FILE__);
-	return *(*guiLayouts.begin()).second.get();
+	return nullptr;
 }
 
 bool World::HandleEvent(const IEventData &eventData)

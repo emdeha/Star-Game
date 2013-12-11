@@ -49,15 +49,6 @@ void Layout::Draw(glutil::MatrixStack &modelMatrix) const
 	}
 }
 
-bool Layout::IsSet() const
-{
-	return isSet;
-}
-void Layout::Set(bool newIsSet)
-{
-	isSet = newIsSet;
-}
-
 bool Layout::HasActiveTextBox() const
 {
 	for (auto control = controls.begin(); control != controls.end(); ++control)
@@ -87,9 +78,20 @@ void Layout::SetBackgroundSprite(const std::string &spriteFile)
 	}
 }
 
-void Layout::SetOnKeyPressedHandler(EventHandlingFunc newOnKeyPressedHandler)
+Control *Layout::GetControl(const std::string &name) const
 {
-	onKeyPressedHandler = newOnKeyPressedHandler;
+	for (auto control = controls.begin(); control != controls.end(); ++control)
+	{
+		if ((*control)->GetName() == name)
+		{
+			return (*control).get();
+		}
+	}
+
+	std::ostringstream errorMsg;
+	errorMsg << "no such control " << name;
+	HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
+	return nullptr;
 }
 
 void Layout::DeactivateAllControls()

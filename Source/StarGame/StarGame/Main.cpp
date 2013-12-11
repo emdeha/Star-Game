@@ -380,7 +380,7 @@ void Keyboard(unsigned char key, int x, int y)
         //glutLeaveMainLoop();
         //return;
 	case 'r':
-		if (!GetWorld().GetCurrentLayout().HasActiveTextBox())
+		if (!GetWorld().GetCurrentLayout()->HasActiveTextBox())
 		{
 			GetWorld().ReloadGUI("gui-config.yaml");
 			return;

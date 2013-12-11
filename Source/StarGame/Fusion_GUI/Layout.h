@@ -77,11 +77,33 @@ namespace FusionEngine
 		bool HasActiveTextBox() const;
 		void SetBackgroundSprite(const std::string &spriteFile);
 		void SetOnKeyPressedHandler(EventHandlingFunc newOnKeyPressedHandler);
+		LayoutType GetType() const;
+
+		Control *GetControl(const std::string &name) const;
 
 		void DeactivateAllControls();
 
 		virtual bool HandleEvent(const IEventData &eventData);
 	};
+
+	inline void Layout::SetOnKeyPressedHandler(EventHandlingFunc newOnKeyPressedHandler)
+	{
+		onKeyPressedHandler = newOnKeyPressedHandler;
+	}
+
+	inline bool Layout::IsSet() const
+	{
+		return isSet;
+	}
+	inline void Layout::Set(bool newIsSet)
+	{
+		isSet = newIsSet;
+	}
+
+	inline LayoutType Layout::GetType() const
+	{
+		return type;
+	}
 }
 
 

@@ -69,7 +69,7 @@ void HandleMouse()
 			auto layoutControls = (*layout).second->GetControls();
 			for (auto control = layoutControls.begin(); control != layoutControls.end(); ++control)
 			{
-				if ((*control)->IsVisible() &&
+				if ((*layout).second->IsSet() &&
 					(*control)->IsMouseOn(GetWorld().GetMouse().GetCurrentPosition()))
 				{
 					GetWorld().GetEventManager().FireEvent(FusionEngine::OnClickEvent(FusionEngine::EVENT_ON_CLICK, true, (*control)->GetName()));

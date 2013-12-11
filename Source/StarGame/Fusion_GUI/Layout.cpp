@@ -54,10 +54,6 @@ bool Layout::IsSet() const
 void Layout::Set(bool newIsSet)
 {
 	isSet = newIsSet;
-	for (auto control = controls.begin(); control != controls.end(); ++control)
-	{
-		(*control)->SetVisibility(isSet);
-	}
 }
 
 bool Layout::HasActiveTextBox() const

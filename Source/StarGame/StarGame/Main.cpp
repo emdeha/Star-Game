@@ -376,14 +376,16 @@ void Keyboard(unsigned char key, int x, int y)
     switch(key)
     {
     case 27:
-        glutLeaveMainLoop();
-        return;
+		break;
+        //glutLeaveMainLoop();
+        //return;
 	case 'r':
 		if (!GetWorld().GetCurrentLayout().HasActiveTextBox())
 		{
 			GetWorld().ReloadGUI("gui-config.yaml");
+			return;
 		}
-		return;
+		break;
    }
 
 	GetWorld().GetEventManager().

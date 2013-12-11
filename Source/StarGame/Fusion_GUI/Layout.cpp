@@ -10,6 +10,7 @@ using namespace FusionEngine;
 void Layout::Init(EventManager &eventManager)
 {
 	eventManager.AddListener(this, FusionEngine::EVENT_ON_RESHAPE);
+	eventManager.AddListener(this, FusionEngine::EVENT_ON_KEY_PRESSED);
 }
 
 void Layout::AddControl(const std::shared_ptr<Control> newControl)
@@ -24,6 +25,7 @@ std::vector<std::shared_ptr<Control>> Layout::GetControls() const
 void Layout::RemoveListeners(EventManager &eventManager)
 {
 	eventManager.RemoveListener(this, FusionEngine::EVENT_ON_RESHAPE);
+	eventManager.RemoveListener(this, FusionEngine::EVENT_ON_KEY_PRESSED);
 	for (auto control = controls.begin(); control != controls.end(); ++control)
 	{
 		eventManager.RemoveListener((*control).get(), FusionEngine::EVENT_ON_CLICK);
@@ -85,6 +87,11 @@ void Layout::SetBackgroundSprite(const std::string &spriteFile)
 	}
 }
 
+void Layout::SetOnKeyPressedHandler(EventHandlingFunc newOnKeyPressedHandler)
+{
+	onKeyPressedHandler = newOnKeyPressedHandler;
+}
+
 void Layout::DeactivateAllControls()
 {
 	for (auto control = controls.begin(); control != controls.end(); ++control)
@@ -104,6 +111,16 @@ bool Layout::HandleEvent(const IEventData &eventData)
 			
 			background.SetPosition(glm::vec2(data.windowWidth, data.windowHeight));
 			background.SetDimensions(data.windowWidth, data.windowHeight);
+		}
+		break;
+	case EVENT_ON_KEY_PRESSED:
+		{
+			const OnKeyPressedEvent &data = static_cast<const OnKeyPressedEvent&>(eventData);
+			
+			if (onKeyPressedHandler)
+			{
+				onKeyPressedHandler(nullptr, data);
+			}
 		}
 		break;
 	}

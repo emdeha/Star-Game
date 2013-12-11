@@ -52,12 +52,14 @@ namespace FusionEngine
 		Sprite2D background;
 		bool isBackgroundSet;
 
+		EventHandlingFunc onKeyPressedHandler;
+
 	public:
 		Layout(LayoutType newType)
 			: type(newType), isSet(false), isBackgroundSet(false),
-			  background(glm::vec2(), 0.0f, 0.0f) {}
+			  background(glm::vec2(), 0.0f, 0.0f), onKeyPressedHandler(nullptr) {}
 		Layout(LayoutType newType, unsigned short backgroundWidth, unsigned short backgroundHeight)
-			: type(newType), isSet(false), isBackgroundSet(false),
+			: type(newType), isSet(false), isBackgroundSet(false), onKeyPressedHandler(nullptr),
 			  background(glm::vec2(backgroundWidth, backgroundHeight), backgroundWidth, backgroundHeight) {}
 
 		void Init(EventManager &eventManager);
@@ -74,6 +76,7 @@ namespace FusionEngine
 		void Set(bool newIsSet);
 		bool HasActiveTextBox() const;
 		void SetBackgroundSprite(const std::string &spriteFile);
+		void SetOnKeyPressedHandler(EventHandlingFunc newOnKeyPressedHandler);
 
 		void DeactivateAllControls();
 

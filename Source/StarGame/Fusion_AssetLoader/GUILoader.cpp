@@ -145,6 +145,10 @@ EventHandlingFunc GetEventHandlerForControl(const std::string &eventHandlerType)
 	{
 		return KeyPressed_FusionImageBox;
 	}
+	else if (eventHandlerType == "GAME_LAYOUT_ON_KEY")
+	{
+		return KeyPressed_GameLayout;
+	}
 
 	std::string errorMessage = "not a valid event handling function ";
 	errorMessage += eventHandlerType;
@@ -226,6 +230,19 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
                 layoutBackgroundFile += guiNode->second["background-image"].as<std::string>();
 				newLayout->SetBackgroundSprite(layoutBackgroundFile);
             }
+			
+			if (guiNode->second["event-handlers"])
+			{
+				for (auto eventHandler = guiNode->second["event-handlers"].begin();
+						eventHandler != guiNode->second["event-handlers"].end(); ++eventHandler)
+				{
+					if (eventHandler->first.as<std::string>() == "OnKey")
+					{
+						newLayout->SetOnKeyPressedHandler(GetEventHandlerForControl(
+																eventHandler->second.as<std::string>()));
+					}
+				}
+			}
 
             if (guiNode->second["controls"])
             {

@@ -62,8 +62,13 @@ void World::Load(const std::string &guiLayoutFile,
 
 void World::ReloadGUI(const std::string &guiLayoutFile)
 {
-	eventManager.RemoveAllListeners();
+	for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
+	{
+		(*layout).second->RemoveListeners(eventManager);
+	}
 	eventManager.AddListener(this, FusionEngine::EVENT_ON_RESHAPE);
+
+	guiLayouts.clear();
 
 	FusionEngine::AssetLoader<FusionEngine::GUIAssetObject> guiLoader;
 	guiLoader.RegisterType("loader-files", new FusionEngine::GUILoader());

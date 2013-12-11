@@ -65,6 +65,8 @@ namespace FusionEngine
 		void AddControl(const std::shared_ptr<Control> newControl);
 		std::vector<std::shared_ptr<Control>> GetControls() const;
 
+		void RemoveListeners(EventManager &eventManager);
+
 		void Draw(glutil::MatrixStack &modelMatrix) const;
 
 	public:

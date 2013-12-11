@@ -21,6 +21,17 @@ std::vector<std::shared_ptr<Control>> Layout::GetControls() const
 	return controls;
 }
 
+void Layout::RemoveListeners(EventManager &eventManager)
+{
+	eventManager.RemoveListener(this, FusionEngine::EVENT_ON_RESHAPE);
+	for (auto control = controls.begin(); control != controls.end(); ++control)
+	{
+		eventManager.RemoveListener((*control).get(), FusionEngine::EVENT_ON_CLICK);
+		eventManager.RemoveListener((*control).get(), FusionEngine::EVENT_ON_RESHAPE);
+		eventManager.RemoveListener((*control).get(), FusionEngine::EVENT_ON_KEY_PRESSED);
+	}
+}
+
 void Layout::Draw(glutil::MatrixStack &modelMatrix) const
 {
 	if (isBackgroundSet)

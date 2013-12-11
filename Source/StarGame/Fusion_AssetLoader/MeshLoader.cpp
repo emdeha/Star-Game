@@ -129,9 +129,9 @@ void MeshLoader::InitMaterials(const aiScene *scene, MeshAssetObject &loadedMesh
 
 			std::string textureName = "../data/mesh-files/" + name;
 			textureName.erase(textureName.end() - 4, textureName.end());
-			textureName.append(".png");
+			textureName.append(".jpg");
             
-			if(!newTexture->Load(textureName, GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE, false))
+			if(!newTexture->Load(textureName, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, false))
             {
 				std::string pathToWhiteTexture = "../data/mesh-files/white.png";
 				if(!newTexture->Load(pathToWhiteTexture, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, false))

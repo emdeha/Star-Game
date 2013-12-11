@@ -14,7 +14,7 @@ layout-game:
             width-height: [ 0, 0 ]
             is-visible: true
             relativity: TOP_LEFT
-            position: [ 5, 30 ]
+            position: [ 5, 50 ]
             text-size: 28
         control-label-tooltip:
             control-type: label
@@ -88,12 +88,12 @@ layout-game:
             text: ""
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true
-            width-height: [ 200, 50 ]
+            width-height: [ 200, 40 ]
             background: "fusion-empty.jpg"
             margins: [ 5, 5 ]
             is-visible: true
             relativity: TOP_RIGHT
-            position: [ 300, 50 ]
+            position: [ 230, 50 ]
             text-max-width: 100.0
             text-size: 28
             event-handlers:
@@ -107,7 +107,7 @@ layout-game:
             width-height: [ 100, 20 ]
             is-visible: true
             relativity: TOP_RIGHT
-            position: [ 400, 50 ]
+            position: [ 290, 50 ]
             text-size: 28
             event-handlers:
                 OnClick: APPLY_INPUT_ON_CLICK
@@ -121,7 +121,7 @@ layout-menu:
             text: "New Game"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true 
-            width-height: [ 100, 40 ]
+            width-height: [ 135, 40 ]
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: true
@@ -136,7 +136,7 @@ layout-menu:
             text: "Resume Game"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true 
-            width-height: [ 100, 40 ]
+            width-height: [ 135, 40 ]
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: false
@@ -151,7 +151,7 @@ layout-menu:
             text: "Save Game"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true 
-            width-height: [ 100, 40 ]
+            width-height: [ 135, 40 ]
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: false
@@ -166,7 +166,7 @@ layout-menu:
             text: "Load Game"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true 
-            width-height: [ 100, 40 ]
+            width-height: [ 135, 40 ]
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: true
@@ -181,7 +181,7 @@ layout-menu:
             text: "Options"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true 
-            width-height: [ 100, 40 ]
+            width-height: [ 135, 40 ]
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: true
@@ -196,7 +196,7 @@ layout-menu:
             text: "Quit" 
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true
-            width-height: [ 100, 40 ]
+            width-height: [ 135, 40 ]
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: true
@@ -215,7 +215,7 @@ layout-save-game:
             text: "Back to Main"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true
-            width-height: [ 100, 50 ]
+            width-height: [ 130, 40 ]
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: true
@@ -245,7 +245,7 @@ layout-load-game:
             text: "Back to Main"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true
-            width-height: [ 100, 50 ]
+            width-height: [ 130, 40 ]
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: true
@@ -275,11 +275,11 @@ layout-options:
             text: "Back to Main"
             font-color: [ 1.0, 1.0, 1.0, 1.0 ]
             has-background: true
-            width-height: [ 100, 50 ]
+            width-height: [ 130, 40 ]
             background: "b-middle-section.jpg"
             margins: [ 10, 10 ]
             is-visible: true
-            relativity: CENTER_TOP
+            relativity: BOTTOM_LEFT
             position: [ 10, 40 ]
             text-size: 28
             event-handlers:

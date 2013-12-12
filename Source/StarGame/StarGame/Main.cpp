@@ -388,8 +388,10 @@ void Keyboard(unsigned char key, int x, int y)
 		break;
    }
 
+	std::string objName = "";
+
 	GetWorld().GetEventManager().
-		FireEvent(FusionEngine::OnKeyPressedEvent(FusionEngine::EVENT_ON_KEY_PRESSED, key, "fusionOne"));
+		FireEvent(FusionEngine::OnKeyPressedEvent(FusionEngine::EVENT_ON_KEY_PRESSED, key, objName));
 
     glutPostRedisplay();
 }

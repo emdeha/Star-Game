@@ -196,6 +196,11 @@ void InitializeScene()
 	GetScene().AddComponent("sun", sunCollidable);
 
 	GetWorld().GetRenderer().SubscribeForRendering(GetScene().GetEntity("sun"));
+
+
+	///////////////////////////////////////
+	GetWorld().SetFusionInput('f', 'q', 'w', 'e');
+	GetWorld().AddFusionSequence("waterSat", 'q', 'q', 'q');
 }
 
 
@@ -389,6 +394,19 @@ void Keyboard(unsigned char key, int x, int y)
    }
 
 	std::string objName = "";
+	unsigned int currentFusionInputIndex = GetWorld().GetCurrentFusionInputIndex();
+	switch (currentFusionInputIndex)
+	{
+	case 0:
+		objName = "fusionOne";
+		break;
+	case 1:
+		objName = "fusionTwo";
+		break;
+	case 2:
+		objName = "fusionThree";
+		break;
+	}
 
 	GetWorld().GetEventManager().
 		FireEvent(FusionEngine::OnKeyPressedEvent(FusionEngine::EVENT_ON_KEY_PRESSED, key, objName));

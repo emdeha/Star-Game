@@ -75,7 +75,7 @@ namespace FusionEngine
 		SunLight sunLight;
 		Audio audio;
 		LayoutsMap guiLayouts;
-		FusionInput fusionInput;
+		std::unique_ptr<FusionInput> fusionInput;
 
 	private:
 		World();

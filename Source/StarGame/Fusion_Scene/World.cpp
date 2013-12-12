@@ -140,20 +140,21 @@ Layout *World::GetCurrentLayout() const
 
 unsigned int World::GetCurrentFusionInputIndex() const
 {
-	return fusionInput.GetCurrentInputIndex();
+	return fusionInput->GetCurrentInputIndex();
 }
 
 void World::SetFusionInput(char sequenceEndButton,
 						   char validButtonA, char validButtonB, char validButtonC)
 {
-	fusionInput = FusionInput(sequenceEndButton, validButtonA, validButtonB, validButtonC,
-							  eventManager);
+	fusionInput = std::unique_ptr<FusionInput>(
+		new FusionInput(sequenceEndButton, validButtonA, validButtonB, validButtonC,
+					    eventManager));
 }
 
 void World::AddFusionSequence(const std::string &sequenceName,
 							  char buttonA, char buttonB, char buttonC)
 {
-	fusionInput.AddSequence(sequenceName, buttonA, buttonB, buttonC);
+	fusionInput->AddSequence(sequenceName, buttonA, buttonB, buttonC);
 }
 
 bool World::HandleEvent(const IEventData &eventData)

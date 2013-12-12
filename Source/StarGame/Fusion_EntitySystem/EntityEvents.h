@@ -23,6 +23,7 @@ namespace FusionEngine
 		EVENT_ON_CLICK,
 		EVENT_ON_RESHAPE,
 		EVENT_ON_KEY_PRESSED,
+		EVENT_ON_FUSION_COMPLETED,
 	};
 
 	struct EntityEvent : public IEventData
@@ -68,6 +69,14 @@ namespace FusionEngine
 
 		OnKeyPressedEvent(EventType eventType, char newKey, const std::string &newObjectId)
 			: IEventData(eventType), key(newKey), objectId(newObjectId) {}
+	};
+
+	struct OnFusionCompletedEvent : public IEventData
+	{
+		std::string inputSequence;
+
+		OnFusionCompletedEvent(EventType eventType, const std::string &newInputSequence)
+			: IEventData(eventType), inputSequence(newInputSequence) {}
 	};
 }
 

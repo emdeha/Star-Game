@@ -309,7 +309,7 @@ bool TextBox::HandleEvent(const IEventData &eventData)
 							visibleText.pop_back();
 						}
 					}
-					else
+					else if (ch != ASCII_BACKSPACE)
 					{
 						textString += ch;
 						visibleText.push_back(ch);

@@ -4,7 +4,7 @@ details:
     default-font: AGENCYR.TTF
 layout-game:
     is-active: false
-    eventHandlers:
+    event-handlers:
         OnKey: GAME_LAYOUT_ON_KEY
     controls:
         control-label-matter:

@@ -268,7 +268,7 @@ bool Button::HandleEvent(const IEventData &eventData)
 ///////////////
 //  TextBox  //
 ///////////////
-const int ASCII_BACKSPACE = 8;
+const char ASCII_BACKSPACE = 8;
 
  void TextBox::Init(EventManager &eventManager)
 {
@@ -292,7 +292,7 @@ bool TextBox::HandleEvent(const IEventData &eventData)
 				{
 					char ch = static_cast<const OnKeyPressedEvent&>(eventData).key;
 
-					if ((int)ch == ASCII_BACKSPACE && textString.length() > 0)
+					if (ch == ASCII_BACKSPACE && textString.length() > 0)
 					{
 						textString.pop_back();
 						int newTextLength = textString.length() - visibleText.length();
@@ -315,7 +315,7 @@ bool TextBox::HandleEvent(const IEventData &eventData)
 						visibleText.push_back(ch);
 					}
 
-					while (fabsf(text.GetWidth()) > maxWidth && (int)ch != ASCII_BACKSPACE)
+					while (fabsf(text.GetWidth()) > maxWidth && ch != ASCII_BACKSPACE)
 					{
 						visibleText.erase(visibleText.begin());
 						text.CalculateTextWidth(visibleText);

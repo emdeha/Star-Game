@@ -45,7 +45,7 @@ namespace FusionEngine
 	struct OnClickEvent : public IEventData
 	{
 		bool isLeftButtonDown;
-		std::string objectId; // replace with int
+		std::string objectId; // TODO: replace with int
 
 		OnClickEvent(EventType eventType, bool newIsLeftButtonDown, const std::string &newObjectId) 
 			: IEventData(eventType), isLeftButtonDown(newIsLeftButtonDown), objectId(newObjectId) {}
@@ -64,9 +64,10 @@ namespace FusionEngine
 	struct OnKeyPressedEvent : public IEventData
 	{
 		char key;
+		std::string objectId; // TODO: replace with int
 
-		OnKeyPressedEvent(EventType eventType, char newKey)
-			: IEventData(eventType), key(newKey) {}
+		OnKeyPressedEvent(EventType eventType, char newKey, const std::string &newObjectId)
+			: IEventData(eventType), key(newKey), objectId(newObjectId) {}
 	};
 }
 

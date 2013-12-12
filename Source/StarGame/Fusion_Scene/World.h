@@ -23,6 +23,7 @@
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Fusion_Renderer/ShaderManager.h"
 #include "../Fusion_GUI/Layout.h"
+#include "../Fusion_Entities/Skills.h"
 #pragma warning(push, 1)
 #include "../Mouse/Mouse.h" // TODO: Replace with Fusion_Mouse
 #include "../Camera/TopDownCamera.h" // TODO: Replace with Fusion_Camera
@@ -74,6 +75,7 @@ namespace FusionEngine
 		SunLight sunLight;
 		Audio audio;
 		LayoutsMap guiLayouts;
+		FusionInput fusionInput;
 
 	private:
 		World();
@@ -110,6 +112,12 @@ namespace FusionEngine
 		void SetLayout(LayoutType layoutToSet);
 		Layout *GetLayout(LayoutType layoutType) const;
 		Layout *GetCurrentLayout() const;
+
+		unsigned int GetCurrentFusionInputIndex() const;
+		void SetFusionInput(char sequenceEndButton,
+							char validButtonA, char validButtonB, char validButtonC);
+		void AddFusionSequence(const std::string &sequenceName,
+							   char buttonA, char buttonB, char buttonC);
 
 		virtual bool HandleEvent(const IEventData &eventData);
 	};

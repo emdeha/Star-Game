@@ -138,6 +138,24 @@ Layout *World::GetCurrentLayout() const
 	return nullptr;
 }
 
+unsigned int World::GetCurrentFusionInputIndex() const
+{
+	return fusionInput.GetCurrentInputIndex();
+}
+
+void World::SetFusionInput(char sequenceEndButton,
+						   char validButtonA, char validButtonB, char validButtonC)
+{
+	fusionInput = FusionInput(sequenceEndButton, validButtonA, validButtonB, validButtonC,
+							  eventManager);
+}
+
+void World::AddFusionSequence(const std::string &sequenceName,
+							  char buttonA, char buttonB, char buttonC)
+{
+	fusionInput.AddSequence(sequenceName, buttonA, buttonB, buttonC);
+}
+
 bool World::HandleEvent(const IEventData &eventData)
 {
 	EventType type = eventData.GetType();

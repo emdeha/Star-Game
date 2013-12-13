@@ -65,6 +65,11 @@ void Control::SetBackground(const std::string &backgroundFileName)
 	hasBackground = true;
 }
 
+void Control::ChangeBackgroundImage(const std::string &newImageFile)
+{
+	background.Init(newImageFile);
+}
+
 void Control::Init(EventManager &eventManager)
 {
 	eventManager.AddListener(this, FusionEngine::EVENT_ON_RESHAPE);
@@ -367,9 +372,4 @@ bool ImageBox::HandleEvent(const IEventData &eventData)
 	}
 
 	return false;
-}
-
-void ImageBox::ChangeImage(const std::string &newImageFile)
-{
-	background.Init(newImageFile);
 }

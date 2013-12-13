@@ -106,6 +106,8 @@ namespace FusionEngine
 		void SetOnKeyPressedHandler(EventHandlingFunc onKeyPressedHandler);
 		void SetRelativity(RelativityOption relativeTo);
 		void SetBackground(const std::string &backgroundFileName);
+
+		void ChangeBackgroundImage(const std::string &newImageFile);
 	};
 
 	
@@ -219,9 +221,6 @@ namespace FusionEngine
 		virtual bool HandleEvent(const IEventData &eventData);
 
 		virtual bool IsImageBox() { return true; }
-
-	public:
-		void ChangeImage(const std::string &newImageFile);
 	};
 }
 

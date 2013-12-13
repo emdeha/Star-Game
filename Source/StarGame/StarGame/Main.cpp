@@ -406,6 +406,8 @@ void Keyboard(unsigned char key, int x, int y)
 	case 2:
 		objName = "fusionThree";
 		break;
+	default:
+		HandleUnexpectedError("Something is wrong with the fusion sequences!!!", __LINE__, __FILE__);
 	}
 
 	GetWorld().GetEventManager().

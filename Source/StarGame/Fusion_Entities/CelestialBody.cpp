@@ -51,6 +51,7 @@ CelestialBody::CelestialBody(int newMaxSatelliteCount, float newDiameter,
 	currentRotationAngle(0.0f), angularVelocity(5.0f)
 {
 	World::GetWorld().GetEventManager().AddListener(this, FusionEngine::EVENT_ON_CLICK);
+	World::GetWorld().GetEventManager().AddListener(this, FusionEngine::EVENT_ON_FUSION_COMPLETED);
 
 	if (offsetFromSun <= 0.0f)
 	{
@@ -74,13 +75,24 @@ CelestialBody::~CelestialBody()
 bool CelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 {
 	EventType type = eventData.GetType();
-	switch(type)
+	switch (type)
 	{
 	case FusionEngine::EVENT_ON_CLICK:
 		{
 			const OnClickEvent &data = static_cast<const OnClickEvent&>(eventData);
 	
-			if(data.isLeftButtonDown && data.objectId == id && currentSatelliteCount <= maxSatelliteCount)
+			if (data.isLeftButtonDown && data.objectId == id && currentSatelliteCount <= maxSatelliteCount)
+			{
+				AddSatellite();
+				return true;
+			}
+		}
+		break;
+	case FusionEngine::EVENT_ON_FUSION_COMPLETED:
+		{
+			const OnFusionCompletedEvent &data = static_cast<const OnFusionCompletedEvent&>(eventData);
+
+			if (data.inputSequence == "qqq")
 			{
 				AddSatellite();
 				return true;

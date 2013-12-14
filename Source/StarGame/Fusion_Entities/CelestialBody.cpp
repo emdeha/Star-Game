@@ -33,6 +33,61 @@
 using namespace FusionEngine;
 
 
+std::string GetSatMesh(CelestialBodyType satType)
+{
+	std::string satMesh = "";
+	switch (satType)
+	{
+	case FE_CELESTIALBODY_FIRE:
+		satMesh = "fire_planet.obj";
+		break;
+	case FE_CELESTIALBODY_AIR:
+		satMesh = "air_planet.obj";
+		break;
+	case FE_CELESTIALBODY_EARTH:
+		satMesh = "earth_planet.obj";
+		break;
+	case FE_CELESTIALBODY_WATER:
+		satMesh = "water_planet.obj";
+		break;
+	default:
+		std::ostringstream errorMsg;
+		errorMsg << "no such satType: " << (int)satType;
+		HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
+		return "";
+	}
+
+	return satMesh;
+}
+
+float GetSatelliteOffset(CelestialBodyType satType)
+{
+	float satOffset = 0.0f;
+	switch (satType)
+	{
+	case FE_CELESTIALBODY_FIRE:
+		satOffset = 1.2f;
+		break;
+	case FE_CELESTIALBODY_AIR:
+		satOffset = 2.4f;
+		break;
+	case FE_CELESTIALBODY_EARTH:
+		satOffset = 3.6f;
+		break;
+	case FE_CELESTIALBODY_WATER:
+		satOffset = 4.8f;
+		break;
+	default:
+		std::ostringstream errorMsg;
+		errorMsg << "no such satType: " << (int)satType;
+		HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
+		return -1.0f;
+	}
+
+	return satOffset;
+}
+
+
 CelestialBody::CelestialBody() :
 	maxSatelliteCount(0), currentSatelliteCount(1),
 	satellites(0), diameter(0.0f),
@@ -106,60 +161,6 @@ bool CelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 	}
 	
 	return false;
-}
-
-std::string GetSatMesh(CelestialBodyType satType)
-{
-	std::string satMesh = "";
-	switch (satType)
-	{
-	case FE_CELESTIALBODY_FIRE:
-		satMesh = "fire_planet.obj";
-		break;
-	case FE_CELESTIALBODY_AIR:
-		satMesh = "air_planet.obj";
-		break;
-	case FE_CELESTIALBODY_EARTH:
-		satMesh = "earth_planet.obj";
-		break;
-	case FE_CELESTIALBODY_WATER:
-		satMesh = "water_planet.obj";
-		break;
-	default:
-		std::ostringstream errorMsg;
-		errorMsg << "no such satType: " << (int)satType;
-		HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
-		return "";
-	}
-
-	return satMesh;
-}
-
-float GetSatelliteOffset(CelestialBodyType satType)
-{
-	float satOffset = 0.0f;
-	switch (satType)
-	{
-	case FE_CELESTIALBODY_FIRE:
-		satOffset = 1.2f;
-		break;
-	case FE_CELESTIALBODY_AIR:
-		satOffset = 2.4f;
-		break;
-	case FE_CELESTIALBODY_EARTH:
-		satOffset = 3.6f;
-		break;
-	case FE_CELESTIALBODY_WATER:
-		satOffset = 4.8f;
-		break;
-	default:
-		std::ostringstream errorMsg;
-		errorMsg << "no such satType: " << (int)satType;
-		HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
-		return -1.0f;
-	}
-
-	return satOffset;
 }
 
 bool CelestialBody::AddSatellite(CelestialBodyType satType)

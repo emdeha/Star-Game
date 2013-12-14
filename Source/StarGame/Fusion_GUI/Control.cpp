@@ -72,6 +72,15 @@ void Control::AddPreloadedBackground(size_t index, const std::string &background
 	Sprite2D newPreloadedBackground = Sprite2D(glm::vec2(position), width, height);
 	newPreloadedBackground.Init(backgroundFileName);
 
+	if (backgrounds.find(index) != backgrounds.end())
+	{
+		std::ostringstream errorMsg;
+		errorMsg << "overwriting boundaries at index: " << index 
+			     << ", file: " << backgroundFileName;
+		HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
+		return;
+	}
+
 	backgrounds.insert(std::make_pair(index, newPreloadedBackground));
 }
 
@@ -83,6 +92,15 @@ void Control::AddPreloadedBackgrounds(const std::map<size_t, std::string> &backg
 		Sprite2D newPreloadedBackground = Sprite2D(glm::vec2(position), width, height);
 		newPreloadedBackground.Init((*fileName).second);
 
+		if (backgrounds.find((*fileName).first) != backgrounds.end())
+		{
+			std::ostringstream errorMsg;
+			errorMsg << "overwriting boundaries at index: " << (*fileName).first 
+					 << ", file: " << (*fileName).second;
+			HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
+			return;
+		}
+
 		backgrounds.insert(std::make_pair((*fileName).first, newPreloadedBackground));
 	}
 }
@@ -90,6 +108,15 @@ void Control::AddPreloadedBackgrounds(const std::map<size_t, std::string> &backg
 void Control::ChangeBackgroundImage(size_t index)
 {
 	auto newBackground = backgrounds.find(index);
+
+	if (newBackground == backgrounds.end())
+	{
+		std::ostringstream errorMsg;
+		errorMsg << "cannot find background image at index: " << index;
+		HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
+		return;
+	}
+
 	background = (*newBackground).second;
 	background.SetPosition(glm::vec2(position));
 }

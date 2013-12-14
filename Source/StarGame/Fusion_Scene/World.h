@@ -119,6 +119,7 @@ namespace FusionEngine
 		void AddFusionSequence(const std::string &sequenceName,
 							   char buttonA, char buttonB, char buttonC);
 		std::string GetFusionInputValidButtons() const;
+		char GetFusionInputSequenceEndButton() const;
 
 		virtual bool HandleEvent(const IEventData &eventData);
 	};

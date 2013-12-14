@@ -21,6 +21,7 @@
 
 #pragma warning(push, 0)
 #include "../glsdk/glm/glm.hpp"
+#include <map>
 #pragma warning(pop)
 
 #include "../Fusion_EntitySystem/EventManager.h"
@@ -65,6 +66,7 @@ namespace FusionEngine
 		unsigned short windowWidth;
 		unsigned short windowHeight;
 
+		std::map<size_t, Sprite2D> backgrounds;
 		Sprite2D background;
 		bool hasBackground;
 		bool isVisible;
@@ -106,8 +108,9 @@ namespace FusionEngine
 		void SetOnKeyPressedHandler(EventHandlingFunc onKeyPressedHandler);
 		void SetRelativity(RelativityOption relativeTo);
 		void SetBackground(const std::string &backgroundFileName);
+		void AddPreloadedBackground(size_t index, const std::string &backgroundFileName);
 
-		void ChangeBackgroundImage(const std::string &newImageFile);
+		void ChangeBackgroundImage(size_t index);
 	};
 
 	

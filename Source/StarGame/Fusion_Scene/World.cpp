@@ -35,6 +35,15 @@ void World::Load(const std::string &guiLayoutFile,
 	FusionEngine::GUIAssetObject loadedGUI = guiLoader.LoadAssetObject("loader-files", guiLayoutFile);
 	guiLayouts = loadedGUI.GetAllLoadedLayouts();
 
+	this->GetLayout(FE_LAYOUT_GAME)->GetControl("fusionOne")->AddPreloadedBackground(1, "../data/images/fusion-catalyst.jpg");
+	this->GetLayout(FE_LAYOUT_GAME)->GetControl("fusionOne")->AddPreloadedBackground(2, "../data/images/fusion-matter.jpg");
+	this->GetLayout(FE_LAYOUT_GAME)->GetControl("fusionOne")->AddPreloadedBackground(3, "../data/images/fusion-ectoplasm.jpg");
+	this->GetLayout(FE_LAYOUT_GAME)->GetControl("fusionTwo")->AddPreloadedBackground(1, "../data/images/fusion-catalyst.jpg");
+	this->GetLayout(FE_LAYOUT_GAME)->GetControl("fusionTwo")->AddPreloadedBackground(2, "../data/images/fusion-matter.jpg");
+	this->GetLayout(FE_LAYOUT_GAME)->GetControl("fusionTwo")->AddPreloadedBackground(3, "../data/images/fusion-ectoplasm.jpg");
+	this->GetLayout(FE_LAYOUT_GAME)->GetControl("fusionThree")->AddPreloadedBackground(1, "../data/images/fusion-catalyst.jpg");
+	this->GetLayout(FE_LAYOUT_GAME)->GetControl("fusionThree")->AddPreloadedBackground(2, "../data/images/fusion-matter.jpg");
+	this->GetLayout(FE_LAYOUT_GAME)->GetControl("fusionThree")->AddPreloadedBackground(3, "../data/images/fusion-ectoplasm.jpg");
 
 #ifndef FAST_LOAD
 	// Load Audio
@@ -141,6 +150,11 @@ Layout *World::GetCurrentLayout() const
 unsigned int World::GetCurrentFusionInputIndex() const
 {
 	return fusionInput->GetCurrentInputIndex();
+}
+
+std::string World::GetFusionInputValidButtons() const
+{
+	return fusionInput->GetValidInputButtons();
 }
 
 void World::SetFusionInput(char sequenceEndButton,

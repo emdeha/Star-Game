@@ -62,12 +62,23 @@ void Control::SetBackground(const std::string &backgroundFileName)
 	background = Sprite2D(glm::vec2(position), width, height);
 	background.Init(backgroundFileName);
 
+	backgrounds.insert(std::make_pair(0, background));
+
 	hasBackground = true;
 }
 
-void Control::ChangeBackgroundImage(const std::string &newImageFile)
+void Control::AddPreloadedBackground(size_t index, const std::string &backgroundFileName)
 {
-	background.Init(newImageFile);
+	Sprite2D newPreloadedBackground = Sprite2D(glm::vec2(position), width, height);
+	newPreloadedBackground.Init(backgroundFileName);
+
+	backgrounds.insert(std::make_pair(index, newPreloadedBackground));
+}
+
+void Control::ChangeBackgroundImage(size_t index)
+{
+	auto newBackground = backgrounds.find(index);
+	background = (*newBackground).second;
 }
 
 void Control::Init(EventManager &eventManager)

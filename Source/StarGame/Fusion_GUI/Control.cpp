@@ -91,6 +91,7 @@ void Control::ChangeBackgroundImage(size_t index)
 {
 	auto newBackground = backgrounds.find(index);
 	background = (*newBackground).second;
+	background.SetPosition(glm::vec2(position));
 }
 
 void Control::Init(EventManager &eventManager)

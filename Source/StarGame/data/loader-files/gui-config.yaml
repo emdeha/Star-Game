@@ -35,6 +35,10 @@ layout-game:
             has-background: true
             width-height: [ 50, 50 ]
             background: "fusion-empty.jpg"
+            preloaded-backgrounds:
+                - "fusion-catalyst.jpg"
+                - "fusion-matter.jpg"
+                - "fusion-ectoplasm.jpg"
             is-visible: true
             relativity: CENTER_BOTTOM
             position: [ -80, 10 ]
@@ -47,6 +51,10 @@ layout-game:
             has-background: true
             width-height: [ 50, 50 ]
             background: "fusion-empty.jpg"
+            preloaded-backgrounds:
+                - "fusion-catalyst.jpg"
+                - "fusion-matter.jpg"
+                - "fusion-ectoplasm.jpg"
             relativity: CENTER_BOTTOM
             position: [ -25, 10 ]
             event-handlers:
@@ -57,6 +65,10 @@ layout-game:
             has-background: true
             width-height: [ 50, 50 ]
             background: "fusion-empty.jpg"
+            preloaded-backgrounds:
+                - "fusion-catalyst.jpg"
+                - "fusion-matter.jpg"
+                - "fusion-ectoplasm.jpg"
             is-visible: true
             relativity: CENTER_BOTTOM
             position: [ 30, 10 ]

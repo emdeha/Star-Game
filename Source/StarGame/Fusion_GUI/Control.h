@@ -109,6 +109,7 @@ namespace FusionEngine
 		void SetRelativity(RelativityOption relativeTo);
 		void SetBackground(const std::string &backgroundFileName);
 		void AddPreloadedBackground(size_t index, const std::string &backgroundFileName);
+		void AddPreloadedBackgrounds(const std::map<size_t, std::string> &backgroundFileNames);
 
 		void ChangeBackgroundImage(size_t index);
 	};

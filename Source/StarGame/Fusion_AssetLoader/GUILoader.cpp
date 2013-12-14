@@ -186,6 +186,7 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 	glm::ivec2 controlPosition;
 	unsigned short controlTextSize;
 	float controlTextBoxMaxWidth;
+	std::map<size_t, std::string> preloadedBackgroundsNames;
 
 	EventHandlingFunc onClickHandler;
 	EventHandlingFunc onKeyPressedHandler;
@@ -267,6 +268,19 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 					controlPosition = glm::ivec2(control->second["position"][0].as<int>(),
 												 control->second["position"][1].as<int>());
 
+					if (control->second["preloaded-backgrounds"])
+					{
+						size_t index = 1;
+						for (auto background = control->second["preloaded-backgrounds"].begin();
+							 background != control->second["preloaded-backgrounds"].end(); ++background)
+						{
+							preloadedBackgroundsNames.insert(std::make_pair(
+															 index, 
+															 texturesDir + background->as<std::string>()));
+							index++;
+						}
+					}
+
 					if (control->second["event-handlers"])
 					{
 						for (auto eventHandler = control->second["event-handlers"].begin();
@@ -321,6 +335,10 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 						{
 							newLabel->SetBackground(controlBackgroundImageDir);
 						}
+						if (preloadedBackgroundsNames.size() > 0)
+						{
+							newLabel->AddPreloadedBackgrounds(preloadedBackgroundsNames);
+						}
 						newLabel->SetVisibility(controlIsVisible);
 						newLabel->Init(GetWorld().GetEventManager());
 
@@ -338,6 +356,10 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 						if (controlHasBackground)
 						{
 							newButton->SetBackground(controlBackgroundImageDir);
+						}
+						if (preloadedBackgroundsNames.size() > 0)
+						{
+							newButton->AddPreloadedBackgrounds(preloadedBackgroundsNames);
 						}
 						newButton->SetVisibility(controlIsVisible);
 						if (onClickHandler)
@@ -361,6 +383,10 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 						{
 							newTextBox->SetBackground(controlBackgroundImageDir);
 						}
+						if (preloadedBackgroundsNames.size() > 0)
+						{
+							newTextBox->AddPreloadedBackgrounds(preloadedBackgroundsNames);
+						}
 						newTextBox->SetVisibility(controlIsVisible);
 						if (onClickHandler)
 						{
@@ -380,6 +406,10 @@ GUIAssetObject GUILoader::Load(const std::string &type, const std::string &name)
 						if (controlHasBackground)
 						{
 							newImageBox->SetBackground(controlBackgroundImageDir);
+						}
+						if (preloadedBackgroundsNames.size() > 0)
+						{
+							newImageBox->AddPreloadedBackgrounds(preloadedBackgroundsNames);
 						}
 						newImageBox->SetVisibility(controlIsVisible);
 						if (onKeyPressedHandler)

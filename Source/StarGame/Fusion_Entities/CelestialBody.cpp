@@ -38,13 +38,16 @@ CelestialBody::CelestialBody() :
 	satellites(0), diameter(0.0f),
 	offsetFromSun(0.0f), currentRotationAngle(0.0f), angularVelocity(5.0f)
 {
+	srand(time(0));
 	std::ostringstream name;
-	name << "satellite" << offsetFromSun;
+	name << "satellite" << rand()%1000;
 	id = name.str();
 }
 
-CelestialBody::CelestialBody(int newMaxSatelliteCount, float newDiameter, 
+CelestialBody::CelestialBody(CelestialBodyType newType,
+							 int newMaxSatelliteCount, float newDiameter, 
 							 float newOffsetFromSun) :
+	type(newType),	
 	maxSatelliteCount(newMaxSatelliteCount), currentSatelliteCount(1),
 	satellites(0), diameter(newDiameter),
 	offsetFromSun(newOffsetFromSun),
@@ -53,7 +56,7 @@ CelestialBody::CelestialBody(int newMaxSatelliteCount, float newDiameter,
 	World::GetWorld().GetEventManager().AddListener(this, FusionEngine::EVENT_ON_CLICK);
 	World::GetWorld().GetEventManager().AddListener(this, FusionEngine::EVENT_ON_FUSION_COMPLETED);
 
-	if (offsetFromSun <= 0.0f)
+	if (type == FE_CELESTIALBODY_SUN)
 	{
 		std::ostringstream name;
 		name << "sun";
@@ -61,8 +64,9 @@ CelestialBody::CelestialBody(int newMaxSatelliteCount, float newDiameter,
 	}
 	else
 	{
+		srand(time(0));
 		std::ostringstream name;
-		name << "satellite" << offsetFromSun;
+		name << "satellite" << rand()%1000;
 		id = name.str();
 	}
 }
@@ -81,11 +85,11 @@ bool CelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 		{
 			const OnClickEvent &data = static_cast<const OnClickEvent&>(eventData);
 	
-			if (data.isLeftButtonDown && data.objectId == id && currentSatelliteCount <= maxSatelliteCount)
-			{
-				AddSatellite();
-				return true;
-			}
+			//if (data.isLeftButtonDown && data.objectId == id && currentSatelliteCount <= maxSatelliteCount)
+			//{
+			//	AddSatellite();
+			//	return true;
+			//}
 		}
 		break;
 	case FusionEngine::EVENT_ON_FUSION_COMPLETED:
@@ -94,7 +98,7 @@ bool CelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 
 			if (data.inputSequence == "qqq")
 			{
-				AddSatellite();
+				AddSatellite(FE_CELESTIALBODY_FIRE);
 				return true;
 			}
 		}
@@ -104,39 +108,75 @@ bool CelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 	return false;
 }
 
-std::string GetSatMesh(int satCount)
+std::string GetSatMesh(CelestialBodyType satType)
 {
 	std::string satMesh = "";
-	switch (satCount)
+	switch (satType)
 	{
-	case 1:
+	case FE_CELESTIALBODY_FIRE:
 		satMesh = "fire_planet.obj";
 		break;
-	case 2: 
+	case FE_CELESTIALBODY_AIR:
 		satMesh = "air_planet.obj";
 		break;
-	case 3: 
+	case FE_CELESTIALBODY_EARTH:
 		satMesh = "earth_planet.obj";
 		break;
-	case 4: 
+	case FE_CELESTIALBODY_WATER:
 		satMesh = "water_planet.obj";
 		break;
 	default:
-		break;
+		std::ostringstream errorMsg;
+		errorMsg << "no such satType: " << (int)satType;
+		HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
+		return "";
 	}
 
 	return satMesh;
 }
 
-bool CelestialBody::AddSatellite()
+float GetSatelliteOffset(CelestialBodyType satType)
 {
-	float satOffset = this->currentSatelliteCount * 1.2f;
-	std::shared_ptr<CelestialBody> newSat(new CelestialBody(0, 0.3f, satOffset));
+	float satOffset = 0.0f;
+	switch (satType)
+	{
+	case FE_CELESTIALBODY_FIRE:
+		satOffset = 1.2f;
+		break;
+	case FE_CELESTIALBODY_AIR:
+		satOffset = 2.4f;
+		break;
+	case FE_CELESTIALBODY_EARTH:
+		satOffset = 3.6f;
+		break;
+	case FE_CELESTIALBODY_WATER:
+		satOffset = 4.8f;
+		break;
+	default:
+		std::ostringstream errorMsg;
+		errorMsg << "no such satType: " << (int)satType;
+		HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
+		return -1.0f;
+	}
+
+	return satOffset;
+}
+
+bool CelestialBody::AddSatellite(CelestialBodyType satType)
+{
+	if (currentSatelliteCount > maxSatelliteCount)
+	{
+		return false;
+	}
+
+	float satOffset = GetSatelliteOffset(satType); 
+	std::shared_ptr<CelestialBody> newSat(new CelestialBody(satType, 0, 0.3f, satOffset));
 	this->satellites.push_back(newSat);
 
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
 	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());	
-	FusionEngine::MeshAssetObject loadedMesh = meshLoader.LoadAssetObject("mesh-files", GetSatMesh(this->currentSatelliteCount));
+	FusionEngine::MeshAssetObject loadedMesh = 
+		meshLoader.LoadAssetObject("mesh-files", GetSatMesh(satType));
 	
 	FusionEngine::Render *satRender = new FusionEngine::Render();
 	

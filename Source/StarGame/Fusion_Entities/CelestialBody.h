@@ -34,11 +34,25 @@
 
 namespace FusionEngine
 {
+	enum CelestialBodyType
+	{
+		FE_CELESTIALBODY_SUN,
+
+		FE_CELESTIALBODY_FIRE,
+		FE_CELESTIALBODY_AIR,
+		FE_CELESTIALBODY_EARTH,
+		FE_CELESTIALBODY_WATER,
+
+		FE_SATELLITE_BAD = -1
+	};
+
 	class CelestialBody : public IEventListener
 	{
 	private:
 		std::vector<std::shared_ptr<CelestialBody>> satellites;
 		std::string id; // TODO: replace with ints
+
+		CelestialBodyType type;
 
 		int maxSatelliteCount;
 		int currentSatelliteCount;
@@ -50,11 +64,12 @@ namespace FusionEngine
 
 	public:
 		CelestialBody();
-		CelestialBody(int newMaxSatelliteCount, float newDiameter, float newOffsetFromSun);
+		CelestialBody(CelestialBodyType newType,
+					  int newMaxSatelliteCount, float newDiameter, float newOffsetFromSun);
 
 		~CelestialBody();
 
-		bool AddSatellite();
+		bool AddSatellite(CelestialBodyType satType);
 		void Update();
 
 		std::string GetID() { return id; }

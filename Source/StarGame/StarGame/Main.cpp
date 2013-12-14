@@ -188,7 +188,9 @@ void InitializeScene()
 
 	FusionEngine::Functional<FusionEngine::CelestialBody> *sunFuncComp = 
 		new FusionEngine::Functional<FusionEngine::CelestialBody>();
-	sunFuncComp->updatedObject = std::unique_ptr<FusionEngine::CelestialBody>(new FusionEngine::CelestialBody(4, 0.5f, 0.0f));
+	sunFuncComp->updatedObject = 
+		std::unique_ptr<FusionEngine::CelestialBody>(new 
+			FusionEngine::CelestialBody(FusionEngine::FE_CELESTIALBODY_SUN, 4, 0.5f, 0.0f));
 	GetScene().AddComponent("sun", sunFuncComp);
 	
 	FusionEngine::Collidable *sunCollidable = new FusionEngine::Collidable();

@@ -30,26 +30,17 @@
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Fusion_EntitySystem/Event.h"
 #include "../Fusion_EntitySystem/FusionComponents.h"
+#include "Skills.h"
 
 
 namespace FusionEngine
 {
-	enum CelestialBodyType
-	{
-		FE_CELESTIALBODY_SUN,
-
-		FE_CELESTIALBODY_FIRE,
-		FE_CELESTIALBODY_AIR,
-		FE_CELESTIALBODY_EARTH,
-		FE_CELESTIALBODY_WATER,
-
-		FE_SATELLITE_BAD = -1
-	};
 
 	class CelestialBody : public IEventListener
 	{
 	private:
 		std::vector<std::shared_ptr<CelestialBody>> satellites;
+		std::vector<std::shared_ptr<Skill>> skills;
 		std::string id; // TODO: replace with ints
 
 		CelestialBodyType type;
@@ -70,6 +61,8 @@ namespace FusionEngine
 		~CelestialBody();
 
 		bool AddSatellite(CelestialBodyType satType);
+		bool AddSkill(Skill newSkill);
+
 		void Update();
 
 		std::string GetID() { return id; }

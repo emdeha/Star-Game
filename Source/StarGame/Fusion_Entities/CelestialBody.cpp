@@ -151,11 +151,19 @@ bool CelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 		{
 			const OnFusionCompletedEvent &data = static_cast<const OnFusionCompletedEvent&>(eventData);
 
-			if (data.inputSequence == "qqq")
+			for (auto skill = skills.begin(); skill != skills.end(); ++skill)
 			{
-				AddSatellite(FE_CELESTIALBODY_FIRE);
-				return true;
+				if ((*skill)->IsForSequence(data.inputSequence))
+				{
+					(*skill)->Activate(this);
+					return true;
+				}
 			}
+			//if (data.inputSequence == "qqq")
+			//{
+			//	AddSatellite(FE_CELESTIALBODY_FIRE);
+			//	return true;
+			//}
 		}
 		break;
 	}

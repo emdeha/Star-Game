@@ -186,7 +186,13 @@ void InitializeScene()
 	sunFuncComp->updatedObject = 
 		std::unique_ptr<FE::CelestialBody>(new FE::CelestialBody(FE::FE_CELESTIALBODY_SUN, 4, 0.5f, 0.0f));
 	sunFuncComp->updatedObject->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_WATER, 'q', 'q', 'q', 0, 0)));
+		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_WATER, 'w', 'w', 'w', 0, 0)));
+	sunFuncComp->updatedObject->AddSkill(std::shared_ptr<FE::Skill>(
+		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_FIRE, 'q', 'q', 'q', 0, 0)));
+	sunFuncComp->updatedObject->AddSkill(std::shared_ptr<FE::Skill>(
+		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_AIR, 'q', 'w', 'e', 0, 0)));
+	sunFuncComp->updatedObject->AddSkill(std::shared_ptr<FE::Skill>(
+		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_EARTH, 'e', 'e', 'e', 0, 0)));
 	GetScene().AddComponent("sun", sunFuncComp);
 	
 	FE::Collidable *sunCollidable = new FE::Collidable();
@@ -198,7 +204,10 @@ void InitializeScene()
 
 	///////////////////////////////////////
 	GetWorld().SetFusionInput('f', 'q', 'w', 'e');
-	GetWorld().AddFusionSequence("waterSat", 'q', 'q', 'q');
+	GetWorld().AddFusionSequence("waterSat", 'w', 'w', 'w');
+	GetWorld().AddFusionSequence("fireSat", 'q', 'q', 'q');
+	GetWorld().AddFusionSequence("earthSat", 'e', 'e', 'e');
+	GetWorld().AddFusionSequence("airSat", 'q', 'w', 'e');
 }
 
 
@@ -209,7 +218,7 @@ const int MAX_FRAMESKIP = 5;
 unsigned long nextGameTick = 0;
 
 unsigned int frameCount = 0;
-const char WINDOW_TITLE[] = "Test Playground: ";
+const char WINDOW_TITLE[] = "Planets: ";
 
 void TimerFunction(int value)
 {

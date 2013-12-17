@@ -215,12 +215,10 @@ void TimerFunction(int value)
 {
     if(value != 0)
     {
-        char *tempString = (char *)malloc(512 + strlen(WINDOW_TITLE));
+		std::ostringstream framesTitle;
+		framesTitle << WINDOW_TITLE << " " << frameCount * 4 << " frames per second";
 
-        sprintf(tempString, "%s %i frames per second", WINDOW_TITLE, frameCount * 4);
-
-        glutSetWindowTitle(tempString);
-        free(tempString);
+        glutSetWindowTitle(framesTitle.str().c_str());
     }
 
     frameCount = 0;
@@ -276,16 +274,13 @@ void Init()
 
     // Bind the static buffers.
     glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(FE::FE_BT_LIGHT), 
-        lightUniformBuffer, 
-        0, sizeof(LightBlockGamma));
+					  lightUniformBuffer, 0, sizeof(LightBlockGamma));
 
     glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(FE::FE_BT_PROJECTION), 
-        projectionUniformBuffer,
-        0, sizeof(glm::mat4));
+					  projectionUniformBuffer, 0, sizeof(glm::mat4));
 
     glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(FE::FE_BT_ORTHOGRAPHIC),
-        orthographicUniformBuffer,
-        0, sizeof(glm::mat4));
+					  orthographicUniformBuffer, 0, sizeof(glm::mat4));
 
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 

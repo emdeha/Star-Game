@@ -39,9 +39,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Spaceship.h">
-      <Filter>Header Files\Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="States.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
@@ -54,19 +51,22 @@
     <ClInclude Include="Skills.h">
       <Filter>Header Files\Solar System</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header Files\Enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Spaceship.cpp">
-      <Filter>Source Files\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="CelestialBody.cpp">
       <Filter>Source Files\Solar System</Filter>
     </ClCompile>
     <ClCompile Include="Skills.cpp">
       <Filter>Source Files\Solar System</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

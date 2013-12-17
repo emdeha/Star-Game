@@ -116,55 +116,27 @@ void HandlePassiveMovement(int x, int y)
 	GetWorld().GetMouse().SetCurrentPosition(glm::ivec2(x, y));
 }
 
-void InitializeScene()
+void CreateSun()
 {
-    TopDownCamera userCamera = TopDownCamera(glm::vec3(), 13.5f, 0.0f, 45.0f);
-
-    SunLight 
-        mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, GetWorld().GetDisplayData().gamma));//displayData.gamma));
-
-	GetWorld().GetCamera() = userCamera;
-	GetWorld().GetSunLight() = mainSunLight;
-
-	FE::ShaderManager worldShaderManager = GetWorld().GetShaderManager();
-	FE::ProgramData textureProgData = worldShaderManager.GetProgram(FE::FE_PROGRAM_TEXTURE);
-    glUseProgram(textureProgData.programId);
-    glUniform1i(textureProgData.GetUniform(FE::FE_UNIFORM__SAMPLER), 0);
-	FE::ProgramData perspectiveTextureProgData = worldShaderManager.GetProgram(FE::FE_PROGRAM_TEXTURE_PERSPECTIVE);
-    glUseProgram(perspectiveTextureProgData.programId);
-    glUniform1i(perspectiveTextureProgData.GetUniform(FE::FE_UNIFORM__SAMPLER), 0);
-	FE::ProgramData simpleTextureProgData = worldShaderManager.GetProgram(FE::FE_PROGRAM_SIMPLE_TEXTURE);
-    glUseProgram(simpleTextureProgData.programId);
-    glUniform1i(simpleTextureProgData.GetUniform(FE::FE_UNIFORM_COLOR_TEXTURE), 0);
-	FE::ProgramData litTextureProgData = worldShaderManager.GetProgram(FE::FE_PROGRAM_LIT_TEXTURE);
-    glUseProgram(litTextureProgData.programId);
-    glUniform1i(litTextureProgData.GetUniform(FE::FE_UNIFORM__SAMPLER), 0);
-	FE::ProgramData spriteProgramData = worldShaderManager.GetProgram(FE::FE_PROGRAM_SPRITE_PARTICLE);
-    glUseProgram(spriteProgramData.programId);
-    glUniform1i(spriteProgramData.GetUniform(FE::FE_UNIFORM__SAMPLER), 0);
-    glUseProgram(0);
-
-
-	GetScene().Init(GetWorld().GetEventManager());
-
 	FE::AssetLoader<FE::MeshAssetObject> meshLoader;
 	meshLoader.RegisterType("mesh-files", new FE::MeshLoader());
 	FE::MeshAssetObject loadedMesh = meshLoader.LoadAssetObject("mesh-files", "sun.obj");
 
 	FE::Render *sunRender = new FE::Render();
 
-	std::vector<std::shared_ptr<FE::MeshEntry>> meshEntries = loadedMesh.GetMeshEntries();
+	auto meshEntries = loadedMesh.GetMeshEntries();
 	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
 	{
 		sunRender->mesh.AddEntry((*meshEntry));
 	}
-	std::vector<std::shared_ptr<Texture2D>> textures = loadedMesh.GetTextures();
+	auto textures = loadedMesh.GetTextures();
 	for(auto texture = textures.begin(); texture != textures.end(); ++texture)
 	{
 		sunRender->mesh.AddTexture((*texture));
 	}
 	sunRender->rendererType = FE::Render::FE_RENDERER_SIMPLE;
-	sunRender->shaderProgram = worldShaderManager.GetProgram(FE::FE_PROGRAM_SIMPLE).programId;
+	sunRender->shaderProgram = 
+		GetWorld().GetShaderManager().GetProgram(FE::FE_PROGRAM_SIMPLE).programId;
 	sunRender->vao = loadedMesh.vao;
 
 	GetScene().AddEntity("sun");
@@ -200,7 +172,77 @@ void InitializeScene()
 	GetScene().AddComponent("sun", sunCollidable);
 
 	GetWorld().GetRenderer().SubscribeForRendering(GetScene().GetEntity("sun"));
+}
 
+void CreateEnemy(const std::string &name, glm::vec3 position)
+{
+	FE::AssetLoader<FE::MeshAssetObject> meshLoader;
+	meshLoader.RegisterType("mesh-files", new FE::MeshLoader());
+	FE::MeshAssetObject loadedMesh = meshLoader.LoadAssetObject("mesh-files", "spaceship.obj");
+
+	FE::Render *spaceshipRender = new FE::Render();
+
+	auto meshEntries = loadedMesh.GetMeshEntries();
+	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
+	{
+		spaceshipRender->mesh.AddEntry((*meshEntry));
+	}
+	auto textures = loadedMesh.GetTextures();
+	for(auto texture = textures.begin(); texture != textures.end(); ++texture)
+	{
+		spaceshipRender->mesh.AddTexture((*texture));
+	}
+	spaceshipRender->rendererType = FE::Render::FE_RENDERER_LIT;
+	spaceshipRender->shaderProgram = 
+		GetWorld().GetShaderManager().GetProgram(FE::FE_PROGRAM_LIT_TEXTURE).programId;
+	spaceshipRender->vao = loadedMesh.vao;
+
+	GetScene().AddEntity(name);
+	GetScene().AddComponent(name, spaceshipRender);
+
+	FE::Transform *spaceshipTransform = new FE::Transform();
+	spaceshipTransform->position = position; 
+	spaceshipTransform->rotation = glm::vec3();
+	spaceshipTransform->scale = glm::vec3(0.1f);
+	GetScene().AddComponent(name, spaceshipTransform);
+
+	GetWorld().GetRenderer().SubscribeForRendering(GetScene().GetEntity(name));
+}
+
+void InitializeScene()
+{
+    TopDownCamera userCamera = TopDownCamera(glm::vec3(), 13.5f, 0.0f, 45.0f);
+
+    SunLight 
+        mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, GetWorld().GetDisplayData().gamma));//displayData.gamma));
+
+	GetWorld().GetCamera() = userCamera;
+	GetWorld().GetSunLight() = mainSunLight;
+
+	FE::ShaderManager worldShaderManager = GetWorld().GetShaderManager();
+	FE::ProgramData textureProgData = worldShaderManager.GetProgram(FE::FE_PROGRAM_TEXTURE);
+    glUseProgram(textureProgData.programId);
+    glUniform1i(textureProgData.GetUniform(FE::FE_UNIFORM__SAMPLER), 0);
+	FE::ProgramData perspectiveTextureProgData = worldShaderManager.GetProgram(FE::FE_PROGRAM_TEXTURE_PERSPECTIVE);
+    glUseProgram(perspectiveTextureProgData.programId);
+    glUniform1i(perspectiveTextureProgData.GetUniform(FE::FE_UNIFORM__SAMPLER), 0);
+	FE::ProgramData simpleTextureProgData = worldShaderManager.GetProgram(FE::FE_PROGRAM_SIMPLE_TEXTURE);
+    glUseProgram(simpleTextureProgData.programId);
+    glUniform1i(simpleTextureProgData.GetUniform(FE::FE_UNIFORM_COLOR_TEXTURE), 0);
+	FE::ProgramData litTextureProgData = worldShaderManager.GetProgram(FE::FE_PROGRAM_LIT_TEXTURE);
+    glUseProgram(litTextureProgData.programId);
+    glUniform1i(litTextureProgData.GetUniform(FE::FE_UNIFORM__SAMPLER), 0);
+	FE::ProgramData spriteProgramData = worldShaderManager.GetProgram(FE::FE_PROGRAM_SPRITE_PARTICLE);
+    glUseProgram(spriteProgramData.programId);
+    glUniform1i(spriteProgramData.GetUniform(FE::FE_UNIFORM__SAMPLER), 0);
+    glUseProgram(0);
+
+
+	GetScene().Init(GetWorld().GetEventManager());
+
+	CreateSun();
+	CreateEnemy("spaceship1", glm::vec3(1.0f, 0.0f, 0.0f));
+	CreateEnemy("spaceship2", glm::vec3(0.0f, 0.0f, 3.0f));
 
 	///////////////////////////////////////
 	GetWorld().SetFusionInput('f', 'q', 'w', 'e');

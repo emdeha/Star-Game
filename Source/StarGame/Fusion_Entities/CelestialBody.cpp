@@ -159,11 +159,6 @@ bool CelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 					return true;
 				}
 			}
-			//if (data.inputSequence == "qqq")
-			//{
-			//	AddSatellite(FE_CELESTIALBODY_FIRE);
-			//	return true;
-			//}
 		}
 		break;
 	}
@@ -216,6 +211,13 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 	World::GetWorld().GetRenderer().SubscribeForRendering(GetScene().GetEntity(newSat->GetID()));
 
 	this->currentSatelliteCount++;
+
+	return true;
+}
+
+bool CelestialBody::AddSkill(const std::shared_ptr<Skill> newSkill)
+{
+	skills.push_back(newSkill);
 
 	return true;
 }

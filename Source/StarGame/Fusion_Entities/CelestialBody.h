@@ -61,7 +61,7 @@ namespace FusionEngine
 		~CelestialBody();
 
 		bool AddSatellite(CelestialBodyType satType);
-		bool AddSkill(Skill newSkill);
+		bool AddSkill(const std::shared_ptr<Skill> newSkill);
 
 		void Update();
 

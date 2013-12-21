@@ -73,8 +73,10 @@ void Renderer::SubscribeForRendering(Entity *entity)
     std::vector<std::shared_ptr<MeshEntry>> meshEntries = renderData[0]->mesh.GetMeshEntries();
 	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
     {
+		int materialUBSize = 0;
+		GenerateUniformBuffers(materialUBSize, glm::vec4(), renderData[0]->materialUniformBuffer);
 		glBindBufferRange(GL_UNIFORM_BUFFER, meshEntry->get()->materialIndex, 
-						  renderData[0]->materialUniformBuffer, 0, sizeof(Material));
+						  renderData[0]->materialUniformBuffer, 0, materialUBSize);
 
 		glGenBuffers(1, &meshEntry->get()->vertexBuffer);
 		glBindBuffer(GL_ARRAY_BUFFER, meshEntry->get()->vertexBuffer);

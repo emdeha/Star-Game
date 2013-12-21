@@ -288,7 +288,7 @@ void Init()
 	GetWorld().GetDisplayData().windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
 	GetWorld().Load("gui-config.yaml", "audio-config.yaml", "shader-config.yaml");
 	InitializeScene();
-
+	
     
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);

@@ -71,8 +71,8 @@ void SunLight::Render(glutil::MatrixStack &modelMatrix, FusionEngine::ShaderMana
 	glUseProgram(litTextureData.programId);
 
     glUniform4fv(litTextureData.GetUniform(FusionEngine::FE_UNIFORM_LIGHT_INTENSITY), 1, glm::value_ptr(lightIntensity));
-    glUniform3fv(lightData.GetUniform(FusionEngine::FE_UNIFORM_CAMERA_SPACE_LIGHT_POS),
-		1, glm::value_ptr(position_cameraSpace));
+    glUniform3fv(litTextureData.GetUniform(FusionEngine::FE_UNIFORM_CAMERA_SPACE_LIGHT_POS),
+				 1, glm::value_ptr(position_cameraSpace));
 
     blockLightData.ambientIntensity = ambientIntensity;
     blockLightData.lightAttenuation = lightAttenuation;

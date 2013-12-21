@@ -55,22 +55,19 @@ void Renderer::SubscribeForRendering(Entity *entity)
 	glGenVertexArrays(1, &renderData[0]->vao);
 	glBindVertexArray(renderData[0]->vao);
 
-	modelToCameraMatrixUniform = glGetUniformLocation(renderData[0]->shaderProgram, "modelToCameraMatrix"); 
-	colorUniform = glGetUniformLocation(renderData[0]->shaderProgram, "color"); 
-	normalModelToCameraMatrixUniform = glGetUniformLocation(renderData[0]->shaderProgram, "normalModelToCameraMatrix");
-	//modelToCameraMatrixUniform.insert(std::make_pair(entity->GetIndex(), 
-	//	glGetUniformLocation(renderData[0]->shaderProgram, "modelToCameraMatrix")));
-	//colorUniform.insert(std::make_pair(entity->GetIndex(),
-	//	glGetUniformLocation(renderData[0]->shaderProgram, "color")));
-	//normalModelToCameraMatrixUniform.insert(std::make_pair(entity->GetIndex(),
-	//	glGetUniformLocation(renderData[0]->shaderProgram, "normalModelToCameraMatrix")));
+	modelToCameraMatrixUniform.insert(std::make_pair(entity->GetIndex(), 
+		glGetUniformLocation(renderData[0]->shaderProgram, "modelToCameraMatrix")));
+	colorUniform.insert(std::make_pair(entity->GetIndex(),
+		glGetUniformLocation(renderData[0]->shaderProgram, "color")));
+	normalModelToCameraMatrixUniform.insert(std::make_pair(entity->GetIndex(),
+		glGetUniformLocation(renderData[0]->shaderProgram, "normalModelToCameraMatrix")));
 
-	//positionAttrib.insert(std::make_pair(entity->GetIndex(),
-	//	glGetAttribLocation(renderData[0]->shaderProgram, "position")));
-	//textureAttrib.insert(std::make_pair(entity->GetIndex(),
-	//	glGetAttribLocation(renderData[0]->shaderProgram, "texCoord")));
-	//normalAttrib.insert(std::make_pair(entity->GetIndex(),
-	//	glGetAttribLocation(renderData[0]->shaderProgram, "normal")));
+	positionAttrib.insert(std::make_pair(entity->GetIndex(),
+		glGetAttribLocation(renderData[0]->shaderProgram, "position")));
+	textureAttrib.insert(std::make_pair(entity->GetIndex(),
+		glGetAttribLocation(renderData[0]->shaderProgram, "texCoord")));
+	normalAttrib.insert(std::make_pair(entity->GetIndex(),
+		glGetAttribLocation(renderData[0]->shaderProgram, "normal")));
 
 
     std::vector<std::shared_ptr<MeshEntry>> meshEntries = renderData[0]->mesh.GetMeshEntries();
@@ -145,9 +142,9 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix) const
 			modelMatrix.RotateZ(transformData[0]->rotation.z);
 			modelMatrix.Scale(transformData[0]->scale);
 
-			glUniformMatrix4fv(modelToCameraMatrixUniform,
+			glUniformMatrix4fv((*modelToCameraMatrixUniform.find(subscribedMesh->first)).second,
 							   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-			glUniform4f(colorUniform, 
+			glUniform4f((*colorUniform.find(subscribedMesh->first)).second, 
 						1.0f, 1.0f, 1.0f, 1.0f);
 
 			if(renderData[0]->rendererType == Render::FE_RENDERER_LIT)
@@ -158,7 +155,7 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix) const
 				glm::mat3 normMatrix(modelMatrix.Top());
 				normMatrix = glm::transpose(glm::inverse(normMatrix));
 
-				glUniformMatrix3fv(normalModelToCameraMatrixUniform, 
+				glUniformMatrix3fv((*normalModelToCameraMatrixUniform.find(subscribedMesh->first)).second, 
 								   1, GL_FALSE, glm::value_ptr(normMatrix));
             }
 

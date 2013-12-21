@@ -38,20 +38,13 @@ namespace FusionEngine
 	private:
 		std::vector<std::pair<unsigned int, MeshAssetObject>> subscribedMeshes;		
 
-		GLuint modelToCameraMatrixUniform;
-		GLuint colorUniform;
-		GLuint normalModelToCameraMatrixUniform;
-
-		GLuint positionAttrib;
-		GLuint textureAttrib;	
-		GLuint normalAttrib;
-		//std::map<unsigned int, GLuint> modelToCameraMatrixUniform;
-		//std::map<unsigned int, GLuint> colorUniform;
-		//std::map<unsigned int, GLuint> normalModelToCameraMatrixUniform;
+		std::map<unsigned int, GLuint> modelToCameraMatrixUniform;
+		std::map<unsigned int, GLuint> colorUniform;
+		std::map<unsigned int, GLuint> normalModelToCameraMatrixUniform;
 		
-		//std::map<unsigned int, GLuint> positionAttrib;
-		//std::map<unsigned int, GLuint> textureAttrib;
-		//std::map<unsigned int, GLuint> normalAttrib;
+		std::map<unsigned int, GLuint> positionAttrib;
+		std::map<unsigned int, GLuint> textureAttrib;
+		std::map<unsigned int, GLuint> normalAttrib;
 
 	public:
         Renderer() {}

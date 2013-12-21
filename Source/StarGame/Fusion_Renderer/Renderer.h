@@ -24,6 +24,7 @@
 #include "../glsdk/glload/gl_3_3.h"
 #include "../glsdk/glutil/glutil.h"
 #include <vector>
+#include <map>
 #pragma warning(pop)
 
 #include "../Fusion_EntitySystem/Entity.h"
@@ -40,6 +41,17 @@ namespace FusionEngine
 		GLuint modelToCameraMatrixUniform;
 		GLuint colorUniform;
 		GLuint normalModelToCameraMatrixUniform;
+
+		GLuint positionAttrib;
+		GLuint textureAttrib;	
+		GLuint normalAttrib;
+		//std::map<unsigned int, GLuint> modelToCameraMatrixUniform;
+		//std::map<unsigned int, GLuint> colorUniform;
+		//std::map<unsigned int, GLuint> normalModelToCameraMatrixUniform;
+		
+		//std::map<unsigned int, GLuint> positionAttrib;
+		//std::map<unsigned int, GLuint> textureAttrib;
+		//std::map<unsigned int, GLuint> normalAttrib;
 
 	public:
         Renderer() {}

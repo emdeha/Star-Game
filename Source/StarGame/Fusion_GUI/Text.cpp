@@ -39,6 +39,8 @@ void Text::Init(unsigned short newWindowWidth, unsigned short newWindowHeight)
 	fontTextureUnif = fontProgramData.GetUniform(FE_UNIFORM_FONT_TEXTURE);
 	positionAttrib = fontProgramData.GetAttrib(FE_ATTRIB_POSITION);
 
+	glUseProgram(fontProgram);
+
 	windowWidth = newWindowWidth;
 	windowHeight = newWindowHeight;
 
@@ -100,6 +102,8 @@ void Text::Init(unsigned short newWindowWidth, unsigned short newWindowHeight)
 		position.x -= (fontFace->glyph->advance.x >> 6);
 		position.y -= (fontFace->glyph->advance.y >> 6);
 	}
+
+	glUseProgram(0);
 
 	if (textBufferData.size() > 0)
 	{

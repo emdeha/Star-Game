@@ -235,6 +235,9 @@ void InitializeScene()
 	FE::ProgramData spriteProgramData = worldShaderManager.GetProgram(FE::FE_PROGRAM_SPRITE_PARTICLE);
     glUseProgram(spriteProgramData.programId);
     glUniform1i(spriteProgramData.GetUniform(FE::FE_UNIFORM__SAMPLER), 0);
+	FE::ProgramData fontProgramData = worldShaderManager.GetProgram(FE::FE_PROGRAM_FONT);
+	glUseProgram(fontProgramData.programId);
+	glUniform1i(fontProgramData.GetUniform(FE::FE_UNIFORM_FONT_TEXTURE), 0);
     glUseProgram(0);
 
 

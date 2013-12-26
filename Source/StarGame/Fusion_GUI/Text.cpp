@@ -63,7 +63,6 @@ void Text::Init(unsigned short newWindowWidth, unsigned short newWindowHeight)
 		glActiveTexture(GL_TEXTURE0);
 		glGenTextures(1, &textureObject);
 		glBindTexture(GL_TEXTURE_2D, textureObject);
-		glUniform1i(fontTextureUnif, textureObject);
 
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 

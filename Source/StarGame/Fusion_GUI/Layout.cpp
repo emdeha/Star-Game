@@ -111,8 +111,11 @@ bool Layout::HandleEvent(const IEventData &eventData)
 		{
 			const OnReshapeEvent &data = static_cast<const OnReshapeEvent&>(eventData);
 			
-			background.SetPosition(glm::vec2(data.windowWidth, data.windowHeight));
-			background.SetDimensions(data.windowWidth, data.windowHeight);
+			if (isBackgroundSet)
+			{
+				background.SetPosition(glm::vec2(data.windowWidth, data.windowHeight));
+				background.SetDimensions(data.windowWidth, data.windowHeight);
+			}
 		}
 		break;
 	case EVENT_ON_KEY_PRESSED:

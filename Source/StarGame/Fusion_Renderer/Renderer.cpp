@@ -73,10 +73,13 @@ void Renderer::SubscribeForRendering(Entity *entity)
     std::vector<std::shared_ptr<MeshEntry>> meshEntries = renderData[0]->mesh.GetMeshEntries();
 	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
     {
-		int materialUBSize = 0;
-		GenerateUniformBuffers(materialUBSize, glm::vec4(), renderData[0]->materialUniformBuffer);
-		glBindBufferRange(GL_UNIFORM_BUFFER, meshEntry->get()->materialIndex, 
-						  renderData[0]->materialUniformBuffer, 0, materialUBSize);
+		if(renderData[0]->rendererType == Render::FE_RENDERER_LIT)
+        {
+			int materialUBSize = 0;
+			GenerateUniformBuffers(materialUBSize, glm::vec4(1.0f), renderData[0]->materialUniformBuffer);
+			glBindBufferRange(GL_UNIFORM_BUFFER, meshEntry->get()->materialIndex, 
+							  renderData[0]->materialUniformBuffer, 0, materialUBSize);
+		}
 
 		glGenBuffers(1, &meshEntry->get()->vertexBuffer);
 		glBindBuffer(GL_ARRAY_BUFFER, meshEntry->get()->vertexBuffer);
@@ -87,12 +90,6 @@ void Renderer::SubscribeForRendering(Entity *entity)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshEntry->get()->indexBuffer);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * meshEntry->get()->indices.size(), 
 											  &meshEntry->get()->indices[0], GL_STATIC_DRAW);
-
-		if(renderData[0]->rendererType == Render::FE_RENDERER_LIT)
-        {
-			int materialBlockSize = 0;
-			GenerateUniformBuffers(materialBlockSize, glm::vec4(1.0f), renderData[0]->materialUniformBuffer);
-        }
     }
 
 	glBindVertexArray(0);

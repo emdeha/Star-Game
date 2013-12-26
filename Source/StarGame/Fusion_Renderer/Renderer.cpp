@@ -121,8 +121,10 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix) const
 		
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
-		//if (renderData[0]->FE_RENDERER_LIT)
+		if (renderData[0]->rendererType == Render::FE_RENDERER_LIT)
+		{
 			glEnableVertexAttribArray(2);
+		}
 
 		
 		std::vector<std::shared_ptr<MeshEntry>> entries = subscribedMesh->second.GetMeshEntries();
@@ -161,8 +163,10 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix) const
             glBindBuffer(GL_ARRAY_BUFFER, entry->get()->vertexBuffer);
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(FusionEngine::Vertex), 0);
 			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(FusionEngine::Vertex), (const GLvoid*)12);
-			//if (renderData[0]->FE_RENDERER_LIT)
+			if (renderData[0]->rendererType == Render::FE_RENDERER_LIT)
+			{
 				glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(FusionEngine::Vertex), (const GLvoid*)20);
+			}
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, entry->get()->indexBuffer);
 			

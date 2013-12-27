@@ -208,7 +208,8 @@ void CreateEnemy(const std::string &name, glm::vec3 position)
 	GetScene().AddComponent(name, spaceshipTransform);
 
 	FE::Updatable *spaceshipFuncComp = new FE::Updatable();
-	spaceshipFuncComp->updatedObject = std::unique_ptr<FE::Enemy>(new FE::Enemy(name, 0.02f));
+	glm::vec3 frontVector = glm::normalize(glm::vec3() - position); // TODO: Make it relative to the sun
+	spaceshipFuncComp->updatedObject = std::unique_ptr<FE::Enemy>(new FE::Enemy(name, 0.02f, frontVector));
 	GetScene().AddComponent(name, spaceshipFuncComp);
 
 	GetWorld().GetRenderer().SubscribeForRendering(GetScene().GetEntity(name));
@@ -249,8 +250,8 @@ void InitializeScene()
 	GetScene().Init(GetWorld().GetEventManager());
 
 	CreateSun();
-	CreateEnemy("spaceship1", glm::vec3(1.0f, 0.0f, 0.0f));
-	CreateEnemy("spaceship2", glm::vec3(0.0f, 0.0f, 3.0f));
+	CreateEnemy("spaceship1", glm::vec3(5.0f, 0.0f, 0.0f));
+	CreateEnemy("spaceship2", glm::vec3(0.0f, 0.0f, 6.0f));
 
 	///////////////////////////////////////
 	GetWorld().SetFusionInput('f', 'q', 'w', 'e');

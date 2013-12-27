@@ -21,12 +21,12 @@
 
 enum BehaviorState
 {
-	STATE_ATTACK,
-	STATE_IDLE,
-	STATE_EVADE,
-	STATE_PATROL,
+	FE_STATE_ATTACK,
+	FE_STATE_IDLE,
+	FE_STATE_EVADE,
+	FE_STATE_PATROL,
 	// should it be a stopped state or a boolean?
-	STATE_STOPPED,
+	FE_STATE_STOPPED,
 };
 
 

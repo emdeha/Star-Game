@@ -25,6 +25,7 @@
 
 #include "../glsdk/glm/glm.hpp"
 
+#include "States.h"
 #include "IUpdatable.h"
 
 
@@ -34,14 +35,21 @@ namespace FusionEngine
 	{
 	private:
 		std::string name;
+
+		BehaviorState currentState;
+
+		glm::vec3 frontVector;
 		
 		int health;
 		float speed;
 
+	private:
+		void UpdateAI();
+
 	public:
 		Enemy() {}
-		Enemy(const std::string &newName, float newSpeed)
-			: name(newName), speed(newSpeed), health(0) {}
+		Enemy(const std::string &newName, float newSpeed, glm::vec3 newFrontVector)
+			: name(newName), speed(newSpeed), health(100), frontVector(newFrontVector), currentState(FE_STATE_IDLE) {}
 
 		void Update();
 	};

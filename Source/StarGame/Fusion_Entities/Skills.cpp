@@ -131,9 +131,95 @@ bool Skill::IsForSequence(const std::string &fusionSequence)
 }
 
 
-/////////////////////////
-//  SatelliteCreation  //
-/////////////////////////
+////////////
+//  Burn  //
+////////////
+BurnSkill::BurnSkill(float newRange, float newDuration_seconds, 
+					 float newDamageApplyTime_seconds, float newDamageApplyTimeDuration_seconds,
+					 char fusionCombA, char fusionCombB, char fusionCombC,
+					 int newApplyCost, int newResearchCost)
+						: range(newRange), duration_seconds(newDuration_seconds), 
+						  damageApplyTime_seconds(newDamageApplyTime_seconds), 
+						  damageApplyTimeDuration_seconds(newDamageApplyTimeDuration_seconds),
+						  isDeployed(false), isActive(false),
+						  attackTimer(Framework::Timer::TT_INFINITE), 
+						  applicationDisc(glm::vec4(0.4f, 0.9f, 0.1f, 0.5f), position, range, 90),
+						  Skill(fusionCombA, fusionCombB, fusionCombC, newApplyCost, newResearchCost) 
+{
+	attackTimer.SetPause(true);
+	applicationDisc.Init();
+	GetWorld().GetEventManager().AddListener(this, EVENT_ON_CLICK);
+}
+
+void BurnSkill::Update()
+{
+	if (isActive)
+	{
+		attackTimer.Update();
+		if (attackTimer.GetTimeSinceStart() > duration_seconds)
+		{
+			attackTimer.Reset();
+			attackTimer.SetPause(true);
+			isActive = false;
+			isDeployed = false;
+		}
+		if (attackTimer.GetTimeSinceStart() > damageApplyTime_seconds)
+		{
+			OnSkillAppliedEvent _event = 
+				OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, position, range, damage); // 10 - damage
+			GetWorld().GetEventManager().FireEvent(_event);
+
+			damageApplyTime_seconds += damageApplyTimeDuration_seconds;
+		}
+	}
+}
+
+void BurnSkill::Activate(FusionEngine::CelestialBody *skillHolder)
+{
+	damageApplyTime_seconds = damageApplyTimeDuration_seconds;
+	isActive = true;
+	isDeployed = false;
+	attackTimer.SetPause(true);
+}
+
+bool BurnSkill::HandleEvent(const IEventData &eventData)
+{
+	EventType type = eventData.GetType();
+	switch (type)
+	{
+	case FusionEngine::EVENT_ON_CLICK:
+		{
+			attackTimer.SetPause(false);
+			attackTimer.Reset();
+			isDeployed = true;
+		}
+		break;
+	}
+
+	return false;
+}
+
+void BurnSkill::Render()
+{
+	if (isActive)
+	{
+		glutil::PushStack push(GetWorld().GetDisplayData().modelMatrix);
+		GetWorld().GetDisplayData().modelMatrix.Translate(position);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		applicationDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
+							 GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
+
+		glDisable(GL_BLEND);
+	}
+}
+
+
+//////////////////////////
+//  Satellite Creation  //
+//////////////////////////
 void SatelliteCreationSkill::Activate(FusionEngine::CelestialBody *skillHolder)
 {
 	skillHolder->AddSatellite(satelliteToAdd);
@@ -145,5 +231,5 @@ void SatelliteCreationSkill::Activate(FusionEngine::CelestialBody *skillHolder)
 ////////////////
 void UltimateSkill::Activate(FusionEngine::CelestialBody *skillHolder)
 {
-	GetWorld().GetEventManager().FireEvent(OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, 300));
+	GetWorld().GetEventManager().FireEvent(OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, glm::vec3(), -1.0f, 300));
 }

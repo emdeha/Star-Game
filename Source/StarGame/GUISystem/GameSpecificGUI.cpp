@@ -40,7 +40,7 @@ void AOESelector::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &s
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	selectorBody.Draw(modelMatrix, simpleData);
+	//selectorBody.Draw(modelMatrix, simpleData);
 
 	glDisable(GL_BLEND);
 }

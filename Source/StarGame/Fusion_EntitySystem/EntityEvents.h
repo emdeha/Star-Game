@@ -4,6 +4,7 @@
 
 #pragma warning(push, 0)
 #include <string>
+#include "../glsdk/glm/glm.hpp"
 #pragma warning(pop)
 
 #include "ComponentType.h"
@@ -82,10 +83,12 @@ namespace FusionEngine
 
 	struct OnSkillAppliedEvent : public IEventData
 	{
+		glm::vec3 position;
+		float radius;
 		int damage;
 		
-		OnSkillAppliedEvent(EventType eventType,  int newDamage)
-			: IEventData(eventType), damage(newDamage) {}
+		OnSkillAppliedEvent(EventType eventType,  glm::vec3 newPosition, float newRadius, int newDamage)
+			: IEventData(eventType), position(newPosition), radius(newRadius), damage(newDamage) {}
 	};
 }
 

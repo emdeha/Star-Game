@@ -28,8 +28,14 @@ bool Enemy::HandleEvent(const FusionEngine::IEventData &eventData)
 	case FusionEngine::EVENT_ON_SKILL_APPLIED:
 		{
 			const OnSkillAppliedEvent &data = static_cast<const OnSkillAppliedEvent&>(eventData);
-	
-			health -= data.damage;
+			ComponentMapper<Transform> enemyTransformData =
+					GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity(name), CT_TRANSFORM);
+
+			if (data.radius <= -1.0f ||
+				glm::length(data.position - enemyTransformData[0]->position) < data.radius)
+			{
+				health -= data.damage;
+			}
 		}
 		break;
 	}

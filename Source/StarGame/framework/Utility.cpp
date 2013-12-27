@@ -398,17 +398,18 @@ void Utility::Primitives::Circle::Init()
 	glBindVertexArray(0);
 }
 
-void Utility::Primitives::Circle::Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &data)
+void Utility::Primitives::Circle::Draw(glutil::MatrixStack &modelMatrix, const FusionEngine::ProgramData &data)
 {
-	glUseProgram(data.theProgram);
+	glUseProgram(data.programId);
 	glBindVertexArray(vao);
 	{
-		glUniformMatrix4fv(data.modelToCameraMatrixUnif, 1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
-		glUniform4f(data.colorUnif, color.r, color.g, color.b, color.a);
+		glUniformMatrix4fv(data.GetUniform(FusionEngine::FE_UNIFORM_MODEL_TO_CAMERA_MATRIX),
+						   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
+		glUniform4f(data.GetUniform(FusionEngine::FE_UNIFORM_COLOR), color.r, color.g, color.b, color.a);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
-		glEnableVertexAttribArray(data.positionAttrib);
-		glVertexAttribPointer(data.positionAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(data.GetAttrib(FusionEngine::FE_ATTRIB_POSITION));
+		glVertexAttribPointer(data.GetAttrib(FusionEngine::FE_ATTRIB_POSITION), 4, GL_FLOAT, GL_FALSE, 0, 0);
 
 		glDrawElements(GL_TRIANGLE_FAN, resolution * 4, GL_UNSIGNED_SHORT, 0);
 	}

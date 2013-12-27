@@ -22,8 +22,10 @@
 #pragma warning(push, 1)
 #include <map>
 #include <string>
+#include "../framework/Timer.h"
 #pragma warning(pop)
 
+#include "../framework/Utility.h"
 #include "../Fusion_EntitySystem/EventManager.h"
 
 
@@ -119,9 +121,6 @@ namespace FusionEngine
 	class Skill : public IEventListener 
 	{
 	protected:
-		friend class World;
-		friend class CelestialBody;
-
 		char fusionCombination[4];
 
 		int applyCost;
@@ -154,9 +153,6 @@ namespace FusionEngine
 	class SatelliteCreationSkill : public Skill
 	{
 	private:
-		friend class World;
-		friend class CelestialBody;
-
 		CelestialBodyType satelliteToAdd;
 
 	public:
@@ -168,6 +164,38 @@ namespace FusionEngine
 									   newApplyCost, newResearchCost) {}
 
 		void Activate(CelestialBody *skillHolder);
+	};
+
+	class BurnSkill : public Skill
+	{
+	private:
+		Utility::Primitives::Circle	applicationDisc;
+
+		glm::vec3 position;
+		int damage;
+
+		float range;
+		float duration_seconds;
+		float damageApplyTime_seconds;
+		float damageApplyTimeDuration_seconds;
+
+		bool isDeployed;
+		bool isActive;
+
+		Framework::Timer attackTimer;
+
+	public:
+		BurnSkill(float newRange, float newDuration_seconds, 
+				  float newDamageApplyTime_seconds, float newDamageApplyTimeDuration_seconds,
+				  char fusionCombA, char fusionCombB, char fusionCombC,
+				  int newApplyCost, int newResearchCost);
+
+		void Update();
+		void Render();
+
+		void Activate(CelestialBody *skillHolder);
+
+		bool HandleEvent(const IEventData &eventData);
 	};
 
 	class UltimateSkill : public Skill

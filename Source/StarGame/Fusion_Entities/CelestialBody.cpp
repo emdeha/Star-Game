@@ -245,6 +245,18 @@ void CelestialBody::Update()
 		float offset = (*satellite)->offsetFromSun;
 		satTransformData[0]->position = glm::vec3(offset, 0.0f, offset);
 		
-		satTransformData[0]->position = glm::vec3(relativeTransformStack.Top() * glm::vec4(satTransformData[0]->position, 1.0f));
+		satTransformData[0]->position = 
+			glm::vec3(relativeTransformStack.Top() * glm::vec4(satTransformData[0]->position, 1.0f));
+
+		// Skill Update
+		for (auto skill = (*satellite)->skills.begin(); skill != (*satellite)->skills.end(); ++skill)
+		{
+			(*skill)->Update();
+		}
+	}
+
+	for (auto skill = skills.begin(); skill != skills.end(); ++skill)
+	{
+		(*skill)->Update();
 	}
 }

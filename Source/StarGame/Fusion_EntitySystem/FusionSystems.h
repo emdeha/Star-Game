@@ -41,21 +41,20 @@
 
 namespace FusionEngine
 {
-	template<class ObjectToUpdate>
-	class FunctionalSystem : public EntityProcessingSystem
+	class UpdateSystem : public EntityProcessingSystem
     {
     protected:
 		virtual void ProcessEntity(EntityManager *manager, Entity *entity)
         {
-			ComponentMapper<Functional<ObjectToUpdate>> functionalData = manager->GetComponentList(entity, CT_FUNCTIONAL_BEHAVIOR);
+			ComponentMapper<Updatable> functionalData = manager->GetComponentList(entity, CT_UPDATABLE_BEHAVIOR);
 
 			functionalData[0]->updatedObject->Update();
         }
 
     public:
-		FunctionalSystem(EventManager *eventManager, EntityManager *entityManager) 
-            : EntityProcessingSystem(eventManager, entityManager, CT_FUNCTIONAL_BEHAVIOR_BIT) {}
-        virtual ~FunctionalSystem() {}
+		UpdateSystem(EventManager *eventManager, EntityManager *entityManager) 
+            : EntityProcessingSystem(eventManager, entityManager, CT_UPDATABLE_BEHAVIOR_BIT) {}
+        virtual ~UpdateSystem() {}
     };
 
 

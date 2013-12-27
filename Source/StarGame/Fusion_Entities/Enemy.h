@@ -19,12 +19,33 @@
 #define FE_ENEMY_H
 
 
-class Enemy
-{
-private:
-public:
+#pragma warning(push, 0)
+#include <string>
+#pragma warning(pop)
 
-};
+#include "../glsdk/glm/glm.hpp"
+
+#include "IUpdatable.h"
+
+
+namespace FusionEngine
+{
+	class Enemy : public IUpdatable
+	{
+	private:
+		std::string name;
+		
+		int health;
+		float speed;
+
+	public:
+		Enemy() {}
+		Enemy(const std::string &newName, float newSpeed)
+			: name(newName), speed(newSpeed), health(0) {}
+
+		void Update();
+	};
+}
 
 
 #endif

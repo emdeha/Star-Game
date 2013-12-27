@@ -54,6 +54,9 @@
     <ClInclude Include="Enemy.h">
       <Filter>Header Files\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="IUpdatable.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

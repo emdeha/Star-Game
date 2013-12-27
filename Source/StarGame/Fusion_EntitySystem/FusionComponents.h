@@ -33,6 +33,7 @@
 #include "../Fusion_EntitySystem/EntityManager.h"
 #include "../Fusion_EntitySystem/Component.h"
 #include "../Fusion_AssetLoader/AssetLoader.h"
+#include "../Fusion_Entities/IUpdatable.h"
 
 #include "../framework/framework.h"
 
@@ -58,26 +59,6 @@ namespace FusionEngine
 		float padding; ///< Padding for compatibility with GLSL.
 	};
 
-	/*
-	struct RenderData
-    {
-		enum RendererType
-        {
-			FE_RENDERER_SIMPLE,
-			FE_RENDERER_LIT,
-
-			FE_RENDERER_COUNT,
-        };
-
-
-		FusionEngine::MeshAssetObject mesh;
-		RendererType rendererType;
-		GLuint shaderProgram;
-
-		GLuint vao;
-		GLuint materialUniformBuffer;
-    };
-	*/
 
     class Transform : public Component
 	{
@@ -125,14 +106,13 @@ namespace FusionEngine
 	};
 	
 
-	template<class ObjectToUpdate>
-	class Functional : public Component
+	class Updatable : public Component
     {
     public:
-		std::unique_ptr<ObjectToUpdate> updatedObject;
+		std::unique_ptr<IUpdatable> updatedObject;
 
-        Functional() : Component(CT_FUNCTIONAL_BEHAVIOR) {}
-        virtual ~Functional() {}
+        Updatable() : Component(CT_UPDATABLE_BEHAVIOR) {}
+        virtual ~Updatable() {}
     };
 	
 

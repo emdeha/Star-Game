@@ -31,12 +31,13 @@
 #include "../Fusion_EntitySystem/Event.h"
 #include "../Fusion_EntitySystem/FusionComponents.h"
 #include "Skills.h"
+#include "IUpdatable.h"
 
 
 namespace FusionEngine
 {
 
-	class CelestialBody : public IEventListener
+	class CelestialBody : public IEventListener, public IUpdatable
 	{
 	private:
 		std::vector<std::shared_ptr<CelestialBody>> satellites;

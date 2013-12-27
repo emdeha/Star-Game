@@ -76,6 +76,7 @@
   <ItemGroup>
     <ClInclude Include="CelestialBody.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="IUpdatable.h" />
     <ClInclude Include="Skills.h" />
     <ClInclude Include="States.h" />
     <ClInclude Include="stdafx.h" />

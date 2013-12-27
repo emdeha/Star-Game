@@ -43,6 +43,7 @@
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Fusion_Renderer/ShaderEnums.h"
 #include "../Fusion_Entities/CelestialBody.h"
+#include "../Fusion_Entities/Enemy.h"
 
 #define FUSION_LOAD_FAST
 
@@ -140,9 +141,9 @@ void CreateSun()
 	sunRender->vao = loadedMesh.vao;
 
 	GetScene().AddEntity("sun");
-	FE::FunctionalSystem<FE::CelestialBody> *sunFunctional =
-		new FE::FunctionalSystem<FE::CelestialBody>(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
-	GetScene().AddSystem(sunFunctional);
+	FE::UpdateSystem *sunUpdate =
+		new FE::UpdateSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
+	GetScene().AddSystem(sunUpdate);
 	FE::CollisionSystem *sunClickable = 
 		new FE::CollisionSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
 	GetScene().AddSystem(sunClickable);
@@ -154,16 +155,16 @@ void CreateSun()
 	sunTransform->scale = glm::vec3(0.5f);
 	GetScene().AddComponent("sun", sunTransform);
 
-	FE::Functional<FE::CelestialBody> *sunFuncComp = new FE::Functional<FE::CelestialBody>();
+	FE::Updatable *sunFuncComp = new FE::Updatable();
 	sunFuncComp->updatedObject = 
 		std::unique_ptr<FE::CelestialBody>(new FE::CelestialBody(FE::FE_CELESTIALBODY_SUN, 4, 0.5f, 0.0f));
-	sunFuncComp->updatedObject->AddSkill(std::shared_ptr<FE::Skill>(
+	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
 		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_WATER, 'w', 'w', 'w', 0, 0)));
-	sunFuncComp->updatedObject->AddSkill(std::shared_ptr<FE::Skill>(
+	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
 		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_FIRE, 'q', 'q', 'q', 0, 0)));
-	sunFuncComp->updatedObject->AddSkill(std::shared_ptr<FE::Skill>(
+	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
 		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_AIR, 'q', 'w', 'e', 0, 0)));
-	sunFuncComp->updatedObject->AddSkill(std::shared_ptr<FE::Skill>(
+	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
 		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_EARTH, 'e', 'e', 'e', 0, 0)));
 	GetScene().AddComponent("sun", sunFuncComp);
 	
@@ -205,6 +206,10 @@ void CreateEnemy(const std::string &name, glm::vec3 position)
 	spaceshipTransform->rotation = glm::vec3();
 	spaceshipTransform->scale = glm::vec3(0.1f);
 	GetScene().AddComponent(name, spaceshipTransform);
+
+	FE::Updatable *spaceshipFuncComp = new FE::Updatable();
+	spaceshipFuncComp->updatedObject = std::unique_ptr<FE::Enemy>(new FE::Enemy(name, 0.02f));
+	GetScene().AddComponent(name, spaceshipFuncComp);
 
 	GetWorld().GetRenderer().SubscribeForRendering(GetScene().GetEntity(name));
 }

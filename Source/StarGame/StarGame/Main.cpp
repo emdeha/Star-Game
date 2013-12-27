@@ -166,6 +166,8 @@ void CreateSun()
 		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_AIR, 'q', 'w', 'e', 0, 0)));
 	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
 		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_EARTH, 'e', 'e', 'e', 0, 0)));
+	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
+		new FE::UltimateSkill('q', 'w', 'w', 0, 0)));
 	GetScene().AddComponent("sun", sunFuncComp);
 	
 	FE::Collidable *sunCollidable = new FE::Collidable();
@@ -259,6 +261,7 @@ void InitializeScene()
 	GetWorld().AddFusionSequence("fireSat", 'q', 'q', 'q');
 	GetWorld().AddFusionSequence("earthSat", 'e', 'e', 'e');
 	GetWorld().AddFusionSequence("airSat", 'q', 'w', 'e');
+	GetWorld().AddFusionSequence("ult", 'q', 'w', 'w');
 }
 
 

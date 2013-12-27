@@ -169,6 +169,17 @@ namespace FusionEngine
 
 		void Activate(CelestialBody *skillHolder);
 	};
+
+	class UltimateSkill : public Skill
+	{
+	public:
+		UltimateSkill(char fusionCombA, char fusionCombB, char fusionCombC,
+					  int newApplyCost, int newResearchCost)
+					  : Skill(fusionCombA, fusionCombB, fusionCombC,
+							  newApplyCost, newResearchCost) {}
+
+		void Activate(CelestialBody *skillHolder);
+	};
 }
 
 

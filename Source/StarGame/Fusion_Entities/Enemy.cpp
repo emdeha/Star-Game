@@ -102,5 +102,6 @@ void Enemy::Update()
 	if (health <= 0)
 	{
 		// Destroy
+		std::printf("KILLED IS ME!!! %s\n", name.c_str());
 	}
 }

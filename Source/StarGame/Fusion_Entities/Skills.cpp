@@ -138,3 +138,12 @@ void SatelliteCreationSkill::Activate(FusionEngine::CelestialBody *skillHolder)
 {
 	skillHolder->AddSatellite(satelliteToAdd);
 }
+
+
+////////////////
+//  Ultimate  //
+////////////////
+void UltimateSkill::Activate(FusionEngine::CelestialBody *skillHolder)
+{
+	GetWorld().GetEventManager().FireEvent(OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, 300));
+}

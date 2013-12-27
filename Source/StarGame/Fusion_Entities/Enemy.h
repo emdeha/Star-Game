@@ -42,6 +42,7 @@ namespace FusionEngine
 		
 		int health;
 		float speed;
+		float attackRange;
 
 	private:
 		void UpdateAI();

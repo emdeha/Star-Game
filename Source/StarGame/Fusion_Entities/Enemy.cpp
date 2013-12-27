@@ -49,7 +49,7 @@ void Enemy::UpdateAI()
 
 		float distanceBetweenSunAndSpaceship = glm::length(vectorFromSunToSpaceship);
 
-		if (distanceBetweenSunAndSpaceship < 3.0f) // 3.0f - lineOfSight
+		if (distanceBetweenSunAndSpaceship < attackRange) // 3.0f - lineOfSight
 		{
 			currentState = FE_STATE_ATTACK;
 		}
@@ -62,7 +62,7 @@ void Enemy::Update()
 	ComponentMapper<Transform> transformData =
 		GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity(name), CT_TRANSFORM);
 
-	transformData[0]->rotation = glm::vec3(0.0f, glm::degrees(atan2f(frontVector.x, frontVector.y)), 0.0f);
+	transformData[0]->rotation = glm::vec3(0.0f, glm::degrees(atan2f(frontVector.x, frontVector.z)), 0.0f);
 
 	if (currentState != FE_STATE_STOPPED)
 	{

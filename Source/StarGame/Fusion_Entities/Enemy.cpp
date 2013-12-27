@@ -2,6 +2,7 @@
 #include "Enemy.h"
 
 
+#include "../Fusion_EntitySystem/EntityEvents.h"
 #include "../Fusion_EntitySystem/ComponentMapper.h"
 #include "../Fusion_EntitySystem/FusionComponents.h"
 #include "../Fusion_Scene/Scene.h"
@@ -12,6 +13,29 @@
 
 using namespace FusionEngine;
 
+
+Enemy::Enemy(const std::string &newName, float newSpeed, glm::vec3 newFrontVector)
+	: name(newName), speed(newSpeed), health(100), frontVector(newFrontVector), currentState(FE_STATE_IDLE) 
+{
+	GetWorld().GetEventManager().AddListener(this, EVENT_ON_SKILL_APPLIED);
+}
+
+bool Enemy::HandleEvent(const FusionEngine::IEventData &eventData)
+{
+	EventType type = eventData.GetType();
+	switch (type)
+	{
+	case FusionEngine::EVENT_ON_SKILL_APPLIED:
+		{
+			const OnSkillAppliedEvent &data = static_cast<const OnSkillAppliedEvent&>(eventData);
+	
+			health -= data.damage;
+		}
+		break;
+	}
+	
+	return false;
+}
 
 void Enemy::UpdateAI()
 {

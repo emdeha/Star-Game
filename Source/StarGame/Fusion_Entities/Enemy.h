@@ -25,13 +25,14 @@
 
 #include "../glsdk/glm/glm.hpp"
 
+#include "../Fusion_EntitySystem/EventManager.h"
 #include "States.h"
 #include "IUpdatable.h"
 
 
 namespace FusionEngine
 {
-	class Enemy : public IUpdatable
+	class Enemy : public IEventListener, public IUpdatable
 	{
 	private:
 		std::string name;
@@ -49,10 +50,11 @@ namespace FusionEngine
 
 	public:
 		Enemy() {}
-		Enemy(const std::string &newName, float newSpeed, glm::vec3 newFrontVector)
-			: name(newName), speed(newSpeed), health(100), frontVector(newFrontVector), currentState(FE_STATE_IDLE) {}
+		Enemy(const std::string &newName, float newSpeed, glm::vec3 newFrontVector);
 
 		void Update();
+
+		virtual bool HandleEvent(const FusionEngine::IEventData &eventData);
 	};
 }
 

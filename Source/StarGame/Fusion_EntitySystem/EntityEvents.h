@@ -24,6 +24,7 @@ namespace FusionEngine
 		EVENT_ON_RESHAPE,
 		EVENT_ON_KEY_PRESSED,
 		EVENT_ON_FUSION_COMPLETED,
+		EVENT_ON_SKILL_APPLIED,
 	};
 
 	struct EntityEvent : public IEventData
@@ -77,6 +78,14 @@ namespace FusionEngine
 
 		OnFusionCompletedEvent(EventType eventType, const std::string &newInputSequence)
 			: IEventData(eventType), inputSequence(newInputSequence) {}
+	};
+
+	struct OnSkillAppliedEvent : public IEventData
+	{
+		int damage;
+		
+		OnSkillAppliedEvent(EventType eventType,  int newDamage)
+			: IEventData(eventType), damage(newDamage) {}
 	};
 }
 

@@ -174,12 +174,12 @@ void SatelliteOrbit::Draw(glutil::MatrixStack &modelMatrix,
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	mainOrbit.Draw(modelMatrix, simpleData);
+//	mainOrbit.Draw(modelMatrix, simpleData);
 
 	glDisable(GL_BLEND);
 
-	orbitOutlineOne.Draw(modelMatrix, simpleData);
-	orbitOutlineTwo.Draw(modelMatrix, simpleData);
+//	orbitOutlineOne.Draw(modelMatrix, simpleData);
+//	orbitOutlineTwo.Draw(modelMatrix, simpleData);
 
 	if(isDrawingUpgradeButtons)
 	{

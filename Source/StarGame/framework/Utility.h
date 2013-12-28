@@ -173,7 +173,7 @@ namespace Utility
 		
 			/// \fn Draw
 			/// \brief Draws the torus on the scene. 
-			void Draw(glutil::MatrixStack &modelMatrix, const SimpleProgData &data);
+			void Draw(glutil::MatrixStack &modelMatrix, const FusionEngine::ProgramData &data);
 		};
 
 		/// \class Circle

@@ -86,9 +86,10 @@ namespace FusionEngine
 		glm::vec3 position;
 		float radius;
 		int damage;
+		bool isNova;
 		
-		OnSkillAppliedEvent(EventType eventType,  glm::vec3 newPosition, float newRadius, int newDamage)
-			: IEventData(eventType), position(newPosition), radius(newRadius), damage(newDamage) {}
+		OnSkillAppliedEvent(EventType eventType,  glm::vec3 newPosition, float newRadius, int newDamage, bool newIsNova)
+			: IEventData(eventType), position(newPosition), radius(newRadius), damage(newDamage), isNova(newIsNova) {}
 	};
 }
 

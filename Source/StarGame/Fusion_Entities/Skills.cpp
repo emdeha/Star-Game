@@ -168,7 +168,7 @@ void BurnSkill::Update()
 		if (attackTimer.GetTimeSinceStart() > damageApplyTime_seconds)
 		{
 			OnSkillAppliedEvent _event = 
-				OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, position, range, damage);
+				OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, position, range, damage, false);
 			GetWorld().GetEventManager().FireEvent(_event);
 
 			damageApplyTime_seconds += damageApplyTimeDuration_seconds;
@@ -295,7 +295,7 @@ bool AOESkill::HandleEvent(const IEventData &eventData)
 				isActive = false;
 
 				OnSkillAppliedEvent _event = 
-					OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, position, range, damage);
+					OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, position, range, damage, false);
 				GetWorld().GetEventManager().FireEvent(_event);
 			}
 		}
@@ -334,7 +334,7 @@ PassiveAOESkill::PassiveAOESkill(int newDamage, float newRange, float newDamageA
 								 char fusionCombA, char fusionCombB, char fusionCombC,
 								 int newApplyCost, int newResearchCost)
 								 : damage(newDamage), range(newRange), 
-								   damageApplyTime_seconds(newDamageApplyTime_seconds),
+								   damageApplyTime_seconds(newDamageApplyTime_seconds), position(0.0f),
 								   Skill(fusionCombA, fusionCombB, fusionCombC, newApplyCost, newResearchCost)
 {
 	attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE, damageApplyTime_seconds);
@@ -354,7 +354,7 @@ void PassiveAOESkill::Update()
 			if (attackTimer.GetTimeSinceStart() >= damageApplyTime_seconds)
 			{
 				OnSkillAppliedEvent _event = 
-					OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, position, range, damage);
+					OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, position, range, damage, false);
 				GetWorld().GetEventManager().FireEvent(_event);
 
 				attackTimer.Reset();
@@ -399,6 +399,70 @@ void PassiveAOESkill::Render()
 }
 
 
+////////////////
+//  Sun Nova  //
+////////////////
+SunNovaSkill::SunNovaSkill(int newDamage, float newRange, float newScaleRate,
+						   char fusionCombA, char fusionCombB, char fusionCombC,
+						   int newApplyCost, int newResearchCost)
+						   : damage(newDamage), range(newRange), scaleRate(newScaleRate), 
+						     position(0.0f), currentScale(1.0f),
+						     Skill(fusionCombA, fusionCombB, fusionCombC, newApplyCost, newResearchCost)
+{
+	novaExpansionDisc = 
+		Utility::Primitives::Torus2D(glm::vec4(1.0f, 1.0f, 0.0f, 0.5f), position, currentScale, currentScale + 0.03f, 90);
+	novaExpansionDisc.Init();
+}
+
+void SunNovaSkill::Update()
+{
+	if (isActive)
+	{
+		if (currentScale <= range)
+		{
+			currentScale += scaleRate;
+
+			OnSkillAppliedEvent _event = 
+				OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, position, currentScale, damage, true);
+			GetWorld().GetEventManager().FireEvent(_event);
+		}
+		else
+		{
+			currentScale = 1.0f;
+			isActive = false;
+		}
+	}
+}
+
+void SunNovaSkill::Activate(FusionEngine::CelestialBody *skillHolder)
+{
+	isActive = true;
+
+	ComponentMapper<Transform> sunTransformData =
+			GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity("sun"), CT_TRANSFORM);
+
+	position = sunTransformData[0]->position;
+}
+
+void SunNovaSkill::Render()
+{
+	if (isActive)
+	{
+		glutil::PushStack push(GetWorld().GetDisplayData().modelMatrix);
+		GetWorld().GetDisplayData().modelMatrix.Translate(position);
+		GetWorld().GetDisplayData().modelMatrix.Scale(currentScale, 0.0f, currentScale);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		novaExpansionDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
+							   GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
+
+		glDisable(GL_BLEND);
+	}
+}
+
+
 //////////////////////////
 //  Satellite Creation  //
 //////////////////////////
@@ -413,5 +477,5 @@ void SatelliteCreationSkill::Activate(FusionEngine::CelestialBody *skillHolder)
 ////////////////
 void UltimateSkill::Activate(FusionEngine::CelestialBody *skillHolder)
 {
-	GetWorld().GetEventManager().FireEvent(OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, glm::vec3(), -1.0f, 300));
+	GetWorld().GetEventManager().FireEvent(OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, glm::vec3(), -1.0f, 300, false));
 }

@@ -259,6 +259,30 @@ namespace FusionEngine
 
 		void Activate(CelestialBody *skillHolder);
 	};
+
+	class SunNovaSkill : public Skill
+	{
+	private:
+		Utility::Primitives::Torus2D novaExpansionDisc;
+
+		glm::vec3 position;
+		
+		int damage;
+
+		float range;
+		float scaleRate;
+		float currentScale;
+
+	public:
+		SunNovaSkill(int newDamage, float newRange, float newScaleRate,
+					 char fusionCombA, char fusionCombB, char fusionCombC,
+					 int newApplyCost, int newResearchCost);
+
+		void Update();
+		void Render();
+
+		void Activate(CelestialBody *skillHolder);
+	};
 }
 
 

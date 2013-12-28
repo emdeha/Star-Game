@@ -179,6 +179,8 @@ void CreateSun()
 		new FE::AOESkill(10, 2.0f, 'w', 'q', 'e', 0, 0)));
 	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
 		new FE::PassiveAOESkill(10, 2.0f, 1.0f, 3.0f, 'w', 'e', 'q', 0, 0)));
+	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
+		new FE::SunNovaSkill(10, 4.0f, 0.05f, 'w', 'q', 'q', 0, 0)));
 	GetScene().AddComponent("sun", sunFuncComp);
 	
 	FE::Collidable *sunCollidable = new FE::Collidable();
@@ -276,6 +278,7 @@ void InitializeScene()
 	GetWorld().AddFusionSequence("burn", 'w', 'e', 'e');
 	GetWorld().AddFusionSequence("aoe", 'w', 'q', 'e');
 	GetWorld().AddFusionSequence("passiveAoe", 'w', 'e', 'q');
+	GetWorld().AddFusionSequence("sunNova", 'w', 'q', 'q');
 }
 
 

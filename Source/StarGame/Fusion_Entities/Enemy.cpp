@@ -31,8 +31,17 @@ bool Enemy::HandleEvent(const FusionEngine::IEventData &eventData)
 			ComponentMapper<Transform> enemyTransformData =
 					GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity(name), CT_TRANSFORM);
 
-			if (data.radius <= -1.0f ||
-				glm::length(data.position - enemyTransformData[0]->position) < data.radius)
+			if (data.isNova)
+			{
+				if (glm::length(data.position - enemyTransformData[0]->position) < data.radius &&
+					glm::length(data.position - enemyTransformData[0]->position) >= data.radius - 0.1f)
+				{
+					health -= data.damage;
+					std::printf("SUN NOVA: %i, %s", health, name.c_str());
+				}
+			}
+			else if (data.radius <= -1.0f ||
+					 glm::length(data.position - enemyTransformData[0]->position) < data.radius)
 			{
 				health -= data.damage;
 				std::printf("CRITICAL: %i, %s", health, name.c_str());

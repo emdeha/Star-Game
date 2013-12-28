@@ -2,7 +2,11 @@
 #include "World.h"
 
 #include "../Fusion_EntitySystem/EntityEvents.h"
+#include "../Fusion_EntitySystem/ComponentMapper.h"
+#include "../Fusion_EntitySystem/FusionComponents.h"
 #include "../Fusion_GUI/ControlEvents.h"
+#include "../Fusion_Entities/CelestialBody.h"
+#include "Scene.h"
 
 using namespace FusionEngine;
 
@@ -87,6 +91,15 @@ void World::Render()
 			{
 				sunLight.Render(displayData.modelMatrix, shaderManager);
 				renderer.Render(displayData.modelMatrix);
+
+				ComponentMapper<Updatable> functionalData = 
+					GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity("sun"), CT_UPDATABLE_BEHAVIOR);
+				CelestialBody *sun = static_cast<CelestialBody*>(functionalData[0]->updatedObject.get());
+				auto sunSkills = sun->GetSkills();
+				for (auto skill = sunSkills.begin(); skill != sunSkills.end(); ++skill)
+				{
+					(*skill)->Render();
+				}
 			}
 		}
 	}

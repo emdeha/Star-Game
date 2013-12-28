@@ -78,6 +78,11 @@ void HandleMouse()
 					GetWorld().GetEventManager().FireEvent(FE::OnClickEvent(FE::EVENT_ON_CLICK, true, (*control)->GetName()));
 				}
 			}
+
+			if ((*layout).first == FE::FE_LAYOUT_GAME)
+			{
+				GetWorld().GetEventManager().FireEvent(FE::OnClickEvent(FE::EVENT_ON_CLICK, true, "skill"));
+			}
 		}
 	}
 	else
@@ -169,7 +174,7 @@ void CreateSun()
 	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
 		new FE::UltimateSkill('q', 'w', 'w', 0, 0)));
 	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::BurnSkill(2.0f, 2.0f, 0.5f, 2.0f, 'w', 'e', 'e', 0, 0)));
+		new FE::BurnSkill(10, 2.0f, 3.0f, 1.0f, 'w', 'e', 'e', 0, 0)));
 	GetScene().AddComponent("sun", sunFuncComp);
 	
 	FE::Collidable *sunCollidable = new FE::Collidable();

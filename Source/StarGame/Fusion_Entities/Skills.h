@@ -185,8 +185,7 @@ namespace FusionEngine
 		Framework::Timer attackTimer;
 
 	public:
-		BurnSkill(float newRange, float newDuration_seconds, 
-				  float newDamageApplyTime_seconds, float newDamageApplyTimeDuration_seconds,
+		BurnSkill(int newDamage, float newRange, float newDuration_seconds, float newDamageApplyTime_seconds,
 				  char fusionCombA, char fusionCombB, char fusionCombC,
 				  int newApplyCost, int newResearchCost);
 

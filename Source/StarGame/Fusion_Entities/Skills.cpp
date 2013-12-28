@@ -134,21 +134,22 @@ bool Skill::IsForSequence(const std::string &fusionSequence)
 ////////////
 //  Burn  //
 ////////////
-BurnSkill::BurnSkill(float newRange, float newDuration_seconds, 
-					 float newDamageApplyTime_seconds, float newDamageApplyTimeDuration_seconds,
+BurnSkill::BurnSkill(int newDamage, float newRange, float newDuration_seconds, float newDamageApplyTime_seconds,
 					 char fusionCombA, char fusionCombB, char fusionCombC,
 					 int newApplyCost, int newResearchCost)
-						: range(newRange), duration_seconds(newDuration_seconds), 
+						: damage(newDamage), range(newRange), duration_seconds(newDuration_seconds), 
 						  damageApplyTime_seconds(newDamageApplyTime_seconds), 
-						  damageApplyTimeDuration_seconds(newDamageApplyTimeDuration_seconds),
-						  isDeployed(false), isActive(false),
-						  attackTimer(Framework::Timer::TT_INFINITE), 
-						  applicationDisc(glm::vec4(0.4f, 0.9f, 0.1f, 0.5f), position, range, 90),
+						  damageApplyTimeDuration_seconds(newDamageApplyTime_seconds),
+						  isDeployed(false), isActive(false), position(0.0f), 
 						  Skill(fusionCombA, fusionCombB, fusionCombC, newApplyCost, newResearchCost) 
 {
+	attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE);
 	attackTimer.SetPause(true);
+
+	applicationDisc = Utility::Primitives::Circle(glm::vec4(0.4f, 0.9f, 0.1f, 0.5f), position, range, 90);
 	applicationDisc.Init();
-	GetWorld().GetEventManager().AddListener(this, EVENT_ON_CLICK);
+
+	GetWorld().GetEventManager().AddListener(this, FusionEngine::EVENT_ON_CLICK);
 }
 
 void BurnSkill::Update()
@@ -171,6 +172,21 @@ void BurnSkill::Update()
 
 			damageApplyTime_seconds += damageApplyTimeDuration_seconds;
 		}
+
+		if (!isDeployed)
+		{
+			DisplayData currentDisplayData = GetWorld().GetDisplayData();
+
+			glm::vec4 mousePos_atZ =
+				GetWorld().GetMouse().GetPositionAtDimension(currentDisplayData.windowWidth,
+															 currentDisplayData.windowHeight,
+															 currentDisplayData.projectionMatrix,
+															 currentDisplayData.modelMatrix.Top(),
+															 glm::vec4(GetWorld().GetCamera().ResolveCamPosition(), 1.0f),
+															 glm::comp::Y);
+
+			position = mousePos_atZ.swizzle(glm::comp::X, glm::comp::Y, glm::comp::Z);
+		}
 	}
 }
 
@@ -189,9 +205,13 @@ bool BurnSkill::HandleEvent(const IEventData &eventData)
 	{
 	case FusionEngine::EVENT_ON_CLICK:
 		{
-			attackTimer.SetPause(false);
-			attackTimer.Reset();
-			isDeployed = true;
+			const OnClickEvent &data = static_cast<const OnClickEvent&>(eventData);
+			if (isActive)
+			{
+				attackTimer.SetPause(false);
+				attackTimer.Reset();
+				isDeployed = true;
+			}
 		}
 		break;
 	}

@@ -67,6 +67,7 @@ namespace FusionEngine
 		void Update();
 
 		std::string GetID() { return id; }
+		std::vector<std::shared_ptr<Skill>> GetSkills() { return skills; }
 
 		virtual bool HandleEvent(const IEventData &eventData);
 	};

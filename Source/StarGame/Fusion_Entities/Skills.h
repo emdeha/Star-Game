@@ -233,6 +233,32 @@ namespace FusionEngine
 
 		bool HandleEvent(const IEventData &eventData);
 	};
+
+	class PassiveAOESkill : public Skill
+	{
+	private:
+		Utility::Primitives::Circle skillVisibilityDisc;
+
+		glm::vec3 position;
+
+		int damage;
+		
+		float range;
+		float damageApplyTime_seconds;
+
+		Framework::Timer attackTimer;
+		Framework::Timer skillLifeTimer;
+
+	public:
+		PassiveAOESkill(int newDamage, float newRange, float newDamageApplyTime_seconds, float skillLife,
+						char fusionCombA, char fusionCombB, char fusionCombC,
+						int newApplyCost, int newResearchCost);
+
+		void Update();
+		void Render();
+
+		void Activate(CelestialBody *skillHolder);
+	};
 }
 
 

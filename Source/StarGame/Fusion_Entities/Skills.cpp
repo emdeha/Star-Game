@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "Skills.h"
 
-#include "../Fusion_Scene/World.h"
 #include "../Fusion_Entities/CelestialBody.h"
 #include "../Fusion_EntitySystem/EntityEvents.h"
+#include "../Fusion_EntitySystem/ComponentMapper.h"
+#include "../Fusion_Scene/World.h"
+#include "../Fusion_Scene/Scene.h"
 
 #pragma warning(push, 1)
 #include <sstream>
@@ -321,6 +323,78 @@ void AOESkill::Render()
 	if (isDeployed)
 	{
 		// Render animation
+	}
+}
+
+
+///////////////////
+//  Passive AOE  //
+///////////////////
+PassiveAOESkill::PassiveAOESkill(int newDamage, float newRange, float newDamageApplyTime_seconds, float skillLife,
+								 char fusionCombA, char fusionCombB, char fusionCombC,
+								 int newApplyCost, int newResearchCost)
+								 : damage(newDamage), range(newRange), 
+								   damageApplyTime_seconds(newDamageApplyTime_seconds),
+								   Skill(fusionCombA, fusionCombB, fusionCombC, newApplyCost, newResearchCost)
+{
+	attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE, damageApplyTime_seconds);
+	skillLifeTimer = Framework::Timer(Framework::Timer::TT_SINGLE, skillLife);
+
+	skillVisibilityDisc = Utility::Primitives::Circle(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), position, range, 90);
+	skillVisibilityDisc.Init();
+}
+
+void PassiveAOESkill::Update()
+{
+	if (isActive)
+	{
+		if (!skillLifeTimer.Update())
+		{
+			attackTimer.Update();
+			if (attackTimer.GetTimeSinceStart() >= damageApplyTime_seconds)
+			{
+				OnSkillAppliedEvent _event = 
+					OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, position, range, damage);
+				GetWorld().GetEventManager().FireEvent(_event);
+
+				attackTimer.Reset();
+			}
+			// update anim
+		}
+		else
+		{
+			isActive = false;
+			skillLifeTimer.Reset();
+			skillLifeTimer.SetPause(true);
+		}
+	}
+}
+
+void PassiveAOESkill::Activate(FusionEngine::CelestialBody *skillHolder)
+{
+	isActive = true;
+	skillLifeTimer.SetPause(false);
+
+	ComponentMapper<Transform> sunTransformData =
+			GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity("sun"), CT_TRANSFORM);
+
+	position = sunTransformData[0]->position;
+}
+
+void PassiveAOESkill::Render()
+{
+	if (isActive)
+	{
+		glutil::PushStack push(GetWorld().GetDisplayData().modelMatrix);
+		GetWorld().GetDisplayData().modelMatrix.Translate(position);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		skillVisibilityDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
+								 GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
+
+		glDisable(GL_BLEND);
 	}
 }
 

@@ -139,8 +139,7 @@ BurnSkill::BurnSkill(int newDamage, float newRange, float newDuration_seconds, f
 					 int newApplyCost, int newResearchCost)
 						: damage(newDamage), range(newRange), duration_seconds(newDuration_seconds), 
 						  damageApplyTime_seconds(newDamageApplyTime_seconds), 
-						  damageApplyTimeDuration_seconds(newDamageApplyTime_seconds),
-						  isDeployed(false), isActive(false), position(0.0f), 
+						  damageApplyTimeDuration_seconds(newDamageApplyTime_seconds), position(0.0f), 
 						  Skill(fusionCombA, fusionCombB, fusionCombC, newApplyCost, newResearchCost) 
 {
 	attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE);
@@ -167,7 +166,7 @@ void BurnSkill::Update()
 		if (attackTimer.GetTimeSinceStart() > damageApplyTime_seconds)
 		{
 			OnSkillAppliedEvent _event = 
-				OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, position, range, damage); // 10 - damage
+				OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, position, range, damage);
 			GetWorld().GetEventManager().FireEvent(_event);
 
 			damageApplyTime_seconds += damageApplyTimeDuration_seconds;
@@ -233,6 +232,95 @@ void BurnSkill::Render()
 							 GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
 
 		glDisable(GL_BLEND);
+	}
+}
+
+
+///////////
+//  AOE  //
+///////////
+AOESkill::AOESkill(int newDamage, float newRange,
+				   char fusionCombA, char fusionCombB, char fusionCombC,
+				   int newApplyCost, int newResearchCost)
+				   : damage(newDamage), range(newRange), position(0.0f),
+				     Skill(fusionCombA, fusionCombB, fusionCombC, newApplyCost, newResearchCost)
+{
+	applicationDisc = Utility::Primitives::Circle(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), position, range, 90);
+	applicationDisc.Init();
+
+	GetWorld().GetEventManager().AddListener(this, FusionEngine::EVENT_ON_CLICK);
+}
+
+void AOESkill::Update()
+{
+	if (isActive)
+	{
+		DisplayData currentDisplayData = GetWorld().GetDisplayData();
+
+		glm::vec4 mousePos_atZ =
+			GetWorld().GetMouse().GetPositionAtDimension(currentDisplayData.windowWidth,
+														 currentDisplayData.windowHeight,
+														 currentDisplayData.projectionMatrix,
+														 currentDisplayData.modelMatrix.Top(),
+														 glm::vec4(GetWorld().GetCamera().ResolveCamPosition(), 1.0f),
+														 glm::comp::Y);
+
+		position = mousePos_atZ.swizzle(glm::comp::X, glm::comp::Y, glm::comp::Z);
+	}
+	if (isDeployed)
+	{
+		// Update animation
+	}
+}
+
+void AOESkill::Activate(FusionEngine::CelestialBody *skillHolder)
+{
+	isActive = true;
+}
+
+bool AOESkill::HandleEvent(const IEventData &eventData)
+{
+	EventType type = eventData.GetType();
+	switch (type)
+	{
+	case FusionEngine::EVENT_ON_CLICK:
+		{
+			const OnClickEvent &data = static_cast<const OnClickEvent&>(eventData);
+
+			if (isActive)
+			{
+				isDeployed = true; // set to false on anim end
+				isActive = false;
+
+				OnSkillAppliedEvent _event = 
+					OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, position, range, damage);
+				GetWorld().GetEventManager().FireEvent(_event);
+			}
+		}
+		break;
+	}
+
+	return false;
+}
+
+void AOESkill::Render()
+{
+	if (isActive)
+	{
+		glutil::PushStack push(GetWorld().GetDisplayData().modelMatrix);
+		GetWorld().GetDisplayData().modelMatrix.Translate(position);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		applicationDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
+							 GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
+
+		glDisable(GL_BLEND);
+	}
+	if (isDeployed)
+	{
+		// Render animation
 	}
 }
 

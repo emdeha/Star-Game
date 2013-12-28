@@ -126,6 +126,9 @@ namespace FusionEngine
 		int applyCost;
 		int researchCost;
 
+		bool isDeployed;
+		bool isActive;
+
 	public:
 		Skill() {}
 		Skill(char fusionCombA, char fusionCombB, char fusionCombC,
@@ -136,6 +139,9 @@ namespace FusionEngine
 			fusionCombination[1] = fusionCombB;
 			fusionCombination[2] = fusionCombC;
 			fusionCombination[3] = '\0';
+
+			isDeployed = false;
+			isActive = false;
 		}
 		virtual ~Skill() {}
 
@@ -179,9 +185,6 @@ namespace FusionEngine
 		float damageApplyTime_seconds;
 		float damageApplyTimeDuration_seconds;
 
-		bool isDeployed;
-		bool isActive;
-
 		Framework::Timer attackTimer;
 
 	public:
@@ -206,6 +209,29 @@ namespace FusionEngine
 							  newApplyCost, newResearchCost) {}
 
 		void Activate(CelestialBody *skillHolder);
+	};
+
+	class AOESkill : public Skill
+	{
+	private:
+		Utility::Primitives::Circle applicationDisc;
+		
+		glm::vec3 position;
+
+		int damage;
+		float range;
+
+	public:
+		AOESkill(int newDamage, float newRange,
+				 char fusionCombA, char fusionCombB, char fusionCombC,
+				 int newApplyCost, int newResearchCost);
+
+		void Update();
+		void Render();
+
+		void Activate(CelestialBody *skillHolder);
+
+		bool HandleEvent(const IEventData &eventData);
 	};
 }
 

@@ -310,6 +310,33 @@ namespace FusionEngine
 		float GetRange() { return range; }
 	};
 
+	// Many similarities between the frost and SunNova
+	class FrostSkill : public Skill
+	{
+	private:
+		Utility::Primitives::Torus2D frostExpansionDisc;
+
+		std::string holderID;
+
+		glm::vec3 position;
+		
+		int damage;
+
+		float range;
+		float scaleRate;
+		float currentScale;
+
+	public:
+		FrostSkill(int newDamage, float newRange, float newScaleRate,
+				   char fusionCombA, char fusionCombB, char fusionCombC,
+				   int newApplyCost, int newResearchCost);
+
+		void Update();
+		void Render();
+
+		void Activate(CelestialBody *skillHolder);
+	};
+
 	class UltimateSkill : public Skill
 	{
 	public:

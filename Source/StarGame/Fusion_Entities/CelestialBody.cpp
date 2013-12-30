@@ -176,6 +176,7 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 	float satOffset = GetSatelliteOffset(satType); 
 	std::shared_ptr<CelestialBody> newSat(new CelestialBody(satType, 0, 0.3f, satOffset));
 	newSat->AddSkill(std::shared_ptr<Skill>(new ShieldSkill(1, 1.0f, 'q', 'w', 'q', 0, 0)));
+	newSat->AddSkill(std::shared_ptr<Skill>(new FrostSkill(10, 2.0f, 0.05f, 'e', 'e', 'q', 0, 0)));
 	this->satellites.push_back(newSat);
 
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;

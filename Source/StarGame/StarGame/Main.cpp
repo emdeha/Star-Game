@@ -280,6 +280,7 @@ void InitializeScene()
 	GetWorld().AddFusionSequence("passiveAoe", 'w', 'e', 'q');
 	GetWorld().AddFusionSequence("sunNova",    'w', 'q', 'q');
 	GetWorld().AddFusionSequence("satShield",  'q', 'w', 'q');
+	GetWorld().AddFusionSequence("satFrost",   'e', 'e', 'q');
 }
 
 

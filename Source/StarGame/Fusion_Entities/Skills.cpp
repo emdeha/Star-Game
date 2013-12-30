@@ -537,6 +537,71 @@ void ShieldSkill::Render()
 }
 
 
+/////////////
+//  Frost  //
+/////////////
+FrostSkill::FrostSkill(int newDamage, float newRange, float newScaleRate,
+					   char fusionCombA, char fusionCombB, char fusionCombC,
+					   int newApplyCost, int newResearchCost)
+						: damage(newDamage), range(newRange), scaleRate(newScaleRate), 
+						  position(0.0f), currentScale(0.5f),
+						  Skill(fusionCombA, fusionCombB, fusionCombC, newApplyCost, newResearchCost)
+{
+	frostExpansionDisc = 
+		Utility::Primitives::Torus2D(glm::vec4(1.0f, 1.0f, 0.0f, 0.5f), position, currentScale, currentScale + 0.03f, 90);
+	frostExpansionDisc.Init();
+}
+
+void FrostSkill::Update()
+{
+	if (isActive)
+	{
+		if (currentScale <= range)
+		{
+			currentScale += scaleRate;
+
+			OnSkillAppliedEvent _event = 
+				OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, position, currentScale, damage, true);
+			GetWorld().GetEventManager().FireEvent(_event);
+
+			ComponentMapper<Transform> holderTransformData =
+				GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity(holderID), CT_TRANSFORM);
+
+			position = holderTransformData[0]->position;
+		}
+		else
+		{
+			currentScale = 1.0f;
+			isActive = false;
+		}
+	}
+}
+
+void FrostSkill::Activate(FusionEngine::CelestialBody *skillHolder)
+{
+	holderID = skillHolder->GetID();
+	isActive = true;
+}
+
+void FrostSkill::Render()
+{
+	if (isActive)
+	{
+		glutil::PushStack push(GetWorld().GetDisplayData().modelMatrix);
+		GetWorld().GetDisplayData().modelMatrix.Translate(position);
+		GetWorld().GetDisplayData().modelMatrix.Scale(currentScale, 0.0f, currentScale);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		frostExpansionDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
+							    GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
+
+		glDisable(GL_BLEND);
+	}
+}
+
+
 //////////////////////////
 //  Satellite Creation  //
 //////////////////////////

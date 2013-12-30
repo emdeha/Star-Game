@@ -103,7 +103,7 @@ namespace FusionEngine
 		// TODO: Later - a generic loading method
 		void Load(const std::string &guiLayoutFile, 
 				  const std::string &audioFile,
-				  const std::string &shaderDataFile); 
+				  const std::string &shaderDataFile);
 		void ReloadGUI(const std::string &guiLayoutFile);
 
 		void Render();
@@ -113,6 +113,8 @@ namespace FusionEngine
 		Layout *GetLayout(LayoutType layoutType) const;
 		Layout *GetCurrentLayout() const;
 
+		std::vector<std::shared_ptr<Skill>> GetCollidableSkills() const;
+		
 		unsigned int GetCurrentFusionInputIndex() const;
 		void SetFusionInput(char sequenceEndButton,
 							char validButtonA, char validButtonB, char validButtonC);

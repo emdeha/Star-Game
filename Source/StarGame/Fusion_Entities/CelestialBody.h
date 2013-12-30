@@ -36,7 +36,6 @@
 
 namespace FusionEngine
 {
-
 	class CelestialBody : public IEventListener, public IUpdatable
 	{
 	private:
@@ -68,6 +67,7 @@ namespace FusionEngine
 
 		std::string GetID() { return id; }
 		std::vector<std::shared_ptr<Skill>> GetSkills() { return skills; }
+		std::vector<std::shared_ptr<CelestialBody>> GetSatellites() { return satellites; }
 
 		virtual bool HandleEvent(const IEventData &eventData);
 	};

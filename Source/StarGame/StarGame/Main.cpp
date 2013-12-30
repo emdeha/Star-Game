@@ -270,15 +270,16 @@ void InitializeScene()
 
 	///////////////////////////////////////
 	GetWorld().SetFusionInput('f', 'q', 'w', 'e');
-	GetWorld().AddFusionSequence("waterSat", 'w', 'w', 'w');
-	GetWorld().AddFusionSequence("fireSat", 'q', 'q', 'q');
-	GetWorld().AddFusionSequence("earthSat", 'e', 'e', 'e');
-	GetWorld().AddFusionSequence("airSat", 'q', 'w', 'e');
-	GetWorld().AddFusionSequence("ult", 'q', 'w', 'w');
-	GetWorld().AddFusionSequence("burn", 'w', 'e', 'e');
-	GetWorld().AddFusionSequence("aoe", 'w', 'q', 'e');
+	GetWorld().AddFusionSequence("waterSat",   'w', 'w', 'w');
+	GetWorld().AddFusionSequence("fireSat",    'q', 'q', 'q');
+	GetWorld().AddFusionSequence("earthSat",   'e', 'e', 'e');
+	GetWorld().AddFusionSequence("airSat",     'q', 'w', 'e');
+	GetWorld().AddFusionSequence("ult",        'q', 'w', 'w');
+	GetWorld().AddFusionSequence("burn",       'w', 'e', 'e');
+	GetWorld().AddFusionSequence("aoe",        'w', 'q', 'e');
 	GetWorld().AddFusionSequence("passiveAoe", 'w', 'e', 'q');
-	GetWorld().AddFusionSequence("sunNova", 'w', 'q', 'q');
+	GetWorld().AddFusionSequence("sunNova",    'w', 'q', 'q');
+	GetWorld().AddFusionSequence("satShield",  'q', 'w', 'q');
 }
 
 

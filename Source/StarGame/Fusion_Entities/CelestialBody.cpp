@@ -156,7 +156,7 @@ bool CelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 				if ((*skill)->IsForSequence(data.inputSequence))
 				{
 					(*skill)->Activate(this);
-					return true;
+					break;
 				}
 			}
 		}
@@ -175,6 +175,7 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 
 	float satOffset = GetSatelliteOffset(satType); 
 	std::shared_ptr<CelestialBody> newSat(new CelestialBody(satType, 0, 0.3f, satOffset));
+	newSat->AddSkill(std::shared_ptr<Skill>(new ShieldSkill(1, 1.0f, 'q', 'w', 'q', 0, 0)));
 	this->satellites.push_back(newSat);
 
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;

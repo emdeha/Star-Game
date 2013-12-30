@@ -439,7 +439,7 @@ void SunNovaSkill::Activate(FusionEngine::CelestialBody *skillHolder)
 	isActive = true;
 
 	ComponentMapper<Transform> sunTransformData =
-			GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity("sun"), CT_TRANSFORM);
+		GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity("sun"), CT_TRANSFORM);
 
 	position = sunTransformData[0]->position;
 }
@@ -457,6 +457,80 @@ void SunNovaSkill::Render()
 
 		novaExpansionDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
 							   GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
+
+		glDisable(GL_BLEND);
+	}
+}
+
+
+//////////////
+//  Shield  //
+//////////////
+ShieldSkill::ShieldSkill(int newDefensePoints, float newRange,
+						 char fusionCombA, char fusionCombB, char fusionCombC,
+						 int newApplyCost, int newResearchCost)
+						 : defensePoints(newDefensePoints), range(newRange), currentDefensePoints(newDefensePoints), 
+						   position(0.0f),
+						   Skill(fusionCombA, fusionCombB, fusionCombC, newApplyCost, newResearchCost)
+{
+	skillEffectDisc = Utility::Primitives::Circle(glm::vec4(0.5f, 0.5f, 1.0f, 0.5f), position, range, 90);
+	skillEffectDisc.Init();
+
+	GetWorld().GetEventManager().AddListener(this, EVENT_ON_COLLIDE);
+}
+
+void ShieldSkill::Update()
+{
+	if (isActive)
+	{
+		if (defensePoints == 0)
+		{
+			isActive = false;
+			currentDefensePoints = defensePoints;
+		}
+		else
+		{
+			ComponentMapper<Transform> holderTransformData =
+				GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity(holderID), CT_TRANSFORM);
+
+			position = holderTransformData[0]->position;
+		}
+	}
+}
+
+void ShieldSkill::Activate(CelestialBody *skillHolder)
+{
+	holderID = skillHolder->GetID();
+	isActive = true;
+}
+
+bool ShieldSkill::HandleEvent(const IEventData &eventData)
+{
+	EventType type = eventData.GetType();
+	switch (type)
+	{
+	case FusionEngine::EVENT_ON_COLLIDE:
+		{
+			defensePoints--;
+		}
+		break;
+	}
+
+	return false;
+}
+
+void ShieldSkill::Render()
+{
+	if (isActive)
+	{
+		glutil::PushStack push(GetWorld().GetDisplayData().modelMatrix);
+		GetWorld().GetDisplayData().modelMatrix.Translate(position);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		skillEffectDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
+							 GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
 
 		glDisable(GL_BLEND);
 	}

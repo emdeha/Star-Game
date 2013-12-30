@@ -26,6 +26,7 @@ namespace FusionEngine
 		EVENT_ON_KEY_PRESSED,
 		EVENT_ON_FUSION_COMPLETED,
 		EVENT_ON_SKILL_APPLIED,
+		EVENT_ON_COLLIDE,
 	};
 
 	struct EntityEvent : public IEventData
@@ -90,6 +91,14 @@ namespace FusionEngine
 		
 		OnSkillAppliedEvent(EventType eventType,  glm::vec3 newPosition, float newRadius, int newDamage, bool newIsNova)
 			: IEventData(eventType), position(newPosition), radius(newRadius), damage(newDamage), isNova(newIsNova) {}
+	};
+
+	struct OnCollideEvent : public IEventData
+	{
+		std::string collidedBodyID;
+
+		OnCollideEvent(EventType eventType, const std::string &newCollidedBodyID)
+			: IEventData(eventType), collidedBodyID(newCollidedBodyID) {}
 	};
 }
 

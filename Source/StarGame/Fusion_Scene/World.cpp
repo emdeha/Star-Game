@@ -92,6 +92,8 @@ void World::Render()
 				sunLight.Render(displayData.modelMatrix, shaderManager);
 				renderer.Render(displayData.modelMatrix);
 
+				// | This is one ugly motherfucker |
+				// V							   V
 				ComponentMapper<Updatable> functionalData = 
 					GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity("sun"), CT_UPDATABLE_BEHAVIOR);
 				CelestialBody *sun = static_cast<CelestialBody*>(functionalData[0]->updatedObject.get());
@@ -100,6 +102,17 @@ void World::Render()
 				{
 					(*skill)->Render();
 				}
+
+				auto sunSats = sun->GetSatellites();
+				for (auto sat = sunSats.begin(); sat != sunSats.end(); ++sat)
+				{
+					auto satSkills = (*sat)->GetSkills();
+					for (auto satSkill = satSkills.begin(); satSkill != satSkills.end(); ++satSkill)
+					{
+						(*satSkill)->Render();
+					}
+				}
+				// | End of ugly motherfucker |
 			}
 		}
 	}
@@ -148,6 +161,41 @@ Layout *World::GetCurrentLayout() const
 
 	HandleUnexpectedError("no current layout", __LINE__, __FILE__);
 	return nullptr;
+}
+
+std::vector<std::shared_ptr<Skill>> World::GetCollidableSkills() const
+{
+	std::vector<std::shared_ptr<Skill>> collidableSkills;
+
+	// | This is the other ugly motherfucker |
+	// V							         V
+	ComponentMapper<Updatable> functionalData = 
+		GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity("sun"), CT_UPDATABLE_BEHAVIOR);
+	CelestialBody *sun = static_cast<CelestialBody*>(functionalData[0]->updatedObject.get());
+	auto sunSkills = sun->GetSkills();
+	for (auto skill = sunSkills.begin(); skill != sunSkills.end(); ++skill)
+	{
+		if ((*skill)->IsCollidable())
+		{
+			collidableSkills.push_back((*skill));
+		}
+	}
+
+	auto sunSats = sun->GetSatellites();
+	for (auto sat = sunSats.begin(); sat != sunSats.end(); ++sat)
+	{
+		auto satSkills = (*sat)->GetSkills();
+		for (auto satSkill = satSkills.begin(); satSkill != satSkills.end(); ++satSkill)
+		{
+			if ((*satSkill)->IsCollidable())
+			{
+				collidableSkills.push_back((*satSkill));
+			}
+		}
+	}
+	// | End of other ugly motherfucker |
+
+	return collidableSkills;
 }
 
 unsigned int World::GetCurrentFusionInputIndex() const

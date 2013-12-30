@@ -152,8 +152,13 @@ namespace FusionEngine
 
 		virtual bool HandleEvent(const IEventData &eventData);
 
+		virtual bool IsCollidable() { return false; }
+
 	public:
 		bool IsForSequence(const std::string &fusionSequence);
+
+		virtual glm::vec3 GetPosition() { return glm::vec3(0.0f); }
+		virtual float GetRange() { return 0.0f; }
 	};
 
 	class SatelliteCreationSkill : public Skill
@@ -198,17 +203,6 @@ namespace FusionEngine
 		void Activate(CelestialBody *skillHolder);
 
 		bool HandleEvent(const IEventData &eventData);
-	};
-
-	class UltimateSkill : public Skill
-	{
-	public:
-		UltimateSkill(char fusionCombA, char fusionCombB, char fusionCombC,
-					  int newApplyCost, int newResearchCost)
-					  : Skill(fusionCombA, fusionCombB, fusionCombC,
-							  newApplyCost, newResearchCost) {}
-
-		void Activate(CelestialBody *skillHolder);
 	};
 
 	class AOESkill : public Skill
@@ -280,6 +274,49 @@ namespace FusionEngine
 
 		void Update();
 		void Render();
+
+		void Activate(CelestialBody *skillHolder);
+	};
+
+	class ShieldSkill : public Skill
+	{
+	private:
+		Utility::Primitives::Circle skillEffectDisc;
+
+		glm::vec3 position;
+
+		std::string holderID; // should be added to every skill
+
+		int defensePoints;
+		int currentDefensePoints;
+
+		float range;
+
+	public:
+		ShieldSkill(int newDefensePoints, float newRange,
+					char fusionCombA, char fusionCombB, char fusionCombC,
+					int newApplyCost, int newResearchCost);
+
+		void Update();
+		void Render();
+
+		void Activate(CelestialBody *skillHolder);
+
+		bool HandleEvent(const IEventData &eventData);
+
+		bool IsCollidable() { return true; }
+
+		glm::vec3 GetPosition() { return position; }
+		float GetRange() { return range; }
+	};
+
+	class UltimateSkill : public Skill
+	{
+	public:
+		UltimateSkill(char fusionCombA, char fusionCombB, char fusionCombC,
+					  int newApplyCost, int newResearchCost)
+					  : Skill(fusionCombA, fusionCombB, fusionCombC,
+							  newApplyCost, newResearchCost) {}
 
 		void Activate(CelestialBody *skillHolder);
 	};

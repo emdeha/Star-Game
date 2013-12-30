@@ -120,4 +120,17 @@ void Enemy::Update()
 		// Destroy
 		std::printf("KILLED IS ME!!! %s\n", name.c_str());
 	}
+
+	if (health > 0)
+	{
+		auto collidableSkills = GetWorld().GetCollidableSkills();
+		for (auto skill = collidableSkills.begin(); skill != collidableSkills.end(); ++skill)
+		{
+			if (glm::length((*skill)->GetPosition() - transformData[0]->position) < (*skill)->GetRange())
+			{
+				health = 0; // Kill enemy
+				GetWorld().GetEventManager().FireEvent(OnCollideEvent(EVENT_ON_COLLIDE, name));
+			}
+		}
+	}
 }

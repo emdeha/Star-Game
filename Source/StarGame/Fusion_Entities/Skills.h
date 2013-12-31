@@ -127,14 +127,19 @@ namespace FusionEngine
 		int researchCost;
 
 	protected:
+		glm::vec3 position;
+
 		bool isDeployed;
 		bool isActive;
+
+	protected:
+		virtual void RenderSkillAnimation() {};
 
 	public:
 		Skill() {}
 		Skill(char fusionCombA, char fusionCombB, char fusionCombC,
 			  int newApplyCost, int newResearchCost) 
-			  : applyCost(newApplyCost), researchCost(newResearchCost)
+			  : applyCost(newApplyCost), researchCost(newResearchCost), position(0.0f)
 		{
 			fusionCombination[0] = fusionCombA;
 			fusionCombination[1] = fusionCombB;
@@ -147,7 +152,7 @@ namespace FusionEngine
 		virtual ~Skill() {}
 
 		virtual void Update() {}
-		virtual void Render() {} // TODO: Export to renderer
+		void Render(); // TODO: Export to renderer
 
 		virtual void Activate(CelestialBody *skillHolder) {}
 
@@ -158,7 +163,7 @@ namespace FusionEngine
 	public:
 		bool IsForSequence(const std::string &fusionSequence);
 
-		virtual glm::vec3 GetPosition() { return glm::vec3(0.0f); }
+		virtual glm::vec3 GetPosition() { return position; }
 		virtual float GetRange() { return 0.0f; }
 	};
 
@@ -172,7 +177,7 @@ namespace FusionEngine
 							   char fusionCombA, char fusionCombB, char fusionCombC,
 							   int newApplyCost, int newResearchCost)
 							   : satelliteToAdd(newSatelliteToAdd),
-							     Skill(fusionCombA, fusionCombB, fusionCombC, 
+							     Skill(fusionCombA, fusionCombB, fusionCombC,
 									   newApplyCost, newResearchCost) {}
 
 		void Activate(CelestialBody *skillHolder);
@@ -183,7 +188,6 @@ namespace FusionEngine
 	private:
 		Utility::Primitives::Circle	applicationDisc;
 
-		glm::vec3 position;
 		int damage;
 
 		float range;
@@ -199,7 +203,7 @@ namespace FusionEngine
 				  int newApplyCost, int newResearchCost);
 
 		void Update();
-		void Render();
+		void RenderSkillAnimation();
 
 		void Activate(CelestialBody *skillHolder);
 
@@ -210,8 +214,6 @@ namespace FusionEngine
 	{
 	private:
 		Utility::Primitives::Circle applicationDisc;
-		
-		glm::vec3 position;
 
 		int damage;
 		float range;
@@ -222,7 +224,7 @@ namespace FusionEngine
 				 int newApplyCost, int newResearchCost);
 
 		void Update();
-		void Render();
+		void RenderSkillAnimation();
 
 		void Activate(CelestialBody *skillHolder);
 
@@ -233,8 +235,6 @@ namespace FusionEngine
 	{
 	private:
 		Utility::Primitives::Circle skillVisibilityDisc;
-
-		glm::vec3 position;
 
 		int damage;
 		
@@ -250,7 +250,7 @@ namespace FusionEngine
 						int newApplyCost, int newResearchCost);
 
 		void Update();
-		void Render();
+		void RenderSkillAnimation();
 
 		void Activate(CelestialBody *skillHolder);
 	};
@@ -259,8 +259,6 @@ namespace FusionEngine
 	{
 	private:
 		Utility::Primitives::Torus2D novaExpansionDisc;
-
-		glm::vec3 position;
 		
 		int damage;
 
@@ -274,7 +272,7 @@ namespace FusionEngine
 					 int newApplyCost, int newResearchCost);
 
 		void Update();
-		void Render();
+		void RenderSkillAnimation();
 
 		void Activate(CelestialBody *skillHolder);
 	};
@@ -283,8 +281,6 @@ namespace FusionEngine
 	{
 	private:
 		Utility::Primitives::Circle skillEffectDisc;
-
-		glm::vec3 position;
 
 		std::string holderID; // should be added to every skill
 
@@ -299,7 +295,7 @@ namespace FusionEngine
 					int newApplyCost, int newResearchCost);
 
 		void Update();
-		void Render();
+		void RenderSkillAnimation();
 
 		void Activate(CelestialBody *skillHolder);
 
@@ -307,7 +303,6 @@ namespace FusionEngine
 
 		bool IsCollidable() { return true; }
 
-		glm::vec3 GetPosition() { return position; }
 		float GetRange() { return range; }
 	};
 
@@ -318,8 +313,6 @@ namespace FusionEngine
 		Utility::Primitives::Torus2D frostExpansionDisc;
 
 		std::string holderID;
-
-		glm::vec3 position;
 		
 		int damage;
 
@@ -333,19 +326,18 @@ namespace FusionEngine
 				   int newApplyCost, int newResearchCost);
 
 		void Update();
-		void Render();
+		void RenderSkillAnimation();
 
 		void Activate(CelestialBody *skillHolder);
 	};
 
+	// Many similarities with the SunNova
 	class ChainSkill : public Skill
 	{
 	private:
 		Utility::Primitives::Torus2D chainExpansionDisc;
 
 		std::string holderID;
-
-		glm::vec3 position;
 
 		int damage;
 
@@ -359,7 +351,7 @@ namespace FusionEngine
 				   int newApplyCost, int newResearchCost);
 
 		void Update();
-		void Render();
+		void RenderSkillAnimation();
 
 		void Activate(CelestialBody *skillHolder);
 

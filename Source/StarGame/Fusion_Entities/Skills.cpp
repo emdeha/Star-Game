@@ -132,6 +132,22 @@ bool Skill::IsForSequence(const std::string &fusionSequence)
 	return fusionSequence == fusionCombination;
 }
 
+void Skill::Render()
+{
+	if (isActive)
+	{
+		glutil::PushStack push(GetWorld().GetDisplayData().modelMatrix);
+        GetWorld().GetDisplayData().modelMatrix.Translate(position);
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		RenderSkillAnimation();
+
+        glDisable(GL_BLEND);
+	}
+}
+
 
 ////////////
 //  Burn  //
@@ -141,7 +157,7 @@ BurnSkill::BurnSkill(int newDamage, float newRange, float newDuration_seconds, f
 					 int newApplyCost, int newResearchCost)
 						: damage(newDamage), range(newRange), duration_seconds(newDuration_seconds), 
 						  damageApplyTime_seconds(newDamageApplyTime_seconds), 
-						  damageApplyTimeDuration_seconds(newDamageApplyTime_seconds), position(0.0f), 
+						  damageApplyTimeDuration_seconds(newDamageApplyTime_seconds),
 						  Skill(fusionCombA, fusionCombB, fusionCombC, newApplyCost, newResearchCost) 
 {
 	attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE);
@@ -220,21 +236,10 @@ bool BurnSkill::HandleEvent(const IEventData &eventData)
 	return false;
 }
 
-void BurnSkill::Render()
+void BurnSkill::RenderSkillAnimation()
 {
-	if (isActive)
-	{
-		glutil::PushStack push(GetWorld().GetDisplayData().modelMatrix);
-		GetWorld().GetDisplayData().modelMatrix.Translate(position);
-
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		applicationDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
-							 GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
-
-		glDisable(GL_BLEND);
-	}
+	applicationDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
+						 GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
 }
 
 
@@ -244,7 +249,7 @@ void BurnSkill::Render()
 AOESkill::AOESkill(int newDamage, float newRange,
 				   char fusionCombA, char fusionCombB, char fusionCombC,
 				   int newApplyCost, int newResearchCost)
-				   : damage(newDamage), range(newRange), position(0.0f),
+				   : damage(newDamage), range(newRange),
 				     Skill(fusionCombA, fusionCombB, fusionCombC, newApplyCost, newResearchCost)
 {
 	applicationDisc = Utility::Primitives::Circle(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), position, range, 90);
@@ -305,21 +310,11 @@ bool AOESkill::HandleEvent(const IEventData &eventData)
 	return false;
 }
 
-void AOESkill::Render()
+void AOESkill::RenderSkillAnimation()
 {
-	if (isActive)
-	{
-		glutil::PushStack push(GetWorld().GetDisplayData().modelMatrix);
-		GetWorld().GetDisplayData().modelMatrix.Translate(position);
+	applicationDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
+						 GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
 
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		applicationDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
-							 GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
-
-		glDisable(GL_BLEND);
-	}
 	if (isDeployed)
 	{
 		// Render animation
@@ -334,7 +329,7 @@ PassiveAOESkill::PassiveAOESkill(int newDamage, float newRange, float newDamageA
 								 char fusionCombA, char fusionCombB, char fusionCombC,
 								 int newApplyCost, int newResearchCost)
 								 : damage(newDamage), range(newRange), 
-								   damageApplyTime_seconds(newDamageApplyTime_seconds), position(0.0f),
+								   damageApplyTime_seconds(newDamageApplyTime_seconds),
 								   Skill(fusionCombA, fusionCombB, fusionCombC, newApplyCost, newResearchCost)
 {
 	attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE, damageApplyTime_seconds);
@@ -381,21 +376,10 @@ void PassiveAOESkill::Activate(FusionEngine::CelestialBody *skillHolder)
 	position = sunTransformData[0]->position;
 }
 
-void PassiveAOESkill::Render()
+void PassiveAOESkill::RenderSkillAnimation()
 {
-	if (isActive)
-	{
-		glutil::PushStack push(GetWorld().GetDisplayData().modelMatrix);
-		GetWorld().GetDisplayData().modelMatrix.Translate(position);
-
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		skillVisibilityDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
-								 GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
-
-		glDisable(GL_BLEND);
-	}
+	skillVisibilityDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
+							 GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
 }
 
 
@@ -405,8 +389,7 @@ void PassiveAOESkill::Render()
 SunNovaSkill::SunNovaSkill(int newDamage, float newRange, float newScaleRate,
 						   char fusionCombA, char fusionCombB, char fusionCombC,
 						   int newApplyCost, int newResearchCost)
-						   : damage(newDamage), range(newRange), scaleRate(newScaleRate), 
-						     position(0.0f), currentScale(1.0f),
+						   : damage(newDamage), range(newRange), scaleRate(newScaleRate), currentScale(1.0f),
 						     Skill(fusionCombA, fusionCombB, fusionCombC, newApplyCost, newResearchCost)
 {
 	novaExpansionDisc = 
@@ -444,22 +427,12 @@ void SunNovaSkill::Activate(FusionEngine::CelestialBody *skillHolder)
 	position = sunTransformData[0]->position;
 }
 
-void SunNovaSkill::Render()
+void SunNovaSkill::RenderSkillAnimation()
 {
-	if (isActive)
-	{
-		glutil::PushStack push(GetWorld().GetDisplayData().modelMatrix);
-		GetWorld().GetDisplayData().modelMatrix.Translate(position);
-		GetWorld().GetDisplayData().modelMatrix.Scale(currentScale, 0.0f, currentScale);
+	GetWorld().GetDisplayData().modelMatrix.Scale(currentScale, 0.0f, currentScale);
 
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		novaExpansionDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
-							   GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
-
-		glDisable(GL_BLEND);
-	}
+	novaExpansionDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
+							GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
 }
 
 
@@ -470,7 +443,6 @@ ShieldSkill::ShieldSkill(int newDefensePoints, float newRange,
 						 char fusionCombA, char fusionCombB, char fusionCombC,
 						 int newApplyCost, int newResearchCost)
 						 : defensePoints(newDefensePoints), range(newRange), currentDefensePoints(newDefensePoints), 
-						   position(0.0f),
 						   Skill(fusionCombA, fusionCombB, fusionCombC, newApplyCost, newResearchCost)
 {
 	skillEffectDisc = Utility::Primitives::Circle(glm::vec4(0.5f, 0.5f, 1.0f, 0.5f), position, range, 90);
@@ -519,21 +491,10 @@ bool ShieldSkill::HandleEvent(const IEventData &eventData)
 	return false;
 }
 
-void ShieldSkill::Render()
+void ShieldSkill::RenderSkillAnimation()
 {
-	if (isActive)
-	{
-		glutil::PushStack push(GetWorld().GetDisplayData().modelMatrix);
-		GetWorld().GetDisplayData().modelMatrix.Translate(position);
-
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		skillEffectDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
-							 GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
-
-		glDisable(GL_BLEND);
-	}
+	skillEffectDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
+						 GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
 }
 
 
@@ -543,8 +504,7 @@ void ShieldSkill::Render()
 FrostSkill::FrostSkill(int newDamage, float newRange, float newScaleRate,
 					   char fusionCombA, char fusionCombB, char fusionCombC,
 					   int newApplyCost, int newResearchCost)
-						: damage(newDamage), range(newRange), scaleRate(newScaleRate), 
-						  position(0.0f), currentScale(0.5f),
+						: damage(newDamage), range(newRange), scaleRate(newScaleRate), currentScale(0.5f),
 						  Skill(fusionCombA, fusionCombB, fusionCombC, newApplyCost, newResearchCost)
 {
 	frostExpansionDisc = 
@@ -583,22 +543,12 @@ void FrostSkill::Activate(FusionEngine::CelestialBody *skillHolder)
 	isActive = true;
 }
 
-void FrostSkill::Render()
+void FrostSkill::RenderSkillAnimation()
 {
-	if (isActive)
-	{
-		glutil::PushStack push(GetWorld().GetDisplayData().modelMatrix);
-		GetWorld().GetDisplayData().modelMatrix.Translate(position);
-		GetWorld().GetDisplayData().modelMatrix.Scale(currentScale, 0.0f, currentScale);
+	GetWorld().GetDisplayData().modelMatrix.Scale(currentScale, 0.0f, currentScale);
 
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		frostExpansionDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
-							    GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
-
-		glDisable(GL_BLEND);
-	}
+	frostExpansionDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
+							GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
 }
 
 
@@ -608,8 +558,7 @@ void FrostSkill::Render()
 ChainSkill::ChainSkill(int newDamage, float newRange, float newScaleRate,
 					   char fusionCombA, char fusionCombB, char fusionCombC,
 					   int newApplyCost, int newResearchCost)
-						: damage(newDamage), range(newRange), scaleRate(newScaleRate), 
-						  position(0.0f), currentScale(0.5f),
+						: damage(newDamage), range(newRange), scaleRate(newScaleRate), currentScale(0.5f),
 						  Skill(fusionCombA, fusionCombB, fusionCombC, newApplyCost, newResearchCost)
 {
 	chainExpansionDisc = 
@@ -677,22 +626,12 @@ bool ChainSkill::HandleEvent(const IEventData &eventData)
 	return false;
 }
 
-void ChainSkill::Render()
+void ChainSkill::RenderSkillAnimation()
 {
-	if (isActive)
-	{
-		glutil::PushStack push(GetWorld().GetDisplayData().modelMatrix);
-		GetWorld().GetDisplayData().modelMatrix.Translate(position);
-		GetWorld().GetDisplayData().modelMatrix.Scale(currentScale, 0.0f, currentScale);
+	GetWorld().GetDisplayData().modelMatrix.Scale(currentScale, 0.0f, currentScale);
 
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		chainExpansionDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
-							    GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
-
-		glDisable(GL_BLEND);
-	}
+	chainExpansionDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
+							GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
 }
 
 

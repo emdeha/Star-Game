@@ -120,12 +120,13 @@ namespace FusionEngine
 
 	class Skill : public IEventListener 
 	{
-	protected:
+	private:
 		char fusionCombination[4];
 
 		int applyCost;
 		int researchCost;
 
+	protected:
 		bool isDeployed;
 		bool isActive;
 

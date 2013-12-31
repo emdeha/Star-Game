@@ -38,13 +38,13 @@ bool FusionInput::IsValidInputButton(char button) const
 	return false;
 }
 
-void FusionInput::AddSequence(//const std::string &sequenceName,
+void FusionInput::AddSequence(const std::string &sequenceName,
 							  char buttonA, char buttonB, char buttonC)
 {
-	sequences.push_back(FusionSequence(buttonA, buttonB, buttonC));
-	//sequences.insert(std::make_pair(sequenceName, FusionSequence(buttonA, buttonB, buttonC)));
+	//sequences.push_back(FusionSequence(buttonA, buttonB, buttonC));
+	sequences.insert(std::make_pair(sequenceName, FusionSequence(buttonA, buttonB, buttonC)));
 }
-/*
+
 std::string FusionInput::GetSequenceButtons(const std::string &sequenceName) const
 {
 	for(auto sequence = sequences.begin(); sequence != sequences.end(); ++sequence)
@@ -76,7 +76,7 @@ std::string FusionInput::GetSequenceName(const std::string &fusionButtons) const
 	HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
 	return ""; 
 }
-*/
+
 bool FusionInput::HandleEvent(const IEventData &eventData)
 {
 	EventType type = eventData.GetType();
@@ -90,11 +90,11 @@ bool FusionInput::HandleEvent(const IEventData &eventData)
 			{
 				for (auto sequence = sequences.begin(); sequence != sequences.end(); ++sequence)
 				{
-					if (currentInputSequence == (*sequence)/*.second*/.buttons)
+					if (currentInputSequence == (*sequence).second.buttons)
 					{
 						GetWorld().GetEventManager().
 							FireEvent(OnFusionCompletedEvent(FusionEngine::EVENT_ON_FUSION_COMPLETED, 
-															 currentInputSequence));
+															 (*sequence).first));
 						break;
 					}
 				}
@@ -119,7 +119,7 @@ bool FusionInput::HandleEvent(const IEventData &eventData)
 	return false;
 }
 
-
+/*
 /////////////
 //  Skill  //
 /////////////
@@ -652,3 +652,4 @@ void UltimateSkill::Activate(FusionEngine::CelestialBody *skillHolder)
 {
 	GetWorld().GetEventManager().FireEvent(OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, glm::vec3(), -1.0f, 300, false));
 }
+*/

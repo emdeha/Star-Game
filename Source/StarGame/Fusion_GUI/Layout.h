@@ -19,7 +19,7 @@
 #define FE_LAYOUT_H
 
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <vector>
 #include <memory>
 #pragma warning(pop)

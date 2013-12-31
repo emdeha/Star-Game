@@ -91,7 +91,7 @@ void World::Render()
 			{
 				sunLight.Render(displayData.modelMatrix, shaderManager);
 				renderer.Render(displayData.modelMatrix);
-
+				/*
 				// | This is one ugly motherfucker |
 				// V							   V
 				ComponentMapper<Updatable> functionalData = 
@@ -112,7 +112,7 @@ void World::Render()
 						(*satSkill)->Render();
 					}
 				}
-				// | End of ugly motherfucker |
+				// | End of ugly motherfucker |*/
 			}
 		}
 	}
@@ -162,7 +162,7 @@ Layout *World::GetCurrentLayout() const
 	HandleUnexpectedError("no current layout", __LINE__, __FILE__);
 	return nullptr;
 }
-
+/*
 std::vector<std::shared_ptr<Skill>> World::GetCollidableSkills() const
 {
 	std::vector<std::shared_ptr<Skill>> collidableSkills;
@@ -196,7 +196,7 @@ std::vector<std::shared_ptr<Skill>> World::GetCollidableSkills() const
 	// | End of other ugly motherfucker |
 
 	return collidableSkills;
-}
+}*/
 
 unsigned int World::GetCurrentFusionInputIndex() const
 {
@@ -220,15 +220,15 @@ void World::SetFusionInput(char sequenceEndButton,
 					    eventManager));
 }
 
-void World::AddFusionSequence(//const std::string &sequenceName,
+void World::AddFusionSequence(const std::string &sequenceName,
 							  char buttonA, char buttonB, char buttonC)
 {
-	fusionInput->AddSequence(/*sequenceName, */buttonA, buttonB, buttonC);
+	fusionInput->AddSequence(sequenceName, buttonA, buttonB, buttonC);
 }
-void World::AddFusionSequence(//const std::string &sequenceName,
+void World::AddFusionSequence(const std::string &sequenceName,
 							  const std::string &sequenceButtons)
 {
-	AddFusionSequence(/*sequenceName, */sequenceButtons[0], sequenceButtons[1], sequenceButtons[2]);
+	AddFusionSequence(sequenceName, sequenceButtons[0], sequenceButtons[1], sequenceButtons[2]);
 }
 
 bool World::HandleEvent(const IEventData &eventData)

@@ -113,14 +113,14 @@ namespace FusionEngine
 		Layout *GetLayout(LayoutType layoutType) const;
 		Layout *GetCurrentLayout() const;
 
-		std::vector<std::shared_ptr<Skill>> GetCollidableSkills() const;
+		//std::vector<std::shared_ptr<Skill>> GetCollidableSkills() const;
 		
 		unsigned int GetCurrentFusionInputIndex() const;
 		void SetFusionInput(char sequenceEndButton,
 							char validButtonA, char validButtonB, char validButtonC);
-		void AddFusionSequence(//const std::string &sequenceName,
+		void AddFusionSequence(const std::string &sequenceName,
 							   char buttonA, char buttonB, char buttonC);
-		void AddFusionSequence(//const std::string &sequenceName,
+		void AddFusionSequence(const std::string &sequenceName,
 							   const std::string &sequenceButtons);
 		std::string GetFusionInputValidButtons() const;
 		char GetFusionInputSequenceEndButton() const;

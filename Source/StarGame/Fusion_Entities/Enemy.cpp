@@ -112,7 +112,7 @@ void Enemy::Update()
 
 	if (health <= 20)
 	{
-		currentState == FE_STATE_EVADE;
+		currentState = FE_STATE_EVADE;
 	}
 
 	if (health <= 0)
@@ -122,7 +122,7 @@ void Enemy::Update()
 	}
 
 	if (health > 0)
-	{
+	{/*
 		auto collidableSkills = GetWorld().GetCollidableSkills();
 		for (auto skill = collidableSkills.begin(); skill != collidableSkills.end(); ++skill)
 		{
@@ -131,6 +131,6 @@ void Enemy::Update()
 				health = 0; // Kill enemy
 				GetWorld().GetEventManager().FireEvent(OnCollideEvent(EVENT_ON_COLLIDE, name));
 			}
-		}
+		}*/
 	}
 }

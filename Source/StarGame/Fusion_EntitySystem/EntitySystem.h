@@ -6,7 +6,7 @@
 #include "Entity.h"
 #include "ComponentType.h"
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <set>
 #pragma warning(pop)
 

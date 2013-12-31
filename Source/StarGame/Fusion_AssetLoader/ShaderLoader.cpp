@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "AssetLoader.h"
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <sstream> 
 
 #include "../glsdk/glload/gl_3_3.h"

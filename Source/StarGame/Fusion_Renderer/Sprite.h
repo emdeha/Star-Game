@@ -19,7 +19,7 @@
 #define FE_SPRITE_H
 
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <memory>
 #pragma warning(pop)
 

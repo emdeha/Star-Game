@@ -19,7 +19,7 @@
 #define SHADER_MANAGER_H
 
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <map>
 #include <vector>
 #include <string>

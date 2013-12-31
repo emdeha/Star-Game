@@ -23,7 +23,7 @@
 /// @}
 
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <string>
 #include <sstream>
 #include <vector>

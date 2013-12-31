@@ -25,7 +25,7 @@
 #include "../Fusion_EntitySystem/Component.h"
 #include "../Fusion_EntitySystem/ComponentMapper.h"
 #include "../Fusion_Renderer/Renderer.h"
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include "../Mouse/Mouse.h"
 #include <vector>
 #include <memory>

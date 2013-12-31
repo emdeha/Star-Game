@@ -21,7 +21,7 @@
 
 #include "../Fusion_Renderer/ShaderManager.h"
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <ft2build.h>
 #include FT_FREETYPE_H
 

@@ -19,7 +19,7 @@
 #define FE_PROGRAM_DATA_H
 
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <map>
 #include <sstream>
 

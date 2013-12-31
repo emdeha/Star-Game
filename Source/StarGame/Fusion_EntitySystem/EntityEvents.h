@@ -2,7 +2,7 @@
 #define __EVENT_TYPE_H
 
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <string>
 #include "../glsdk/glm/glm.hpp"
 #pragma warning(pop)
@@ -76,10 +76,10 @@ namespace FusionEngine
 
 	struct OnFusionCompletedEvent : public IEventData
 	{
-		std::string inputSequence;
+		std::string skillID;
 
-		OnFusionCompletedEvent(EventType eventType, const std::string &newInputSequence)
-			: IEventData(eventType), inputSequence(newInputSequence) {}
+		OnFusionCompletedEvent(EventType eventType, const std::string &newSkillID)
+			: IEventData(eventType), skillID(newSkillID) {}
 	};
 
 	struct OnSkillAppliedEvent : public IEventData

@@ -19,7 +19,7 @@
 #define FE_ASSET_LOADER_H
 
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <fstream>
 #include <string>
 #include <map>

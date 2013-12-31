@@ -19,7 +19,7 @@
 #define FE_ENEMY_H
 
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <string>
 #pragma warning(pop)
 

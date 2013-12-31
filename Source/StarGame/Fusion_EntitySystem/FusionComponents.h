@@ -19,7 +19,7 @@
 #define FE_FUSION_COMPONENTS_H
 
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <vector>
 #include <functional>
 #include "../glsdk/glm/glm.hpp"
@@ -114,6 +114,28 @@ namespace FusionEngine
         Updatable() : Component(CT_UPDATABLE_BEHAVIOR) {}
         virtual ~Updatable() {}
     };
+
+
+	class Skill : public Component
+	{
+	public:
+		std::string skillHolderID;		
+		std::string fusionCombination;
+
+		int applyCost;
+		int researchCost;
+
+		int damage;
+		float range;
+
+		bool isActive;
+		bool isDeployed;
+
+		bool isAppliedOnActive;
+		
+		Skill() : Component(CT_SKILL) {}
+		virtual ~Skill() {}
+	};
 	
 
 

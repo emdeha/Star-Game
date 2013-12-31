@@ -4,7 +4,7 @@
 #include "../Fusion_Scene/World.h"
 #include "../framework/ErrorAPI.h"
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include "../glsdk/glm/gtc/type_ptr.hpp"
 #pragma warning(pop)
 

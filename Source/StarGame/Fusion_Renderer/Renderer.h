@@ -19,7 +19,7 @@
 #define FE_RENDERER_H
 
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include "../glsdk/glm/glm.hpp"
 #include "../glsdk/glload/gl_3_3.h"
 #include "../glsdk/glutil/glutil.h"

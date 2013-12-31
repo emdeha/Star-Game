@@ -2,7 +2,7 @@
 #define __COMPONENT_MAPPER_H
 
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <vector>
 #pragma warning(pop)
 #include "Component.h"

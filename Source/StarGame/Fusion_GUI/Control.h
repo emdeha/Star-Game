@@ -19,7 +19,7 @@
 #define FE_CONTROL_H
 
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include "../glsdk/glm/glm.hpp"
 #include <map>
 #pragma warning(pop)

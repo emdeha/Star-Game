@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "EventManager.h"
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <assert.h>
 #pragma warning(pop)
 

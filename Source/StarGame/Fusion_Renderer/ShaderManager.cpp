@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ShaderManager.h"
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <sstream>
 
 #include "../framework/framework.h"

@@ -23,7 +23,7 @@
 // TODO: Fix a bug with satellite selection. 
 //		 When the sun is moved the selection doesn't work properly. Move the sun for an example.
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <ctime>
 #include <sstream>
 #include <string>
@@ -122,6 +122,26 @@ void HandlePassiveMovement(int x, int y)
 	GetWorld().GetMouse().SetCurrentPosition(glm::ivec2(x, y));
 }
 
+void CreateSkills()
+{
+	GetScene().AddSystem(new FE::SkillSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager()));
+
+	GetScene().AddEntity("ultSkill");
+	FE::Skill *ultSkill = new FE::Skill();
+	ultSkill->skillHolderID = "sun";
+	ultSkill->fusionCombination = "qqe";
+	ultSkill->damage = 300;
+	ultSkill->range = -1.0f;
+	ultSkill->applyCost = 0;
+	ultSkill->researchCost = 0;
+	ultSkill->isActive = false;
+	ultSkill->isDeployed = false;
+	ultSkill->isAppliedOnActive = true;
+	GetScene().AddComponent("ultSkill", ultSkill);
+
+	GetWorld().AddFusionSequence("ultSkill", 'q', 'q', 'e');
+}
+
 void CreateSun()
 {
 	FE::AssetLoader<FE::MeshAssetObject> meshLoader;
@@ -163,7 +183,7 @@ void CreateSun()
 	FE::Updatable *sunFuncComp = new FE::Updatable();
 	sunFuncComp->updatedObject = 
 		std::unique_ptr<FE::CelestialBody>(new FE::CelestialBody(FE::FE_CELESTIALBODY_SUN, 4, 0.5f, 0.0f));
-	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
+	/*static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
 		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_WATER, 'w', 'w', 'w', 0, 0)));
 	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
 		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_FIRE, 'q', 'q', 'q', 0, 0)));
@@ -180,7 +200,7 @@ void CreateSun()
 	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
 		new FE::PassiveAOESkill(10, 2.0f, 1.0f, 3.0f, 'w', 'e', 'q', 0, 0)));
 	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::SunNovaSkill(10, 4.0f, 0.05f, 'w', 'q', 'q', 0, 0)));
+		new FE::SunNovaSkill(10, 4.0f, 0.05f, 'w', 'q', 'q', 0, 0)));*/
 	GetScene().AddComponent("sun", sunFuncComp);
 	
 	FE::Collidable *sunCollidable = new FE::Collidable();

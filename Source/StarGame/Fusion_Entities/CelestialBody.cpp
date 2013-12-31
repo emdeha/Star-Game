@@ -25,7 +25,7 @@
 #include "../Fusion_Scene/Scene.h"
 #include "../Fusion_Scene/World.h"
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <time.h>
 #pragma warning(pop)
 
@@ -150,7 +150,7 @@ bool CelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 	case FusionEngine::EVENT_ON_FUSION_COMPLETED:
 		{
 			const OnFusionCompletedEvent &data = static_cast<const OnFusionCompletedEvent&>(eventData);
-
+			/*
 			for (auto skill = skills.begin(); skill != skills.end(); ++skill)
 			{
 				if ((*skill)->IsForSequence(data.inputSequence))
@@ -158,7 +158,7 @@ bool CelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 					(*skill)->Activate(this);
 					break;
 				}
-			}
+			}*/
 		}
 		break;
 	}
@@ -175,11 +175,11 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 
 	float satOffset = GetSatelliteOffset(satType); 
 	std::shared_ptr<CelestialBody> newSat(new CelestialBody(satType, 0, 0.3f, satOffset));
-	newSat->AddSkill(std::shared_ptr<Skill>(new ShieldSkill(1, 1.0f, 'q', 'w', 'q', 0, 0)));
-	newSat->AddSkill(std::shared_ptr<Skill>(new FrostSkill(10, 2.0f, 0.05f, 'e', 'e', 'q', 0, 0)));
-	std::shared_ptr<Skill> chainSkill = std::shared_ptr<Skill>(new ChainSkill(10, 2.0f, 0.05f, 'w', 'w', 'q', 0, 0)); 
-	chainSkill->Activate(newSat.get());
-	newSat->AddSkill(chainSkill);
+	//newSat->AddSkill(std::shared_ptr<Skill>(new ShieldSkill(1, 1.0f, 'q', 'w', 'q', 0, 0)));
+	//newSat->AddSkill(std::shared_ptr<Skill>(new FrostSkill(10, 2.0f, 0.05f, 'e', 'e', 'q', 0, 0)));
+	//std::shared_ptr<Skill> chainSkill = std::shared_ptr<Skill>(new ChainSkill(10, 2.0f, 0.05f, 'w', 'w', 'q', 0, 0)); 
+	//chainSkill->Activate(newSat.get());
+	//newSat->AddSkill(chainSkill);
 	this->satellites.push_back(newSat);
 
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
@@ -219,14 +219,14 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 
 	return true;
 }
-
+/*
 bool CelestialBody::AddSkill(const std::shared_ptr<Skill> newSkill)
 {
 	skills.push_back(newSkill);
 	GetWorld().AddFusionSequence(newSkill->GetFusionCombination());
 
 	return true;
-}
+}*/
 
 void CelestialBody::Update()
 {
@@ -253,16 +253,16 @@ void CelestialBody::Update()
 		
 		satTransformData[0]->position = 
 			glm::vec3(relativeTransformStack.Top() * glm::vec4(satTransformData[0]->position, 1.0f));
-
+		/*
 		// Skill Update
 		for (auto skill = (*satellite)->skills.begin(); skill != (*satellite)->skills.end(); ++skill)
 		{
 			(*skill)->Update();
-		}
+		}*/
 	}
-
+	/*
 	for (auto skill = skills.begin(); skill != skills.end(); ++skill)
 	{
 		(*skill)->Update();
-	}
+	}*/
 }

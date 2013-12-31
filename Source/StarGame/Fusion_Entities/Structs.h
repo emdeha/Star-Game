@@ -19,7 +19,7 @@
 #define FE_STRUCTS_H
 
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <vector>
 #include "../glsdk/glm/glm.hpp"
 #pragma warning(pop)

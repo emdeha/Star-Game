@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Scene.h"
 
-#pragma warning(push, 0)
+#pragma warning(push, 1)
 #include <algorithm>
 #include <assert.h>
 #pragma warning(pop)

@@ -10,6 +10,7 @@ namespace FusionEngine
 		CT_RENDER,
 		CT_UPDATABLE_BEHAVIOR,
 		CT_COLLISION,
+		CT_SKILL,
         
         
         /////////////

@@ -281,6 +281,7 @@ void InitializeScene()
 	GetWorld().AddFusionSequence("sunNova",    'w', 'q', 'q');
 	GetWorld().AddFusionSequence("satShield",  'q', 'w', 'q');
 	GetWorld().AddFusionSequence("satFrost",   'e', 'e', 'q');
+	GetWorld().AddFusionSequence("satChain",   'w', 'w', 'q');
 }
 
 

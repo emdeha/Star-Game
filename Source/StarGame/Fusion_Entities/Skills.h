@@ -338,6 +338,34 @@ namespace FusionEngine
 		void Activate(CelestialBody *skillHolder);
 	};
 
+	class ChainSkill : public Skill
+	{
+	private:
+		Utility::Primitives::Torus2D chainExpansionDisc;
+
+		std::string holderID;
+
+		glm::vec3 position;
+
+		int damage;
+
+		float range;
+		float scaleRate;
+		float currentScale;
+
+	public:
+		ChainSkill(int newDamage, float newRange, float newScaleRate,
+				   char fusionCombA, char fusionCombB, char fusionCombC,
+				   int newApplyCost, int newResearchCost);
+
+		void Update();
+		void Render();
+
+		void Activate(CelestialBody *skillHolder);
+
+		bool HandleEvent(const IEventData &eventData);
+	};
+
 	class UltimateSkill : public Skill
 	{
 	public:

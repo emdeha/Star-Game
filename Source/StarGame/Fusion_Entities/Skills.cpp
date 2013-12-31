@@ -602,6 +602,100 @@ void FrostSkill::Render()
 }
 
 
+///////////////////
+//  Chain Skill  //
+///////////////////
+ChainSkill::ChainSkill(int newDamage, float newRange, float newScaleRate,
+					   char fusionCombA, char fusionCombB, char fusionCombC,
+					   int newApplyCost, int newResearchCost)
+						: damage(newDamage), range(newRange), scaleRate(newScaleRate), 
+						  position(0.0f), currentScale(0.5f),
+						  Skill(fusionCombA, fusionCombB, fusionCombC, newApplyCost, newResearchCost)
+{
+	chainExpansionDisc = 
+		Utility::Primitives::Torus2D(glm::vec4(1.0f, 1.0f, 0.0f, 0.5f), position, currentScale, currentScale + 0.03f, 90);
+	chainExpansionDisc.Init();
+
+	GetWorld().GetEventManager().AddListener(this, EVENT_ON_SKILL_APPLIED);
+}
+
+void ChainSkill::Update()
+{
+	if (isActive)
+	{
+		if (currentScale <= range)
+		{
+			currentScale += scaleRate;
+
+			OnSkillAppliedEvent _event = 
+				OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, position, currentScale, damage, true);
+			GetWorld().GetEventManager().FireEvent(_event);
+
+			ComponentMapper<Transform> holderTransformData =
+				GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity(holderID), CT_TRANSFORM);
+
+			position = holderTransformData[0]->position;
+		}
+		else
+		{
+			currentScale = 1.0f;
+			isActive = false;
+		}
+	}
+}
+
+void ChainSkill::Activate(CelestialBody *skillHolder)
+{
+	holderID = skillHolder->GetID(); // Bad stuff. Maybe it'd be better if there's just a method for setting the holderID.
+}
+
+bool ChainSkill::HandleEvent(const IEventData &eventData)
+{
+	EventType type = eventData.GetType();
+	switch (type)
+	{
+	case FusionEngine::EVENT_ON_SKILL_APPLIED:
+		{
+			const OnSkillAppliedEvent &data = static_cast<const OnSkillAppliedEvent&>(eventData);
+
+			ComponentMapper<Transform> holderTransformData =
+				GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity(holderID), CT_TRANSFORM);
+
+			if (data.isNova)
+			{
+				if (glm::length(data.position - holderTransformData[0]->position) < data.radius &&
+					glm::length(data.position - holderTransformData[0]->position) >= data.radius - 0.1f)
+				{
+					isActive = true;
+					position = holderTransformData[0]->position;
+				}
+			}
+		}
+		break;
+	}
+
+	return false;
+}
+
+void ChainSkill::Render()
+{
+	if (isActive)
+	{
+		glutil::PushStack push(GetWorld().GetDisplayData().modelMatrix);
+		GetWorld().GetDisplayData().modelMatrix.Translate(position);
+		GetWorld().GetDisplayData().modelMatrix.Scale(currentScale, 0.0f, currentScale);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		chainExpansionDisc.Draw(GetWorld().GetDisplayData().modelMatrix, 
+							    GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
+
+		glDisable(GL_BLEND);
+	}
+}
+
+
 //////////////////////////
 //  Satellite Creation  //
 //////////////////////////

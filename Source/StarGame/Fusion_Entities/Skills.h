@@ -48,7 +48,8 @@ namespace FusionEngine
 		};
 
 	private:
-		std::map<std::string, FusionSequence> sequences;
+		//std::map<std::string, FusionSequence> sequences;
+		std::vector<FusionSequence> sequences;
 
 		std::string currentInputSequence;
 		char sequenceEndButton;
@@ -63,11 +64,11 @@ namespace FusionEngine
 					char validInputSequenceA, char validInputSequenceB, char validInputSequenceC,
 					EventManager &eventManager);
 
-		void AddSequence(const std::string &sequenceName,
+		void AddSequence(//const std::string &sequenceName,
 						 char buttonA, char buttonB, char buttonC);
 
-		std::string GetSequenceButtons(const std::string &sequenceName) const;
-		std::string GetSequenceName(const std::string &sequenceName) const;
+		//std::string GetSequenceButtons(const std::string &sequenceName) const;
+		//std::string GetSequenceName(const std::string &sequenceName) const;
 		std::string GetCurrentInputSequence() const;
 		std::string GetValidInputButtons() const;
 		char GetSequenceEndButton() const;
@@ -162,6 +163,8 @@ namespace FusionEngine
 
 	public:
 		bool IsForSequence(const std::string &fusionSequence);
+
+		std::string GetFusionCombination() { return fusionCombination; }
 
 		virtual glm::vec3 GetPosition() { return position; }
 		virtual float GetRange() { return 0.0f; }

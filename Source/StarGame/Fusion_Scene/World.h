@@ -118,8 +118,10 @@ namespace FusionEngine
 		unsigned int GetCurrentFusionInputIndex() const;
 		void SetFusionInput(char sequenceEndButton,
 							char validButtonA, char validButtonB, char validButtonC);
-		void AddFusionSequence(const std::string &sequenceName,
+		void AddFusionSequence(//const std::string &sequenceName,
 							   char buttonA, char buttonB, char buttonC);
+		void AddFusionSequence(//const std::string &sequenceName,
+							   const std::string &sequenceButtons);
 		std::string GetFusionInputValidButtons() const;
 		char GetFusionInputSequenceEndButton() const;
 

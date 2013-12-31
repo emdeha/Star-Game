@@ -220,10 +220,15 @@ void World::SetFusionInput(char sequenceEndButton,
 					    eventManager));
 }
 
-void World::AddFusionSequence(const std::string &sequenceName,
+void World::AddFusionSequence(//const std::string &sequenceName,
 							  char buttonA, char buttonB, char buttonC)
 {
-	fusionInput->AddSequence(sequenceName, buttonA, buttonB, buttonC);
+	fusionInput->AddSequence(/*sequenceName, */buttonA, buttonB, buttonC);
+}
+void World::AddFusionSequence(//const std::string &sequenceName,
+							  const std::string &sequenceButtons)
+{
+	AddFusionSequence(/*sequenceName, */sequenceButtons[0], sequenceButtons[1], sequenceButtons[2]);
 }
 
 bool World::HandleEvent(const IEventData &eventData)

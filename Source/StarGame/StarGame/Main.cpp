@@ -264,12 +264,9 @@ void InitializeScene()
 
 	GetScene().Init(GetWorld().GetEventManager());
 
-	CreateSun();
-	CreateEnemy("spaceship1", glm::vec3(5.0f, 0.0f, 0.0f));
-	CreateEnemy("spaceship2", glm::vec3(0.0f, 0.0f, 6.0f));
-
 	///////////////////////////////////////
 	GetWorld().SetFusionInput('f', 'q', 'w', 'e');
+	/*
 	GetWorld().AddFusionSequence("waterSat",   'w', 'w', 'w');
 	GetWorld().AddFusionSequence("fireSat",    'q', 'q', 'q');
 	GetWorld().AddFusionSequence("earthSat",   'e', 'e', 'e');
@@ -282,6 +279,11 @@ void InitializeScene()
 	GetWorld().AddFusionSequence("satShield",  'q', 'w', 'q');
 	GetWorld().AddFusionSequence("satFrost",   'e', 'e', 'q');
 	GetWorld().AddFusionSequence("satChain",   'w', 'w', 'q');
+	*/
+
+	CreateSun();
+	CreateEnemy("spaceship1", glm::vec3(5.0f, 0.0f, 0.0f));
+	CreateEnemy("spaceship2", glm::vec3(0.0f, 0.0f, 6.0f));
 }
 
 

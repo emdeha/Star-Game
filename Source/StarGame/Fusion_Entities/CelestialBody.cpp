@@ -223,6 +223,7 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 bool CelestialBody::AddSkill(const std::shared_ptr<Skill> newSkill)
 {
 	skills.push_back(newSkill);
+	GetWorld().AddFusionSequence(newSkill->GetFusionCombination());
 
 	return true;
 }

@@ -122,6 +122,8 @@ namespace FusionEngine
 		std::string skillHolderID;		
 		std::string fusionCombination;
 
+		glm::vec3 position;
+
 		int applyCost;
 		int researchCost;
 

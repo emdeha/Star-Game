@@ -130,6 +130,7 @@ void CreateSkills()
 	FE::Skill *ultSkill = new FE::Skill();
 	ultSkill->skillHolderID = "sun";
 	ultSkill->fusionCombination = "qqe";
+	ultSkill->position = glm::vec3();
 	ultSkill->damage = 300;
 	ultSkill->range = -1.0f;
 	ultSkill->applyCost = 0;
@@ -301,6 +302,7 @@ void InitializeScene()
 	GetWorld().AddFusionSequence("satChain",   'w', 'w', 'q');
 	*/
 
+	CreateSkills();
 	CreateSun();
 	CreateEnemy("spaceship1", glm::vec3(5.0f, 0.0f, 0.0f));
 	CreateEnemy("spaceship2", glm::vec3(0.0f, 0.0f, 6.0f));

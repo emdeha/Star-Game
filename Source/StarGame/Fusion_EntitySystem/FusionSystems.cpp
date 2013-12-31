@@ -72,7 +72,11 @@ bool SkillSystem::HandleEvent(const IEventData &eventData)
 				if (skillData[0]->isAppliedOnActive)
 				{
 					GetWorld().GetEventManager().
-						FireEvent(OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, glm::vec3(), -1.0f, 300, false));
+						FireEvent(OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, 
+													  skillData[0]->position, 
+													  skillData[0]->range, 
+													  skillData[0]->damage, 
+													  false));
 				}
 			}
 		}

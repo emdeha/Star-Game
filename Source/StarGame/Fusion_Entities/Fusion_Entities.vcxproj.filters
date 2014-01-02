@@ -75,6 +75,9 @@
     <ClInclude Include="Scripts.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="Ultimate.h">
+      <Filter>Header Files\Scripts\Skills</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -90,6 +93,9 @@
       <Filter>Source Files\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="SatelliteCreation.cpp">
+      <Filter>Source Files\Skills\Skills</Filter>
+    </ClCompile>
+    <ClCompile Include="Ultimate.cpp">
       <Filter>Source Files\Skills\Skills</Filter>
     </ClCompile>
   </ItemGroup>

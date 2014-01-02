@@ -27,12 +27,8 @@ namespace FusionEngine
 	class Entity;
 	class EntityManager;
 
-	void SatelliteCreation_OnClick(EntityManager *entityManager, Entity *entity, 
-								   const IEventData &eventData);
 	void SatelliteCreation_OnFusionCompleted(EntityManager *entityManager, Entity *entity, 
 											 const IEventData &eventData);
-
-	void SatelliteCreation_OnUpdate(EntityManager *entityManager, Entity *entity);
 }
 
 

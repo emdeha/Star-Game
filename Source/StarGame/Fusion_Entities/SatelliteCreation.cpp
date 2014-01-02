@@ -11,10 +11,6 @@
 using namespace FusionEngine;
 
 
-void FusionEngine::SatelliteCreation_OnClick(EntityManager *entityManager, Entity *entity, 
-											 const IEventData &eventData)
-{ }
-
 void FusionEngine::SatelliteCreation_OnFusionCompleted(EntityManager *entityManager, Entity *entity, 
 													   const IEventData &eventData)
 {
@@ -27,6 +23,3 @@ void FusionEngine::SatelliteCreation_OnFusionCompleted(EntityManager *entityMana
 		static_cast<CelestialBody*>(sunUpdatable[0]->updatedObject.get())->AddSatellite(satCreationData[0]->satType);
 	}
 }
-
-void FusionEngine::SatelliteCreation_OnUpdate(EntityManager *entityManager, Entity *entity)
-{ }

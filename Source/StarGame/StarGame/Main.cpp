@@ -162,7 +162,8 @@ void CreateSkills()
 {
 	GetScene().AddSystem(new FE::SkillSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager()));
 
-	CreateSkill("ultSkill", "sun", "qqe", glm::vec3(), 300, -1.0f, 0, 0, true);
+	CreateSkill("ultSkill", "sun", "qqe", glm::vec3(), 300, -1.0f, 0, 0, true, FE::FE_SATELLITE_BAD,
+				nullptr, FE::Ultimate_OnFusionCompleted, nullptr);
 	CreateSkill("waterSat", "sun", "www", glm::vec3(), 0, -1.0f, 0, 0, true, FE::FE_CELESTIALBODY_WATER,
 				nullptr, FE::SatelliteCreation_OnFusionCompleted, nullptr);
 	CreateSkill("airSat", "sun", "qqq", glm::vec3(), 0, -1.0f, 0, 0, true, FE::FE_CELESTIALBODY_AIR,

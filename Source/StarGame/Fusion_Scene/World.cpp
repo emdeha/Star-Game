@@ -231,6 +231,11 @@ void World::AddFusionSequence(const std::string &sequenceName,
 	AddFusionSequence(sequenceName, sequenceButtons[0], sequenceButtons[1], sequenceButtons[2]);
 }
 
+std::string World::GetActiveSkillName() const
+{
+	return fusionInput->GetSequenceName(fusionInput->GetCurrentInputSequence());
+}
+
 bool World::HandleEvent(const IEventData &eventData)
 {
 	EventType type = eventData.GetType();

@@ -77,6 +77,8 @@
     <ClInclude Include="CelestialBody.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="IUpdatable.h" />
+    <ClInclude Include="SatelliteCreation.h" />
+    <ClInclude Include="Scripts.h" />
     <ClInclude Include="Skills.h" />
     <ClInclude Include="States.h" />
     <ClInclude Include="stdafx.h" />
@@ -86,6 +88,7 @@
   <ItemGroup>
     <ClCompile Include="CelestialBody.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="SatelliteCreation.cpp" />
     <ClCompile Include="Skills.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -57,6 +57,18 @@ namespace FusionEngine
 		float gamma;
 
 		float padding; ///< Padding for compatibility with GLSL.
+	};	
+
+	enum CelestialBodyType
+	{
+		FE_CELESTIALBODY_SUN,
+
+		FE_CELESTIALBODY_FIRE,
+		FE_CELESTIALBODY_AIR,
+		FE_CELESTIALBODY_EARTH,
+		FE_CELESTIALBODY_WATER,
+
+		FE_SATELLITE_BAD = -1
 	};
 
 
@@ -119,6 +131,13 @@ namespace FusionEngine
 	class Skill : public Component
 	{
 	public:
+		typedef void (*OnEventFunc)(EntityManager*, Entity*, const IEventData&);
+		typedef void (*OnUpdateFunc)(EntityManager*, Entity*);
+
+		OnEventFunc OnFusionCompleted;
+		OnEventFunc OnClick;
+		OnUpdateFunc OnUpdate;
+
 		std::string skillHolderID;		
 		std::string fusionCombination;
 
@@ -137,6 +156,34 @@ namespace FusionEngine
 		
 		Skill() : Component(CT_SKILL) {}
 		virtual ~Skill() {}
+	};
+	
+	class SatelliteCreation : public Component
+	{
+	public:
+		CelestialBodyType satType;
+
+		SatelliteCreation() : Component(CT_SATELLITE_CREATION) {}
+		virtual ~SatelliteCreation() {}
+	};
+	
+	class SelectorAppliedSkill : public Component
+	{
+	public:
+		Utility::Primitives::Circle skillSelector;
+
+		SelectorAppliedSkill() : Component(CT_SELECTOR_APPLIED_SKILL) {}
+		virtual ~SelectorAppliedSkill() {}
+	};
+
+	class TimedSkill : public Component
+	{
+	public:
+		Framework::Timer attackTimer;
+		Framework::Timer skillLifeTimer;
+
+		TimedSkill() : Component(CT_TIMED_SKILL) {}
+		virtual ~TimedSkill() {}
 	};
 	
 

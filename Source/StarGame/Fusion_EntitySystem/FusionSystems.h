@@ -74,7 +74,7 @@ namespace FusionEngine
 
 	public:
 		SkillSystem(EventManager *eventManager, EntityManager *entityManager)
-			: EntityProcessingSystem(eventManager, entityManager, CT_COLLISION_BIT) 
+			: EntityProcessingSystem(eventManager, entityManager, CT_SKILL_BIT) 
 		{
 			eventManager->AddListener(this, EVENT_ON_FUSION_COMPLETED);
 			eventManager->AddListener(this, EVENT_ON_CLICK);

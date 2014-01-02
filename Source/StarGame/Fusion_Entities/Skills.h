@@ -104,18 +104,6 @@ namespace FusionEngine
 	}
 
 
-	enum CelestialBodyType
-	{
-		FE_CELESTIALBODY_SUN,
-
-		FE_CELESTIALBODY_FIRE,
-		FE_CELESTIALBODY_AIR,
-		FE_CELESTIALBODY_EARTH,
-		FE_CELESTIALBODY_WATER,
-
-		FE_SATELLITE_BAD = -1
-	};
-
 	/*
 	class CelestialBody;
 

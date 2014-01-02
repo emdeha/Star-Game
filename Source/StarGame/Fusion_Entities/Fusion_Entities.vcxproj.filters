@@ -28,6 +28,18 @@
     <Filter Include="Header Files\Core">
       <UniqueIdentifier>{b036192e-31ed-49dd-a7a1-81192d6a0ee1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scripts">
+      <UniqueIdentifier>{5387ac01-ea35-441f-adb2-047842b2ec78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scripts\Skills">
+      <UniqueIdentifier>{a234fc40-1cd5-4f99-8fc7-aeace9f1f971}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Skills">
+      <UniqueIdentifier>{db2643f2-fd1b-4c62-8575-ee713d66fbee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Skills\Skills">
+      <UniqueIdentifier>{08b37896-b814-494f-b452-d161f6b6fd5d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -57,6 +69,12 @@
     <ClInclude Include="IUpdatable.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="SatelliteCreation.h">
+      <Filter>Header Files\Scripts\Skills</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts.h">
+      <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -70,6 +88,9 @@
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="SatelliteCreation.cpp">
+      <Filter>Source Files\Skills\Skills</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

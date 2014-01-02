@@ -11,6 +11,9 @@ namespace FusionEngine
 		CT_UPDATABLE_BEHAVIOR,
 		CT_COLLISION,
 		CT_SKILL,
+		CT_SATELLITE_CREATION,
+		CT_SELECTOR_APPLIED_SKILL,
+		CT_TIMED_SKILL,
         
         
         /////////////
@@ -43,6 +46,10 @@ namespace FusionEngine
 	const unsigned int CT_RENDER_BIT = 1 << CT_RENDER;
 	const unsigned int CT_UPDATABLE_BEHAVIOR_BIT = 1 << CT_UPDATABLE_BEHAVIOR;
 	const unsigned int CT_COLLISION_BIT = 1 << CT_COLLISION;
+	const unsigned int CT_SKILL_BIT = 1 << CT_SKILL;
+	const unsigned int CT_SATELLITE_CREATION_BIT = 1 << CT_SATELLITE_CREATION;
+	const unsigned int CT_SELECTOR_APPLIED_SKILL_BIT = 1 << CT_SELECTOR_APPLIED_SKILL;
+	const unsigned int CT_TIMED_SKILL_BIT = 1 << CT_TIMED_SKILL;
 
 
 	/////////////

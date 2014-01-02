@@ -44,6 +44,7 @@
 #include "../Fusion_Renderer/ShaderEnums.h"
 #include "../Fusion_Entities/CelestialBody.h"
 #include "../Fusion_Entities/Enemy.h"
+#include "../Fusion_Entities/Scripts.h"
 
 #define FUSION_LOAD_FAST
 
@@ -122,25 +123,56 @@ void HandlePassiveMovement(int x, int y)
 	GetWorld().GetMouse().SetCurrentPosition(glm::ivec2(x, y));
 }
 
+void CreateSkill(const std::string &skillName, const std::string &holderID, const std::string &fusionCombination, 
+				 glm::vec3 position, int damage, float range, int applyCost, int researchCost, 
+				 bool isAppliedOnActive, FE::CelestialBodyType satType = FE::FE_SATELLITE_BAD, 
+				 FE::Skill::OnEventFunc OnClickFunc = nullptr, FE::Skill::OnEventFunc OnFusionCompletedFunc = nullptr,
+				 FE::Skill::OnUpdateFunc OnUpdateFunc = nullptr)
+{
+	GetScene().AddEntity(skillName);
+	FE::Skill *newSkill = new FE::Skill();
+	newSkill->skillHolderID = holderID;
+	newSkill->fusionCombination = fusionCombination;
+	newSkill->position = position;
+	newSkill->damage = damage;
+	newSkill->range = range;
+	newSkill->applyCost = applyCost;
+	newSkill->researchCost = researchCost;
+	newSkill->isActive = false;
+	newSkill->isDeployed = false;
+	newSkill->isAppliedOnActive = isAppliedOnActive;
+	if (OnClickFunc)
+		newSkill->OnClick = OnClickFunc;
+	if (OnFusionCompletedFunc)
+		newSkill->OnFusionCompleted = OnFusionCompletedFunc;
+	if (OnUpdateFunc)
+		newSkill->OnUpdate = OnUpdateFunc;
+	GetScene().AddComponent(skillName, newSkill);
+
+	if (satType != FE::FE_SATELLITE_BAD)
+	{
+		FE::SatelliteCreation *satCreation = new FE::SatelliteCreation();
+		satCreation->satType = satType;
+		GetScene().AddComponent(skillName, satCreation);
+	}
+
+	GetWorld().AddFusionSequence(skillName, fusionCombination);
+}
 void CreateSkills()
 {
 	GetScene().AddSystem(new FE::SkillSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager()));
 
-	GetScene().AddEntity("ultSkill");
-	FE::Skill *ultSkill = new FE::Skill();
-	ultSkill->skillHolderID = "sun";
-	ultSkill->fusionCombination = "qqe";
-	ultSkill->position = glm::vec3();
-	ultSkill->damage = 300;
-	ultSkill->range = -1.0f;
-	ultSkill->applyCost = 0;
-	ultSkill->researchCost = 0;
-	ultSkill->isActive = false;
-	ultSkill->isDeployed = false;
-	ultSkill->isAppliedOnActive = true;
-	GetScene().AddComponent("ultSkill", ultSkill);
+	CreateSkill("ultSkill", "sun", "qqe", glm::vec3(), 300, -1.0f, 0, 0, true);
+	CreateSkill("waterSat", "sun", "www", glm::vec3(), 0, -1.0f, 0, 0, true, FE::FE_CELESTIALBODY_WATER,
+				nullptr, FE::SatelliteCreation_OnFusionCompleted, nullptr);
+	CreateSkill("airSat", "sun", "qqq", glm::vec3(), 0, -1.0f, 0, 0, true, FE::FE_CELESTIALBODY_AIR,
+				nullptr, FE::SatelliteCreation_OnFusionCompleted, nullptr);
+	CreateSkill("earthSat", "sun", "eee", glm::vec3(), 0, -1.0f, 0, 0, true, FE::FE_CELESTIALBODY_EARTH,
+				nullptr, FE::SatelliteCreation_OnFusionCompleted, nullptr);
+	CreateSkill("fireSat", "sun", "qwe", glm::vec3(), 0, -1.0f, 0, 0, true, FE::FE_CELESTIALBODY_FIRE,
+				nullptr, FE::SatelliteCreation_OnFusionCompleted, nullptr);
 
-	GetWorld().AddFusionSequence("ultSkill", 'q', 'q', 'e');
+
 }
 
 void CreateSun()

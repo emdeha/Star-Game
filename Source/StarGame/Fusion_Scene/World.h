@@ -125,6 +125,8 @@ namespace FusionEngine
 		std::string GetFusionInputValidButtons() const;
 		char GetFusionInputSequenceEndButton() const;
 
+		std::string GetActiveSkillName() const;
+
 		virtual bool HandleEvent(const IEventData &eventData);
 	};
 

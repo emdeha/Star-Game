@@ -79,7 +79,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="CelestialBody.h" />
+    <ClInclude Include="Components.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="IComponent.h" />
+    <ClInclude Include="Composable.h" />
     <ClInclude Include="IUpdatable.h" />
     <ClInclude Include="SatelliteCreation.h" />
     <ClInclude Include="Scripts.h" />

@@ -106,6 +106,7 @@ namespace FusionEngine
 				  const std::string &shaderDataFile);
 		void ReloadGUI(const std::string &guiLayoutFile);
 
+		void Update();
 		void Render();
 
 		// WARN: If there's no layout of this type, all layouts will be unset!!!

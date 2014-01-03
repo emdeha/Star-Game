@@ -48,8 +48,8 @@ namespace FusionEngine
 	public:
         Renderer() {}
 
-		void SubscribeForRendering(/*Entity *entity*/);
-		void UnsubscribeForRendering(/*Entity *entity*/);
+		void SubscribeForRendering(unsigned int id, const MeshAssetObject &mesh);
+		void UnsubscribeForRendering(unsigned int id);
 
 		void Render(glutil::MatrixStack &modelMatrix) const;
 	};

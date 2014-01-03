@@ -43,7 +43,7 @@ static void GenerateUniformBuffers(int &materialBlockSize, glm::vec4 diffuseColo
 }
 
 
-void Renderer::SubscribeForRendering(/*Entity *entity*/)
+void Renderer::SubscribeForRendering(unsigned int id, const MeshAssetObject &mesh)
 {
 	//ComponentMapper<FusionEngine::Render> renderData = 
 	//	Scene::GetScene().GetEntityManager()->GetComponentList(entity, CT_RENDER);
@@ -91,11 +91,11 @@ void Renderer::SubscribeForRendering(/*Entity *entity*/)
 	glBindVertexArray(0);
 	subscribedMeshes.push_back(std::make_pair<unsigned int, MeshAssetObject&>(entity->GetIndex(), renderData[0]->mesh));*/
 }
-void Renderer::UnsubscribeForRendering(/*Entity *entity*/)
+void Renderer::UnsubscribeForRendering(unsigned int id)
 {
 	for(auto subscribedMesh = subscribedMeshes.begin(); subscribedMesh != subscribedMeshes.end(); ++subscribedMesh)
     {
-		//if(subscribedMesh->first == entity->GetID())
+		if(subscribedMesh->first == id)
         {
 			subscribedMeshes.erase(subscribedMesh);
 			break;

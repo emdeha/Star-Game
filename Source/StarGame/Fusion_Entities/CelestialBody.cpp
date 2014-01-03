@@ -29,21 +29,21 @@
 using namespace FusionEngine;
 
 
-std::string GetSatMesh(/*CelestialBodyType satType*/)
-{/*
+std::string GetSatMesh(CelestialBodyType satType)
+{
 	std::string satMesh = "";
 	switch (satType)
 	{
-	case FE_CELESTIALBODY_FIRE:
+	case FE_FIRE_SAT:
 		satMesh = "fire_planet.obj";
 		break;
-	case FE_CELESTIALBODY_AIR:
+	case FE_AIR_SAT:
 		satMesh = "air_planet.obj";
 		break;
-	case FE_CELESTIALBODY_EARTH:
+	case FE_EARTH_SAT:
 		satMesh = "earth_planet.obj";
 		break;
-	case FE_CELESTIALBODY_WATER:
+	case FE_WATER_SAT:
 		satMesh = "water_planet.obj";
 		break;
 	default:
@@ -53,25 +53,24 @@ std::string GetSatMesh(/*CelestialBodyType satType*/)
 		return "";
 	}
 
-	return satMesh;*/
-	return "sad";
+	return satMesh;
 }
 
-float GetSatelliteOffset(/*CelestialBodyType satType*/)
-{/*
+float GetSatelliteOffset(CelestialBodyType satType)
+{
 	float satOffset = 0.0f;
 	switch (satType)
 	{
-	case FE_CELESTIALBODY_FIRE:
+	case FE_FIRE_SAT:
 		satOffset = 1.2f;
 		break;
-	case FE_CELESTIALBODY_AIR:
+	case FE_AIR_SAT:
 		satOffset = 2.4f;
 		break;
-	case FE_CELESTIALBODY_EARTH:
+	case FE_EARTH_SAT:
 		satOffset = 3.6f;
 		break;
-	case FE_CELESTIALBODY_WATER:
+	case FE_WATER_SAT:
 		satOffset = 4.8f;
 		break;
 	default:
@@ -81,8 +80,7 @@ float GetSatelliteOffset(/*CelestialBodyType satType*/)
 		return -1.0f;
 	}
 
-	return satOffset;*/
-	return 0.0f;
+	return satOffset;
 }
 
 
@@ -97,10 +95,10 @@ CelestialBody::CelestialBody() :
 	id = name.str();
 }
 
-CelestialBody::CelestialBody(//CelestialBodyType newType,
+CelestialBody::CelestialBody(CelestialBodyType newType,
 							 int newMaxSatelliteCount, float newDiameter, 
 							 float newOffsetFromSun) :
-	//type(newType),	
+	type(newType),	
 	maxSatelliteCount(newMaxSatelliteCount), currentSatelliteCount(1),
 	satellites(0), diameter(newDiameter),
 	offsetFromSun(newOffsetFromSun),
@@ -109,13 +107,13 @@ CelestialBody::CelestialBody(//CelestialBodyType newType,
 	World::GetWorld().GetEventManager().AddListener(this, FusionEngine::EVENT_ON_CLICK);
 	World::GetWorld().GetEventManager().AddListener(this, FusionEngine::EVENT_ON_FUSION_COMPLETED);
 
-	//if (type == FE_CELESTIALBODY_SUN)
+	if (type == FE_SUN)
 	{
 		std::ostringstream name;
 		name << "sun";
 		id = name.str();
 	}
-	//else
+	else
 	{
 		srand(time(0));
 		std::ostringstream name;
@@ -164,7 +162,7 @@ bool CelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 	return false;
 }
 
-bool CelestialBody::AddSatellite(/*CelestialBodyType satType*/)
+bool CelestialBody::AddSatellite(CelestialBodyType satType)
 {
 	if (currentSatelliteCount > maxSatelliteCount)
 	{

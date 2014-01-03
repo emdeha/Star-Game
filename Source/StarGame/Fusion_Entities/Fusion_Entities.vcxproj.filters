@@ -81,6 +81,15 @@
     <ClInclude Include="AOE.h">
       <Filter>Header Files\Scripts\Skills</Filter>
     </ClInclude>
+    <ClInclude Include="IComponent.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Composable.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

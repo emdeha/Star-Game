@@ -456,7 +456,6 @@ void Display()
 	int loops = 0;
 	while (GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
 	{
-		//GetScene().ProcessSystems();
 	    HandleMouse();
 	
 		nextGameTick += SKIP_TICKS;

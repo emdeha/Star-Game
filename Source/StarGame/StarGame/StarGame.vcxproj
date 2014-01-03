@@ -110,8 +110,8 @@
     <ProjectReference Include="..\Fusion_Entities\Fusion_Entities.vcxproj">
       <Project>{6ea21665-7fff-4460-b1b4-6551fd606e3e}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Fusion_EntitySystem\Fusion_EntitySystem.vcxproj">
-      <Project>{46033b29-5b2c-49e1-9f18-58199443d50d}</Project>
+    <ProjectReference Include="..\Fusion_EventManager\Fusion_EventManager.vcxproj">
+      <Project>{a411d0dd-fcec-4081-bdd8-98b61829600e}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Fusion_GUI\Fusion_GUI.vcxproj">
       <Project>{0e11d5e3-c942-4a72-ad11-059a8a6867ce}</Project>

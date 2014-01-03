@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Express 2012 for Windows Desktop
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StarGame", "StarGame\StarGame.vcxproj", "{8A802BF6-FBD4-463F-BAA2-AA3AC7D619A4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F4D5FA3D-2A08-5146-A354-4B4F0729A6E3} = {F4D5FA3D-2A08-5146-A354-4B4F0729A6E3}
@@ -39,8 +39,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fusion_Scene", "Fusion_Scen
 		{0E11D5E3-C942-4A72-AD11-059A8A6867CE} = {0E11D5E3-C942-4A72-AD11-059A8A6867CE}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fusion_EntitySystem", "Fusion_EntitySystem\Fusion_EntitySystem.vcxproj", "{46033B29-5B2C-49E1-9F18-58199443D50D}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fusion_AssetLoader", "Fusion_AssetLoader\Fusion_AssetLoader.vcxproj", "{9CA9CC8A-1F25-4D48-9D6A-623A6F8061CC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fusion_Renderer", "Fusion_Renderer\Fusion_Renderer.vcxproj", "{7805C27A-13EF-49A7-B430-063367F3F799}"
@@ -50,6 +48,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fusion_GUI", "Fusion_GUI\Fusion_GUI.vcxproj", "{0E11D5E3-C942-4A72-AD11-059A8A6867CE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetLoader", "AssetLoader\AssetLoader.vcxproj", "{F0ACC795-F7C6-4CEE-840D-A17BC02D7141}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fusion_EventManager", "Fusion_EventManager\Fusion_EventManager.vcxproj", "{A411D0DD-FCEC-4081-BDD8-98B61829600E}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -108,10 +108,6 @@ Global
 		{7984709A-7392-4FE3-8590-E38677208BD8}.Debug|Win32.Build.0 = Debug|Win32
 		{7984709A-7392-4FE3-8590-E38677208BD8}.Release|Win32.ActiveCfg = Release|Win32
 		{7984709A-7392-4FE3-8590-E38677208BD8}.Release|Win32.Build.0 = Release|Win32
-		{46033B29-5B2C-49E1-9F18-58199443D50D}.Debug|Win32.ActiveCfg = Debug|Win32
-		{46033B29-5B2C-49E1-9F18-58199443D50D}.Debug|Win32.Build.0 = Debug|Win32
-		{46033B29-5B2C-49E1-9F18-58199443D50D}.Release|Win32.ActiveCfg = Release|Win32
-		{46033B29-5B2C-49E1-9F18-58199443D50D}.Release|Win32.Build.0 = Release|Win32
 		{9CA9CC8A-1F25-4D48-9D6A-623A6F8061CC}.Debug|Win32.ActiveCfg = Debug|Win32
 		{9CA9CC8A-1F25-4D48-9D6A-623A6F8061CC}.Debug|Win32.Build.0 = Debug|Win32
 		{9CA9CC8A-1F25-4D48-9D6A-623A6F8061CC}.Release|Win32.ActiveCfg = Release|Win32
@@ -132,6 +128,10 @@ Global
 		{F0ACC795-F7C6-4CEE-840D-A17BC02D7141}.Debug|Win32.Build.0 = Debug|Win32
 		{F0ACC795-F7C6-4CEE-840D-A17BC02D7141}.Release|Win32.ActiveCfg = Release|Win32
 		{F0ACC795-F7C6-4CEE-840D-A17BC02D7141}.Release|Win32.Build.0 = Release|Win32
+		{A411D0DD-FCEC-4081-BDD8-98B61829600E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A411D0DD-FCEC-4081-BDD8-98B61829600E}.Debug|Win32.Build.0 = Debug|Win32
+		{A411D0DD-FCEC-4081-BDD8-98B61829600E}.Release|Win32.ActiveCfg = Release|Win32
+		{A411D0DD-FCEC-4081-BDD8-98B61829600E}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,7 +19,7 @@
 #define FE_CONTROL_EVENTS_H
 
 
-#include "../Fusion_EntitySystem/EntityEvents.h"
+#include "../Fusion_EventManager/EntityEvents.h"
 
 
 namespace FusionEngine 

@@ -28,8 +28,8 @@
 #pragma warning(pop)
 
 #include "../Fusion_Renderer/Renderer.h"
-#include "../Fusion_EntitySystem/Event.h"
-#include "../Fusion_EntitySystem/FusionComponents.h"
+#include "../Fusion_EventManager/EventManager.h"
+#include "../Fusion_EventManager/Event.h"
 #include "Skills.h"
 #include "IUpdatable.h"
 
@@ -43,7 +43,7 @@ namespace FusionEngine
 		//std::vector<std::shared_ptr<Skill>> skills;
 		std::string id; // TODO: replace with ints
 
-		CelestialBodyType type;
+		//CelestialBodyType type;
 
 		int maxSatelliteCount;
 		int currentSatelliteCount;
@@ -55,12 +55,12 @@ namespace FusionEngine
 
 	public:
 		CelestialBody();
-		CelestialBody(CelestialBodyType newType,
+		CelestialBody(//CelestialBodyType newType,
 					  int newMaxSatelliteCount, float newDiameter, float newOffsetFromSun);
 
 		~CelestialBody();
 
-		bool AddSatellite(CelestialBodyType satType);
+		bool AddSatellite(/*CelestialBodyType satType*/);
 		//bool AddSkill(const std::shared_ptr<Skill> newSkill);
 
 		void Update();

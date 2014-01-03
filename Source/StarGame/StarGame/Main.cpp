@@ -35,10 +35,7 @@
 #include "../framework/ErrorAPI.h"
 #pragma warning(pop)
 
-#include "../Fusion_Scene/Scene.h"
 #include "../Fusion_Scene/World.h"
-#include "../Fusion_EntitySystem/FusionComponents.h"
-#include "../Fusion_EntitySystem/FusionSystems.h"
 #include "../Fusion_AssetLoader/AssetLoader.h"
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Fusion_Renderer/ShaderEnums.h"
@@ -58,7 +55,7 @@ long long GetCurrentTimeMillis()
 
 
 void HandleMouse()
-{
+{/*
 	unsigned int entityIndex = GetScene().GetEntity("sun")->GetIndex();
 	FE::ComponentMapper<FE::Collidable> collidableData = 
 		GetScene().GetEntityManager()->GetComponentList(entityIndex, FE::CT_COLLISION);
@@ -89,7 +86,7 @@ void HandleMouse()
 	else
 	{
 		collidableData[0]->isForCheck = false;
-	}
+	}*/
 
 	GetWorld().GetMouse().ReleaseLeftButton();
 	GetWorld().GetMouse().ReleaseRightButton();
@@ -122,7 +119,7 @@ void HandlePassiveMovement(int x, int y)
 {
 	GetWorld().GetMouse().SetCurrentPosition(glm::ivec2(x, y));
 }
-
+/*
 void CreateSkill(const std::string &skillName, const std::string &holderID, const std::string &fusionCombination, 
 				 glm::vec3 position, int damage, float range, int applyCost, int researchCost, 
 				 FE::CelestialBodyType satType = FE::FE_SATELLITE_BAD, 
@@ -188,7 +185,7 @@ void CreateSkills()
 	CreateSkill("aoe", "sun", "wqe", glm::vec3(), 10, 2.0f, 0, 0, FE::FE_SATELLITE_BAD, 
 				FE::AOE_OnClick, FE::AOE_OnFusionCompleted, FE::AOE_OnUpdate, true);
 }
-
+*//*
 void CreateSun()
 {
 	FE::AssetLoader<FE::MeshAssetObject> meshLoader;
@@ -241,7 +238,7 @@ void CreateSun()
 	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
 		new FE::PassiveAOESkill(10, 2.0f, 1.0f, 3.0f, 'w', 'e', 'q', 0, 0)));
 	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::SunNovaSkill(10, 4.0f, 0.05f, 'w', 'q', 'q', 0, 0)));*/
+		new FE::SunNovaSkill(10, 4.0f, 0.05f, 'w', 'q', 'q', 0, 0)));*//*
 	GetScene().AddComponent("sun", sunFuncComp);
 	
 	FE::Collidable *sunCollidable = new FE::Collidable();
@@ -289,7 +286,7 @@ void CreateEnemy(const std::string &name, glm::vec3 position)
 	GetScene().AddComponent(name, spaceshipFuncComp);
 
 	GetWorld().GetRenderer().SubscribeForRendering(GetScene().GetEntity(name));
-}
+}*/
 
 void InitializeScene()
 {
@@ -323,7 +320,7 @@ void InitializeScene()
     glUseProgram(0);
 
 
-	GetScene().Init(GetWorld().GetEventManager());
+	//GetScene().Init(GetWorld().GetEventManager());
 
 	///////////////////////////////////////
 	GetWorld().SetFusionInput('f', 'q', 'w', 'e');
@@ -341,7 +338,7 @@ void InitializeScene()
 	GetWorld().AddFusionSequence("satFrost",   'e', 'e', 'q');
 	GetWorld().AddFusionSequence("satChain",   'w', 'w', 'q');
 	*/
-	
+	/*
 	FE::UpdateSystem *update =
 		new FE::UpdateSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
 	GetScene().AddSystem(update);
@@ -352,7 +349,7 @@ void InitializeScene()
 	CreateSun();
 	CreateEnemy("spaceship1", glm::vec3(5.0f, 0.0f, 0.0f));
 	CreateEnemy("spaceship2", glm::vec3(0.0f, 0.0f, 6.0f));
-	CreateSkills();
+	CreateSkills();*/
 }
 
 
@@ -459,7 +456,7 @@ void Display()
 	int loops = 0;
 	while (GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
 	{
-		GetScene().ProcessSystems();
+		//GetScene().ProcessSystems();
 	    HandleMouse();
 	
 		nextGameTick += SKIP_TICKS;

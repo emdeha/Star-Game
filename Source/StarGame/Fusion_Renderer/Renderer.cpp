@@ -18,17 +18,13 @@
 #include "stdafx.h"
 #include "Renderer.h"
 
-#include "../Fusion_Scene/Scene.h"
-#include "../Fusion_EntitySystem/FusionComponents.h"
-#include "../Fusion_EntitySystem/ComponentMapper.h"
-
 
 using namespace FusionEngine;
 
 
 static void GenerateUniformBuffers(int &materialBlockSize, glm::vec4 diffuseColor, GLuint &materialUniformBuffer)
-{
-	Material material;
+{/*
+	//Material material;
 	material.diffuseColor = glm::vec4(1.0f);
 	material.specularColor = glm::vec4(0.25f, 0.25f, 0.25f, 1.0f);
 	material.shininessFactor = 0.3f;
@@ -36,25 +32,25 @@ static void GenerateUniformBuffers(int &materialBlockSize, glm::vec4 diffuseColo
 	int uniformBufferAlignSize = 0;
 	glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignSize);
 
-	materialBlockSize = sizeof(Material);
+	//materialBlockSize = sizeof(Material);
 	materialBlockSize += uniformBufferAlignSize - 
 		(materialBlockSize % uniformBufferAlignSize);
 
 	glGenBuffers(1, &materialUniformBuffer);
 	glBindBuffer(GL_UNIFORM_BUFFER, materialUniformBuffer);
 	glBufferData(GL_UNIFORM_BUFFER, materialBlockSize, &material, GL_STATIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);*/
 }
 
 
-void Renderer::SubscribeForRendering(Entity *entity)
+void Renderer::SubscribeForRendering(/*Entity *entity*/)
 {
-	ComponentMapper<FusionEngine::Render> renderData = 
-		Scene::GetScene().GetEntityManager()->GetComponentList(entity, CT_RENDER);
+	//ComponentMapper<FusionEngine::Render> renderData = 
+	//	Scene::GetScene().GetEntityManager()->GetComponentList(entity, CT_RENDER);
 
-	glGenVertexArrays(1, &renderData[0]->vao);
-	glBindVertexArray(renderData[0]->vao);
-
+	//glGenVertexArrays(1, &renderData[0]->vao);
+	//glBindVertexArray(renderData[0]->vao);
+	/*
 	modelToCameraMatrixUniform.insert(std::make_pair(entity->GetIndex(), 
 		glGetUniformLocation(renderData[0]->shaderProgram, "modelToCameraMatrix")));
 	colorUniform.insert(std::make_pair(entity->GetIndex(),
@@ -73,7 +69,7 @@ void Renderer::SubscribeForRendering(Entity *entity)
     std::vector<std::shared_ptr<MeshEntry>> meshEntries = renderData[0]->mesh.GetMeshEntries();
 	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
     {
-		if(renderData[0]->rendererType == Render::FE_RENDERER_LIT)
+		//if(renderData[0]->rendererType == Render::FE_RENDERER_LIT)
         {
 			int materialUBSize = 0;
 			GenerateUniformBuffers(materialUBSize, glm::vec4(1.0f), renderData[0]->materialUniformBuffer);
@@ -93,13 +89,13 @@ void Renderer::SubscribeForRendering(Entity *entity)
     }
 
 	glBindVertexArray(0);
-	subscribedMeshes.push_back(std::make_pair<unsigned int, MeshAssetObject&>(entity->GetIndex(), renderData[0]->mesh));
+	subscribedMeshes.push_back(std::make_pair<unsigned int, MeshAssetObject&>(entity->GetIndex(), renderData[0]->mesh));*/
 }
-void Renderer::UnsubscribeForRendering(Entity *entity)
+void Renderer::UnsubscribeForRendering(/*Entity *entity*/)
 {
 	for(auto subscribedMesh = subscribedMeshes.begin(); subscribedMesh != subscribedMeshes.end(); ++subscribedMesh)
     {
-		if(subscribedMesh->first == entity->GetID())
+		//if(subscribedMesh->first == entity->GetID())
         {
 			subscribedMeshes.erase(subscribedMesh);
 			break;
@@ -114,14 +110,14 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix) const
 
 	for (auto subscribedMesh = subscribedMeshes.begin(); subscribedMesh != subscribedMeshes.end(); ++subscribedMesh)
     {
-		ComponentMapper<FusionEngine::Render> renderData = 
-			Scene::GetScene().GetEntityManager()->GetComponentList(subscribedMesh->first, CT_RENDER);
+		//ComponentMapper<FusionEngine::Render> renderData = 
+		//	Scene::GetScene().GetEntityManager()->GetComponentList(subscribedMesh->first, CT_RENDER);
 
-		glBindVertexArray(renderData[0]->vao);
+		//glBindVertexArray(renderData[0]->vao);
 		
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
-		if (renderData[0]->rendererType == Render::FE_RENDERER_LIT)
+		//if (renderData[0]->rendererType == Render::FE_RENDERER_LIT)
 		{
 			glEnableVertexAttribArray(2);
 		}
@@ -131,27 +127,27 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix) const
         for(std::vector<std::shared_ptr<MeshEntry>>::const_iterator entry = entries.begin(); 
 			entry != entries.end(); ++entry)
         {
-			glUseProgram(renderData[0]->shaderProgram); 
+			//glUseProgram(renderData[0]->shaderProgram); 
 		
             glutil::PushStack push(modelMatrix);
 			
-			ComponentMapper<Transform> transformData = 
-				Scene::GetScene().GetEntityManager()->GetComponentList(subscribedMesh->first, CT_TRANSFORM);
-			modelMatrix.Translate(transformData[0]->position);
-			modelMatrix.RotateX(transformData[0]->rotation.x);
-			modelMatrix.RotateY(transformData[0]->rotation.y);
-			modelMatrix.RotateZ(transformData[0]->rotation.z);
-			modelMatrix.Scale(transformData[0]->scale);
+			//ComponentMapper<Transform> transformData = 
+			//	Scene::GetScene().GetEntityManager()->GetComponentList(subscribedMesh->first, CT_TRANSFORM);
+			//modelMatrix.Translate(transformData[0]->position);
+			//modelMatrix.RotateX(transformData[0]->rotation.x);
+			//modelMatrix.RotateY(transformData[0]->rotation.y);
+			//modelMatrix.RotateZ(transformData[0]->rotation.z);
+			//modelMatrix.Scale(transformData[0]->scale);
 
 			glUniformMatrix4fv((*modelToCameraMatrixUniform.find(subscribedMesh->first)).second,
 							   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));
 			glUniform4f((*colorUniform.find(subscribedMesh->first)).second, 
 						1.0f, 1.0f, 1.0f, 1.0f);
 
-			if(renderData[0]->rendererType == Render::FE_RENDERER_LIT)
+			//if(renderData[0]->rendererType == Render::FE_RENDERER_LIT)
             {
-				glBindBufferRange(GL_UNIFORM_BUFFER, entry->get()->materialIndex, 
-								  renderData[0]->materialUniformBuffer, 0, sizeof(Material));
+				//glBindBufferRange(GL_UNIFORM_BUFFER, entry->get()->materialIndex, 
+				//				  renderData[0]->materialUniformBuffer, 0, sizeof(Material));
 
 				glm::mat3 normMatrix(modelMatrix.Top());
 				normMatrix = glm::transpose(glm::inverse(normMatrix));
@@ -163,7 +159,7 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix) const
             glBindBuffer(GL_ARRAY_BUFFER, entry->get()->vertexBuffer);
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(FusionEngine::Vertex), 0);
 			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(FusionEngine::Vertex), (const GLvoid*)12);
-			if (renderData[0]->rendererType == Render::FE_RENDERER_LIT)
+			//if (renderData[0]->rendererType == Render::FE_RENDERER_LIT)
 			{
 				glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(FusionEngine::Vertex), (const GLvoid*)20);
 			}
@@ -179,7 +175,7 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix) const
 
 			glDrawElements(GL_TRIANGLES, entry->get()->indicesCount, GL_UNSIGNED_INT, 0);
 			
-            if(renderData[0]->rendererType == Render::FE_RENDERER_LIT)
+            //if(renderData[0]->rendererType == Render::FE_RENDERER_LIT)
             {
 				glBindBufferBase(GL_UNIFORM_BUFFER, entry->get()->materialIndex, 0);
             }

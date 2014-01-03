@@ -27,7 +27,6 @@
 #include <map>
 #pragma warning(pop)
 
-#include "../Fusion_EntitySystem/Entity.h"
 #include "../Fusion_AssetLoader/AssetLoader.h"
 
 
@@ -49,8 +48,8 @@ namespace FusionEngine
 	public:
         Renderer() {}
 
-		void SubscribeForRendering(Entity *entity);
-		void UnsubscribeForRendering(Entity *entity);
+		void SubscribeForRendering(/*Entity *entity*/);
+		void UnsubscribeForRendering(/*Entity *entity*/);
 
 		void Render(glutil::MatrixStack &modelMatrix) const;
 	};

@@ -2,10 +2,7 @@
 #include "Enemy.h"
 
 
-#include "../Fusion_EntitySystem/EntityEvents.h"
-#include "../Fusion_EntitySystem/ComponentMapper.h"
-#include "../Fusion_EntitySystem/FusionComponents.h"
-#include "../Fusion_Scene/Scene.h"
+#include "../Fusion_EventManager/EntityEvents.h"
 #include "../Fusion_Scene/World.h"
 
 #include "CelestialBody.h"
@@ -13,7 +10,7 @@
 
 using namespace FusionEngine;
 
-
+/*
 Enemy::Enemy(const std::string &newName, float newSpeed, glm::vec3 newFrontVector)
 	: name(newName), speed(newSpeed), health(100), frontVector(newFrontVector), currentState(FE_STATE_IDLE) 
 {
@@ -131,6 +128,6 @@ void Enemy::Update()
 				health = 0; // Kill enemy
 				GetWorld().GetEventManager().FireEvent(OnCollideEvent(EVENT_ON_COLLIDE, name));
 			}
-		}*/
+		}*//*
 	}
-}
+}*/

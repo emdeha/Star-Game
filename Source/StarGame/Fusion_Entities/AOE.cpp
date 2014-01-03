@@ -1,19 +1,15 @@
 #include "stdafx.h"
 #include "AOE.h"
 
-#include "../Fusion_EntitySystem/ComponentMapper.h"
-#include "../Fusion_EntitySystem/FusionComponents.h"
-#include "../Fusion_EntitySystem/EntityEvents.h"
+#include "../Fusion_EventManager/EntityEvents.h"
 #include "../Fusion_Entities/CelestialBody.h"
 #include "../Fusion_Scene/World.h"
-#include "../Fusion_Scene/Scene.h"
 
 using namespace FusionEngine;
 
 
-void FusionEngine::AOE_OnClick(EntityManager *entityManager, Entity *entity, 
-							   const IEventData &eventData)
-{
+void FusionEngine::AOE_OnClick(const IEventData &eventData)
+{/*
 	ComponentMapper<Skill> skillData = entityManager->GetComponentList(entity, CT_SKILL);
 	if (skillData[0]->isActive)
 	{
@@ -25,17 +21,16 @@ void FusionEngine::AOE_OnClick(EntityManager *entityManager, Entity *entity,
 																   skillTransform[0]->position, 
 																   skillData[0]->range, 
 																   skillData[0]->damage, false));
-	}
+	}*/
 }
-void FusionEngine::AOE_OnFusionCompleted(EntityManager *entityManager, Entity *entity, 
-										 const IEventData &eventData)
-{
+void FusionEngine::AOE_OnFusionCompleted(const IEventData &eventData)
+{/*
 	ComponentMapper<Skill> skillData = entityManager->GetComponentList(entity, CT_SKILL);
-	skillData[0]->isActive = true;
+	skillData[0]->isActive = true;*/
 }
 
-void FusionEngine::AOE_OnUpdate(EntityManager *entityManager, Entity *entity)
-{
+void FusionEngine::AOE_OnUpdate()
+{/*
 	ComponentMapper<Skill> skillData = entityManager->GetComponentList(entity, CT_SKILL);
 	if (skillData[0]->isActive)
 	{
@@ -65,6 +60,6 @@ void FusionEngine::AOE_OnUpdate(EntityManager *entityManager, Entity *entity)
 		aoeSelector[0]->skillSelector.Draw(currentDisplayData.modelMatrix, 
 										   GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
 
-		glDisable(GL_BLEND);
-	}
+		glDisable(GL_BLEND);*/
+	//}
 }

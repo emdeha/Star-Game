@@ -233,7 +233,11 @@ void World::AddFusionSequence(const std::string &sequenceName,
 
 std::string World::GetActiveSkillName() const
 {
-	return fusionInput->GetSequenceName(fusionInput->GetCurrentInputSequence());
+	if (fusionInput->GetCurrentInputSequence().length() > 0)
+	{
+		return fusionInput->GetSequenceName(fusionInput->GetCurrentInputSequence());
+	}
+	else return "";
 }
 
 bool World::HandleEvent(const IEventData &eventData)

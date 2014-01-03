@@ -141,8 +141,6 @@ namespace FusionEngine
 		std::string skillHolderID;		
 		std::string fusionCombination;
 
-		glm::vec3 position;
-
 		int applyCost;
 		int researchCost;
 
@@ -151,8 +149,6 @@ namespace FusionEngine
 
 		bool isActive;
 		bool isDeployed;
-
-		bool isAppliedOnActive;
 		
 		Skill() : Component(CT_SKILL) {}
 		virtual ~Skill() {}

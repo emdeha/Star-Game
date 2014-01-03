@@ -125,22 +125,20 @@ void HandlePassiveMovement(int x, int y)
 
 void CreateSkill(const std::string &skillName, const std::string &holderID, const std::string &fusionCombination, 
 				 glm::vec3 position, int damage, float range, int applyCost, int researchCost, 
-				 bool isAppliedOnActive, FE::CelestialBodyType satType = FE::FE_SATELLITE_BAD, 
+				 FE::CelestialBodyType satType = FE::FE_SATELLITE_BAD, 
 				 FE::Skill::OnEventFunc OnClickFunc = nullptr, FE::Skill::OnEventFunc OnFusionCompletedFunc = nullptr,
-				 FE::Skill::OnUpdateFunc OnUpdateFunc = nullptr)
+				 FE::Skill::OnUpdateFunc OnUpdateFunc = nullptr, bool addSelector = false)
 {
 	GetScene().AddEntity(skillName);
 	FE::Skill *newSkill = new FE::Skill();
 	newSkill->skillHolderID = holderID;
 	newSkill->fusionCombination = fusionCombination;
-	newSkill->position = position;
 	newSkill->damage = damage;
 	newSkill->range = range;
 	newSkill->applyCost = applyCost;
 	newSkill->researchCost = researchCost;
 	newSkill->isActive = false;
 	newSkill->isDeployed = false;
-	newSkill->isAppliedOnActive = isAppliedOnActive;
 	if (OnClickFunc)
 		newSkill->OnClick = OnClickFunc;
 	if (OnFusionCompletedFunc)
@@ -155,25 +153,40 @@ void CreateSkill(const std::string &skillName, const std::string &holderID, cons
 		satCreation->satType = satType;
 		GetScene().AddComponent(skillName, satCreation);
 	}
+	if (addSelector)
+	{
+		FE::SelectorAppliedSkill *selectorApplied = new FE::SelectorAppliedSkill();
+		selectorApplied->skillSelector = Utility::Primitives::Circle(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), position, range, 90);
+		selectorApplied->skillSelector.Init();
+		GetScene().AddComponent(skillName, selectorApplied);
+
+		FE::Transform *transform = new FE::Transform();
+		transform->position = position;
+		transform->scale = glm::vec3(range, 0.0f, range);
+		transform->rotation = glm::vec3();
+		GetScene().AddComponent(skillName, transform);
+	}
 
 	GetWorld().AddFusionSequence(skillName, fusionCombination);
 }
 void CreateSkills()
 {
-	GetScene().AddSystem(new FE::SkillSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager()));
+	FE::SkillSystem *skillSystem = new FE::SkillSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
+	GetScene().AddSystem(skillSystem);
 
-	CreateSkill("ultSkill", "sun", "qqe", glm::vec3(), 300, -1.0f, 0, 0, true, FE::FE_SATELLITE_BAD,
+	CreateSkill("ultSkill", "sun", "qqe", glm::vec3(), 300, -1.0f, 0, 0, FE::FE_SATELLITE_BAD,
 				nullptr, FE::Ultimate_OnFusionCompleted, nullptr);
-	CreateSkill("waterSat", "sun", "www", glm::vec3(), 0, -1.0f, 0, 0, true, FE::FE_CELESTIALBODY_WATER,
+	CreateSkill("waterSat", "sun", "www", glm::vec3(), 0, -1.0f, 0, 0, FE::FE_CELESTIALBODY_WATER,
 				nullptr, FE::SatelliteCreation_OnFusionCompleted, nullptr);
-	CreateSkill("airSat", "sun", "qqq", glm::vec3(), 0, -1.0f, 0, 0, true, FE::FE_CELESTIALBODY_AIR,
+	CreateSkill("airSat", "sun", "qqq", glm::vec3(), 0, -1.0f, 0, 0, FE::FE_CELESTIALBODY_AIR,
 				nullptr, FE::SatelliteCreation_OnFusionCompleted, nullptr);
-	CreateSkill("earthSat", "sun", "eee", glm::vec3(), 0, -1.0f, 0, 0, true, FE::FE_CELESTIALBODY_EARTH,
+	CreateSkill("earthSat", "sun", "eee", glm::vec3(), 0, -1.0f, 0, 0, FE::FE_CELESTIALBODY_EARTH,
 				nullptr, FE::SatelliteCreation_OnFusionCompleted, nullptr);
-	CreateSkill("fireSat", "sun", "qwe", glm::vec3(), 0, -1.0f, 0, 0, true, FE::FE_CELESTIALBODY_FIRE,
+	CreateSkill("fireSat", "sun", "qwe", glm::vec3(), 0, -1.0f, 0, 0, FE::FE_CELESTIALBODY_FIRE,
 				nullptr, FE::SatelliteCreation_OnFusionCompleted, nullptr);
 
-
+	CreateSkill("aoe", "sun", "wqe", glm::vec3(), 10, 2.0f, 0, 0, FE::FE_SATELLITE_BAD, 
+				FE::AOE_OnClick, FE::AOE_OnFusionCompleted, FE::AOE_OnUpdate, true);
 }
 
 void CreateSun()
@@ -200,12 +213,6 @@ void CreateSun()
 	sunRender->vao = loadedMesh.vao;
 
 	GetScene().AddEntity("sun");
-	FE::UpdateSystem *sunUpdate =
-		new FE::UpdateSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
-	GetScene().AddSystem(sunUpdate);
-	FE::CollisionSystem *sunClickable = 
-		new FE::CollisionSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
-	GetScene().AddSystem(sunClickable);
 	GetScene().AddComponent("sun", sunRender);
 
 	FE::Transform *sunTransform = new FE::Transform();
@@ -334,11 +341,18 @@ void InitializeScene()
 	GetWorld().AddFusionSequence("satFrost",   'e', 'e', 'q');
 	GetWorld().AddFusionSequence("satChain",   'w', 'w', 'q');
 	*/
+	
+	FE::UpdateSystem *update =
+		new FE::UpdateSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
+	GetScene().AddSystem(update);
+	FE::CollisionSystem *click = 
+		new FE::CollisionSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
+	GetScene().AddSystem(click);
 
-	CreateSkills();
 	CreateSun();
 	CreateEnemy("spaceship1", glm::vec3(5.0f, 0.0f, 0.0f));
 	CreateEnemy("spaceship2", glm::vec3(0.0f, 0.0f, 6.0f));
+	CreateSkills();
 }
 
 

@@ -4,5 +4,6 @@
 
 #include "SatelliteCreation.h"
 #include "Ultimate.h"
+#include "AOE.h"
 
 #endif

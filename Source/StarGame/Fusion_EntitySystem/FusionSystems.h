@@ -45,7 +45,7 @@ namespace FusionEngine
     {
     protected:
 		virtual void ProcessEntity(EntityManager *manager, Entity *entity);
-
+		
     public:
 		UpdateSystem(EventManager *eventManager, EntityManager *entityManager) 
             : EntityProcessingSystem(eventManager, entityManager, CT_UPDATABLE_BEHAVIOR_BIT) {}

@@ -74,6 +74,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AOE.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="CelestialBody.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="IUpdatable.h" />
@@ -90,6 +94,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AOE.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="CelestialBody.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="SatelliteCreation.cpp" />

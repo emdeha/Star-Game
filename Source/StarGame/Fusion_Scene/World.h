@@ -24,6 +24,9 @@
 #include "../Fusion_Renderer/ShaderManager.h"
 #include "../Fusion_GUI/Layout.h"
 #include "../Fusion_Entities/Skills.h"
+#include "../Fusion_Entities/CelestialBody.h"
+#include "../Fusion_Entities/Enemy.h"
+
 #pragma warning(push, 1)
 #include "../Mouse/Mouse.h" // TODO: Replace with Fusion_Mouse
 #include "../Camera/TopDownCamera.h" // TODO: Replace with Fusion_Camera
@@ -77,6 +80,9 @@ namespace FusionEngine
 		LayoutsMap guiLayouts;
 		std::unique_ptr<FusionInput> fusionInput;
 
+		std::shared_ptr<CelestialBody> sun; // TODO: Make generic
+		std::vector<std::shared_ptr<Enemy>> enemies;
+
 	private:
 		World();
 		World(const World&);
@@ -129,6 +135,10 @@ namespace FusionEngine
 		std::string GetActiveSkillName() const;
 
 		virtual bool HandleEvent(const IEventData &eventData);
+
+
+		// Components
+		std::shared_ptr<IComponent> GetComponentForObject(const std::string &id, unsigned int componentID);
 	};
 
 	inline World& World::GetWorld()

@@ -25,37 +25,26 @@
 #include <sstream>
 #pragma warning(pop)
 
-
 #include "../framework/ErrorAPI.h"
 #include "IComponent.h"
 
-class Composable
+
+namespace FusionEngine
 {
-private:
-	std::map<unsigned int, std::shared_ptr<IComponent>> components;
-
-public:
-	virtual ~Composable() {}
-
-	void AddComponent(unsigned int componentID, IComponent *newComponent)
+	class Composable
 	{
-		components.insert(std::make_pair(componentID, std::shared_ptr<IComponent>(newComponent)));
-	}
-	void RemoveComponent(unsigned int componentID)
-	{
-		auto componentToRemove = components.find(componentID);
-		if (componentToRemove != components.end())
-		{
-			components.erase(componentToRemove);
-		}
-		else
-		{
-			std::ostringstream errorMsg;
-			errorMsg << "Component with id " << componentID << " not found!\n";
-			HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
-		}
-	}
-};
+	private:
+		std::map<unsigned int, std::shared_ptr<IComponent>> components;
+
+	public:
+		virtual ~Composable() {}
+
+		void AddComponent(unsigned int componentID, std::shared_ptr<IComponent> newComponent);
+		void RemoveComponent(unsigned int componentID);
+
+		std::shared_ptr<IComponent> GetComponent(unsigned int componentID);
+	};
+}
 
 
 #endif

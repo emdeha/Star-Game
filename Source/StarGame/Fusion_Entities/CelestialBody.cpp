@@ -20,6 +20,7 @@
 
 #include "../Fusion_EventManager/EntityEvents.h"
 #include "../Fusion_Scene/World.h"
+#include "../Fusion_Entities/Components.h"
 
 #pragma warning(push, 1)
 #include <time.h>
@@ -169,14 +170,41 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 		return false;
 	}
 
-	//float satOffset = GetSatelliteOffset(satType); 
-	//std::shared_ptr<CelestialBody> newSat(new CelestialBody(satType, 0, 0.3f, satOffset));
+	float satOffset = GetSatelliteOffset(satType); 
+	std::shared_ptr<CelestialBody> newSat = std::make_shared<CelestialBody>(satType, 0, 0.3f, satOffset);
+	
+	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
+	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
+
+	FusionEngine::MeshAssetObject sunMesh = meshLoader.LoadAssetObject("mesh-files", GetSatMesh(satType));
+	
+	std::shared_ptr<FusionEngine::RenderComponent> satRenderComponent = std::make_shared<RenderComponent>();
+	satRenderComponent->vao = sunMesh.vao;
+	satRenderComponent->shaderProgramID = GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_LIT).programId;
+	satRenderComponent->renderType = RenderComponent::FE_RENDERER_LIT;
+	
+	newSat->AddComponent(FE_COMPONENT_RENDER, satRenderComponent);
+
+	std::shared_ptr<FusionEngine::TransformComponent> satTransformComponent = std::make_shared<TransformComponent>();
+	satTransformComponent->position = glm::vec3();
+	satTransformComponent->scale = glm::vec3(0.5f);
+	satTransformComponent->rotation = glm::vec3();
+
+	newSat->AddComponent(FE_COMPONENT_TRANSFORM, satTransformComponent);
+	
+	GetWorld().GetRenderer().SubscribeForRendering(id, sunMesh);
+
+	satellites.push_back(newSat);
+	currentSatelliteCount++;
+
+
+
+
 	//newSat->AddSkill(std::shared_ptr<Skill>(new ShieldSkill(1, 1.0f, 'q', 'w', 'q', 0, 0)));
 	//newSat->AddSkill(std::shared_ptr<Skill>(new FrostSkill(10, 2.0f, 0.05f, 'e', 'e', 'q', 0, 0)));
 	//std::shared_ptr<Skill> chainSkill = std::shared_ptr<Skill>(new ChainSkill(10, 2.0f, 0.05f, 'w', 'w', 'q', 0, 0)); 
 	//chainSkill->Activate(newSat.get());
 	//newSat->AddSkill(chainSkill);
-	//this->satellites.push_back(newSat);
 
     //FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
 	//meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());	
@@ -226,6 +254,29 @@ bool CelestialBody::AddSkill(const std::shared_ptr<Skill> newSkill)
 
 void CelestialBody::Update()
 {
+	for (auto satellite = satellites.begin(); satellite != satellites.end(); ++satellite)
+	{
+		TransformComponent *satTransform = 
+			static_cast<TransformComponent*>((*satellite)->GetComponent(FE_COMPONENT_TRANSFORM).get());
+		if (satTransform)
+		{
+			glutil::MatrixStack relativeTransformStack;
+			relativeTransformStack.Translate(satTransform->position);
+			relativeTransformStack.RotateY((*satellite)->currentRotationAngle);
+
+			(*satellite)->currentRotationAngle += (*satellite)->angularVelocity * World::GetWorld().interpolation;
+			if ((*satellite)->currentRotationAngle >= 360.0f)
+			{
+				(*satellite)->currentRotationAngle -= 360.0f;
+			}
+
+			float offset = (*satellite)->offsetFromSun;
+			satTransform->position = glm::vec3(offset, 0.0f, offset);
+			satTransform->position = glm::vec3(relativeTransformStack.Top() * glm::vec4(satTransform->position, 1.0f));
+		}
+	}
+
+	/*
 	//FusionEngine::ComponentMapper<FusionEngine::Transform> transformData =
 	//	GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity("sun"), FusionEngine::CT_TRANSFORM);
 
@@ -249,16 +300,17 @@ void CelestialBody::Update()
 		
 		//satTransformData[0]->position = 
 		//	glm::vec3(relativeTransformStack.Top() * glm::vec4(satTransformData[0]->position, 1.0f));
-		/*
+		
 		// Skill Update
 		for (auto skill = (*satellite)->skills.begin(); skill != (*satellite)->skills.end(); ++skill)
 		{
 			(*skill)->Update();
-		}*/
+		}
 	}
-	/*
+	
 	for (auto skill = skills.begin(); skill != skills.end(); ++skill)
 	{
 		(*skill)->Update();
-	}*/
+	}
+	*/
 }

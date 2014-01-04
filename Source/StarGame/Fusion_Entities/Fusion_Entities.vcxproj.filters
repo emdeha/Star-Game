@@ -40,6 +40,9 @@
     <Filter Include="Source Files\Skills\Skills">
       <UniqueIdentifier>{08b37896-b814-494f-b452-d161f6b6fd5d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Composable">
+      <UniqueIdentifier>{294dabf2-fe2a-45a7-ab3b-451560d3f586}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -112,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="AOE.cpp">
       <Filter>Source Files\Skills\Skills</Filter>
+    </ClCompile>
+    <ClCompile Include="Composable.cpp">
+      <Filter>Source Files\Composable</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

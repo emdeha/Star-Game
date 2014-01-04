@@ -102,6 +102,7 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="CelestialBody.cpp" />
+    <ClCompile Include="Composable.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="SatelliteCreation.cpp" />
     <ClCompile Include="Skills.cpp" />

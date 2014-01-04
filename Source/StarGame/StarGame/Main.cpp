@@ -55,13 +55,13 @@ long long GetCurrentTimeMillis()
 
 
 void HandleMouse()
-{/*
-	unsigned int entityIndex = GetScene().GetEntity("sun")->GetIndex();
-	FE::ComponentMapper<FE::Collidable> collidableData = 
-		GetScene().GetEntityManager()->GetComponentList(entityIndex, FE::CT_COLLISION);
+{
+	//unsigned int entityIndex = GetScene().GetEntity("sun")->GetIndex();
+	//FE::ComponentMapper<FE::Collidable> collidableData = 
+	//	GetScene().GetEntityManager()->GetComponentList(entityIndex, FE::CT_COLLISION);
 	if (GetWorld().GetMouse().IsLeftButtonDown())
 	{
-		collidableData[0]->isForCheck = true;
+		//collidableData[0]->isForCheck = true;
 
 		auto guiLayouts = GetWorld().GetLayouts();
 		for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
@@ -85,8 +85,8 @@ void HandleMouse()
 	}
 	else
 	{
-		collidableData[0]->isForCheck = false;
-	}*/
+		//collidableData[0]->isForCheck = false;
+	}
 
 	GetWorld().GetMouse().ReleaseLeftButton();
 	GetWorld().GetMouse().ReleaseRightButton();
@@ -456,6 +456,7 @@ void Display()
 	int loops = 0;
 	while (GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
 	{
+		GetWorld().Update();
 	    HandleMouse();
 	
 		nextGameTick += SKIP_TICKS;

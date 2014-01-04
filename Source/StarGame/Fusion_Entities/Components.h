@@ -21,28 +21,52 @@
 
 #pragma warning(push, 1)
 #include "../glsdk/glload/gl_3_3.h"
+#include "../glsdk/glm/glm.hpp"
 #pragma warning(pop)
 
 #include "IComponent.h"
 
 
-class RenderComponent : public IComponent
+namespace FusionEngine
 {
-public:
-	enum RenderType
+	const unsigned int FE_COMPONENT_RENDER = 0;
+	const unsigned int FE_COMPONENT_TRANSFORM = 1;
+
+	class RenderComponent : public IComponent
 	{
-		FE_RENDERER_SIMPLE,
-		FE_RENDERER_LIT,
+	public:
+		enum RenderType
+		{
+			FE_RENDERER_SIMPLE,
+			FE_RENDERER_LIT,
+		};
+
+		RenderType renderType;
+
+		GLuint vao;
+		GLuint materialUniformBuffer;
+		GLuint shaderProgramID;
+
+		virtual ~RenderComponent() {}
 	};
 
-	RenderType renderType;
+	class TransformComponent : public IComponent
+	{
+	public:
+		glm::vec3 position;
+		glm::vec3 rotation; // TODO: Use quats.
+		glm::vec3 scale;
 
-	GLuint vao;
-	GLuint materialUniformBuffer;
-	GLuint shaderProgramID;
+		virtual ~TransformComponent() {}
+	};
 
-	virtual ~RenderComponent() {}
-};
+	struct Material
+	{
+		glm::vec4 diffuseColor;
+		glm::vec4 specularColor;
+		float shininessFactor;
+	};
+}
 
 
 #endif

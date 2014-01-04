@@ -19,11 +19,14 @@
 #define FE_ICOMPONENT_H
 
 
-class IComponent 
+namespace FusionEngine
 {
-public:
-	virtual ~IComponent() {}
-};
+	class IComponent 
+	{
+	public:
+		virtual ~IComponent() {}
+	};
+}
 
 
 #endif

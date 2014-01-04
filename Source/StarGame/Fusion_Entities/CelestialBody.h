@@ -27,11 +27,11 @@
 #include "../glsdk/glload/gl_3_3.h"
 #pragma warning(pop)
 
-#include "../Fusion_Renderer/Renderer.h"
 #include "../Fusion_EventManager/EventManager.h"
 #include "../Fusion_EventManager/Event.h"
 #include "Skills.h"
 #include "IUpdatable.h"
+#include "Composable.h"
 
 
 namespace FusionEngine
@@ -46,7 +46,7 @@ namespace FusionEngine
 		FE_SUN,
 	};
 
-	class CelestialBody : public IEventListener, public IUpdatable
+	class CelestialBody : public IEventListener, public IUpdatable, public Composable
 	{
 	private:
 		std::vector<std::shared_ptr<CelestialBody>> satellites;

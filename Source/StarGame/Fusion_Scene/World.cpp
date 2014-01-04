@@ -4,6 +4,7 @@
 #include "../Fusion_EventManager/EntityEvents.h"
 #include "../Fusion_GUI/ControlEvents.h"
 #include "../Fusion_Entities/CelestialBody.h"
+#include "../Fusion_Entities/Components.h"
 
 using namespace FusionEngine;
 
@@ -58,6 +59,30 @@ void World::Load(const std::string &guiLayoutFile,
 #endif
 	
 	// Load Cheats
+
+	// Load Entities
+	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
+	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
+
+	FusionEngine::MeshAssetObject sunMesh = meshLoader.LoadAssetObject("mesh-files", "sun.obj");
+	
+	sun = std::make_shared<CelestialBody>(FE_SUN, 4, 0.5f, 0.0f);
+
+	std::shared_ptr<FusionEngine::RenderComponent> sunRenderComponent = std::make_shared<RenderComponent>();
+	sunRenderComponent->vao = sunMesh.vao;
+	sunRenderComponent->shaderProgramID = shaderManager.GetProgram(FE_PROGRAM_SIMPLE).programId;
+	sunRenderComponent->renderType = RenderComponent::FE_RENDERER_SIMPLE;
+	
+	sun->AddComponent(FE_COMPONENT_RENDER, sunRenderComponent);
+
+	std::shared_ptr<FusionEngine::TransformComponent> sunTransformComponent = std::make_shared<TransformComponent>();
+	sunTransformComponent->position = glm::vec3();
+	sunTransformComponent->scale = glm::vec3(0.5f);
+	sunTransformComponent->rotation = glm::vec3();
+
+	sun->AddComponent(FE_COMPONENT_TRANSFORM, sunTransformComponent);
+
+	renderer.SubscribeForRendering("sun", sunMesh);
 }
 
 void World::ReloadGUI(const std::string &guiLayoutFile)
@@ -74,6 +99,11 @@ void World::ReloadGUI(const std::string &guiLayoutFile)
 	guiLoader.RegisterType("loader-files", new FusionEngine::GUILoader());
 	FusionEngine::GUIAssetObject loadedGUI = guiLoader.LoadAssetObject("loader-files", guiLayoutFile);
 	guiLayouts = loadedGUI.GetAllLoadedLayouts();
+}
+
+void World::Update()
+{
+	sun->Update();
 }
 
 void World::Render()
@@ -235,6 +265,19 @@ std::string World::GetActiveSkillName() const
 		return fusionInput->GetSequenceName(fusionInput->GetCurrentInputSequence());
 	}
 	else return "";
+}
+
+std::shared_ptr<IComponent> World::GetComponentForObject(const std::string &id, unsigned int componentID)
+{
+	if (id == "sun")
+	{
+		return sun->GetComponent(componentID);
+	}
+
+	std::ostringstream errorMsg;
+	errorMsg << "Object with id: " << id << " not found";
+	HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
+	return nullptr;
 }
 
 bool World::HandleEvent(const IEventData &eventData)

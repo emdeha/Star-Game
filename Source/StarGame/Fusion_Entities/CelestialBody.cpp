@@ -180,22 +180,23 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 	
 	std::shared_ptr<FusionEngine::RenderComponent> satRenderComponent = std::make_shared<RenderComponent>();
 	satRenderComponent->vao = sunMesh.vao;
-	satRenderComponent->shaderProgramID = GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_LIT).programId;
+	satRenderComponent->shaderProgramID = GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_LIT_TEXTURE).programId;
 	satRenderComponent->renderType = RenderComponent::FE_RENDERER_LIT;
 	
 	newSat->AddComponent(FE_COMPONENT_RENDER, satRenderComponent);
 
 	std::shared_ptr<FusionEngine::TransformComponent> satTransformComponent = std::make_shared<TransformComponent>();
 	satTransformComponent->position = glm::vec3();
-	satTransformComponent->scale = glm::vec3(0.5f);
+	satTransformComponent->scale = glm::vec3(0.4f);
 	satTransformComponent->rotation = glm::vec3();
 
 	newSat->AddComponent(FE_COMPONENT_TRANSFORM, satTransformComponent);
 	
-	GetWorld().GetRenderer().SubscribeForRendering(id, sunMesh);
-
 	satellites.push_back(newSat);
 	currentSatelliteCount++;
+
+	GetWorld().GetRenderer().SubscribeForRendering(newSat->GetID(), sunMesh);
+
 
 
 
@@ -254,14 +255,17 @@ bool CelestialBody::AddSkill(const std::shared_ptr<Skill> newSkill)
 
 void CelestialBody::Update()
 {
+	TransformComponent *sunTransform = static_cast<TransformComponent*>(GetComponent(FE_COMPONENT_TRANSFORM).get());
+
 	for (auto satellite = satellites.begin(); satellite != satellites.end(); ++satellite)
 	{
 		TransformComponent *satTransform = 
 			static_cast<TransformComponent*>((*satellite)->GetComponent(FE_COMPONENT_TRANSFORM).get());
+
 		if (satTransform)
 		{
 			glutil::MatrixStack relativeTransformStack;
-			relativeTransformStack.Translate(satTransform->position);
+			relativeTransformStack.Translate(sunTransform->position);
 			relativeTransformStack.RotateY((*satellite)->currentRotationAngle);
 
 			(*satellite)->currentRotationAngle += (*satellite)->angularVelocity * World::GetWorld().interpolation;

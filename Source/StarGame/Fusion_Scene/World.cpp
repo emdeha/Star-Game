@@ -61,6 +61,8 @@ void World::Load(const std::string &guiLayoutFile,
 	// Load Cheats
 
 	// Load Entities
+
+	//    Sun
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
 	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
 
@@ -83,6 +85,36 @@ void World::Load(const std::string &guiLayoutFile,
 	sun->AddComponent(FE_COMPONENT_TRANSFORM, sunTransformComponent);
 
 	renderer.SubscribeForRendering("sun", sunMesh);
+
+	// WARN: Sequential calls to AddSatellite make sequential calls to srand(time()) 
+	//       which breaks the random generation algorithm
+	sun->AddSatellite(FE_FIRE_SAT);
+	sun->AddSatellite(FE_AIR_SAT);
+	sun->AddSatellite(FE_WATER_SAT);
+	sun->AddSatellite(FE_EARTH_SAT);
+
+	//    Enemies
+	FusionEngine::MeshAssetObject enemyMesh = meshLoader.LoadAssetObject("mesh-files", "spaceship.obj");
+
+
+	std::shared_ptr<FusionEngine::RenderComponent> spaceshipRenderComponent = std::make_shared<RenderComponent>();
+	spaceshipRenderComponent->vao = enemyMesh.vao;
+	spaceshipRenderComponent->shaderProgramID = shaderManager.GetProgram(FE_PROGRAM_LIT).programId;
+	spaceshipRenderComponent->renderType = RenderComponent::FE_RENDERER_LIT;
+	
+	std::shared_ptr<FusionEngine::TransformComponent> spaceshipTransformComponent = std::make_shared<TransformComponent>();
+	spaceshipTransformComponent->position = glm::vec3(5.0f, 0.0f, 0.0f);
+	spaceshipTransformComponent->rotation = glm::vec3();
+	spaceshipTransformComponent->scale = glm::vec3(0.1f);
+
+	glm::vec3 frontVector = glm::normalize(glm::vec3() - spaceshipTransformComponent->position); // TODO: Make relative to the Sun
+
+	std::shared_ptr<Enemy> firstEnemy = std::make_shared<Enemy>("spaceship1", 0.02f, frontVector);
+	firstEnemy->AddComponent(FE_COMPONENT_RENDER, spaceshipRenderComponent);
+	firstEnemy->AddComponent(FE_COMPONENT_TRANSFORM, spaceshipTransformComponent);
+	enemies.push_back(firstEnemy);
+
+	renderer.SubscribeForRendering("spaceship1", enemyMesh);
 }
 
 void World::ReloadGUI(const std::string &guiLayoutFile)
@@ -104,6 +136,10 @@ void World::ReloadGUI(const std::string &guiLayoutFile)
 void World::Update()
 {
 	sun->Update();
+	for (auto enemy = enemies.begin(); enemy != enemies.end(); ++enemy)
+	{
+		(*enemy)->Update();
+	}
 }
 
 void World::Render()
@@ -272,6 +308,25 @@ std::shared_ptr<IComponent> World::GetComponentForObject(const std::string &id, 
 	if (id == "sun")
 	{
 		return sun->GetComponent(componentID);
+	}
+	else
+	{
+		auto sunSats = sun->GetSatellites();
+		for (auto sat = sunSats.begin(); sat != sunSats.end(); ++sat)
+		{
+			if ((*sat)->GetID() == id)
+			{
+				return (*sat)->GetComponent(componentID);
+			}
+		}
+
+		for (auto enemy = enemies.begin(); enemy != enemies.end(); ++enemy)
+		{
+			if ((*enemy)->GetID() == id)
+			{
+				return (*enemy)->GetComponent(componentID);
+			}
+		}
 	}
 
 	std::ostringstream errorMsg;

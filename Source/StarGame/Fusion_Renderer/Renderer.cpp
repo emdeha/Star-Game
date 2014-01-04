@@ -127,26 +127,26 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix) const
 		{
 			glEnableVertexAttribArray(2);
 		}
-
+		
+		TransformComponent *meshTransform =
+			static_cast<TransformComponent*>(GetWorld().
+				GetComponentForObject((*subscribedMesh).first, FE_COMPONENT_TRANSFORM).get());
+		
+		glutil::PushStack push(modelMatrix);
+						
+		modelMatrix.Translate(meshTransform->position);
+		modelMatrix.RotateX(meshTransform->rotation.x);
+		modelMatrix.RotateY(meshTransform->rotation.y);
+		modelMatrix.RotateZ(meshTransform->rotation.z);
+		modelMatrix.Scale(meshTransform->scale);
+     
 		
 		std::vector<std::shared_ptr<MeshEntry>> entries = subscribedMesh->second.GetMeshEntries();
         for(std::vector<std::shared_ptr<MeshEntry>>::const_iterator entry = entries.begin(); 
 			entry != entries.end(); ++entry)
         {
 			glUseProgram(meshRender->shaderProgramID); 
-		
-            glutil::PushStack push(modelMatrix);
-			
-			
-			TransformComponent *meshTransform =
-				static_cast<TransformComponent*>(GetWorld().
-					GetComponentForObject((*subscribedMesh).first, FE_COMPONENT_TRANSFORM).get());
 
-			modelMatrix.Translate(meshTransform->position);
-			modelMatrix.RotateX(meshTransform->rotation.x);
-			modelMatrix.RotateY(meshTransform->rotation.y);
-			modelMatrix.RotateZ(meshTransform->rotation.z);
-			modelMatrix.Scale(meshTransform->scale);
 
 			glUniformMatrix4fv((*modelToCameraMatrixUniform.find(subscribedMesh->first)).second,
 							   1, GL_FALSE, glm::value_ptr(modelMatrix.Top()));

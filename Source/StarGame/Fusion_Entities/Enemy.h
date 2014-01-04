@@ -28,11 +28,12 @@
 #include "../Fusion_EventManager/EventManager.h"
 #include "States.h"
 #include "IUpdatable.h"
+#include "Composable.h"
 
 
 namespace FusionEngine
 {
-	class Enemy : public IEventListener, public IUpdatable
+	class Enemy : public IEventListener, public IUpdatable, public Composable
 	{
 	private:
 		std::string name;
@@ -53,6 +54,8 @@ namespace FusionEngine
 		Enemy(const std::string &newName, float newSpeed, glm::vec3 newFrontVector);
 
 		void Update();
+
+		std::string GetID() { return name; }
 
 		virtual bool HandleEvent(const FusionEngine::IEventData &eventData);
 	};

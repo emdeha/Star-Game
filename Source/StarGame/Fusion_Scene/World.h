@@ -91,7 +91,9 @@ namespace FusionEngine
 
 		void CreateSun();
 		void CreateEnemy(const std::string &enemyID, glm::vec3 position);
-		void CreateSkill(const std::string &skillID);
+		void CreateSkill(const std::string &skillID, const std::string &skillFusionCombination,
+						 CelestialBodyType bodyToCreate,
+						 OnEventFunc skillOnClick, OnEventFunc skillOnFusionCompleted, OnUpdateFunc skillOnUpdate);
 
 	public:
 		float interpolation;

@@ -8,7 +8,7 @@
 using namespace FusionEngine;
 
 
-void FusionEngine::AOE_OnClick(const IEventData &eventData)
+void FusionEngine::AOE_OnClick(const std::string &skillID, const IEventData &eventData)
 {/*
 	ComponentMapper<Skill> skillData = entityManager->GetComponentList(entity, CT_SKILL);
 	if (skillData[0]->isActive)
@@ -23,13 +23,13 @@ void FusionEngine::AOE_OnClick(const IEventData &eventData)
 																   skillData[0]->damage, false));
 	}*/
 }
-void FusionEngine::AOE_OnFusionCompleted(const IEventData &eventData)
+void FusionEngine::AOE_OnFusionCompleted(const std::string &skillID, const IEventData &eventData)
 {/*
 	ComponentMapper<Skill> skillData = entityManager->GetComponentList(entity, CT_SKILL);
 	skillData[0]->isActive = true;*/
 }
 
-void FusionEngine::AOE_OnUpdate()
+void FusionEngine::AOE_OnUpdate(const std::string &skillID)
 {/*
 	ComponentMapper<Skill> skillData = entityManager->GetComponentList(entity, CT_SKILL);
 	if (skillData[0]->isActive)

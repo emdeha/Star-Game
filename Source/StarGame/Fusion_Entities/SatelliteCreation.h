@@ -24,7 +24,7 @@
 
 namespace FusionEngine
 {
-	void SatelliteCreation_OnFusionCompleted(const IEventData &eventData);
+	void SatelliteCreation_OnFusionCompleted(const std::string &skillID, const IEventData &eventData);
 }
 
 

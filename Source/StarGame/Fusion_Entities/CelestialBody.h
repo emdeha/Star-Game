@@ -43,6 +43,8 @@ namespace FusionEngine
 		FE_EARTH_SAT,
 
 		FE_SUN,
+
+		FE_BAD = -1,
 	};
 
 	class CelestialBody : public IEventListener, public Composable

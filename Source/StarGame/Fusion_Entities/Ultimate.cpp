@@ -8,8 +8,7 @@
 using namespace FusionEngine;
 
 
-void FusionEngine::Ultimate_OnFusionCompleted(EntityManager *entityManager, Entity *entity, 
-											  const IEventData &eventData)
+void FusionEngine::Ultimate_OnFusionCompleted(const std::string &skillID, const IEventData &eventData)
 {/*
 	ComponentMapper<Skill> skillData = entityManager->GetComponentList(entity, CT_SKILL);
 	GetWorld().GetEventManager().FireEvent(OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED,

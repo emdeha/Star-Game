@@ -25,6 +25,7 @@
 #pragma warning(pop)
 
 #include "IComponent.h"
+#include "../Fusion_Entities/CelestialBody.h"
 
 
 namespace FusionEngine
@@ -57,6 +58,14 @@ namespace FusionEngine
 		virtual ~TransformComponent() {}
 	};
 
+	class SkillSatelliteCreationComponent : public IComponent
+	{
+	public:
+		CelestialBodyType satelliteType;
+
+		virtual ~SkillSatelliteCreationComponent() {}
+	};
+	
 	struct Material
 	{
 		glm::vec4 diffuseColor;

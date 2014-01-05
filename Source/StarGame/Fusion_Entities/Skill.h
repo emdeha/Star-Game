@@ -104,13 +104,13 @@ namespace FusionEngine
 		sequences.clear();
 	}
 
+	
+	typedef void (*OnEventFunc)(const std::string&, const IEventData&);
+    typedef void (*OnUpdateFunc)(const std::string&);
 
 	class Skill : public IEventListener, public Composable
 	{
 	private:
-		typedef void (*OnEventFunc)(const IEventData&);
-        typedef void (*OnUpdateFunc)();
-
 		char fusionCombination[4];
 
 		int applyCost;

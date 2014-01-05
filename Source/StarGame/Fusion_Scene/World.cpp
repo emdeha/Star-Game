@@ -44,13 +44,6 @@ void World::CreateSun()
 	sun->AddComponent(FE_COMPONENT_TRANSFORM, sunTransformComponent);
 
 	renderer.SubscribeForRendering("sun", sunMesh);
-
-	// WARN: Sequential calls to AddSatellite make sequential calls to srand(time()) 
-	//       which breaks the random generation algorithm
-	//sun->AddSatellite(FE_FIRE_SAT);
-	//sun->AddSatellite(FE_AIR_SAT);
-	//sun->AddSatellite(FE_WATER_SAT);
-	//sun->AddSatellite(FE_EARTH_SAT);
 }
 
 void World::CreateEnemy(const std::string &enemyID, glm::vec3 position)
@@ -78,6 +71,39 @@ void World::CreateEnemy(const std::string &enemyID, glm::vec3 position)
 	enemies.push_back(firstEnemy);
 
 	renderer.SubscribeForRendering(enemyID, enemyMesh);
+}
+
+void World::CreateSkill(const std::string &skillID, const std::string &skillFusionCombination,
+						CelestialBodyType bodyToCreate,
+						OnEventFunc skillOnClick, OnEventFunc skillOnFusionCompleted, OnUpdateFunc skillOnUpdate)
+{
+	std::shared_ptr<Skill> newSkill = 
+		std::shared_ptr<Skill>(new Skill(skillID, skillFusionCombination[0], 
+												  skillFusionCombination[1], 
+												  skillFusionCombination[2], 0, 0));
+
+	if (skillOnClick)
+	{
+		newSkill->SetOnClickCallback(skillOnClick);
+	}
+	if (skillOnFusionCompleted)
+	{
+		newSkill->SetOnFusionCompletedCallback(skillOnFusionCompleted);
+	}
+	if (skillOnUpdate)
+	{
+		newSkill->SetOnUpdateCallback(skillOnUpdate);
+	}
+
+	if (bodyToCreate != FE_BAD)
+	{
+		std::shared_ptr<SkillSatelliteCreationComponent> newSatCreation = 
+			std::make_shared<SkillSatelliteCreationComponent>();
+		newSatCreation->satelliteType = bodyToCreate;
+		newSkill->AddComponent(FE_COMPONENT_SKILL_SATELLITE_CREATION, newSatCreation);
+	}
+
+	sun->AddSkill(skillID, newSkill);
 }
 
 void World::Load(const std::string &guiLayoutFile,
@@ -126,9 +152,11 @@ void World::Load(const std::string &guiLayoutFile,
 	CreateEnemy("spaceship1", glm::vec3(0.0f, 0.0f, 6.0f));
 	CreateEnemy("spaceship2", glm::vec3(4.0f, 0.0f, 0.0f));
 
-	// Skill
-	std::shared_ptr<Skill> waterSat = std::shared_ptr<Skill>(new Skill("waterSat", 'w', 'w', 'w', 0, 0));
-	waterSat->SetOnFusionCompletedCallback(SatelliteCreation_OnFusionCompleted);
+	// Skills
+	CreateSkill("waterSat", "www", FE_WATER_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
+	CreateSkill("airSat", "qqq", FE_AIR_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
+	CreateSkill("fireSat", "qwe", FE_FIRE_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
+	CreateSkill("earthSat", "eee", FE_EARTH_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
 }
 
 void World::ReloadGUI(const std::string &guiLayoutFile)

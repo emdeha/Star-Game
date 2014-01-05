@@ -24,10 +24,10 @@
 
 namespace FusionEngine
 {
-	void AOE_OnClick(const IEventData &eventData);
-	void AOE_OnFusionCompleted(const IEventData &eventData);
+	void AOE_OnClick(const std::string &skillID, const IEventData &eventData);
+	void AOE_OnFusionCompleted(const std::string &skillID, const IEventData &eventData);
 
-	void AOE_OnUpdate();
+	void AOE_OnUpdate(const std::string &skillID);
 }
 
 #endif

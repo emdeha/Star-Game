@@ -34,14 +34,14 @@
     <Filter Include="Header Files\Scripts\Skills">
       <UniqueIdentifier>{a234fc40-1cd5-4f99-8fc7-aeace9f1f971}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Skills">
-      <UniqueIdentifier>{db2643f2-fd1b-4c62-8575-ee713d66fbee}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Skills\Skills">
-      <UniqueIdentifier>{08b37896-b814-494f-b452-d161f6b6fd5d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Composable">
       <UniqueIdentifier>{294dabf2-fe2a-45a7-ab3b-451560d3f586}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scripts">
+      <UniqueIdentifier>{db2643f2-fd1b-4c62-8575-ee713d66fbee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scripts\Skills">
+      <UniqueIdentifier>{08b37896-b814-494f-b452-d161f6b6fd5d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -102,13 +102,13 @@
       <Filter>Source Files\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="SatelliteCreation.cpp">
-      <Filter>Source Files\Skills\Skills</Filter>
+      <Filter>Source Files\Scripts\Skills</Filter>
     </ClCompile>
     <ClCompile Include="Ultimate.cpp">
-      <Filter>Source Files\Skills\Skills</Filter>
+      <Filter>Source Files\Scripts\Skills</Filter>
     </ClCompile>
     <ClCompile Include="AOE.cpp">
-      <Filter>Source Files\Skills\Skills</Filter>
+      <Filter>Source Files\Scripts\Skills</Filter>
     </ClCompile>
     <ClCompile Include="Composable.cpp">
       <Filter>Source Files\Composable</Filter>

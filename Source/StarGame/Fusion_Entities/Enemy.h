@@ -35,8 +35,6 @@ namespace FusionEngine
 	class Enemy : public IEventListener, public Composable
 	{
 	private:
-		std::string name;
-
 		BehaviorState currentState;
 
 		glm::vec3 frontVector;
@@ -49,13 +47,10 @@ namespace FusionEngine
 		void UpdateAI();
 
 	public:
-		Enemy() {}
 		Enemy(const std::string &newName, float newSpeed, glm::vec3 newFrontVector);
 
 		void Update();
-
-		std::string GetID() { return name; }
-
+		
 		virtual bool HandleEvent(const FusionEngine::IEventData &eventData);
 	};
 }

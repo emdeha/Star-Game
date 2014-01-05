@@ -13,7 +13,7 @@ using namespace FusionEngine;
 
 
 Enemy::Enemy(const std::string &newName, float newSpeed, glm::vec3 newFrontVector)
-	: name(newName), speed(newSpeed), health(100), frontVector(newFrontVector), currentState(FE_STATE_IDLE) 
+	: Composable(newName), speed(newSpeed), health(100), frontVector(newFrontVector), currentState(FE_STATE_IDLE) 
 {
 	GetWorld().GetEventManager().AddListener(this, EVENT_ON_SKILL_APPLIED);
 }
@@ -37,14 +37,14 @@ bool Enemy::HandleEvent(const FusionEngine::IEventData &eventData)
 					glm::length(data.position - enemyTransformData->position) >= data.radius - 0.1f)
 				{
 					health -= data.damage;
-					std::printf("SUN NOVA: %i, %s", health, name.c_str());
+					std::printf("SUN NOVA: %i, %s", health, id.c_str());
 				}
 			}
 			else if (data.radius <= -1.0f ||
 					 glm::length(data.position - enemyTransformData->position) < data.radius)
 			{
 				health -= data.damage;
-				std::printf("CRITICAL: %i, %s", health, name.c_str());
+				std::printf("CRITICAL: %i, %s", health, id.c_str());
 			}
 		}
 		break;
@@ -118,7 +118,7 @@ void Enemy::Update()
 	if (health <= 0)
 	{
 		// Destroy
-		std::printf("KILLED IS ME!!! %s\n", name.c_str());
+		std::printf("KILLED IS ME!!! %s\n", id.c_str());
 	}
 
 	if (health > 0)

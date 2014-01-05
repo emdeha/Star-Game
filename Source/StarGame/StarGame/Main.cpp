@@ -185,108 +185,7 @@ void CreateSkills()
 	CreateSkill("aoe", "sun", "wqe", glm::vec3(), 10, 2.0f, 0, 0, FE::FE_SATELLITE_BAD, 
 				FE::AOE_OnClick, FE::AOE_OnFusionCompleted, FE::AOE_OnUpdate, true);
 }
-*//*
-void CreateSun()
-{
-	FE::AssetLoader<FE::MeshAssetObject> meshLoader;
-	meshLoader.RegisterType("mesh-files", new FE::MeshLoader());
-	FE::MeshAssetObject loadedMesh = meshLoader.LoadAssetObject("mesh-files", "sun.obj");
-
-	FE::Render *sunRender = new FE::Render();
-
-	auto meshEntries = loadedMesh.GetMeshEntries();
-	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
-	{
-		sunRender->mesh.AddEntry((*meshEntry));
-	}
-	auto textures = loadedMesh.GetTextures();
-	for(auto texture = textures.begin(); texture != textures.end(); ++texture)
-	{
-		sunRender->mesh.AddTexture((*texture));
-	}
-	sunRender->rendererType = FE::Render::FE_RENDERER_SIMPLE;
-	sunRender->shaderProgram = 
-		GetWorld().GetShaderManager().GetProgram(FE::FE_PROGRAM_SIMPLE).programId;
-	sunRender->vao = loadedMesh.vao;
-
-	GetScene().AddEntity("sun");
-	GetScene().AddComponent("sun", sunRender);
-
-	FE::Transform *sunTransform = new FE::Transform();
-	sunTransform->position = glm::vec3(0.0f, 0.0f, 0.0f);
-	sunTransform->rotation = glm::vec3();
-	sunTransform->scale = glm::vec3(0.5f);
-	GetScene().AddComponent("sun", sunTransform);
-
-	FE::Updatable *sunFuncComp = new FE::Updatable();
-	sunFuncComp->updatedObject = 
-		std::unique_ptr<FE::CelestialBody>(new FE::CelestialBody(FE::FE_CELESTIALBODY_SUN, 4, 0.5f, 0.0f));
-	/*static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_WATER, 'w', 'w', 'w', 0, 0)));
-	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_FIRE, 'q', 'q', 'q', 0, 0)));
-	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_AIR, 'q', 'w', 'e', 0, 0)));
-	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_EARTH, 'e', 'e', 'e', 0, 0)));
-	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::UltimateSkill('q', 'w', 'w', 0, 0)));
-	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::BurnSkill(10, 2.0f, 3.0f, 1.0f, 'w', 'e', 'e', 0, 0)));
-	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::AOESkill(10, 2.0f, 'w', 'q', 'e', 0, 0)));
-	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::PassiveAOESkill(10, 2.0f, 1.0f, 3.0f, 'w', 'e', 'q', 0, 0)));
-	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::SunNovaSkill(10, 4.0f, 0.05f, 'w', 'q', 'q', 0, 0)));*//*
-	GetScene().AddComponent("sun", sunFuncComp);
-	
-	FE::Collidable *sunCollidable = new FE::Collidable();
-	sunCollidable->isForCheck = false;
-	GetScene().AddComponent("sun", sunCollidable);
-
-	GetWorld().GetRenderer().SubscribeForRendering(GetScene().GetEntity("sun"));
-}
-
-void CreateEnemy(const std::string &name, glm::vec3 position)
-{
-	FE::AssetLoader<FE::MeshAssetObject> meshLoader;
-	meshLoader.RegisterType("mesh-files", new FE::MeshLoader());
-	FE::MeshAssetObject loadedMesh = meshLoader.LoadAssetObject("mesh-files", "spaceship.obj");
-
-	FE::Render *spaceshipRender = new FE::Render();
-
-	auto meshEntries = loadedMesh.GetMeshEntries();
-	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
-	{
-		spaceshipRender->mesh.AddEntry((*meshEntry));
-	}
-	auto textures = loadedMesh.GetTextures();
-	for(auto texture = textures.begin(); texture != textures.end(); ++texture)
-	{
-		spaceshipRender->mesh.AddTexture((*texture));
-	}
-	spaceshipRender->rendererType = FE::Render::FE_RENDERER_LIT;
-	spaceshipRender->shaderProgram = 
-		GetWorld().GetShaderManager().GetProgram(FE::FE_PROGRAM_LIT_TEXTURE).programId;
-	spaceshipRender->vao = loadedMesh.vao;
-
-	GetScene().AddEntity(name);
-	GetScene().AddComponent(name, spaceshipRender);
-
-	FE::Transform *spaceshipTransform = new FE::Transform();
-	spaceshipTransform->position = position; 
-	spaceshipTransform->rotation = glm::vec3();
-	spaceshipTransform->scale = glm::vec3(0.1f);
-	GetScene().AddComponent(name, spaceshipTransform);
-
-	FE::Updatable *spaceshipFuncComp = new FE::Updatable();
-	glm::vec3 frontVector = glm::normalize(glm::vec3() - position); // TODO: Make it relative to the sun
-	spaceshipFuncComp->updatedObject = std::unique_ptr<FE::Enemy>(new FE::Enemy(name, 0.02f, frontVector));
-	GetScene().AddComponent(name, spaceshipFuncComp);
-
-	GetWorld().GetRenderer().SubscribeForRendering(GetScene().GetEntity(name));
-}*/
+*/
 
 void InitializeScene()
 {
@@ -319,9 +218,7 @@ void InitializeScene()
 	glUniform1i(fontProgramData.GetUniform(FE::FE_UNIFORM_FONT_TEXTURE), 0);
     glUseProgram(0);
 
-
-	//GetScene().Init(GetWorld().GetEventManager());
-
+	
 	///////////////////////////////////////
 	GetWorld().SetFusionInput('f', 'q', 'w', 'e');
 	/*
@@ -338,18 +235,7 @@ void InitializeScene()
 	GetWorld().AddFusionSequence("satFrost",   'e', 'e', 'q');
 	GetWorld().AddFusionSequence("satChain",   'w', 'w', 'q');
 	*/
-	/*
-	FE::UpdateSystem *update =
-		new FE::UpdateSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
-	GetScene().AddSystem(update);
-	FE::CollisionSystem *click = 
-		new FE::CollisionSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
-	GetScene().AddSystem(click);
-
-	CreateSun();
-	CreateEnemy("spaceship1", glm::vec3(5.0f, 0.0f, 0.0f));
-	CreateEnemy("spaceship2", glm::vec3(0.0f, 0.0f, 6.0f));
-	CreateSkills();*/
+	/*CreateSkills();*/
 }
 
 

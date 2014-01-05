@@ -121,9 +121,11 @@ bool FusionInput::HandleEvent(const IEventData &eventData)
 /////////////
 //  Skill  //
 /////////////
-Skill::Skill(char fusionCombA, char fusionCombB, char fusionCombC,
+Skill::Skill(const std::string &newID,
+			 char fusionCombA, char fusionCombB, char fusionCombC,
 			 int newApplyCost, int newResearchCost)
-			  : applyCost(newApplyCost), researchCost(newResearchCost),
+			  : Composable(newID),
+				applyCost(newApplyCost), researchCost(newResearchCost),
 			    OnFusionCompleted(nullptr), OnClick(nullptr), OnUpdate(nullptr)
 {
 	fusionCombination[0] = fusionCombA;

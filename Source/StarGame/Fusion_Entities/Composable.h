@@ -20,9 +20,10 @@
 
 
 #pragma warning(push, 1)
+#include <sstream>
+#include <string>
 #include <memory>
 #include <map>
-#include <sstream>
 #pragma warning(pop)
 
 #include "../framework/ErrorAPI.h"
@@ -35,12 +36,19 @@ namespace FusionEngine
 	{
 	private:
 		std::map<unsigned int, std::shared_ptr<IComponent>> components;
+		
+	protected:
+		std::string id;
 
 	public:
+		Composable(const std::string &newID) 
+			: id(newID) {}
 		virtual ~Composable() {}
 
 		void AddComponent(unsigned int componentID, std::shared_ptr<IComponent> newComponent);
 		void RemoveComponent(unsigned int componentID);
+
+		std::string GetID() { return id; }
 
 		std::shared_ptr<IComponent> GetComponent(unsigned int componentID);
 	};

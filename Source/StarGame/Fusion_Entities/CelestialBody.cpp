@@ -86,6 +86,7 @@ float GetSatelliteOffset(CelestialBodyType satType)
 
 
 CelestialBody::CelestialBody() :
+	Composable(""),
 	maxSatelliteCount(0), currentSatelliteCount(1),
 	satellites(0), diameter(0.0f),
 	offsetFromSun(0.0f), currentRotationAngle(0.0f), angularVelocity(5.0f)
@@ -99,6 +100,7 @@ CelestialBody::CelestialBody() :
 CelestialBody::CelestialBody(CelestialBodyType newType,
 							 int newMaxSatelliteCount, float newDiameter, 
 							 float newOffsetFromSun) :
+	Composable(""),
 	type(newType),	
 	maxSatelliteCount(newMaxSatelliteCount), currentSatelliteCount(1),
 	satellites(0), diameter(newDiameter),
@@ -197,61 +199,16 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 
 	GetWorld().GetRenderer().SubscribeForRendering(newSat->GetID(), sunMesh);
 
-
-
-
-
-	//newSat->AddSkill(std::shared_ptr<Skill>(new ShieldSkill(1, 1.0f, 'q', 'w', 'q', 0, 0)));
-	//newSat->AddSkill(std::shared_ptr<Skill>(new FrostSkill(10, 2.0f, 0.05f, 'e', 'e', 'q', 0, 0)));
-	//std::shared_ptr<Skill> chainSkill = std::shared_ptr<Skill>(new ChainSkill(10, 2.0f, 0.05f, 'w', 'w', 'q', 0, 0)); 
-	//chainSkill->Activate(newSat.get());
-	//newSat->AddSkill(chainSkill);
-
-    //FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
-	//meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());	
-	//FusionEngine::MeshAssetObject loadedMesh = 
-	//	meshLoader.LoadAssetObject("mesh-files", GetSatMesh(satType));
-	
-	//FusionEngine::Render *satRender = new FusionEngine::Render();
-	/*
-	std::vector<std::shared_ptr<FusionEngine::MeshEntry>> meshEntries = loadedMesh.GetMeshEntries();
-	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
-	{
-		satRender->mesh.AddEntry((*meshEntry));
-	}
-	std::vector<std::shared_ptr<Texture2D>> textures = loadedMesh.GetTextures();
-	for(auto texture = textures.begin(); texture != textures.end(); ++texture)
-	{
-		satRender->mesh.AddTexture((*texture));
-	}
-	satRender->rendererType = Render::FE_RENDERER_LIT;
-	satRender->shaderProgram = 
-		World::GetWorld().GetShaderManager().GetProgram(FusionEngine::FE_PROGRAM_LIT_TEXTURE).programId;
-	satRender->vao = loadedMesh.vao;
-
-	GetScene().AddEntity(newSat->GetID());
-	GetScene().AddComponent(newSat->GetID(), satRender);
-
-	FusionEngine::Transform *satTransform = new FusionEngine::Transform();
-	satTransform->position = glm::vec3();
-	satTransform->rotation = glm::vec3();
-	satTransform->scale = glm::vec3(newSat->diameter);
-	GetScene().AddComponent(newSat->GetID(), satTransform);
-
-	World::GetWorld().GetRenderer().SubscribeForRendering(GetScene().GetEntity(newSat->GetID()));
-
-	this->currentSatelliteCount++;
-	*/
 	return true;
 }
-/*
-bool CelestialBody::AddSkill(const std::shared_ptr<Skill> newSkill)
+
+bool CelestialBody::AddSkill(const std::string &skillName, const std::shared_ptr<Skill> newSkill)
 {
 	skills.push_back(newSkill);
-	GetWorld().AddFusionSequence(newSkill->GetFusionCombination());
+	GetWorld().AddFusionSequence(skillName, newSkill->GetFusionCombination());
 
 	return true;
-}*/
+}
 
 void CelestialBody::Update()
 {
@@ -278,43 +235,25 @@ void CelestialBody::Update()
 			satTransform->position = glm::vec3(offset, 0.0f, offset);
 			satTransform->position = glm::vec3(relativeTransformStack.Top() * glm::vec4(satTransform->position, 1.0f));
 		}
+
+		(*satellite)->Update(); // Or maybe just update sat skills here.
 	}
 
-	/*
-	//FusionEngine::ComponentMapper<FusionEngine::Transform> transformData =
-	//	GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity("sun"), FusionEngine::CT_TRANSFORM);
-
-	for(auto satellite = this->satellites.begin(); satellite != this->satellites.end(); ++satellite)
-	{
-		// TODO: Get entity by id
-		//FusionEngine::ComponentMapper<FusionEngine::Transform> satTransformData =
-		//	GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity((*satellite)->GetID()), FusionEngine::CT_TRANSFORM);
-
-		
-		glutil::MatrixStack relativeTransformStack;
-		//relativeTransformStack.Translate(transformData[0]->position);
-		relativeTransformStack.RotateY((*satellite)->currentRotationAngle);
-		(*satellite)->currentRotationAngle += (*satellite)->angularVelocity * World::GetWorld().interpolation;
-		if ((*satellite)->currentRotationAngle >= 360.0f)
-		{
-			(*satellite)->currentRotationAngle -= 360.0f;
-		}
-		float offset = (*satellite)->offsetFromSun;
-		//satTransformData[0]->position = glm::vec3(offset, 0.0f, offset);
-		
-		//satTransformData[0]->position = 
-		//	glm::vec3(relativeTransformStack.Top() * glm::vec4(satTransformData[0]->position, 1.0f));
-		
-		// Skill Update
-		for (auto skill = (*satellite)->skills.begin(); skill != (*satellite)->skills.end(); ++skill)
-		{
-			(*skill)->Update();
-		}
-	}
-	
 	for (auto skill = skills.begin(); skill != skills.end(); ++skill)
 	{
 		(*skill)->Update();
 	}
-	*/
+}
+
+std::vector<std::shared_ptr<Skill>> CelestialBody::GetAllSkills()
+{
+	std::vector<std::shared_ptr<Skill>> skillsToReturn(skills);
+	
+	for (auto sat = satellites.begin(); sat != satellites.end(); ++sat)
+	{
+		auto satSkills = (*sat)->GetAllSkills();
+		skillsToReturn.insert(skillsToReturn.begin(), satSkills.begin(), satSkills.end());
+	}
+
+	return skillsToReturn;
 }

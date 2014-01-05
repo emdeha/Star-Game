@@ -49,8 +49,7 @@ namespace FusionEngine
 	{
 	private:
 		std::vector<std::shared_ptr<CelestialBody>> satellites;
-		//std::vector<std::shared_ptr<Skill>> skills;
-		std::string id; // TODO: replace with ints
+		std::vector<std::shared_ptr<Skill>> skills;
 
 		CelestialBodyType type;
 
@@ -70,12 +69,12 @@ namespace FusionEngine
 		~CelestialBody();
 
 		bool AddSatellite(CelestialBodyType satType);
-		//bool AddSkill(const std::shared_ptr<Skill> newSkill);
+		bool AddSkill(const std::string &skillName, const std::shared_ptr<Skill> newSkill);
 
 		void Update();
 
-		std::string GetID() { return id; }
-		//std::vector<std::shared_ptr<Skill>> GetSkills() { return skills; }
+		std::vector<std::shared_ptr<Skill>> GetSkills() { return skills; }
+		std::vector<std::shared_ptr<Skill>> GetAllSkills();
 		std::vector<std::shared_ptr<CelestialBody>> GetSatellites() { return satellites; }
 
 		virtual bool HandleEvent(const IEventData &eventData);

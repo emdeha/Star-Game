@@ -5,6 +5,7 @@
 #include "../Fusion_GUI/ControlEvents.h"
 #include "../Fusion_Entities/CelestialBody.h"
 #include "../Fusion_Entities/Components.h"
+#include "../Fusion_Entities/Scripts.h"
 
 using namespace FusionEngine;
 
@@ -124,6 +125,10 @@ void World::Load(const std::string &guiLayoutFile,
 	CreateSun();
 	CreateEnemy("spaceship1", glm::vec3(0.0f, 0.0f, 6.0f));
 	CreateEnemy("spaceship2", glm::vec3(4.0f, 0.0f, 0.0f));
+
+	// Skill
+	//std::shared_ptr<Skill> waterSat = std::shared_ptr<Skill>(new Skill("waterSat", 'w', 'w', 'w', 0, 0));
+	//waterSat->SetOnFusionCompletedCallback(SatelliteCreation_OnFusionCompleted);
 }
 
 void World::ReloadGUI(const std::string &guiLayoutFile)
@@ -326,6 +331,15 @@ std::shared_ptr<IComponent> World::GetComponentForObject(const std::string &id, 
 			if ((*sat)->GetID() == id)
 			{
 				return (*sat)->GetComponent(componentID);
+			}
+		}
+
+		auto allSkills = sun->GetAllSkills();
+		for (auto skill = allSkills.begin(); skill != allSkills.end(); ++skill)
+		{
+			if ((*skill)->GetID() == id)
+			{
+				return (*skill)->GetComponent(componentID);
 			}
 		}
 

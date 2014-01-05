@@ -29,8 +29,7 @@
 
 #include "../Fusion_EventManager/EventManager.h"
 #include "../Fusion_EventManager/Event.h"
-#include "Skills.h"
-#include "IUpdatable.h"
+#include "Skill.h"
 #include "Composable.h"
 
 
@@ -46,7 +45,7 @@ namespace FusionEngine
 		FE_SUN,
 	};
 
-	class CelestialBody : public IEventListener, public IUpdatable, public Composable
+	class CelestialBody : public IEventListener, public Composable
 	{
 	private:
 		std::vector<std::shared_ptr<CelestialBody>> satellites;

@@ -63,14 +63,8 @@
     <ClInclude Include="CelestialBody.h">
       <Filter>Header Files\Solar System</Filter>
     </ClInclude>
-    <ClInclude Include="Skills.h">
-      <Filter>Header Files\Solar System</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>Header Files\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="IUpdatable.h">
-      <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="SatelliteCreation.h">
       <Filter>Header Files\Scripts\Skills</Filter>
@@ -93,15 +87,15 @@
     <ClInclude Include="Composable.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Skill.h">
+      <Filter>Header Files\Solar System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CelestialBody.cpp">
-      <Filter>Source Files\Solar System</Filter>
-    </ClCompile>
-    <ClCompile Include="Skills.cpp">
       <Filter>Source Files\Solar System</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
@@ -118,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="Composable.cpp">
       <Filter>Source Files\Composable</Filter>
+    </ClCompile>
+    <ClCompile Include="Skill.cpp">
+      <Filter>Source Files\Solar System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

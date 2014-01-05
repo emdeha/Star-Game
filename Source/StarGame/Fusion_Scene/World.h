@@ -23,7 +23,7 @@
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Fusion_Renderer/ShaderManager.h"
 #include "../Fusion_GUI/Layout.h"
-#include "../Fusion_Entities/Skills.h"
+#include "../Fusion_Entities/Skill.h"
 #include "../Fusion_Entities/CelestialBody.h"
 #include "../Fusion_Entities/Enemy.h"
 
@@ -88,6 +88,10 @@ namespace FusionEngine
 		World(const World&);
 		World& operator=(const World&);
 		~World();
+
+		void CreateSun();
+		void CreateEnemy(const std::string &enemyID, glm::vec3 position);
+		void CreateSkill(const std::string &skillID);
 
 	public:
 		float interpolation;

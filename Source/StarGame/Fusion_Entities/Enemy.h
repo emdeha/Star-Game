@@ -27,13 +27,12 @@
 
 #include "../Fusion_EventManager/EventManager.h"
 #include "States.h"
-#include "IUpdatable.h"
 #include "Composable.h"
 
 
 namespace FusionEngine
 {
-	class Enemy : public IEventListener, public IUpdatable, public Composable
+	class Enemy : public IEventListener, public Composable
 	{
 	private:
 		std::string name;

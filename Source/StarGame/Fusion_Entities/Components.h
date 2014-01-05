@@ -29,9 +29,6 @@
 
 namespace FusionEngine
 {
-	const unsigned int FE_COMPONENT_RENDER = 0;
-	const unsigned int FE_COMPONENT_TRANSFORM = 1;
-
 	class RenderComponent : public IComponent
 	{
 	public:

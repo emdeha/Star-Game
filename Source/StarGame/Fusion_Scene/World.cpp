@@ -127,8 +127,8 @@ void World::Load(const std::string &guiLayoutFile,
 	CreateEnemy("spaceship2", glm::vec3(4.0f, 0.0f, 0.0f));
 
 	// Skill
-	//std::shared_ptr<Skill> waterSat = std::shared_ptr<Skill>(new Skill("waterSat", 'w', 'w', 'w', 0, 0));
-	//waterSat->SetOnFusionCompletedCallback(SatelliteCreation_OnFusionCompleted);
+	std::shared_ptr<Skill> waterSat = std::shared_ptr<Skill>(new Skill("waterSat", 'w', 'w', 'w', 0, 0));
+	waterSat->SetOnFusionCompletedCallback(SatelliteCreation_OnFusionCompleted);
 }
 
 void World::ReloadGUI(const std::string &guiLayoutFile)
@@ -317,7 +317,7 @@ std::string World::GetActiveSkillName() const
 	else return "";
 }
 
-std::shared_ptr<IComponent> World::GetComponentForObject(const std::string &id, unsigned int componentID)
+std::shared_ptr<IComponent> World::GetComponentForObject(const std::string &id, ComponentType componentID)
 {
 	if (id == "sun")
 	{

@@ -35,7 +35,7 @@ namespace FusionEngine
 	class Composable
 	{
 	private:
-		std::map<unsigned int, std::shared_ptr<IComponent>> components;
+		std::map<ComponentType, std::shared_ptr<IComponent>> components;
 		
 	protected:
 		std::string id;
@@ -45,12 +45,12 @@ namespace FusionEngine
 			: id(newID) {}
 		virtual ~Composable() {}
 
-		void AddComponent(unsigned int componentID, std::shared_ptr<IComponent> newComponent);
-		void RemoveComponent(unsigned int componentID);
+		void AddComponent(ComponentType componentID, std::shared_ptr<IComponent> newComponent);
+		void RemoveComponent(ComponentType componentID);
 
 		std::string GetID() { return id; }
 
-		std::shared_ptr<IComponent> GetComponent(unsigned int componentID);
+		std::shared_ptr<IComponent> GetComponent(ComponentType componentID);
 	};
 }
 

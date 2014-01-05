@@ -142,7 +142,7 @@ namespace FusionEngine
 
 
 		// Components
-		std::shared_ptr<IComponent> GetComponentForObject(const std::string &id, unsigned int componentID);
+		std::shared_ptr<IComponent> GetComponentForObject(const std::string &id, ComponentType componentID);
 
 		std::shared_ptr<CelestialBody> GetSun() { return sun; }
 	};

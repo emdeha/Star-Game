@@ -20,7 +20,14 @@
 
 
 namespace FusionEngine
-{
+{	
+	enum ComponentType
+	{
+		FE_COMPONENT_RENDER,
+		FE_COMPONENT_TRANSFORM,
+		FE_COMPONENT_SKILL_SATELLITE_CREATION,
+	};
+
 	class IComponent 
 	{
 	public:

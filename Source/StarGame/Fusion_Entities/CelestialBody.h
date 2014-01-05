@@ -44,7 +44,7 @@ namespace FusionEngine
 
 		FE_SUN,
 
-		FE_BAD = -1,
+		FE_CELESTIAL_BODY_BAD = -1,
 	};
 
 	class CelestialBody : public IEventListener, public Composable

@@ -65,6 +65,19 @@ namespace FusionEngine
 
 		virtual ~SkillSatelliteCreationComponent() {}
 	};
+
+	class SkillGenericComponent : public IComponent
+	{
+	public:
+		int damage;
+		float range;
+
+		bool isActive;
+		bool isDeployed;
+
+		virtual ~SkillGenericComponent() {}
+	};
+
 	
 	struct Material
 	{

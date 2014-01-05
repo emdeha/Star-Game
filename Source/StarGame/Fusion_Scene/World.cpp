@@ -74,6 +74,7 @@ void World::CreateEnemy(const std::string &enemyID, glm::vec3 position)
 }
 
 void World::CreateSkill(const std::string &skillID, const std::string &skillFusionCombination,
+						bool hasGeneric, int damage, float range, glm::vec3 position,
 						CelestialBodyType bodyToCreate,
 						OnEventFunc skillOnClick, OnEventFunc skillOnFusionCompleted, OnUpdateFunc skillOnUpdate)
 {
@@ -95,7 +96,25 @@ void World::CreateSkill(const std::string &skillID, const std::string &skillFusi
 		newSkill->SetOnUpdateCallback(skillOnUpdate);
 	}
 
-	if (bodyToCreate != FE_BAD)
+	if (hasGeneric)
+	{
+		std::shared_ptr<SkillGenericComponent> newGeneric = std::make_shared<SkillGenericComponent>();
+		newGeneric->damage = damage;
+		newGeneric->range = range;
+		newGeneric->isActive = false;
+		newGeneric->isDeployed = false;
+
+		newSkill->AddComponent(FE_COMPONENT_SKILL_GENERIC, newGeneric);
+
+		std::shared_ptr<TransformComponent> newTransform = std::make_shared<TransformComponent>();
+		newTransform->position = position;
+		newTransform->scale = glm::vec3();
+		newTransform->rotation = glm::vec3();
+
+		newSkill->AddComponent(FE_COMPONENT_TRANSFORM, newTransform);
+	}
+
+	if (bodyToCreate != FE_CELESTIAL_BODY_BAD)
 	{
 		std::shared_ptr<SkillSatelliteCreationComponent> newSatCreation = 
 			std::make_shared<SkillSatelliteCreationComponent>();
@@ -153,10 +172,17 @@ void World::Load(const std::string &guiLayoutFile,
 	CreateEnemy("spaceship2", glm::vec3(4.0f, 0.0f, 0.0f));
 
 	// Skills
-	CreateSkill("waterSat", "www", FE_WATER_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
-	CreateSkill("airSat", "qqq", FE_AIR_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
-	CreateSkill("fireSat", "qwe", FE_FIRE_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
-	CreateSkill("earthSat", "eee", FE_EARTH_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
+	CreateSkill("waterSat", "www", false, 0, 0.0f, glm::vec3(),
+				FE_WATER_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
+	CreateSkill("airSat", "qqq",  false, 0, 0.0f, glm::vec3(),
+				FE_AIR_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
+	CreateSkill("fireSat", "qwe",  false, 0, 0.0f, glm::vec3(),
+				FE_FIRE_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
+	CreateSkill("earthSat", "eee",  false, 0, 0.0f, glm::vec3(),
+				FE_EARTH_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
+
+	CreateSkill("ult", "ewq", true, 300, -1.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
+				nullptr, Ultimate_OnFusionCompleted, nullptr);
 }
 
 void World::ReloadGUI(const std::string &guiLayoutFile)

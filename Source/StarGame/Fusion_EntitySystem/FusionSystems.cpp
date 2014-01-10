@@ -53,9 +53,7 @@ void SkillSystem::ProcessEntity(EntityManager *manager, Entity *entity)
 	if (skillData[0]->OnUpdate)
 	{
 		skillData[0]->OnUpdate(manager, entity);
-		std::cout << "OnUpdate Skill Called" << std::endl;
 	}
-	std::cout << "Processing Skills" << std::endl;
 }
 
 bool SkillSystem::HandleEvent(const IEventData &eventData)

@@ -88,6 +88,8 @@ namespace FusionEngine
 		World& operator=(const World&);
 		~World();
 
+		void CreateSun();
+
 	public:
 		float interpolation;
 

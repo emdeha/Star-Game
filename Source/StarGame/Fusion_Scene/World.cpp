@@ -4,6 +4,7 @@
 #include "../Fusion_EventManager/EntityEvents.h"
 #include "../Fusion_GUI/ControlEvents.h"
 #include "../Fusion_Entities/CelestialBody.h"
+#include "../Fusion_Entities/Components.h"
 
 using namespace FusionEngine;
 
@@ -16,6 +17,32 @@ World::World()
 
 World::~World()
 {
+}
+
+void World::CreateSun()
+{
+	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
+	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
+
+	FusionEngine::MeshAssetObject sunMesh = meshLoader.LoadAssetObject("mesh-files", "sun.obj");
+	
+	sun = std::make_shared<CelestialBody>(FE_SUN, 4, 0.5f, 0.0f);
+
+	std::shared_ptr<FusionEngine::RenderComponent> sunRenderComponent = std::make_shared<RenderComponent>();
+	sunRenderComponent->vao = sunMesh.vao;
+	sunRenderComponent->shaderProgramID = shaderManager.GetProgram(FE_PROGRAM_SIMPLE).programId;
+	sunRenderComponent->renderType = RenderComponent::FE_RENDERER_SIMPLE;
+	
+	sun->AddComponent(FE_COMPONENT_RENDER, sunRenderComponent);
+
+	std::shared_ptr<FusionEngine::TransformComponent> sunTransformComponent = std::make_shared<TransformComponent>();
+	sunTransformComponent->position = glm::vec3();
+	sunTransformComponent->scale = glm::vec3(0.5f);
+	sunTransformComponent->rotation = glm::vec3();
+
+	sun->AddComponent(FE_COMPONENT_TRANSFORM, sunTransformComponent);
+
+	renderer.SubscribeForRendering("sun", sunMesh);
 }
 
 void World::Load(const std::string &guiLayoutFile,
@@ -58,6 +85,9 @@ void World::Load(const std::string &guiLayoutFile,
 #endif
 	
 	// Load Cheats
+
+	// Create Test Entities
+	CreateSun();
 }
 
 void World::ReloadGUI(const std::string &guiLayoutFile)
@@ -184,7 +214,7 @@ std::string World::GetActiveSkillName() const
 {
 	if (fusionInput->GetCurrentInputSequence().length() > 0)
 	{
-			return fusionInput->GetSequenceName(fusionInput->GetCurrentInputSequence());
+		return fusionInput->GetSequenceName(fusionInput->GetCurrentInputSequence());
 	}
 	else return "";
 }
@@ -193,35 +223,35 @@ std::shared_ptr<IComponent> World::GetComponentForObject(const std::string &id, 
 {
 	if (id == "sun")
 	{
-			return sun->GetComponent(componentID);
+		return sun->GetComponent(componentID);
 	}
 	else
 	{
-			auto sunSats = sun->GetSatellites();
-			for (auto sat = sunSats.begin(); sat != sunSats.end(); ++sat)
+		auto sunSats = sun->GetSatellites();
+		for (auto sat = sunSats.begin(); sat != sunSats.end(); ++sat)
+		{
+			if ((*sat)->GetID() == id)
 			{
-					if ((*sat)->GetID() == id)
-					{
-							return (*sat)->GetComponent(componentID);
-					}
+				return (*sat)->GetComponent(componentID);
 			}
+		}
 
-			auto allSkills = sun->GetAllSkills();
-			for (auto skill = allSkills.begin(); skill != allSkills.end(); ++skill)
+		auto allSkills = sun->GetAllSkills();
+		for (auto skill = allSkills.begin(); skill != allSkills.end(); ++skill)
+		{
+			if ((*skill)->GetID() == id)
 			{
-					if ((*skill)->GetID() == id)
-					{
-							return (*skill)->GetComponent(componentID);
-					}
+				return (*skill)->GetComponent(componentID);
 			}
+		}
 
-			for (auto enemy = enemies.begin(); enemy != enemies.end(); ++enemy)
+		for (auto enemy = enemies.begin(); enemy != enemies.end(); ++enemy)
+		{
+			if ((*enemy)->GetID() == id)
 			{
-					if ((*enemy)->GetID() == id)
-					{
-							return (*enemy)->GetComponent(componentID);
-					}
+				return (*enemy)->GetComponent(componentID);
 			}
+		}
 	}
 
 	std::ostringstream errorMsg;

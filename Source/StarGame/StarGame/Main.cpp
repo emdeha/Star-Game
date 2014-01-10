@@ -219,11 +219,11 @@ void Init()
     glDepthRange(depthZNear, depthZFar);
     glEnable(GL_DEPTH_CLAMP);
 
-    //GLuint lightUniformBuffer = 0;
-    //glGenBuffers(1, &lightUniformBuffer);
-    //GetWorld().GetShaderManager().SetUniformBuffer(FE::FE_UBT_LIGHT, lightUniformBuffer);
-    //glBindBuffer(GL_UNIFORM_BUFFER, lightUniformBuffer);
-    //glBufferData(GL_UNIFORM_BUFFER, sizeof(LightBlockGamma), NULL, GL_DYNAMIC_DRAW);
+    GLuint lightUniformBuffer = 0;
+    glGenBuffers(1, &lightUniformBuffer);
+    GetWorld().GetShaderManager().SetUniformBuffer(FE::FE_UBT_LIGHT, lightUniformBuffer);
+    glBindBuffer(GL_UNIFORM_BUFFER, lightUniformBuffer);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(LightBlockGamma), NULL, GL_DYNAMIC_DRAW);
 
     GLuint projectionUniformBuffer = 0;
     glGenBuffers(1, &projectionUniformBuffer);
@@ -238,8 +238,8 @@ void Init()
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 
     // Bind the static buffers.
-	//glBindBufferRange(GL_UNIFORM_BUFFER, GetWorld().GetShaderManager().GetBlockIndex(FE::FE_BT_LIGHT), 
-	//					lightUniformBuffer, 0, sizeof(LightBlockGamma));
+	glBindBufferRange(GL_UNIFORM_BUFFER, GetWorld().GetShaderManager().GetBlockIndex(FE::FE_BT_LIGHT), 
+					  lightUniformBuffer, 0, sizeof(LightBlockGamma));
 
     glBindBufferRange(GL_UNIFORM_BUFFER, GetWorld().GetShaderManager().GetBlockIndex(FE::FE_BT_PROJECTION), 
 					  projectionUniformBuffer, 0, sizeof(glm::mat4));
@@ -270,6 +270,7 @@ void Display()
 	int loops = 0;
 	while (GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
 	{
+		GetWorld().Update();
 	    HandleMouse();
 	
 		nextGameTick += SKIP_TICKS;

@@ -57,7 +57,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>..\Assimp\lib\x86\release\assimp.lib;..\AssetLoader\yaml-cpp\lib\debug\libyaml-cppmdd.lib;..\Fusion_AssetLoader\yaml-cpp\lib\debug\libyaml-cppmdd.lib;..\freeimage\FreeImaged.lib;..\freetype\freetype2410_D.lib;..\framework\lib\frameworkD.lib;..\fmod\fmodexL_vc.lib;..\glsdk\glload\glloadD.lib;..\glsdk\glimg\glimgD.lib;..\glsdk\glutil\glutilD.lib;..\glsdk\glmesh\glmeshD.lib;..\glsdk\freeglut\freeglutD.lib;glu32.lib;opengl32.lib;gdi32.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\Assimp\lib\x86\release\assimp.lib;..\Fusion_AssetLoader\yaml-cpp\lib\debug\libyaml-cppmdd.lib;..\freeimage\FreeImaged.lib;..\freetype\freetype2410_D.lib;..\framework\lib\frameworkD.lib;..\fmod\fmodexL_vc.lib;..\glsdk\glload\glloadD.lib;..\glsdk\glimg\glimgD.lib;..\glsdk\glutil\glutilD.lib;..\glsdk\glmesh\glmeshD.lib;..\glsdk\freeglut\freeglutD.lib;glu32.lib;opengl32.lib;gdi32.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\assimp\lib;..\glsdk\glload\lib;..\glsdk\glimg\lib;..\glsdk\glutil\lib;..\glsdk\glmesh\lib;..\glsdk\freeglut\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -77,19 +77,17 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>..\Assimp\lib\x86\release\assimp.lib;..\AssetLoader\yaml-cpp\lib\release\libyaml-cppmd.lib;..\Fusion_AssetLoader\yaml-cpp\lib\release\libyaml-cppmd.lib;..\freeimage\FreeImage.lib;..\freetype\freetype2410.lib;..\framework\lib\framework.lib;..\fmod\fmodex_vc.lib;..\glsdk\glload\glload.lib;..\glsdk\glimg\glimg.lib;..\glsdk\glutil\glutil.lib;..\glsdk\glmesh\glmesh.lib;..\glsdk\freeglut\freeglut.lib;glu32.lib;opengl32.lib;gdi32.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\Assimp\lib\x86\release\assimp.lib;..\Fusion_AssetLoader\yaml-cpp\lib\release\libyaml-cppmd.lib;..\freeimage\FreeImage.lib;..\freetype\freetype2410.lib;..\framework\lib\framework.lib;..\fmod\fmodex_vc.lib;..\glsdk\glload\glload.lib;..\glsdk\glimg\glimg.lib;..\glsdk\glutil\glutil.lib;..\glsdk\glmesh\glmesh.lib;..\glsdk\freeglut\freeglut.lib;glu32.lib;opengl32.lib;gdi32.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\assimp\lib;..\glsdk\glload\lib;..\glsdk\glimg\lib;..\glsdk\glutil\lib;..\glsdk\glmesh\lib;..\glsdk\freeglut\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="ShaderManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioEnums.h" />
     <ClInclude Include="DisplayData.h" />
     <ClInclude Include="Main.h" />
-    <ClInclude Include="ShaderManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Audio\Audio.vcxproj">
@@ -98,20 +96,14 @@
     <ProjectReference Include="..\Camera\Camera.vcxproj">
       <Project>{4abdf53a-0e59-4a3a-bb81-53affdea813b}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Entities\Entities.vcxproj">
-      <Project>{0e2397ac-13f2-4a38-92c7-8fd02a24c17e}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Fusion\Fusion.vcxproj">
-      <Project>{a35d6336-e27f-47c8-bd8c-356f97dc2846}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\Fusion_AssetLoader\Fusion_AssetLoader.vcxproj">
       <Project>{9ca9cc8a-1f25-4d48-9d6a-623a6f8061cc}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Fusion_Entities\Fusion_Entities.vcxproj">
       <Project>{6ea21665-7fff-4460-b1b4-6551fd606e3e}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Fusion_EntitySystem\Fusion_EntitySystem.vcxproj">
-      <Project>{46033b29-5b2c-49e1-9f18-58199443d50d}</Project>
+    <ProjectReference Include="..\Fusion_EventManager\Fusion_EventManager.vcxproj">
+      <Project>{94d2ea26-ac3c-43ee-bea7-85e2299fc2ea}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Fusion_GUI\Fusion_GUI.vcxproj">
       <Project>{0e11d5e3-c942-4a72-ad11-059a8a6867ce}</Project>
@@ -122,20 +114,11 @@
     <ProjectReference Include="..\Fusion_Scene\Fusion_Scene.vcxproj">
       <Project>{7984709a-7392-4fe3-8590-e38677208bd8}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\GUISystem\GUISystem.vcxproj">
-      <Project>{06dbbf6b-b713-4370-bee5-c2810cf7026d}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\Mouse\Mouse.vcxproj">
       <Project>{854d03a0-f808-4790-aab3-a1842b8dfeed}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\ParticleEngine\ParticleEngine.vcxproj">
-      <Project>{2e742ce0-402c-476e-8974-bad3f5967057}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\ProgramData\ProgramData.vcxproj">
       <Project>{b5f4f13f-30dc-4003-b0ee-64718ed4b5ec}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Scene\Scene.vcxproj">
-      <Project>{b8817648-5808-4483-b39d-55ad9c180086}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

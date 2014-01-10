@@ -25,7 +25,7 @@
 
 #include "../glsdk/glm/glm.hpp"
 
-#include "../Fusion_EntitySystem/EventManager.h"
+#include "../Fusion_EventManager/EventManager.h"
 #include "States.h"
 #include "IUpdatable.h"
 

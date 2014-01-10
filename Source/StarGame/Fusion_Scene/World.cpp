@@ -1,12 +1,9 @@
 #include "stdafx.h"
 #include "World.h"
 
-#include "../Fusion_EntitySystem/EntityEvents.h"
-#include "../Fusion_EntitySystem/ComponentMapper.h"
-#include "../Fusion_EntitySystem/FusionComponents.h"
+#include "../Fusion_EventManager/EntityEvents.h"
 #include "../Fusion_GUI/ControlEvents.h"
 #include "../Fusion_Entities/CelestialBody.h"
-#include "Scene.h"
 
 using namespace FusionEngine;
 
@@ -89,7 +86,7 @@ void World::Render()
 			
 			if ((*layout).first == FE_LAYOUT_GAME)
 			{
-				sunLight.Render(displayData.modelMatrix, shaderManager);
+				//sunLight.Render(displayData.modelMatrix, shaderManager);
 				renderer.Render(displayData.modelMatrix);
 				/*
 				// | This is one ugly motherfucker |

@@ -26,7 +26,7 @@
 #pragma warning(pop)
 
 #include "../framework/Utility.h"
-#include "../Fusion_EntitySystem/EventManager.h"
+#include "../Fusion_EventManager/EventManager.h"
 
 
 namespace FusionEngine

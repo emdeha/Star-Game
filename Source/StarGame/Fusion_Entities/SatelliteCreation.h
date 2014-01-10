@@ -19,7 +19,7 @@
 #define FE_SATELLITE_CREATION
 
 
-#include "../Fusion_EntitySystem/EntityEvents.h"
+#include "../Fusion_EventManager/EntityEvents.h"
 
 
 namespace FusionEngine

@@ -24,7 +24,7 @@
 #include <map>
 #pragma warning(pop)
 
-#include "../Fusion_EntitySystem/EventManager.h"
+#include "../Fusion_EventManager/EventManager.h"
 #include "../Fusion_Renderer/Sprite.h"
 #include "../Fusion_GUI/Text.h"
 

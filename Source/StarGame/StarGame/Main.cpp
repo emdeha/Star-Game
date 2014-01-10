@@ -30,15 +30,11 @@
 #include <iostream>
 
 #include "Main.h"
-#include "ShaderManager.h"
 #include "DisplayData.h"
 #include "../framework/ErrorAPI.h"
 #pragma warning(pop)
 
-#include "../Fusion_Scene/Scene.h"
 #include "../Fusion_Scene/World.h"
-#include "../Fusion_EntitySystem/FusionComponents.h"
-#include "../Fusion_EntitySystem/FusionSystems.h"
 #include "../Fusion_AssetLoader/AssetLoader.h"
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Fusion_Renderer/ShaderEnums.h"
@@ -59,12 +55,12 @@ long long GetCurrentTimeMillis()
 
 void HandleMouse()
 {
-	unsigned int entityIndex = GetScene().GetEntity("sun")->GetIndex();
-	FE::ComponentMapper<FE::Collidable> collidableData = 
-		GetScene().GetEntityManager()->GetComponentList(entityIndex, FE::CT_COLLISION);
+	//unsigned int entityIndex = GetScene().GetEntity("sun")->GetIndex();
+	//FE::ComponentMapper<FE::Collidable> collidableData = 
+	//	GetScene().GetEntityManager()->GetComponentList(entityIndex, FE::CT_COLLISION);
 	if (GetWorld().GetMouse().IsLeftButtonDown())
 	{
-		collidableData[0]->isForCheck = true;
+		//collidableData[0]->isForCheck = true;
 
 		auto guiLayouts = GetWorld().GetLayouts();
 		for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
@@ -80,15 +76,15 @@ void HandleMouse()
 				}
 			}
 
-			if ((*layout).first == FE::FE_LAYOUT_GAME)
-			{
-				GetWorld().GetEventManager().FireEvent(FE::OnClickEvent(FE::EVENT_ON_CLICK, true, "skill"));
-			}
+			//if ((*layout).first == FE::FE_LAYOUT_GAME)
+			//{
+			//	GetWorld().GetEventManager().FireEvent(FE::OnClickEvent(FE::EVENT_ON_CLICK, true, "skill"));
+			//}
 		}
 	}
 	else
 	{
-		collidableData[0]->isForCheck = false;
+		//collidableData[0]->isForCheck = false;
 	}
 
 	GetWorld().GetMouse().ReleaseLeftButton();
@@ -123,183 +119,15 @@ void HandlePassiveMovement(int x, int y)
 	GetWorld().GetMouse().SetCurrentPosition(glm::ivec2(x, y));
 }
 
-void CreateSkill(const std::string &skillName, const std::string &holderID, const std::string &fusionCombination, 
-				 glm::vec3 position, int damage, float range, int applyCost, int researchCost, 
-				 FE::CelestialBodyType satType = FE::FE_SATELLITE_BAD, 
-				 FE::Skill::OnEventFunc OnClickFunc = nullptr, FE::Skill::OnEventFunc OnFusionCompletedFunc = nullptr,
-				 FE::Skill::OnUpdateFunc OnUpdateFunc = nullptr, bool addSelector = false)
-{
-	GetScene().AddEntity(skillName);
-	FE::Skill *newSkill = new FE::Skill();
-	newSkill->skillHolderID = holderID;
-	newSkill->fusionCombination = fusionCombination;
-	newSkill->damage = damage;
-	newSkill->range = range;
-	newSkill->applyCost = applyCost;
-	newSkill->researchCost = researchCost;
-	newSkill->isActive = false;
-	newSkill->isDeployed = false;
-	if (OnClickFunc)
-		newSkill->OnClick = OnClickFunc;
-	if (OnFusionCompletedFunc)
-		newSkill->OnFusionCompleted = OnFusionCompletedFunc;
-	if (OnUpdateFunc)
-		newSkill->OnUpdate = OnUpdateFunc;
-	GetScene().AddComponent(skillName, newSkill);
-
-	if (satType != FE::FE_SATELLITE_BAD)
-	{
-		FE::SatelliteCreation *satCreation = new FE::SatelliteCreation();
-		satCreation->satType = satType;
-		GetScene().AddComponent(skillName, satCreation);
-	}
-	if (addSelector)
-	{
-		FE::SelectorAppliedSkill *selectorApplied = new FE::SelectorAppliedSkill();
-		selectorApplied->skillSelector = Utility::Primitives::Circle(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), position, range, 90);
-		selectorApplied->skillSelector.Init();
-		GetScene().AddComponent(skillName, selectorApplied);
-
-		FE::Transform *transform = new FE::Transform();
-		transform->position = position;
-		transform->scale = glm::vec3(range, 0.0f, range);
-		transform->rotation = glm::vec3();
-		GetScene().AddComponent(skillName, transform);
-	}
-
-	GetWorld().AddFusionSequence(skillName, fusionCombination);
-}
-void CreateSkills()
-{
-	FE::SkillSystem *skillSystem = new FE::SkillSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
-	GetScene().AddSystem(skillSystem);
-
-	CreateSkill("ultSkill", "sun", "qqe", glm::vec3(), 300, -1.0f, 0, 0, FE::FE_SATELLITE_BAD,
-				nullptr, FE::Ultimate_OnFusionCompleted, nullptr);
-	CreateSkill("waterSat", "sun", "www", glm::vec3(), 0, -1.0f, 0, 0, FE::FE_CELESTIALBODY_WATER,
-				nullptr, FE::SatelliteCreation_OnFusionCompleted, nullptr);
-	CreateSkill("airSat", "sun", "qqq", glm::vec3(), 0, -1.0f, 0, 0, FE::FE_CELESTIALBODY_AIR,
-				nullptr, FE::SatelliteCreation_OnFusionCompleted, nullptr);
-	CreateSkill("earthSat", "sun", "eee", glm::vec3(), 0, -1.0f, 0, 0, FE::FE_CELESTIALBODY_EARTH,
-				nullptr, FE::SatelliteCreation_OnFusionCompleted, nullptr);
-	CreateSkill("fireSat", "sun", "qwe", glm::vec3(), 0, -1.0f, 0, 0, FE::FE_CELESTIALBODY_FIRE,
-				nullptr, FE::SatelliteCreation_OnFusionCompleted, nullptr);
-
-	CreateSkill("aoe", "sun", "wqe", glm::vec3(), 10, 2.0f, 0, 0, FE::FE_SATELLITE_BAD, 
-				FE::AOE_OnClick, FE::AOE_OnFusionCompleted, FE::AOE_OnUpdate, true);
-}
-
-void CreateSun()
-{
-	FE::AssetLoader<FE::MeshAssetObject> meshLoader;
-	meshLoader.RegisterType("mesh-files", new FE::MeshLoader());
-	FE::MeshAssetObject loadedMesh = meshLoader.LoadAssetObject("mesh-files", "sun.obj");
-
-	FE::Render *sunRender = new FE::Render();
-
-	auto meshEntries = loadedMesh.GetMeshEntries();
-	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
-	{
-		sunRender->mesh.AddEntry((*meshEntry));
-	}
-	auto textures = loadedMesh.GetTextures();
-	for(auto texture = textures.begin(); texture != textures.end(); ++texture)
-	{
-		sunRender->mesh.AddTexture((*texture));
-	}
-	sunRender->rendererType = FE::Render::FE_RENDERER_SIMPLE;
-	sunRender->shaderProgram = 
-		GetWorld().GetShaderManager().GetProgram(FE::FE_PROGRAM_SIMPLE).programId;
-	sunRender->vao = loadedMesh.vao;
-
-	GetScene().AddEntity("sun");
-	GetScene().AddComponent("sun", sunRender);
-
-	FE::Transform *sunTransform = new FE::Transform();
-	sunTransform->position = glm::vec3(0.0f, 0.0f, 0.0f);
-	sunTransform->rotation = glm::vec3();
-	sunTransform->scale = glm::vec3(0.5f);
-	GetScene().AddComponent("sun", sunTransform);
-
-	FE::Updatable *sunFuncComp = new FE::Updatable();
-	sunFuncComp->updatedObject = 
-		std::unique_ptr<FE::CelestialBody>(new FE::CelestialBody(FE::FE_CELESTIALBODY_SUN, 4, 0.5f, 0.0f));
-	/*static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_WATER, 'w', 'w', 'w', 0, 0)));
-	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_FIRE, 'q', 'q', 'q', 0, 0)));
-	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_AIR, 'q', 'w', 'e', 0, 0)));
-	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::SatelliteCreationSkill(FE::FE_CELESTIALBODY_EARTH, 'e', 'e', 'e', 0, 0)));
-	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::UltimateSkill('q', 'w', 'w', 0, 0)));
-	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::BurnSkill(10, 2.0f, 3.0f, 1.0f, 'w', 'e', 'e', 0, 0)));
-	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::AOESkill(10, 2.0f, 'w', 'q', 'e', 0, 0)));
-	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::PassiveAOESkill(10, 2.0f, 1.0f, 3.0f, 'w', 'e', 'q', 0, 0)));
-	static_cast<FE::CelestialBody*>(sunFuncComp->updatedObject.get())->AddSkill(std::shared_ptr<FE::Skill>(
-		new FE::SunNovaSkill(10, 4.0f, 0.05f, 'w', 'q', 'q', 0, 0)));*/
-	GetScene().AddComponent("sun", sunFuncComp);
-	
-	FE::Collidable *sunCollidable = new FE::Collidable();
-	sunCollidable->isForCheck = false;
-	GetScene().AddComponent("sun", sunCollidable);
-
-	GetWorld().GetRenderer().SubscribeForRendering(GetScene().GetEntity("sun"));
-}
-
-void CreateEnemy(const std::string &name, glm::vec3 position)
-{
-	FE::AssetLoader<FE::MeshAssetObject> meshLoader;
-	meshLoader.RegisterType("mesh-files", new FE::MeshLoader());
-	FE::MeshAssetObject loadedMesh = meshLoader.LoadAssetObject("mesh-files", "spaceship.obj");
-
-	FE::Render *spaceshipRender = new FE::Render();
-
-	auto meshEntries = loadedMesh.GetMeshEntries();
-	for(auto meshEntry = meshEntries.begin(); meshEntry != meshEntries.end(); ++meshEntry)
-	{
-		spaceshipRender->mesh.AddEntry((*meshEntry));
-	}
-	auto textures = loadedMesh.GetTextures();
-	for(auto texture = textures.begin(); texture != textures.end(); ++texture)
-	{
-		spaceshipRender->mesh.AddTexture((*texture));
-	}
-	spaceshipRender->rendererType = FE::Render::FE_RENDERER_LIT;
-	spaceshipRender->shaderProgram = 
-		GetWorld().GetShaderManager().GetProgram(FE::FE_PROGRAM_LIT_TEXTURE).programId;
-	spaceshipRender->vao = loadedMesh.vao;
-
-	GetScene().AddEntity(name);
-	GetScene().AddComponent(name, spaceshipRender);
-
-	FE::Transform *spaceshipTransform = new FE::Transform();
-	spaceshipTransform->position = position; 
-	spaceshipTransform->rotation = glm::vec3();
-	spaceshipTransform->scale = glm::vec3(0.1f);
-	GetScene().AddComponent(name, spaceshipTransform);
-
-	FE::Updatable *spaceshipFuncComp = new FE::Updatable();
-	glm::vec3 frontVector = glm::normalize(glm::vec3() - position); // TODO: Make it relative to the sun
-	spaceshipFuncComp->updatedObject = std::unique_ptr<FE::Enemy>(new FE::Enemy(name, 0.02f, frontVector));
-	GetScene().AddComponent(name, spaceshipFuncComp);
-
-	GetWorld().GetRenderer().SubscribeForRendering(GetScene().GetEntity(name));
-}
-
 void InitializeScene()
 {
     TopDownCamera userCamera = TopDownCamera(glm::vec3(), 13.5f, 0.0f, 45.0f);
 
-    SunLight 
-        mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, GetWorld().GetDisplayData().gamma));//displayData.gamma));
+    //SunLight 
+    //    mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, GetWorld().GetDisplayData().gamma));//displayData.gamma));
 
 	GetWorld().GetCamera() = userCamera;
-	GetWorld().GetSunLight() = mainSunLight;
+	//GetWorld().GetSunLight() = mainSunLight;
 
 	FE::ShaderManager worldShaderManager = GetWorld().GetShaderManager();
 	FE::ProgramData textureProgData = worldShaderManager.GetProgram(FE::FE_PROGRAM_TEXTURE);
@@ -322,9 +150,6 @@ void InitializeScene()
 	glUniform1i(fontProgramData.GetUniform(FE::FE_UNIFORM_FONT_TEXTURE), 0);
     glUseProgram(0);
 
-
-	GetScene().Init(GetWorld().GetEventManager());
-
 	///////////////////////////////////////
 	GetWorld().SetFusionInput('f', 'q', 'w', 'e');
 	/*
@@ -341,18 +166,6 @@ void InitializeScene()
 	GetWorld().AddFusionSequence("satFrost",   'e', 'e', 'q');
 	GetWorld().AddFusionSequence("satChain",   'w', 'w', 'q');
 	*/
-	
-	FE::UpdateSystem *update =
-		new FE::UpdateSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
-	GetScene().AddSystem(update);
-	FE::CollisionSystem *click = 
-		new FE::CollisionSystem(&GetWorld().GetEventManager(), GetScene().GetEntityManager());
-	GetScene().AddSystem(click);
-
-	CreateSun();
-	CreateEnemy("spaceship1", glm::vec3(5.0f, 0.0f, 0.0f));
-	CreateEnemy("spaceship2", glm::vec3(0.0f, 0.0f, 6.0f));
-	CreateSkills();
 }
 
 
@@ -406,34 +219,32 @@ void Init()
     glDepthRange(depthZNear, depthZFar);
     glEnable(GL_DEPTH_CLAMP);
 
-	FE::ShaderManager &worldShaderManager = GetWorld().GetShaderManager();
-
-    GLuint lightUniformBuffer = 0;
-    glGenBuffers(1, &lightUniformBuffer);
-    worldShaderManager.SetUniformBuffer(FE::FE_UBT_LIGHT, lightUniformBuffer);
-    glBindBuffer(GL_UNIFORM_BUFFER, lightUniformBuffer);
-    glBufferData(GL_UNIFORM_BUFFER, sizeof(LightBlockGamma), NULL, GL_DYNAMIC_DRAW);
+    //GLuint lightUniformBuffer = 0;
+    //glGenBuffers(1, &lightUniformBuffer);
+    //GetWorld().GetShaderManager().SetUniformBuffer(FE::FE_UBT_LIGHT, lightUniformBuffer);
+    //glBindBuffer(GL_UNIFORM_BUFFER, lightUniformBuffer);
+    //glBufferData(GL_UNIFORM_BUFFER, sizeof(LightBlockGamma), NULL, GL_DYNAMIC_DRAW);
 
     GLuint projectionUniformBuffer = 0;
     glGenBuffers(1, &projectionUniformBuffer);
-    worldShaderManager.SetUniformBuffer(FE::FE_UBT_PROJECTION, projectionUniformBuffer);
+    GetWorld().GetShaderManager().SetUniformBuffer(FE::FE_UBT_PROJECTION, projectionUniformBuffer);
     glBindBuffer(GL_UNIFORM_BUFFER, projectionUniformBuffer);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 
     GLuint orthographicUniformBuffer = 0;
     glGenBuffers(1, &orthographicUniformBuffer);
-    worldShaderManager.SetUniformBuffer(FE::FE_UBT_ORTHOGRAPHIC, orthographicUniformBuffer);
+    GetWorld().GetShaderManager().SetUniformBuffer(FE::FE_UBT_ORTHOGRAPHIC, orthographicUniformBuffer);
     glBindBuffer(GL_UNIFORM_BUFFER, orthographicUniformBuffer);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 
     // Bind the static buffers.
-    glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(FE::FE_BT_LIGHT), 
-					  lightUniformBuffer, 0, sizeof(LightBlockGamma));
+	//glBindBufferRange(GL_UNIFORM_BUFFER, GetWorld().GetShaderManager().GetBlockIndex(FE::FE_BT_LIGHT), 
+	//					lightUniformBuffer, 0, sizeof(LightBlockGamma));
 
-    glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(FE::FE_BT_PROJECTION), 
+    glBindBufferRange(GL_UNIFORM_BUFFER, GetWorld().GetShaderManager().GetBlockIndex(FE::FE_BT_PROJECTION), 
 					  projectionUniformBuffer, 0, sizeof(glm::mat4));
 
-    glBindBufferRange(GL_UNIFORM_BUFFER, worldShaderManager.GetBlockIndex(FE::FE_BT_ORTHOGRAPHIC),
+    glBindBufferRange(GL_UNIFORM_BUFFER, GetWorld().GetShaderManager().GetBlockIndex(FE::FE_BT_ORTHOGRAPHIC),
 					  orthographicUniformBuffer, 0, sizeof(glm::mat4));
 
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -459,7 +270,6 @@ void Display()
 	int loops = 0;
 	while (GetTickCount() > nextGameTick && loops < MAX_FRAMESKIP)
 	{
-		GetScene().ProcessSystems();
 	    HandleMouse();
 	
 		nextGameTick += SKIP_TICKS;

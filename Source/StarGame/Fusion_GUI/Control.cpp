@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Control.h"
 
-#include "../Fusion_EntitySystem/EntityEvents.h"
+#include "../Fusion_EventManager/EntityEvents.h"
 
 
 using namespace FusionEngine;

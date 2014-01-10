@@ -95,7 +95,7 @@ void World::Render()
 			
 			if ((*layout).first == FE_LAYOUT_GAME)
 			{
-				//sunLight.Render(displayData.modelMatrix, shaderManager);
+				sunLight.Render(displayData.modelMatrix, shaderManager);
 				renderer.Render(displayData.modelMatrix);
 			}
 		}

@@ -43,6 +43,12 @@
     <Filter Include="Source Files\Script\Skills">
       <UniqueIdentifier>{08b37896-b814-494f-b452-d161f6b6fd5d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Light">
+      <UniqueIdentifier>{cf2a9c58-f157-4ede-9152-38bd87a552c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Light">
+      <UniqueIdentifier>{3d112604-5808-4dfa-a3ff-576f530c912a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -90,6 +96,9 @@
     <ClInclude Include="Skill.h">
       <Filter>Header Files\Solar System</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files\Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -115,6 +124,9 @@
     </ClCompile>
     <ClCompile Include="Skill.cpp">
       <Filter>Source Files\Solar System</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files\Light</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

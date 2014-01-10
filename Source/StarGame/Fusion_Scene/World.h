@@ -26,10 +26,10 @@
 #include "../Fusion_Entities/CelestialBody.h"
 #include "../Fusion_Entities/Enemy.h"
 #include "../Fusion_Entities/Skill.h"
+#include "../Fusion_Entities/Light.h"
 #pragma warning(push, 1)
 #include "../Mouse/Mouse.h" // TODO: Replace with Fusion_Mouse
 #include "../Camera/TopDownCamera.h" // TODO: Replace with Fusion_Camera
-//#include "../Entities/Lights.h" // TODO: Refactor
 #include "../Audio/Audio.h" 
 
 #include <memory>
@@ -74,7 +74,7 @@ namespace FusionEngine
 		Mouse mouse;
 		DisplayData displayData;
 		TopDownCamera camera;
-		//SunLight sunLight;
+		SunLight sunLight;
 		Audio audio;
 		LayoutsMap guiLayouts;
 		std::unique_ptr<FusionInput> fusionInput;
@@ -100,7 +100,7 @@ namespace FusionEngine
 		Mouse& GetMouse();
 		DisplayData& GetDisplayData();
 		TopDownCamera& GetCamera();
-		//SunLight& GetSunLight();
+		SunLight& GetSunLight();
 		LayoutsMap& GetLayouts();
 		Audio& GetAudio();
 
@@ -172,10 +172,10 @@ namespace FusionEngine
 	{
 		return shaderManager;
 	}
-	//inline SunLight& World::GetSunLight()
-	//{
-	//	return sunLight;
-	//}
+	inline SunLight& World::GetSunLight()
+	{
+		return sunLight;
+	}
 	inline Audio& World::GetAudio()
 	{
 		return audio;

@@ -34,10 +34,13 @@
     <Filter Include="Header Files\Scripts\Skills">
       <UniqueIdentifier>{a234fc40-1cd5-4f99-8fc7-aeace9f1f971}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Skills">
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{c48468b9-3f6e-46e6-ab31-d9963fce2b2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Script">
       <UniqueIdentifier>{db2643f2-fd1b-4c62-8575-ee713d66fbee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Skills\Skills">
+    <Filter Include="Source Files\Script\Skills">
       <UniqueIdentifier>{08b37896-b814-494f-b452-d161f6b6fd5d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -60,14 +63,8 @@
     <ClInclude Include="CelestialBody.h">
       <Filter>Header Files\Solar System</Filter>
     </ClInclude>
-    <ClInclude Include="Skills.h">
-      <Filter>Header Files\Solar System</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>Header Files\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="IUpdatable.h">
-      <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="SatelliteCreation.h">
       <Filter>Header Files\Scripts\Skills</Filter>
@@ -81,6 +78,18 @@
     <ClInclude Include="AOE.h">
       <Filter>Header Files\Scripts\Skills</Filter>
     </ClInclude>
+    <ClInclude Include="IComponent.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Composable.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Skill.h">
+      <Filter>Header Files\Solar System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -89,20 +98,23 @@
     <ClCompile Include="CelestialBody.cpp">
       <Filter>Source Files\Solar System</Filter>
     </ClCompile>
-    <ClCompile Include="Skills.cpp">
-      <Filter>Source Files\Solar System</Filter>
-    </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="SatelliteCreation.cpp">
-      <Filter>Source Files\Skills\Skills</Filter>
+      <Filter>Source Files\Script\Skills</Filter>
     </ClCompile>
     <ClCompile Include="Ultimate.cpp">
-      <Filter>Source Files\Skills\Skills</Filter>
+      <Filter>Source Files\Script\Skills</Filter>
     </ClCompile>
     <ClCompile Include="AOE.cpp">
-      <Filter>Source Files\Skills\Skills</Filter>
+      <Filter>Source Files\Script\Skills</Filter>
+    </ClCompile>
+    <ClCompile Include="Composable.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Skill.cpp">
+      <Filter>Source Files\Solar System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

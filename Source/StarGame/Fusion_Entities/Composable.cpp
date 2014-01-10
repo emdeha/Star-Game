@@ -4,12 +4,12 @@
 
 using namespace FusionEngine;
 
-void Composable::AddComponent(unsigned int componentID, std::shared_ptr<IComponent> newComponent)
+void Composable::AddComponent(ComponentType componentID, std::shared_ptr<IComponent> newComponent)
 {
 	components.insert(std::make_pair(componentID, newComponent));
 }
 
-void Composable::RemoveComponent(unsigned int componentID)
+void Composable::RemoveComponent(ComponentType componentID)
 {
 	auto componentToRemove = components.find(componentID);
 	if (componentToRemove != components.end())
@@ -24,7 +24,7 @@ void Composable::RemoveComponent(unsigned int componentID)
 	}
 }
 
-std::shared_ptr<IComponent> Composable::GetComponent(unsigned int componentID)
+std::shared_ptr<IComponent> Composable::GetComponent(ComponentType componentID)
 {
 	auto componentToReturn = components.find(componentID);
 	if (componentToReturn != components.end())

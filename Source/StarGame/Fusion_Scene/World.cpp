@@ -76,6 +76,15 @@ void World::ReloadGUI(const std::string &guiLayoutFile)
 	guiLayouts = loadedGUI.GetAllLoadedLayouts();
 }
 
+void World::Update()
+{
+	sun->Update();
+	for (auto enemy = enemies.begin(); enemy != enemies.end(); ++enemy)
+	{
+		(*enemy)->Update();
+	}
+}
+
 void World::Render()
 {
 	for (auto layout = guiLayouts.begin(); layout != guiLayouts.end(); ++layout)
@@ -88,28 +97,6 @@ void World::Render()
 			{
 				//sunLight.Render(displayData.modelMatrix, shaderManager);
 				renderer.Render(displayData.modelMatrix);
-				/*
-				// | This is one ugly motherfucker |
-				// V							   V
-				ComponentMapper<Updatable> functionalData = 
-					GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity("sun"), CT_UPDATABLE_BEHAVIOR);
-				CelestialBody *sun = static_cast<CelestialBody*>(functionalData[0]->updatedObject.get());
-				auto sunSkills = sun->GetSkills();
-				for (auto skill = sunSkills.begin(); skill != sunSkills.end(); ++skill)
-				{
-					(*skill)->Render();
-				}
-
-				auto sunSats = sun->GetSatellites();
-				for (auto sat = sunSats.begin(); sat != sunSats.end(); ++sat)
-				{
-					auto satSkills = (*sat)->GetSkills();
-					for (auto satSkill = satSkills.begin(); satSkill != satSkills.end(); ++satSkill)
-					{
-						(*satSkill)->Render();
-					}
-				}
-				// | End of ugly motherfucker |*/
 			}
 		}
 	}
@@ -159,41 +146,6 @@ Layout *World::GetCurrentLayout() const
 	HandleUnexpectedError("no current layout", __LINE__, __FILE__);
 	return nullptr;
 }
-/*
-std::vector<std::shared_ptr<Skill>> World::GetCollidableSkills() const
-{
-	std::vector<std::shared_ptr<Skill>> collidableSkills;
-
-	// | This is the other ugly motherfucker |
-	// V							         V
-	ComponentMapper<Updatable> functionalData = 
-		GetScene().GetEntityManager()->GetComponentList(GetScene().GetEntity("sun"), CT_UPDATABLE_BEHAVIOR);
-	CelestialBody *sun = static_cast<CelestialBody*>(functionalData[0]->updatedObject.get());
-	auto sunSkills = sun->GetSkills();
-	for (auto skill = sunSkills.begin(); skill != sunSkills.end(); ++skill)
-	{
-		if ((*skill)->IsCollidable())
-		{
-			collidableSkills.push_back((*skill));
-		}
-	}
-
-	auto sunSats = sun->GetSatellites();
-	for (auto sat = sunSats.begin(); sat != sunSats.end(); ++sat)
-	{
-		auto satSkills = (*sat)->GetSkills();
-		for (auto satSkill = satSkills.begin(); satSkill != satSkills.end(); ++satSkill)
-		{
-			if ((*satSkill)->IsCollidable())
-			{
-				collidableSkills.push_back((*satSkill));
-			}
-		}
-	}
-	// | End of other ugly motherfucker |
-
-	return collidableSkills;
-}*/
 
 unsigned int World::GetCurrentFusionInputIndex() const
 {
@@ -232,9 +184,50 @@ std::string World::GetActiveSkillName() const
 {
 	if (fusionInput->GetCurrentInputSequence().length() > 0)
 	{
-		return fusionInput->GetSequenceName(fusionInput->GetCurrentInputSequence());
+			return fusionInput->GetSequenceName(fusionInput->GetCurrentInputSequence());
 	}
 	else return "";
+}
+
+std::shared_ptr<IComponent> World::GetComponentForObject(const std::string &id, ComponentType componentID)
+{
+	if (id == "sun")
+	{
+			return sun->GetComponent(componentID);
+	}
+	else
+	{
+			auto sunSats = sun->GetSatellites();
+			for (auto sat = sunSats.begin(); sat != sunSats.end(); ++sat)
+			{
+					if ((*sat)->GetID() == id)
+					{
+							return (*sat)->GetComponent(componentID);
+					}
+			}
+
+			auto allSkills = sun->GetAllSkills();
+			for (auto skill = allSkills.begin(); skill != allSkills.end(); ++skill)
+			{
+					if ((*skill)->GetID() == id)
+					{
+							return (*skill)->GetComponent(componentID);
+					}
+			}
+
+			for (auto enemy = enemies.begin(); enemy != enemies.end(); ++enemy)
+			{
+					if ((*enemy)->GetID() == id)
+					{
+							return (*enemy)->GetComponent(componentID);
+					}
+			}
+	}
+
+	std::ostringstream errorMsg;
+	errorMsg << "Object with id: " << id << " not found";
+	HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
+	return nullptr;
 }
 
 bool World::HandleEvent(const IEventData &eventData)

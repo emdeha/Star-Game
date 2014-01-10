@@ -29,20 +29,30 @@
 
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Fusion_EventManager/Event.h"
-#include "Skills.h"
-#include "IUpdatable.h"
+#include "Skill.h"
+#include "Composable.h"
 
 
 namespace FusionEngine
 {
-	class CelestialBody : public IEventListener, public IUpdatable
+	enum CelestialBodyType
+	{
+		FE_FIRE_SAT,
+		FE_WATER_SAT,
+		FE_AIR_SAT,
+		FE_EARTH_SAT,
+		FE_SUN,
+
+		FE_CELESTIAL_BODY_BAD = -1
+	};
+
+	class CelestialBody : public Composable, public IEventListener
 	{
 	private:
 		std::vector<std::shared_ptr<CelestialBody>> satellites;
-		//std::vector<std::shared_ptr<Skill>> skills;
-		std::string id; // TODO: replace with ints
+		std::vector<std::shared_ptr<Skill>> skills;
 
-		//CelestialBodyType type;
+		CelestialBodyType type;
 
 		int maxSatelliteCount;
 		int currentSatelliteCount;
@@ -54,18 +64,18 @@ namespace FusionEngine
 
 	public:
 		CelestialBody();
-		CelestialBody(//CelestialBodyType newType,
+		CelestialBody(CelestialBodyType newType,
 					  int newMaxSatelliteCount, float newDiameter, float newOffsetFromSun);
 
 		~CelestialBody();
 
-		bool AddSatellite();//CelestialBodyType satType);
-		//bool AddSkill(const std::shared_ptr<Skill> newSkill);
+		bool AddSatellite(CelestialBodyType satType);
+		bool AddSkill(const std::string &skillName, std::shared_ptr<Skill> newSkill);
 
 		void Update();
 
-		std::string GetID() { return id; }
-		//std::vector<std::shared_ptr<Skill>> GetSkills() { return skills; }
+		std::vector<std::shared_ptr<Skill>> GetSkills() { return skills; }
+		std::vector<std::shared_ptr<Skill>> GetAllSkills();
 		std::vector<std::shared_ptr<CelestialBody>> GetSatellites() { return satellites; }
 
 		virtual bool HandleEvent(const IEventData &eventData);

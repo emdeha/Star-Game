@@ -27,16 +27,14 @@
 
 #include "../Fusion_EventManager/EventManager.h"
 #include "States.h"
-#include "IUpdatable.h"
+#include "Composable.h"
 
 
 namespace FusionEngine
 {
-	class Enemy : public IEventListener, public IUpdatable
+	class Enemy : public Composable, public IEventListener
 	{
 	private:
-		std::string name;
-
 		BehaviorState currentState;
 
 		glm::vec3 frontVector;
@@ -49,7 +47,6 @@ namespace FusionEngine
 		void UpdateAI();
 
 	public:
-		Enemy() {}
 		Enemy(const std::string &newName, float newSpeed, glm::vec3 newFrontVector);
 
 		void Update();

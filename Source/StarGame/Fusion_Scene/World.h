@@ -23,7 +23,9 @@
 #include "../Fusion_Renderer/Renderer.h"
 #include "../Fusion_Renderer/ShaderManager.h"
 #include "../Fusion_GUI/Layout.h"
-#include "../Fusion_Entities/Skills.h"
+#include "../Fusion_Entities/CelestialBody.h"
+#include "../Fusion_Entities/Enemy.h"
+#include "../Fusion_Entities/Skill.h"
 #pragma warning(push, 1)
 #include "../Mouse/Mouse.h" // TODO: Replace with Fusion_Mouse
 #include "../Camera/TopDownCamera.h" // TODO: Replace with Fusion_Camera
@@ -76,6 +78,9 @@ namespace FusionEngine
 		Audio audio;
 		LayoutsMap guiLayouts;
 		std::unique_ptr<FusionInput> fusionInput;
+		
+		std::shared_ptr<CelestialBody> sun;
+		std::vector<std::shared_ptr<Enemy>> enemies;
 
 	private:
 		World();
@@ -106,6 +111,7 @@ namespace FusionEngine
 				  const std::string &shaderDataFile);
 		void ReloadGUI(const std::string &guiLayoutFile);
 
+		void Update();
 		void Render();
 
 		// WARN: If there's no layout of this type, all layouts will be unset!!!
@@ -128,6 +134,12 @@ namespace FusionEngine
 		std::string GetActiveSkillName() const;
 
 		virtual bool HandleEvent(const IEventData &eventData);
+
+
+		// Components
+		std::shared_ptr<IComponent> GetComponentForObject(const std::string &id, ComponentType componentID);
+
+		std::shared_ptr<CelestialBody> GetSun() { return sun; }
 	};
 
 	inline World& World::GetWorld()

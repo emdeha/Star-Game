@@ -54,9 +54,10 @@ namespace FusionEngine
 	struct OnFusionCompletedEvent : public IEventData
 	{
 		std::string skillID;
+		std::string fusionComb;
 
-		OnFusionCompletedEvent(EventType eventType, const std::string &newSkillID)
-			: IEventData(eventType), skillID(newSkillID) {}
+		OnFusionCompletedEvent(EventType eventType, const std::string &newSkillID, const std::string &newFusionComb)
+			: IEventData(eventType), skillID(newSkillID), fusionComb(newFusionComb) {}
 	};
 
 	struct OnSkillAppliedEvent : public IEventData

@@ -23,7 +23,6 @@
 #include "../glsdk/glm/glm.hpp"
 #include "../glsdk/glload/gl_3_3.h"
 #include "../glsdk/glutil/glutil.h"
-#include <vector>
 #include <map>
 #pragma warning(pop)
 
@@ -35,21 +34,21 @@ namespace FusionEngine
 	class Renderer
 	{
 	private:
-		std::vector<std::pair<unsigned int, MeshAssetObject>> subscribedMeshes;		
+		std::map<std::string, MeshAssetObject> subscribedMeshes;		
 
-		std::map<unsigned int, GLuint> modelToCameraMatrixUniform;
-		std::map<unsigned int, GLuint> colorUniform;
-		std::map<unsigned int, GLuint> normalModelToCameraMatrixUniform;
+		std::map<std::string, GLuint> modelToCameraMatrixUniform;
+		std::map<std::string, GLuint> colorUniform;
+		std::map<std::string, GLuint> normalModelToCameraMatrixUniform;
 		
-		std::map<unsigned int, GLuint> positionAttrib;
-		std::map<unsigned int, GLuint> textureAttrib;
-		std::map<unsigned int, GLuint> normalAttrib;
+		std::map<std::string, GLuint> positionAttrib;
+		std::map<std::string, GLuint> textureAttrib;
+		std::map<std::string, GLuint> normalAttrib;
 
 	public:
         Renderer() {}
 
-		//void SubscribeForRendering(Entity *entity);
-		//void UnsubscribeForRendering(Entity *entity);
+		void SubscribeForRendering(const std::string &id, const MeshAssetObject &mesh);
+		void UnsubscribeForRendering(const std::string &id);
 
 		void Render(glutil::MatrixStack &modelMatrix) const;
 	};

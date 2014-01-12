@@ -15,8 +15,8 @@
 //along with the Star Game.  If not, see <http://www.gnu.org/licenses/>.
 
 
-#ifndef FE_SKILL
-#define FE_SKILL
+#ifndef FE_AOE
+#define FE_AOE
 
 
 #include "../Fusion_EventManager/EntityEvents.h"

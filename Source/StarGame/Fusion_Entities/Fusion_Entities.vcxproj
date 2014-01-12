@@ -78,18 +78,39 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Burn.h" />
     <ClInclude Include="CelestialBody.h" />
+    <ClInclude Include="Chaining.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Components.h" />
     <ClInclude Include="Composable.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Frost.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="IComponent.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="PassiveAOE.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="SatelliteCreation.h" />
     <ClInclude Include="Scripts.h" />
+    <ClInclude Include="Shield.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Skill.h" />
     <ClInclude Include="States.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Structs.h" />
+    <ClInclude Include="SunNova.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Ultimate.h">
       <SubType>
@@ -101,15 +122,36 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Burn.cpp" />
     <ClCompile Include="CelestialBody.cpp" />
+    <ClCompile Include="Chaining.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Composable.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Frost.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="PassiveAOE.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="SatelliteCreation.cpp" />
+    <ClCompile Include="Shield.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="SunNova.cpp">
+      <SubType>
+      </SubType>
     </ClCompile>
     <ClCompile Include="Ultimate.cpp">
       <SubType>

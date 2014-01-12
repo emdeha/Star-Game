@@ -37,17 +37,17 @@
     <Filter Include="Source Files\Core">
       <UniqueIdentifier>{c48468b9-3f6e-46e6-ab31-d9963fce2b2c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Script">
-      <UniqueIdentifier>{db2643f2-fd1b-4c62-8575-ee713d66fbee}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Script\Skills">
-      <UniqueIdentifier>{08b37896-b814-494f-b452-d161f6b6fd5d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Light">
       <UniqueIdentifier>{cf2a9c58-f157-4ede-9152-38bd87a552c2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Light">
       <UniqueIdentifier>{3d112604-5808-4dfa-a3ff-576f530c912a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scripts">
+      <UniqueIdentifier>{db2643f2-fd1b-4c62-8575-ee713d66fbee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scripts\Skills">
+      <UniqueIdentifier>{08b37896-b814-494f-b452-d161f6b6fd5d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +99,24 @@
     <ClInclude Include="Light.h">
       <Filter>Header Files\Light</Filter>
     </ClInclude>
+    <ClInclude Include="Burn.h">
+      <Filter>Header Files\Scripts\Skills</Filter>
+    </ClInclude>
+    <ClInclude Include="Chaining.h">
+      <Filter>Header Files\Scripts\Skills</Filter>
+    </ClInclude>
+    <ClInclude Include="PassiveAOE.h">
+      <Filter>Header Files\Scripts\Skills</Filter>
+    </ClInclude>
+    <ClInclude Include="SunNova.h">
+      <Filter>Header Files\Scripts\Skills</Filter>
+    </ClInclude>
+    <ClInclude Include="Shield.h">
+      <Filter>Header Files\Scripts\Skills</Filter>
+    </ClInclude>
+    <ClInclude Include="Frost.h">
+      <Filter>Header Files\Scripts\Skills</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -111,13 +129,13 @@
       <Filter>Source Files\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="SatelliteCreation.cpp">
-      <Filter>Source Files\Script\Skills</Filter>
+      <Filter>Source Files\Scripts\Skills</Filter>
     </ClCompile>
     <ClCompile Include="Ultimate.cpp">
-      <Filter>Source Files\Script\Skills</Filter>
+      <Filter>Source Files\Scripts\Skills</Filter>
     </ClCompile>
     <ClCompile Include="AOE.cpp">
-      <Filter>Source Files\Script\Skills</Filter>
+      <Filter>Source Files\Scripts\Skills</Filter>
     </ClCompile>
     <ClCompile Include="Composable.cpp">
       <Filter>Source Files\Core</Filter>
@@ -127,6 +145,24 @@
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Source Files\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Burn.cpp">
+      <Filter>Source Files\Scripts\Skills</Filter>
+    </ClCompile>
+    <ClCompile Include="Chaining.cpp">
+      <Filter>Source Files\Scripts\Skills</Filter>
+    </ClCompile>
+    <ClCompile Include="PassiveAOE.cpp">
+      <Filter>Source Files\Scripts\Skills</Filter>
+    </ClCompile>
+    <ClCompile Include="SunNova.cpp">
+      <Filter>Source Files\Scripts\Skills</Filter>
+    </ClCompile>
+    <ClCompile Include="Shield.cpp">
+      <Filter>Source Files\Scripts\Skills</Filter>
+    </ClCompile>
+    <ClCompile Include="Frost.cpp">
+      <Filter>Source Files\Scripts\Skills</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -123,11 +123,11 @@ void InitializeScene()
 {
     TopDownCamera userCamera = TopDownCamera(glm::vec3(), 13.5f, 0.0f, 45.0f);
 
-    //SunLight 
-    //    mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, GetWorld().GetDisplayData().gamma));//displayData.gamma));
+    SunLight 
+        mainSunLight(SunLight(glm::vec3(), glm::vec4(3.5f), glm::vec4(0.4f), 1.2f, 5.0f, GetWorld().GetDisplayData().gamma));//displayData.gamma));
 
 	GetWorld().GetCamera() = userCamera;
-	//GetWorld().GetSunLight() = mainSunLight;
+	GetWorld().GetSunLight() = mainSunLight;
 
 	FE::ShaderManager worldShaderManager = GetWorld().GetShaderManager();
 	FE::ProgramData textureProgData = worldShaderManager.GetProgram(FE::FE_PROGRAM_TEXTURE);

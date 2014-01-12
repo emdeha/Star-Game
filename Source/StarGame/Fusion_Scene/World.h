@@ -89,6 +89,7 @@ namespace FusionEngine
 		~World();
 
 		void CreateSun();
+		void CreateEnemy(const std::string &id, glm::vec3 position);
 
 	public:
 		float interpolation;

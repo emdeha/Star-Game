@@ -45,6 +45,34 @@ void World::CreateSun()
 	renderer.SubscribeForRendering("sun", sunMesh);
 }
 
+void World::CreateEnemy(const std::string &id, glm::vec3 position)
+{
+	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
+	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
+
+	FusionEngine::MeshAssetObject enemyMesh = meshLoader.LoadAssetObject("mesh-files", "spaceship.obj");
+
+	std::shared_ptr<FusionEngine::RenderComponent> spaceshipRenderComponent = std::make_shared<RenderComponent>();
+	spaceshipRenderComponent->vao = enemyMesh.vao;
+	spaceshipRenderComponent->shaderProgramID = shaderManager.GetProgram(FE_PROGRAM_LIT).programId;
+	spaceshipRenderComponent->renderType = RenderComponent::FE_RENDERER_LIT;
+	
+	std::shared_ptr<FusionEngine::TransformComponent> spaceshipTransformComponent = 
+		std::make_shared<TransformComponent>();
+	spaceshipTransformComponent->position = position;
+	spaceshipTransformComponent->rotation = glm::vec3();
+	spaceshipTransformComponent->scale = glm::vec3(0.1f);
+
+	glm::vec3 frontVector = glm::normalize(glm::vec3() - position); // TODO: Make relative to the Sun
+
+	std::shared_ptr<Enemy> firstEnemy = std::make_shared<Enemy>(id, 0.02f, frontVector);
+	firstEnemy->AddComponent(FE_COMPONENT_RENDER, spaceshipRenderComponent);
+	firstEnemy->AddComponent(FE_COMPONENT_TRANSFORM, spaceshipTransformComponent);
+	enemies.push_back(firstEnemy);
+
+	renderer.SubscribeForRendering(id, enemyMesh);
+}
+
 void World::Load(const std::string &guiLayoutFile,
 				 const std::string &audioFile,
 				 const std::string &shaderDataFile)
@@ -88,6 +116,8 @@ void World::Load(const std::string &guiLayoutFile,
 
 	// Create Test Entities
 	CreateSun();
+	CreateEnemy("sp2", glm::vec3(0.0f, 0.0f, 6.0f));
+	CreateEnemy("sp1", glm::vec3(4.0f, 0.0f, 0.0f));
 }
 
 void World::ReloadGUI(const std::string &guiLayoutFile)

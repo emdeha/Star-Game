@@ -24,11 +24,7 @@
 
 namespace FusionEngine
 {
-	class Entity;
-	class EntityManager;
-
-	void SatelliteCreation_OnFusionCompleted(EntityManager *entityManager, Entity *entity, 
-											 const IEventData &eventData);
+	void SatelliteCreation_OnFusionCompleted(const std::string &skillID, const IEventData &eventData);
 }
 
 

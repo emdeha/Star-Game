@@ -27,8 +27,7 @@ namespace FusionEngine
 	class Entity;
 	class EntityManager;
 
-	void Ultimate_OnFusionCompleted(EntityManager *entityManager, Entity *entity, 
-								    const IEventData &eventData);
+	void Ultimate_OnFusionCompleted(const std::string &skillID, const IEventData &eventData);
 }
 
 #endif

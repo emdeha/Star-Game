@@ -151,7 +151,6 @@ void InitializeScene()
     glUseProgram(0);
 
 	///////////////////////////////////////
-	GetWorld().SetFusionInput('f', 'q', 'w', 'e');
 	/*
 	GetWorld().AddFusionSequence("waterSat",   'w', 'w', 'w');
 	GetWorld().AddFusionSequence("fireSat",    'q', 'q', 'q');
@@ -202,6 +201,7 @@ void Init()
 
 	GetWorld().GetDisplayData().windowWidth = glutGet(GLUT_WINDOW_WIDTH);
 	GetWorld().GetDisplayData().windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+	GetWorld().SetFusionInput('f', 'q', 'w', 'e');
 	GetWorld().Load("gui-config.yaml", "audio-config.yaml", "shader-config.yaml");
 	InitializeScene();
 	

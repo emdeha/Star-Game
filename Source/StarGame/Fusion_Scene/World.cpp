@@ -5,6 +5,7 @@
 #include "../Fusion_GUI/ControlEvents.h"
 #include "../Fusion_Entities/CelestialBody.h"
 #include "../Fusion_Entities/Components.h"
+#include "../Fusion_Entities/Scripts.h"
 
 using namespace FusionEngine;
 
@@ -73,6 +74,58 @@ void World::CreateEnemy(const std::string &id, glm::vec3 position)
 	renderer.SubscribeForRendering(id, enemyMesh);
 }
 
+void World::CreateSkill(const std::string &skillID, const std::string &skillFusionCombination,
+                                                bool hasGeneric, int damage, float range, glm::vec3 position,
+                                                CelestialBodyType bodyToCreate,
+                                                OnEventFunc skillOnClick, OnEventFunc skillOnFusionCompleted, OnUpdateFunc skillOnUpdate)
+{
+	std::shared_ptr<Skill> newSkill = 
+		std::shared_ptr<Skill>(new Skill(skillID, skillFusionCombination[0], 
+												  skillFusionCombination[1], 
+												  skillFusionCombination[2], 0, 0));
+
+	if (skillOnClick)
+	{
+		newSkill->SetOnClickCallback(skillOnClick);
+	}
+	if (skillOnFusionCompleted)
+	{
+		newSkill->SetOnFusionCompletedCallback(skillOnFusionCompleted);
+	}
+	if (skillOnUpdate)
+	{
+		newSkill->SetOnUpdateCallback(skillOnUpdate);
+	}
+
+	if (hasGeneric)
+	{
+		std::shared_ptr<SkillGenericComponent> newGeneric = std::make_shared<SkillGenericComponent>();
+		newGeneric->damage = damage;
+		newGeneric->range = range;
+		newGeneric->isActive = false;
+		newGeneric->isDeployed = false;
+
+		newSkill->AddComponent(FE_COMPONENT_SKILL_GENERIC, newGeneric);
+
+		std::shared_ptr<TransformComponent> newTransform = std::make_shared<TransformComponent>();
+		newTransform->position = position;
+		newTransform->scale = glm::vec3();
+		newTransform->rotation = glm::vec3();
+
+		newSkill->AddComponent(FE_COMPONENT_TRANSFORM, newTransform);
+	}
+
+	if (bodyToCreate != FE_CELESTIAL_BODY_BAD)
+	{
+		std::shared_ptr<SkillSatelliteCreationComponent> newSatCreation = 
+			std::make_shared<SkillSatelliteCreationComponent>();
+		newSatCreation->satelliteType = bodyToCreate;
+		newSkill->AddComponent(FE_COMPONENT_SKILL_SATELLITE_CREATION, newSatCreation);
+	}
+
+	sun->AddSkill(skillID, newSkill);
+}
+
 void World::Load(const std::string &guiLayoutFile,
 				 const std::string &audioFile,
 				 const std::string &shaderDataFile)
@@ -118,6 +171,18 @@ void World::Load(const std::string &guiLayoutFile,
 	CreateSun();
 	CreateEnemy("sp2", glm::vec3(0.0f, 0.0f, 6.0f));
 	CreateEnemy("sp1", glm::vec3(4.0f, 0.0f, 0.0f));
+
+	CreateSkill("waterSat", "www", false, 0, 0.0f, glm::vec3(),
+				FE_WATER_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
+	CreateSkill("airSat", "qqq", false, 0, 0.0f, glm::vec3(),
+				FE_AIR_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
+	CreateSkill("fireSat", "qwe", false, 0, 0.0f, glm::vec3(),
+				FE_FIRE_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
+	CreateSkill("earthSat", "eee", false, 0, 0.0f, glm::vec3(),
+				FE_EARTH_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
+
+	CreateSkill("ult", "ewq", true, 300, -1.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
+				nullptr, Ultimate_OnFusionCompleted, nullptr);
 }
 
 void World::ReloadGUI(const std::string &guiLayoutFile)

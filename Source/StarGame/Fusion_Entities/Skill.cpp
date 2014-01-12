@@ -2,6 +2,7 @@
 #include "Skill.h"
 
 #include "../Fusion_Entities/CelestialBody.h"
+#include "../Fusion_Entities/Components.h"
 #include "../Fusion_EventManager/EntityEvents.h"
 #include "../Fusion_Scene/World.h"
 
@@ -145,6 +146,36 @@ void Skill::Update()
 	}
 }
 
+void Skill::Render()
+{
+	SkillGenericComponent *skillGeneric = 
+		static_cast<SkillGenericComponent*>(GetWorld().GetComponentForObject(id, FE_COMPONENT_SKILL_GENERIC).get());
+
+	SkillSelectorAppliedComponent *skillSelector = 
+		static_cast<SkillSelectorAppliedComponent*>(
+			GetWorld().GetComponentForObject(id, FE_COMPONENT_SKILL_SELECTOR_APPLIED).get());
+
+	TransformComponent *skillTransform = 
+		static_cast<TransformComponent*>(GetWorld().GetComponentForObject(id, FE_COMPONENT_TRANSFORM).get());
+
+	if (skillGeneric && skillSelector && skillTransform && skillGeneric->isActive)
+	{
+		glutil::PushStack push(GetWorld().GetDisplayData().modelMatrix);
+		GetWorld().GetDisplayData().modelMatrix.Translate(skillTransform->position);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		if (skillSelector)
+		{
+			skillSelector->skillSelector.Draw(GetWorld().GetDisplayData().modelMatrix, 
+											  GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
+		}
+
+		glDisable(GL_BLEND);
+	}
+}
+
 bool Skill::HandleEvent(const IEventData &eventData)
 {
 	EventType type = eventData.GetType();
@@ -152,7 +183,8 @@ bool Skill::HandleEvent(const IEventData &eventData)
 	{
 	case FusionEngine::EVENT_ON_CLICK:
 		{
-			if (OnClick)
+			const OnClickEvent &data = static_cast<const OnClickEvent&>(eventData);
+			if (OnClick && data.objectId == "skill")
 			{
 				OnClick(id, eventData);
 			}

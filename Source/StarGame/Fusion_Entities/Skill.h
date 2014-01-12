@@ -126,6 +126,7 @@ namespace FusionEngine
 				  int newApplyCost, int newResearchCost);
 		
 		void Update();
+		void Render();
 
 		virtual bool HandleEvent(const IEventData &eventData);
 			

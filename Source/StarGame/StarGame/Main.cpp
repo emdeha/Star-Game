@@ -76,10 +76,10 @@ void HandleMouse()
 				}
 			}
 
-			//if ((*layout).first == FE::FE_LAYOUT_GAME)
-			//{
-			//	GetWorld().GetEventManager().FireEvent(FE::OnClickEvent(FE::EVENT_ON_CLICK, true, "skill"));
-			//}
+			if ((*layout).first == FE::FE_LAYOUT_GAME)
+			{
+				GetWorld().GetEventManager().FireEvent(FE::OnClickEvent(FE::EVENT_ON_CLICK, true, "skill"));
+			}
 		}
 	}
 	else

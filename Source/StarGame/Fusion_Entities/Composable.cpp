@@ -32,8 +32,9 @@ std::shared_ptr<IComponent> Composable::GetComponent(ComponentType componentID)
 		return (*componentToReturn).second;
 	}
 
-	std::ostringstream errorMsg;
-	errorMsg << "Component with id " << (unsigned int)componentID << " not found!\n";
-	HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
+	// TODO: Maybe that's not an unexpected error.
+	//std::ostringstream errorMsg;
+	//errorMsg << "Component with id " << (unsigned int)componentID << " not found!\n";
+	//HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
 	return nullptr;
 }

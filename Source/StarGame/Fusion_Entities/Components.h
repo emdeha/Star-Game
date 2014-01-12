@@ -65,6 +65,14 @@ namespace FusionEngine
 
 		virtual ~SkillSatelliteCreationComponent() {}
 	};
+	
+	class SkillSelectorAppliedComponent : public IComponent
+	{
+	public:
+		Utility::Primitives::Circle skillSelector;
+
+		virtual ~SkillSelectorAppliedComponent() {}
+	};
 
 	class SkillGenericComponent : public IComponent
 	{

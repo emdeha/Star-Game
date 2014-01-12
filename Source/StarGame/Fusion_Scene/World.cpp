@@ -75,9 +75,10 @@ void World::CreateEnemy(const std::string &id, glm::vec3 position)
 }
 
 void World::CreateSkill(const std::string &skillID, const std::string &skillFusionCombination,
-                                                bool hasGeneric, int damage, float range, glm::vec3 position,
-                                                CelestialBodyType bodyToCreate,
-                                                OnEventFunc skillOnClick, OnEventFunc skillOnFusionCompleted, OnUpdateFunc skillOnUpdate)
+						bool hasGeneric, int damage, float range, glm::vec3 position,
+						CelestialBodyType bodyToCreate,
+						OnEventFunc skillOnClick, OnEventFunc skillOnFusionCompleted, OnUpdateFunc skillOnUpdate,
+						bool isSelectorApplied, glm::vec4 selectorColor, bool hasTransform)
 {
 	std::shared_ptr<Skill> newSkill = 
 		std::shared_ptr<Skill>(new Skill(skillID, skillFusionCombination[0], 
@@ -112,6 +113,27 @@ void World::CreateSkill(const std::string &skillID, const std::string &skillFusi
 		newTransform->scale = glm::vec3();
 		newTransform->rotation = glm::vec3();
 
+		newSkill->AddComponent(FE_COMPONENT_TRANSFORM, newTransform);
+	}
+
+	if (isSelectorApplied)
+	{
+		std::shared_ptr<SkillSelectorAppliedComponent> newSelectorApplied = 
+			std::make_shared<SkillSelectorAppliedComponent>();
+		Utility::Primitives::Circle selector = Utility::Primitives::Circle(selectorColor, position, range, 90);
+		selector.Init();
+		newSelectorApplied->skillSelector = selector;
+		
+		newSkill->AddComponent(FE_COMPONENT_SKILL_SELECTOR_APPLIED, newSelectorApplied);
+	}
+
+	if (hasTransform)
+	{
+		std::shared_ptr<TransformComponent> newTransform = std::make_shared<TransformComponent>();
+		newTransform->position = position;
+		newTransform->scale = glm::vec3(range, 0.0f, range);
+		newTransform->rotation = glm::vec3();
+		
 		newSkill->AddComponent(FE_COMPONENT_TRANSFORM, newTransform);
 	}
 
@@ -183,6 +205,9 @@ void World::Load(const std::string &guiLayoutFile,
 
 	CreateSkill("ult", "ewq", true, 300, -1.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
 				nullptr, Ultimate_OnFusionCompleted, nullptr);
+	CreateSkill("aoe", "wqe", true, 10, 2.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
+				AOE_OnClick, AOE_OnFusionCompleted, AOE_OnUpdate,
+				true, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), true);
 }
 
 void World::ReloadGUI(const std::string &guiLayoutFile)
@@ -222,6 +247,12 @@ void World::Render()
 			{
 				sunLight.Render(displayData.modelMatrix, shaderManager);
 				renderer.Render(displayData.modelMatrix);
+				
+				auto skills = sun->GetAllSkills();
+				for (auto skill = skills.begin(); skill != skills.end(); ++skill)
+				{
+					(*skill)->Render();
+				}
 			}
 		}
 	}

@@ -24,15 +24,10 @@
 
 namespace FusionEngine
 {
-	class Entity;
-	class EntityManager;
+	void AOE_OnClick(const std::string &skillID, const IEventData &eventData);
+	void AOE_OnFusionCompleted(const std::string &skillID, const IEventData &eventData);
 
-	void AOE_OnClick(EntityManager *entityManager, Entity *entity, 
-					 const IEventData &eventData);
-	void AOE_OnFusionCompleted(EntityManager *entityManager, Entity *entity, 
-							   const IEventData &eventData);
-
-	void AOE_OnUpdate(EntityManager *entityManager, Entity *entity);
+	void AOE_OnUpdate(const std::string &skillID);
 }
 
 #endif

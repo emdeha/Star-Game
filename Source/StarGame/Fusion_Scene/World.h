@@ -93,7 +93,9 @@ namespace FusionEngine
 		void CreateSkill(const std::string &id, const std::string &fusionCombination,
 						 bool hasGeneric, int damage, float range, glm::vec3 position,
 						 CelestialBodyType bodyToCreate,
-						 OnEventFunc onClick, OnEventFunc onFusionCompleted, OnUpdateFunc onUpdate);
+						 OnEventFunc onClick, OnEventFunc onFusionCompleted, OnUpdateFunc onUpdate,
+						 bool isSelectorApplied = false, glm::vec4 selectorColor = glm::vec4(), 
+						 bool hasTransform = false);
 
 	public:
 		float interpolation;

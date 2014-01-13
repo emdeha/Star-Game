@@ -32,7 +32,7 @@ std::shared_ptr<IComponent> Composable::GetComponent(ComponentType componentID)
 		return (*componentToReturn).second;
 	}
 
-	// TODO: Maybe that's not an unexpected error.
+	// TODO: Figure out how to render skills without this throwing.
 	//std::ostringstream errorMsg;
 	//errorMsg << "Component with id " << (unsigned int)componentID << " not found!\n";
 	//HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);

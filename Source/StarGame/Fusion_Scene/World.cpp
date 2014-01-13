@@ -78,7 +78,8 @@ void World::CreateSkill(const std::string &skillID, const std::string &skillFusi
 						bool hasGeneric, int damage, float range, glm::vec3 position,
 						CelestialBodyType bodyToCreate,
 						OnEventFunc skillOnClick, OnEventFunc skillOnFusionCompleted, OnUpdateFunc skillOnUpdate,
-						bool isSelectorApplied, glm::vec4 selectorColor, bool hasTransform)
+						bool isSelectorApplied, glm::vec4 selectorColor, bool hasTransform,
+						bool isTimed, float duration_secs, float damageDuration_secs)
 {
 	std::shared_ptr<Skill> newSkill = 
 		std::shared_ptr<Skill>(new Skill(skillID, skillFusionCombination[0], 
@@ -125,6 +126,20 @@ void World::CreateSkill(const std::string &skillID, const std::string &skillFusi
 		newSelectorApplied->skillSelector = selector;
 		
 		newSkill->AddComponent(FE_COMPONENT_SKILL_SELECTOR_APPLIED, newSelectorApplied);
+	}
+
+	if (isTimed)
+	{
+		std::shared_ptr<SkillTimedComponent> newSkillTimed = std::make_shared<SkillTimedComponent>();
+
+		newSkillTimed->attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE);
+		newSkillTimed->attackTimer.SetPause(true);
+
+		newSkillTimed->damageApplyTimeDuration_seconds = damageDuration_secs;
+		newSkillTimed->damageApplyTime_seconds = damageDuration_secs;
+		newSkillTimed->duration_seconds = duration_secs;
+
+		newSkill->AddComponent(FE_COMPONENT_SKILL_TIMED, newSkillTimed);
 	}
 
 	if (hasTransform)
@@ -207,7 +222,11 @@ void World::Load(const std::string &guiLayoutFile,
 				nullptr, Ultimate_OnFusionCompleted, nullptr);
 	CreateSkill("aoe", "wqe", true, 10, 2.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
 				AOE_OnClick, AOE_OnFusionCompleted, AOE_OnUpdate,
-				true, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), true);
+				true, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), true);
+	CreateSkill("burn", "wee", true, 10, 2.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
+				Burn_OnClick, Burn_OnFusionCompleted, Burn_OnUpdate,
+				true, glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), true,
+				true, 3.0f, 1.0f);
 }
 
 void World::ReloadGUI(const std::string &guiLayoutFile)

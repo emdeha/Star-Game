@@ -95,7 +95,8 @@ namespace FusionEngine
 						 CelestialBodyType bodyToCreate,
 						 OnEventFunc onClick, OnEventFunc onFusionCompleted, OnUpdateFunc onUpdate,
 						 bool isSelectorApplied = false, glm::vec4 selectorColor = glm::vec4(), 
-						 bool hasTransform = false);
+						 bool hasTransform = false,
+						 bool isTimed = false, float duration_secs = 0.0f, float damageDuration_secs = 0.0f);
 
 	public:
 		float interpolation;

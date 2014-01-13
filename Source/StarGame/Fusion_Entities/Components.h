@@ -74,6 +74,19 @@ namespace FusionEngine
 		virtual ~SkillSelectorAppliedComponent() {}
 	};
 
+	class SkillTimedComponent : public IComponent
+	{
+	public:
+		float damageApplyTime_seconds;
+		float damageApplyTimeDuration_seconds;
+		float duration_seconds;
+
+		Framework::Timer attackTimer;
+		Framework::Timer skillLifeTimer;
+
+		virtual ~SkillTimedComponent() {}
+	};
+
 	class SkillGenericComponent : public IComponent
 	{
 	public:

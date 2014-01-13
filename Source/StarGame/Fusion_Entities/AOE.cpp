@@ -42,8 +42,6 @@ void FusionEngine::AOE_OnUpdate(const std::string &skillID)
 	{
 		TransformComponent *skillTransform =
 			static_cast<TransformComponent*>(GetWorld().GetComponentForObject(skillID, FE_COMPONENT_TRANSFORM).get());
-		SkillSelectorAppliedComponent *skillSelector =
-			static_cast<SkillSelectorAppliedComponent*>(GetWorld().GetComponentForObject(skillID, FE_COMPONENT_SKILL_SELECTOR_APPLIED).get());
 
 		DisplayData currentDisplayData = GetWorld().GetDisplayData();
 

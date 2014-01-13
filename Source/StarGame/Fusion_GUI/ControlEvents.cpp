@@ -112,25 +112,33 @@ void KeyPressed_GameLayout(FusionEngine::Control *control, const FusionEngine::I
 	
 	if (key == ASCII_CHAR_ESCAPE)
 	{
-		if (GetWorld().GetCurrentLayout()->HasActiveTextBox())
+		if (GetWorld().GetCurrentLayout()->GetType() != FE_LAYOUT_MENU)
 		{
-			GetWorld().GetCurrentLayout()->DeactivateAllControls();			
-			return;
-		}
+			if (GetWorld().GetCurrentLayout()->HasActiveTextBox())
+			{
+				GetWorld().GetCurrentLayout()->DeactivateAllControls();			
+				return;
+			}
 
-		Control *resumeGame = GetWorld().GetLayout(FE_LAYOUT_MENU)->GetControl("resumeGame");
-		Control *newGame = GetWorld().GetLayout(FE_LAYOUT_MENU)->GetControl("newGame");
-		Control *loadGame = GetWorld().GetLayout(FE_LAYOUT_MENU)->GetControl("loadGame");
-		Control *saveGame = GetWorld().GetLayout(FE_LAYOUT_MENU)->GetControl("saveGame");
-		if (resumeGame && newGame && loadGame && saveGame)
-		{
-			resumeGame->SetVisibility(true);
-			saveGame->SetVisibility(true);
-			newGame->SetVisibility(false);
-			loadGame->SetVisibility(false);
+			Control *resumeGame = GetWorld().GetLayout(FE_LAYOUT_MENU)->GetControl("resumeGame");
+			Control *newGame = GetWorld().GetLayout(FE_LAYOUT_MENU)->GetControl("newGame");
+			Control *loadGame = GetWorld().GetLayout(FE_LAYOUT_MENU)->GetControl("loadGame");
+			Control *saveGame = GetWorld().GetLayout(FE_LAYOUT_MENU)->GetControl("saveGame");
+			if (resumeGame && newGame && loadGame && saveGame)
+			{
+				resumeGame->SetVisibility(true);
+				saveGame->SetVisibility(true);
+				newGame->SetVisibility(false);
+				loadGame->SetVisibility(false);
+			}
+			GetWorld().GetCurrentLayout()->DeactivateAllControls();
+			GetWorld().SetLayout(FE_LAYOUT_MENU);
 		}
-		GetWorld().GetCurrentLayout()->DeactivateAllControls();
-		GetWorld().SetLayout(FE_LAYOUT_MENU);
+		else
+		{
+			//exit(0);
+			//return;
+		}
 	}
 }
 

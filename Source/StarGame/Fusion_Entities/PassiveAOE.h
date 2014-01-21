@@ -24,7 +24,6 @@
 
 namespace FusionEngine
 {
-	void PassiveAOE_OnClick(const std::string &skillID, const IEventData &eventData);
 	void PassiveAOE_OnFusionCompleted(const std::string &skillID, const IEventData &eventData);
 
 	void PassiveAOE_OnUpdate(const std::string &skillID);

@@ -24,9 +24,6 @@
 
 namespace FusionEngine
 {
-	void Chaining_OnClick(const std::string &skillID, const IEventData &eventData);
-	void Chaining_OnFusionCompleted(const std::string &skillID, const IEventData &eventData);
-
 	void Chaining_OnUpdate(const std::string &skillID);
 }
 

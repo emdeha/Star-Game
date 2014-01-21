@@ -79,7 +79,9 @@ void World::CreateSkill(const std::string &skillID, const std::string &skillFusi
 						CelestialBodyType bodyToCreate,
 						OnEventFunc skillOnClick, OnEventFunc skillOnFusionCompleted, OnUpdateFunc skillOnUpdate,
 						bool isSelectorApplied, glm::vec4 selectorColor, bool hasTransform,
-						bool isTimed, float duration_secs, float damageDuration_secs)
+						bool isTimed, float duration_secs, float damageDuration_secs, float skillLife_secs,
+						const std::string &holderID,
+						bool isAnimated, float currentScale, float scaleRate)
 {
 	std::shared_ptr<Skill> newSkill = 
 		std::shared_ptr<Skill>(new Skill(skillID, skillFusionCombination[0], 
@@ -102,6 +104,7 @@ void World::CreateSkill(const std::string &skillID, const std::string &skillFusi
 	if (hasGeneric)
 	{
 		std::shared_ptr<SkillGenericComponent> newGeneric = std::make_shared<SkillGenericComponent>();
+		newGeneric->holderID = holderID;
 		newGeneric->damage = damage;
 		newGeneric->range = range;
 		newGeneric->isActive = false;
@@ -134,12 +137,26 @@ void World::CreateSkill(const std::string &skillID, const std::string &skillFusi
 
 		newSkillTimed->attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE);
 		newSkillTimed->attackTimer.SetPause(true);
+		if (skillLife_secs > 0.0f)
+		{
+			newSkillTimed->skillLifeTimer = Framework::Timer(Framework::Timer::TT_SINGLE, skillLife_secs);
+		}
 
 		newSkillTimed->damageApplyTimeDuration_seconds = damageDuration_secs;
 		newSkillTimed->damageApplyTime_seconds = damageDuration_secs;
 		newSkillTimed->duration_seconds = duration_secs;
 
 		newSkill->AddComponent(FE_COMPONENT_SKILL_TIMED, newSkillTimed);
+	}
+
+	if (isAnimated)
+	{
+		std::shared_ptr<SkillAnimatedComponent> newSkillAnimated = std::make_shared<SkillAnimatedComponent>();
+
+		newSkillAnimated->currentScale = currentScale;
+		newSkillAnimated->scaleRate = scaleRate;
+
+		newSkill->AddComponent(FE_COMPONENT_SKILL_ANIMATED, newSkillAnimated);
 	}
 
 	if (hasTransform)
@@ -227,6 +244,10 @@ void World::Load(const std::string &guiLayoutFile,
 				Burn_OnClick, Burn_OnFusionCompleted, Burn_OnUpdate,
 				true, glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), true,
 				true, 3.0f, 1.0f);
+	CreateSkill("passiveAoe", "weq", true, 10, 2.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
+				nullptr, PassiveAOE_OnFusionCompleted, PassiveAOE_OnUpdate,
+				true, glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), true,
+				true, 10.0f, 1.0f, 3.0f);
 }
 
 void World::ReloadGUI(const std::string &guiLayoutFile)

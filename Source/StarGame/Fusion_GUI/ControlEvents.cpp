@@ -136,8 +136,8 @@ void KeyPressed_GameLayout(FusionEngine::Control *control, const FusionEngine::I
 		}
 		else
 		{
-			//exit(0);
-			//return;
+			exit(0);
+			return;
 		}
 	}
 }

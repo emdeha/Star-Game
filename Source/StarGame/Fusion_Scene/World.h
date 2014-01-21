@@ -96,7 +96,10 @@ namespace FusionEngine
 						 OnEventFunc onClick, OnEventFunc onFusionCompleted, OnUpdateFunc onUpdate,
 						 bool isSelectorApplied = false, glm::vec4 selectorColor = glm::vec4(), 
 						 bool hasTransform = false,
-						 bool isTimed = false, float duration_secs = 0.0f, float damageDuration_secs = 0.0f);
+						 bool isTimed = false, float duration_secs = 0.0f, float damageDuration_secs = 0.0f,
+						 float skillLife_secs = 0.0f,
+						 const std::string &holderID = "",
+						 bool isAnimated = false, float currentScale = 0.0f, float scaleRate = 0.0f);
 
 	public:
 		float interpolation;

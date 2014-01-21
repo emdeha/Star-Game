@@ -87,9 +87,20 @@ namespace FusionEngine
 		virtual ~SkillTimedComponent() {}
 	};
 
+	class SkillAnimatedComponent : public IComponent
+	{
+	public:
+		float currentScale;
+		float scaleRate;
+
+		virtual ~SkillAnimatedComponent() {}
+	};
+
 	class SkillGenericComponent : public IComponent
 	{
 	public:
+		std::string holderID;
+
 		int damage;
 		float range;
 

@@ -155,10 +155,15 @@ void Skill::Render()
 		static_cast<SkillSelectorAppliedComponent*>(
 			GetWorld().GetComponentForObject(id, FE_COMPONENT_SKILL_SELECTOR_APPLIED).get());
 
+	SkillAnimatedComponent *skillAnimated = 
+		static_cast<SkillAnimatedComponent*>(
+			GetWorld().GetComponentForObject(id, FE_COMPONENT_SKILL_ANIMATED).get());
+
 	TransformComponent *skillTransform = 
 		static_cast<TransformComponent*>(GetWorld().GetComponentForObject(id, FE_COMPONENT_TRANSFORM).get());
 
-	if (skillGeneric && skillSelector && skillTransform && skillGeneric->isActive)
+	if (skillGeneric && (skillSelector || skillAnimated) && 
+	    skillTransform && skillGeneric->isActive)
 	{
 		glutil::PushStack push(GetWorld().GetDisplayData().modelMatrix);
 		GetWorld().GetDisplayData().modelMatrix.Translate(skillTransform->position);
@@ -170,6 +175,13 @@ void Skill::Render()
 		{
 			skillSelector->skillSelector.Draw(GetWorld().GetDisplayData().modelMatrix, 
 											  GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
+		}
+		else if (skillAnimated)
+		{
+			GetWorld().GetDisplayData().modelMatrix.Scale(skillAnimated->currentScale);
+
+			skillAnimated->anim.Draw(GetWorld().GetDisplayData().modelMatrix, 
+									 GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_SIMPLE));
 		}
 
 		glDisable(GL_BLEND);

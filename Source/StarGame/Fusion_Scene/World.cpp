@@ -156,6 +156,12 @@ void World::CreateSkill(const std::string &skillID, const std::string &skillFusi
 		newSkillAnimated->currentScale = currentScale;
 		newSkillAnimated->scaleRate = scaleRate;
 
+		Utility::Primitives::Torus2D anim =
+			Utility::Primitives::Torus2D(selectorColor, position, currentScale, currentScale+0.02f, 90);
+		anim.Init();
+
+		newSkillAnimated->anim = anim;
+
 		newSkill->AddComponent(FE_COMPONENT_SKILL_ANIMATED, newSkillAnimated);
 	}
 
@@ -248,6 +254,11 @@ void World::Load(const std::string &guiLayoutFile,
 				nullptr, PassiveAOE_OnFusionCompleted, PassiveAOE_OnUpdate,
 				true, glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), true,
 				true, 10.0f, 1.0f, 3.0f);
+
+	CreateSkill("sunNova", "wqq", true, 50, 5.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
+				nullptr, SunNova_OnFusionCompleted, SunNova_OnUpdate, false, 
+				glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), true, false, 0.0f, 0.0f,
+				0.0f, "sun", true, 1.0f, 0.02f);
 }
 
 void World::ReloadGUI(const std::string &guiLayoutFile)

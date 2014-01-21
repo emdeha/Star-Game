@@ -24,7 +24,6 @@
 
 namespace FusionEngine
 {
-	void SunNova_OnClick(const std::string &skillID, const IEventData &eventData);
 	void SunNova_OnFusionCompleted(const std::string &skillID, const IEventData &eventData);
 
 	void SunNova_OnUpdate(const std::string &skillID);

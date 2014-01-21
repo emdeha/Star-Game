@@ -90,6 +90,8 @@ namespace FusionEngine
 	class SkillAnimatedComponent : public IComponent
 	{
 	public:
+		Utility::Primitives::Torus2D anim;
+
 		float currentScale;
 		float scaleRate;
 

@@ -31,6 +31,6 @@ void HandleUnexpectedError(const std::string &message, unsigned line, const std:
 	while(true);
 #else
 	printf("Error %s at line %u in file %s\n\n", message.c_str(), line, file.c_str());
-	printf("\a\a\a\a");
+	//printf("\a\a\a\a");
 #endif
 }

@@ -109,6 +109,7 @@ void World::CreateSkill(const std::string &skillID, const std::string &skillFusi
 		newGeneric->range = range;
 		newGeneric->isActive = false;
 		newGeneric->isDeployed = false;
+		newGeneric->isChain = false;
 
 		newSkill->AddComponent(FE_COMPONENT_SKILL_GENERIC, newGeneric);
 
@@ -259,6 +260,9 @@ void World::Load(const std::string &guiLayoutFile,
 				nullptr, SunNova_OnFusionCompleted, SunNova_OnUpdate, false, 
 				glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), true, false, 0.0f, 0.0f,
 				0.0f, "sun", true, 1.0f, 0.02f);
+	// ***************************************
+	// Skill Chain added on satellite creation
+	// ***************************************
 }
 
 void World::ReloadGUI(const std::string &guiLayoutFile)

@@ -109,6 +109,8 @@ namespace FusionEngine
 		bool isActive;
 		bool isDeployed;
 
+		bool isChain;
+
 		virtual ~SkillGenericComponent() {}
 	};
 

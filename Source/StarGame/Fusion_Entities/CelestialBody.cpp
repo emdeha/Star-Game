@@ -22,6 +22,8 @@
 #include "../Fusion_Scene/World.h"
 #include "../Fusion_Entities/Components.h"
 
+#include "../Fusion_Entities/Chaining.h"
+
 #pragma warning(push, 1)
 #include <time.h>
 #pragma warning(pop)
@@ -198,6 +200,49 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 	currentSatelliteCount++;
 
 	GetWorld().GetRenderer().SubscribeForRendering(newSat->GetID(), sunMesh);
+
+	// Skill Chain
+	std::string skillName = "skill";
+	skillName += id;
+	std::shared_ptr<Skill> newSkill = 
+		std::shared_ptr<Skill>(new Skill(skillName, '0', '0', '0', 0, 0));
+
+	newSkill->SetOnFusionCompletedCallback(Chaining_OnFusionCompleted);
+	newSkill->SetOnUpdateCallback(Chaining_OnUpdate);
+
+	std::shared_ptr<SkillGenericComponent> newGeneric = std::make_shared<SkillGenericComponent>();
+	newGeneric->holderID = id;
+	newGeneric->damage = 10;
+	newGeneric->range = 2.0f;
+	newGeneric->isActive = false;
+	newGeneric->isDeployed = false;
+
+	newSkill->AddComponent(FE_COMPONENT_SKILL_GENERIC, newGeneric);
+
+	std::shared_ptr<TransformComponent> newTransform = std::make_shared<TransformComponent>();
+	newTransform->position = glm::vec3();
+	newTransform->rotation = glm::vec3();
+	newTransform->scale = glm::vec3();
+
+	newSkill->AddComponent(FE_COMPONENT_TRANSFORM, newTransform);
+
+	std::shared_ptr<SkillAnimatedComponent> newSkillAnimated = std::make_shared<SkillAnimatedComponent>();
+
+	newSkillAnimated->currentScale = 1.0f;
+	newSkillAnimated->scaleRate = 0.02f;
+
+
+	Utility::Primitives::Torus2D anim =
+		Utility::Primitives::Torus2D(glm::vec4(1.0f, 1.0f, 0.0f, 0.5f), 
+									 glm::vec3(), 1.0f, 1.02f, 90);
+	anim.Init();
+
+	newSkillAnimated->anim = anim;
+
+	newSkill->AddComponent(FE_COMPONENT_SKILL_ANIMATED, newSkillAnimated);
+	// End Skill Chain
+
+	newSat->AddSkill(skillName, newSkill);
 
 	return true;
 }

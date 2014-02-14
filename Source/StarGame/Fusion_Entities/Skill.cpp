@@ -136,6 +136,7 @@ Skill::Skill(const std::string &newID,
 
 	GetWorld().GetEventManager().AddListener(this, FusionEngine::EVENT_ON_CLICK);
 	GetWorld().GetEventManager().AddListener(this, FusionEngine::EVENT_ON_FUSION_COMPLETED);
+	GetWorld().GetEventManager().AddListener(this, FusionEngine::EVENT_ON_SKILL_APPLIED);
 }
 
 void Skill::Update()
@@ -206,11 +207,38 @@ bool Skill::HandleEvent(const IEventData &eventData)
 		{
 			if (OnFusionCompleted)
 			{
-				const OnFusionCompletedEvent &data = static_cast<const OnFusionCompletedEvent&>(eventData);
+				const OnFusionCompletedEvent &data =
+					static_cast<const OnFusionCompletedEvent&>(eventData);
 
 				if (IsForSequence(data.fusionComb))
 				{
 					OnFusionCompleted(id, eventData);
+				}
+			}
+		}
+		break;
+	case FusionEngine::EVENT_ON_SKILL_APPLIED:
+		{
+			SkillGenericComponent *skillData = 
+				static_cast<SkillGenericComponent*>(
+					GetWorld().GetComponentForObject(id, FE_COMPONENT_SKILL_GENERIC).get());
+
+			if (skillData && skillData->isChain)
+			{
+				const OnSkillAppliedEvent &data = static_cast<const OnSkillAppliedEvent&>(eventData);
+
+				if (data.isNova)
+				{
+					TransformComponent *transform = 
+						static_cast<TransformComponent*>(
+							GetWorld().GetComponentForObject(skillData->holderID,
+															 FE_COMPONENT_TRANSFORM).get());
+
+					if (glm::length(data.position - transform->position) < data.radius &&
+						glm::length(data.position - transform->position) >= data.radius - 0.1f)
+					{
+						OnFusionCompleted(id, eventData);
+					}
 				}
 			}
 		}

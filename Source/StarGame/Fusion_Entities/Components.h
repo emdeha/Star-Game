@@ -98,6 +98,15 @@ namespace FusionEngine
 		virtual ~SkillAnimatedComponent() {}
 	};
 
+	class SkillDefensiveComponent : public IComponent
+	{
+	public:
+		int defensePoints;
+		int currentDefensePoints;
+
+		virtual ~SkillDefensiveComponent() {}
+	};
+
 	class SkillGenericComponent : public IComponent
 	{
 	public:
@@ -110,6 +119,7 @@ namespace FusionEngine
 		bool isDeployed;
 
 		bool isChain;
+		bool isDefensive;
 
 		virtual ~SkillGenericComponent() {}
 	};

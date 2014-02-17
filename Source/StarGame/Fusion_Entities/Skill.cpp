@@ -144,7 +144,7 @@ void Skill::Update()
 	SkillGenericComponent *skillGeneric = static_cast<SkillGenericComponent*>(
 		GetComponent(FE_COMPONENT_SKILL_GENERIC).get()); 
 
-	if (skillGeneric && skillGeneric->isChain)
+	if (skillGeneric && (skillGeneric->isChain || skillGeneric->isDefensive))
 	{
 		TransformComponent *skillTransform = static_cast<TransformComponent*>(
 			GetComponent(FE_COMPONENT_TRANSFORM).get());

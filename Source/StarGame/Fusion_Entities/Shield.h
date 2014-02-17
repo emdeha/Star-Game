@@ -24,7 +24,6 @@
 
 namespace FusionEngine
 {
-	void Shield_OnClick(const std::string &skillID, const IEventData &eventData);
 	void Shield_OnFusionCompleted(const std::string &skillID, const IEventData &eventData);
 
 	void Shield_OnUpdate(const std::string &skillID);

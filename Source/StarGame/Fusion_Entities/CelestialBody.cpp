@@ -23,6 +23,8 @@
 #include "../Fusion_Entities/Components.h"
 
 #include "../Fusion_Entities/Chaining.h"
+#include "../Fusion_Entities/Shield.h"
+#include "../Fusion_Entities/Frost.h"
 
 #pragma warning(push, 1)
 #include <time.h>
@@ -202,8 +204,8 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 	GetWorld().GetRenderer().SubscribeForRendering(newSat->GetID(), sunMesh);
 
 	// Skill Chain
-	std::string skillName = "skill";
-	skillName += id;
+	std::string skillName = "skillChain";
+	skillName += newSat->GetID();
 	std::shared_ptr<Skill> newSkill = 
 		std::shared_ptr<Skill>(new Skill(skillName, '0', '0', '0', 0, 0));
 
@@ -243,7 +245,53 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 	newSkill->AddComponent(FE_COMPONENT_SKILL_ANIMATED, newSkillAnimated);
 	// End Skill Chain
 
+	// Skill Shield
+	std::string shieldSkillName = "skillPAOE";
+	shieldSkillName += newSat->GetID();
+	std::shared_ptr<Skill> shield = 
+		std::shared_ptr<Skill>(new Skill(shieldSkillName, 'q', 'w', 'q', 0, 0));
+
+	shield->SetOnFusionCompletedCallback(Shield_OnFusionCompleted);
+	shield->SetOnUpdateCallback(Shield_OnUpdate);
+
+	std::shared_ptr<SkillGenericComponent> shieldGeneric = std::make_shared<SkillGenericComponent>();
+	shieldGeneric->holderID = newSat->GetID();	
+	shieldGeneric->damage = 0;
+	shieldGeneric->range = 2.0f;
+	shieldGeneric->isActive = false;
+	shieldGeneric->isDeployed = false;
+	shieldGeneric->isChain = false;
+	shieldGeneric->isDefensive = true;
+
+	shield->AddComponent(FE_COMPONENT_SKILL_GENERIC, shieldGeneric);
+
+	std::shared_ptr<SkillDefensiveComponent> shieldDefensive = std::make_shared<SkillDefensiveComponent>();
+	shieldDefensive->defensePoints = 3;
+	shieldDefensive->currentDefensePoints = 0;
+
+	shield->AddComponent(FE_COMPONENT_SKILL_DEFENSIVE, shieldDefensive);
+	
+	std::shared_ptr<TransformComponent> shieldTransform = std::make_shared<TransformComponent>();
+	shieldTransform->position = glm::vec3();
+	shieldTransform->scale = glm::vec3();
+	shieldTransform->rotation = glm::vec3();
+
+	shield->AddComponent(FE_COMPONENT_TRANSFORM, shieldTransform);
+
+	std::shared_ptr<SkillSelectorAppliedComponent> shieldSelector = std::make_shared<SkillSelectorAppliedComponent>();
+	Utility::Primitives::Circle selector = Utility::Primitives::Circle(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), 
+																	   glm::vec3(), 1.0f, 90);
+	selector.Init();
+	shieldSelector->skillSelector = selector;
+
+	shield->AddComponent(FE_COMPONENT_SKILL_SELECTOR_APPLIED, shieldSelector);
+	// End Skill Shield
+
+	// Skill Frost
+	// End Skill Frost
+
 	newSat->AddSkill(skillName, newSkill);
+	newSat->AddSkill(shieldSkillName, shield);
 
 	return true;
 }

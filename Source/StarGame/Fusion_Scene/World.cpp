@@ -20,6 +20,11 @@ World::~World()
 {
 }
 
+void World::UpdateCollisionCheck()
+{
+
+}
+
 void World::CreateSun()
 {
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
@@ -110,9 +115,11 @@ void World::CreateSkill(const std::string &skillID, const std::string &skillFusi
 		newGeneric->isActive = false;
 		newGeneric->isDeployed = false;
 		newGeneric->isChain = false;
+		newGeneric->isDefensive = false;
 
 		newSkill->AddComponent(FE_COMPONENT_SKILL_GENERIC, newGeneric);
 
+		// WARN: Duplicate in ""if (hasTransform)"
 		std::shared_ptr<TransformComponent> newTransform = std::make_shared<TransformComponent>();
 		newTransform->position = position;
 		newTransform->scale = glm::vec3();
@@ -262,6 +269,7 @@ void World::Load(const std::string &guiLayoutFile,
 				0.0f, "sun", true, 1.0f, 0.02f);
 	// ***************************************
 	// Skill Chain added on satellite creation
+	// Other sat-related skills are added there also
 	// ***************************************
 }
 
@@ -288,6 +296,8 @@ void World::Update()
 	{
 		(*enemy)->Update();
 	}
+
+	UpdateCollisionCheck();
 }
 
 void World::Render()

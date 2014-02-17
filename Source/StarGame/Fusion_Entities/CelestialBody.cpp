@@ -191,7 +191,7 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 
 	std::shared_ptr<FusionEngine::TransformComponent> satTransformComponent = std::make_shared<TransformComponent>();
 	satTransformComponent->position = glm::vec3();
-	satTransformComponent->scale = glm::vec3(0.4f);
+	satTransformComponent->scale = glm::vec3(0.4f, 0.0f, 0.4f);
 	satTransformComponent->rotation = glm::vec3();
 
 	newSat->AddComponent(FE_COMPONENT_TRANSFORM, satTransformComponent);
@@ -211,10 +211,11 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 	newSkill->SetOnUpdateCallback(Chaining_OnUpdate);
 
 	std::shared_ptr<SkillGenericComponent> newGeneric = std::make_shared<SkillGenericComponent>();
-	newGeneric->holderID = id;
+	newGeneric->holderID = newSat->GetID();
 	newGeneric->damage = 10;
 	newGeneric->range = 2.0f;
 	newGeneric->isActive = false;
+	newGeneric->isChain = true;
 	newGeneric->isDeployed = false;
 
 	newSkill->AddComponent(FE_COMPONENT_SKILL_GENERIC, newGeneric);

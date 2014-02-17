@@ -141,6 +141,19 @@ Skill::Skill(const std::string &newID,
 
 void Skill::Update()
 {
+	SkillGenericComponent *skillGeneric = static_cast<SkillGenericComponent*>(
+		GetComponent(FE_COMPONENT_SKILL_GENERIC).get()); 
+
+	if (skillGeneric && skillGeneric->isChain)
+	{
+		TransformComponent *skillTransform = static_cast<TransformComponent*>(
+			GetComponent(FE_COMPONENT_TRANSFORM).get());
+		TransformComponent *holderTransform = static_cast<TransformComponent*>(
+			GetWorld().GetComponentForObject(skillGeneric->holderID, FE_COMPONENT_TRANSFORM).get());
+
+		skillTransform->position = holderTransform->position;
+	}
+
 	if (OnUpdate)
 	{
 		OnUpdate(id);
@@ -149,19 +162,14 @@ void Skill::Update()
 
 void Skill::Render()
 {
-	SkillGenericComponent *skillGeneric = 
-		static_cast<SkillGenericComponent*>(GetWorld().GetComponentForObject(id, FE_COMPONENT_SKILL_GENERIC).get());
-
-	SkillSelectorAppliedComponent *skillSelector = 
-		static_cast<SkillSelectorAppliedComponent*>(
-			GetWorld().GetComponentForObject(id, FE_COMPONENT_SKILL_SELECTOR_APPLIED).get());
-
-	SkillAnimatedComponent *skillAnimated = 
-		static_cast<SkillAnimatedComponent*>(
-			GetWorld().GetComponentForObject(id, FE_COMPONENT_SKILL_ANIMATED).get());
-
-	TransformComponent *skillTransform = 
-		static_cast<TransformComponent*>(GetWorld().GetComponentForObject(id, FE_COMPONENT_TRANSFORM).get());
+	SkillGenericComponent *skillGeneric = static_cast<SkillGenericComponent*>(
+		GetComponent(FE_COMPONENT_SKILL_GENERIC).get()); 
+	SkillSelectorAppliedComponent *skillSelector = static_cast<SkillSelectorAppliedComponent*>(
+		GetComponent(FE_COMPONENT_SKILL_SELECTOR_APPLIED).get());
+	SkillAnimatedComponent *skillAnimated = static_cast<SkillAnimatedComponent*>(
+		GetComponent(FE_COMPONENT_SKILL_ANIMATED).get());
+	TransformComponent *skillTransform = static_cast<TransformComponent*>(
+		GetComponent(FE_COMPONENT_TRANSFORM).get());
 
 	if (skillGeneric && (skillSelector || skillAnimated) && 
 	    skillTransform && skillGeneric->isActive)
@@ -219,9 +227,8 @@ bool Skill::HandleEvent(const IEventData &eventData)
 		break;
 	case FusionEngine::EVENT_ON_SKILL_APPLIED:
 		{
-			SkillGenericComponent *skillData = 
-				static_cast<SkillGenericComponent*>(
-					GetWorld().GetComponentForObject(id, FE_COMPONENT_SKILL_GENERIC).get());
+			SkillGenericComponent *skillData = static_cast<SkillGenericComponent*>(
+					GetComponent(FE_COMPONENT_SKILL_GENERIC).get());
 
 			if (skillData && skillData->isChain)
 			{
@@ -229,10 +236,8 @@ bool Skill::HandleEvent(const IEventData &eventData)
 
 				if (data.isNova)
 				{
-					TransformComponent *transform = 
-						static_cast<TransformComponent*>(
-							GetWorld().GetComponentForObject(skillData->holderID,
-															 FE_COMPONENT_TRANSFORM).get());
+					TransformComponent *transform = static_cast<TransformComponent*>(
+						GetComponent(FE_COMPONENT_TRANSFORM).get());
 
 					if (glm::length(data.position - transform->position) < data.radius &&
 						glm::length(data.position - transform->position) >= data.radius - 0.1f)

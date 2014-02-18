@@ -124,6 +124,17 @@ namespace FusionEngine
 		virtual ~SkillGenericComponent() {}
 	};
 
+	class CollisionComponent : public IComponent
+	{
+	public:
+		std::string parentObjectID;
+
+		glm::vec3 center;
+		float radius; 
+		
+		virtual ~CollisionComponent() {}
+	};
+
 	
 	struct Material
 	{

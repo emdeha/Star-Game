@@ -151,7 +151,15 @@ void Skill::Update()
 		TransformComponent *holderTransform = static_cast<TransformComponent*>(
 			GetWorld().GetComponentForObject(skillGeneric->holderID, FE_COMPONENT_TRANSFORM).get());
 
+		CollisionComponent *skillCollision = static_cast<CollisionComponent*>(
+			GetComponent(FE_COMPONENT_COLLISION).get());
+		SkillAnimatedComponent *skillAnimated = static_cast<SkillAnimatedComponent*>(
+			GetComponent(FE_COMPONENT_SKILL_ANIMATED).get());
+
 		skillTransform->position = holderTransform->position;
+
+		skillCollision->center = skillTransform->position;
+		skillCollision->radius = skillAnimated->currentScale;
 	}
 
 	if (OnUpdate)

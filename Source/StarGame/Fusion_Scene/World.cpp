@@ -22,7 +22,42 @@ World::~World()
 
 void World::UpdateCollisionCheck()
 {
+	// should optimize
+	auto colliders = GetObjectsWithComponent(FE_COMPONENT_COLLISION);	
 
+	for (auto collider = colliders.begin(); collider != colliders.end(); ++collider)
+	{
+		for (auto collided = colliders.begin(); collided != colliders.end(); ++collided)
+		{
+			if ((*collider).get()->GetID() != (*collided).get()->GetID() &&
+				(*collider).get()->GetID() != "ult" && (*collided).get()->GetID() != "ult")
+			{
+				CollisionComponent *colliderOneCollision = static_cast<CollisionComponent*>(
+					(*collider).get()->GetComponent(FE_COMPONENT_COLLISION).get());
+				CollisionComponent *colliderTwoCollision = static_cast<CollisionComponent*>(
+					(*collided).get()->GetComponent(FE_COMPONENT_COLLISION).get());
+
+				if (colliderOneCollision->parentObjectID != (*collided).get()->GetID() &&
+					colliderTwoCollision->parentObjectID != (*collider).get()->GetID())
+				{
+					float distanceBetweenColliders = glm::length(
+						colliderOneCollision->center - colliderTwoCollision->center); 
+					float minDistance = colliderOneCollision->radius + colliderTwoCollision->radius;
+					if (distanceBetweenColliders < minDistance)// && 
+						//(colliderOneCollision->radius < 0.0f || colliderTwoCollision->radius < 0.0f))
+					{
+						//std::printf("Body %s collided with %s\n", 
+						//			(*collider).get()->GetID().c_str(), (*collided).get()->GetID().c_str());
+						//std::printf("Distance %f Rad sum %f\n",
+						//			distanceBetweenColliders, minDistance);
+						OnCollideEvent _event = 
+							OnCollideEvent(EVENT_ON_COLLIDE, (*collider).get()->GetID(), (*collided).get()->GetID());
+						eventManager.FireEvent(_event);
+					}
+				}
+			}
+		}
+	}
 }
 
 void World::CreateSun()
@@ -48,6 +83,12 @@ void World::CreateSun()
 
 	sun->AddComponent(FE_COMPONENT_TRANSFORM, sunTransformComponent);
 
+	std::shared_ptr<FusionEngine::CollisionComponent> sunCollisionComponent = std::make_shared<CollisionComponent>();
+	sunCollisionComponent->center = glm::vec3();
+	sunCollisionComponent->radius = 0.5f;
+
+	sun->AddComponent(FE_COMPONENT_COLLISION, sunCollisionComponent);
+
 	renderer.SubscribeForRendering("sun", sunMesh);
 }
 
@@ -69,11 +110,17 @@ void World::CreateEnemy(const std::string &id, glm::vec3 position)
 	spaceshipTransformComponent->rotation = glm::vec3();
 	spaceshipTransformComponent->scale = glm::vec3(0.1f);
 
+	std::shared_ptr<FusionEngine::CollisionComponent> spaceshipCollisionComponent =
+		std::make_shared<CollisionComponent>();
+	spaceshipCollisionComponent->center = position;
+	spaceshipCollisionComponent->radius = 0.0f;
+
 	glm::vec3 frontVector = glm::normalize(glm::vec3() - position); // TODO: Make relative to the Sun
 
 	std::shared_ptr<Enemy> firstEnemy = std::make_shared<Enemy>(id, 0.02f, frontVector);
 	firstEnemy->AddComponent(FE_COMPONENT_RENDER, spaceshipRenderComponent);
 	firstEnemy->AddComponent(FE_COMPONENT_TRANSFORM, spaceshipTransformComponent);
+	firstEnemy->AddComponent(FE_COMPONENT_COLLISION, spaceshipCollisionComponent);
 	enemies.push_back(firstEnemy);
 
 	renderer.SubscribeForRendering(id, enemyMesh);
@@ -119,7 +166,7 @@ void World::CreateSkill(const std::string &skillID, const std::string &skillFusi
 
 		newSkill->AddComponent(FE_COMPONENT_SKILL_GENERIC, newGeneric);
 
-		// WARN: Duplicate in ""if (hasTransform)"
+		// WARN: Duplicate in "if (hasTransform)"
 		std::shared_ptr<TransformComponent> newTransform = std::make_shared<TransformComponent>();
 		newTransform->position = position;
 		newTransform->scale = glm::vec3();
@@ -137,6 +184,13 @@ void World::CreateSkill(const std::string &skillID, const std::string &skillFusi
 		newSelectorApplied->skillSelector = selector;
 		
 		newSkill->AddComponent(FE_COMPONENT_SKILL_SELECTOR_APPLIED, newSelectorApplied);
+
+		std::shared_ptr<CollisionComponent> newSkillCollision = std::make_shared<CollisionComponent>();
+		newSkillCollision->center = position;
+		newSkillCollision->radius = currentScale;
+		newSkillCollision->parentObjectID = "sun";
+
+		newSkill->AddComponent(FE_COMPONENT_COLLISION, newSkillCollision);
 	}
 
 	if (isTimed)
@@ -157,6 +211,7 @@ void World::CreateSkill(const std::string &skillID, const std::string &skillFusi
 		newSkill->AddComponent(FE_COMPONENT_SKILL_TIMED, newSkillTimed);
 	}
 
+
 	if (isAnimated)
 	{
 		std::shared_ptr<SkillAnimatedComponent> newSkillAnimated = std::make_shared<SkillAnimatedComponent>();
@@ -171,6 +226,13 @@ void World::CreateSkill(const std::string &skillID, const std::string &skillFusi
 		newSkillAnimated->anim = anim;
 
 		newSkill->AddComponent(FE_COMPONENT_SKILL_ANIMATED, newSkillAnimated);
+
+		std::shared_ptr<CollisionComponent> newSkillCollision = std::make_shared<CollisionComponent>();
+		newSkillCollision->center = position;
+		newSkillCollision->radius = currentScale;
+		newSkillCollision->parentObjectID = "sun";
+
+		newSkill->AddComponent(FE_COMPONENT_COLLISION, newSkillCollision);
 	}
 
 	if (hasTransform)
@@ -449,6 +511,48 @@ std::shared_ptr<IComponent> World::GetComponentForObject(const std::string &id, 
 	errorMsg << "Object with id: " << id << " not found";
 	HandleUnexpectedError(errorMsg.str(), __LINE__, __FILE__);
 	return nullptr;
+}
+
+std::vector<std::shared_ptr<Composable>> World::GetObjectsWithComponent(ComponentType componentID)
+{
+	std::vector<std::shared_ptr<Composable>> objectsToReturn;
+	if (sun->GetComponent(componentID))
+	{
+		objectsToReturn.push_back(sun);
+	}
+
+	auto sunSats = sun->GetSatellites();
+	for (auto sat = sunSats.begin(); sat != sunSats.end(); ++sat)
+	{
+		if ((*sat)->GetComponent(componentID))
+		{
+			objectsToReturn.push_back(*sat);
+		}
+	}
+
+	auto allSkills = sun->GetAllSkills();
+	for (auto skill = allSkills.begin(); skill != allSkills.end(); ++skill)
+	{
+		if ((*skill)->GetComponent(componentID))
+		{
+			SkillGenericComponent *skillGeneric = static_cast<SkillGenericComponent*>(
+				(*skill)->GetComponent(FE_COMPONENT_SKILL_GENERIC).get());
+			if (skillGeneric->isActive)
+			{
+				objectsToReturn.push_back(*skill);
+			}
+		}
+	}
+
+	for (auto enemy = enemies.begin(); enemy != enemies.end(); ++enemy)
+	{
+		if ((*enemy)->GetComponent(componentID))
+		{
+			objectsToReturn.push_back(*enemy);
+		}
+	}
+
+	return objectsToReturn;
 }
 
 bool World::HandleEvent(const IEventData &eventData)

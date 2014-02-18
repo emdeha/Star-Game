@@ -243,6 +243,12 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 	newSkillAnimated->anim = anim;
 
 	newSkill->AddComponent(FE_COMPONENT_SKILL_ANIMATED, newSkillAnimated);
+
+	std::shared_ptr<CollisionComponent> newSkillCollision = std::make_shared<CollisionComponent>();
+	newSkillCollision->center = glm::vec3();
+	newSkillCollision->radius = newSkillAnimated->currentScale;
+
+	newSkill->AddComponent(FE_COMPONENT_COLLISION, newSkillCollision);
 	// End Skill Chain
 
 	// Skill Shield
@@ -285,6 +291,12 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 	shieldSelector->skillSelector = selector;
 
 	shield->AddComponent(FE_COMPONENT_SKILL_SELECTOR_APPLIED, shieldSelector);
+
+	std::shared_ptr<CollisionComponent> shieldCollision = std::make_shared<CollisionComponent>();
+	shieldCollision->center = glm::vec3();
+	shieldCollision->radius = 1.0f;
+
+	shield->AddComponent(FE_COMPONENT_COLLISION, shieldCollision);
 	// End Skill Shield
 
 	// Skill Frost

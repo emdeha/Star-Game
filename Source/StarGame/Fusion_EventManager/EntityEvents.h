@@ -73,10 +73,11 @@ namespace FusionEngine
 
 	struct OnCollideEvent : public IEventData
 	{
-		std::string collidedBodyID;
+		std::string colliderID;
+		std::string collidedID;
 
-		OnCollideEvent(EventType eventType, const std::string &newCollidedBodyID)
-			: IEventData(eventType), collidedBodyID(newCollidedBodyID) {}
+		OnCollideEvent(EventType eventType, const std::string &newColliderID, const std::string &newCollidedID)
+			: IEventData(eventType), colliderID(newColliderID), collidedID(newCollidedID) {}
 	};
 }
 

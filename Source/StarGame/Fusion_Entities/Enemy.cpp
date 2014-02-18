@@ -16,6 +16,7 @@ Enemy::Enemy(const std::string &newName, float newSpeed, glm::vec3 newFrontVecto
 	: Composable(newName), speed(newSpeed), health(100), frontVector(newFrontVector), currentState(FE_STATE_IDLE) 
 {
 	GetWorld().GetEventManager().AddListener(this, EVENT_ON_SKILL_APPLIED);
+	GetWorld().GetEventManager().AddListener(this, EVENT_ON_COLLIDE);
 }
 
 bool Enemy::HandleEvent(const FusionEngine::IEventData &eventData)
@@ -23,30 +24,52 @@ bool Enemy::HandleEvent(const FusionEngine::IEventData &eventData)
 	EventType type = eventData.GetType();
 	switch (type)
 	{
-	case FusionEngine::EVENT_ON_SKILL_APPLIED:
+	case FusionEngine::EVENT_ON_COLLIDE:
 		{
-			const OnSkillAppliedEvent &data = static_cast<const OnSkillAppliedEvent&>(eventData);
+			const OnCollideEvent &data = static_cast<const OnCollideEvent&>(eventData);
 
-			TransformComponent *enemyTransformData = 
-				static_cast<TransformComponent*>(GetComponent(FE_COMPONENT_TRANSFORM).get());
-
-			if (data.isNova)
+			if (data.colliderID == "sunNova")
 			{
-				if (glm::length(data.position - enemyTransformData->position) < data.radius &&
-					glm::length(data.position - enemyTransformData->position) >= data.radius - 0.1f)
-				{
-					health -= data.damage;
-					std::printf("SUN NOVA: %i, %s", health, id.c_str());
-				}
+				SkillGenericComponent *skillGeneric = static_cast<SkillGenericComponent*>( 
+					GetWorld().GetComponentForObject(data.collidedID, FE_COMPONENT_SKILL_GENERIC).get());
+
+				health -= skillGeneric->damage;
+				std::printf("SUN NOVA: %i, %s", health, id.c_str());
 			}
-			else if (data.radius <= -1.0f ||
-					 glm::length(data.position - enemyTransformData->position) < data.radius)
+			else if (data.collidedID == "ult")
 			{
-				health -= data.damage;
+				SkillGenericComponent *skillGeneric = static_cast<SkillGenericComponent*>( 
+					GetWorld().GetComponentForObject(data.collidedID, FE_COMPONENT_SKILL_GENERIC).get());
+
+				health -= skillGeneric->damage;
 				std::printf("CRITICAL: %i, %s", health, id.c_str());
 			}
 		}
 		break;
+	//case FusionEngine::EVENT_ON_SKILL_APPLIED:
+	//	{
+	//		const OnSkillAppliedEvent &data = static_cast<const OnSkillAppliedEvent&>(eventData);
+
+	//		TransformComponent *enemyTransformData = 
+	//			static_cast<TransformComponent*>(GetComponent(FE_COMPONENT_TRANSFORM).get());
+
+	//		if (data.isNova)
+	//		{
+	//			if (glm::length(data.position - enemyTransformData->position) < data.radius &&
+	//				glm::length(data.position - enemyTransformData->position) >= data.radius - 0.1f)
+	//			{
+	//				health -= data.damage;
+	//				std::printf("SUN NOVA: %i, %s", health, id.c_str());
+	//			}
+	//		}
+	//		else if (data.radius <= -1.0f ||
+	//				 glm::length(data.position - enemyTransformData->position) < data.radius)
+	//		{
+	//			health -= data.damage;
+	//			std::printf("CRITICAL: %i, %s", health, id.c_str());
+	//		}
+	//	}
+	//	break;
 	}
 	
 	return false;
@@ -107,6 +130,10 @@ void Enemy::Update()
 	{
 		enemyTransformData->position += frontVector * World::GetWorld().interpolation * speed;
 		UpdateAI();
+
+		CollisionComponent *enemyCollisionData =
+			static_cast<CollisionComponent*>(GetComponent(FE_COMPONENT_COLLISION).get());
+		enemyCollisionData->center = enemyTransformData->position;
 	}
 
 	if (health <= 20)

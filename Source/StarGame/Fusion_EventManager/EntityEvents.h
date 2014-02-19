@@ -67,7 +67,8 @@ namespace FusionEngine
 		int damage;
 		bool isNova;
 		
-		OnSkillAppliedEvent(EventType eventType,  glm::vec3 newPosition, float newRadius, int newDamage, bool newIsNova)
+		OnSkillAppliedEvent(EventType eventType,
+							glm::vec3 newPosition, float newRadius, int newDamage, bool newIsNova)
 			: IEventData(eventType), position(newPosition), radius(newRadius), damage(newDamage), isNova(newIsNova) {}
 	};
 
@@ -75,9 +76,13 @@ namespace FusionEngine
 	{
 		std::string colliderID;
 		std::string collidedID;
+		std::string colliderType;
 
-		OnCollideEvent(EventType eventType, const std::string &newColliderID, const std::string &newCollidedID)
-			: IEventData(eventType), colliderID(newColliderID), collidedID(newCollidedID) {}
+		OnCollideEvent(EventType eventType, 
+					  const std::string &newColliderID, const std::string &newCollidedID, 
+					  const std::string& newColliderType)
+			: IEventData(eventType), colliderID(newColliderID), collidedID(newCollidedID),
+									 colliderType(newColliderType) {}
 	};
 }
 

@@ -20,46 +20,6 @@ World::~World()
 {
 }
 
-void World::UpdateCollisionCheck()
-{
-	// should optimize
-	auto colliders = GetObjectsWithComponent(FE_COMPONENT_COLLISION);	
-
-	for (auto collider = colliders.begin(); collider != colliders.end(); ++collider)
-	{
-		for (auto collided = colliders.begin(); collided != colliders.end(); ++collided)
-		{
-			if ((*collider).get()->GetID() != (*collided).get()->GetID() &&
-				(*collider).get()->GetID() != "ult" && (*collided).get()->GetID() != "ult")
-			{
-				CollisionComponent *colliderOneCollision = static_cast<CollisionComponent*>(
-					(*collider).get()->GetComponent(FE_COMPONENT_COLLISION).get());
-				CollisionComponent *colliderTwoCollision = static_cast<CollisionComponent*>(
-					(*collided).get()->GetComponent(FE_COMPONENT_COLLISION).get());
-
-				if (colliderOneCollision->parentObjectID != (*collided).get()->GetID() &&
-					colliderTwoCollision->parentObjectID != (*collider).get()->GetID())
-				{
-					float distanceBetweenColliders = glm::length(
-						colliderOneCollision->center - colliderTwoCollision->center); 
-					float minDistance = colliderOneCollision->radius + colliderTwoCollision->radius;
-					if (distanceBetweenColliders < minDistance)// && 
-						//(colliderOneCollision->radius < 0.0f || colliderTwoCollision->radius < 0.0f))
-					{
-						//std::printf("Body %s collided with %s\n", 
-						//			(*collider).get()->GetID().c_str(), (*collided).get()->GetID().c_str());
-						//std::printf("Distance %f Rad sum %f\n",
-						//			distanceBetweenColliders, minDistance);
-						OnCollideEvent _event = 
-							OnCollideEvent(EVENT_ON_COLLIDE, (*collider).get()->GetID(), (*collided).get()->GetID());
-						eventManager.FireEvent(_event);
-					}
-				}
-			}
-		}
-	}
-}
-
 void World::CreateSun()
 {
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
@@ -85,7 +45,8 @@ void World::CreateSun()
 
 	std::shared_ptr<FusionEngine::CollisionComponent> sunCollisionComponent = std::make_shared<CollisionComponent>();
 	sunCollisionComponent->center = glm::vec3();
-	sunCollisionComponent->radius = 0.5f;
+	sunCollisionComponent->innerRadius = 0.5f;
+	sunCollisionComponent->cType = CollisionComponent::FE_COLLISION_CIRCLE;
 
 	sun->AddComponent(FE_COMPONENT_COLLISION, sunCollisionComponent);
 
@@ -113,7 +74,8 @@ void World::CreateEnemy(const std::string &id, glm::vec3 position)
 	std::shared_ptr<FusionEngine::CollisionComponent> spaceshipCollisionComponent =
 		std::make_shared<CollisionComponent>();
 	spaceshipCollisionComponent->center = position;
-	spaceshipCollisionComponent->radius = 0.0f;
+	spaceshipCollisionComponent->innerRadius = 0.0f;
+	spaceshipCollisionComponent->cType = CollisionComponent::FE_COLLISION_CIRCLE;
 
 	glm::vec3 frontVector = glm::normalize(glm::vec3() - position); // TODO: Make relative to the Sun
 
@@ -187,8 +149,8 @@ void World::CreateSkill(const std::string &skillID, const std::string &skillFusi
 
 		std::shared_ptr<CollisionComponent> newSkillCollision = std::make_shared<CollisionComponent>();
 		newSkillCollision->center = position;
-		newSkillCollision->radius = currentScale;
-		newSkillCollision->parentObjectID = "sun";
+		newSkillCollision->innerRadius = currentScale;
+		newSkillCollision->cType = CollisionComponent::FE_COLLISION_CIRCLE;
 
 		newSkill->AddComponent(FE_COMPONENT_COLLISION, newSkillCollision);
 	}
@@ -229,8 +191,9 @@ void World::CreateSkill(const std::string &skillID, const std::string &skillFusi
 
 		std::shared_ptr<CollisionComponent> newSkillCollision = std::make_shared<CollisionComponent>();
 		newSkillCollision->center = position;
-		newSkillCollision->radius = currentScale;
-		newSkillCollision->parentObjectID = "sun";
+		newSkillCollision->innerRadius = currentScale;
+		newSkillCollision->outerRadius = currentScale - 0.1f;
+		newSkillCollision->cType = CollisionComponent::FE_COLLISION_TORUS;
 
 		newSkill->AddComponent(FE_COMPONENT_COLLISION, newSkillCollision);
 	}
@@ -358,8 +321,6 @@ void World::Update()
 	{
 		(*enemy)->Update();
 	}
-
-	UpdateCollisionCheck();
 }
 
 void World::Render()

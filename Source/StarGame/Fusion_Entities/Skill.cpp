@@ -144,22 +144,30 @@ void Skill::Update()
 	SkillGenericComponent *skillGeneric = static_cast<SkillGenericComponent*>(
 		GetComponent(FE_COMPONENT_SKILL_GENERIC).get()); 
 
+	TransformComponent *skillTransform = static_cast<TransformComponent*>(
+		GetComponent(FE_COMPONENT_TRANSFORM).get());
+
 	if (skillGeneric && (skillGeneric->isChain || skillGeneric->isDefensive))
 	{
-		TransformComponent *skillTransform = static_cast<TransformComponent*>(
-			GetComponent(FE_COMPONENT_TRANSFORM).get());
 		TransformComponent *holderTransform = static_cast<TransformComponent*>(
 			GetWorld().GetComponentForObject(skillGeneric->holderID, FE_COMPONENT_TRANSFORM).get());
 
-		CollisionComponent *skillCollision = static_cast<CollisionComponent*>(
-			GetComponent(FE_COMPONENT_COLLISION).get());
-		SkillAnimatedComponent *skillAnimated = static_cast<SkillAnimatedComponent*>(
-			GetComponent(FE_COMPONENT_SKILL_ANIMATED).get());
-
 		skillTransform->position = holderTransform->position;
+	}
 
+	CollisionComponent *skillCollision = static_cast<CollisionComponent*>(
+		GetComponent(FE_COMPONENT_COLLISION).get());
+	SkillAnimatedComponent *skillAnimated = static_cast<SkillAnimatedComponent*>(
+		GetComponent(FE_COMPONENT_SKILL_ANIMATED).get());
+
+	if (skillCollision && skillAnimated)
+	{
 		skillCollision->center = skillTransform->position;
-		skillCollision->radius = skillAnimated->currentScale;
+		skillCollision->innerRadius = skillAnimated->currentScale;
+		if (skillCollision->cType == CollisionComponent::FE_COLLISION_TORUS)
+		{
+			skillCollision->outerRadius = skillAnimated->currentScale - 0.1f;
+		}
 	}
 
 	if (OnUpdate)

@@ -24,52 +24,21 @@ bool Enemy::HandleEvent(const FusionEngine::IEventData &eventData)
 	EventType type = eventData.GetType();
 	switch (type)
 	{
-	case FusionEngine::EVENT_ON_COLLIDE:
+	case FusionEngine::EVENT_ON_SKILL_APPLIED:
 		{
-			const OnCollideEvent &data = static_cast<const OnCollideEvent&>(eventData);
+			const OnSkillAppliedEvent &data = static_cast<const OnSkillAppliedEvent&>(eventData);
 
-			if (data.colliderID == "sunNova")
+			TransformComponent *enemyTransformData = 
+				static_cast<TransformComponent*>(GetComponent(FE_COMPONENT_TRANSFORM).get());
+
+			if (data.radius <= -1.0f ||
+				glm::length(data.position - enemyTransformData->position) < data.radius)
 			{
-				SkillGenericComponent *skillGeneric = static_cast<SkillGenericComponent*>( 
-					GetWorld().GetComponentForObject(data.colliderID, FE_COMPONENT_SKILL_GENERIC).get());
-
-				health -= skillGeneric->damage;
-				std::printf("SUN NOVA: %i, %s", health, id.c_str());
-			}
-			else if (data.colliderID == "ult")
-			{
-				SkillGenericComponent *skillGeneric = static_cast<SkillGenericComponent*>( 
-					GetWorld().GetComponentForObject(data.colliderID, FE_COMPONENT_SKILL_GENERIC).get());
-
-				health -= skillGeneric->damage;
+				health -= data.damage;
 				std::printf("CRITICAL: %i, %s", health, id.c_str());
 			}
 		}
 		break;
-	//case FusionEngine::EVENT_ON_SKILL_APPLIED:
-	//	{
-	//		const OnSkillAppliedEvent &data = static_cast<const OnSkillAppliedEvent&>(eventData);
-
-	//		TransformComponent *enemyTransformData = 
-	//			static_cast<TransformComponent*>(GetComponent(FE_COMPONENT_TRANSFORM).get());
-
-	//		if (data.isNova)
-	//		{
-	//			if (glm::length(data.position - enemyTransformData->position) < data.radius &&
-	//				glm::length(data.position - enemyTransformData->position) >= data.radius - 0.1f)
-	//			{
-	//				health -= data.damage;
-	//				std::printf("SUN NOVA: %i, %s", health, id.c_str());
-	//			}
-	//		}
-	//		else if (data.radius <= -1.0f ||
-	//				 glm::length(data.position - enemyTransformData->position) < data.radius)
-	//		{
-	//			health -= data.damage;
-	//			std::printf("CRITICAL: %i, %s", health, id.c_str());
-	//		}
-	//	}
-	//	break;
 	}
 	
 	return false;
@@ -118,6 +87,52 @@ void Enemy::UpdateAI()
 	}
 }
 
+void Enemy::UpdateCollision()
+{
+	auto collidableObjects = GetWorld().GetObjectsWithComponent(FE_COMPONENT_COLLISION);	
+
+	for (auto collider = collidableObjects.begin(); collider != collidableObjects.end(); ++collider)
+	{
+		if ((*collider).get()->GetID() != id)
+		{
+			CollisionComponent *colliderCollision = static_cast<CollisionComponent*>(
+				(*collider).get()->GetComponent(FE_COMPONENT_COLLISION).get());
+			CollisionComponent *enemyCollision = static_cast<CollisionComponent*>(
+				GetComponent(FE_COMPONENT_COLLISION).get());
+
+			switch (colliderCollision->cType)
+			{
+			case CollisionComponent::FE_COLLISION_CIRCLE:
+				{
+					float distanceBetweenColliders = glm::length(colliderCollision->center - enemyCollision->center); 
+					float minDistance = colliderCollision->innerRadius + enemyCollision->innerRadius;
+					if (distanceBetweenColliders < minDistance)
+					{
+						if ((*collider).get()->GetID().find("skillShield") != std::string::npos)
+						{
+							health = 0;
+							// KILL ENEMY
+						}
+						// Handle collision
+					}  
+				}
+				break;
+			case CollisionComponent::FE_COLLISION_TORUS:
+				{
+					float distanceBetweenColliders = glm::length(colliderCollision->center - enemyCollision->center); 
+					float minDistance = colliderCollision->innerRadius + enemyCollision->innerRadius;
+					float maxDistance = colliderCollision->outerRadius + enemyCollision->innerRadius;
+					if (distanceBetweenColliders < minDistance && distanceBetweenColliders >= maxDistance)
+					{
+						// Handle collision
+					}  
+				}
+				break;
+			}
+		}
+	}
+}
+
 void Enemy::Update()
 {
 	// if (GetWorld().IsEntityKilled("sun") == false)
@@ -125,6 +140,8 @@ void Enemy::Update()
 		static_cast<TransformComponent*>(GetComponent(FE_COMPONENT_TRANSFORM).get());
 
 	enemyTransformData->rotation = glm::vec3(0.0f, glm::degrees(atan2f(frontVector.x, frontVector.z)), 0.0f);
+
+	UpdateCollision();
 
 	if (currentState != FE_STATE_STOPPED)
 	{

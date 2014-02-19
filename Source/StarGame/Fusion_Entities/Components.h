@@ -127,10 +127,18 @@ namespace FusionEngine
 	class CollisionComponent : public IComponent
 	{
 	public:
+		enum CollisionType
+		{
+			FE_COLLISION_CIRCLE,
+			FE_COLLISION_TORUS,
+		};
+
 		std::string parentObjectID;
 
+		CollisionType cType;
 		glm::vec3 center;
-		float radius; 
+		float innerRadius; 
+		float outerRadius;
 		
 		virtual ~CollisionComponent() {}
 	};

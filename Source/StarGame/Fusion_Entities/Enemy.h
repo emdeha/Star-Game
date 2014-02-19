@@ -45,6 +45,7 @@ namespace FusionEngine
 
 	private:
 		void UpdateAI();
+		void UpdateCollision();
 
 	public:
 		Enemy(const std::string &newName, float newSpeed, glm::vec3 newFrontVector);

@@ -35,10 +35,6 @@ void FusionEngine::SunNova_OnUpdate(const std::string &skillID)
 		if (skillAnimated->currentScale <= skillData->range)
 		{
 			skillAnimated->currentScale += skillAnimated->scaleRate;
-
-			//OnSkillAppliedEvent _event = 
-			//	OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, glm::vec3(), skillAnimated->currentScale, skillData->damage, true);
-			//GetWorld().GetEventManager().FireEvent(_event);
 		}
 		else
 		{

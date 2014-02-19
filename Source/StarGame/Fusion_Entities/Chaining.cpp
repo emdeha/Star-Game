@@ -41,10 +41,10 @@ void FusionEngine::Chaining_OnUpdate(const std::string &skillID)
 			TransformComponent *skillTransform = static_cast<TransformComponent*>(
 				GetWorld().GetComponentForObject(skillID, FE_COMPONENT_TRANSFORM).get());
 
-			OnSkillAppliedEvent _event =
-				OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, skillTransform->position, skillAnimated->currentScale, 
-															skillData->damage, true);
-			GetWorld().GetEventManager().FireEvent(_event);
+			//OnSkillAppliedEvent _event =
+			//	OnSkillAppliedEvent(EVENT_ON_SKILL_APPLIED, skillTransform->position, skillAnimated->currentScale, 
+			//												skillData->damage, true);
+			//GetWorld().GetEventManager().FireEvent(_event);
 
 			TransformComponent *holderTransform = static_cast<TransformComponent*>(
 				GetWorld().GetComponentForObject(skillData->holderID, FE_COMPONENT_TRANSFORM).get());

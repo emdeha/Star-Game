@@ -101,8 +101,6 @@ namespace FusionEngine
 						 const std::string &holderID = "",
 						 bool isAnimated = false, float currentScale = 0.0f, float scaleRate = 0.0f);
 
-		void UpdateCollisionCheck();
-
 	public:
 		float interpolation;
 

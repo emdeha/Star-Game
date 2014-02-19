@@ -31,15 +31,15 @@ bool Enemy::HandleEvent(const FusionEngine::IEventData &eventData)
 			if (data.colliderID == "sunNova")
 			{
 				SkillGenericComponent *skillGeneric = static_cast<SkillGenericComponent*>( 
-					GetWorld().GetComponentForObject(data.collidedID, FE_COMPONENT_SKILL_GENERIC).get());
+					GetWorld().GetComponentForObject(data.colliderID, FE_COMPONENT_SKILL_GENERIC).get());
 
 				health -= skillGeneric->damage;
 				std::printf("SUN NOVA: %i, %s", health, id.c_str());
 			}
-			else if (data.collidedID == "ult")
+			else if (data.colliderID == "ult")
 			{
 				SkillGenericComponent *skillGeneric = static_cast<SkillGenericComponent*>( 
-					GetWorld().GetComponentForObject(data.collidedID, FE_COMPONENT_SKILL_GENERIC).get());
+					GetWorld().GetComponentForObject(data.colliderID, FE_COMPONENT_SKILL_GENERIC).get());
 
 				health -= skillGeneric->damage;
 				std::printf("CRITICAL: %i, %s", health, id.c_str());

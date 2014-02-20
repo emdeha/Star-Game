@@ -111,6 +111,7 @@ void Enemy::UpdateCollision()
 						if ((*collider).get()->GetID().find("skillShield") != std::string::npos)
 						{
 							health = 0;
+							std::printf("\n\nKILLED BY SHIELD\n\n");
 							// KILL ENEMY
 						}
 						// Handle collision
@@ -124,6 +125,9 @@ void Enemy::UpdateCollision()
 					float maxDistance = colliderCollision->outerRadius + enemyCollision->innerRadius;
 					if (distanceBetweenColliders < minDistance && distanceBetweenColliders >= maxDistance)
 					{
+						SkillGenericComponent *skillGeneric = static_cast<SkillGenericComponent*>(
+							(*collider).get()->GetComponent(FE_COMPONENT_SKILL_GENERIC).get());
+						health -= skillGeneric->damage;
 						// Handle collision
 					}  
 				}

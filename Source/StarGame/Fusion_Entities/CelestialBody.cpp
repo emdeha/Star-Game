@@ -193,7 +193,7 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 
 	std::shared_ptr<FusionEngine::TransformComponent> satTransformComponent = std::make_shared<TransformComponent>();
 	satTransformComponent->position = glm::vec3();
-	satTransformComponent->scale = glm::vec3(0.4f, 0.0f, 0.4f);
+	satTransformComponent->scale = glm::vec3(0.4f, 0.4f, 0.4f);
 	satTransformComponent->rotation = glm::vec3();
 
 	newSat->AddComponent(FE_COMPONENT_TRANSFORM, satTransformComponent);

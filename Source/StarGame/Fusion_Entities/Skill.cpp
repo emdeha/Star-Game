@@ -160,13 +160,16 @@ void Skill::Update()
 	SkillAnimatedComponent *skillAnimated = static_cast<SkillAnimatedComponent*>(
 		GetComponent(FE_COMPONENT_SKILL_ANIMATED).get());
 
-	if (skillCollision && skillAnimated)
+	if (skillCollision)
 	{
 		skillCollision->center = skillTransform->position;
-		skillCollision->innerRadius = skillAnimated->currentScale;
-		if (skillCollision->cType == CollisionComponent::FE_COLLISION_TORUS)
+		if (skillAnimated)
 		{
-			skillCollision->outerRadius = skillAnimated->currentScale - 0.1f;
+			skillCollision->innerRadius = skillAnimated->currentScale;
+			if (skillCollision->cType == CollisionComponent::FE_COLLISION_TORUS)
+			{
+				skillCollision->outerRadius = skillAnimated->currentScale - 0.1f;
+			}
 		}
 	}
 

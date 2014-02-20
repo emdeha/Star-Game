@@ -262,8 +262,8 @@ void World::Load(const std::string &guiLayoutFile,
 
 	// Create Test Entities
 	CreateSun();
-	CreateEnemy("sp2", glm::vec3(0.0f, 0.0f, 6.0f));
-	CreateEnemy("sp1", glm::vec3(4.0f, 0.0f, 0.0f));
+	CreateEnemy("enemysp2", glm::vec3(0.0f, 0.0f, 6.0f));
+	CreateEnemy("enemysp1", glm::vec3(4.0f, 0.0f, 0.0f));
 
 	CreateSkill("waterSat", "www", false, 0, 0.0f, glm::vec3(),
 				FE_WATER_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);

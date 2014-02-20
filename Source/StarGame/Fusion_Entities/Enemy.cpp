@@ -35,7 +35,7 @@ bool Enemy::HandleEvent(const FusionEngine::IEventData &eventData)
 				glm::length(data.position - enemyTransformData->position) < data.radius)
 			{
 				health -= data.damage;
-				std::printf("CRITICAL: %i, %s", health, id.c_str());
+				//std::printf("CRITICAL: %i, %s", health, id.c_str());
 			}
 		}
 		break;
@@ -165,7 +165,7 @@ void Enemy::Update()
 	if (health <= 0)
 	{
 		// Destroy
-		std::printf("KILLED IS ME!!! %s\n", id.c_str());
+		//std::printf("KILLED IS ME!!! %s\n", id.c_str());
 	}
 
 	if (health > 0)

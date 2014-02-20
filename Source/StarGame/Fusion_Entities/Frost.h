@@ -24,7 +24,6 @@
 
 namespace FusionEngine
 {
-	void Frost_OnClick(const std::string &skillID, const IEventData &eventData);
 	void Frost_OnFusionCompleted(const std::string &skillID, const IEventData &eventData);
 
 	void Frost_OnUpdate(const std::string &skillID);

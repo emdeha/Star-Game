@@ -11,26 +11,26 @@ using namespace FusionEngine;
 
 void FusionEngine::SunNova_OnFusionCompleted(const std::string &skillID, const IEventData &eventData)
 {
-	SkillGenericComponent *skillData = 
-		static_cast<SkillGenericComponent*>(GetWorld().GetComponentForObject(skillID, FE_COMPONENT_SKILL_GENERIC).get());
+	SkillGenericComponent *skillData = static_cast<SkillGenericComponent*>(
+		GetWorld().GetComponentForObject(skillID, FE_COMPONENT_SKILL_GENERIC).get());
 
 	skillData->isActive = true;
 	
-	TransformComponent *skillTransform = 
-		static_cast<TransformComponent*>(GetWorld().GetComponentForObject(skillID, FE_COMPONENT_TRANSFORM).get());
+	TransformComponent *skillTransform = static_cast<TransformComponent*>(
+		GetWorld().GetComponentForObject(skillID, FE_COMPONENT_TRANSFORM).get());
 
 	skillTransform->position = glm::vec3(); // Sun's position
 }
 
 void FusionEngine::SunNova_OnUpdate(const std::string &skillID)
 {
-	SkillGenericComponent *skillData = 
-		static_cast<SkillGenericComponent*>(GetWorld().GetComponentForObject(skillID, FE_COMPONENT_SKILL_GENERIC).get());
+	SkillGenericComponent *skillData = static_cast<SkillGenericComponent*>(
+		GetWorld().GetComponentForObject(skillID, FE_COMPONENT_SKILL_GENERIC).get());
 
 	if (skillData->isActive)
 	{
-		SkillAnimatedComponent *skillAnimated = 
-			static_cast<SkillAnimatedComponent*>(GetWorld().GetComponentForObject(skillID, FE_COMPONENT_SKILL_ANIMATED).get());
+		SkillAnimatedComponent *skillAnimated = static_cast<SkillAnimatedComponent*>(
+			GetWorld().GetComponentForObject(skillID, FE_COMPONENT_SKILL_ANIMATED).get());
 
 		if (skillAnimated->currentScale <= skillData->range)
 		{

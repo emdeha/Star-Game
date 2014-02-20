@@ -303,10 +303,50 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 	// End Skill Shield
 
 	// Skill Frost
+	std::string frostSkillName = "skillFrost";
+	frostSkillName += newSat->GetID();
+	std::shared_ptr<Skill> frost =
+		std::shared_ptr<Skill>(new Skill(frostSkillName, 'e', 'e', 'q', 0, 0));
+
+	frost->SetOnFusionCompletedCallback(Frost_OnFusionCompleted);
+	frost->SetOnUpdateCallback(Frost_OnUpdate);
+
+	std::shared_ptr<SkillGenericComponent> frostGeneric = std::make_shared<SkillGenericComponent>();
+	frostGeneric->holderID = newSat->GetID();
+	frostGeneric->damage = 20;
+	frostGeneric->range = 2.0f;
+	frostGeneric->isActive = false;
+	frostGeneric->isDeployed = false;
+	frostGeneric->isChain = false;
+	frostGeneric->isDefensive = false;
+
+	frost->AddComponent(FE_COMPONENT_SKILL_GENERIC, frostGeneric);
+
+	std::shared_ptr<TransformComponent> frostTransform = std::make_shared<TransformComponent>();
+	frostTransform->position = glm::vec3();
+	frostTransform->scale = glm::vec3();
+	frostTransform->rotation = glm::vec3();
+
+	frost->AddComponent(FE_COMPONENT_TRANSFORM, frostTransform);
+
+	std::shared_ptr<SkillAnimatedComponent> frostAnimated = std::make_shared<SkillAnimatedComponent>();
+	frostAnimated->currentScale = 1.0f;
+	frostAnimated->scaleRate = 0.02f;
+	frostAnimated->anim = anim;
+
+	frost->AddComponent(FE_COMPONENT_SKILL_ANIMATED, frostAnimated);
+
+	std::shared_ptr<CollisionComponent> frostCollision = std::make_shared<CollisionComponent>();
+	frostCollision->center = glm::vec3();
+	frostCollision->innerRadius = 2.0f;
+	frostCollision->cType = CollisionComponent::FE_COLLISION_CIRCLE;
+
+	frost->AddComponent(FE_COMPONENT_COLLISION, frostCollision);
 	// End Skill Frost
 
 	newSat->AddSkill(skillName, newSkill);
 	newSat->AddSkill(shieldSkillName, shield);
+	newSat->AddSkill(frostSkillName, frost);
 
 	return true;
 }

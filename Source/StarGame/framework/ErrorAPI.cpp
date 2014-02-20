@@ -17,18 +17,18 @@
 
 #include "ErrorAPI.h"
 // WARN: Remove in release!!!
-//#define FUSION_ERROR
+#define FUSION_ERROR
 
 
-void HandleUnexpectedError(const std::string &message, unsigned line, const std::string &file)
+void HandleUnexpectedError(const std::string &message, unsigned line, const std::string &file,
+						   Severity errorSeverity)
 {
 #ifdef FUSION_ERROR
 	printf("Error %s at line %u in file %s\n\n", message.c_str(), line, file.c_str());
-	printf("\a\a\a\a");
-	do
+	if (errorSeverity == FE_SEVERITY_HIGH)
 	{
+		_CrtDbgBreak();
 	}
-	while(true);
 #else
 	printf("Error %s at line %u in file %s\n\n", message.c_str(), line, file.c_str());
 	//printf("\a\a\a\a");

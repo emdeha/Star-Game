@@ -31,7 +31,15 @@
 #endif
 
 
-void HandleUnexpectedError(const std::string &message, unsigned line, const std::string &file);
+enum Severity
+{
+	FE_SEVERITY_LOW,
+	FE_SEVERITY_MED,
+	FE_SEVERITY_HIGH,
+};
+
+void HandleUnexpectedError(const std::string &message, unsigned line, const std::string &file, 
+						   Severity errorSeverity = FE_SEVERITY_HIGH);
 
 
 #endif

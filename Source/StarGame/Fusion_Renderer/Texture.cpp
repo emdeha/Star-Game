@@ -32,7 +32,7 @@ bool Texture2D::Load(const std::string &fileName,
     {
 		std::string errorMsg = "Image file format unknown - ";
 		errorMsg.append(fileName);
-		HandleUnexpectedError(errorMsg, __LINE__, __FILE__);
+		HandleUnexpectedError(errorMsg, __LINE__, __FILE__, FE_SEVERITY_LOW);
         return false;
     }
 
@@ -45,7 +45,7 @@ bool Texture2D::Load(const std::string &fileName,
     {
 		std::string errorMsg = "Could not load image - ";
 		errorMsg.append(fileName);
-		HandleUnexpectedError(errorMsg, __LINE__, __FILE__);
+		HandleUnexpectedError(errorMsg, __LINE__, __FILE__, FE_SEVERITY_LOW);
         return false;
     }
 
@@ -57,7 +57,7 @@ bool Texture2D::Load(const std::string &fileName,
     {
 		std::string errorMsg = "Incorrect image bits, width or height - ";
 		errorMsg.append(fileName);
-		HandleUnexpectedError(errorMsg, __LINE__, __FILE__);
+		HandleUnexpectedError(errorMsg, __LINE__, __FILE__, FE_SEVERITY_LOW);
         return false;
     }
 

@@ -1,4 +1,44 @@
 entity-skill:
+    create-water-sat:
+        fusion-comb: "www"
+        apply-cost: 0
+        research-cost: 0
+        scripts:
+            - null
+            - SatelliteCreation_OnFusionCompleted
+            - null
+        skill-sat-creation:
+            sat-type: WATER
+    create-fire-sat:
+        fusion-comb: "qwe"
+        apply-cost: 0
+        research-cost: 0
+        scripts:
+            - null
+            - SatelliteCreation_OnFusionCompleted
+            - null
+        skill-sat-creation:
+            sat-type: FIRE
+    create-air-sat:
+        fusion-comb: "qqq"
+        apply-cost: 0
+        research-cost: 0
+        scripts:
+            - null
+            - SatelliteCreation_OnFusionCompleted
+            - null
+        skill-sat-creation:
+            sat-type: AIR
+    create-earth-sat:
+        fusion-comb: "eee"
+        apply-cost: 0
+        research-cost: 0
+        scripts:
+            - null
+            - SatelliteCreation_OnFusionCompleted
+            - null
+        skill-sat-creation:
+            sat-type: EARTH
     ult:
         fusion-comb: "ewq"
         apply-cost: 0

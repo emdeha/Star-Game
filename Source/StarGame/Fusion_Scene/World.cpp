@@ -79,7 +79,7 @@ void World::CreateEnemy(const std::string &id, glm::vec3 position)
 
 	glm::vec3 frontVector = glm::normalize(glm::vec3() - position); // TODO: Make relative to the Sun
 
-	std::shared_ptr<Enemy> firstEnemy = std::make_shared<Enemy>(id, 0.00f, frontVector);
+	std::shared_ptr<Enemy> firstEnemy = std::make_shared<Enemy>(id, 0.02f, frontVector);
 	firstEnemy->AddComponent(FE_COMPONENT_RENDER, spaceshipRenderComponent);
 	firstEnemy->AddComponent(FE_COMPONENT_TRANSFORM, spaceshipTransformComponent);
 	firstEnemy->AddComponent(FE_COMPONENT_COLLISION, spaceshipCollisionComponent);
@@ -262,8 +262,8 @@ void World::Load(const std::string &guiLayoutFile,
 
 	// Create Test Entities
 	CreateSun();
-	CreateEnemy("enemysp2", glm::vec3(0.0f, 0.0f, 3.0f));
-	CreateEnemy("enemysp1", glm::vec3(2.0f, 0.0f, 0.0f));
+	CreateEnemy("enemysp2", glm::vec3(0.0f, 0.0f, 6.0f));
+	CreateEnemy("enemysp1", glm::vec3(4.0f, 0.0f, 0.0f));
 
 	CreateSkill("waterSat", "www", false, 0, 0.0f, glm::vec3(),
 				FE_WATER_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);

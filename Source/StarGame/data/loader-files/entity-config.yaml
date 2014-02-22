@@ -1,0 +1,98 @@
+entity-skill:
+    ult:
+        fusion-comb: "ewq"
+        apply-cost: 0
+        research-cost: 0
+        scripts:
+            - null
+            - Ultimate_OnFusionCompleted
+            - null
+        skill-generic:
+            holder-id: "sun"
+            damage: 300
+            range: -1.0
+            is-chain: false
+    aoe:
+        fusion-comb: "wqe"
+        apply-cost: 0
+        research-cost: 0
+        scripts:
+            - AOE_OnClick
+            - AOE_OnFusionCompleted
+            - AOE_OnUpdate
+        transform:
+            position: [ 0, 0, 0 ]
+        skill-selector-applied:
+            selector-color: [ 1.0, 0.0, 0.0, 0.5 ]
+        skill-generic:
+            holder-id: "sun"
+            damage: 10
+            range: 2.0
+            is-chain: false
+        collision:
+            type: CIRCLE
+    burn:
+        fusion-comb: "wee"
+        apply-cost: 0
+        research-cost: 0
+        scripts:
+            - Burn_OnClick
+            - Burn_OnFusionCompleted
+            - Burn_OnUpdate
+        transform:
+            position: [ 0, 0, 0 ]
+        skill-selector-applied:
+            selector-color: [ 0.0, 1.0, 0.0, 0.5 ]
+        skill-timed:
+            damage-duration-secs: 3.0
+            skill-duration-secs: 1.0
+        skill-generic:
+            holder-id: "sun"
+            damage: 10
+            range: 2.0
+            is-chain: false
+        collision:
+            type: CIRCLE
+    passive-aoe:
+        fusion-comb: "weq"
+        apply-cost: 0
+        research-cost: 0
+        scripts:
+            - null
+            - PassiveAOE_OnFusionCompleted
+            - PassiveAOE_OnUpdate
+        transform:
+            position: [ 0, 0, 0 ]
+        skill-selector-applied:
+            selector-color: [ 0.0, 1.0, 1.0, 0.5 ] 
+        skill-timed:
+            damage-duration-secs: 10.0
+            skill-duration-secs: 1.0
+            skill-life-secs: 3.0
+        skill-generic: 
+            holder-id: "sun"
+            damage: 10
+            range: 2.0
+            is-chain: false
+        collision:
+            type: CIRCLE
+    sun-nova:
+        fusion-comb: "wqq"
+        apply-cost: 0
+        research-cost: 0
+        scripts:
+            - null
+            - SunNova_OnFusionCompleted
+            - SunNova_OnUpdate
+        skill-animated:
+            current-scale: 1.0
+            scale-rate: 0.02
+            torus-radius: 0.02
+            color: [ 1.0, 0.0, 0.0, 0.5 ]
+        skill-generic:
+            holder-id: "sun"
+            damage: 50
+            range: 5.0
+            is-chain: false
+        collision:
+            type: TORUS

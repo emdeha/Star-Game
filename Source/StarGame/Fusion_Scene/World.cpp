@@ -237,6 +237,11 @@ void World::Load(const std::string &guiLayoutFile,
 	FusionEngine::GUIAssetObject loadedGUI = guiLoader.LoadAssetObject("loader-files", guiLayoutFile);
 	guiLayouts = loadedGUI.GetAllLoadedLayouts();
 
+	// Load entities
+	FusionEngine::AssetLoader<FusionEngine::EntityAssetObject> entityLoader;
+	entityLoader.RegisterType("loader-files", new FusionEngine::EntityLoader());
+	FusionEngine::EntityAssetObject loadedEntities = entityLoader.LoadAssetObject("loader-files", "entity-config.yaml");
+
 #ifndef FAST_LOAD
 	// Load Audio
 	FusionEngine::AssetLoader<FusionEngine::AudioAssetObject> audioLoader;

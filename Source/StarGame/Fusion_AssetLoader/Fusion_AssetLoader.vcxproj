@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioLoader.cpp" />
+    <ClCompile Include="EntityLoader.cpp" />
     <ClCompile Include="GUILoader.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="MeshLoader.cpp" />

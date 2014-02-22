@@ -79,6 +79,9 @@ namespace FusionEngine
 		std::vector<std::shared_ptr<CelestialBody>> GetSatellites() { return satellites; }
 
 		virtual bool HandleEvent(const IEventData &eventData);
+
+	private:
+		void UpdateCollision();
 	};
 }
 

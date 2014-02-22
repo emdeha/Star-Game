@@ -236,8 +236,15 @@ bool Skill::HandleEvent(const IEventData &eventData)
 			{
 				const OnFusionCompletedEvent &data =
 					static_cast<const OnFusionCompletedEvent&>(eventData);
-
-				if (IsForSequence(data.fusionComb))
+				
+				if (data.skillID != "")
+				{
+					if (data.skillID == id)
+					{
+						OnFusionCompleted(id, eventData);
+					}
+				}
+				else if (IsForSequence(data.fusionComb))
 				{
 					OnFusionCompleted(id, eventData);
 				}

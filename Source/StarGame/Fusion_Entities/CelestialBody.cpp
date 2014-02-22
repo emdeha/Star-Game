@@ -193,10 +193,18 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 
 	std::shared_ptr<FusionEngine::TransformComponent> satTransformComponent = std::make_shared<TransformComponent>();
 	satTransformComponent->position = glm::vec3();
-	satTransformComponent->scale = glm::vec3(0.4f, 0.4f, 0.4f);
+	const float RADIUS = 0.4f;
+	satTransformComponent->scale = glm::vec3(RADIUS, RADIUS, RADIUS);
 	satTransformComponent->rotation = glm::vec3();
 
 	newSat->AddComponent(FE_COMPONENT_TRANSFORM, satTransformComponent);
+
+	std::shared_ptr<FusionEngine::CollisionComponent> satCollisionComponent = std::make_shared<CollisionComponent>();
+	satCollisionComponent->center = glm::vec3();
+	satCollisionComponent->cType = CollisionComponent::FE_COLLISION_CIRCLE;
+	satCollisionComponent->innerRadius = RADIUS;
+
+	newSat->AddComponent(FE_COMPONENT_COLLISION, satCollisionComponent);
 	
 	satellites.push_back(newSat);
 	currentSatelliteCount++;
@@ -231,9 +239,8 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 
 	std::shared_ptr<SkillAnimatedComponent> newSkillAnimated = std::make_shared<SkillAnimatedComponent>();
 
-	newSkillAnimated->currentScale = 1.0f;
+	newSkillAnimated->currentScale = 0.5f;
 	newSkillAnimated->scaleRate = 0.02f;
-
 
 	Utility::Primitives::Torus2D anim =
 		Utility::Primitives::Torus2D(glm::vec4(1.0f, 1.0f, 0.0f, 0.5f), 
@@ -330,7 +337,7 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 	frost->AddComponent(FE_COMPONENT_TRANSFORM, frostTransform);
 
 	std::shared_ptr<SkillAnimatedComponent> frostAnimated = std::make_shared<SkillAnimatedComponent>();
-	frostAnimated->currentScale = 1.0f;
+	frostAnimated->currentScale = 0.5f;
 	frostAnimated->scaleRate = 0.02f;
 	frostAnimated->anim = anim;
 
@@ -339,7 +346,7 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 	std::shared_ptr<CollisionComponent> frostCollision = std::make_shared<CollisionComponent>();
 	frostCollision->center = glm::vec3();
 	frostCollision->innerRadius = 2.0f;
-	frostCollision->cType = CollisionComponent::FE_COLLISION_CIRCLE;
+	frostCollision->cType = CollisionComponent::FE_COLLISION_TORUS;
 
 	frost->AddComponent(FE_COMPONENT_COLLISION, frostCollision);
 	// End Skill Frost
@@ -359,14 +366,64 @@ bool CelestialBody::AddSkill(const std::string &skillName, const std::shared_ptr
 	return true;
 }
 
+void CelestialBody::UpdateCollision()
+{
+	auto collidableObjects = GetWorld().GetObjectsWithComponent(FE_COMPONENT_COLLISION);
+
+	for (auto collider = collidableObjects.begin(); collider != collidableObjects.end(); ++collider)
+	{
+		if ((*collider).get()->GetID() != id)
+		{
+			CollisionComponent *colliderCollision = static_cast<CollisionComponent*>(
+				(*collider).get()->GetComponent(FE_COMPONENT_COLLISION).get());
+			CollisionComponent *satCollision = static_cast<CollisionComponent*>(
+				GetComponent(FE_COMPONENT_COLLISION).get());
+
+			switch (colliderCollision->cType)
+			{
+			case CollisionComponent::FE_COLLISION_CIRCLE:
+				{
+					float distanceBetweenColliders = glm::length(colliderCollision->center - satCollision->center); 
+					float minDistance = colliderCollision->innerRadius + satCollision->innerRadius;
+					if (distanceBetweenColliders < minDistance)
+					{
+						// handle circle-based collision
+					}  
+				}
+				break;
+			case CollisionComponent::FE_COLLISION_TORUS:
+				{
+					float distanceBetweenColliders = glm::length(colliderCollision->center - satCollision->center); 
+					float minDistance = colliderCollision->innerRadius + satCollision->innerRadius;
+					float maxDistance = colliderCollision->outerRadius + satCollision->innerRadius;
+					if (distanceBetweenColliders < minDistance && distanceBetweenColliders >= maxDistance)
+					{
+						if ((*collider).get()->GetID().find("sunNova") != std::string::npos &&
+							this->type != FE_SUN)
+						{
+							std::string skillName = "skillChain";
+							skillName += id;
+							OnFusionCompletedEvent _event = OnFusionCompletedEvent(EVENT_ON_FUSION_COMPLETED, skillName, "000");
+							GetWorld().GetEventManager().FireEvent(_event);
+						}
+					}  
+				}
+				break;
+			}
+		}
+	}
+}
+
 void CelestialBody::Update()
 {
+	UpdateCollision();
+
 	TransformComponent *sunTransform = static_cast<TransformComponent*>(GetComponent(FE_COMPONENT_TRANSFORM).get());
 
 	for (auto satellite = satellites.begin(); satellite != satellites.end(); ++satellite)
 	{
-		TransformComponent *satTransform = 
-			static_cast<TransformComponent*>((*satellite)->GetComponent(FE_COMPONENT_TRANSFORM).get());
+		TransformComponent *satTransform = static_cast<TransformComponent*>(
+			(*satellite)->GetComponent(FE_COMPONENT_TRANSFORM).get());
 
 		if (satTransform)
 		{
@@ -383,6 +440,10 @@ void CelestialBody::Update()
 			float offset = (*satellite)->offsetFromSun;
 			satTransform->position = glm::vec3(offset, 0.0f, offset);
 			satTransform->position = glm::vec3(relativeTransformStack.Top() * glm::vec4(satTransform->position, 1.0f));
+
+			CollisionComponent *satCollision = static_cast<CollisionComponent*>(
+				(*satellite)->GetComponent(FE_COMPONENT_COLLISION).get());
+			satCollision->center = satTransform->position;
 		}
 
 		(*satellite)->Update(); // Or maybe just update sat skills here.

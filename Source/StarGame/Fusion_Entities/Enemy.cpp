@@ -35,7 +35,7 @@ bool Enemy::HandleEvent(const FusionEngine::IEventData &eventData)
 				glm::length(data.position - enemyTransformData->position) < data.radius)
 			{
 				health -= data.damage;
-				//std::printf("CRITICAL: %i, %s", health, id.c_str());
+				std::printf("ENEMY ATTACKED: %i, %s", health, id.c_str());
 			}
 		}
 		break;
@@ -80,7 +80,7 @@ void Enemy::UpdateAI()
 
 		float distanceBetweenSunAndSpaceship = glm::length(vectorFromSunToSpaceship);
 
-		if (distanceBetweenSunAndSpaceship < attackRange) // 3.0f - lineOfSight
+		if (distanceBetweenSunAndSpaceship < attackRange)
 		{
 			currentState = FE_STATE_ATTACK;
 		}
@@ -93,10 +93,10 @@ void Enemy::UpdateCollision()
 
 	for (auto collider = collidableObjects.begin(); collider != collidableObjects.end(); ++collider)
 	{
-		if ((*collider).get()->GetID() != id)
+		if ((*collider)->GetID() != id)
 		{
 			CollisionComponent *colliderCollision = static_cast<CollisionComponent*>(
-				(*collider).get()->GetComponent(FE_COMPONENT_COLLISION).get());
+				(*collider)->GetComponent(FE_COMPONENT_COLLISION).get());
 			CollisionComponent *enemyCollision = static_cast<CollisionComponent*>(
 				GetComponent(FE_COMPONENT_COLLISION).get());
 
@@ -108,13 +108,11 @@ void Enemy::UpdateCollision()
 					float minDistance = colliderCollision->innerRadius + enemyCollision->innerRadius;
 					if (distanceBetweenColliders < minDistance)
 					{
-						if ((*collider).get()->GetID().find("skillShield") != std::string::npos)
+						if ((*collider)->GetID().find("skillShield") != std::string::npos)
 						{
 							health = 0;
 							std::printf("\n\nKILLED BY SHIELD\n\n");
-							// KILL ENEMY
 						}
-						// Handle collision
 					}  
 				}
 				break;
@@ -126,9 +124,9 @@ void Enemy::UpdateCollision()
 					if (distanceBetweenColliders < minDistance && distanceBetweenColliders >= maxDistance)
 					{
 						SkillGenericComponent *skillGeneric = static_cast<SkillGenericComponent*>(
-							(*collider).get()->GetComponent(FE_COMPONENT_SKILL_GENERIC).get());
+							(*collider)->GetComponent(FE_COMPONENT_SKILL_GENERIC).get());
 						health -= skillGeneric->damage;
-						// Handle collision
+						std::printf("ATTACKED BY nova%s: %i\n", (*collider)->GetID().c_str(), health);
 					}  
 				}
 				break;
@@ -144,8 +142,6 @@ void Enemy::Update()
 		static_cast<TransformComponent*>(GetComponent(FE_COMPONENT_TRANSFORM).get());
 
 	enemyTransformData->rotation = glm::vec3(0.0f, glm::degrees(atan2f(frontVector.x, frontVector.z)), 0.0f);
-
-	UpdateCollision();
 
 	if (currentState != FE_STATE_STOPPED)
 	{
@@ -168,16 +164,5 @@ void Enemy::Update()
 		//std::printf("KILLED IS ME!!! %s\n", id.c_str());
 	}
 
-	if (health > 0)
-	{/*
-		auto collidableSkills = GetWorld().GetCollidableSkills();
-		for (auto skill = collidableSkills.begin(); skill != collidableSkills.end(); ++skill)
-		{
-			if (glm::length((*skill)->GetPosition() - transformData[0]->position) < (*skill)->GetRange())
-			{
-				health = 0; // Kill enemy
-				GetWorld().GetEventManager().FireEvent(OnCollideEvent(EVENT_ON_COLLIDE, name));
-			}
-		}*/
-	}
+	UpdateCollision();
 }

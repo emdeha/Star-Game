@@ -282,7 +282,7 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 
 	std::shared_ptr<SkillDefensiveComponent> shieldDefensive = std::make_shared<SkillDefensiveComponent>();
 	shieldDefensive->defensePoints = 3;
-	shieldDefensive->currentDefensePoints = 0;
+	shieldDefensive->currentDefensePoints = 3;
 
 	shield->AddComponent(FE_COMPONENT_SKILL_DEFENSIVE, shieldDefensive);
 	
@@ -403,7 +403,7 @@ void CelestialBody::UpdateCollision()
 						{
 							std::string skillName = "skillChain";
 							skillName += id;
-							OnFusionCompletedEvent _event = OnFusionCompletedEvent(EVENT_ON_FUSION_COMPLETED, skillName, "000");
+							OnFusionCompletedEvent _event = OnFusionCompletedEvent(EVENT_ON_FUSION_COMPLETED, skillName, "000", true);
 							GetWorld().GetEventManager().FireEvent(_event);
 						}
 					}  

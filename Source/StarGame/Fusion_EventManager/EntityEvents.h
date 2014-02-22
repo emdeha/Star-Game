@@ -55,9 +55,12 @@ namespace FusionEngine
 	{
 		std::string skillID;
 		std::string fusionComb;
+		bool isSkillIDChecked;
 
-		OnFusionCompletedEvent(EventType eventType, const std::string &newSkillID, const std::string &newFusionComb)
-			: IEventData(eventType), skillID(newSkillID), fusionComb(newFusionComb) {}
+		OnFusionCompletedEvent(EventType eventType, const std::string &newSkillID, 
+							   const std::string &newFusionComb, bool newIsSkillIDChecked)
+			: IEventData(eventType), skillID(newSkillID), fusionComb(newFusionComb), 
+			  isSkillIDChecked(newIsSkillIDChecked) {}
 	};
 
 	struct OnSkillAppliedEvent : public IEventData

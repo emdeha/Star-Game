@@ -29,7 +29,7 @@ void RespondToCollision(const std::string &id)
 				SkillDefensiveComponent *skillDefensive = static_cast<SkillDefensiveComponent*>(
 					GetWorld().GetComponentForObject(id, FE_COMPONENT_SKILL_DEFENSIVE).get());
 
-				skillDefensive->defensePoints -= 1;
+				skillDefensive->currentDefensePoints -= 1;
 			}  
 		}
 	}
@@ -51,7 +51,7 @@ void FusionEngine::Shield_OnUpdate(const std::string &skillID)
 		SkillDefensiveComponent *skillDefensive = static_cast<SkillDefensiveComponent*>(
 			GetWorld().GetComponentForObject(skillID, FE_COMPONENT_SKILL_DEFENSIVE).get());
 		
-		if (skillDefensive->defensePoints == 0)
+		if (skillDefensive->currentDefensePoints == 0)
 		{
 			skillGeneric->isActive = false;
 			skillDefensive->currentDefensePoints = skillDefensive->defensePoints;

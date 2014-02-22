@@ -93,7 +93,7 @@ bool FusionInput::HandleEvent(const IEventData &eventData)
 					{
 						GetWorld().GetEventManager().
 							FireEvent(OnFusionCompletedEvent(FusionEngine::EVENT_ON_FUSION_COMPLETED, 
-															 (*sequence).first, currentInputSequence));
+															 (*sequence).first, currentInputSequence, false));
 						break;
 					}
 				}
@@ -234,10 +234,9 @@ bool Skill::HandleEvent(const IEventData &eventData)
 		{
 			if (OnFusionCompleted)
 			{
-				const OnFusionCompletedEvent &data =
-					static_cast<const OnFusionCompletedEvent&>(eventData);
+				const OnFusionCompletedEvent &data = static_cast<const OnFusionCompletedEvent&>(eventData);
 				
-				if (data.skillID != "")
+				if (data.isSkillIDChecked)
 				{
 					if (data.skillID == id)
 					{

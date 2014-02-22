@@ -136,3 +136,68 @@ entity-skill:
             is-chain: false
         collision:
             type: TORUS
+    sat-chain:
+        fusion-comb: "000"
+        apply-cost: 0
+        research-cost: 0
+        scripts:
+            - null
+            - Chaining_OnFusionCompleted
+            - Chaining_OnUpdate
+        transform:
+            position: [ 0, 0, 0 ]
+        skill-animated:
+            current-scale: 0.5
+            scale-rate: 0.02
+            torus-radius: 0.02
+            color: [ 1.0, 1.0, 0.0, 0.5 ]
+        skill-generic:
+            holder-id: "sat"
+            damage: 10
+            range: 2.0
+            is-chain: true
+        collision:
+            type: TORUS
+    sat-shield:
+        fusion-comb: "qwq"
+        apply-cost: 0
+        research-cost: 0
+        script:
+            - null
+            - Shield_OnFusionCompleted
+            - Shield_OnUpdate
+        transform:
+            position: [ 0, 0, 0 ]
+        skill-selector-applied:
+            selector-color: [ 0.0, 1.0, 0.0, 0.5 ] 
+        skill-defensive:
+            defense-points: 3
+        skill-generic:
+            holder-id: "sat"
+            damage: 0
+            range: 2.0
+            is-chain: false
+        collision:
+            type: CIRCLE
+    sat-frost:
+        fusion-comb: "eeq"
+        apply-cost: 0
+        research-cost: 0
+        script:
+            - null
+            - Frost_OnFusionCompleted
+            - Frost_OnUpdate
+        transform:
+            position: [ 0, 0, 0 ]
+        skill-animated:
+            current-scale: 0.5
+            scale-rate: 0.02
+            torus-radius: 0.02
+            color: [ 0.0, 0.0, 1.0, 0.5 ]
+        skill-generic:
+            holder-id: "sat"
+            damage: 20
+            range: 2.0
+            is-chain: false
+        collision:
+            type: TORUS

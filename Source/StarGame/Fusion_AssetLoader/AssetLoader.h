@@ -38,6 +38,7 @@
 #include "../Fusion_Renderer/ProgramData.h"
 #include "../Fusion_Renderer/Texture.h"
 #include "../Fusion_GUI/Layout.h"
+#include "../Fusion_Entities/Composable.h"
 
 
 namespace FusionEngine
@@ -352,6 +353,32 @@ namespace FusionEngine
 
 	public:
 		ShaderAssetObject Load(const std::string &type, const std::string &name);
+	};
+
+	///////////////////////
+	//  Entities Loader  //
+	///////////////////////
+	class EntityAssetObject : public IAssetObject
+	{
+	private:
+		std::vector<std::shared_ptr<Composable>> loadedEntities;
+
+	public:
+		EntityAssetObject() {}
+		EntityAssetObject(const std::vector<std::shared_ptr<Composable>> &newLoadedEntities)
+			: loadedEntities(newLoadedEntities) {}
+
+		std::vector<std::shared_ptr<Composable>> GetLoadedEntities() const { return loadedEntities; }
+		std::shared_ptr<Composable> GetSkills() const { return nullptr; }
+		std::shared_ptr<Composable> GetEnemies() const { return nullptr; }
+		std::shared_ptr<Composable> GetCelestialBodies() const { return nullptr; }
+	};
+
+	class EntityLoader : public ITypeLoader<EntityAssetObject>
+	{
+	private:
+	public:
+		EntityAssetObject Load(const std::string &type, const std::string &name);
 	};
 }
 

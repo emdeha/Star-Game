@@ -4,9 +4,9 @@ entity-skill:
         apply-cost: 0
         research-cost: 0
         scripts:
-            - null
+            - nil
             - SatelliteCreation_OnFusionCompleted
-            - null
+            - nil
         skill-sat-creation:
             sat-type: WATER
     create-fire-sat:
@@ -14,9 +14,9 @@ entity-skill:
         apply-cost: 0
         research-cost: 0
         scripts:
-            - null
+            - nil
             - SatelliteCreation_OnFusionCompleted
-            - null
+            - nil
         skill-sat-creation:
             sat-type: FIRE
     create-air-sat:
@@ -24,9 +24,9 @@ entity-skill:
         apply-cost: 0
         research-cost: 0
         scripts:
-            - null
+            - nil
             - SatelliteCreation_OnFusionCompleted
-            - null
+            - nil
         skill-sat-creation:
             sat-type: AIR
     create-earth-sat:
@@ -34,9 +34,9 @@ entity-skill:
         apply-cost: 0
         research-cost: 0
         scripts:
-            - null
+            - nil
             - SatelliteCreation_OnFusionCompleted
-            - null
+            - nil
         skill-sat-creation:
             sat-type: EARTH
     ult:
@@ -44,9 +44,9 @@ entity-skill:
         apply-cost: 0
         research-cost: 0
         scripts:
-            - null
+            - nil
             - Ultimate_OnFusionCompleted
-            - null
+            - nil
         skill-generic:
             holder-id: "sun"
             damage: 300
@@ -98,7 +98,7 @@ entity-skill:
         apply-cost: 0
         research-cost: 0
         scripts:
-            - null
+            - nil
             - PassiveAOE_OnFusionCompleted
             - PassiveAOE_OnUpdate
         transform:
@@ -121,9 +121,11 @@ entity-skill:
         apply-cost: 0
         research-cost: 0
         scripts:
-            - null
+            - nil
             - SunNova_OnFusionCompleted
             - SunNova_OnUpdate
+        transform:
+            position: [ 0, 0, 0 ]
         skill-animated:
             current-scale: 1.0
             scale-rate: 0.02
@@ -141,7 +143,7 @@ entity-skill:
         apply-cost: 0
         research-cost: 0
         scripts:
-            - null
+            - nil
             - Chaining_OnFusionCompleted
             - Chaining_OnUpdate
         transform:
@@ -162,8 +164,8 @@ entity-skill:
         fusion-comb: "qwq"
         apply-cost: 0
         research-cost: 0
-        script:
-            - null
+        scripts:
+            - nil
             - Shield_OnFusionCompleted
             - Shield_OnUpdate
         transform:
@@ -183,8 +185,8 @@ entity-skill:
         fusion-comb: "eeq"
         apply-cost: 0
         research-cost: 0
-        script:
-            - null
+        scripts:
+            - nil
             - Frost_OnFusionCompleted
             - Frost_OnUpdate
         transform:

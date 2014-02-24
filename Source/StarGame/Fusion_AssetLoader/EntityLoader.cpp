@@ -123,40 +123,6 @@ EntityAssetObject EntityLoader::Load(const std::string &type, const std::string 
 	YAML::Node entityData = YAML::LoadFile("../data/" + type + "/" + name);	
 
 	std::vector<std::shared_ptr<Skill>> loadedSkills;
-	//auto waterCreation = GetWorld().CreateSkill("waterSat", "www", false, 0, 0.0f, glm::vec3(),
-	//			FE_WATER_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
-	//loadedSkills.push_back(waterCreation);
-	//auto airCreation = GetWorld().CreateSkill("airSat", "qqq", false, 0, 0.0f, glm::vec3(),
-	//			FE_AIR_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
-	//loadedSkills.push_back(airCreation);
-	//auto fireCreation = GetWorld().CreateSkill("fireSat", "qwe", false, 0, 0.0f, glm::vec3(),
-	//			FE_FIRE_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
-	//loadedSkills.push_back(fireCreation);
-	//auto earthCreation = GetWorld().CreateSkill("earthSat", "eee", false, 0, 0.0f, glm::vec3(),
-	//			FE_EARTH_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
-	//loadedSkills.push_back(earthCreation);
-	//auto ult = GetWorld().CreateSkill("ult", "ewq", true, 300, -1.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
-	//			nullptr, Ultimate_OnFusionCompleted, nullptr);
-	//loadedSkills.push_back(ult);
-	//auto aoe = GetWorld().CreateSkill("aoe", "wqe", true, 10, 2.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
-	//			AOE_OnClick, AOE_OnFusionCompleted, AOE_OnUpdate,
-	//			true, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), true);
-	//loadedSkills.push_back(aoe);
-	//auto burn = GetWorld().CreateSkill("burn", "wee", true, 10, 2.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
-	//			Burn_OnClick, Burn_OnFusionCompleted, Burn_OnUpdate,
-	//			true, glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), true,
-	//			true, 3.0f, 1.0f);
-	//loadedSkills.push_back(burn);
-	//auto passiveAOE = GetWorld().CreateSkill("passiveAoe", "weq", true, 10, 2.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
-	//			nullptr, PassiveAOE_OnFusionCompleted, PassiveAOE_OnUpdate,
-	//			true, glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), true,
-	//			true, 10.0f, 1.0f, 3.0f);
-	//loadedSkills.push_back(passiveAOE);
-	//auto sunNova = GetWorld().CreateSkill("sunNova", "wqq", true, 50, 5.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
-	//			nullptr, SunNova_OnFusionCompleted, SunNova_OnUpdate, false, 
-	//			glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), true, false, 0.0f, 0.0f,
-	//			0.0f, "sun", true, 1.0f, 0.02f);
-	//loadedSkills.push_back(sunNova);
 	for (YAML::Node::const_iterator entityNode = entityData.begin();
 		 entityNode != entityData.end(); ++entityNode)
 	{
@@ -215,7 +181,7 @@ EntityAssetObject EntityLoader::Load(const std::string &type, const std::string 
 					float range = skill->second["skill-generic"]["range"].as<float>();
 
 					Utility::Primitives::Circle selector(color, glm::vec3(), range, 90); 
-
+					selector.Init();
 					selectorApplied->skillSelector = selector;
 
 					newSkill->AddComponent(FE_COMPONENT_SKILL_SELECTOR_APPLIED, selectorApplied);
@@ -246,13 +212,14 @@ EntityAssetObject EntityLoader::Load(const std::string &type, const std::string 
 					animated->scaleRate = skill->second["skill-animated"]["scale-rate"].as<float>();
 
 					float torusOuterRadius = 
-						skill->second["skill-animated"]["torus-radius"].as<float>() + animated->currentScale;
+						animated->currentScale + skill->second["skill-animated"]["torus-radius"].as<float>();
 					glm::vec4 torusColor(skill->second["skill-animated"]["color"][0].as<float>(),
 										 skill->second["skill-animated"]["color"][1].as<float>(),
 										 skill->second["skill-animated"]["color"][2].as<float>(),
 										 skill->second["skill-animated"]["color"][3].as<float>());
 					Utility::Primitives::Torus2D animTorus(torusColor, glm::vec3(), 
 														   animated->currentScale, torusOuterRadius, 90); 
+					animTorus.Init();
 					animated->anim = animTorus;
 
 					newSkill->AddComponent(FE_COMPONENT_SKILL_ANIMATED, animated);

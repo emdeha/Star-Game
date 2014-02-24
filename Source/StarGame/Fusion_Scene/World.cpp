@@ -279,7 +279,7 @@ void World::Load(const std::string &guiLayoutFile,
 		//}
 		//else
 		{
-			sun->AddSkill(entity->get()->GetID(), (*entity));
+			sun->AddSkill((*entity)->GetID(), (*entity));
 		}
 	}
 

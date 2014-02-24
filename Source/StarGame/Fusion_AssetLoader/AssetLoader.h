@@ -39,6 +39,7 @@
 #include "../Fusion_Renderer/Texture.h"
 #include "../Fusion_GUI/Layout.h"
 #include "../Fusion_Entities/Composable.h"
+#include "../Fusion_Entities/Skill.h"
 
 
 namespace FusionEngine
@@ -361,15 +362,16 @@ namespace FusionEngine
 	class EntityAssetObject : public IAssetObject
 	{
 	private:
-		std::vector<std::shared_ptr<Composable>> loadedEntities;
+		//std::vector<std::shared_ptr<Composable>> loadedEntities;
+		std::vector<std::shared_ptr<Skill>> loadedSkills;
 
 	public:
 		EntityAssetObject() {}
-		EntityAssetObject(const std::vector<std::shared_ptr<Composable>> &newLoadedEntities)
-			: loadedEntities(newLoadedEntities) {}
+		EntityAssetObject(const std::vector<std::shared_ptr<Skill>> &newLoadedSkills)
+			: loadedSkills(newLoadedSkills) {}
 
-		std::vector<std::shared_ptr<Composable>> GetLoadedEntities() const { return loadedEntities; }
-		std::shared_ptr<Composable> GetSkills() const { return nullptr; }
+		//std::vector<std::shared_ptr<Composable>> GetLoadedEntities() const { return loadedEntities; }
+		std::vector<std::shared_ptr<Skill>> GetSkills() const { return loadedSkills; }
 		std::shared_ptr<Composable> GetEnemies() const { return nullptr; }
 		std::shared_ptr<Composable> GetCelestialBodies() const { return nullptr; }
 	};

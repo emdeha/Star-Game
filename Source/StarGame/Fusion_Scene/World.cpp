@@ -88,7 +88,7 @@ void World::CreateEnemy(const std::string &id, glm::vec3 position)
 	renderer.SubscribeForRendering(id, enemyMesh);
 }
 
-void World::CreateSkill(const std::string &skillID, const std::string &skillFusionCombination,
+std::shared_ptr<Skill> World::CreateSkill(const std::string &skillID, const std::string &skillFusionCombination,
 						bool hasGeneric, int damage, float range, glm::vec3 position,
 						CelestialBodyType bodyToCreate,
 						OnEventFunc skillOnClick, OnEventFunc skillOnFusionCompleted, OnUpdateFunc skillOnUpdate,
@@ -216,7 +216,8 @@ void World::CreateSkill(const std::string &skillID, const std::string &skillFusi
 		newSkill->AddComponent(FE_COMPONENT_SKILL_SATELLITE_CREATION, newSatCreation);
 	}
 
-	sun->AddSkill(skillID, newSkill);
+	return newSkill;
+	//sun->AddSkill(skillID, newSkill);
 }
 
 void World::Load(const std::string &guiLayoutFile,
@@ -236,11 +237,6 @@ void World::Load(const std::string &guiLayoutFile,
 	guiLoader.RegisterType("loader-files", new FusionEngine::GUILoader());
 	FusionEngine::GUIAssetObject loadedGUI = guiLoader.LoadAssetObject("loader-files", guiLayoutFile);
 	guiLayouts = loadedGUI.GetAllLoadedLayouts();
-
-	// Load entities
-	FusionEngine::AssetLoader<FusionEngine::EntityAssetObject> entityLoader;
-	entityLoader.RegisterType("loader-files", new FusionEngine::EntityLoader());
-	FusionEngine::EntityAssetObject loadedEntities = entityLoader.LoadAssetObject("loader-files", "entity-config.yaml");
 
 #ifndef FAST_LOAD
 	// Load Audio
@@ -267,36 +263,55 @@ void World::Load(const std::string &guiLayoutFile,
 
 	// Create Test Entities
 	CreateSun();
+
+	// Load entities
+	FusionEngine::AssetLoader<FusionEngine::EntityAssetObject> entityLoader;
+	entityLoader.RegisterType("loader-files", new FusionEngine::EntityLoader());
+	FusionEngine::EntityAssetObject loadedEntities = entityLoader.LoadAssetObject("loader-files", "entity-config.yaml");
+	auto loadedEntitiesVector = loadedEntities.GetSkills();
+	for (auto entity = loadedEntitiesVector.begin(); entity != loadedEntitiesVector.end(); ++entity)
+	{
+		//SkillGenericComponent *skillGeneric = static_cast<SkillGenericComponent*>(
+		//	(*entity)->GetComponent(FE_COMPONENT_SKILL_GENERIC).get());
+		//if (skillGeneric && skillGeneric->holderID == "")
+		//{
+		//	continue;
+		//}
+		//else
+		{
+			sun->AddSkill(entity->get()->GetID(), (*entity));
+		}
+	}
+
+	// Create enemies
 	CreateEnemy("enemysp2", glm::vec3(0.0f, 0.0f, 6.0f));
 	CreateEnemy("enemysp1", glm::vec3(4.0f, 0.0f, 0.0f));
 
-	CreateSkill("waterSat", "www", false, 0, 0.0f, glm::vec3(),
-				FE_WATER_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
-	CreateSkill("airSat", "qqq", false, 0, 0.0f, glm::vec3(),
-				FE_AIR_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
-	CreateSkill("fireSat", "qwe", false, 0, 0.0f, glm::vec3(),
-				FE_FIRE_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
-	CreateSkill("earthSat", "eee", false, 0, 0.0f, glm::vec3(),
-				FE_EARTH_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
-
-	CreateSkill("ult", "ewq", true, 300, -1.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
-				nullptr, Ultimate_OnFusionCompleted, nullptr);
-	CreateSkill("aoe", "wqe", true, 10, 2.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
-				AOE_OnClick, AOE_OnFusionCompleted, AOE_OnUpdate,
-				true, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), true);
-	CreateSkill("burn", "wee", true, 10, 2.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
-				Burn_OnClick, Burn_OnFusionCompleted, Burn_OnUpdate,
-				true, glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), true,
-				true, 3.0f, 1.0f);
-	CreateSkill("passiveAoe", "weq", true, 10, 2.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
-				nullptr, PassiveAOE_OnFusionCompleted, PassiveAOE_OnUpdate,
-				true, glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), true,
-				true, 10.0f, 1.0f, 3.0f);
-
-	CreateSkill("sunNova", "wqq", true, 50, 5.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
-				nullptr, SunNova_OnFusionCompleted, SunNova_OnUpdate, false, 
-				glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), true, false, 0.0f, 0.0f,
-				0.0f, "sun", true, 1.0f, 0.02f);
+	//CreateSkill("waterSat", "www", false, 0, 0.0f, glm::vec3(),
+	//			FE_WATER_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
+	//CreateSkill("airSat", "qqq", false, 0, 0.0f, glm::vec3(),
+	//			FE_AIR_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
+	//CreateSkill("fireSat", "qwe", false, 0, 0.0f, glm::vec3(),
+	//			FE_FIRE_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
+	//CreateSkill("earthSat", "eee", false, 0, 0.0f, glm::vec3(),
+	//			FE_EARTH_SAT, nullptr, SatelliteCreation_OnFusionCompleted, nullptr);
+	//CreateSkill("ult", "ewq", true, 300, -1.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
+	//			nullptr, Ultimate_OnFusionCompleted, nullptr);
+	//CreateSkill("aoe", "wqe", true, 10, 2.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
+	//			AOE_OnClick, AOE_OnFusionCompleted, AOE_OnUpdate,
+	//			true, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), true);
+	//CreateSkill("burn", "wee", true, 10, 2.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
+	//			Burn_OnClick, Burn_OnFusionCompleted, Burn_OnUpdate,
+	//			true, glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), true,
+	//			true, 3.0f, 1.0f);
+	//CreateSkill("passiveAoe", "weq", true, 10, 2.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
+	//			nullptr, PassiveAOE_OnFusionCompleted, PassiveAOE_OnUpdate,
+	//			true, glm::vec4(0.0f, 1.0f, 0.0f, 0.5f), true,
+	//			true, 10.0f, 1.0f, 3.0f);
+	//CreateSkill("sunNova", "wqq", true, 50, 5.0f, glm::vec3(), FE_CELESTIAL_BODY_BAD,
+	//			nullptr, SunNova_OnFusionCompleted, SunNova_OnUpdate, false, 
+	//			glm::vec4(1.0f, 0.0f, 0.0f, 0.5f), true, false, 0.0f, 0.0f,
+	//			0.0f, "sun", true, 1.0f, 0.02f);
 	// ***************************************
 	// Skill Chain added on satellite creation
 	// Other sat-related skills are added there also

@@ -133,7 +133,7 @@ namespace FusionEngine
 	public:
 		bool IsForSequence(const std::string &fusionSequence) { return fusionSequence == fusionCombination; }
 
-		std::string GetFusionCombination() { return fusionCombination; }
+		std::string GetFusionCombination() const { return fusionCombination; }
 
 		void SetOnUpdateCallback(OnUpdateFunc newOnUpdateFunc) { OnUpdate = newOnUpdateFunc; }
 		void SetOnClickCallback(OnEventFunc newOnClickFunc) { OnClick = newOnClickFunc; }

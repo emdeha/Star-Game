@@ -398,7 +398,7 @@ void CelestialBody::UpdateCollision()
 					float maxDistance = colliderCollision->outerRadius + satCollision->innerRadius;
 					if (distanceBetweenColliders < minDistance && distanceBetweenColliders >= maxDistance)
 					{
-						if ((*collider).get()->GetID().find("sunNova") != std::string::npos &&
+						if ((*collider).get()->GetID().find("sun-nova") != std::string::npos &&
 							this->type != FE_SUN)
 						{
 							std::string skillName = "skillChain";

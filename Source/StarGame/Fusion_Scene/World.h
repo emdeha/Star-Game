@@ -88,9 +88,10 @@ namespace FusionEngine
 		World& operator=(const World&);
 		~World();
 
+	public:
 		void CreateSun();
 		void CreateEnemy(const std::string &id, glm::vec3 position);
-		void CreateSkill(const std::string &id, const std::string &fusionCombination,
+		std::shared_ptr<Skill> CreateSkill(const std::string &id, const std::string &fusionCombination,
 						 bool hasGeneric, int damage, float range, glm::vec3 position,
 						 CelestialBodyType bodyToCreate,
 						 OnEventFunc onClick, OnEventFunc onFusionCompleted, OnUpdateFunc onUpdate,

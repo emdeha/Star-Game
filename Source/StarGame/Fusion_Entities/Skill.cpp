@@ -147,7 +147,7 @@ void Skill::Update()
 	TransformComponent *skillTransform = static_cast<TransformComponent*>(
 		GetComponent(FE_COMPONENT_TRANSFORM).get());
 
-	if (skillGeneric && skillGeneric->holderID != "")
+	if (skillTransform && skillGeneric && skillGeneric->holderID != "")
 	{
 		TransformComponent *holderTransform = static_cast<TransformComponent*>(
 			GetWorld().GetComponentForObject(skillGeneric->holderID, FE_COMPONENT_TRANSFORM).get());

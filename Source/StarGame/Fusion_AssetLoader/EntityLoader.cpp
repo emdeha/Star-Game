@@ -253,14 +253,14 @@ EntityAssetObject EntityLoader::Load(const std::string &type, const std::string 
 					collision->center = center;
 
 					std::string collisionType = skill->second["collision"]["type"].as<std::string>();
-					if (type == "TORUS")
+					if (collisionType == "TORUS")
 					{
 						collision->cType = CollisionComponent::FE_COLLISION_TORUS;
 						float innerRadius = skill->second["skill-animated"]["current-scale"].as<float>();
 						collision->innerRadius = innerRadius;
 						collision->outerRadius = innerRadius + skill->second["skill-animated"]["torus-radius"].as<float>();
 					}
-					else if (type == "CIRCLE")
+					else if (collisionType == "CIRCLE")
 					{
 						collision->cType = CollisionComponent::FE_COLLISION_CIRCLE;
 						collision->innerRadius = skill->second["skill-generic"]["range"].as<float>();

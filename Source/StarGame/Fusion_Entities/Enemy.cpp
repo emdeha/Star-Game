@@ -108,7 +108,7 @@ void Enemy::UpdateCollision()
 					float minDistance = colliderCollision->innerRadius + enemyCollision->innerRadius;
 					if (distanceBetweenColliders < minDistance)
 					{
-						if ((*collider)->GetID().find("skill-shield") != std::string::npos)
+						if ((*collider)->GetID().find("shield") != std::string::npos)
 						{
 							health = 0;
 							std::printf("\n\nKILLED BY SHIELD\n\n");

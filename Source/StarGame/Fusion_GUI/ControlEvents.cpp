@@ -64,7 +64,8 @@ void Click_TextBox(FusionEngine::Control *control, const IEventData &eventData)
 void KeyPressed_FusionImageBox(FusionEngine::Control *control,
 							   const FusionEngine::IEventData &eventData)
 {
-	if (GetWorld().GetCurrentLayout()->HasActiveTextBox())
+	if (GetWorld().GetCurrentLayout()->HasActiveTextBox() || 
+		GetWorld().GetCurrentLayout()->GetType() != FE_LAYOUT_GAME)
 	{
 		return;
 	}
@@ -99,7 +100,6 @@ void KeyPressed_FusionImageBox(FusionEngine::Control *control,
 	if (objId == "all")
 	{
 		Layout *currentLayout = GetWorld().GetCurrentLayout();
-		std::string fusionEmpty = "../data/images/fusion-empty.jpg";
 		currentLayout->GetControl("fusionOne")->ChangeBackgroundImage(0);
 		currentLayout->GetControl("fusionTwo")->ChangeBackgroundImage(0);
 		currentLayout->GetControl("fusionThree")->ChangeBackgroundImage(0);

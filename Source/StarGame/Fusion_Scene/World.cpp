@@ -271,16 +271,7 @@ void World::Load(const std::string &guiLayoutFile,
 	auto loadedEntitiesVector = loadedEntities.GetSkills();
 	for (auto entity = loadedEntitiesVector.begin(); entity != loadedEntitiesVector.end(); ++entity)
 	{
-		//SkillGenericComponent *skillGeneric = static_cast<SkillGenericComponent*>(
-		//	(*entity)->GetComponent(FE_COMPONENT_SKILL_GENERIC).get());
-		//if (skillGeneric && skillGeneric->holderID == "")
-		//{
-		//	continue;
-		//}
-		//else
-		{
-			sun->AddSkill((*entity)->GetID(), (*entity));
-		}
+		sun->AddSkill((*entity)->GetID(), (*entity));
 	}
 
 	// Create enemies

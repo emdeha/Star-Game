@@ -215,8 +215,25 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 	return true;
 }
 
-bool CelestialBody::AddSkill(const std::string &skillName, const std::shared_ptr<Skill> newSkill)
+bool CelestialBody::AddSkill(const std::string &skillName, const SkillData &newSkillData) 
 {
+	std::shared_ptr<Skill> newSkill = 
+		std::shared_ptr<Skill>(new Skill(skillName, 
+										 newSkillData.fusionCombination[0],
+										 newSkillData.fusionCombination[1],
+										 newSkillData.fusionCombination[2], 
+										 newSkillData.applyCost, newSkillData.researchCost));
+
+	newSkill->SetOnClickCallback(newSkillData.onClick);
+	newSkill->SetOnFusionCompletedCallback(newSkillData.onFusionCompleted);
+	newSkill->SetOnUpdateCallback(newSkillData.onUpdate);
+
+	for (auto component = newSkillData.components.begin(); component != newSkillData.components.end();
+		 ++component)
+	{
+		newSkill->AddComponent((*component).first, (*component).second);
+	}
+
 	skills.push_back(newSkill);
 	GetWorld().AddFusionSequence(skillName, newSkill->GetFusionCombination());
 

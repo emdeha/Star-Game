@@ -371,9 +371,9 @@ namespace FusionEngine
 		OnEventFunc onFusionCompleted;
 		OnUpdateFunc onUpdate;
 
-		std::map<ComponentType, IComponent> components;
+		std::map<ComponentType, std::shared_ptr<IComponent>> components;
 
-		void AddComponent(ComponentType cType, IComponent component);
+		void AddComponent(ComponentType cType, std::shared_ptr<IComponent> component);
 	};
 
 	struct EnemyData

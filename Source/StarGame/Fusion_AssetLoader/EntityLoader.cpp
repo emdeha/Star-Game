@@ -117,7 +117,7 @@ CelestialBodyType GetCelestialBodyTypeByID(const std::string &id)
 	return FE_CELESTIAL_BODY_BAD;
 }
 
-void SkillData::AddComponent(ComponentType cType, IComponent component)
+void SkillData::AddComponent(ComponentType cType, std::shared_ptr<IComponent> component)
 {
 	components.insert(std::make_pair(cType, component));
 }
@@ -151,30 +151,33 @@ EntityAssetObject EntityLoader::Load(const std::string &type, const std::string 
 
 				if (skill->second["skill-sat-creation"])
 				{
-					SkillSatelliteCreationComponent satCreation;
+					std::shared_ptr<SkillSatelliteCreationComponent> satCreation = 
+						std::make_shared<SkillSatelliteCreationComponent>();
 
-					satCreation.satelliteType = 
+					satCreation->satelliteType = 
 						GetCelestialBodyTypeByID(skill->second["skill-sat-creation"]["sat-type"].as<std::string>());
 
 					newSkillData.AddComponent(FE_COMPONENT_SKILL_SATELLITE_CREATION, satCreation);
 				}
 				if (skill->second["skill-generic"])
 				{
-					SkillGenericComponent generic;
+					std::shared_ptr<SkillGenericComponent> generic 
+						= std::make_shared<SkillGenericComponent>();
 
-					generic.holderID = skill->second["skill-generic"]["holder-id"].as<std::string>();
-					generic.damage = skill->second["skill-generic"]["damage"].as<int>();
-					generic.range = skill->second["skill-generic"]["range"].as<float>();
-					generic.isChain = skill->second["skill-generic"]["is-chain"].as<bool>();
-					generic.isActive = false;
-					generic.isDeployed = false;
-					generic.isDefensive = skill->second["skill-defensive"] ? true : false;
+					generic->holderID = skill->second["skill-generic"]["holder-id"].as<std::string>();
+					generic->damage = skill->second["skill-generic"]["damage"].as<int>();
+					generic->range = skill->second["skill-generic"]["range"].as<float>();
+					generic->isChain = skill->second["skill-generic"]["is-chain"].as<bool>();
+					generic->isActive = false;
+					generic->isDeployed = false;
+					generic->isDefensive = skill->second["skill-defensive"] ? true : false;
 
 					newSkillData.AddComponent(FE_COMPONENT_SKILL_GENERIC, generic);
 				}
 				if (skill->second["skill-selector-applied"])
 				{
-					SkillSelectorAppliedComponent selectorApplied;
+					std::shared_ptr<SkillSelectorAppliedComponent> selectorApplied 
+						= std::make_shared<SkillSelectorAppliedComponent>();
 
 					glm::vec4 color(skill->second["skill-selector-applied"]["selector-color"][0].as<float>(),
 									skill->second["skill-selector-applied"]["selector-color"][1].as<float>(),
@@ -184,63 +187,67 @@ EntityAssetObject EntityLoader::Load(const std::string &type, const std::string 
 
 					Utility::Primitives::Circle selector(color, glm::vec3(), range, 90); 
 					selector.Init();
-					selectorApplied.skillSelector = selector;
+					selectorApplied->skillSelector = selector;
 
 					newSkillData.AddComponent(FE_COMPONENT_SKILL_SELECTOR_APPLIED, selectorApplied);
 				}
 				if (skill->second["skill-timed"])
 				{
-					SkillTimedComponent timed; 
+					std::shared_ptr<SkillTimedComponent> timed =
+						std::make_shared<SkillTimedComponent>(); 
 
-					timed.attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE);
-					timed.attackTimer.SetPause(true);
+					timed->attackTimer = Framework::Timer(Framework::Timer::TT_INFINITE);
+					timed->attackTimer.SetPause(true);
 					if (skill->second["skill-timed"]["skill-life-secs"])
 					{
 						float skillLife_secs = skill->second["skill-timed"]["skill-life-secs"].as<float>();
-						timed.skillLifeTimer = Framework::Timer(Framework::Timer::TT_SINGLE, skillLife_secs);
+						timed->skillLifeTimer = Framework::Timer(Framework::Timer::TT_SINGLE, skillLife_secs);
 					}
 					float skillDuration_secs = skill->second["skill-timed"]["damage-duration-secs"].as<float>();
-					timed.damageApplyTimeDuration_seconds = skillDuration_secs;
-					timed.damageApplyTime_seconds = skillDuration_secs;
-					timed.duration_seconds = skill->second["skill-timed"]["skill-duration-secs"].as<float>();
+					timed->damageApplyTimeDuration_seconds = skillDuration_secs;
+					timed->damageApplyTime_seconds = skillDuration_secs;
+					timed->duration_seconds = skill->second["skill-timed"]["skill-duration-secs"].as<float>();
 
 					newSkillData.AddComponent(FE_COMPONENT_SKILL_TIMED, timed);
 				}
 				if (skill->second["skill-animated"])
 				{
-					SkillAnimatedComponent animated;
+					std::shared_ptr<SkillAnimatedComponent> animated =
+						std::make_shared<SkillAnimatedComponent>();
 
-					animated.currentScale = skill->second["skill-animated"]["current-scale"].as<float>();
-					animated.scaleRate = skill->second["skill-animated"]["scale-rate"].as<float>();
+					animated->currentScale = skill->second["skill-animated"]["current-scale"].as<float>();
+					animated->scaleRate = skill->second["skill-animated"]["scale-rate"].as<float>();
 
 					float torusOuterRadius = 
-						animated.currentScale + skill->second["skill-animated"]["torus-radius"].as<float>();
+						animated->currentScale + skill->second["skill-animated"]["torus-radius"].as<float>();
 					glm::vec4 torusColor(skill->second["skill-animated"]["color"][0].as<float>(),
 										 skill->second["skill-animated"]["color"][1].as<float>(),
 										 skill->second["skill-animated"]["color"][2].as<float>(),
 										 skill->second["skill-animated"]["color"][3].as<float>());
 					Utility::Primitives::Torus2D animTorus(torusColor, glm::vec3(), 
-														   animated.currentScale, torusOuterRadius, 90); 
+														   animated->currentScale, torusOuterRadius, 90); 
 					animTorus.Init();
-					animated.anim = animTorus;
+					animated->anim = animTorus;
 
 					newSkillData.AddComponent(FE_COMPONENT_SKILL_ANIMATED, animated);
 				}
 				if (skill->second["skill-defensive"])
 				{
-					SkillDefensiveComponent defensive;
+					std::shared_ptr<SkillDefensiveComponent> defensive =
+						std::make_shared<SkillDefensiveComponent>();
 
 					int defensePoints = skill->second["skill-defensive"]["defense-points"].as<float>();
-					defensive.currentDefensePoints = defensePoints;
-					defensive.defensePoints = defensePoints;
+					defensive->currentDefensePoints = defensePoints;
+					defensive->defensePoints = defensePoints;
 
 					newSkillData.AddComponent(FE_COMPONENT_SKILL_DEFENSIVE, defensive);
 				}
 				if (skill->second["transform"])
 				{
-					TransformComponent transform;
+					std::shared_ptr<TransformComponent> transform =
+						std::make_shared<TransformComponent>();
 
-					transform.position = glm::vec3(skill->second["transform"]["position"][0].as<float>(),
+					transform->position = glm::vec3(skill->second["transform"]["position"][0].as<float>(),
 												    skill->second["transform"]["position"][1].as<float>(),
 												    skill->second["transform"]["position"][2].as<float>());
 
@@ -248,24 +255,25 @@ EntityAssetObject EntityLoader::Load(const std::string &type, const std::string 
 				}
 				if (skill->second["collision"])
 				{
-					CollisionComponent collision;
+					std::shared_ptr<CollisionComponent> collision =
+						std::make_shared<CollisionComponent>();
 					glm::vec3 center(skill->second["transform"]["position"][0].as<float>(),
 									 skill->second["transform"]["position"][1].as<float>(),
 									 skill->second["transform"]["position"][2].as<float>());
-					collision.center = center;
+					collision->center = center;
 
 					std::string collisionType = skill->second["collision"]["type"].as<std::string>();
 					if (collisionType == "TORUS")
 					{
-						collision.cType = CollisionComponent::FE_COLLISION_TORUS;
+						collision->cType = CollisionComponent::FE_COLLISION_TORUS;
 						float innerRadius = skill->second["skill-animated"]["current-scale"].as<float>();
-						collision.innerRadius = innerRadius;
-						collision.outerRadius = innerRadius + skill->second["skill-animated"]["torus-radius"].as<float>();
+						collision->innerRadius = innerRadius;
+						collision->outerRadius = innerRadius + skill->second["skill-animated"]["torus-radius"].as<float>();
 					}
 					else if (collisionType == "CIRCLE")
 					{
-						collision.cType = CollisionComponent::FE_COLLISION_CIRCLE;
-						collision.innerRadius = skill->second["skill-generic"]["range"].as<float>();
+						collision->cType = CollisionComponent::FE_COLLISION_CIRCLE;
+						collision->innerRadius = skill->second["skill-generic"]["range"].as<float>();
 					}
 
 					newSkillData.AddComponent(FE_COMPONENT_COLLISION, collision);

@@ -122,8 +122,8 @@ namespace FusionEngine
 
 	public:
 		Skill(const std::string &newID,
-				  char fusionCombA, char fusionCombB, char fusionCombC,
-				  int newApplyCost, int newResearchCost);
+			  char fusionCombA, char fusionCombB, char fusionCombC,
+			  int newApplyCost, int newResearchCost);
 		
 		void Update();
 		void Render();

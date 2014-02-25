@@ -267,7 +267,15 @@ void World::Load(const std::string &guiLayoutFile,
 	// Load entities
 	FusionEngine::AssetLoader<FusionEngine::EntityAssetObject> entityLoader;
 	entityLoader.RegisterType("loader-files", new FusionEngine::EntityLoader());
-	FusionEngine::EntityAssetObject loadedEntities = entityLoader.LoadAssetObject("loader-files", "entity-config.yaml");
+	loadedEntitiesData = entityLoader.LoadAssetObject("loader-files", "entity-config.yaml");
+	auto loadedSkills = loadedEntitiesData.GetLoadedSkills();
+	for (auto skill = loadedSkills.begin(); skill != loadedSkills.end(); ++skill)
+	{
+		if ((*skill).first.find("sat") == std::string::npos)
+		{
+			sun->AddSkill((*skill).first, (*skill).second);
+		}
+	}
 
 	// Create enemies
 	CreateEnemy("enemysp2", glm::vec3(0.0f, 0.0f, 6.0f));

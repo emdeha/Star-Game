@@ -77,6 +77,7 @@ namespace FusionEngine
 		SunLight sunLight;
 		Audio audio;
 		LayoutsMap guiLayouts;
+		EntityAssetObject loadedEntitiesData;
 		std::unique_ptr<FusionInput> fusionInput;
 		
 		std::shared_ptr<CelestialBody> sun;

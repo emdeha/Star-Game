@@ -241,6 +241,11 @@ bool CelestialBody::AddSkill(const std::string &skillName, const SkillData &newS
 	{
 		std::shared_ptr<IComponent> newComponent = 
 			std::shared_ptr<IComponent>((*component).second->Clone());
+		if ((*component).first == FE_COMPONENT_SKILL_GENERIC)
+		{
+			SkillGenericComponent *generic = static_cast<SkillGenericComponent*>(newComponent.get());
+			generic->holderID = id;
+		}
 		newSkill->AddComponent((*component).first, newComponent);
 	}
 

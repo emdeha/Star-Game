@@ -45,6 +45,10 @@ namespace FusionEngine
 		GLuint materialUniformBuffer;
 		GLuint shaderProgramID;
 
+		virtual RenderComponent* Clone() const 
+		{
+			return new RenderComponent(*this);
+		}
 		virtual ~RenderComponent() {}
 	};
 
@@ -55,6 +59,10 @@ namespace FusionEngine
 		glm::vec3 rotation; // TODO: Use quats.
 		glm::vec3 scale;
 
+		virtual TransformComponent* Clone() const 
+		{
+			return new TransformComponent(*this);
+		}
 		virtual ~TransformComponent() {}
 	};
 
@@ -63,6 +71,10 @@ namespace FusionEngine
 	public:
 		CelestialBodyType satelliteType;
 
+		virtual SkillSatelliteCreationComponent* Clone() const 
+		{
+			return new SkillSatelliteCreationComponent(*this);
+		}
 		virtual ~SkillSatelliteCreationComponent() {}
 	};
 	
@@ -71,6 +83,10 @@ namespace FusionEngine
 	public:
 		Utility::Primitives::Circle skillSelector;
 
+		virtual SkillSelectorAppliedComponent* Clone() const 
+		{
+			return new SkillSelectorAppliedComponent(*this);
+		}
 		virtual ~SkillSelectorAppliedComponent() {}
 	};
 
@@ -84,6 +100,10 @@ namespace FusionEngine
 		Framework::Timer attackTimer;
 		Framework::Timer skillLifeTimer;
 
+		virtual SkillTimedComponent* Clone() const 
+		{
+			return new SkillTimedComponent(*this);
+		}
 		virtual ~SkillTimedComponent() {}
 	};
 
@@ -95,6 +115,10 @@ namespace FusionEngine
 		float currentScale;
 		float scaleRate;
 
+		virtual SkillAnimatedComponent* Clone() const 
+		{
+			return new SkillAnimatedComponent(*this);
+		}
 		virtual ~SkillAnimatedComponent() {}
 	};
 
@@ -104,6 +128,10 @@ namespace FusionEngine
 		int defensePoints;
 		int currentDefensePoints;
 
+		virtual SkillDefensiveComponent* Clone() const 
+		{
+			return new SkillDefensiveComponent(*this);
+		}
 		virtual ~SkillDefensiveComponent() {}
 	};
 
@@ -121,6 +149,10 @@ namespace FusionEngine
 		bool isChain;
 		bool isDefensive;
 
+		virtual SkillGenericComponent* Clone() const 
+		{
+			return new SkillGenericComponent(*this);
+		}
 		virtual ~SkillGenericComponent() {}
 	};
 
@@ -140,6 +172,10 @@ namespace FusionEngine
 		float innerRadius; 
 		float outerRadius;
 		
+		virtual CollisionComponent* Clone() const 
+		{
+			return new CollisionComponent(*this);
+		}
 		virtual ~CollisionComponent() {}
 	};
 

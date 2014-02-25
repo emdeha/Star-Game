@@ -211,6 +211,14 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 
 	GetWorld().GetRenderer().SubscribeForRendering(newSat->GetID(), sunMesh);
 
+	auto loadedSkills = GetWorld().GetLoadedEntityData().GetLoadedSkills();
+	for (auto skill = loadedSkills.begin(); skill != loadedSkills.end(); ++skill)
+	{
+		if ((*skill).first.find("sat") != std::string::npos)
+		{
+			newSat->AddSkill((*skill).first, (*skill).second);
+		}
+	}
 
 	return true;
 }
@@ -231,7 +239,9 @@ bool CelestialBody::AddSkill(const std::string &skillName, const SkillData &newS
 	for (auto component = newSkillData.components.begin(); component != newSkillData.components.end();
 		 ++component)
 	{
-		newSkill->AddComponent((*component).first, (*component).second);
+		std::shared_ptr<IComponent> newComponent = 
+			std::shared_ptr<IComponent>((*component).second->Clone());
+		newSkill->AddComponent((*component).first, newComponent);
 	}
 
 	skills.push_back(newSkill);

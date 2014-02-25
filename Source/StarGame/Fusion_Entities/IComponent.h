@@ -37,6 +37,7 @@ namespace FusionEngine
 	class IComponent 
 	{
 	public:
+		virtual IComponent* Clone() const = 0;
 		virtual ~IComponent() {}
 	};
 }

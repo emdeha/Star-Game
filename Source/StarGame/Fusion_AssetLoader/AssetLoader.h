@@ -39,7 +39,6 @@
 #include "../Fusion_Renderer/Texture.h"
 #include "../Fusion_GUI/Layout.h"
 #include "../Fusion_Entities/Composable.h"
-#include "../Fusion_Entities/Skill.h"
 
 
 namespace FusionEngine
@@ -359,21 +358,52 @@ namespace FusionEngine
 	///////////////////////
 	//  Entities Loader  //
 	///////////////////////
+	typedef void (*OnEventFunc)(const std::string&, const IEventData&);
+    typedef void (*OnUpdateFunc)(const std::string&);
+
+	struct SkillData
+	{
+		std::string fusionCombination;
+		int applyCost;
+		int researchCost;
+
+		OnEventFunc onClick;
+		OnEventFunc onFusionCompleted;
+		OnUpdateFunc onUpdate;
+
+		std::map<ComponentType, IComponent> components;
+
+		void AddComponent(ComponentType cType, IComponent component);
+	};
+
+	struct EnemyData
+	{
+		//...
+	};
+
+	struct CelestialBodyData
+	{
+		//...
+	};
+
 	class EntityAssetObject : public IAssetObject
 	{
 	private:
-		//std::vector<std::shared_ptr<Composable>> loadedEntities;
-		std::vector<std::shared_ptr<Skill>> loadedSkills;
+		std::map<std::string, SkillData> loadedSkills;
+		std::map<std::string, EnemyData> loadedEnemies;
+		std::map<std::string, CelestialBodyData> loadedCelestialBodies;
 
 	public:
 		EntityAssetObject() {}
-		EntityAssetObject(const std::vector<std::shared_ptr<Skill>> &newLoadedSkills)
-			: loadedSkills(newLoadedSkills) {}
+		EntityAssetObject(const std::map<std::string, SkillData> &newLoadedSkills,
+						  const std::map<std::string, EnemyData> &newLoadedEnemies,
+						  const std::map<std::string, CelestialBodyData> &newLoadedCelestialBodies)
+			: loadedSkills(newLoadedSkills), loadedEnemies(newLoadedEnemies), 
+			  loadedCelestialBodies(newLoadedCelestialBodies) {}
 
-		//std::vector<std::shared_ptr<Composable>> GetLoadedEntities() const { return loadedEntities; }
-		std::vector<std::shared_ptr<Skill>> GetSkills() const { return loadedSkills; }
-		std::shared_ptr<Composable> GetEnemies() const { return nullptr; }
-		std::shared_ptr<Composable> GetCelestialBodies() const { return nullptr; }
+		std::map<std::string, SkillData> GetLoadedSkills() const;
+		std::map<std::string, EnemyData> GetLoadedEnemies() const;
+		std::map<std::string, CelestialBodyData> GetLoadedCelestialBodies() const;
 	};
 
 	class EntityLoader : public ITypeLoader<EntityAssetObject>

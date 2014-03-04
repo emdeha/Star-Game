@@ -112,7 +112,6 @@ CelestialBody::CelestialBody(CelestialBodyType newType,
 	currentRotationAngle(0.0f), angularVelocity(5.0f)
 {
 	World::GetWorld().GetEventManager().AddListener(this, FusionEngine::EVENT_ON_CLICK);
-	World::GetWorld().GetEventManager().AddListener(this, FusionEngine::EVENT_ON_FUSION_COMPLETED);
 
 	if (type == FE_SUN)
 	{
@@ -150,20 +149,6 @@ bool CelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
 			//}
 		}
 		break;
-	case FusionEngine::EVENT_ON_FUSION_COMPLETED:
-		{
-			const OnFusionCompletedEvent &data = static_cast<const OnFusionCompletedEvent&>(eventData);
-			/*
-			for (auto skill = skills.begin(); skill != skills.end(); ++skill)
-			{
-				if ((*skill)->IsForSequence(data.inputSequence))
-				{
-					(*skill)->Activate(this);
-					break;
-				}
-			}*/
-		}
-		break;
 	}
 	
 	return false;
@@ -177,21 +162,21 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 	}
 
 	float satOffset = GetSatelliteOffset(satType); 
-	std::shared_ptr<CelestialBody> newSat = std::make_shared<CelestialBody>(satType, 0, 0.3f, satOffset);
+	auto newSat = std::make_shared<CelestialBody>(satType, 0, 0.3f, satOffset);
 	
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
 	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
 
 	FusionEngine::MeshAssetObject sunMesh = meshLoader.LoadAssetObject("mesh-files", GetSatMesh(satType));
 	
-	std::shared_ptr<FusionEngine::RenderComponent> satRenderComponent = std::make_shared<RenderComponent>();
+	auto satRenderComponent = std::make_shared<RenderComponent>();
 	satRenderComponent->vao = sunMesh.vao;
 	satRenderComponent->shaderProgramID = GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_LIT_TEXTURE).programId;
 	satRenderComponent->renderType = RenderComponent::FE_RENDERER_LIT;
 	
 	newSat->AddComponent(FE_COMPONENT_RENDER, satRenderComponent);
 
-	std::shared_ptr<FusionEngine::TransformComponent> satTransformComponent = std::make_shared<TransformComponent>();
+	auto satTransformComponent = std::make_shared<TransformComponent>();
 	satTransformComponent->position = glm::vec3();
 	const float RADIUS = 0.4f;
 	satTransformComponent->scale = glm::vec3(RADIUS, RADIUS, RADIUS);
@@ -199,7 +184,7 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 
 	newSat->AddComponent(FE_COMPONENT_TRANSFORM, satTransformComponent);
 
-	std::shared_ptr<FusionEngine::CollisionComponent> satCollisionComponent = std::make_shared<CollisionComponent>();
+	auto satCollisionComponent = std::make_shared<CollisionComponent>();
 	satCollisionComponent->center = glm::vec3();
 	satCollisionComponent->cType = CollisionComponent::FE_COLLISION_CIRCLE;
 	satCollisionComponent->innerRadius = RADIUS;
@@ -225,12 +210,12 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 
 bool CelestialBody::AddSkill(const std::string &skillName, const SkillData &newSkillData) 
 {
-	std::shared_ptr<Skill> newSkill = 
-		std::shared_ptr<Skill>(new Skill(skillName + id, 
-										 newSkillData.fusionCombination[0],
-										 newSkillData.fusionCombination[1],
-										 newSkillData.fusionCombination[2], 
-										 newSkillData.applyCost, newSkillData.researchCost));
+	std::string skillNameWithID = skillName + id;
+	auto newSkill = std::shared_ptr<Skill>(new Skill(skillNameWithID, 
+													 newSkillData.fusionCombination[0],
+													 newSkillData.fusionCombination[1],
+													 newSkillData.fusionCombination[2], 
+													 newSkillData.applyCost, newSkillData.researchCost));
 
 	newSkill->SetOnClickCallback(newSkillData.onClick);
 	newSkill->SetOnFusionCompletedCallback(newSkillData.onFusionCompleted);

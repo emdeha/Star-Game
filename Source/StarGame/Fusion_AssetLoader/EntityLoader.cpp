@@ -7,7 +7,6 @@
 
 using namespace FusionEngine;
 
-
 OnUpdateFunc GetOnUpdateMethodByID(const std::string &id)
 {
 	if (id == "AOE_OnUpdate")

@@ -104,6 +104,7 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Skill.h" />
+    <ClInclude Include="Spaceship.h" />
     <ClInclude Include="States.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Structs.h" />
@@ -145,6 +146,7 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Skill.cpp" />
+    <ClCompile Include="Spaceship.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

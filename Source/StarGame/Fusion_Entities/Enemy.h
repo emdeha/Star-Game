@@ -32,27 +32,27 @@
 
 namespace FusionEngine
 {
+    typedef void (*OnUpdateFunc)(const std::string&);
+
 	class Enemy : public Composable, public IEventListener
 	{
 	private:
-		BehaviorState currentState;
+		OnUpdateFunc OnUpdateAI;
 
-		glm::vec3 frontVector;
-		
-		int health;
-		float speed;
-		float attackRange;
-
-	private:
-		void UpdateAI();
 		void UpdateCollision();
 
 	public:
-		Enemy(const std::string &newName, float newSpeed, glm::vec3 newFrontVector);
+		Enemy(const std::string &newName);
 
 		void Update();
 
 		virtual bool HandleEvent(const FusionEngine::IEventData &eventData);
+
+	public:
+		void SetOnUpdateAI(OnUpdateFunc newOnUpdateAIfunc)
+		{
+			OnUpdateAI = newOnUpdateAIfunc;
+		}
 	};
 }
 

@@ -6,6 +6,7 @@
 #include "../Fusion_Entities/CelestialBody.h"
 #include "../Fusion_Entities/Components.h"
 #include "../Fusion_Entities/Scripts.h"
+#include "../Fusion_Entities/Spaceship.h"
 
 using namespace FusionEngine;
 
@@ -60,29 +61,36 @@ void World::CreateEnemy(const std::string &id, glm::vec3 position)
 
 	FusionEngine::MeshAssetObject enemyMesh = meshLoader.LoadAssetObject("mesh-files", "spaceship.obj");
 
-	std::shared_ptr<FusionEngine::RenderComponent> spaceshipRenderComponent = std::make_shared<RenderComponent>();
+	auto spaceshipRenderComponent = std::make_shared<RenderComponent>();
 	spaceshipRenderComponent->vao = enemyMesh.vao;
 	spaceshipRenderComponent->shaderProgramID = shaderManager.GetProgram(FE_PROGRAM_LIT).programId;
 	spaceshipRenderComponent->renderType = RenderComponent::FE_RENDERER_LIT;
 	
-	std::shared_ptr<FusionEngine::TransformComponent> spaceshipTransformComponent = 
-		std::make_shared<TransformComponent>();
+	auto spaceshipTransformComponent = std::make_shared<TransformComponent>();
 	spaceshipTransformComponent->position = position;
 	spaceshipTransformComponent->rotation = glm::vec3();
 	spaceshipTransformComponent->scale = glm::vec3(0.1f);
 
-	std::shared_ptr<FusionEngine::CollisionComponent> spaceshipCollisionComponent =
-		std::make_shared<CollisionComponent>();
+	auto spaceshipCollisionComponent = std::make_shared<CollisionComponent>();
 	spaceshipCollisionComponent->center = position;
 	spaceshipCollisionComponent->innerRadius = 0.0f;
 	spaceshipCollisionComponent->cType = CollisionComponent::FE_COLLISION_CIRCLE;
 
 	glm::vec3 frontVector = glm::normalize(glm::vec3() - position); // TODO: Make relative to the Sun
 
-	std::shared_ptr<Enemy> firstEnemy = std::make_shared<Enemy>(id, 0.02f, frontVector);
+	auto spaceshipEnemyGenericComponent = std::make_shared<EnemyGenericComponent>();
+	spaceshipEnemyGenericComponent->health = 100;
+	spaceshipEnemyGenericComponent->currentState = FE_STATE_IDLE;
+	spaceshipEnemyGenericComponent->speed = 0.02f;
+	spaceshipEnemyGenericComponent->frontVector = frontVector;
+	spaceshipEnemyGenericComponent->attackRange = 2.0f;
+
+	auto firstEnemy = std::make_shared<Enemy>(id);
 	firstEnemy->AddComponent(FE_COMPONENT_RENDER, spaceshipRenderComponent);
 	firstEnemy->AddComponent(FE_COMPONENT_TRANSFORM, spaceshipTransformComponent);
 	firstEnemy->AddComponent(FE_COMPONENT_COLLISION, spaceshipCollisionComponent);
+	firstEnemy->AddComponent(FE_COMPONENT_ENEMY_GENERIC, spaceshipEnemyGenericComponent);
+	firstEnemy->SetOnUpdateAI(Spaceship_OnUpdate);
 	enemies.push_back(firstEnemy);
 
 	renderer.SubscribeForRendering(id, enemyMesh);

@@ -26,6 +26,7 @@
 
 #include "IComponent.h"
 #include "../Fusion_Entities/CelestialBody.h"
+#include "States.h"
 
 
 namespace FusionEngine
@@ -179,6 +180,23 @@ namespace FusionEngine
 		virtual ~CollisionComponent() {}
 	};
 
+	class EnemyGenericComponent : public IComponent
+	{
+	public:
+		BehaviorState currentState;
+
+		glm::vec3 frontVector;
+		
+		int health;
+		float speed;
+		float attackRange;
+
+		virtual EnemyGenericComponent* Clone() const
+		{
+			return new EnemyGenericComponent(*this);
+		}
+		virtual ~EnemyGenericComponent() {}
+	};
 	
 	struct Material
 	{

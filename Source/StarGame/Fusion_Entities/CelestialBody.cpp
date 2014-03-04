@@ -226,7 +226,7 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 bool CelestialBody::AddSkill(const std::string &skillName, const SkillData &newSkillData) 
 {
 	std::shared_ptr<Skill> newSkill = 
-		std::shared_ptr<Skill>(new Skill(skillName, 
+		std::shared_ptr<Skill>(new Skill(skillName + id, 
 										 newSkillData.fusionCombination[0],
 										 newSkillData.fusionCombination[1],
 										 newSkillData.fusionCombination[2], 
@@ -290,7 +290,7 @@ void CelestialBody::UpdateCollision()
 						if ((*collider).get()->GetID().find("sun-nova") != std::string::npos &&
 							this->type != FE_SUN)
 						{
-							std::string skillName = "skill-chain";
+							std::string skillName = "sat-chain";
 							skillName += id;
 							OnFusionCompletedEvent _event = OnFusionCompletedEvent(EVENT_ON_FUSION_COMPLETED, skillName, "000", true);
 							GetWorld().GetEventManager().FireEvent(_event);

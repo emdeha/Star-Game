@@ -151,7 +151,7 @@ entity-skill:
         skill-animated:
             current-scale: 0.5
             scale-rate: 0.02
-            torus-radius: 0.1
+            torus-radius: 0.02
             color: [ 1.0, 1.0, 0.0, 0.5 ]
         skill-generic:
             holder-id: ""
@@ -177,7 +177,7 @@ entity-skill:
         skill-generic:
             holder-id: ""
             damage: 0
-            range: 2.0
+            range: 1.0
             is-chain: false
         collision:
             type: CIRCLE

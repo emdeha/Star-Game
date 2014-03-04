@@ -49,6 +49,12 @@
     <Filter Include="Source Files\Scripts\Skills">
       <UniqueIdentifier>{08b37896-b814-494f-b452-d161f6b6fd5d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scripts\Enemies">
+      <UniqueIdentifier>{6533f341-c566-4b2c-aa2a-e6fb71af5324}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scripts\Enemies">
+      <UniqueIdentifier>{0b64d0ae-6881-4f19-9ccd-56edf0576e59}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

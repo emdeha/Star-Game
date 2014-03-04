@@ -171,7 +171,8 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 	
 	auto satRenderComponent = std::make_shared<RenderComponent>();
 	satRenderComponent->vao = sunMesh.vao;
-	satRenderComponent->shaderProgramID = GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_LIT_TEXTURE).programId;
+	satRenderComponent->shaderProgramID = 
+		GetWorld().GetShaderManager().GetProgram(FE_PROGRAM_LIT_TEXTURE).programId;
 	satRenderComponent->renderType = RenderComponent::FE_RENDERER_LIT;
 	
 	newSat->AddComponent(FE_COMPONENT_RENDER, satRenderComponent);
@@ -257,7 +258,8 @@ void CelestialBody::UpdateCollision()
 			{
 			case CollisionComponent::FE_COLLISION_CIRCLE:
 				{
-					float distanceBetweenColliders = glm::length(colliderCollision->center - satCollision->center); 
+					float distanceBetweenColliders = 
+						glm::length(colliderCollision->center - satCollision->center); 
 					float minDistance = colliderCollision->innerRadius + satCollision->innerRadius;
 					if (distanceBetweenColliders < minDistance)
 					{
@@ -267,7 +269,8 @@ void CelestialBody::UpdateCollision()
 				break;
 			case CollisionComponent::FE_COLLISION_TORUS:
 				{
-					float distanceBetweenColliders = glm::length(colliderCollision->center - satCollision->center); 
+					float distanceBetweenColliders = 
+						glm::length(colliderCollision->center - satCollision->center); 
 					float minDistance = colliderCollision->innerRadius + satCollision->innerRadius;
 					float maxDistance = colliderCollision->outerRadius + satCollision->innerRadius;
 					if (distanceBetweenColliders < minDistance && distanceBetweenColliders >= maxDistance)
@@ -277,7 +280,8 @@ void CelestialBody::UpdateCollision()
 						{
 							std::string skillName = "sat-chain";
 							skillName += id;
-							OnFusionCompletedEvent _event = OnFusionCompletedEvent(EVENT_ON_FUSION_COMPLETED, skillName, "000", true);
+							OnFusionCompletedEvent _event =
+								OnFusionCompletedEvent(EVENT_ON_FUSION_COMPLETED, skillName, "000", true);
 							GetWorld().GetEventManager().FireEvent(_event);
 						}
 					}  
@@ -292,7 +296,8 @@ void CelestialBody::Update()
 {
 	UpdateCollision();
 
-	TransformComponent *sunTransform = static_cast<TransformComponent*>(GetComponent(FE_COMPONENT_TRANSFORM).get());
+	TransformComponent *sunTransform = 
+		static_cast<TransformComponent*>(GetComponent(FE_COMPONENT_TRANSFORM).get());
 
 	for (auto satellite = satellites.begin(); satellite != satellites.end(); ++satellite)
 	{
@@ -305,7 +310,8 @@ void CelestialBody::Update()
 			relativeTransformStack.Translate(sunTransform->position);
 			relativeTransformStack.RotateY((*satellite)->currentRotationAngle);
 
-			(*satellite)->currentRotationAngle += (*satellite)->angularVelocity * World::GetWorld().interpolation;
+			(*satellite)->currentRotationAngle += 
+				(*satellite)->angularVelocity * World::GetWorld().interpolation;
 			if ((*satellite)->currentRotationAngle >= 360.0f)
 			{
 				(*satellite)->currentRotationAngle -= 360.0f;
@@ -313,7 +319,8 @@ void CelestialBody::Update()
 
 			float offset = (*satellite)->offsetFromSun;
 			satTransform->position = glm::vec3(offset, 0.0f, offset);
-			satTransform->position = glm::vec3(relativeTransformStack.Top() * glm::vec4(satTransform->position, 1.0f));
+			satTransform->position = 
+				glm::vec3(relativeTransformStack.Top() * glm::vec4(satTransform->position, 1.0f));
 
 			CollisionComponent *satCollision = static_cast<CollisionComponent*>(
 				(*satellite)->GetComponent(FE_COMPONENT_COLLISION).get());

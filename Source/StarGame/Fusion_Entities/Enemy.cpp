@@ -13,7 +13,8 @@ using namespace FusionEngine;
 
 
 Enemy::Enemy(const std::string &newName, float newSpeed, glm::vec3 newFrontVector)
-	: Composable(newName), speed(newSpeed), health(100), frontVector(newFrontVector), currentState(FE_STATE_IDLE) 
+	: Composable(newName), speed(newSpeed), health(100), frontVector(newFrontVector),
+	  currentState(FE_STATE_IDLE) 
 {
 	GetWorld().GetEventManager().AddListener(this, EVENT_ON_SKILL_APPLIED);
 	GetWorld().GetEventManager().AddListener(this, EVENT_ON_COLLIDE);
@@ -44,49 +45,6 @@ bool Enemy::HandleEvent(const FusionEngine::IEventData &eventData)
 	return false;
 }
 
-void Enemy::UpdateAI()
-{
-	if (currentState == FE_STATE_ATTACK)
-	{
-		speed = 0.0f;
-	}
-	else if (currentState == FE_STATE_EVADE)
-	{
-		TransformComponent *sunTransformData =
-			static_cast<TransformComponent*>(GetWorld().GetComponentForObject("sun", FE_COMPONENT_TRANSFORM).get());
-
-		TransformComponent *enemyTransformData =
-			static_cast<TransformComponent*>(GetComponent(FE_COMPONENT_TRANSFORM).get());
-
-		glm::vec3 vectorFromSunToSpaceship = sunTransformData->position - enemyTransformData->position;
-
-		vectorFromSunToSpaceship = glm::normalize(vectorFromSunToSpaceship);
-		glm::vec3 spaceshipDirection = glm::normalize(frontVector * speed);
-
-		if (glm::dot(vectorFromSunToSpaceship, spaceshipDirection) > 0)
-		{
-			speed *= -1.0f;
-		}
-	}
-	else if (currentState == FE_STATE_IDLE)
-	{
-		TransformComponent *sunTransformData =
-			static_cast<TransformComponent*>(GetWorld().GetComponentForObject("sun", FE_COMPONENT_TRANSFORM).get());
-
-		TransformComponent *enemyTransformData =
-			static_cast<TransformComponent*>(GetComponent(FE_COMPONENT_TRANSFORM).get());
-
-		glm::vec3 vectorFromSunToSpaceship = sunTransformData->position - enemyTransformData->position;
-
-		float distanceBetweenSunAndSpaceship = glm::length(vectorFromSunToSpaceship);
-
-		if (distanceBetweenSunAndSpaceship < attackRange)
-		{
-			currentState = FE_STATE_ATTACK;
-		}
-	}
-}
-
 void Enemy::UpdateCollision()
 {
 	auto collidableObjects = GetWorld().GetObjectsWithComponent(FE_COMPONENT_COLLISION);	
@@ -104,7 +62,8 @@ void Enemy::UpdateCollision()
 			{
 			case CollisionComponent::FE_COLLISION_CIRCLE:
 				{
-					float distanceBetweenColliders = glm::length(colliderCollision->center - enemyCollision->center); 
+					float distanceBetweenColliders = 
+						glm::length(colliderCollision->center - enemyCollision->center); 
 					float minDistance = colliderCollision->innerRadius + enemyCollision->innerRadius;
 					if (distanceBetweenColliders < minDistance)
 					{
@@ -118,7 +77,8 @@ void Enemy::UpdateCollision()
 				break;
 			case CollisionComponent::FE_COLLISION_TORUS:
 				{
-					float distanceBetweenColliders = glm::length(colliderCollision->center - enemyCollision->center); 
+					float distanceBetweenColliders = 
+						glm::length(colliderCollision->center - enemyCollision->center); 
 					float minDistance = colliderCollision->innerRadius + enemyCollision->innerRadius;
 					float maxDistance = colliderCollision->outerRadius + enemyCollision->innerRadius;
 					if (distanceBetweenColliders < minDistance && distanceBetweenColliders >= maxDistance)
@@ -135,34 +95,69 @@ void Enemy::UpdateCollision()
 	}
 }
 
-void Enemy::Update()
+void Enemy::UpdateAI()
 {
-	// if (GetWorld().IsEntityKilled("sun") == false)
-	TransformComponent *enemyTransformData =
-		static_cast<TransformComponent*>(GetComponent(FE_COMPONENT_TRANSFORM).get());
-
-	enemyTransformData->rotation = glm::vec3(0.0f, glm::degrees(atan2f(frontVector.x, frontVector.z)), 0.0f);
-
-	if (currentState != FE_STATE_STOPPED)
+	if (currentState == FE_STATE_ATTACK)
 	{
-		enemyTransformData->position += frontVector * World::GetWorld().interpolation * speed;
-		UpdateAI();
+		speed = 0.0f;
+	}
+	else if (currentState == FE_STATE_EVADE)
+	{
+		TransformComponent *sunTransformData = static_cast<TransformComponent*>(
+			GetWorld().GetComponentForObject("sun", FE_COMPONENT_TRANSFORM).get());
 
-		CollisionComponent *enemyCollisionData =
-			static_cast<CollisionComponent*>(GetComponent(FE_COMPONENT_COLLISION).get());
-		enemyCollisionData->center = enemyTransformData->position;
+		TransformComponent *enemyTransformData =
+			static_cast<TransformComponent*>(GetComponent(FE_COMPONENT_TRANSFORM).get());
+
+		glm::vec3 vectorFromSunToSpaceship = sunTransformData->position - enemyTransformData->position;
+
+		vectorFromSunToSpaceship = glm::normalize(vectorFromSunToSpaceship);
+		glm::vec3 spaceshipDirection = glm::normalize(frontVector * speed);
+
+		if (glm::dot(vectorFromSunToSpaceship, spaceshipDirection) > 0)
+		{
+			speed *= -1.0f;
+		}
+	}
+	else if (currentState == FE_STATE_IDLE)
+	{
+		TransformComponent *sunTransformData = static_cast<TransformComponent*>(
+			GetWorld().GetComponentForObject("sun", FE_COMPONENT_TRANSFORM).get());
+
+		TransformComponent *enemyTransformData = static_cast<TransformComponent*>(
+			GetComponent(FE_COMPONENT_TRANSFORM).get());
+
+		glm::vec3 vectorFromSunToSpaceship = sunTransformData->position - enemyTransformData->position;
+
+		float distanceBetweenSunAndSpaceship = glm::length(vectorFromSunToSpaceship);
+
+		if (distanceBetweenSunAndSpaceship < attackRange)
+		{
+			currentState = FE_STATE_ATTACK;
+		}
 	}
 
 	if (health <= 20)
 	{
 		currentState = FE_STATE_EVADE;
 	}
+}
 
-	if (health <= 0)
+void Enemy::Update()
+{
+	if (currentState != FE_STATE_STOPPED)
 	{
-		// Destroy
-		//std::printf("KILLED IS ME!!! %s\n", id.c_str());
+		TransformComponent *enemyTransformData =
+			static_cast<TransformComponent*>(GetComponent(FE_COMPONENT_TRANSFORM).get());
+		enemyTransformData->rotation = 
+			glm::vec3(0.0f, glm::degrees(atan2f(frontVector.x, frontVector.z)), 0.0f);
+		enemyTransformData->position += frontVector * World::GetWorld().interpolation * speed;
+
+		CollisionComponent *enemyCollisionData =
+			static_cast<CollisionComponent*>(GetComponent(FE_COMPONENT_COLLISION).get());
+		enemyCollisionData->center = enemyTransformData->position;
 	}
 
+	UpdateAI();
 	UpdateCollision();
 }

@@ -189,6 +189,7 @@ namespace FusionEngine
 		
 		int health;
 		float speed;
+		float previousSpeed;
 		float attackRange;
 
 		virtual EnemyGenericComponent* Clone() const

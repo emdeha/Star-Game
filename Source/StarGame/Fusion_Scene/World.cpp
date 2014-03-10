@@ -54,7 +54,7 @@ void World::CreateSun()
 	renderer.SubscribeForRendering("sun", sunMesh);
 }
 
-void World::CreateEnemy(const std::string &id, glm::vec3 position)
+void World::CreateSpaceship(const std::string &id, glm::vec3 position)
 {
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
 	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
@@ -188,8 +188,8 @@ void World::Load(const std::string &guiLayoutFile,
 	}
 
 	// Create enemies
-	CreateEnemy("enemysp2", glm::vec3(0.0f, 0.0f, 6.0f));
-	CreateEnemy("enemysp1", glm::vec3(4.0f, 0.0f, 0.0f));
+	CreateSpaceship("enemysp2", glm::vec3(0.0f, 0.0f, 6.0f));
+	CreateSpaceship("enemysp1", glm::vec3(4.0f, 0.0f, 0.0f));
 }
 
 void World::ReloadGUI(const std::string &guiLayoutFile)

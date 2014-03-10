@@ -91,7 +91,11 @@ namespace FusionEngine
 
 	public:
 		void CreateSun();
-		void CreateEnemy(const std::string &id, glm::vec3 position);
+		void CreateSpaceship(const std::string &id, glm::vec3 position);
+		void CreateSwarm(const std::string &id, glm::vec3 position);
+		void CreateFastSuicideBomber(const std::string &id, glm::vec3 position);
+		void CreateMothership(const std::string &id, glm::vec3 position);
+		void CreateAsteroid(const std::string &id, glm::vec3 position);
 
 	public:
 		float interpolation;

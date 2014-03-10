@@ -203,8 +203,9 @@ namespace FusionEngine
 	{
 	public:
 		Composable components;
-		float speed;
 		glm::vec3 frontVector;
+		float speed;
+		float range;
 
 		virtual EnemyProjectileComponent* Clone() const
 		{

@@ -72,6 +72,17 @@ void Spaceship_ProjectileUpdate(const std::string &enemyID)
 
 	projectileTransform->position += 
 		projectile->frontVector * World::GetWorld().interpolation * projectile->speed;
+
+	TransformComponent *enemyTransform = static_cast<TransformComponent*>(
+		GetWorld().GetComponentForObject(enemyID, FE_COMPONENT_TRANSFORM).get());
+
+	glm::vec3 vectorBetweenSpaceshipAndProjectile = enemyTransform->position - projectileTransform->position;
+	float distanceBetweenSpaceshipAndProjectile = glm::length(vectorBetweenSpaceshipAndProjectile);
+
+	if (distanceBetweenSpaceshipAndProjectile > projectile->range)
+	{
+		projectileTransform->position = enemyTransform->position;
+	}
 }
 
 void Spaceship_AttackState(const std::string &enemyID, EnemyGenericComponent *enemyGeneric)

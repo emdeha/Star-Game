@@ -89,7 +89,8 @@ void World::CreateEnemy(const std::string &id, glm::vec3 position)
 	std::string projectileID = "proj" + id;
 	auto spaceshipProjectileComponent = std::make_shared<EnemyProjectileComponent>(projectileID);
 	spaceshipProjectileComponent->frontVector = spaceshipEnemyGenericComponent->frontVector;
-	spaceshipProjectileComponent->speed = 3*spaceshipEnemyGenericComponent->speed;
+	spaceshipProjectileComponent->speed = 6 * spaceshipEnemyGenericComponent->speed;
+	spaceshipProjectileComponent->range = 2.0f;
 
 	auto projectileRenderableComponent = std::make_shared<RenderComponent>();
 	FusionEngine::MeshAssetObject projectileMesh = meshLoader.LoadAssetObject("mesh-files", "sun.obj");
@@ -102,7 +103,7 @@ void World::CreateEnemy(const std::string &id, glm::vec3 position)
 	auto projectileTransformComponent = std::make_shared<TransformComponent>();
 	projectileTransformComponent->position = spaceshipTransformComponent->position;
 	projectileTransformComponent->rotation = glm::vec3();
-	projectileTransformComponent->scale = glm::vec3(0.1f);
+	projectileTransformComponent->scale = glm::vec3(0.05f);
 
 	spaceshipProjectileComponent->components.AddComponent(FE_COMPONENT_TRANSFORM, projectileTransformComponent);
 	// End Projectile creation

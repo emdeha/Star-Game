@@ -90,7 +90,7 @@ void World::CreateEnemy(const std::string &id, glm::vec3 position)
 	auto spaceshipProjectileComponent = std::make_shared<EnemyProjectileComponent>(projectileID);
 	spaceshipProjectileComponent->frontVector = spaceshipEnemyGenericComponent->frontVector;
 	spaceshipProjectileComponent->speed = 6 * spaceshipEnemyGenericComponent->speed;
-	spaceshipProjectileComponent->range = 2.0f;
+	spaceshipProjectileComponent->range = 3.0f;
 
 	auto projectileRenderableComponent = std::make_shared<RenderComponent>();
 	FusionEngine::MeshAssetObject projectileMesh = meshLoader.LoadAssetObject("mesh-files", "sun.obj");
@@ -99,6 +99,13 @@ void World::CreateEnemy(const std::string &id, glm::vec3 position)
 	projectileRenderableComponent->renderType = RenderComponent::FE_RENDERER_LIT;
 
 	spaceshipProjectileComponent->components.AddComponent(FE_COMPONENT_RENDER, projectileRenderableComponent);
+
+	auto projectileCollisionComponent = std::make_shared<CollisionComponent>();
+	projectileCollisionComponent->center = spaceshipTransformComponent->position;
+	projectileCollisionComponent->cType = CollisionComponent::FE_COLLISION_CIRCLE;
+	projectileCollisionComponent->innerRadius = 0.05f;
+
+	spaceshipProjectileComponent->components.AddComponent(FE_COMPONENT_COLLISION, projectileCollisionComponent);
 
 	auto projectileTransformComponent = std::make_shared<TransformComponent>();
 	projectileTransformComponent->position = spaceshipTransformComponent->position;
@@ -404,6 +411,12 @@ std::vector<std::shared_ptr<Composable>> World::GetObjectsWithComponent(Componen
 		if ((*enemy)->GetComponent(componentID))
 		{
 			objectsToReturn.push_back(*enemy);
+		}
+		EnemyProjectileComponent *enemyProjectile = static_cast<EnemyProjectileComponent*>(
+			(*enemy)->GetComponent(FE_COMPONENT_ENEMY_PROJECTILE).get());
+		if (enemyProjectile && enemyProjectile->components.GetComponent(componentID))
+		{
+			objectsToReturn.push_back(std::make_shared<Composable>(enemyProjectile->components));
 		}
 	}
 

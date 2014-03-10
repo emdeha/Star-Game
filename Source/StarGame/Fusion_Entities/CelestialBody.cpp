@@ -263,7 +263,10 @@ void CelestialBody::UpdateCollision()
 					float minDistance = colliderCollision->innerRadius + satCollision->innerRadius;
 					if (distanceBetweenColliders < minDistance)
 					{
-						// handle circle-based collision
+						if ((*collider).get()->GetID().find("proj") != std::string::npos)
+						{
+							std::printf("projectile hit ME!!!");
+						}
 					}  
 				}
 				break;

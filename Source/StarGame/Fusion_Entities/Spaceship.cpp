@@ -83,6 +83,10 @@ void Spaceship_ProjectileUpdate(const std::string &enemyID)
 	{
 		projectileTransform->position = enemyTransform->position;
 	}
+
+	CollisionComponent *projectileCollision = static_cast<CollisionComponent*>(
+		projectile->components.GetComponent(FE_COMPONENT_COLLISION).get());
+	projectileCollision->center = projectileTransform->position;
 }
 
 void Spaceship_AttackState(const std::string &enemyID, EnemyGenericComponent *enemyGeneric)

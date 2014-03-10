@@ -30,6 +30,12 @@ void Spaceship_EvadeState(const std::string &enemyID, EnemyGenericComponent *ene
 	{
 		enemyGeneric->frontVector *= -1.0f;
 	}
+
+	EnemyProjectileComponent *projectile = static_cast<EnemyProjectileComponent*>(
+		GetWorld().GetComponentForObject(enemyID, FE_COMPONENT_ENEMY_PROJECTILE).get());
+	TransformComponent *projectileTransform = static_cast<TransformComponent*>(
+		projectile->components.GetComponent(FE_COMPONENT_TRANSFORM).get());
+	projectileTransform->position = enemyTransformData->position; 
 }
 
 void Spaceship_IdleState(const std::string &enemyID, EnemyGenericComponent *enemyGeneric)
@@ -48,24 +54,44 @@ void Spaceship_IdleState(const std::string &enemyID, EnemyGenericComponent *enem
 	{
 		enemyGeneric->currentState = FE_STATE_ATTACK;
 	}
+
+	EnemyProjectileComponent *projectile = static_cast<EnemyProjectileComponent*>(
+		GetWorld().GetComponentForObject(enemyID, FE_COMPONENT_ENEMY_PROJECTILE).get());
+	TransformComponent *projectileTransform = static_cast<TransformComponent*>(
+		projectile->components.GetComponent(FE_COMPONENT_TRANSFORM).get());
+	projectileTransform->position = enemyTransformData->position; 
 }
 
-void Spaceship_AttackState(EnemyGenericComponent *enemyGeneric)
+void Spaceship_ProjectileUpdate(const std::string &enemyID)
+{
+	EnemyProjectileComponent *projectile = static_cast<EnemyProjectileComponent*>(
+		GetWorld().GetComponentForObject(enemyID, FE_COMPONENT_ENEMY_PROJECTILE).get());
+
+	TransformComponent *projectileTransform = static_cast<TransformComponent*>(
+		projectile->components.GetComponent(FE_COMPONENT_TRANSFORM).get());
+
+	projectileTransform->position += 
+		projectile->frontVector * World::GetWorld().interpolation * projectile->speed;
+}
+
+void Spaceship_AttackState(const std::string &enemyID, EnemyGenericComponent *enemyGeneric)
 {
 	if (enemyGeneric->speed > 0.0f)
 	{
 		enemyGeneric->previousSpeed = enemyGeneric->speed;
 	}
 	enemyGeneric->speed = 0.0f;
+	Spaceship_ProjectileUpdate(enemyID);
 }
 
 void FusionEngine::Spaceship_OnUpdate(const std::string &enemyID)
 {
 	EnemyGenericComponent *enemyGeneric = static_cast<EnemyGenericComponent*>(
 		GetWorld().GetComponentForObject(enemyID, FE_COMPONENT_ENEMY_GENERIC).get());
+
 	if (enemyGeneric->currentState == FE_STATE_ATTACK)
 	{
-		Spaceship_AttackState(enemyGeneric);
+		Spaceship_AttackState(enemyID, enemyGeneric);
 	}
 	else if (enemyGeneric->currentState == FE_STATE_EVADE)
 	{

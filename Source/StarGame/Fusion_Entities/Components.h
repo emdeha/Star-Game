@@ -198,6 +198,21 @@ namespace FusionEngine
 		}
 		virtual ~EnemyGenericComponent() {}
 	};
+
+	class EnemyProjectileComponent : public IComponent
+	{
+	public:
+		Composable components;
+		float speed;
+		glm::vec3 frontVector;
+
+		virtual EnemyProjectileComponent* Clone() const
+		{
+			return new EnemyProjectileComponent(*this);
+		}
+		virtual ~EnemyProjectileComponent() {}
+		EnemyProjectileComponent(const std::string &id) : components(id) {}
+	};
 	
 	struct Material
 	{

@@ -85,15 +85,39 @@ void World::CreateEnemy(const std::string &id, glm::vec3 position)
 	spaceshipEnemyGenericComponent->frontVector = frontVector;
 	spaceshipEnemyGenericComponent->attackRange = 2.0f;
 
+	// Projectile creation
+	std::string projectileID = "proj" + id;
+	auto spaceshipProjectileComponent = std::make_shared<EnemyProjectileComponent>(projectileID);
+	spaceshipProjectileComponent->frontVector = spaceshipEnemyGenericComponent->frontVector;
+	spaceshipProjectileComponent->speed = 3*spaceshipEnemyGenericComponent->speed;
+
+	auto projectileRenderableComponent = std::make_shared<RenderComponent>();
+	FusionEngine::MeshAssetObject projectileMesh = meshLoader.LoadAssetObject("mesh-files", "sun.obj");
+	projectileRenderableComponent->vao = projectileMesh.vao;
+	projectileRenderableComponent->shaderProgramID = shaderManager.GetProgram(FE_PROGRAM_LIT).programId;
+	projectileRenderableComponent->renderType = RenderComponent::FE_RENDERER_LIT;
+
+	spaceshipProjectileComponent->components.AddComponent(FE_COMPONENT_RENDER, projectileRenderableComponent);
+
+	auto projectileTransformComponent = std::make_shared<TransformComponent>();
+	projectileTransformComponent->position = spaceshipTransformComponent->position;
+	projectileTransformComponent->rotation = glm::vec3();
+	projectileTransformComponent->scale = glm::vec3(0.1f);
+
+	spaceshipProjectileComponent->components.AddComponent(FE_COMPONENT_TRANSFORM, projectileTransformComponent);
+	// End Projectile creation
+
 	auto firstEnemy = std::make_shared<Enemy>(id);
 	firstEnemy->AddComponent(FE_COMPONENT_RENDER, spaceshipRenderComponent);
 	firstEnemy->AddComponent(FE_COMPONENT_TRANSFORM, spaceshipTransformComponent);
 	firstEnemy->AddComponent(FE_COMPONENT_COLLISION, spaceshipCollisionComponent);
 	firstEnemy->AddComponent(FE_COMPONENT_ENEMY_GENERIC, spaceshipEnemyGenericComponent);
+	firstEnemy->AddComponent(FE_COMPONENT_ENEMY_PROJECTILE, spaceshipProjectileComponent);
 	firstEnemy->SetOnUpdateAI(Spaceship_OnUpdate);
 	enemies.push_back(firstEnemy);
 
 	renderer.SubscribeForRendering(id, enemyMesh);
+	renderer.SubscribeForRendering(projectileID, projectileMesh);
 }
 
 void World::Load(const std::string &guiLayoutFile,
@@ -324,6 +348,15 @@ std::shared_ptr<IComponent> World::GetComponentForObject(const std::string &id, 
 			if ((*enemy)->GetID() == id)
 			{
 				return (*enemy)->GetComponent(componentID);
+			}
+			EnemyProjectileComponent *enemyProjectile = static_cast<EnemyProjectileComponent*>(
+				(*enemy)->GetComponent(FE_COMPONENT_ENEMY_PROJECTILE).get());
+			if (enemyProjectile)
+			{
+				if (enemyProjectile->components.GetID() == id)
+				{
+					return enemyProjectile->components.GetComponent(componentID);
+				}
 			}
 		}
 	}

@@ -28,7 +28,7 @@ void World::CreateSun()
 
 	FusionEngine::MeshAssetObject sunMesh = meshLoader.LoadAssetObject("mesh-files", "sun.obj");
 	
-	sun = std::make_shared<CelestialBody>(FE_SUN, 4, 0.5f, 0.0f);
+	sun = std::make_shared<CelestialBody>(FE_SUN, 4, 50, 0.5f, 0.0f);
 
 	std::shared_ptr<FusionEngine::RenderComponent> sunRenderComponent = std::make_shared<RenderComponent>();
 	sunRenderComponent->vao = sunMesh.vao;
@@ -89,6 +89,7 @@ void World::CreateEnemy(const std::string &id, glm::vec3 position)
 	std::string projectileID = "proj" + id;
 	auto spaceshipProjectileComponent = std::make_shared<EnemyProjectileComponent>(projectileID);
 	spaceshipProjectileComponent->frontVector = spaceshipEnemyGenericComponent->frontVector;
+	spaceshipProjectileComponent->damage = 4;
 	spaceshipProjectileComponent->speed = 6 * spaceshipEnemyGenericComponent->speed;
 	spaceshipProjectileComponent->range = 3.0f;
 
@@ -104,6 +105,7 @@ void World::CreateEnemy(const std::string &id, glm::vec3 position)
 	projectileCollisionComponent->center = spaceshipTransformComponent->position;
 	projectileCollisionComponent->cType = CollisionComponent::FE_COLLISION_CIRCLE;
 	projectileCollisionComponent->innerRadius = 0.05f;
+	projectileCollisionComponent->parentObjectID = id;
 
 	spaceshipProjectileComponent->components.AddComponent(FE_COMPONENT_COLLISION, projectileCollisionComponent);
 

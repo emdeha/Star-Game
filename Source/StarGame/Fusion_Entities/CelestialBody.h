@@ -56,6 +56,7 @@ namespace FusionEngine
 
 		int maxSatelliteCount;
 		int currentSatelliteCount;
+		int health;
 
 		float diameter;
 		float offsetFromSun;
@@ -65,7 +66,7 @@ namespace FusionEngine
 	public:
 		CelestialBody();
 		CelestialBody(CelestialBodyType newType,
-					  int newMaxSatelliteCount, float newDiameter, float newOffsetFromSun);
+					  int newMaxSatelliteCount, int newHealth, float newDiameter, float newOffsetFromSun);
 
 		~CelestialBody();
 

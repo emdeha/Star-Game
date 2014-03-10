@@ -204,6 +204,7 @@ namespace FusionEngine
 	public:
 		Composable components;
 		glm::vec3 frontVector;
+		int damage;
 		float speed;
 		float range;
 

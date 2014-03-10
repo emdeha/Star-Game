@@ -102,11 +102,12 @@ CelestialBody::CelestialBody() :
 }
 
 CelestialBody::CelestialBody(CelestialBodyType newType,
-							 int newMaxSatelliteCount, float newDiameter, 
-							 float newOffsetFromSun) :
+							 int newMaxSatelliteCount, int newHealth, 
+							 float newDiameter, float newOffsetFromSun) :
 	Composable(""),
 	type(newType),	
 	maxSatelliteCount(newMaxSatelliteCount), currentSatelliteCount(1),
+	health(newHealth),
 	satellites(0), diameter(newDiameter),
 	offsetFromSun(newOffsetFromSun),
 	currentRotationAngle(0.0f), angularVelocity(5.0f)
@@ -162,7 +163,7 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 	}
 
 	float satOffset = GetSatelliteOffset(satType); 
-	auto newSat = std::make_shared<CelestialBody>(satType, 0, 0.3f, satOffset);
+	auto newSat = std::make_shared<CelestialBody>(satType, 0, 20, 0.3f, satOffset);
 	
 	FusionEngine::AssetLoader<FusionEngine::MeshAssetObject> meshLoader;
 	meshLoader.RegisterType("mesh-files", new FusionEngine::MeshLoader());
@@ -247,10 +248,10 @@ void CelestialBody::UpdateCollision()
 
 	for (auto collider = collidableObjects.begin(); collider != collidableObjects.end(); ++collider)
 	{
-		if ((*collider).get()->GetID() != id)
+		if ((*collider)->GetID() != id)
 		{
 			CollisionComponent *colliderCollision = static_cast<CollisionComponent*>(
-				(*collider).get()->GetComponent(FE_COMPONENT_COLLISION).get());
+				(*collider)->GetComponent(FE_COMPONENT_COLLISION).get());
 			CollisionComponent *satCollision = static_cast<CollisionComponent*>(
 				GetComponent(FE_COMPONENT_COLLISION).get());
 
@@ -265,7 +266,20 @@ void CelestialBody::UpdateCollision()
 					{
 						if ((*collider).get()->GetID().find("proj") != std::string::npos)
 						{
-							std::printf("projectile hit ME!!!");
+							EnemyProjectileComponent *projectile = static_cast<EnemyProjectileComponent*>(
+								GetWorld().GetComponentForObject(
+									colliderCollision->parentObjectID, FE_COMPONENT_ENEMY_PROJECTILE).get());
+							health -= projectile->damage;
+							TransformComponent *projectileTransform = static_cast<TransformComponent*>(
+								(*collider)->GetComponent(FE_COMPONENT_TRANSFORM).get());
+							TransformComponent *enemyTransform = static_cast<TransformComponent*>(
+								GetWorld().GetComponentForObject(
+									colliderCollision->parentObjectID, FE_COMPONENT_TRANSFORM).get());
+							projectileTransform->position = enemyTransform->position;
+							if (health <= 0)
+							{
+								std::printf("projectile killed ME!!!");
+							}
 						}
 					}  
 				}

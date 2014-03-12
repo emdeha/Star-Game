@@ -116,9 +116,8 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix) const
 
 	for (auto subscribedMesh = subscribedMeshes.begin(); subscribedMesh != subscribedMeshes.end(); ++subscribedMesh)
     {
-		RenderComponent *meshRender = 
-			static_cast<RenderComponent*>(GetWorld().
-				GetComponentForObject((*subscribedMesh).first, FE_COMPONENT_RENDER).get());
+		RenderComponent *meshRender = static_cast<RenderComponent*>(
+			GetWorld().GetComponentForObject((*subscribedMesh).first, FE_COMPONENT_RENDER).get());
 
 		glBindVertexArray(meshRender->vao);
 		
@@ -129,9 +128,8 @@ void Renderer::Render(glutil::MatrixStack &modelMatrix) const
 			glEnableVertexAttribArray(2);
 		}
 		
-		TransformComponent *meshTransform =
-			static_cast<TransformComponent*>(GetWorld().
-				GetComponentForObject((*subscribedMesh).first, FE_COMPONENT_TRANSFORM).get());
+		TransformComponent *meshTransform = static_cast<TransformComponent*>(
+			GetWorld().GetComponentForObject((*subscribedMesh).first, FE_COMPONENT_TRANSFORM).get());
 		
 		glutil::PushStack push(modelMatrix);
 						

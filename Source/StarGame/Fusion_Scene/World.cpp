@@ -210,10 +210,22 @@ void World::ReloadGUI(const std::string &guiLayoutFile)
 
 void World::Update()
 {
-	sun->Update();
-	for (auto enemy = enemies.begin(); enemy != enemies.end(); ++enemy)
+	if (sun != nullptr)
 	{
-		(*enemy)->Update();
+		sun->Update();
+		for (auto enemy = enemies.begin(); enemy != enemies.end(); ++enemy)
+		{
+			(*enemy)->Update();
+		}
+
+		if (sun->GetHealth() <= 0)
+		{
+			sun.reset();
+			sun = nullptr;
+			renderer.UnsubscribeForRendering("sun");
+			// Kill satellites!
+			std::printf("\n YOU IS DEAD! \n");
+		}
 	}
 }
 
@@ -227,13 +239,17 @@ void World::Render()
 			
 			if ((*layout).first == FE_LAYOUT_GAME)
 			{
+				// TODO: if there's no sun, don't render lights
 				sunLight.Render(displayData.modelMatrix, shaderManager);
 				renderer.Render(displayData.modelMatrix);
 				
-				auto skills = sun->GetAllSkills();
-				for (auto skill = skills.begin(); skill != skills.end(); ++skill)
+				if (sun != nullptr)
 				{
-					(*skill)->Render();
+					auto skills = sun->GetAllSkills();
+					for (auto skill = skills.begin(); skill != skills.end(); ++skill)
+					{
+						(*skill)->Render();
+					}
 				}
 			}
 		}
@@ -335,21 +351,25 @@ std::shared_ptr<IComponent> World::GetComponentForObject(const std::string &id, 
 	}
 	else
 	{
-		auto sunSats = sun->GetSatellites();
-		for (auto sat = sunSats.begin(); sat != sunSats.end(); ++sat)
+		// kind of bad/ugly
+		if (sun != nullptr)
 		{
-			if ((*sat)->GetID() == id)
+			auto sunSats = sun->GetSatellites();
+			for (auto sat = sunSats.begin(); sat != sunSats.end(); ++sat)
 			{
-				return (*sat)->GetComponent(componentID);
+				if ((*sat)->GetID() == id)
+				{
+					return (*sat)->GetComponent(componentID);
+				}
 			}
-		}
 
-		auto allSkills = sun->GetAllSkills();
-		for (auto skill = allSkills.begin(); skill != allSkills.end(); ++skill)
-		{
-			if ((*skill)->GetID() == id)
+			auto allSkills = sun->GetAllSkills();
+			for (auto skill = allSkills.begin(); skill != allSkills.end(); ++skill)
 			{
-				return (*skill)->GetComponent(componentID);
+				if ((*skill)->GetID() == id)
+				{
+					return (*skill)->GetComponent(componentID);
+				}
 			}
 		}
 

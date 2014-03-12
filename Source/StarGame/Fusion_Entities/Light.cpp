@@ -27,11 +27,11 @@ void SunLight::Render(glutil::MatrixStack &modelMatrix, FusionEngine::ShaderMana
 {
     glm::vec4 position_cameraSpace = modelMatrix.Top() * glm::vec4(position, 1.0f);
 
-	FusionEngine::ProgramData lightData =
-		shaderManager.GetProgram(FusionEngine::FE_PROGRAM_LIT);
+	FusionEngine::ProgramData lightData = shaderManager.GetProgram(FusionEngine::FE_PROGRAM_LIT);
     glUseProgram(lightData.programId);
 
-    glUniform4fv(lightData.GetUniform(FusionEngine::FE_UNIFORM_LIGHT_INTENSITY), 1, glm::value_ptr(lightIntensity));
+    glUniform4fv(lightData.GetUniform(FusionEngine::FE_UNIFORM_LIGHT_INTENSITY),
+				 1, glm::value_ptr(lightIntensity));
     glUniform3fv(lightData.GetUniform(FusionEngine::FE_UNIFORM_CAMERA_SPACE_LIGHT_POS),
 			 	 1, glm::value_ptr(position_cameraSpace));
 
@@ -49,11 +49,11 @@ void SunLight::Render(glutil::MatrixStack &modelMatrix, FusionEngine::ShaderMana
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 
-	FusionEngine::ProgramData litTextureData =
-		shaderManager.GetProgram(FusionEngine::FE_PROGRAM_LIT_TEXTURE);
+	FusionEngine::ProgramData litTextureData = shaderManager.GetProgram(FusionEngine::FE_PROGRAM_LIT_TEXTURE);
 	glUseProgram(litTextureData.programId);
 
-    glUniform4fv(litTextureData.GetUniform(FusionEngine::FE_UNIFORM_LIGHT_INTENSITY), 1, glm::value_ptr(lightIntensity));
+    glUniform4fv(litTextureData.GetUniform(FusionEngine::FE_UNIFORM_LIGHT_INTENSITY),
+				 1, glm::value_ptr(lightIntensity));
     glUniform3fv(litTextureData.GetUniform(FusionEngine::FE_UNIFORM_CAMERA_SPACE_LIGHT_POS),
 				 1, glm::value_ptr(position_cameraSpace));
 

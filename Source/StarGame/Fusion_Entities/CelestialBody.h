@@ -78,6 +78,7 @@ namespace FusionEngine
 		std::vector<std::shared_ptr<Skill>> GetSkills() { return skills; }
 		std::vector<std::shared_ptr<Skill>> GetAllSkills();
 		std::vector<std::shared_ptr<CelestialBody>> GetSatellites() { return satellites; }
+		int GetHealth() { return health; }
 
 		virtual bool HandleEvent(const IEventData &eventData);
 

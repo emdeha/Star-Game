@@ -72,7 +72,8 @@ void HandleMouse()
 				if ((*layout).second->IsSet() &&
 					(*control)->IsMouseOn(GetWorld().GetMouse().GetCurrentPosition()))
 				{
-					GetWorld().GetEventManager().FireEvent(FE::OnClickEvent(FE::EVENT_ON_CLICK, true, (*control)->GetName()));
+					GetWorld().GetEventManager().
+						FireEvent(FE::OnClickEvent(FE::EVENT_ON_CLICK, true, (*control)->GetName()));
 				}
 			}
 
@@ -149,22 +150,6 @@ void InitializeScene()
 	glUseProgram(fontProgramData.programId);
 	glUniform1i(fontProgramData.GetUniform(FE::FE_UNIFORM_FONT_TEXTURE), 0);
     glUseProgram(0);
-
-	///////////////////////////////////////
-	/*
-	GetWorld().AddFusionSequence("waterSat",   'w', 'w', 'w');
-	GetWorld().AddFusionSequence("fireSat",    'q', 'q', 'q');
-	GetWorld().AddFusionSequence("earthSat",   'e', 'e', 'e');
-	GetWorld().AddFusionSequence("airSat",     'q', 'w', 'e');
-	GetWorld().AddFusionSequence("ult",        'q', 'w', 'w');
-	GetWorld().AddFusionSequence("burn",       'w', 'e', 'e');
-	GetWorld().AddFusionSequence("aoe",        'w', 'q', 'e');
-	GetWorld().AddFusionSequence("passiveAoe", 'w', 'e', 'q');
-	GetWorld().AddFusionSequence("sunNova",    'w', 'q', 'q');
-	GetWorld().AddFusionSequence("satShield",  'q', 'w', 'q');
-	GetWorld().AddFusionSequence("satFrost",   'e', 'e', 'q');
-	GetWorld().AddFusionSequence("satChain",   'w', 'w', 'q');
-	*/
 }
 
 

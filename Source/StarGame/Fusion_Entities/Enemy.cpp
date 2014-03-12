@@ -108,8 +108,8 @@ void Enemy::Update()
 	EnemyGenericComponent *enemyGeneric = static_cast<EnemyGenericComponent*>(
 		GetComponent(FE_COMPONENT_ENEMY_GENERIC).get());
 
-	TransformComponent *enemyTransformData =
-		static_cast<TransformComponent*>(GetComponent(FE_COMPONENT_TRANSFORM).get());
+	TransformComponent *enemyTransformData = static_cast<TransformComponent*>(
+		GetComponent(FE_COMPONENT_TRANSFORM).get());
 	enemyTransformData->rotation = 
 		glm::vec3(0.0f, 
 				  glm::degrees(atan2f(enemyGeneric->frontVector.x, enemyGeneric->frontVector.z)),			  // Here's the D

@@ -131,7 +131,7 @@ CelestialBody::CelestialBody(CelestialBodyType newType,
 
 CelestialBody::~CelestialBody()
 {
-	//scene.GetEventManager()->RemoveListener(this, EVENT_ON_CLICK);
+	World::GetWorld().GetEventManager().RemoveListener(this, FusionEngine::EVENT_ON_CLICK);
 }
 
 bool CelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)

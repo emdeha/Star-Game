@@ -235,7 +235,7 @@ EntityAssetObject EntityLoader::Load(const std::string &type, const std::string 
 					std::shared_ptr<SkillDefensiveComponent> defensive =
 						std::make_shared<SkillDefensiveComponent>();
 
-					int defensePoints = skill->second["skill-defensive"]["defense-points"].as<float>();
+					int defensePoints = skill->second["skill-defensive"]["defense-points"].as<int>();
 					defensive->currentDefensePoints = defensePoints;
 					defensive->defensePoints = defensePoints;
 

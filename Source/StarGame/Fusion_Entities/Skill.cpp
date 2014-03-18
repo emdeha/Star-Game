@@ -139,6 +139,13 @@ Skill::Skill(const std::string &newID,
 	GetWorld().GetEventManager().AddListener(this, FusionEngine::EVENT_ON_SKILL_APPLIED);
 }
 
+Skill::~Skill()
+{
+	GetWorld().GetEventManager().RemoveListener(this, FusionEngine::EVENT_ON_CLICK);
+	GetWorld().GetEventManager().RemoveListener(this, FusionEngine::EVENT_ON_FUSION_COMPLETED);
+	GetWorld().GetEventManager().RemoveListener(this, FusionEngine::EVENT_ON_SKILL_APPLIED);
+}
+
 void Skill::Update()
 {
 	SkillGenericComponent *skillGeneric = static_cast<SkillGenericComponent*>(

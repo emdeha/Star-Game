@@ -220,9 +220,9 @@ void World::Update()
 
 		if (sun->GetHealth() <= 0)
 		{
+			sun->Kill();
 			sun.reset();
 			sun = nullptr;
-			renderer.UnsubscribeForRendering("sun");
 			// Kill satellites!
 			std::printf("\n YOU IS DEAD! \n");
 		}

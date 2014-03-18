@@ -131,11 +131,9 @@ CelestialBody::CelestialBody(CelestialBodyType newType,
 
 CelestialBody::~CelestialBody()
 {
-	World::GetWorld().GetEventManager().RemoveListener(this, FusionEngine::EVENT_ON_CLICK);
-
 	for (auto satellite = satellites.begin(); satellite != satellites.end(); ++satellite)
 	{
-		World::GetWorld().GetRenderer().UnsubscribeForRendering((*satellite)->GetID());
+		(*satellite)->Kill();
 		(*satellite).reset();
 		(*satellite) = nullptr;
 	}
@@ -144,6 +142,12 @@ CelestialBody::~CelestialBody()
 		(*skill).reset();
 		(*skill) = nullptr;
 	}
+}
+
+void CelestialBody::Kill()
+{
+	World::GetWorld().GetRenderer().UnsubscribeForRendering(id);
+	World::GetWorld().GetEventManager().RemoveListener(this, FusionEngine::EVENT_ON_CLICK);
 }
 
 bool CelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
@@ -218,6 +222,29 @@ bool CelestialBody::AddSatellite(CelestialBodyType satType)
 			newSat->AddSkill((*skill).first, (*skill).second);
 		}
 	}
+
+	return true;
+}
+
+bool CelestialBody::RemoveSatellite(const std::string &id)
+{
+	for (auto satellite = satellites.begin(); satellite != satellites.end(); ++satellite)
+	{
+		if ((*satellite)->GetID() == id)
+		{
+			return RemoveSatellite(satellite);
+		}
+	}
+
+	return false;
+}
+bool CelestialBody::RemoveSatellite(std::vector<std::shared_ptr<CelestialBody>>::iterator satelliteIter)
+{
+	(*satelliteIter)->Kill();
+	(*satelliteIter).reset();
+	(*satelliteIter) = nullptr;
+	satellites.erase(satelliteIter);
+	currentSatelliteCount--;
 
 	return true;
 }
@@ -330,6 +357,12 @@ void CelestialBody::Update()
 
 	for (auto satellite = satellites.begin(); satellite != satellites.end(); ++satellite)
 	{
+		if ((*satellite)->GetHealth() <= 0)
+		{
+			RemoveSatellite((*satellite)->GetID());
+			break;
+		}
+
 		TransformComponent *satTransform = static_cast<TransformComponent*>(
 			(*satellite)->GetComponent(FE_COMPONENT_TRANSFORM).get());
 

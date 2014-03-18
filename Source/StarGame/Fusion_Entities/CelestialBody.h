@@ -69,8 +69,11 @@ namespace FusionEngine
 					  int newMaxSatelliteCount, int newHealth, float newDiameter, float newOffsetFromSun);
 
 		~CelestialBody();
+		void Kill();
 
 		bool AddSatellite(CelestialBodyType satType);
+		bool RemoveSatellite(const std::string &id);
+		bool RemoveSatellite(std::vector<std::shared_ptr<CelestialBody>>::iterator satelliteIter);
 		bool AddSkill(const std::string &skillName, const SkillData &newSkillData);
 
 		void Update();

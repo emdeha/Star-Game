@@ -132,6 +132,18 @@ CelestialBody::CelestialBody(CelestialBodyType newType,
 CelestialBody::~CelestialBody()
 {
 	World::GetWorld().GetEventManager().RemoveListener(this, FusionEngine::EVENT_ON_CLICK);
+
+	for (auto satellite = satellites.begin(); satellite != satellites.end(); ++satellite)
+	{
+		World::GetWorld().GetRenderer().UnsubscribeForRendering((*satellite)->GetID());
+		(*satellite).reset();
+		(*satellite) = nullptr;
+	}
+	for (auto skill = skills.begin(); skill != skills.end(); ++skill)
+	{
+		(*skill).reset();
+		(*skill) = nullptr;
+	}
 }
 
 bool CelestialBody::HandleEvent(const FusionEngine::IEventData &eventData)
